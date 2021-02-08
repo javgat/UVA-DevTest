@@ -2,4 +2,9 @@ module gitlab.com/HP-SCDS/Observatorio/2020-2021/uva-devtest/BackEnd/signin_serv
 
 go 1.15
 
-require github.com/go-chi/chi v1.5.1 // indirect
+replace gitlab.com/HP-SCDS/Observatorio/2020-2021/uva-devtest/BackEnd/common/model => ../common/model
+
+require (
+	github.com/go-chi/chi v1.5.1 // indirect
+	gitlab.com/HP-SCDS/Observatorio/2020-2021/uva-devtest/BackEnd/common/model v0.0.0-00010101000000-000000000000
+)

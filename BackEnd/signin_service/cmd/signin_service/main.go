@@ -18,8 +18,7 @@ func main() {
 
   log.Printf("Starting %v\n", service_name)
 
-//  port := ":443"
-  port := ":80" 
+  port := ":443"
   r := chi.NewRouter()
 
   // A good base middleware stack, recommended by go-chi
@@ -31,6 +30,9 @@ func main() {
 
   r.Post("/users", service.RegisterUser)
 
-  log.Fatal(http.ListenAndServe(port, r))
+  cert := "cert.pem"
+  key := "key.pem"
+
+  log.Fatal(http.ListenAndServeTLS(port, cert, key, r))
 
 }
