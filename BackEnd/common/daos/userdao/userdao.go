@@ -18,3 +18,40 @@ func InsertUser(db *sql.DB, u model.User) error{
   defer query.Close()
   return err
 }
+
+func rowsToUser(rows *sql.Rows) (*model.User, error){
+  //Seguramente se pueda hacer mas bonito y no entiendo el {}
+  var user *model.User
+  var err error
+  var trash int
+  for rows.Next() {
+    var us model.User
+    err = rows.Scan(&trash, &us.Username, &us.Email, &us.PwHash)
+    user = &us
+  }
+  return user, err
+}
+
+func GetUserUsername(db *sql.DB, username string) (*model.User, error){
+  query, err := db.Prepare("SELECT * FROM users WHERE username=?")
+  var u *model.User
+  if err != nil {
+    return u, err
+  }
+  rows, err := query.Query(username)
+  u, err = rowsToUser(rows)
+  defer query.Close()
+  return u, err
+}
+
+func GetUserEmail(db *sql.DB, email string) (*model.User, error){
+  query, err := db.Prepare("SELECT * FROM users WHERE email=?")
+  var u *model.User
+  if err != nil {
+    return u, err
+  }
+  rows, err := query.Query(email)
+  u, err = rowsToUser(rows)
+  defer query.Close()
+  return u, err
+}
