@@ -59,7 +59,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
     if lu.Email == "" && lu.Username == ""{
       badReqError(w, nil)
     }else if err != nil {
-      badReqError(w, nil)
+      badReqError(w, err)
     }else if u == nil{
       authFailError(w, err, "Usuario no existe")
     }else{

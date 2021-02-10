@@ -19,15 +19,25 @@ func InsertUser(db *sql.DB, u model.User) error{
   return err
 }
 
-func rowsToUser(rows *sql.Rows) (*model.User, error){
-  //Seguramente se pueda hacer mas bonito y no entiendo el {}
-  var user *model.User
-  var err error
+func rowsToUsers(rows *sql.Rows) ([]model.User, error){
+  var users []model.User
   var trash int
   for rows.Next() {
     var us model.User
-    err = rows.Scan(&trash, &us.Username, &us.Email, &us.PwHash)
-    user = &us
+    err := rows.Scan(&trash, &us.Username, &us.Email, &us.PwHash)
+    if err != nil{
+      return users, err
+    }
+    users = append(users, us)
+  }
+  return users, nil
+}
+
+func rowsToUser(rows *sql.Rows) (*model.User, error){
+  var user *model.User
+  users, err := rowsToUsers(rows)
+  if len(users) >= 1{
+    user = &users[0]
   }
   return user, err
 }
