@@ -20,4 +20,5 @@ require (
 	gitlab.com/HP-SCDS/Observatorio/2020-2021/uva-devtest/BackEnd/common/launch v0.0.0-00010101000000-000000000000 // indirect
 	gitlab.com/HP-SCDS/Observatorio/2020-2021/uva-devtest/BackEnd/common/model v0.0.0-00010101000000-000000000000
 	gitlab.com/HP-SCDS/Observatorio/2020-2021/uva-devtest/BackEnd/common/response v0.0.0-00010101000000-000000000000
+	golang.org/x/crypto v0.0.0-20201221181555-eec23a3978ad
 )
