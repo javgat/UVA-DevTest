@@ -45,34 +45,38 @@ func success(w http.ResponseWriter, u model.User) {
 
 func Login(w http.ResponseWriter, r *http.Request) {
   log.Println("Generando Token JWT de usuario...")
-  var lu model.LoginUser
+  var lu LoginUser
   json.NewDecoder(r.Body).Decode(&lu)
-  log.Printf("Nombre de usuario: %v\n", lu.Username)
-  log.Println("Email: " + lu.Email)
-    db, err := dbconnection.ConnectDb()
+  log.Printf("Login id: %v\n", lu.LoginId)
+  db, err := dbconnection.ConnectDb()
 
   if err != nil {
     serverError(w, err)
   } else {
     log.Println("Conectado a la base de datos")
     var u *model.User
-    if lu.Username != "" {
-      u, err = userdao.GetUserUsername(db, lu.Username)
-    } else if lu.Email != "" {
-      u, err = userdao.GetUserEmail(db, lu.Email)
-    }
-    if lu.Email == "" && lu.Username == "" {
+    if lu.LoginId == "" {
       badReqError(w, nil)
-    } else if err != nil {
-      badReqError(w, err)
-    } else if u == nil {
-      authFailError(w, err, "Usuario no existe")
-    } else {
-      authErr := bcrypt.CompareHashAndPassword([]byte(u.PwHash), []byte(lu.Pass))
-      if authErr != nil {
-	authFailError(w, err, "Password incorrecto")
-      } else {
-	success(w, *u)
+    }else{
+      // Primero compruebo si la LoginId corresponde a un username
+      u, err = userdao.GetUserUsername(db, lu.LoginId)
+      if err != nil {
+        serverError(w, err)
+      }else{
+	if u == nil {
+	  //Si no corresponde, compruebo con un email
+          u, err = userdao.GetUserEmail(db, lu.LoginId)
+        }
+        if u == nil {
+          authFailError(w, err, "Usuario no existe")
+        } else {
+          authErr := bcrypt.CompareHashAndPassword([]byte(u.PwHash), []byte(lu.Pass))
+	  if authErr != nil {
+	    authFailError(w, err, "Password incorrecto")
+	  } else {
+	    success(w, *u)
+	  }
+        }
       }
     }
   }

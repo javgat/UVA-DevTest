@@ -29,7 +29,7 @@ func success(w http.ResponseWriter, u model.User){
 
 func RegisterUser(w http.ResponseWriter, r *http.Request) {
   log.Println("Registrando usuario...")
-  var lu model.LoginUser
+  var lu SigninUser
   json.NewDecoder(r.Body).Decode(&lu)
   log.Printf("Nombre de usuario: %v\n", lu.Username)
   log.Println("Email: "+lu.Email)
