@@ -1,3 +1,7 @@
+// UVa-DevTest. 2021.
+// Author: Javier Gatón Herguedas.
+
+// Package userdao acts as a Data Access Object for the User Type
 package userdao
 
 import(
@@ -7,6 +11,7 @@ import(
   "gitlab.com/HP-SCDS/Observatorio/2020-2021/uva-devtest/BackEnd/common/model"
 )
 
+// Inserts user <u> into the database <db>
 func InsertUser(db *sql.DB, u model.User) error{
   query, err := db.Prepare("INSERT INTO users(username, email, pwhash) VALUES (?,?,?)")
 
@@ -19,6 +24,7 @@ func InsertUser(db *sql.DB, u model.User) error{
   return err
 }
 
+// Transforms <rows> into a slice of users
 func rowsToUsers(rows *sql.Rows) ([]model.User, error){
   var users []model.User
   var trash int
@@ -33,6 +39,7 @@ func rowsToUsers(rows *sql.Rows) ([]model.User, error){
   return users, nil
 }
 
+// Transforms <rows> into a single user
 func rowsToUser(rows *sql.Rows) (*model.User, error){
   var user *model.User
   users, err := rowsToUsers(rows)
@@ -42,6 +49,8 @@ func rowsToUser(rows *sql.Rows) (*model.User, error){
   return user, err
 }
 
+// Returns the user whose username is <username>. If there is no such user,
+// returns nil
 func GetUserUsername(db *sql.DB, username string) (*model.User, error){
   query, err := db.Prepare("SELECT * FROM users WHERE username=?")
   var u *model.User
@@ -54,6 +63,8 @@ func GetUserUsername(db *sql.DB, username string) (*model.User, error){
   return u, err
 }
 
+// Returns the user whose email is <email>. If there is no such user,
+// returns nil
 func GetUserEmail(db *sql.DB, email string) (*model.User, error){
   query, err := db.Prepare("SELECT * FROM users WHERE email=?")
   var u *model.User

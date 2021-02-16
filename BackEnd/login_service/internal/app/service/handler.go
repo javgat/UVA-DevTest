@@ -1,3 +1,7 @@
+// UVa-DevTest. 2021.
+// Author: Javier Gatón Herguedas.
+
+// Internal package that handles the http request
 package service
 
 import (
@@ -13,21 +17,25 @@ import (
   "gitlab.com/HP-SCDS/Observatorio/2020-2021/uva-devtest/BackEnd/common/response"
 )
 
+// Responds with Server Error
 func serverError(w http.ResponseWriter, err error) {
   log.Println(err)
-  response.RespondError(w, http.StatusInternalServerError, err.Error())
+  response.RespondError(w, http.StatusInternalServerError, "Error interno del servidor")
 }
 
+// Responds with Bad Request Error
 func badReqError(w http.ResponseWriter, err error) {
   log.Println(err)
   response.RespondError(w, http.StatusBadRequest, "Datos de log invalidos")
 }
 
+// Responds with authentication Failure Error
 func authFailError(w http.ResponseWriter, err error, info string) {
   log.Println(err)
   response.RespondError(w, http.StatusGone, info)
 }
 
+// The user is logged in, the handler will try to respond with a JWT
 func success(w http.ResponseWriter, u model.User) {
   log.Println("Usuario logged in")
   var wrap jwtauth.JwtWrapper
@@ -43,6 +51,7 @@ func success(w http.ResponseWriter, u model.User) {
   }
 }
 
+// Main handler function.
 func Login(w http.ResponseWriter, r *http.Request) {
   log.Println("Generando Token JWT de usuario...")
   var lu LoginUser

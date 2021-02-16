@@ -1,3 +1,7 @@
+// UVa-DevTest. 2021.
+// Author: Javier Gatón Herguedas.
+
+// Package that will launch the service
 package main
 
 import (
@@ -8,6 +12,7 @@ import (
 
 var service_name = "signin_service"
 
+// Main will launch the service
 func main() {
 
   r := chi.NewRouter()

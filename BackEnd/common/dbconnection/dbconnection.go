@@ -1,3 +1,7 @@
+// UVa-DevTest. 2021.
+// Author: Javier Gatón Herguedas.
+
+// Package dbconnection provides a connection with the mysql/mariadb database
 package dbconnection
 
 import(
@@ -10,6 +14,7 @@ import(
 
 )
 
+// Returns database information stored at ./dbinfo.json
 func getDbInfo() (DbInfo, error) {
   data, err := ioutil.ReadFile("./dbinfo.json")
   var dbinfo DbInfo
@@ -20,6 +25,7 @@ func getDbInfo() (DbInfo, error) {
   return dbinfo, err
 }
 
+// Connects with the database and returns its sql.DB representation
 func ConnectDb() (*sql.DB, error) {
   dbinfo, err := getDbInfo()
   if err != nil{

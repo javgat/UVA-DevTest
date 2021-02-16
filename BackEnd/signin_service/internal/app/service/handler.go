@@ -1,3 +1,7 @@
+// UVa-DevTest. 2021.
+// Author: Javier Gatón Herguedas.
+
+// Package service handles the http request
 package service
 
 import (
@@ -12,21 +16,25 @@ import (
   "gitlab.com/HP-SCDS/Observatorio/2020-2021/uva-devtest/BackEnd/common/response"
 )
 
+// Responds with a Status Internal Server Error
 func serverError(w http.ResponseWriter, err error){
   log.Println(err)
-  response.RespondError(w, http.StatusInternalServerError, err.Error())
+  response.RespondError(w, http.StatusInternalServerError, "Error interno del servidor")
 }
 
+// Responds with a Conflict Error, user already exists
 func conflictError(w http.ResponseWriter, err error){
   log.Println(err)
-  response.RespondError(w, http.StatusConflict, err.Error())
+  response.RespondError(w, http.StatusConflict, "Usuario ya existe")
 }
 
+// Responds with a 201 Created object and the user created
 func success(w http.ResponseWriter, u model.User){
   log.Println("Usuario registrado")
   response.RespondJSON(w, http.StatusCreated, u)
 }
 
+// Main handler function
 func RegisterUser(w http.ResponseWriter, r *http.Request) {
   log.Println("Registrando usuario...")
   var lu SigninUser

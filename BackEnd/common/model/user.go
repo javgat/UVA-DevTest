@@ -1,3 +1,7 @@
+// UVa-DevTest. 2021.
+// Author: Javier Gatón Herguedas.
+
+// Package model provides structures used in DevTest project
 package model
 
 type User struct{
