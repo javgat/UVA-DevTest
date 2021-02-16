@@ -15,9 +15,9 @@ import(
 )
 
 // Returns database information stored at ./dbinfo.json
-func getDbInfo() (DbInfo, error) {
-  data, err := ioutil.ReadFile("./dbinfo.json")
-  var dbinfo DbInfo
+func getDbInfo(filename string) (*DbInfo, error) {
+  data, err := ioutil.ReadFile(filename)
+  var dbinfo *DbInfo
   if err!= nil {
     return dbinfo, err
   }
@@ -27,10 +27,11 @@ func getDbInfo() (DbInfo, error) {
 
 // Connects with the database and returns its sql.DB representation
 func ConnectDb() (*sql.DB, error) {
-  dbinfo, err := getDbInfo()
+  dbpoint, err := getDbInfo("./dbinfo.json")
   if err != nil{
     return nil, err
   }
+  dbinfo := *dbpoint
   dbSource := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8", dbinfo.Username, dbinfo.Pass, dbinfo.Host, dbinfo.Port, dbinfo.Name)
   db, err := sql.Open("mysql", dbSource)
   return db, err
