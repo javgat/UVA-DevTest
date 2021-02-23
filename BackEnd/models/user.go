@@ -24,11 +24,6 @@ type User struct {
 	// Required: true
 	Email *string `json:"email"`
 
-	// pwhash
-	// Example: e$ia9s7ATDGba39pakscAKs
-	// Required: true
-	Pwhash *string `json:"pwhash"`
-
 	// username
 	// Example: carlosg72
 	// Required: true
@@ -40,10 +35,6 @@ func (m *User) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateEmail(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validatePwhash(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -60,15 +51,6 @@ func (m *User) Validate(formats strfmt.Registry) error {
 func (m *User) validateEmail(formats strfmt.Registry) error {
 
 	if err := validate.Required("email", "body", m.Email); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (m *User) validatePwhash(formats strfmt.Registry) error {
-
-	if err := validate.Required("pwhash", "body", m.Pwhash); err != nil {
 		return err
 	}
 

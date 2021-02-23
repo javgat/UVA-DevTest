@@ -193,17 +193,12 @@ func init() {
       "type": "object",
       "required": [
         "username",
-        "email",
-        "pwhash"
+        "email"
       ],
       "properties": {
         "email": {
           "type": "string",
           "example": "carlos@mail.com"
-        },
-        "pwhash": {
-          "type": "string",
-          "example": "e$ia9s7ATDGba39pakscAKs"
         },
         "username": {
           "type": "string",
@@ -446,17 +441,12 @@ func init() {
       "type": "object",
       "required": [
         "username",
-        "email",
-        "pwhash"
+        "email"
       ],
       "properties": {
         "email": {
           "type": "string",
           "example": "carlos@mail.com"
-        },
-        "pwhash": {
-          "type": "string",
-          "example": "e$ia9s7ATDGba39pakscAKs"
         },
         "username": {
           "type": "string",

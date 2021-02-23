@@ -20,7 +20,6 @@ import (
 func serverErrorSignin(err error) middleware.Responder {
 	log.Println(err)
 	return user.NewRegisterUserBadRequest()
-	//response.RespondError(w, http.StatusInternalServerError, "Error interno del servidor")
 }
 
 // Responds with a Conflict Error, user already exists
@@ -31,17 +30,21 @@ func conflictErrorSignin(err error) middleware.Responder {
 		Message: &errSt,
 	}
 	return user.NewRegisterUserConflict().WithPayload(&prerr)
-	//response.RespondError(w, http.StatusConflict, "Usuario ya existe")
 }
 
 // Responds with a 201 Created object and the user created
-func successSignin(u *models.User) middleware.Responder {
+func successSignin(u *userdao.User) middleware.Responder {
 	log.Println("Usuario registrado")
-	return user.NewRegisterUserCreated().WithPayload(u)
-	//response.RespondJSON(w, http.StatusCreated, u)
+	mu := &models.User{
+		Username: u.Username,
+		Email:    u.Email,
+	}
+	return user.NewRegisterUserCreated().WithPayload(mu)
 }
 
-// Main handler function
+// RegisterUser is the main handler function for Sign In functionality
+// Param params
+// Return middleware.Responder
 func RegisterUser(params user.RegisterUserParams) middleware.Responder {
 
 	log.Println("Registrando usuario...")
@@ -52,24 +55,21 @@ func RegisterUser(params user.RegisterUserParams) middleware.Responder {
 	pwhashstring := string(bytes)
 	if err != nil {
 		return serverErrorSignin(err)
-	} else {
-		u := &models.User{
-			Username: lu.Username,
-			Email:    lu.Email,
-			Pwhash:   &pwhashstring,
-		}
-		db, err := dbconnection.ConnectDb()
-
-		if err != nil {
-			return serverErrorSignin(err)
-		} else {
-			log.Println("Conectado a la base de datos")
-			err = userdao.InsertUser(db, u)
-			if err != nil {
-				return conflictErrorSignin(err)
-			} else {
-				return successSignin(u)
-			}
-		}
 	}
+	u := &userdao.User{
+		Username: lu.Username,
+		Email:    lu.Email,
+		Pwhash:   &pwhashstring,
+	}
+	db, err := dbconnection.ConnectDb()
+
+	if err != nil {
+		return serverErrorSignin(err)
+	}
+	log.Println("Conectado a la base de datos")
+	err = userdao.InsertUser(db, u)
+	if err != nil {
+		return conflictErrorSignin(err)
+	}
+	return successSignin(u)
 }

@@ -44,7 +44,7 @@ func authFailErrorLogin(err error, info string) middleware.Responder {
 }
 
 // The user is logged in, the handler will try to respond with a JWT
-func successLogin(u models.User) middleware.Responder {
+func successLogin(u userdao.User) middleware.Responder {
 	log.Println("Usuario logged in")
 	var wrap jwtauth.JwtWrapper
 	wrap.SecretKey = *u.Pwhash
@@ -70,7 +70,7 @@ func Login(params auth.LoginParams) middleware.Responder {
 		return serverErrorLogin(err)
 	} else {
 		log.Println("Conectado a la base de datos")
-		var u *models.User
+		var u *userdao.User
 		if *lu.Loginid == "" {
 			return badReqErrorLogin(nil)
 		} else {

@@ -26,11 +26,11 @@ func signinUserToInsert() *models.SigninUser {
 	return u
 }
 
-func userToInsert() *models.User {
+func userToInsert() *User {
 	su := signinUserToInsert()
 	bytes, _ := bcrypt.GenerateFromPassword([]byte(*su.Pass), 14)
 	pwhashstring := string(bytes)
-	u := &models.User{
+	u := &User{
 		Username: su.Username,
 		Email:    su.Email,
 		Pwhash:   &pwhashstring,
@@ -38,7 +38,7 @@ func userToInsert() *models.User {
 	return u
 }
 
-func expectInsert(mock sqlmock.Sqlmock, u *models.User) {
+func expectInsert(mock sqlmock.Sqlmock, u *User) {
 	mock.ExpectPrepare("INSERT INTO users").ExpectExec().
 		WithArgs(u.Username, u.Email, u.Pwhash).WillReturnResult(sqlmock.NewResult(1, 1))
 }
