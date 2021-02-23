@@ -43,7 +43,7 @@ func successSignin(u *userdao.User) middleware.Responder {
 }
 
 // RegisterUser is the main handler function for Sign In functionality
-// Param params
+// Param params Parametros de entrada que tiene la peticion http
 // Return middleware.Responder
 func RegisterUser(params user.RegisterUserParams) middleware.Responder {
 

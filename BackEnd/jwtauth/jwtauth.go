@@ -14,8 +14,10 @@ import (
 	"uva-devtest/models"
 )
 
-// Creates a JwtJson from the signed jwt in the string <signedToken>
-func CreateJwtJson(signedToken string) models.JWTJSON {
+// CreateJwtJSON creates a JwtJson from the signed jwt in the string
+// Param signedToken represents the JWT Token
+// Returns models.JWTJSON to send
+func CreateJwtJSON(signedToken string) models.JWTJSON {
 	jsonToken := models.JWTJSON{
 		Token: &signedToken,
 	}
@@ -36,7 +38,10 @@ type JwtClaim struct {
 	jwt.StandardClaims
 }
 
-// The JwtWrapper generates a signed token with an email claim
+// GenerateToken creates a signed token with an email claim, identifying the user
+// Param email: Email identifying the user
+// Return signedToken: Signed JWT Token
+// Return err: Error, if any
 func (j *JwtWrapper) GenerateToken(email string) (signedToken string, err error) {
 	claims := &JwtClaim{
 		Email: email,
@@ -50,7 +55,10 @@ func (j *JwtWrapper) GenerateToken(email string) (signedToken string, err error)
 	return signedToken, err
 }
 
-// The JwtWrapper validates the token signedToken and returns the claims
+// ValidateToken validates the token signedToken and returns the claims
+// Param signedToken: Token that will be validated
+// Return claims: *JwtClaim that the token is claiming
+// Return err: error if something is wrong or if validation is unsuccessful
 func (j *JwtWrapper) ValidateToken(signedToken string) (claims *JwtClaim, err error) {
 	token, err := jwt.ParseWithClaims(
 		signedToken,
@@ -59,6 +67,8 @@ func (j *JwtWrapper) ValidateToken(signedToken string) (claims *JwtClaim, err er
 			return []byte(j.SecretKey), nil
 		},
 	)
+	//Para validar en realidad tendre que hacer nuevas funcioness que
+	//separen validacion de secreto de obtencion de claims
 	if err != nil {
 		return
 	}
