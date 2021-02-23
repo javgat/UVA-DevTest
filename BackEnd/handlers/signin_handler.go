@@ -64,7 +64,7 @@ func RegisterUser(params user.RegisterUserParams) middleware.Responder {
 			return serverErrorSignin(err)
 		} else {
 			log.Println("Conectado a la base de datos")
-			err = userdao.InsertUser(db, *u)
+			err = userdao.InsertUser(db, u)
 			if err != nil {
 				return conflictErrorSignin(err)
 			} else {

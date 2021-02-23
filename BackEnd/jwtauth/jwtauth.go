@@ -16,7 +16,7 @@ import (
 
 // Creates a JwtJson from the signed jwt in the string <signedToken>
 func CreateJwtJson(signedToken string) models.JWTJSON {
-	jsonToken := models.JWTJSON{ // Esto igual no funciona? por lo del puntero a signedToken
+	jsonToken := models.JWTJSON{
 		Token: &signedToken,
 	}
 	return jsonToken

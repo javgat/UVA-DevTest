@@ -22,7 +22,7 @@ paths:
     post:
       tags:
       - user
-      - auth #?
+      - auth
       summary: adds an user
       operationId: RegisterUser
       description: Adds an user to the system

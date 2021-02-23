@@ -6,14 +6,21 @@ package userdao
 
 import (
 	"database/sql"
+	"errors"
 
 	_ "github.com/go-sql-driver/mysql"
 
 	"uva-devtest/models"
 )
 
-// Inserts user <u> into the database <db>
-func InsertUser(db *sql.DB, u models.User) error {
+// Inserts a user into the database
+// Param db: Database to use
+// Param u: User to insert
+// Return error if something wrong happens
+func InsertUser(db *sql.DB, u *models.User) error {
+	if db == nil || u == nil {
+		return errors.New("Argumento de entrada nil")
+	}
 	query, err := db.Prepare("INSERT INTO users(username, email, pwhash) VALUES (?,?,?)")
 
 	if err != nil {
@@ -25,7 +32,10 @@ func InsertUser(db *sql.DB, u models.User) error {
 	return err
 }
 
-// Transforms <rows> into a slice of users
+// Transforms some sql.Rows into a slice(array) of users
+// Param rows: Rows which contains database information returned
+// Return []models.User: Users represented in rows
+// Return error if any
 func rowsToUsers(rows *sql.Rows) ([]models.User, error) {
 	var users []models.User
 	var trash int
@@ -40,7 +50,10 @@ func rowsToUsers(rows *sql.Rows) ([]models.User, error) {
 	return users, nil
 }
 
-// Transforms <rows> into a single user
+// Transforms rows into a single user
+// Param rows: Rows which contains database info of 1 user
+// Return *models.User: User represented in rows
+// Return error if something happens, or if there is more than 1 user
 func rowsToUser(rows *sql.Rows) (*models.User, error) {
 	var user *models.User
 	users, err := rowsToUsers(rows)
@@ -50,30 +63,46 @@ func rowsToUser(rows *sql.Rows) (*models.User, error) {
 	return user, err
 }
 
-// Returns the user whose username is <username>. If there is no such user,
-// returns nil
+// Returns the user based on their username.
+// Param db: Database in which the user will be looked for
+// Param username: Username of the user
+// Return *models.User: User found, or nil if not found
+// Return error if something happened
 func GetUserUsername(db *sql.DB, username string) (*models.User, error) {
+	if db == nil {
+		return nil, errors.New("Parametro db nil")
+	}
 	query, err := db.Prepare("SELECT * FROM users WHERE username=?")
 	var u *models.User
 	if err != nil {
 		return u, err
 	}
 	rows, err := query.Query(username)
-	u, err = rowsToUser(rows)
+	if err == nil {
+		u, err = rowsToUser(rows)
+	}
 	defer query.Close()
 	return u, err
 }
 
-// Returns the user whose email is <email>. If there is no such user,
-// returns nil
+// Returns the user based on their email.
+// Param db: Database in which the user will be looked for
+// Param email: Email of the user
+// Return *models.User: User found, or nil if not found
+// Return error if something happened
 func GetUserEmail(db *sql.DB, email string) (*models.User, error) {
+	if db == nil {
+		return nil, errors.New("Parametro db nil")
+	}
 	query, err := db.Prepare("SELECT * FROM users WHERE email=?")
 	var u *models.User
 	if err != nil {
 		return u, err
 	}
 	rows, err := query.Query(email)
-	u, err = rowsToUser(rows)
+	if err == nil {
+		u, err = rowsToUser(rows)
+	}
 	defer query.Close()
 	return u, err
 }

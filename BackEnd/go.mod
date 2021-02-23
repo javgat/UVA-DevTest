@@ -3,6 +3,7 @@ module uva-devtest
 go 1.15
 
 require (
+	github.com/DATA-DOG/go-sqlmock v1.5.0
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/go-openapi/errors v0.20.0
 	github.com/go-openapi/loads v0.20.2
