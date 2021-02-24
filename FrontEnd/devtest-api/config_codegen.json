@@ -1,0 +1,6 @@
+{
+  "npmName": "@javgat/devtest-api",
+  "npmVersion": "0.0.1",
+  "snapshot": true,
+  "ngVersion": "11.2.1"
+}
