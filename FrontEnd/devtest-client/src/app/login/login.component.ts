@@ -8,16 +8,33 @@ import { AuthService, LoginUser } from '@javgat/devtest-api'
 })
 export class LoginComponent implements OnInit {
 
-  constructor(authService : AuthService) {
-    let loginUser: LoginUser = {
-      loginid: "Carlos",
-      pass: "carlospass"
-    }
+  loginUserEmpty = {
+    loginid: "",
+    pass: ""
+  }
 
-    authService.login(loginUser).subscribe(console.log)
+  loginUser = this.loginUserEmpty as LoginUser
+
+  constructor(private authService : AuthService) {
+    
   }
 
   ngOnInit(): void {
+  }
+
+  login(lu : LoginUser){
+    this.authService.login(lu).subscribe(
+      resp => {
+        console.log("Inicio sesion con exito")
+      },
+      err =>{
+        console.log("Error al iniciar sesion")
+      }
+    )
+  }
+
+  loginSubmit(){
+    this.login(this.loginUser)
   }
 
 }

@@ -7,6 +7,7 @@ import { SigninComponent } from './signin/signin.component';
 import { LoginComponent } from './login/login.component';
 
 import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 import { ApiModule, BASE_PATH } from '@javgat/devtest-api';
 import { environment } from '../environments/environment';
 
@@ -20,7 +21,8 @@ import { environment } from '../environments/environment';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    ApiModule
+    ApiModule,
+    FormsModule
   ],
   providers: [{ provide: BASE_PATH, useValue: environment.API_BASE_PATH }],
   bootstrap: [AppComponent]
