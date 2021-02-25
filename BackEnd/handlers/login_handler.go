@@ -5,6 +5,7 @@
 package handlers
 
 import (
+	"errors"
 	"log"
 	"uva-devtest/models"
 	"uva-devtest/persistence/daos/userdao"
@@ -64,6 +65,9 @@ func successLogin(u userdao.User) middleware.Responder {
 func Login(params auth.LoginParams) middleware.Responder {
 	log.Println("Generando Token JWT de usuario...")
 	var lu *models.LoginUser = params.LoginUser
+	if lu == nil {
+		return badReqErrorLogin(errors.New("Parametros de entrada vacios"))
+	}
 	log.Printf("Login id: %v\n", *lu.Loginid)
 	db, err := dbconnection.ConnectDb()
 	if err != nil {

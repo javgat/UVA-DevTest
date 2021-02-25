@@ -14,6 +14,7 @@ require (
 	github.com/go-openapi/validate v0.20.2
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/jessevdk/go-flags v1.4.0
+	github.com/rs/cors v1.7.0
 	golang.org/x/crypto v0.0.0-20210220033148-5ea612d1eb83
 	golang.org/x/net v0.0.0-20210224082022-3d97a244fca7
 )

@@ -6,6 +6,10 @@ import { AppComponent } from './app.component';
 import { SigninComponent } from './signin/signin.component';
 import { LoginComponent } from './login/login.component';
 
+import { HttpClientModule } from '@angular/common/http';
+import { ApiModule, BASE_PATH } from '@javgat/devtest-api';
+import { environment } from '../environments/environment';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -14,9 +18,12 @@ import { LoginComponent } from './login/login.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule,
+    ApiModule
   ],
-  providers: [],
+  providers: [{ provide: BASE_PATH, useValue: environment.API_BASE_PATH }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+

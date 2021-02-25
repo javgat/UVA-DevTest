@@ -5,6 +5,7 @@
 package handlers
 
 import (
+	"errors"
 	"log"
 
 	"github.com/go-openapi/runtime/middleware"
@@ -49,6 +50,9 @@ func RegisterUser(params user.RegisterUserParams) middleware.Responder {
 
 	log.Println("Registrando usuario...")
 	var lu *models.SigninUser = params.SigninUser
+	if lu == nil {
+		return serverErrorSignin(errors.New("Parametros de entrada vacios"))
+	}
 	log.Printf("Nombre de usuario: %v\n", *lu.Username)
 	log.Println("Email: " + *lu.Email)
 	bytes, err := bcrypt.GenerateFromPassword([]byte(*lu.Pass), 14)

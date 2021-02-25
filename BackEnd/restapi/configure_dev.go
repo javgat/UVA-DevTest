@@ -8,6 +8,7 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
+	"github.com/rs/cors"
 
 	"uva-devtest/handlers"
 	"uva-devtest/restapi/operations"
@@ -71,5 +72,15 @@ func setupMiddlewares(handler http.Handler) http.Handler {
 // The middleware configuration happens before anything, this middleware also applies to serving the swagger.json document.
 // So this is a good place to plug in a panic handling middleware, logging and metrics.
 func setupGlobalMiddleware(handler http.Handler) http.Handler {
+	var c = cors.New(cors.Options{
+		AllowedOrigins:   []string{"*"},
+		AllowCredentials: true,
+		AllowedMethods:   []string{"POST", "PUT", "GET", "DELETE", "OPTIONS"},
+		AllowedHeaders: []string{"Accept", "Accept-Encoding", "Authorization", "Content-Type",
+			"cache-control", "Origin", "X-CSRF-Token"}, //por que el token?
+		MaxAge: 300,
+		Debug:  true,
+	})
+	handler = c.Handler(handler)
 	return handler
 }
