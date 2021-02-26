@@ -7,6 +7,7 @@ package handlers
 import (
 	"errors"
 	"log"
+	"strings"
 
 	"github.com/go-openapi/runtime/middleware"
 	"golang.org/x/crypto/bcrypt"
@@ -26,7 +27,10 @@ func serverErrorSignin(err error) middleware.Responder {
 // Responds with a Conflict Error, user already exists
 func conflictErrorSignin(err error) middleware.Responder {
 	log.Println(err)
-	errSt := "Usuario ya existe"
+	errSt := "Ya existe un usuario registrado con ese nombre de usuario"
+	if strings.Contains(err.Error(), "email") {
+		errSt = "Ya existe un usuario registrado con ese email"
+	}
 	prerr := models.Error{
 		Message: &errSt,
 	}
