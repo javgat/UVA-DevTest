@@ -4,6 +4,8 @@ import { Mensaje, Session, Tipo } from '../shared/app.model';
 import { DataService } from '../shared/data.service';
 import { SessionService } from '../shared/session.service';
 
+// LoginComponent es el componente que permite el inicio de sesión y autenticación de un usuario
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -15,7 +17,7 @@ export class LoginComponent implements OnInit {
     loginid: "",
     pass: ""
   }
-
+  // Variable que se modificara en el formulario de inicio de sesión
   loginUser = this.loginUserEmpty as LoginUser
   mensaje: Mensaje
 
@@ -30,6 +32,7 @@ export class LoginComponent implements OnInit {
     )
   }
 
+  // Envío de petición de login a BackEnd, y manejo de la respuesta
   login(lu : LoginUser){
     this.authService.login(lu).subscribe(
       resp => {        
@@ -50,6 +53,7 @@ export class LoginComponent implements OnInit {
     )
   }
 
+  // Cuando el formulario se envia, se ejecuta la funcio
   loginSubmit(){
     this.login(this.loginUser)
   }

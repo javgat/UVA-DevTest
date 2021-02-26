@@ -4,6 +4,8 @@ import { AuthService, SigninUser } from '@javgat/devtest-api';
 import { Mensaje, Tipo } from '../shared/app.model';
 import { DataService } from '../shared/data.service';
 
+// SigninComponent es el componente que permite el registro de un nuevo usuario
+
 @Component({
   selector: 'app-signin',
   templateUrl: './signin.component.html',
@@ -16,7 +18,7 @@ export class SigninComponent implements OnInit {
     email:"",
     pass:""
   }
-
+  // Variable que se modificara en el formulario de registro
   signinUser = this.signinUserEmpty as SigninUser
   mensaje: Mensaje
   
@@ -30,6 +32,7 @@ export class SigninComponent implements OnInit {
     )
   }
 
+  // Envío de petición de registro a BackEnd, y manejo de la respuesta
   signin(su: SigninUser){
     this.authService.registerUser(su).subscribe(
       resp => {        
@@ -49,6 +52,7 @@ export class SigninComponent implements OnInit {
     )
   }
 
+  // Cuando el formulario se envia, se ejecuta la funcio
   signinSubmit(){
     this.signin(this.signinUser)
   }
