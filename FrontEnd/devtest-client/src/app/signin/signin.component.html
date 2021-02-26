@@ -1,18 +1,21 @@
-<div class="alert alert-{{mensaje.type}}" *ngIf="mensaje.mostrar">{{mensaje.texto}}</div>
+<div class="alert alert-{{mensaje.type}}" *ngIf="mensaje.mostrar" role="alert">{{mensaje.texto}}</div>
 <form (ngSubmit)='signinSubmit()' ngNativeValidate>
-    <div class="form-group">
-        <label for="inputUsername">Nombre de usuario</label>
-        <input type="text" class="form-control" name="inputUsername" aria-describedby="usernameHelp" [(ngModel)]="signinUser.username" required/>
-        <small id="usernameHelp" class="form-text text-muted">Introduce tu nombre de usuario</small>
+    <div class="mb-3">
+        <label for="inputUsername" class="form-label">Nombre de usuario</label>
+        <input type="text" class="form-control" name="inputUsername" aria-describedby="usernameHelp" [(ngModel)]="signinUser.username" required pattern="[^@]+"/>
+        <div id="usernameHelp" class="form-text text-muted">Introduce tu nombre de usuario. No puedes introducir el caracter '@'.</div>
     </div>
-    <div class="form-group">
-        <label for="inputEmail">Email</label>
-        <input type="text" class="form-control" name="inputEmail" aria-describedby="emailHelp" [(ngModel)]="signinUser.email" required/>
-        <small id="emailHelp" class="form-text text-muted">Introduce tu correo electronico</small>
+    <div class="mb-3">
+        <label for="inputEmail" class="form-label">Email</label>
+        <input type="email" class="form-control" name="inputEmail" aria-describedby="emailHelp" [(ngModel)]="signinUser.email" required/>
+        <div id="emailHelp" class="form-text text-muted">Introduce tu correo electronico</div>
     </div>
-    <div class="form-group">
-        <label for="inputPassword">Password</label>
-        <input type="password" class="form-control" name="inputPassword" [(ngModel)]="signinUser.pass" required/>
+    <div class="mb-3">
+        <label for="inputPassword" class="form-label">Password</label>
+        <input type="password" class="form-control" name="inputPassword" aria-describedby="passwordHelp" [(ngModel)]="signinUser.pass" required minlength="6"/>
+        <div id="passwordHelp" class="form-text text-muted">Introduce una contraseña, mínimo 6 caracteres.</div>
     </div>
-    <input type="submit" value="Acceder" class="btn btn-primary btn-lg btn-block"/>
+    <div class="d-grid gap-2">
+        <input type="submit" value="Registrarse" class="btn btn-primary"/>
+    </div>
 </form>

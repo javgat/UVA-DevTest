@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService, SigninUser } from '@javgat/devtest-api';
 import { Mensaje, Tipo } from '../shared/app.model';
 import { DataService } from '../shared/data.service';
@@ -19,7 +20,7 @@ export class SigninComponent implements OnInit {
   signinUser = this.signinUserEmpty as SigninUser
   mensaje: Mensaje
   
-  constructor(private authService : AuthService, private datos : DataService) { 
+  constructor(private authService : AuthService, private datos : DataService, private router: Router) { 
     this.mensaje = new Mensaje()
   }
 
@@ -34,10 +35,16 @@ export class SigninComponent implements OnInit {
       resp => {        
         this.datos.cambiarMensaje(new Mensaje("Registro con exito", Tipo.SUCCESS, true))
         console.log("Registro con exito")
+        this.router.navigate(['login'])
       },
       err =>{
-        this.datos.cambiarMensaje(new Mensaje("Error al registrar nuevo usuario", Tipo.ERROR, true))
-        console.log("Error al registrar nuevo usuario")
+        let msg: string
+        if(err.status >= 500)
+          msg = "Error al conectar con el servidor"
+        else
+          msg = err.error.message
+        this.datos.cambiarMensaje(new Mensaje("Error al registrar nuevo usuario: "+msg, Tipo.ERROR, true))
+        console.log("Error al registrar nuevo usuario: "+msg)
       }
     )
   }

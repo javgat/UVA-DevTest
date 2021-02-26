@@ -36,10 +36,16 @@ export class LoginComponent implements OnInit {
         this.datos.cambiarMensaje(new Mensaje("Inicio sesion con exito", Tipo.SUCCESS, true))
         this.session.cambiarSession(new Session(true, resp.token, lu.loginid))
         console.log("Inicio sesion con exito")
+        // Redireccion a pagina principal?
       },
       err =>{
-        this.datos.cambiarMensaje(new Mensaje("Error al iniciar sesion", Tipo.ERROR, true))
-        console.log("Error al iniciar sesion")
+        let msg: string
+        if(err.status >= 500)
+          msg = "Error al conectar con el servidor"
+        else
+          msg = err.error.message
+        this.datos.cambiarMensaje(new Mensaje("Error al iniciar sesion: "+msg, Tipo.ERROR, true))
+        console.log("Error al iniciar sesion: "+msg)
       }
     )
   }
