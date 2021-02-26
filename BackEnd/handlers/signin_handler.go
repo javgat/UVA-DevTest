@@ -60,10 +60,10 @@ func RegisterUser(params user.RegisterUserParams) middleware.Responder {
 	log.Printf("Nombre de usuario: %v\n", *lu.Username)
 	log.Println("Email: " + *lu.Email)
 	bytes, err := bcrypt.GenerateFromPassword([]byte(*lu.Pass), 14)
-	pwhashstring := string(bytes)
 	if err != nil {
 		return serverErrorSignin(err)
 	}
+	pwhashstring := string(bytes)
 	u := &userdao.User{
 		Username: lu.Username,
 		Email:    lu.Email,

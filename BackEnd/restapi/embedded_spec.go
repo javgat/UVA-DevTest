@@ -163,7 +163,9 @@ func init() {
         },
         "pass": {
           "type": "string",
-          "example": "pass"
+          "format": "password",
+          "pattern": "^.{6,}$",
+          "example": "password"
         }
       }
     },
@@ -177,14 +179,19 @@ func init() {
       "properties": {
         "email": {
           "type": "string",
+          "format": "email",
+          "pattern": "^[^@ \\t\\r\\n]+@[^@ \\t\\r\\n]+\\.[^@ \\t\\r\\n]+$",
           "example": "carlos@mail.com"
         },
         "pass": {
           "type": "string",
-          "example": "pass"
+          "format": "password",
+          "pattern": "^.{6,}$",
+          "example": "password"
         },
         "username": {
           "type": "string",
+          "pattern": "^[^@]+$",
           "example": "carlosg72"
         }
       }
@@ -198,10 +205,13 @@ func init() {
       "properties": {
         "email": {
           "type": "string",
+          "format": "email",
+          "pattern": "^[^@ \\t\\r\\n]+@[^@ \\t\\r\\n]+\\.[^@ \\t\\r\\n]+$",
           "example": "carlos@mail.com"
         },
         "username": {
           "type": "string",
+          "pattern": "^[^@]+$",
           "example": "carlosg72"
         }
       }
@@ -411,7 +421,9 @@ func init() {
         },
         "pass": {
           "type": "string",
-          "example": "pass"
+          "format": "password",
+          "pattern": "^.{6,}$",
+          "example": "password"
         }
       }
     },
@@ -425,14 +437,19 @@ func init() {
       "properties": {
         "email": {
           "type": "string",
+          "format": "email",
+          "pattern": "^[^@ \\t\\r\\n]+@[^@ \\t\\r\\n]+\\.[^@ \\t\\r\\n]+$",
           "example": "carlos@mail.com"
         },
         "pass": {
           "type": "string",
-          "example": "pass"
+          "format": "password",
+          "pattern": "^.{6,}$",
+          "example": "password"
         },
         "username": {
           "type": "string",
+          "pattern": "^[^@]+$",
           "example": "carlosg72"
         }
       }
@@ -446,10 +463,13 @@ func init() {
       "properties": {
         "email": {
           "type": "string",
+          "format": "email",
+          "pattern": "^[^@ \\t\\r\\n]+@[^@ \\t\\r\\n]+\\.[^@ \\t\\r\\n]+$",
           "example": "carlos@mail.com"
         },
         "username": {
           "type": "string",
+          "pattern": "^[^@]+$",
           "example": "carlosg72"
         }
       }

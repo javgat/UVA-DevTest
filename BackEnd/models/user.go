@@ -22,11 +22,14 @@ type User struct {
 	// email
 	// Example: carlos@mail.com
 	// Required: true
-	Email *string `json:"email"`
+	// Pattern: ^[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+$
+	// Format: email
+	Email *strfmt.Email `json:"email"`
 
 	// username
 	// Example: carlosg72
 	// Required: true
+	// Pattern: ^[^@]+$
 	Username *string `json:"username"`
 }
 
@@ -54,12 +57,24 @@ func (m *User) validateEmail(formats strfmt.Registry) error {
 		return err
 	}
 
+	if err := validate.Pattern("email", "body", m.Email.String(), `^[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+$`); err != nil {
+		return err
+	}
+
+	if err := validate.FormatOf("email", "body", "email", m.Email.String(), formats); err != nil {
+		return err
+	}
+
 	return nil
 }
 
 func (m *User) validateUsername(formats strfmt.Registry) error {
 
 	if err := validate.Required("username", "body", m.Username); err != nil {
+		return err
+	}
+
+	if err := validate.Pattern("username", "body", *m.Username, `^[^@]+$`); err != nil {
 		return err
 	}
 

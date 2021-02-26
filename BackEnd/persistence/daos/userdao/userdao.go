@@ -8,10 +8,11 @@ import (
 	"database/sql"
 	"errors"
 
+	// Blank import of mysql driver
 	_ "github.com/go-sql-driver/mysql"
 )
 
-// Inserts a user into the database
+// InsertUser inserts a user into the database
 // Param db: Database to use
 // Param u: User to insert
 // Return error if something wrong happens

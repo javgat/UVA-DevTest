@@ -9,6 +9,7 @@ import (
 	"uva-devtest/models"
 
 	"github.com/DATA-DOG/go-sqlmock"
+	"github.com/go-openapi/strfmt"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -16,8 +17,8 @@ import (
 
 func signinUserToInsert() *models.SigninUser {
 	uname := "Test"
-	email := "Test@mail.com"
-	pass := "Test"
+	var email strfmt.Email = "Test@mail.com"
+	var pass strfmt.Password = "Testpass"
 	u := &models.SigninUser{
 		Username: &uname,
 		Email:    &email,
@@ -264,7 +265,7 @@ func TestGetUserUsernameFound(t *testing.T) {
 		t.Log("u should not be nil")
 		t.Fail()
 	}
-	if *u.Email != email {
+	if u.Email.String() != email {
 		t.Log("email incorrect")
 		t.Fail()
 	}

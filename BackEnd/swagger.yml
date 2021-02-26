@@ -102,12 +102,17 @@ definitions:
       username:
         type: string
         example: carlosg72
+        pattern: '^[^@]+$'
       email:
         type: string
         example: carlos@mail.com
+        format: email
+        pattern: '^[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+$'
       pass:
         type: string
-        example: pass
+        example: password
+        format: password
+        pattern: '^.{6,}$'
   LoginUser:
     type: object
     required:
@@ -119,7 +124,9 @@ definitions:
         example: carlosg72 || carlos@mail.com #??????
       pass:
         type: string
-        example: pass
+        example: password
+        format: password
+        pattern: '^.{6,}$'
   JWTJson:
     type: object
     required:
@@ -137,9 +144,12 @@ definitions:
       username:
         type: string
         example: carlosg72
+        pattern: '^[^@]+$'
       email:
         type: string
         example: carlos@mail.com
+        format: email
+        pattern: '^[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+$'
   Error:
     type: object
     required:

@@ -1,5 +1,7 @@
 package userdao
 
+import "github.com/go-openapi/strfmt"
+
 // User user
 //
 // swagger:model User
@@ -8,7 +10,8 @@ type User struct {
 	// email
 	// Example: carlos@mail.com
 	// Required: true
-	Email *string `json:"email"`
+	// Format: email
+	Email *strfmt.Email `json:"email"`
 
 	// pwhash
 	// Example: e$ia9s7ATDGba39pakscAKs
@@ -18,5 +21,6 @@ type User struct {
 	// username
 	// Example: carlosg72
 	// Required: true
+	// Pattern: [^@]+
 	Username *string `json:"username"`
 }

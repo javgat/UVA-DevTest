@@ -51,7 +51,7 @@ func successLogin(u userdao.User) middleware.Responder {
 	wrap.SecretKey = *u.Pwhash
 	wrap.Issuer = "DevTest"
 	wrap.ExpirationHours = 24
-	signedToken, err := wrap.GenerateToken(*u.Email)
+	signedToken, err := wrap.GenerateToken(u.Email.String())
 	tokenJSON := jwtauth.CreateJwtJSON(signedToken)
 	if err != nil {
 		return badReqErrorLogin(err)

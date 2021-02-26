@@ -25,9 +25,11 @@ type LoginUser struct {
 	Loginid *string `json:"loginid"`
 
 	// pass
-	// Example: pass
+	// Example: password
 	// Required: true
-	Pass *string `json:"pass"`
+	// Pattern: ^.{6,}$
+	// Format: password
+	Pass *strfmt.Password `json:"pass"`
 }
 
 // Validate validates this login user
@@ -60,6 +62,14 @@ func (m *LoginUser) validateLoginid(formats strfmt.Registry) error {
 func (m *LoginUser) validatePass(formats strfmt.Registry) error {
 
 	if err := validate.Required("pass", "body", m.Pass); err != nil {
+		return err
+	}
+
+	if err := validate.Pattern("pass", "body", m.Pass.String(), `^.{6,}$`); err != nil {
+		return err
+	}
+
+	if err := validate.FormatOf("pass", "body", "password", m.Pass.String(), formats); err != nil {
 		return err
 	}
 
