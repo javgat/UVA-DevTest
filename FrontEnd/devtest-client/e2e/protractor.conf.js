@@ -13,7 +13,9 @@ exports.config = {
     './src/**/*.e2e-spec.ts'
   ],
   capabilities: {
-    browserName: 'chrome'
+    browserName: 'firefox',
+    marionette : true,
+    acceptInsecureCerts : true
   },
   directConnect: true,
   SELENIUM_PROMISE_MANAGER: false,

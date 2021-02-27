@@ -1,11 +1,24 @@
 import { browser, by, element } from 'protractor';
 
 export class AppPage {
-  async navigateTo(): Promise<unknown> {
-    return browser.get(browser.baseUrl);
+
+  getUrl(): string{
+    return browser.baseUrl
   }
 
-  async getTitleText(): Promise<string> {
-    return element(by.css('app-root .content span')).getText();
+  async navigateTo(): Promise<unknown> {
+    return browser.get(this.getUrl());
+  }
+
+  async messageVisible(): Promise<boolean>{
+    return element(by.id("message")).isPresent()
+  }
+
+  async messageType(): Promise<string>{
+    return element(by.id("message")).getAttribute("class")
+  }
+
+  async logout(){
+    // Aqui hacer el logout, por ahora nada
   }
 }

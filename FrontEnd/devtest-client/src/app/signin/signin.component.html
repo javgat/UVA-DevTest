@@ -1,4 +1,4 @@
-<div class="alert alert-{{mensaje.type}}" *ngIf="mensaje.mostrar" role="alert">{{mensaje.texto}}</div>
+<div class="alert alert-{{mensaje.type}}" *ngIf="mensaje.mostrar" id="message" role="alert">{{mensaje.texto}}</div>
 <form (ngSubmit)='signinSubmit()' ngNativeValidate>
     <div class="mb-3">
         <label for="inputUsername" class="form-label">Nombre de usuario</label>
@@ -16,6 +16,6 @@
         <div id="passwordHelp" class="form-text text-muted">Introduce una contraseña, mínimo 6 caracteres.</div>
     </div>
     <div class="d-grid gap-2">
-        <input type="submit" value="Registrarse" class="btn btn-primary"/>
+        <input type="submit" value="Registrarse" class="btn btn-primary" id="buttonSubmitSignin"/>
     </div>
 </form>
