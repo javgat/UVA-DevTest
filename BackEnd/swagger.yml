@@ -17,6 +17,8 @@ tags:
   description: Operations related to users
 - name: auth
   description: Operations related to authentication
+- name: team
+  description: Operations related to teams
 paths:
   /users:
     post:
@@ -34,6 +36,7 @@ paths:
       - in: body
         name: signinUser
         description: User item to add
+        required: true
         schema:
           $ref: '#/definitions/SigninUser'
       responses:
@@ -45,6 +48,131 @@ paths:
           $ref: '#/responses/BadRequestError'
         409:
           $ref: '#/responses/ConflictError'
+        500:
+          $ref: '#/responses/InternalServerError'
+    get:
+      security:
+        - BearerHeader: []
+      tags:
+      - user
+      summary: Returns all users. Only for admins
+      operationId: GetUsers
+      description: Returns all users. Only for admins
+      produces:
+      - application/json
+      responses:
+        200:
+          description: users found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  /users/{username}:
+    get:
+      security:
+        - BearerHeader: []
+      tags:
+      - user
+      summary: Finds a user by its username
+      operationId: getUserUsername
+      description: Finds a user by its username
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the user to find
+        required: true
+        type: string
+      responses:
+        200:
+          description: user found
+          schema:
+            $ref: '#/definitions/User'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+    put:
+      security:
+        - BearerHeader: []
+      tags:
+      - user
+      summary: Modifies the user <username>
+      operationId: putUserUsername
+      description: Modifies the user <username>
+      consumes:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the user to modify its password
+        required: true
+        type: string
+      - in: body
+        name: user
+        required: true
+        description: User information updated
+        schema:
+          $ref: '#/definitions/User'
+      responses:
+        200:
+          description: user updated
+          schema:
+            $ref: '#/definitions/User'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        409:
+          $ref: '#/responses/ConflictError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  /passwords/{username}:
+    put:
+      security:
+        - BearerHeader: []
+      tags:
+      - user
+      - auth
+      summary: Modifies the password of the user <username>
+      operationId: putPasswordUsername
+      description: Modifies the password of the user <username>
+      consumes:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the user to modify its password
+        required: true
+        type: string
+      - in: body
+        name: passwordUpdate
+        description: Password update information
+        required: true
+        schema:
+          $ref: '#/definitions/PasswordUpdate'
+      responses:
+        200:
+          description: Resource password modified correctly
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
         500:
           $ref: '#/responses/InternalServerError'
   /accesstokens:
@@ -62,6 +190,7 @@ paths:
       - in: body
         name: loginUser
         description: User who is trying to generate a token
+        required: true
         schema:
           $ref: '#/definitions/LoginUser'
       responses:
@@ -75,10 +204,13 @@ paths:
           $ref: '#/responses/GoneError'
         500:
           $ref: '#/responses/InternalServerError'
-          
 responses:
   BadRequestError:
     description: Incorrect Request, or invalida data
+    schema:
+      $ref: '#/definitions/Error'
+  ForbiddenError:
+    description: Not authorized to this content
     schema:
       $ref: '#/definitions/Error'
   ConflictError:
@@ -102,7 +234,7 @@ definitions:
       username:
         type: string
         example: carlosg72
-        pattern: '^[^@]+$'
+        pattern: '^[^@ \t\r\n]+$'
       email:
         type: string
         example: carlos@mail.com
@@ -144,12 +276,34 @@ definitions:
       username:
         type: string
         example: carlosg72
-        pattern: '^[^@]+$'
+        pattern: '^[^@ \t\r\n]+$'
       email:
         type: string
         example: carlos@mail.com
         format: email
         pattern: '^[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+$'
+      fullname:
+        type: string
+        example: Javier Gatón Herguedas
+      type:
+        type: string
+        enum: [student, teacher, admin]
+  PasswordUpdate:
+    type: object
+    required:
+    - oldpass
+    - newpass
+    properties:
+      oldpass:
+        type: string
+        example: password
+        format: password
+        pattern: '^.{6,}$'
+      newpass:
+        type: string
+        example: password
+        format: password
+        pattern: '^.{6,}$'
   Error:
     type: object
     required:
@@ -159,16 +313,11 @@ definitions:
         type: string
         example: Object not found
 securityDefinitions:
-  # X-API-Key: abcdef12345
-  APIKeyHeader:
+  # Bearer: abcdef12345
+  BearerHeader:
     type: apiKey
     in: header
-    name: X-API-Key
-  # /path?api_key=abcdef12345
-  APIKeyQueryParam:
-    type: apiKey
-    in: query
-    name: api_key
+    name: Bearer
 host: localhost
 basePath: /DevTest
 schemes:
