@@ -167,11 +167,53 @@ func UpdateUser(db *sql.DB, u *models.User, username string) error {
 	if db == nil || u == nil {
 		return errors.New("Argumento de entrada nil")
 	}
-	query, err := db.Prepare("UPDATE users SET email=? fullname=? username=? type=? WHERE username = ? ")
+	query, err := db.Prepare("UPDATE users SET email=?, fullname=?, username=?, type=? WHERE username = ? ")
 	if err != nil {
 		return err
 	}
 	_, err = query.Exec(u.Email, u.Fullname, u.Username, u.Type, username)
+	defer query.Close()
+	return err
+}
+
+// DeleteUser deletes user <username> from the database
+func DeleteUser(db *sql.DB, username string) error {
+	if db == nil {
+		return errors.New("Argumento de entrada nil")
+	}
+	query, err := db.Prepare("DELETE FROM users WHERE username = ? ")
+	if err != nil {
+		return err
+	}
+	_, err = query.Exec(username)
+	defer query.Close()
+	return err
+}
+
+// AddUserTeam adds a user to a team
+func AddUserTeam(db *sql.DB, username string, teamname string) error {
+	if db == nil {
+		return errors.New("Argumento de entrada nil")
+	}
+	query, err := db.Prepare("INSERT INTO teamroles(username, teamname, role) VALUES (?, ?, ?) ")
+	if err != nil {
+		return err
+	}
+	_, err = query.Exec(username, teamname, models.TeamRoleRoleMember)
+	defer query.Close()
+	return err
+}
+
+// ExitUserTeam gets out a user from a team
+func ExitUserTeam(db *sql.DB, username string, teamname string) error {
+	if db == nil {
+		return errors.New("Argumento de entrada nil")
+	}
+	query, err := db.Prepare("DELETE FROM teamroles WHERE username = ? AND teamname = ? ")
+	if err != nil {
+		return err
+	}
+	_, err = query.Exec(username, teamname)
 	defer query.Close()
 	return err
 }

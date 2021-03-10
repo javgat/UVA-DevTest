@@ -13,6 +13,7 @@ import (
 	"uva-devtest/handlers"
 	"uva-devtest/restapi/operations"
 	"uva-devtest/restapi/operations/auth"
+	"uva-devtest/restapi/operations/team"
 	"uva-devtest/restapi/operations/user"
 )
 
@@ -56,14 +57,14 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 	api.UserRegisterUserHandler = user.RegisterUserHandlerFunc(handlers.RegisterUser) // POST /users
 	api.UserGetUsersHandler = user.GetUsersHandlerFunc(handlers.GetUsers)             // GET /users
 
-	api.UserGetUserHandler = user.GetUserHandlerFunc(handlers.GetUser) // GET /users/{username}
-	api.UserPutUserHandler = user.PutUserHandlerFunc(handlers.PutUser) // PUT /users/{username}
-	api.UserDeleteUserHandler = nil                                    // DELETE /users/{username}
-	api.UserGetTeamsOfUserHandler = nil                                // GET /users/{username}/teams
-	api.UserAddTeamOfUserHandler = nil                                 // PUT /users/{username}/teams/{teamname}
-	api.UserDeleteTeamOfUserHandler = nil                              // DELETE /users/{username}/teams/{teamname}
-	api.TeamGetUserTeamRoleHandler = nil                               // GET /users/{username}/teams/{teamname}/role
-	api.TeamPutUserTeamRoleHandler = nil                               // PUT /users/{username}/teams/{teamname}/role
+	api.UserGetUserHandler = user.GetUserHandlerFunc(handlers.GetUser)                            // GET /users/{username}
+	api.UserPutUserHandler = user.PutUserHandlerFunc(handlers.PutUser)                            // PUT /users/{username}
+	api.UserDeleteUserHandler = user.DeleteUserHandlerFunc(handlers.DeleteUser)                   // DELETE /users/{username}
+	api.UserGetTeamsOfUserHandler = user.GetTeamsOfUserHandlerFunc(handlers.GetTeamsOfUser)       // GET /users/{username}/teams
+	api.UserAddTeamOfUserHandler = user.AddTeamOfUserHandlerFunc(handlers.AddTeamOfUser)          // PUT /users/{username}/teams/{teamname}
+	api.UserDeleteTeamOfUserHandler = user.DeleteTeamOfUserHandlerFunc(handlers.DeleteTeamOfUser) // DELETE /users/{username}/teams/{teamname}
+	api.TeamGetUserTeamRoleHandler = team.GetUserTeamRoleHandlerFunc(handlers.GetUserTeamRole)    // GET /users/{username}/teams/{teamname}/role
+	api.TeamPutUserTeamRoleHandler = team.PutUserTeamRoleHandlerFunc(handlers.PutUserTeamRole)    // PUT /users/{username}/teams/{teamname}/role
 
 	api.TeamGetTeamsHandler = nil           // GET /teams
 	api.TeamPostTeamHandler = nil           // POST /teams
