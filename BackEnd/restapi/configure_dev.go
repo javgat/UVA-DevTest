@@ -66,14 +66,14 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 	api.TeamGetUserTeamRoleHandler = team.GetUserTeamRoleHandlerFunc(handlers.GetUserTeamRole)    // GET /users/{username}/teams/{teamname}/role
 	api.TeamPutUserTeamRoleHandler = team.PutUserTeamRoleHandlerFunc(handlers.PutUserTeamRole)    // PUT /users/{username}/teams/{teamname}/role
 
-	api.TeamGetTeamsHandler = nil           // GET /teams
-	api.TeamPostTeamHandler = nil           // POST /teams
-	api.TeamGetTeamHandler = nil            // GET /teams/{teamname}
-	api.TeamPutTeamHandler = nil            // PUT /teams/{teamname}
-	api.TeamDeleteTeamHandler = nil         // DELETE /teams/{teamname}
-	api.UserGetUsersFromTeamHandler = nil   // GET /teams/{teamname}/users
-	api.UserAddUserFromTeamHandler = nil    // PUT /teams/{teamname}/users/{username}
-	api.UserDeleteUserFromTeamHandler = nil // DELETE /teams/{teamname}/users/{username}
+	api.TeamGetTeamsHandler = team.GetTeamsHandlerFunc(handlers.GetTeams)                               // GET /teams
+	api.TeamPostTeamHandler = team.PostTeamHandlerFunc(handlers.PostTeam)                               // POST /teams
+	api.TeamGetTeamHandler = team.GetTeamHandlerFunc(handlers.GetTeam)                                  // GET /teams/{teamname}
+	api.TeamPutTeamHandler = team.PutTeamHandlerFunc(handlers.PutTeam)                                  // PUT /teams/{teamname}
+	api.TeamDeleteTeamHandler = team.DeleteTeamHandlerFunc(handlers.DeleteTeam)                         // DELETE /teams/{teamname}
+	api.UserGetUsersFromTeamHandler = user.GetUsersFromTeamHandlerFunc(handlers.GetUsersFromTeam)       // GET /teams/{teamname}/users
+	api.UserAddUserFromTeamHandler = user.AddUserFromTeamHandlerFunc(handlers.AddUserFromTeam)          // PUT /teams/{teamname}/users/{username}
+	api.UserDeleteUserFromTeamHandler = user.DeleteUserFromTeamHandlerFunc(handlers.DeleteUserFromTeam) // DELETE /teams/{teamname}/users/{username}
 
 	api.PreServerShutdown = func() {}
 

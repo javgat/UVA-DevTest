@@ -181,7 +181,7 @@ func DeleteUser(db *sql.DB, username string) error {
 	if db == nil {
 		return errors.New("Argumento de entrada nil")
 	}
-	query, err := db.Prepare("DELETE FROM users WHERE username = ? ")
+	query, err := db.Prepare("DELETE FROM users WHERE username = ? ") //ESTO TENDRA QUE SER MAS COMPLEJO, RELACIONES
 	if err != nil {
 		return err
 	}
@@ -216,4 +216,22 @@ func ExitUserTeam(db *sql.DB, username string, teamname string) error {
 	_, err = query.Exec(username, teamname)
 	defer query.Close()
 	return err
+}
+
+// GetUsersFromTeam returns all users
+func GetUsersFromTeam(db *sql.DB, teamname string) ([]*models.User, error) {
+	if db == nil {
+		return nil, errors.New("Parametro db nil")
+	}
+	query, err := db.Prepare("SELECT U FROM users U JOIN teamroles R WHERE R.teamname=?")
+	var us []*User
+	if err != nil {
+		return nil, err
+	}
+	rows, err := query.Query(teamname)
+	if err == nil {
+		us, err = rowsToUsers(rows)
+	}
+	defer query.Close()
+	return DaoToModelsUser(us), err
 }

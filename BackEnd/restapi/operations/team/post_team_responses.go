@@ -101,6 +101,50 @@ func (o *PostTeamBadRequest) WriteResponse(rw http.ResponseWriter, producer runt
 	}
 }
 
+// PostTeamForbiddenCode is the HTTP code returned for type PostTeamForbidden
+const PostTeamForbiddenCode int = 403
+
+/*PostTeamForbidden Not authorized to this content
+
+swagger:response postTeamForbidden
+*/
+type PostTeamForbidden struct {
+
+	/*
+	  In: Body
+	*/
+	Payload *models.Error `json:"body,omitempty"`
+}
+
+// NewPostTeamForbidden creates PostTeamForbidden with default headers values
+func NewPostTeamForbidden() *PostTeamForbidden {
+
+	return &PostTeamForbidden{}
+}
+
+// WithPayload adds the payload to the post team forbidden response
+func (o *PostTeamForbidden) WithPayload(payload *models.Error) *PostTeamForbidden {
+	o.Payload = payload
+	return o
+}
+
+// SetPayload sets the payload to the post team forbidden response
+func (o *PostTeamForbidden) SetPayload(payload *models.Error) {
+	o.Payload = payload
+}
+
+// WriteResponse to the client
+func (o *PostTeamForbidden) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	rw.WriteHeader(403)
+	if o.Payload != nil {
+		payload := o.Payload
+		if err := producer.Produce(rw, payload); err != nil {
+			panic(err) // let the recovery middleware deal with this
+		}
+	}
+}
+
 // PostTeamConflictCode is the HTTP code returned for type PostTeamConflict
 const PostTeamConflictCode int = 409
 

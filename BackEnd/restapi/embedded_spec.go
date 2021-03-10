@@ -211,6 +211,9 @@ func init() {
           "400": {
             "$ref": "#/responses/BadRequestError"
           },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
           "409": {
             "$ref": "#/responses/ConflictError"
           },
@@ -1424,6 +1427,12 @@ func init() {
           },
           "400": {
             "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
             "schema": {
               "$ref": "#/definitions/Error"
             }

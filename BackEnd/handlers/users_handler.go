@@ -18,6 +18,14 @@ func userOrAdmin(username string, u *models.User) bool {
 	return username == *u.Username || u.Type == models.UserTypeAdmin
 }
 
+func isAdmin(u *models.User) bool {
+	return u.Type == models.UserTypeAdmin
+}
+
+func isUser(u *models.User) bool {
+	return u.Username != nil
+}
+
 // PutPassword PUT /password/{username} Modifies the password of a user
 func PutPassword(params user.PutPasswordParams, u *models.User) middleware.Responder {
 	if userOrAdmin(params.Username, u) {
@@ -45,7 +53,7 @@ func PutPassword(params user.PutPasswordParams, u *models.User) middleware.Respo
 
 // GetUsers GET /users. Returns all users
 func GetUsers(params user.GetUsersParams, u *models.User) middleware.Responder {
-	if u.Type != "admin" {
+	if !isAdmin(u) {
 		return user.NewGetUsersForbidden()
 	}
 	db, err := dbconnection.ConnectDb()
