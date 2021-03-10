@@ -56,6 +56,7 @@ func init() {
             "description": "User who is trying to generate a token",
             "name": "loginUser",
             "in": "body",
+            "required": true,
             "schema": {
               "$ref": "#/definitions/LoginUser"
             }
@@ -80,9 +81,477 @@ func init() {
         }
       }
     },
-    "/users": {
+    "/passwords/{username}": {
+      "put": {
+        "security": [
+          {
+            "BearerHeader": []
+          }
+        ],
+        "description": "Modifies the password of the user \u003cusername\u003e",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "user",
+          "auth"
+        ],
+        "summary": "Modifies the password of the user \u003cusername\u003e",
+        "operationId": "putPassword",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user to modify its password",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Password update information",
+            "name": "passwordUpdate",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PasswordUpdate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resource password modified correctly"
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/teams": {
+      "get": {
+        "security": [
+          {
+            "BearerHeader": []
+          }
+        ],
+        "description": "Returns all teams.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "team"
+        ],
+        "summary": "Returns all teams.",
+        "operationId": "GetTeams",
+        "responses": {
+          "200": {
+            "description": "teams found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Team"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      },
       "post": {
-        "description": "Adds an user to the system",
+        "security": [
+          {
+            "BearerHeader": []
+          }
+        ],
+        "description": "Adds a team to the system",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "team"
+        ],
+        "summary": "adds a team",
+        "operationId": "PostTeam",
+        "parameters": [
+          {
+            "description": "Team item to add",
+            "name": "team",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Team"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "team created",
+            "schema": {
+              "$ref": "#/definitions/Team"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "409": {
+            "$ref": "#/responses/ConflictError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/teams/{teamname}": {
+      "get": {
+        "security": [
+          {
+            "BearerHeader": []
+          }
+        ],
+        "description": "Finds a team by its teamname",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "team"
+        ],
+        "summary": "Finds a team by its teamname",
+        "operationId": "getTeam",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Teamname of the team to find",
+            "name": "teamname",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "team found",
+            "schema": {
+              "$ref": "#/definitions/Team"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "BearerHeader": []
+          }
+        ],
+        "description": "Modifies the team \u003cteamname\u003e",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "team"
+        ],
+        "summary": "Modifies the team \u003cteamname\u003e",
+        "operationId": "putTeam",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Teamname of the team to modify its information",
+            "name": "teamname",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Team information updated",
+            "name": "team",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Team"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "team updated"
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "409": {
+            "$ref": "#/responses/ConflictError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "BearerHeader": []
+          }
+        ],
+        "description": "Deletes a team by its teamname",
+        "tags": [
+          "team"
+        ],
+        "summary": "Deletes a team by its teamname",
+        "operationId": "deleteTeam",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Teamname of the team to delete",
+            "name": "teamname",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "team found and deleted"
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/teams/{teamname}/users": {
+      "get": {
+        "security": [
+          {
+            "BearerHeader": []
+          }
+        ],
+        "description": "Returns all users that are members of a team",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user",
+          "team"
+        ],
+        "summary": "Returns all users that are members of a team",
+        "operationId": "GetUsersFromTeam",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Teamname of the team to get its users",
+            "name": "teamname",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "users found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/teams/{teamname}/users/{username}": {
+      "put": {
+        "security": [
+          {
+            "BearerHeader": []
+          }
+        ],
+        "description": "Adds user {username} to team {teamname}",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user",
+          "team"
+        ],
+        "summary": "Adds user {username} to team {teamname}",
+        "operationId": "AddUserFromTeam",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Teamname of the team to modify",
+            "name": "teamname",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "Username of the user to add",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User added to team"
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "409": {
+            "$ref": "#/responses/ConflictError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "BearerHeader": []
+          }
+        ],
+        "description": "Deletes user {username} from team {teamname}",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user",
+          "team"
+        ],
+        "summary": "Deletes user {username} from team {teamname}",
+        "operationId": "DeleteUserFromTeam",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Teamname of the team to modify",
+            "name": "teamname",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "Username of the user to delete from team",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User deleted from team"
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "security": [
+          {
+            "BearerHeader": []
+          }
+        ],
+        "description": "Returns all users. Only for admins",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns all users. Only for admins",
+        "operationId": "GetUsers",
+        "responses": {
+          "200": {
+            "description": "users found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      },
+      "post": {
+        "description": "Adds a user to the system",
         "consumes": [
           "application/json"
         ],
@@ -93,13 +562,14 @@ func init() {
           "user",
           "auth"
         ],
-        "summary": "adds an user",
+        "summary": "adds a user",
         "operationId": "RegisterUser",
         "parameters": [
           {
             "description": "User item to add",
             "name": "signinUser",
             "in": "body",
+            "required": true,
             "schema": {
               "$ref": "#/definitions/SigninUser"
             }
@@ -117,6 +587,413 @@ func init() {
           },
           "409": {
             "$ref": "#/responses/ConflictError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/users/{username}": {
+      "get": {
+        "security": [
+          {
+            "BearerHeader": []
+          }
+        ],
+        "description": "Finds a user by its username",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Finds a user by its username",
+        "operationId": "getUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user to find",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "user found",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "BearerHeader": []
+          }
+        ],
+        "description": "Modifies the user \u003cusername\u003e",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Modifies the user \u003cusername\u003e",
+        "operationId": "putUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user to modify its information",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "User information updated",
+            "name": "user",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "user updated"
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "409": {
+            "$ref": "#/responses/ConflictError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "BearerHeader": []
+          }
+        ],
+        "description": "Deletes a user by its username",
+        "tags": [
+          "user"
+        ],
+        "summary": "Deletes a user by its username",
+        "operationId": "deleteUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user to delete",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "user found and deleted"
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/users/{username}/teams": {
+      "get": {
+        "security": [
+          {
+            "BearerHeader": []
+          }
+        ],
+        "description": "Returns all teams of a user.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user",
+          "team"
+        ],
+        "summary": "Returns all teams of a user.",
+        "operationId": "GetTeamsOfUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user to get their teams",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "teams found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Team"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/users/{username}/teams/{teamname}": {
+      "put": {
+        "security": [
+          {
+            "BearerHeader": []
+          }
+        ],
+        "description": "Adds user {username} to team {teamname}",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user",
+          "team"
+        ],
+        "summary": "Adds user {username} to team {teamname}",
+        "operationId": "AddTeamOfUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Teamname of the team to modify",
+            "name": "teamname",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "Username of the user to add",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User added to team"
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "409": {
+            "$ref": "#/responses/ConflictError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "BearerHeader": []
+          }
+        ],
+        "description": "Deletes user {username} from team {teamname}",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user",
+          "team"
+        ],
+        "summary": "Deletes user {username} from team {teamname}",
+        "operationId": "DeleteTeamOfUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Teamname of the team to modify",
+            "name": "teamname",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "Username of the user to delete from team",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User deleted from team"
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/users/{username}/teams/{teamname}/role": {
+      "get": {
+        "security": [
+          {
+            "BearerHeader": []
+          }
+        ],
+        "description": "Returns the role of a user in a team",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "team",
+          "user"
+        ],
+        "summary": "Returns the role of a user in a team",
+        "operationId": "GetUserTeamRole",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Teamname of the team to modify",
+            "name": "teamname",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "Username of the user to modify its role",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Role found",
+            "schema": {
+              "$ref": "#/definitions/TeamRole"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "BearerHeader": []
+          }
+        ],
+        "description": "Modifies the role of a user in a team",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "team",
+          "user"
+        ],
+        "summary": "Modifies the role of a user in a team",
+        "operationId": "PutUserTeamRole",
+        "parameters": [
+          {
+            "description": "New role of the user",
+            "name": "role",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/TeamRole"
+            }
+          },
+          {
+            "type": "string",
+            "description": "Teamname of the team to modify",
+            "name": "teamname",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "Username of the user to modify its role",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Role modified"
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
           },
           "500": {
             "$ref": "#/responses/InternalServerError"
@@ -169,6 +1046,27 @@ func init() {
         }
       }
     },
+    "PasswordUpdate": {
+      "type": "object",
+      "required": [
+        "oldpass",
+        "newpass"
+      ],
+      "properties": {
+        "newpass": {
+          "type": "string",
+          "format": "password",
+          "pattern": "^.{6,}$",
+          "example": "password"
+        },
+        "oldpass": {
+          "type": "string",
+          "format": "password",
+          "pattern": "^.{6,}$",
+          "example": "password"
+        }
+      }
+    },
     "SigninUser": {
       "type": "object",
       "required": [
@@ -191,8 +1089,40 @@ func init() {
         },
         "username": {
           "type": "string",
-          "pattern": "^[^@]+$",
+          "pattern": "^[^@ \\t\\r\\n]+$",
           "example": "carlosg72"
+        }
+      }
+    },
+    "Team": {
+      "type": "object",
+      "required": [
+        "teamname"
+      ],
+      "properties": {
+        "description": {
+          "type": "string",
+          "example": "DevTest Team"
+        },
+        "teamname": {
+          "type": "string",
+          "pattern": "^[^@ \\t\\r\\n]+$",
+          "example": "devtestTeam"
+        }
+      }
+    },
+    "TeamRole": {
+      "type": "object",
+      "required": [
+        "role"
+      ],
+      "properties": {
+        "role": {
+          "type": "string",
+          "enum": [
+            "admin",
+            "member"
+          ]
         }
       }
     },
@@ -209,9 +1139,21 @@ func init() {
           "pattern": "^[^@ \\t\\r\\n]+@[^@ \\t\\r\\n]+\\.[^@ \\t\\r\\n]+$",
           "example": "carlos@mail.com"
         },
+        "fullname": {
+          "type": "string",
+          "example": "Javier Gatón Herguedas"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "student",
+            "teacher",
+            "admin"
+          ]
+        },
         "username": {
           "type": "string",
-          "pattern": "^[^@]+$",
+          "pattern": "^[^@ \\t\\r\\n]+$",
           "example": "carlosg72"
         }
       }
@@ -230,6 +1172,12 @@ func init() {
         "$ref": "#/definitions/Error"
       }
     },
+    "ForbiddenError": {
+      "description": "Not authorized to this content",
+      "schema": {
+        "$ref": "#/definitions/Error"
+      }
+    },
     "GoneError": {
       "description": "That user (password and name) does not exist",
       "schema": {
@@ -241,15 +1189,10 @@ func init() {
     }
   },
   "securityDefinitions": {
-    "APIKeyHeader": {
+    "BearerHeader": {
       "type": "apiKey",
-      "name": "X-API-Key",
+      "name": "Bearer",
       "in": "header"
-    },
-    "APIKeyQueryParam": {
-      "type": "apiKey",
-      "name": "api_key",
-      "in": "query"
     }
   },
   "tags": [
@@ -260,6 +1203,10 @@ func init() {
     {
       "description": "Operations related to authentication",
       "name": "auth"
+    },
+    {
+      "description": "Operations related to teams",
+      "name": "team"
     }
   ]
 }`))
@@ -302,6 +1249,7 @@ func init() {
             "description": "User who is trying to generate a token",
             "name": "loginUser",
             "in": "body",
+            "required": true,
             "schema": {
               "$ref": "#/definitions/LoginUser"
             }
@@ -332,9 +1280,561 @@ func init() {
         }
       }
     },
-    "/users": {
+    "/passwords/{username}": {
+      "put": {
+        "security": [
+          {
+            "BearerHeader": []
+          }
+        ],
+        "description": "Modifies the password of the user \u003cusername\u003e",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "user",
+          "auth"
+        ],
+        "summary": "Modifies the password of the user \u003cusername\u003e",
+        "operationId": "putPassword",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user to modify its password",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Password update information",
+            "name": "passwordUpdate",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PasswordUpdate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resource password modified correctly"
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/teams": {
+      "get": {
+        "security": [
+          {
+            "BearerHeader": []
+          }
+        ],
+        "description": "Returns all teams.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "team"
+        ],
+        "summary": "Returns all teams.",
+        "operationId": "GetTeams",
+        "responses": {
+          "200": {
+            "description": "teams found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Team"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      },
       "post": {
-        "description": "Adds an user to the system",
+        "security": [
+          {
+            "BearerHeader": []
+          }
+        ],
+        "description": "Adds a team to the system",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "team"
+        ],
+        "summary": "adds a team",
+        "operationId": "PostTeam",
+        "parameters": [
+          {
+            "description": "Team item to add",
+            "name": "team",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Team"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "team created",
+            "schema": {
+              "$ref": "#/definitions/Team"
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "409": {
+            "description": "A user with same username/email already exists",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/teams/{teamname}": {
+      "get": {
+        "security": [
+          {
+            "BearerHeader": []
+          }
+        ],
+        "description": "Finds a team by its teamname",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "team"
+        ],
+        "summary": "Finds a team by its teamname",
+        "operationId": "getTeam",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Teamname of the team to find",
+            "name": "teamname",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "team found",
+            "schema": {
+              "$ref": "#/definitions/Team"
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "BearerHeader": []
+          }
+        ],
+        "description": "Modifies the team \u003cteamname\u003e",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "team"
+        ],
+        "summary": "Modifies the team \u003cteamname\u003e",
+        "operationId": "putTeam",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Teamname of the team to modify its information",
+            "name": "teamname",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Team information updated",
+            "name": "team",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Team"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "team updated"
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "409": {
+            "description": "A user with same username/email already exists",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "BearerHeader": []
+          }
+        ],
+        "description": "Deletes a team by its teamname",
+        "tags": [
+          "team"
+        ],
+        "summary": "Deletes a team by its teamname",
+        "operationId": "deleteTeam",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Teamname of the team to delete",
+            "name": "teamname",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "team found and deleted"
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/teams/{teamname}/users": {
+      "get": {
+        "security": [
+          {
+            "BearerHeader": []
+          }
+        ],
+        "description": "Returns all users that are members of a team",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user",
+          "team"
+        ],
+        "summary": "Returns all users that are members of a team",
+        "operationId": "GetUsersFromTeam",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Teamname of the team to get its users",
+            "name": "teamname",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "users found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/teams/{teamname}/users/{username}": {
+      "put": {
+        "security": [
+          {
+            "BearerHeader": []
+          }
+        ],
+        "description": "Adds user {username} to team {teamname}",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user",
+          "team"
+        ],
+        "summary": "Adds user {username} to team {teamname}",
+        "operationId": "AddUserFromTeam",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Teamname of the team to modify",
+            "name": "teamname",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "Username of the user to add",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User added to team"
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "409": {
+            "description": "A user with same username/email already exists",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "BearerHeader": []
+          }
+        ],
+        "description": "Deletes user {username} from team {teamname}",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user",
+          "team"
+        ],
+        "summary": "Deletes user {username} from team {teamname}",
+        "operationId": "DeleteUserFromTeam",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Teamname of the team to modify",
+            "name": "teamname",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "Username of the user to delete from team",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User deleted from team"
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "security": [
+          {
+            "BearerHeader": []
+          }
+        ],
+        "description": "Returns all users. Only for admins",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns all users. Only for admins",
+        "operationId": "GetUsers",
+        "responses": {
+          "200": {
+            "description": "users found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      },
+      "post": {
+        "description": "Adds a user to the system",
         "consumes": [
           "application/json"
         ],
@@ -345,13 +1845,14 @@ func init() {
           "user",
           "auth"
         ],
-        "summary": "adds an user",
+        "summary": "adds a user",
         "operationId": "RegisterUser",
         "parameters": [
           {
             "description": "User item to add",
             "name": "signinUser",
             "in": "body",
+            "required": true,
             "schema": {
               "$ref": "#/definitions/SigninUser"
             }
@@ -372,6 +1873,488 @@ func init() {
           },
           "409": {
             "description": "A user with same username/email already exists",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/users/{username}": {
+      "get": {
+        "security": [
+          {
+            "BearerHeader": []
+          }
+        ],
+        "description": "Finds a user by its username",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Finds a user by its username",
+        "operationId": "getUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user to find",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "user found",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "BearerHeader": []
+          }
+        ],
+        "description": "Modifies the user \u003cusername\u003e",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Modifies the user \u003cusername\u003e",
+        "operationId": "putUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user to modify its information",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "User information updated",
+            "name": "user",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "user updated"
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "409": {
+            "description": "A user with same username/email already exists",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "BearerHeader": []
+          }
+        ],
+        "description": "Deletes a user by its username",
+        "tags": [
+          "user"
+        ],
+        "summary": "Deletes a user by its username",
+        "operationId": "deleteUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user to delete",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "user found and deleted"
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/users/{username}/teams": {
+      "get": {
+        "security": [
+          {
+            "BearerHeader": []
+          }
+        ],
+        "description": "Returns all teams of a user.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user",
+          "team"
+        ],
+        "summary": "Returns all teams of a user.",
+        "operationId": "GetTeamsOfUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user to get their teams",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "teams found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Team"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/users/{username}/teams/{teamname}": {
+      "put": {
+        "security": [
+          {
+            "BearerHeader": []
+          }
+        ],
+        "description": "Adds user {username} to team {teamname}",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user",
+          "team"
+        ],
+        "summary": "Adds user {username} to team {teamname}",
+        "operationId": "AddTeamOfUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Teamname of the team to modify",
+            "name": "teamname",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "Username of the user to add",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User added to team"
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "409": {
+            "description": "A user with same username/email already exists",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "BearerHeader": []
+          }
+        ],
+        "description": "Deletes user {username} from team {teamname}",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user",
+          "team"
+        ],
+        "summary": "Deletes user {username} from team {teamname}",
+        "operationId": "DeleteTeamOfUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Teamname of the team to modify",
+            "name": "teamname",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "Username of the user to delete from team",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User deleted from team"
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/users/{username}/teams/{teamname}/role": {
+      "get": {
+        "security": [
+          {
+            "BearerHeader": []
+          }
+        ],
+        "description": "Returns the role of a user in a team",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "team",
+          "user"
+        ],
+        "summary": "Returns the role of a user in a team",
+        "operationId": "GetUserTeamRole",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Teamname of the team to modify",
+            "name": "teamname",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "Username of the user to modify its role",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Role found",
+            "schema": {
+              "$ref": "#/definitions/TeamRole"
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "BearerHeader": []
+          }
+        ],
+        "description": "Modifies the role of a user in a team",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "team",
+          "user"
+        ],
+        "summary": "Modifies the role of a user in a team",
+        "operationId": "PutUserTeamRole",
+        "parameters": [
+          {
+            "description": "New role of the user",
+            "name": "role",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/TeamRole"
+            }
+          },
+          {
+            "type": "string",
+            "description": "Teamname of the team to modify",
+            "name": "teamname",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "Username of the user to modify its role",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Role modified"
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -427,6 +2410,27 @@ func init() {
         }
       }
     },
+    "PasswordUpdate": {
+      "type": "object",
+      "required": [
+        "oldpass",
+        "newpass"
+      ],
+      "properties": {
+        "newpass": {
+          "type": "string",
+          "format": "password",
+          "pattern": "^.{6,}$",
+          "example": "password"
+        },
+        "oldpass": {
+          "type": "string",
+          "format": "password",
+          "pattern": "^.{6,}$",
+          "example": "password"
+        }
+      }
+    },
     "SigninUser": {
       "type": "object",
       "required": [
@@ -449,8 +2453,40 @@ func init() {
         },
         "username": {
           "type": "string",
-          "pattern": "^[^@]+$",
+          "pattern": "^[^@ \\t\\r\\n]+$",
           "example": "carlosg72"
+        }
+      }
+    },
+    "Team": {
+      "type": "object",
+      "required": [
+        "teamname"
+      ],
+      "properties": {
+        "description": {
+          "type": "string",
+          "example": "DevTest Team"
+        },
+        "teamname": {
+          "type": "string",
+          "pattern": "^[^@ \\t\\r\\n]+$",
+          "example": "devtestTeam"
+        }
+      }
+    },
+    "TeamRole": {
+      "type": "object",
+      "required": [
+        "role"
+      ],
+      "properties": {
+        "role": {
+          "type": "string",
+          "enum": [
+            "admin",
+            "member"
+          ]
         }
       }
     },
@@ -467,9 +2503,21 @@ func init() {
           "pattern": "^[^@ \\t\\r\\n]+@[^@ \\t\\r\\n]+\\.[^@ \\t\\r\\n]+$",
           "example": "carlos@mail.com"
         },
+        "fullname": {
+          "type": "string",
+          "example": "Javier Gatón Herguedas"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "student",
+            "teacher",
+            "admin"
+          ]
+        },
         "username": {
           "type": "string",
-          "pattern": "^[^@]+$",
+          "pattern": "^[^@ \\t\\r\\n]+$",
           "example": "carlosg72"
         }
       }
@@ -488,6 +2536,12 @@ func init() {
         "$ref": "#/definitions/Error"
       }
     },
+    "ForbiddenError": {
+      "description": "Not authorized to this content",
+      "schema": {
+        "$ref": "#/definitions/Error"
+      }
+    },
     "GoneError": {
       "description": "That user (password and name) does not exist",
       "schema": {
@@ -499,15 +2553,10 @@ func init() {
     }
   },
   "securityDefinitions": {
-    "APIKeyHeader": {
+    "BearerHeader": {
       "type": "apiKey",
-      "name": "X-API-Key",
+      "name": "Bearer",
       "in": "header"
-    },
-    "APIKeyQueryParam": {
-      "type": "apiKey",
-      "name": "api_key",
-      "in": "query"
     }
   },
   "tags": [
@@ -518,6 +2567,10 @@ func init() {
     {
       "description": "Operations related to authentication",
       "name": "auth"
+    },
+    {
+      "description": "Operations related to teams",
+      "name": "team"
     }
   ]
 }`))

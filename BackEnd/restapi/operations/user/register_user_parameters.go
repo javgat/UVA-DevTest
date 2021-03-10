@@ -7,6 +7,7 @@ package user
 
 import (
 	"context"
+	"io"
 	"net/http"
 
 	"github.com/go-openapi/errors"
@@ -35,6 +36,7 @@ type RegisterUserParams struct {
 	HTTPRequest *http.Request `json:"-"`
 
 	/*User item to add
+	  Required: true
 	  In: body
 	*/
 	SigninUser *models.SigninUser
@@ -53,7 +55,11 @@ func (o *RegisterUserParams) BindRequest(r *http.Request, route *middleware.Matc
 		defer r.Body.Close()
 		var body models.SigninUser
 		if err := route.Consumer.Consume(r.Body, &body); err != nil {
-			res = append(res, errors.NewParseError("signinUser", "body", "", err))
+			if err == io.EOF {
+				res = append(res, errors.Required("signinUser", "body", ""))
+			} else {
+				res = append(res, errors.NewParseError("signinUser", "body", "", err))
+			}
 		} else {
 			// validate body object
 			if err := body.Validate(route.Formats); err != nil {
@@ -69,6 +75,8 @@ func (o *RegisterUserParams) BindRequest(r *http.Request, route *middleware.Matc
 				o.SigninUser = &body
 			}
 		}
+	} else {
+		res = append(res, errors.Required("signinUser", "body", ""))
 	}
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)

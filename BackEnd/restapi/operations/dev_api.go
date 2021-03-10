@@ -19,7 +19,9 @@ import (
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 
+	"uva-devtest/models"
 	"uva-devtest/restapi/operations/auth"
+	"uva-devtest/restapi/operations/team"
 	"uva-devtest/restapi/operations/user"
 )
 
@@ -45,12 +47,73 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 
 		JSONProducer: runtime.JSONProducer(),
 
+		UserAddTeamOfUserHandler: user.AddTeamOfUserHandlerFunc(func(params user.AddTeamOfUserParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation user.AddTeamOfUser has not yet been implemented")
+		}),
+		UserAddUserFromTeamHandler: user.AddUserFromTeamHandlerFunc(func(params user.AddUserFromTeamParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation user.AddUserFromTeam has not yet been implemented")
+		}),
+		UserDeleteTeamOfUserHandler: user.DeleteTeamOfUserHandlerFunc(func(params user.DeleteTeamOfUserParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation user.DeleteTeamOfUser has not yet been implemented")
+		}),
+		UserDeleteUserFromTeamHandler: user.DeleteUserFromTeamHandlerFunc(func(params user.DeleteUserFromTeamParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation user.DeleteUserFromTeam has not yet been implemented")
+		}),
+		TeamGetTeamsHandler: team.GetTeamsHandlerFunc(func(params team.GetTeamsParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation team.GetTeams has not yet been implemented")
+		}),
+		UserGetTeamsOfUserHandler: user.GetTeamsOfUserHandlerFunc(func(params user.GetTeamsOfUserParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation user.GetTeamsOfUser has not yet been implemented")
+		}),
+		TeamGetUserTeamRoleHandler: team.GetUserTeamRoleHandlerFunc(func(params team.GetUserTeamRoleParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation team.GetUserTeamRole has not yet been implemented")
+		}),
+		UserGetUsersHandler: user.GetUsersHandlerFunc(func(params user.GetUsersParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation user.GetUsers has not yet been implemented")
+		}),
+		UserGetUsersFromTeamHandler: user.GetUsersFromTeamHandlerFunc(func(params user.GetUsersFromTeamParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation user.GetUsersFromTeam has not yet been implemented")
+		}),
 		AuthLoginHandler: auth.LoginHandlerFunc(func(params auth.LoginParams) middleware.Responder {
 			return middleware.NotImplemented("operation auth.Login has not yet been implemented")
+		}),
+		TeamPostTeamHandler: team.PostTeamHandlerFunc(func(params team.PostTeamParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation team.PostTeam has not yet been implemented")
+		}),
+		TeamPutUserTeamRoleHandler: team.PutUserTeamRoleHandlerFunc(func(params team.PutUserTeamRoleParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation team.PutUserTeamRole has not yet been implemented")
 		}),
 		UserRegisterUserHandler: user.RegisterUserHandlerFunc(func(params user.RegisterUserParams) middleware.Responder {
 			return middleware.NotImplemented("operation user.RegisterUser has not yet been implemented")
 		}),
+		TeamDeleteTeamHandler: team.DeleteTeamHandlerFunc(func(params team.DeleteTeamParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation team.DeleteTeam has not yet been implemented")
+		}),
+		UserDeleteUserHandler: user.DeleteUserHandlerFunc(func(params user.DeleteUserParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation user.DeleteUser has not yet been implemented")
+		}),
+		TeamGetTeamHandler: team.GetTeamHandlerFunc(func(params team.GetTeamParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation team.GetTeam has not yet been implemented")
+		}),
+		UserGetUserHandler: user.GetUserHandlerFunc(func(params user.GetUserParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation user.GetUser has not yet been implemented")
+		}),
+		UserPutPasswordHandler: user.PutPasswordHandlerFunc(func(params user.PutPasswordParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation user.PutPassword has not yet been implemented")
+		}),
+		TeamPutTeamHandler: team.PutTeamHandlerFunc(func(params team.PutTeamParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation team.PutTeam has not yet been implemented")
+		}),
+		UserPutUserHandler: user.PutUserHandlerFunc(func(params user.PutUserParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation user.PutUser has not yet been implemented")
+		}),
+
+		// Applies when the "Bearer" header is set
+		BearerHeaderAuth: func(token string) (*models.User, error) {
+			return nil, errors.NotImplemented("api key auth (BearerHeader) Bearer from header param [Bearer] has not yet been implemented")
+		},
+		// default authorizer is authorized meaning no requests are blocked
+		APIAuthorizer: security.Authorized(),
 	}
 }
 
@@ -87,10 +150,53 @@ type DevAPI struct {
 	//   - application/json
 	JSONProducer runtime.Producer
 
+	// BearerHeaderAuth registers a function that takes a token and returns a principal
+	// it performs authentication based on an api key Bearer provided in the header
+	BearerHeaderAuth func(string) (*models.User, error)
+
+	// APIAuthorizer provides access control (ACL/RBAC/ABAC) by providing access to the request and authenticated principal
+	APIAuthorizer runtime.Authorizer
+
+	// UserAddTeamOfUserHandler sets the operation handler for the add team of user operation
+	UserAddTeamOfUserHandler user.AddTeamOfUserHandler
+	// UserAddUserFromTeamHandler sets the operation handler for the add user from team operation
+	UserAddUserFromTeamHandler user.AddUserFromTeamHandler
+	// UserDeleteTeamOfUserHandler sets the operation handler for the delete team of user operation
+	UserDeleteTeamOfUserHandler user.DeleteTeamOfUserHandler
+	// UserDeleteUserFromTeamHandler sets the operation handler for the delete user from team operation
+	UserDeleteUserFromTeamHandler user.DeleteUserFromTeamHandler
+	// TeamGetTeamsHandler sets the operation handler for the get teams operation
+	TeamGetTeamsHandler team.GetTeamsHandler
+	// UserGetTeamsOfUserHandler sets the operation handler for the get teams of user operation
+	UserGetTeamsOfUserHandler user.GetTeamsOfUserHandler
+	// TeamGetUserTeamRoleHandler sets the operation handler for the get user team role operation
+	TeamGetUserTeamRoleHandler team.GetUserTeamRoleHandler
+	// UserGetUsersHandler sets the operation handler for the get users operation
+	UserGetUsersHandler user.GetUsersHandler
+	// UserGetUsersFromTeamHandler sets the operation handler for the get users from team operation
+	UserGetUsersFromTeamHandler user.GetUsersFromTeamHandler
 	// AuthLoginHandler sets the operation handler for the login operation
 	AuthLoginHandler auth.LoginHandler
+	// TeamPostTeamHandler sets the operation handler for the post team operation
+	TeamPostTeamHandler team.PostTeamHandler
+	// TeamPutUserTeamRoleHandler sets the operation handler for the put user team role operation
+	TeamPutUserTeamRoleHandler team.PutUserTeamRoleHandler
 	// UserRegisterUserHandler sets the operation handler for the register user operation
 	UserRegisterUserHandler user.RegisterUserHandler
+	// TeamDeleteTeamHandler sets the operation handler for the delete team operation
+	TeamDeleteTeamHandler team.DeleteTeamHandler
+	// UserDeleteUserHandler sets the operation handler for the delete user operation
+	UserDeleteUserHandler user.DeleteUserHandler
+	// TeamGetTeamHandler sets the operation handler for the get team operation
+	TeamGetTeamHandler team.GetTeamHandler
+	// UserGetUserHandler sets the operation handler for the get user operation
+	UserGetUserHandler user.GetUserHandler
+	// UserPutPasswordHandler sets the operation handler for the put password operation
+	UserPutPasswordHandler user.PutPasswordHandler
+	// TeamPutTeamHandler sets the operation handler for the put team operation
+	TeamPutTeamHandler team.PutTeamHandler
+	// UserPutUserHandler sets the operation handler for the put user operation
+	UserPutUserHandler user.PutUserHandler
 
 	// ServeError is called when an error is received, there is a default handler
 	// but you can set your own with this
@@ -168,11 +274,69 @@ func (o *DevAPI) Validate() error {
 		unregistered = append(unregistered, "JSONProducer")
 	}
 
+	if o.BearerHeaderAuth == nil {
+		unregistered = append(unregistered, "BearerAuth")
+	}
+
+	if o.UserAddTeamOfUserHandler == nil {
+		unregistered = append(unregistered, "user.AddTeamOfUserHandler")
+	}
+	if o.UserAddUserFromTeamHandler == nil {
+		unregistered = append(unregistered, "user.AddUserFromTeamHandler")
+	}
+	if o.UserDeleteTeamOfUserHandler == nil {
+		unregistered = append(unregistered, "user.DeleteTeamOfUserHandler")
+	}
+	if o.UserDeleteUserFromTeamHandler == nil {
+		unregistered = append(unregistered, "user.DeleteUserFromTeamHandler")
+	}
+	if o.TeamGetTeamsHandler == nil {
+		unregistered = append(unregistered, "team.GetTeamsHandler")
+	}
+	if o.UserGetTeamsOfUserHandler == nil {
+		unregistered = append(unregistered, "user.GetTeamsOfUserHandler")
+	}
+	if o.TeamGetUserTeamRoleHandler == nil {
+		unregistered = append(unregistered, "team.GetUserTeamRoleHandler")
+	}
+	if o.UserGetUsersHandler == nil {
+		unregistered = append(unregistered, "user.GetUsersHandler")
+	}
+	if o.UserGetUsersFromTeamHandler == nil {
+		unregistered = append(unregistered, "user.GetUsersFromTeamHandler")
+	}
 	if o.AuthLoginHandler == nil {
 		unregistered = append(unregistered, "auth.LoginHandler")
 	}
+	if o.TeamPostTeamHandler == nil {
+		unregistered = append(unregistered, "team.PostTeamHandler")
+	}
+	if o.TeamPutUserTeamRoleHandler == nil {
+		unregistered = append(unregistered, "team.PutUserTeamRoleHandler")
+	}
 	if o.UserRegisterUserHandler == nil {
 		unregistered = append(unregistered, "user.RegisterUserHandler")
+	}
+	if o.TeamDeleteTeamHandler == nil {
+		unregistered = append(unregistered, "team.DeleteTeamHandler")
+	}
+	if o.UserDeleteUserHandler == nil {
+		unregistered = append(unregistered, "user.DeleteUserHandler")
+	}
+	if o.TeamGetTeamHandler == nil {
+		unregistered = append(unregistered, "team.GetTeamHandler")
+	}
+	if o.UserGetUserHandler == nil {
+		unregistered = append(unregistered, "user.GetUserHandler")
+	}
+	if o.UserPutPasswordHandler == nil {
+		unregistered = append(unregistered, "user.PutPasswordHandler")
+	}
+	if o.TeamPutTeamHandler == nil {
+		unregistered = append(unregistered, "team.PutTeamHandler")
+	}
+	if o.UserPutUserHandler == nil {
+		unregistered = append(unregistered, "user.PutUserHandler")
 	}
 
 	if len(unregistered) > 0 {
@@ -189,12 +353,23 @@ func (o *DevAPI) ServeErrorFor(operationID string) func(http.ResponseWriter, *ht
 
 // AuthenticatorsFor gets the authenticators for the specified security schemes
 func (o *DevAPI) AuthenticatorsFor(schemes map[string]spec.SecurityScheme) map[string]runtime.Authenticator {
-	return nil
+	result := make(map[string]runtime.Authenticator)
+	for name := range schemes {
+		switch name {
+		case "BearerHeader":
+			scheme := schemes[name]
+			result[name] = o.APIKeyAuthenticator(scheme.Name, scheme.In, func(token string) (interface{}, error) {
+				return o.BearerHeaderAuth(token)
+			})
+
+		}
+	}
+	return result
 }
 
 // Authorizer returns the registered authorizer
 func (o *DevAPI) Authorizer() runtime.Authorizer {
-	return nil
+	return o.APIAuthorizer
 }
 
 // ConsumersFor gets the consumers for the specified media types.
@@ -262,6 +437,42 @@ func (o *DevAPI) initHandlerCache() {
 		o.handlers = make(map[string]map[string]http.Handler)
 	}
 
+	if o.handlers["PUT"] == nil {
+		o.handlers["PUT"] = make(map[string]http.Handler)
+	}
+	o.handlers["PUT"]["/users/{username}/teams/{teamname}"] = user.NewAddTeamOfUser(o.context, o.UserAddTeamOfUserHandler)
+	if o.handlers["PUT"] == nil {
+		o.handlers["PUT"] = make(map[string]http.Handler)
+	}
+	o.handlers["PUT"]["/teams/{teamname}/users/{username}"] = user.NewAddUserFromTeam(o.context, o.UserAddUserFromTeamHandler)
+	if o.handlers["DELETE"] == nil {
+		o.handlers["DELETE"] = make(map[string]http.Handler)
+	}
+	o.handlers["DELETE"]["/users/{username}/teams/{teamname}"] = user.NewDeleteTeamOfUser(o.context, o.UserDeleteTeamOfUserHandler)
+	if o.handlers["DELETE"] == nil {
+		o.handlers["DELETE"] = make(map[string]http.Handler)
+	}
+	o.handlers["DELETE"]["/teams/{teamname}/users/{username}"] = user.NewDeleteUserFromTeam(o.context, o.UserDeleteUserFromTeamHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/teams"] = team.NewGetTeams(o.context, o.TeamGetTeamsHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/users/{username}/teams"] = user.NewGetTeamsOfUser(o.context, o.UserGetTeamsOfUserHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/users/{username}/teams/{teamname}/role"] = team.NewGetUserTeamRole(o.context, o.TeamGetUserTeamRoleHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/users"] = user.NewGetUsers(o.context, o.UserGetUsersHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/teams/{teamname}/users"] = user.NewGetUsersFromTeam(o.context, o.UserGetUsersFromTeamHandler)
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
@@ -269,7 +480,43 @@ func (o *DevAPI) initHandlerCache() {
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
+	o.handlers["POST"]["/teams"] = team.NewPostTeam(o.context, o.TeamPostTeamHandler)
+	if o.handlers["PUT"] == nil {
+		o.handlers["PUT"] = make(map[string]http.Handler)
+	}
+	o.handlers["PUT"]["/users/{username}/teams/{teamname}/role"] = team.NewPutUserTeamRole(o.context, o.TeamPutUserTeamRoleHandler)
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
+	}
 	o.handlers["POST"]["/users"] = user.NewRegisterUser(o.context, o.UserRegisterUserHandler)
+	if o.handlers["DELETE"] == nil {
+		o.handlers["DELETE"] = make(map[string]http.Handler)
+	}
+	o.handlers["DELETE"]["/teams/{teamname}"] = team.NewDeleteTeam(o.context, o.TeamDeleteTeamHandler)
+	if o.handlers["DELETE"] == nil {
+		o.handlers["DELETE"] = make(map[string]http.Handler)
+	}
+	o.handlers["DELETE"]["/users/{username}"] = user.NewDeleteUser(o.context, o.UserDeleteUserHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/teams/{teamname}"] = team.NewGetTeam(o.context, o.TeamGetTeamHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/users/{username}"] = user.NewGetUser(o.context, o.UserGetUserHandler)
+	if o.handlers["PUT"] == nil {
+		o.handlers["PUT"] = make(map[string]http.Handler)
+	}
+	o.handlers["PUT"]["/passwords/{username}"] = user.NewPutPassword(o.context, o.UserPutPasswordHandler)
+	if o.handlers["PUT"] == nil {
+		o.handlers["PUT"] = make(map[string]http.Handler)
+	}
+	o.handlers["PUT"]["/teams/{teamname}"] = team.NewPutTeam(o.context, o.TeamPutTeamHandler)
+	if o.handlers["PUT"] == nil {
+		o.handlers["PUT"] = make(map[string]http.Handler)
+	}
+	o.handlers["PUT"]["/users/{username}"] = user.NewPutUser(o.context, o.UserPutUserHandler)
 }
 
 // Serve creates a http handler to serve the API over HTTP

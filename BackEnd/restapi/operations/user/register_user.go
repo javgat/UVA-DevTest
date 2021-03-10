@@ -31,9 +31,9 @@ func NewRegisterUser(ctx *middleware.Context, handler RegisterUserHandler) *Regi
 
 /* RegisterUser swagger:route POST /users user auth registerUser
 
-adds an user
+adds a user
 
-Adds an user to the system
+Adds a user to the system
 
 */
 type RegisterUser struct {

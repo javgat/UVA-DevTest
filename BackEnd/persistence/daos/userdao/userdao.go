@@ -7,10 +7,30 @@ package userdao
 import (
 	"database/sql"
 	"errors"
+	"uva-devtest/models"
 
 	// Blank import of mysql driver
 	_ "github.com/go-sql-driver/mysql"
 )
+
+// DaoToModelUser converts a userdao.User into a models.User
+func DaoToModelUser(u *User) *models.User {
+	mu := &models.User{
+		Username: u.Username,
+		Email:    u.Email,
+		Type:     "admin", // CAMBIAR !!!!
+	}
+	return mu
+}
+
+// DaoToModelsUser converts a splice of userdao.User into models.User
+func DaoToModelsUser(us []*User) []*models.User {
+	var mus = []*models.User{}
+	for _, itemCopy := range us {
+		mus = append(mus, DaoToModelUser(itemCopy))
+	}
+	return mus
+}
 
 // InsertUser inserts a user into the database
 // Param db: Database to use
@@ -35,8 +55,8 @@ func InsertUser(db *sql.DB, u *User) error {
 // Param rows: Rows which contains database information returned
 // Return []models.User: Users represented in rows
 // Return error if any
-func rowsToUsers(rows *sql.Rows) ([]User, error) {
-	var users []User
+func rowsToUsers(rows *sql.Rows) ([]*User, error) {
+	var users []*User
 	var trash int
 	for rows.Next() {
 		var us User
@@ -44,7 +64,7 @@ func rowsToUsers(rows *sql.Rows) ([]User, error) {
 		if err != nil {
 			return users, err
 		}
-		users = append(users, us)
+		users = append(users, &us)
 	}
 	return users, nil
 }
@@ -57,7 +77,7 @@ func rowsToUser(rows *sql.Rows) (*User, error) {
 	var user *User
 	users, err := rowsToUsers(rows)
 	if len(users) >= 1 {
-		user = &users[0]
+		user = users[0]
 	}
 	return user, err
 }
@@ -104,4 +124,54 @@ func GetUserEmail(db *sql.DB, email string) (*User, error) {
 	}
 	defer query.Close()
 	return u, err
+}
+
+// GetUsers returns all users
+func GetUsers(db *sql.DB) ([]*User, error) {
+	if db == nil {
+		return nil, errors.New("Parametro db nil")
+	}
+	query, err := db.Prepare("SELECT * FROM users")
+	var us []*User
+	if err != nil {
+		return us, err
+	}
+	rows, err := query.Query()
+	if err == nil {
+		us, err = rowsToUsers(rows)
+	}
+	defer query.Close()
+	return us, err
+}
+
+// PutPasswordUsername modifies the pwhash of user <username> in database <db>
+func PutPasswordUsername(db *sql.DB, username string, newpwhash string) error {
+	if db == nil {
+		return errors.New("Parametro db nil")
+	}
+	query, err := db.Prepare("UPDATE users SET pwhash = ? WHERE username = ?")
+	if err != nil {
+		return err
+	}
+	_, err = query.Exec(newpwhash, username)
+	defer query.Close()
+	return err
+}
+
+// UpdateUser updates a user from the database
+// Param db: Database to use
+// Param u: User data to update
+// Param username: Username of the user to update
+// Return error if something wrong happens
+func UpdateUser(db *sql.DB, u *models.User, username string) error {
+	if db == nil || u == nil {
+		return errors.New("Argumento de entrada nil")
+	}
+	query, err := db.Prepare("UPDATE users SET email=? fullname=? username=? type=? WHERE username = ? ")
+	if err != nil {
+		return err
+	}
+	_, err = query.Exec(u.Email, u.Fullname, u.Username, u.Type, username)
+	defer query.Close()
+	return err
 }

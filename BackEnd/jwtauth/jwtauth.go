@@ -55,6 +55,28 @@ func (j *JwtWrapper) GenerateToken(email string) (signedToken string, err error)
 	return signedToken, err
 }
 
+// GetEmailToken returns the email associated with the jwt token
+func GetEmailToken(token string) (email string, err error) {
+	tok, _ := jwt.ParseWithClaims(
+		token,
+		&JwtClaim{},
+		func(token *jwt.Token) (interface{}, error) {
+			return []byte(token.Signature), nil
+		},
+	)
+	claims, ok := tok.Claims.(*JwtClaim)
+	if !ok {
+		err = errors.New("Couldn't parse claims")
+		return
+	}
+	if claims.ExpiresAt < time.Now().Local().Unix() {
+		err = errors.New("JWT is expired")
+		return
+	}
+	email = claims.Email
+	return
+}
+
 // ValidateToken validates the token signedToken and returns the claims
 // Param signedToken: Token that will be validated
 // Return claims: *JwtClaim that the token is claiming
@@ -67,7 +89,7 @@ func (j *JwtWrapper) ValidateToken(signedToken string) (claims *JwtClaim, err er
 			return []byte(j.SecretKey), nil
 		},
 	)
-	//Para validar en realidad tendre que hacer nuevas funcioness que
+	//Para validar en realidad tendre que hacer nuevas funciones que
 	//separen validacion de secreto de obtencion de claims
 	if err != nil {
 		return

@@ -40,9 +40,39 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 
 	api.JSONProducer = runtime.JSONProducer()
 
-	api.AuthLoginHandler = auth.LoginHandlerFunc(handlers.Login)
+	// Applies when the "Bearer" header is set
+	api.BearerHeaderAuth = handlers.BearerAuth
 
-	api.UserRegisterUserHandler = user.RegisterUserHandlerFunc(handlers.RegisterUser)
+	// Set your custom authorizer if needed. Default one is security.Authorized()
+	// Expected interface runtime.Authorizer
+	//
+	// Example:
+	// api.APIAuthorizer = security.Authorized()
+
+	api.AuthLoginHandler = auth.LoginHandlerFunc(handlers.Login) // POST /accesstokens
+
+	api.UserPutPasswordHandler = user.PutPasswordHandlerFunc(handlers.PutPassword) // PUT /passwords/{username}
+
+	api.UserRegisterUserHandler = user.RegisterUserHandlerFunc(handlers.RegisterUser) // POST /users
+	api.UserGetUsersHandler = user.GetUsersHandlerFunc(handlers.GetUsers)             // GET /users
+
+	api.UserGetUserHandler = user.GetUserHandlerFunc(handlers.GetUser) // GET /users/{username}
+	api.UserPutUserHandler = user.PutUserHandlerFunc(handlers.PutUser) // PUT /users/{username}
+	api.UserDeleteUserHandler = nil                                    // DELETE /users/{username}
+	api.UserGetTeamsOfUserHandler = nil                                // GET /users/{username}/teams
+	api.UserAddTeamOfUserHandler = nil                                 // PUT /users/{username}/teams/{teamname}
+	api.UserDeleteTeamOfUserHandler = nil                              // DELETE /users/{username}/teams/{teamname}
+	api.TeamGetUserTeamRoleHandler = nil                               // GET /users/{username}/teams/{teamname}/role
+	api.TeamPutUserTeamRoleHandler = nil                               // PUT /users/{username}/teams/{teamname}/role
+
+	api.TeamGetTeamsHandler = nil           // GET /teams
+	api.TeamPostTeamHandler = nil           // POST /teams
+	api.TeamGetTeamHandler = nil            // GET /teams/{teamname}
+	api.TeamPutTeamHandler = nil            // PUT /teams/{teamname}
+	api.TeamDeleteTeamHandler = nil         // DELETE /teams/{teamname}
+	api.UserGetUsersFromTeamHandler = nil   // GET /teams/{teamname}/users
+	api.UserAddUserFromTeamHandler = nil    // PUT /teams/{teamname}/users/{username}
+	api.UserDeleteUserFromTeamHandler = nil // DELETE /teams/{teamname}/users/{username}
 
 	api.PreServerShutdown = func() {}
 

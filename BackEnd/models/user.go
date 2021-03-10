@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -26,10 +27,18 @@ type User struct {
 	// Format: email
 	Email *strfmt.Email `json:"email"`
 
+	// fullname
+	// Example: Javier Gatón Herguedas
+	Fullname string `json:"fullname,omitempty"`
+
+	// type
+	// Enum: [student teacher admin]
+	Type string `json:"type,omitempty"`
+
 	// username
 	// Example: carlosg72
 	// Required: true
-	// Pattern: ^[^@]+$
+	// Pattern: ^[^@ \t\r\n]+$
 	Username *string `json:"username"`
 }
 
@@ -38,6 +47,10 @@ func (m *User) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateEmail(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateType(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -68,13 +81,58 @@ func (m *User) validateEmail(formats strfmt.Registry) error {
 	return nil
 }
 
+var userTypeTypePropEnum []interface{}
+
+func init() {
+	var res []string
+	if err := json.Unmarshal([]byte(`["student","teacher","admin"]`), &res); err != nil {
+		panic(err)
+	}
+	for _, v := range res {
+		userTypeTypePropEnum = append(userTypeTypePropEnum, v)
+	}
+}
+
+const (
+
+	// UserTypeStudent captures enum value "student"
+	UserTypeStudent string = "student"
+
+	// UserTypeTeacher captures enum value "teacher"
+	UserTypeTeacher string = "teacher"
+
+	// UserTypeAdmin captures enum value "admin"
+	UserTypeAdmin string = "admin"
+)
+
+// prop value enum
+func (m *User) validateTypeEnum(path, location string, value string) error {
+	if err := validate.EnumCase(path, location, value, userTypeTypePropEnum, true); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (m *User) validateType(formats strfmt.Registry) error {
+	if swag.IsZero(m.Type) { // not required
+		return nil
+	}
+
+	// value enum
+	if err := m.validateTypeEnum("type", "body", m.Type); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (m *User) validateUsername(formats strfmt.Registry) error {
 
 	if err := validate.Required("username", "body", m.Username); err != nil {
 		return err
 	}
 
-	if err := validate.Pattern("username", "body", *m.Username, `^[^@]+$`); err != nil {
+	if err := validate.Pattern("username", "body", *m.Username, `^[^@ \t\r\n]+$`); err != nil {
 		return err
 	}
 

@@ -40,12 +40,12 @@ func conflictErrorSignin(err error) middleware.Responder {
 // Responds with a 201 Created object and the user created
 func successSignin(u *userdao.User) middleware.Responder {
 	log.Println("Usuario registrado")
-	mu := &models.User{
-		Username: u.Username,
-		Email:    u.Email,
-	}
+	mu := userdao.DaoToModelUser(u)
 	return user.NewRegisterUserCreated().WithPayload(mu)
 }
+
+// Cost used in bcrypt.GenerateFromPassword functions
+const Cost = 14
 
 // RegisterUser is the main handler function for Sign In functionality
 // Param params Parametros de entrada que tiene la peticion http
@@ -59,7 +59,7 @@ func RegisterUser(params user.RegisterUserParams) middleware.Responder {
 	}
 	log.Printf("Nombre de usuario: %v\n", *lu.Username)
 	log.Println("Email: " + *lu.Email)
-	bytes, err := bcrypt.GenerateFromPassword([]byte(*lu.Pass), 14)
+	bytes, err := bcrypt.GenerateFromPassword([]byte(*lu.Pass), Cost)
 	if err != nil {
 		return serverErrorSignin(err)
 	}

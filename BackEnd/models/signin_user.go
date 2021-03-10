@@ -36,7 +36,7 @@ type SigninUser struct {
 	// username
 	// Example: carlosg72
 	// Required: true
-	// Pattern: ^[^@]+$
+	// Pattern: ^[^@ \t\r\n]+$
 	Username *string `json:"username"`
 }
 
@@ -102,7 +102,7 @@ func (m *SigninUser) validateUsername(formats strfmt.Registry) error {
 		return err
 	}
 
-	if err := validate.Pattern("username", "body", *m.Username, `^[^@]+$`); err != nil {
+	if err := validate.Pattern("username", "body", *m.Username, `^[^@ \t\r\n]+$`); err != nil {
 		return err
 	}
 
