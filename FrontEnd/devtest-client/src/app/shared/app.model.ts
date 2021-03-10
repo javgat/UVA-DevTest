@@ -16,7 +16,7 @@ export class Mensaje{
     }
 }
 
-export class Session{
+export class SessionUser{
     readonly logged: boolean
     readonly jwt: String
     readonly userid: String

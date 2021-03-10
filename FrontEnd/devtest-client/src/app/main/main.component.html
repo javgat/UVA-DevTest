@@ -1,0 +1,8 @@
+<div>
+    <div *ngIf="sessionActual.logged">
+        <app-logged-in></app-logged-in>
+    </div>
+    <div *ngIf="!sessionActual.logged">
+        <app-not-logged-in></app-not-logged-in>
+    </div>
+</div>

@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService, SigninUser } from '@javgat/devtest-api';
-import { Mensaje, Tipo } from '../shared/app.model';
+import { Mensaje, SessionUser, Tipo } from '../shared/app.model';
 import { DataService } from '../shared/data.service';
+import { SessionService } from '../shared/session.service';
 
 // SigninComponent es el componente que permite el registro de un nuevo usuario
 
@@ -21,14 +22,24 @@ export class SigninComponent implements OnInit {
   // Variable que se modificara en el formulario de registro
   signinUser = this.signinUserEmpty as SigninUser
   mensaje: Mensaje
-  
-  constructor(private authService : AuthService, private datos : DataService, private router: Router) { 
+  sessionUser : SessionUser
+  constructor(private authService : AuthService, private datos : DataService,
+    private session: SessionService, private router: Router) { 
     this.mensaje = new Mensaje()
+    this.sessionUser = new SessionUser(false)
   }
 
   ngOnInit(): void {
     this.datos.mensajeActual.subscribe(
       valor => this.mensaje = valor
+    )
+    this.session.sessionActual.subscribe(
+      valor => {
+        this.sessionUser = valor
+        if(this.sessionUser.logged){
+          this.router.navigate(['/'])
+        }
+      }
     )
   }
 

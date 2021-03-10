@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService, LoginUser } from '@javgat/devtest-api'
-import { Mensaje, Session, Tipo } from '../shared/app.model';
+import { Mensaje, SessionUser, Tipo } from '../shared/app.model';
 import { DataService } from '../shared/data.service';
 import { SessionService } from '../shared/session.service';
 
@@ -20,15 +21,25 @@ export class LoginComponent implements OnInit {
   // Variable que se modificara en el formulario de inicio de sesión
   loginUser = this.loginUserEmpty as LoginUser
   mensaje: Mensaje
+  sessionUser : SessionUser
 
   constructor(private authService : AuthService, private datos: DataService,
-    private session: SessionService) {
+    private session: SessionService, private router: Router) {
     this.mensaje = new Mensaje()
+    this.sessionUser = new SessionUser(false)
   }
 
   ngOnInit(): void {
     this.datos.mensajeActual.subscribe(
       valor => this.mensaje = valor
+    )
+    this.session.sessionActual.subscribe(
+      valor => {
+        this.sessionUser = valor
+        if(this.sessionUser.logged){
+          this.router.navigate(['/'])
+        }
+      }
     )
   }
 
@@ -37,9 +48,8 @@ export class LoginComponent implements OnInit {
     this.authService.login(lu).subscribe(
       resp => {        
         this.datos.cambiarMensaje(new Mensaje("Inicio sesion con exito", Tipo.SUCCESS, true))
-        this.session.cambiarSession(new Session(true, resp.token, lu.loginid))
+        this.session.cambiarSession(new SessionUser(true, resp.token, lu.loginid))
         console.log("Inicio sesion con exito")
-        // Redireccion a pagina principal?
       },
       err =>{
         let msg: string

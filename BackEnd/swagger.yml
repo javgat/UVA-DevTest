@@ -20,14 +20,43 @@ tags:
 - name: team
   description: Operations related to teams
 paths:
+  /accesstokens:
+    post:
+      tags:
+      - auth
+      summary: Registers a new authorized connection token
+      operationId: Login
+      description: Tries to login, and gets a JWT auth token if successful
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: loginUser
+        description: User who is trying to generate a token
+        required: true
+        schema:
+          $ref: '#/definitions/LoginUser'
+      responses:
+        200:
+          description: Successful authentication
+          schema:
+            $ref: '#/definitions/JWTJson'
+        400:
+          $ref: '#/responses/BadRequestError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
   /users:
     post:
       tags:
       - user
       - auth
-      summary: adds an user
+      summary: adds a user
       operationId: RegisterUser
-      description: Adds an user to the system
+      description: Adds a user to the system
       consumes:
       - application/json
       produces:
@@ -80,7 +109,7 @@ paths:
       tags:
       - user
       summary: Finds a user by its username
-      operationId: getUserUsername
+      operationId: getUser
       description: Finds a user by its username
       produces:
       - application/json
@@ -109,14 +138,14 @@ paths:
       tags:
       - user
       summary: Modifies the user <username>
-      operationId: putUserUsername
+      operationId: putUser
       description: Modifies the user <username>
       consumes:
       - application/json
       parameters:
       - in: path
         name: username
-        description: Username of the user to modify its password
+        description: Username of the user to modify its information
         required: true
         type: string
       - in: body
@@ -128,14 +157,37 @@ paths:
       responses:
         200:
           description: user updated
-          schema:
-            $ref: '#/definitions/User'
         400:
           $ref: '#/responses/BadRequestError'
         403:
           $ref: '#/responses/ForbiddenError'
         409:
           $ref: '#/responses/ConflictError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+    delete:
+      security:
+        - BearerHeader: []
+      tags:
+      - user
+      summary: Deletes a user by its username
+      operationId: deleteUser
+      description: Deletes a user by its username
+      parameters:
+      - in: path
+        name: username
+        description: Username of the user to delete
+        required: true
+        type: string
+      responses:
+        200:
+          description: user found and deleted
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
         410:
           $ref: '#/responses/GoneError'
         500:
@@ -148,7 +200,7 @@ paths:
       - user
       - auth
       summary: Modifies the password of the user <username>
-      operationId: putPasswordUsername
+      operationId: putPassword
       description: Modifies the password of the user <username>
       consumes:
       - application/json
@@ -175,31 +227,421 @@ paths:
           $ref: '#/responses/GoneError'
         500:
           $ref: '#/responses/InternalServerError'
-  /accesstokens:
-    post:
+  /users/{username}/teams:
+    get:
+      security:
+        - BearerHeader: []
       tags:
-      - auth
-      summary: Registers a new authorized connection token
-      operationId: Login
-      description: Tries to login, and gets a JWT auth token if successful
+      - user
+      - team
+      summary: Returns all teams of a user.
+      operationId: GetTeamsOfUser
+      description: Returns all teams of a user.
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the user to get their teams
+        required: true
+        type: string
+      responses:
+        200:
+          description: teams found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Team'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  /users/{username}/teams/{teamname}:
+    put:
+      security:
+        - BearerHeader: []
+      tags:
+      - user
+      - team
+      summary: Adds user {username} to team {teamname}
+      operationId: AddTeamOfUser
+      description: Adds user {username} to team {teamname}
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: teamname
+        description: Teamname of the team to modify
+        required: true
+        type: string
+      - in: path
+        name: username
+        description: Username of the user to add
+        required: true
+        type: string
+      responses:
+        200:
+          description: User added to team
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        409:
+          $ref: '#/responses/ConflictError' #? lo quito? si ya esta añadido deberia devolver error?
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+    delete:
+      security:
+        - BearerHeader: []
+      tags:
+      - user
+      - team
+      summary: Deletes user {username} from team {teamname}
+      operationId: DeleteTeamOfUser
+      description: Deletes user {username} from team {teamname}
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: teamname
+        description: Teamname of the team to modify
+        required: true
+        type: string
+      - in: path
+        name: username
+        description: Username of the user to delete from team
+        required: true
+        type: string
+      responses:
+        200:
+          description: User deleted from team
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  /users/{username}/teams/{teamname}/role:
+    get:
+      security:
+        - BearerHeader: []
+      tags:
+      - team
+      - user
+      summary: Returns the role of a user in a team
+      operationId: GetUserTeamRole
+      description: Returns the role of a user in a team
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: teamname
+        description: Teamname of the team to modify
+        required: true
+        type: string
+      - in: path
+        name: username
+        description: Username of the user to modify its role
+        required: true
+        type: string
+      responses:
+        200:
+          description: Role found
+          schema:
+            $ref: '#/definitions/TeamRole'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+    put:
+      security:
+        - BearerHeader: []
+      tags:
+      - team
+      - user
+      summary: Modifies the role of a user in a team
+      operationId: PutUserTeamRole
+      description: Modifies the role of a user in a team
+      consumes:
+      - application/json
+      parameters:
+      - in: body
+        name: role
+        description: New role of the user
+        required: true
+        schema:
+          $ref: '#/definitions/TeamRole'
+      - in: path
+        name: teamname
+        description: Teamname of the team to modify
+        required: true
+        type: string
+      - in: path
+        name: username
+        description: Username of the user to modify its role
+        required: true
+        type: string
+      responses:
+        200:
+          description: Role modified
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  /teams:
+    post:
+      security:
+        - BearerHeader: []
+      tags:
+      - team
+      summary: adds a team
+      operationId: PostTeam
+      description: Adds a team to the system
       consumes:
       - application/json
       produces:
       - application/json
       parameters:
       - in: body
-        name: loginUser
-        description: User who is trying to generate a token
+        name: team
+        description: Team item to add
         required: true
         schema:
-          $ref: '#/definitions/LoginUser'
+          $ref: '#/definitions/Team'
       responses:
-        200:
-          description: Successful authentication
+        201:
+          description: team created
           schema:
-            $ref: '#/definitions/JWTJson'
+            $ref: '#/definitions/Team'
         400:
           $ref: '#/responses/BadRequestError'
+        409:
+          $ref: '#/responses/ConflictError'
+        500:
+          $ref: '#/responses/InternalServerError'
+    get:
+      security:
+        - BearerHeader: []
+      tags:
+      - team
+      summary: Returns all teams.
+      operationId: GetTeams
+      description: Returns all teams.
+      produces:
+      - application/json
+      responses:
+        200:
+          description: teams found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Team'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  /teams/{teamname}:
+    get:
+      security:
+        - BearerHeader: []
+      tags:
+      - team
+      summary: Finds a team by its teamname
+      operationId: getTeam
+      description: Finds a team by its teamname
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: teamname
+        description: Teamname of the team to find
+        required: true
+        type: string
+      responses:
+        200:
+          description: team found
+          schema:
+            $ref: '#/definitions/Team'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+    put:
+      security:
+        - BearerHeader: []
+      tags:
+      - team
+      summary: Modifies the team <teamname>
+      operationId: putTeam
+      description: Modifies the team <teamname>
+      consumes:
+      - application/json
+      parameters:
+      - in: path
+        name: teamname
+        description: Teamname of the team to modify its information
+        required: true
+        type: string
+      - in: body
+        name: team
+        required: true
+        description: Team information updated
+        schema:
+          $ref: '#/definitions/Team'
+      responses:
+        200:
+          description: team updated
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        409:
+          $ref: '#/responses/ConflictError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+    delete:
+      security:
+        - BearerHeader: []
+      tags:
+      - team
+      summary: Deletes a team by its teamname
+      operationId: deleteTeam
+      description: Deletes a team by its teamname
+      parameters:
+      - in: path
+        name: teamname
+        description: Teamname of the team to delete
+        required: true
+        type: string
+      responses:
+        200:
+          description: team found and deleted
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  /teams/{teamname}/users:
+    get:
+      security:
+        - BearerHeader: []
+      tags:
+      - user
+      - team
+      summary: Returns all users that are members of a team
+      operationId: GetUsersFromTeam
+      description: Returns all users that are members of a team
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: teamname
+        description: Teamname of the team to get its users
+        required: true
+        type: string
+      responses:
+        200:
+          description: users found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  /teams/{teamname}/users/{username}:
+    put:
+      security:
+        - BearerHeader: []
+      tags:
+      - user
+      - team
+      summary: Adds user {username} to team {teamname}
+      operationId: AddUserFromTeam
+      description: Adds user {username} to team {teamname}
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: teamname
+        description: Teamname of the team to modify
+        required: true
+        type: string
+      - in: path
+        name: username
+        description: Username of the user to add
+        required: true
+        type: string
+      responses:
+        200:
+          description: User added to team
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        409:
+          $ref: '#/responses/ConflictError' #? lo quito? si ya esta añadido deberia devolver error?
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+    delete:
+      security:
+        - BearerHeader: []
+      tags:
+      - user
+      - team
+      summary: Deletes user {username} from team {teamname}
+      operationId: DeleteUserFromTeam
+      description: Deletes user {username} from team {teamname}
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: teamname
+        description: Teamname of the team to modify
+        required: true
+        type: string
+      - in: path
+        name: username
+        description: Username of the user to delete from team
+        required: true
+        type: string
+      responses:
+        200:
+          description: User deleted from team
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
         410:
           $ref: '#/responses/GoneError'
         500:
@@ -288,6 +730,26 @@ definitions:
       type:
         type: string
         enum: [student, teacher, admin]
+  Team:
+    type: object
+    required:
+    - teamname
+    properties:
+      teamname:
+        type: string
+        example: devtestTeam
+        pattern: '^[^@ \t\r\n]+$'
+      description:
+        type: string
+        example: DevTest Team
+  TeamRole:
+    type: object
+    required:
+    - role
+    properties:
+      role:
+        type: string
+        enum: [admin, member]
   PasswordUpdate:
     type: object
     required:
