@@ -1,4 +1,4 @@
-package teamdao
+package dao
 
 import (
 	"database/sql"
@@ -6,16 +6,33 @@ import (
 	"uva-devtest/models"
 )
 
+// DaoToModelTeam converts a teamdao.Team into a models.Team
+func DaoToModelTeam(t *Team) *models.Team {
+	mt := &models.Team{
+		Teamname:    t.Teamname,
+		Description: t.Description,
+	}
+	return mt
+}
+
+// DaoToModelsTeams converts a splice of teamdao.Team into models.Team
+func DaoToModelsTeams(us []*Team) []*models.Team {
+	var mts = []*models.Team{}
+	for _, itemCopy := range us {
+		mts = append(mts, DaoToModelTeam(itemCopy))
+	}
+	return mts
+}
+
 // Transforms some sql.Rows into a slice(array) of teams
 // Param rows: Rows which contains database information returned
-// Return []models.Team: Team represented in rows
+// Return []Team: Team represented in rows
 // Return error if any
-func rowsToTeams(rows *sql.Rows) ([]*models.Team, error) {
-	var teams []*models.Team
-	var trash int
+func rowsToTeams(rows *sql.Rows) ([]*Team, error) {
+	var teams []*Team
 	for rows.Next() {
-		var t models.Team
-		err := rows.Scan(&trash, &t.Teamname, &t.Description)
+		var t Team
+		err := rows.Scan(&t.ID, &t.Teamname, &t.Description)
 		if err != nil {
 			return teams, err
 		}
@@ -26,10 +43,10 @@ func rowsToTeams(rows *sql.Rows) ([]*models.Team, error) {
 
 // Transforms rows into a single team
 // Param rows: Rows which contains database info of 1 Team
-// Return *models.Team: Team that was represented in rows
+// Return *Team: Team that was represented in rows
 // Return error if something happens
-func rowsToTeam(rows *sql.Rows) (*models.Team, error) {
-	var team *models.Team
+func rowsToTeam(rows *sql.Rows) (*Team, error) {
+	var team *Team
 	teams, err := rowsToTeams(rows)
 	if len(teams) >= 1 {
 		team = teams[0]
@@ -38,16 +55,20 @@ func rowsToTeam(rows *sql.Rows) (*models.Team, error) {
 }
 
 // GetTeamsUsername gets all teams from user <username>
-func GetTeamsUsername(db *sql.DB, username string) ([]*models.Team, error) {
+func GetTeamsUsername(db *sql.DB, username string) ([]*Team, error) {
 	if db == nil {
 		return nil, errors.New("Parametro db nil")
 	}
-	query, err := db.Prepare("SELECT T FROM teams T JOIN teamroles R WHERE R.username = ?")
-	var ts []*models.Team
+	u, err := GetUserUsername(db, username)
+	if err != nil {
+		return nil, err
+	}
+	query, err := db.Prepare("SELECT T FROM teams T JOIN teamroles R ON	T.id=R.teamid WHERE R.userid = ?")
+	var ts []*Team
 	if err != nil {
 		return ts, err
 	}
-	rows, err := query.Query(username)
+	rows, err := query.Query(u.ID)
 	if err == nil {
 		ts, err = rowsToTeams(rows)
 	}
@@ -56,12 +77,12 @@ func GetTeamsUsername(db *sql.DB, username string) ([]*models.Team, error) {
 }
 
 // GetTeams gets all teams
-func GetTeams(db *sql.DB) ([]*models.Team, error) {
+func GetTeams(db *sql.DB) ([]*Team, error) {
 	if db == nil {
 		return nil, errors.New("Parametro db nil")
 	}
 	query, err := db.Prepare("SELECT * FROM teams")
-	var ts []*models.Team
+	var ts []*Team
 	if err != nil {
 		return ts, err
 	}
@@ -74,12 +95,12 @@ func GetTeams(db *sql.DB) ([]*models.Team, error) {
 }
 
 // GetTeam gets team <teamname>
-func GetTeam(db *sql.DB, teamname string) (*models.Team, error) {
+func GetTeam(db *sql.DB, teamname string) (*Team, error) {
 	if db == nil {
 		return nil, errors.New("Parametro db nil")
 	}
 	query, err := db.Prepare("SELECT * FROM teams")
-	var t *models.Team
+	var t *Team
 	if err != nil {
 		return t, err
 	}

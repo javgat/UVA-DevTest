@@ -2,7 +2,7 @@
 // Author: Javier Gatón Herguedas.
 
 // Package userdao acts as a Data Access Object for the User Type
-package userdao
+package dao
 
 import (
 	"database/sql"
@@ -57,10 +57,9 @@ func InsertUser(db *sql.DB, u *User) error {
 // Return error if any
 func rowsToUsers(rows *sql.Rows) ([]*User, error) {
 	var users []*User
-	var trash int
 	for rows.Next() {
 		var us User
-		err := rows.Scan(&trash, &us.Username, &us.Email, &us.Pwhash)
+		err := rows.Scan(&us.ID, &us.Username, &us.Email, &us.Pwhash)
 		if err != nil {
 			return users, err
 		}
@@ -195,11 +194,19 @@ func AddUserTeam(db *sql.DB, username string, teamname string) error {
 	if db == nil {
 		return errors.New("Argumento de entrada nil")
 	}
-	query, err := db.Prepare("INSERT INTO teamroles(username, teamname, role) VALUES (?, ?, ?) ")
+	u, err := GetUserUsername(db, username)
 	if err != nil {
 		return err
 	}
-	_, err = query.Exec(username, teamname, models.TeamRoleRoleMember)
+	t, err := GetTeam(db, teamname)
+	if err != nil {
+		return err
+	}
+	query, err := db.Prepare("INSERT INTO teamroles(userid, teamid, role) VALUES (?, ?, ?) ")
+	if err != nil {
+		return err
+	}
+	_, err = query.Exec(u.ID, t.ID, models.TeamRoleRoleMember)
 	defer query.Close()
 	return err
 }
@@ -209,11 +216,19 @@ func ExitUserTeam(db *sql.DB, username string, teamname string) error {
 	if db == nil {
 		return errors.New("Argumento de entrada nil")
 	}
-	query, err := db.Prepare("DELETE FROM teamroles WHERE username = ? AND teamname = ? ")
+	u, err := GetUserUsername(db, username)
 	if err != nil {
 		return err
 	}
-	_, err = query.Exec(username, teamname)
+	t, err := GetTeam(db, teamname)
+	if err != nil {
+		return err
+	}
+	query, err := db.Prepare("DELETE FROM teamroles WHERE userid = ? AND teamid = ? ")
+	if err != nil {
+		return err
+	}
+	_, err = query.Exec(u.ID, t.ID)
 	defer query.Close()
 	return err
 }
@@ -223,12 +238,16 @@ func GetUsersFromTeam(db *sql.DB, teamname string) ([]*models.User, error) {
 	if db == nil {
 		return nil, errors.New("Parametro db nil")
 	}
-	query, err := db.Prepare("SELECT U FROM users U JOIN teamroles R WHERE R.teamname=?")
+	t, err := GetTeam(db, teamname)
+	if err != nil {
+		return nil, err
+	}
+	query, err := db.Prepare("SELECT U FROM users U JOIN teamroles R ON	U.id=R.userid WHERE R.teamid=?")
 	var us []*User
 	if err != nil {
 		return nil, err
 	}
-	rows, err := query.Query(teamname)
+	rows, err := query.Query(t.ID)
 	if err == nil {
 		us, err = rowsToUsers(rows)
 	}

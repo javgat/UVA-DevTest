@@ -1,11 +1,14 @@
-package userdao
+package dao
 
 import "github.com/go-openapi/strfmt"
 
 // User user
 //
-// swagger:model User
+// userdao User
 type User struct {
+	// id
+	// Identificador SQL
+	ID int
 
 	// email
 	// Example: carlos@mail.com

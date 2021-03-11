@@ -8,7 +8,7 @@ import (
 	"errors"
 	"log"
 	"uva-devtest/models"
-	"uva-devtest/persistence/daos/userdao"
+	"uva-devtest/persistence/dao"
 	"uva-devtest/persistence/dbconnection"
 	"uva-devtest/restapi/operations/auth"
 
@@ -45,7 +45,7 @@ func authFailErrorLogin(err error, info string) middleware.Responder {
 }
 
 // The user is logged in, the handler will try to respond with a JWT
-func successLogin(u userdao.User) middleware.Responder {
+func successLogin(u dao.User) middleware.Responder {
 	log.Println("Usuario logged in")
 	var wrap jwtauth.JwtWrapper
 	wrap.SecretKey = *u.Pwhash
@@ -75,18 +75,18 @@ func Login(params auth.LoginParams) middleware.Responder {
 		return serverErrorLogin(err)
 	}
 	log.Println("Conectado a la base de datos")
-	var u *userdao.User
+	var u *dao.User
 	if *lu.Loginid == "" {
 		return badReqErrorLogin(nil)
 	}
 	// Primero compruebo si la LoginId corresponde a un username
-	u, err = userdao.GetUserUsername(db, *lu.Loginid)
+	u, err = dao.GetUserUsername(db, *lu.Loginid)
 	if err != nil {
 		return serverErrorLogin(err)
 	}
 	if u == nil {
 		//Si no corresponde, compruebo con un email
-		u, err = userdao.GetUserEmail(db, *lu.Loginid)
+		u, err = dao.GetUserEmail(db, *lu.Loginid)
 	}
 	if u == nil {
 		return authFailErrorLogin(err, "Usuario no existe")

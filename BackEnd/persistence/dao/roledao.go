@@ -1,4 +1,4 @@
-package roledao
+package dao
 
 import (
 	"database/sql"
@@ -12,11 +12,10 @@ import (
 // Return error if any
 func rowsToRoles(rows *sql.Rows) ([]*models.TeamRole, error) {
 	var roles []*models.TeamRole
-	var trash int
-	var username, teamname string
+	var trash, userid, teamid int
 	for rows.Next() {
 		var r models.TeamRole
-		err := rows.Scan(&trash, &username, &teamname, &r.Role)
+		err := rows.Scan(&trash, &userid, &teamid, &r.Role)
 		if err != nil {
 			return roles, err
 		}
@@ -43,11 +42,19 @@ func GetRole(db *sql.DB, username string, teamname string) (role *models.TeamRol
 	if db == nil {
 		return nil, errors.New("Argumento de entrada nil")
 	}
-	query, err := db.Prepare("SELECT * FROM teamroles WHERE username = ? AND teamname = ? ")
+	u, err := GetUserUsername(db, username)
 	if err != nil {
 		return nil, err
 	}
-	rows, err := query.Query(username, teamname)
+	t, err := GetTeam(db, teamname)
+	if err != nil {
+		return nil, err
+	}
+	query, err := db.Prepare("SELECT * FROM teamroles WHERE userid = ? AND teamid = ? ")
+	if err != nil {
+		return nil, err
+	}
+	rows, err := query.Query(u.ID, t.ID)
 	if err == nil {
 		role, err = rowsToRole(rows)
 	}
@@ -60,11 +67,19 @@ func UpdateRole(db *sql.DB, username string, teamname string, role *models.TeamR
 	if db == nil || role == nil {
 		return errors.New("Argumento de entrada nil")
 	}
-	query, err := db.Prepare("UPDATE teamroles SET role = ? WHERE username = ? AND teamname = ? ")
+	u, err := GetUserUsername(db, username)
 	if err != nil {
 		return err
 	}
-	_, err = query.Exec(role.Role, username, teamname)
+	t, err := GetTeam(db, teamname)
+	if err != nil {
+		return err
+	}
+	query, err := db.Prepare("UPDATE teamroles SET role = ? WHERE userid = ? AND teamid = ? ")
+	if err != nil {
+		return err
+	}
+	_, err = query.Exec(role.Role, u.ID, t.ID)
 	defer query.Close()
 	return err
 }

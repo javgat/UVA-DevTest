@@ -13,7 +13,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 
 	"uva-devtest/models"
-	"uva-devtest/persistence/daos/userdao"
+	"uva-devtest/persistence/dao"
 	"uva-devtest/persistence/dbconnection"
 	"uva-devtest/restapi/operations/user"
 )
@@ -38,9 +38,9 @@ func conflictErrorSignin(err error) middleware.Responder {
 }
 
 // Responds with a 201 Created object and the user created
-func successSignin(u *userdao.User) middleware.Responder {
+func successSignin(u *dao.User) middleware.Responder {
 	log.Println("Usuario registrado")
-	mu := userdao.DaoToModelUser(u)
+	mu := dao.DaoToModelUser(u)
 	return user.NewRegisterUserCreated().WithPayload(mu)
 }
 
@@ -64,7 +64,7 @@ func RegisterUser(params user.RegisterUserParams) middleware.Responder {
 		return serverErrorSignin(err)
 	}
 	pwhashstring := string(bytes)
-	u := &userdao.User{
+	u := &dao.User{
 		Username: lu.Username,
 		Email:    lu.Email,
 		Pwhash:   &pwhashstring,
@@ -75,7 +75,7 @@ func RegisterUser(params user.RegisterUserParams) middleware.Responder {
 		return serverErrorSignin(err)
 	}
 	log.Println("Conectado a la base de datos")
-	err = userdao.InsertUser(db, u)
+	err = dao.InsertUser(db, u)
 	if err != nil {
 		return conflictErrorSignin(err)
 	}

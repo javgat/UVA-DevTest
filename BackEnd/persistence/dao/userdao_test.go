@@ -1,7 +1,7 @@
 // UVa-DevTest. 2021.
 // Author: Javier Gatón Herguedas.
 
-package userdao
+package dao
 
 import (
 	"fmt"

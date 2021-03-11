@@ -3,7 +3,7 @@ package handlers
 import (
 	"uva-devtest/jwtauth"
 	"uva-devtest/models"
-	"uva-devtest/persistence/daos/userdao"
+	"uva-devtest/persistence/dao"
 	"uva-devtest/persistence/dbconnection"
 )
 
@@ -17,7 +17,7 @@ func BearerAuth(token string) (*models.User, error) {
 	if err != nil {
 		return nil, err
 	}
-	u, err := userdao.GetUserEmail(db, email)
+	u, err := dao.GetUserEmail(db, email)
 	if u == nil || err != nil {
 		return nil, err
 	}
@@ -29,6 +29,6 @@ func BearerAuth(token string) (*models.User, error) {
 	if err != nil {
 		return nil, err
 	}
-	mu := userdao.DaoToModelUser(u)
+	mu := dao.DaoToModelUser(u)
 	return mu, err
 }
