@@ -69,6 +69,7 @@ func RegisterUser(params user.RegisterUserParams) middleware.Responder {
 		Email:    lu.Email,
 		Pwhash:   &pwhashstring,
 		Type:     models.UserTypeStudent,
+		Fullname: *lu.Username,
 	}
 	db, err := dbconnection.ConnectDb()
 

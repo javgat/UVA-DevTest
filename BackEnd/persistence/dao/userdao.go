@@ -20,6 +20,7 @@ func ToModelUser(u *User) *models.User {
 		Username: u.Username,
 		Email:    u.Email,
 		Type:     u.Type,
+		Fullname: u.Fullname,
 	}
 	return mu
 }
@@ -42,13 +43,13 @@ func InsertUser(db *sql.DB, u *User) error {
 	if db == nil || u == nil {
 		return errors.New("Argumento de entrada nil")
 	}
-	query, err := db.Prepare("INSERT INTO Users(username, email, pwhash, type) VALUES (?,?,?,?)")
+	query, err := db.Prepare("INSERT INTO Users(username, email, pwhash, type, fullname) VALUES (?,?,?,?)")
 
 	if err != nil {
 		return err
 	}
 
-	_, err = query.Exec(u.Username, u.Email, u.Pwhash, u.Type)
+	_, err = query.Exec(u.Username, u.Email, u.Pwhash, u.Type, u.Fullname)
 	defer query.Close()
 	return err
 }
@@ -188,11 +189,11 @@ func UpdateUser(db *sql.DB, u *models.User, username string) error {
 	if db == nil || u == nil {
 		return errors.New("Argumento de entrada nil")
 	}
-	query, err := db.Prepare("UPDATE Users SET email=?, fullname=?, username=?, type=? WHERE username = ? ")
+	query, err := db.Prepare("UPDATE Users SET username=?, email=?, fullname=?, type=? WHERE username = ? ")
 	if err != nil {
 		return err
 	}
-	_, err = query.Exec(u.Email, u.Fullname, u.Username, u.Type, username)
+	_, err = query.Exec(u.Username, u.Email, u.Fullname, u.Type, username)
 	defer query.Close()
 	return err
 }
@@ -230,6 +231,8 @@ func AddUserTeam(db *sql.DB, username string, teamname string) error {
 	query, err := db.Prepare("INSERT INTO Teamroles(userid, teamid, role) VALUES (?, ?, ?) ")
 	if err != nil {
 		return err
+	} else if u == nil || t == nil {
+		return errors.New("No se encontro el usuario o equipo")
 	}
 	_, err = query.Exec(u.ID, t.ID, models.TeamRoleRoleMember)
 	defer query.Close()
@@ -254,6 +257,8 @@ func ExitUserTeam(db *sql.DB, username string, teamname string) error {
 	query, err := db.Prepare("DELETE FROM Teamroles WHERE userid = ? AND teamid = ? ")
 	if err != nil {
 		return err
+	} else if u == nil || t == nil {
+		return errors.New("No se encontro el usuario o equipo")
 	}
 	_, err = query.Exec(u.ID, t.ID)
 	defer query.Close()
@@ -269,6 +274,8 @@ func GetUsersFromTeam(db *sql.DB, teamname string) ([]*User, error) {
 	t, err := GetTeam(db, teamname)
 	if err != nil {
 		return nil, err
+	} else if t == nil {
+		return nil, errors.New("No se encontro el equipo")
 	}
 	query, err := db.Prepare("SELECT U FROM Users U JOIN Teamroles R ON	U.id=R.userid WHERE R.teamid=?")
 	var us []*User
@@ -292,6 +299,8 @@ func GetTeamAdmins(db *sql.DB, teamname string) ([]*User, error) {
 	t, err := GetTeam(db, teamname)
 	if err != nil {
 		return nil, err
+	} else if t == nil {
+		return nil, errors.New("No se encontro el equipo")
 	}
 	query, err := db.Prepare("SELECT U FROM Users U JOIN Teamroles R ON	U.id=R.userid WHERE R.teamid=? AND R.role='Admin'")
 	var us []*User

@@ -27,6 +27,10 @@ type User struct {
 	// Pattern: [^@]+
 	Username *string `json:"username"`
 
+	// fullname
+	// Example: Javier Gatón Herguedas
+	Fullname string `json:"fullname,omitempty"`
+
 	// type
 	// Enum: [student teacher admin]
 	Type string `json:"type,omitempty"`

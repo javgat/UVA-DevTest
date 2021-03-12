@@ -10,6 +10,7 @@ CREATE TABLE Users (
   email varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   pwhash longtext COLLATE utf8_unicode_ci NOT NULL,
   type ENUM('Admin', 'Teacher', 'Student') NOT NULL,
+  fullname varchar(200) COLLATE utf8_unicode_ci,
   UNIQUE(username),
   UNIQUE(email),
   PRIMARY KEY (id)

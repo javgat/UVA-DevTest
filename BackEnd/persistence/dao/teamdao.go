@@ -128,12 +128,12 @@ func GetTeam(db *sql.DB, teamname string) (*Team, error) {
 	if db == nil {
 		return nil, errors.New("Parametro db nil")
 	}
-	query, err := db.Prepare("SELECT * FROM Teams")
+	query, err := db.Prepare("SELECT * FROM Teams WHERE teamname=?")
 	var t *Team
 	if err != nil {
 		return t, err
 	}
-	rows, err := query.Query()
+	rows, err := query.Query(teamname)
 	if err == nil {
 		t, err = rowsToTeam(rows)
 	}

@@ -37,13 +37,14 @@ func userToInsert() *User {
 		Email:    su.Email,
 		Pwhash:   &pwhashstring,
 		Type:     studentType,
+		Fullname: *su.Username,
 	}
 	return u
 }
 
 func expectInsert(mock sqlmock.Sqlmock, u *User) {
 	mock.ExpectPrepare("INSERT INTO Users").ExpectExec().
-		WithArgs(u.Username, u.Email, u.Pwhash, u.Type).WillReturnResult(sqlmock.NewResult(1, 1))
+		WithArgs(u.Username, u.Email, u.Pwhash, u.Type, u.Fullname).WillReturnResult(sqlmock.NewResult(1, 1))
 }
 
 func TestInsertUserNilDB(t *testing.T) {
@@ -772,132 +773,708 @@ func TestPutPasswordCorrect(t *testing.T) {
 
 // UpdateUser
 
-func TestUpdateUserNilDB(t *testing.T) {
+func expectUpdateUser(mock sqlmock.Sqlmock, u *User) {
+	mock.ExpectPrepare("UPDATE Users").ExpectExec().
+		WithArgs(u.Username, u.Email, u.Fullname, u.Type, u.Username).WillReturnResult(sqlmock.NewResult(1, 1))
+}
 
+func expectUpdateUserDefault(mock sqlmock.Sqlmock) {
+	u := defaultAdmin1()
+	expectUpdateUser(mock, u)
+}
+
+func TestUpdateUserNilDB(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	defer db.Close()
+	expectUpdateUserDefault(mock)
+	u := ToModelUser(defaultAdmin1())
+	err = UpdateUser(nil, u, *u.Username)
+	if err == nil {
+		t.Log("error should not be nil", err)
+		t.Fail()
+	}
 }
 
 func TestUpdateUserNilUser(t *testing.T) {
-
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	defer db.Close()
+	expectUpdateUserDefault(mock)
+	u := ToModelUser(defaultAdmin1())
+	err = UpdateUser(db, nil, *u.Username)
+	if err == nil {
+		t.Log("error should not be nil", err)
+		t.Fail()
+	}
 }
 
 func TestUpdateUserClosedDB(t *testing.T) {
-
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	db.Close()
+	expectUpdateUserDefault(mock)
+	u := ToModelUser(defaultAdmin1())
+	err = UpdateUser(db, u, *u.Username)
+	if err == nil {
+		t.Log("error should not be nil", err)
+		t.Fail()
+	}
 }
 
 func TestUpdateUserError(t *testing.T) {
-
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	defer db.Close()
+	u := ToModelUser(defaultAdmin1())
+	mock.ExpectPrepare("UPDATE Users").ExpectExec().
+		WithArgs(u.Username, u.Email, u.Fullname, u.Type, username).WillReturnError(fmt.Errorf("Error"))
+	err = UpdateUser(db, u, *u.Username)
+	if err == nil {
+		t.Log("error should not be nil", err)
+		t.Fail()
+	}
 }
 
 func TestUpdateUserCorrect(t *testing.T) {
-
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	defer db.Close()
+	expectUpdateUserDefault(mock)
+	u := ToModelUser(defaultAdmin1())
+	err = UpdateUser(db, u, *u.Username)
+	if err != nil {
+		t.Log("error should be nil", err)
+		t.Fail()
+	}
 }
 
 // DeleteUser
 
-func TestDeleteUserNilDB(t *testing.T) {
+var usernameDelete string = "username"
 
+func expectDeleteUser(mock sqlmock.Sqlmock, username string) {
+	mock.ExpectPrepare("DELETE FROM Users").ExpectExec().
+		WithArgs(username).WillReturnResult(sqlmock.NewResult(1, 1))
+}
+
+func expectDeleteUserDefault(mock sqlmock.Sqlmock) {
+	expectDeleteUser(mock, usernameDelete)
+}
+
+func TestDeleteUserNilDB(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	defer db.Close()
+	expectDeleteUserDefault(mock)
+	err = DeleteUser(nil, usernameDelete)
+	if err == nil {
+		t.Log("error should not be nil", err)
+		t.Fail()
+	}
 }
 
 func TestDeleteUserClosedDB(t *testing.T) {
-
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	db.Close()
+	expectDeleteUserDefault(mock)
+	err = DeleteUser(db, usernameDelete)
+	if err == nil {
+		t.Log("error should not be nil", err)
+		t.Fail()
+	}
 }
 
 func TestDeleteUserError(t *testing.T) {
-
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	defer db.Close()
+	mock.ExpectPrepare("DELETE Users").ExpectExec().
+		WithArgs(username).WillReturnError(fmt.Errorf("Error"))
+	err = DeleteUser(db, usernameDelete)
+	if err == nil {
+		t.Log("error should not be nil", err)
+		t.Fail()
+	}
 }
 
 func TestDeleteUserCorrect(t *testing.T) {
-
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	defer db.Close()
+	expectDeleteUserDefault(mock)
+	err = DeleteUser(db, usernameDelete)
+	if err != nil {
+		t.Log("error should be nil", err)
+		t.Fail()
+	}
 }
 
 // AddUserTeam
+var usernameAddUser string = "username"
+var teamnameAddUser string = "teamname"
+var useridAddUser int = 1
+var teamidAddUser int = 1
+
+func defaultTeam() *Team {
+	t := &Team{
+		ID:          1,
+		Teamname:    &teamnameAddUser,
+		Description: "description",
+	}
+	return t
+}
+
+func expectGetTeam(mock sqlmock.Sqlmock, arg string, team *Team) {
+	columns := []string{"id", "teamname", "description"}
+	mock.ExpectPrepare("SELECT (.+) FROM Teams").ExpectQuery().WithArgs(arg).
+		WillReturnRows(sqlmock.NewRows(columns).AddRow(team.ID, team.Teamname, team.Description))
+}
+
+func expectGetTeamEmpty(mock sqlmock.Sqlmock, arg string) {
+	columns := []string{"id", "teamname", "description"}
+	mock.ExpectPrepare("SELECT (.+) FROM Teams").ExpectQuery().WithArgs(arg).
+		WillReturnRows(sqlmock.NewRows(columns))
+}
+
+func expectAddUserTeam(mock sqlmock.Sqlmock, userid int, teamid int) {
+	expectGetUser(mock, usernameAddUser, usernameAddUser, emailS, pwhash, typeTeacher)
+	expectGetTeam(mock, teamnameAddUser, defaultTeam())
+	mock.ExpectPrepare("INSERT INTO Teamroles").ExpectExec().
+		WithArgs(userid, teamid, models.TeamRoleRoleMember).WillReturnResult(sqlmock.NewResult(1, 1))
+}
+
+func expectAddUserTeamDefault(mock sqlmock.Sqlmock) {
+	expectAddUserTeam(mock, useridAddUser, teamidAddUser)
+}
+
+func expectAddUserTeamUsernameNotFound(mock sqlmock.Sqlmock) {
+	expectGetUserEmpty(mock, usernameAddUser)
+	expectGetTeam(mock, teamnameAddUser, defaultTeam())
+	mock.ExpectPrepare("INSERT INTO Teamroles").ExpectExec().
+		WithArgs(useridAddUser, teamidAddUser, models.TeamRoleRoleMember).WillReturnResult(sqlmock.NewResult(1, 1))
+}
+
+func expectAddUserTeamTeamnameNotFound(mock sqlmock.Sqlmock) {
+	expectGetUser(mock, usernameAddUser, usernameAddUser, emailS, pwhash, typeTeacher)
+	expectGetTeamEmpty(mock, teamnameAddUser)
+	mock.ExpectPrepare("INSERT INTO Teamroles").ExpectExec().
+		WithArgs(useridAddUser, teamidAddUser, models.TeamRoleRoleMember).WillReturnResult(sqlmock.NewResult(1, 1))
+}
 
 func TestAddUserTeamNilDB(t *testing.T) {
-
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	defer db.Close()
+	expectAddUserTeamDefault(mock)
+	err = AddUserTeam(nil, usernameAddUser, teamnameAddUser)
+	if err == nil {
+		t.Log("error should not be nil", err)
+		t.Fail()
+	}
 }
 
 func TestAddUserTeamClosedDB(t *testing.T) {
-
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	db.Close()
+	expectAddUserTeamDefault(mock)
+	err = AddUserTeam(db, usernameAddUser, teamnameAddUser)
+	if err == nil {
+		t.Log("error should not be nil", err)
+		t.Fail()
+	}
 }
 
-func TestAddUserTeamUsernameError(t *testing.T) {
-
+func TestAddUserTeamUsernameNotFound(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	defer db.Close()
+	expectAddUserTeamUsernameNotFound(mock)
+	err = AddUserTeam(db, usernameAddUser, teamnameAddUser)
+	if err == nil {
+		t.Log("error should not be nil", err)
+		t.Fail()
+	}
 }
 
-func TestAddUserTeamTeamnameError(t *testing.T) {
-
+func TestAddUserTeamTeamnameNotFound(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	defer db.Close()
+	expectAddUserTeamTeamnameNotFound(mock)
+	err = AddUserTeam(db, usernameAddUser, teamnameAddUser)
+	if err == nil {
+		t.Log("error should not be nil", err)
+		t.Fail()
+	}
 }
 
 func TestAddUserTeamError(t *testing.T) {
-
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	defer db.Close()
+	expectGetUser(mock, usernameAddUser, usernameAddUser, emailS, pwhash, typeTeacher)
+	expectGetTeam(mock, teamnameAddUser, defaultTeam())
+	mock.ExpectPrepare("INSERT INTO Teamroles").ExpectExec().
+		WithArgs(useridAddUser, teamidAddUser, models.TeamRoleRoleMember).WillReturnError(fmt.Errorf("Error"))
+	err = AddUserTeam(db, usernameAddUser, teamnameAddUser)
+	if err == nil {
+		t.Log("error should not be nil", err)
+		t.Fail()
+	}
 }
 
 func TestAddUserTeamCorrect(t *testing.T) {
-
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	defer db.Close()
+	expectAddUserTeamDefault(mock)
+	err = AddUserTeam(db, usernameAddUser, teamnameAddUser)
+	if err != nil {
+		t.Log("error should be nil", err)
+		t.Fail()
+	}
 }
 
 // ExitUserTeam
 
-func TestExitUserTeamNilDB(t *testing.T) {
+func expectExitUserTeam(mock sqlmock.Sqlmock, userid int, teamid int) {
+	expectGetUser(mock, usernameAddUser, usernameAddUser, emailS, pwhash, typeTeacher)
+	expectGetTeam(mock, teamnameAddUser, defaultTeam())
+	mock.ExpectPrepare("DELETE FROM Teamroles").ExpectExec().
+		WithArgs(userid, teamid).WillReturnResult(sqlmock.NewResult(1, 1))
+}
 
+func expectExitUserTeamDefault(mock sqlmock.Sqlmock) {
+	expectExitUserTeam(mock, useridAddUser, teamidAddUser)
+}
+
+func expectExitUserTeamUsernameNotFound(mock sqlmock.Sqlmock) {
+	expectGetUserEmpty(mock, usernameAddUser)
+	expectGetTeam(mock, teamnameAddUser, defaultTeam())
+	mock.ExpectPrepare("DELETE FROM Teamroles").ExpectExec().
+		WithArgs(useridAddUser, teamidAddUser).WillReturnResult(sqlmock.NewResult(1, 1))
+}
+
+func expectExitUserTeamTeamnameNotFound(mock sqlmock.Sqlmock) {
+	expectGetUser(mock, usernameAddUser, usernameAddUser, emailS, pwhash, typeTeacher)
+	expectGetTeamEmpty(mock, teamnameAddUser)
+	mock.ExpectPrepare("DELETE FROM Teamroles").ExpectExec().
+		WithArgs(useridAddUser, teamidAddUser).WillReturnResult(sqlmock.NewResult(1, 1))
+}
+
+func expectExitUserTeamError(mock sqlmock.Sqlmock) {
+	expectGetUser(mock, usernameAddUser, usernameAddUser, emailS, pwhash, typeTeacher)
+	expectGetTeam(mock, teamnameAddUser, defaultTeam())
+	mock.ExpectPrepare("DELETE FROM Teamroles").ExpectExec().
+		WithArgs(useridAddUser, teamidAddUser).WillReturnError(fmt.Errorf("Error"))
+}
+func TestExitUserTeamNilDB(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	defer db.Close()
+	expectExitUserTeamDefault(mock)
+	err = ExitUserTeam(nil, usernameAddUser, teamnameAddUser)
+	if err == nil {
+		t.Log("error should not be nil", err)
+		t.Fail()
+	}
 }
 
 func TestExitUserTeamClosedDB(t *testing.T) {
-
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	db.Close()
+	expectExitUserTeamDefault(mock)
+	err = ExitUserTeam(db, usernameAddUser, teamnameAddUser)
+	if err == nil {
+		t.Log("error should not be nil", err)
+		t.Fail()
+	}
 }
 
-func TestExitUserTeamUsernameError(t *testing.T) {
-
+func TestExitUserTeamUsernameNotFound(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	defer db.Close()
+	expectExitUserTeamUsernameNotFound(mock)
+	err = ExitUserTeam(db, usernameAddUser, teamnameAddUser)
+	if err == nil {
+		t.Log("error should not be nil", err)
+		t.Fail()
+	}
 }
 
-func TestExitUserTeamTeamnameError(t *testing.T) {
-
+func TestExitUserTeamTeamnameNotFound(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	defer db.Close()
+	expectExitUserTeamTeamnameNotFound(mock)
+	err = ExitUserTeam(db, usernameAddUser, teamnameAddUser)
+	if err == nil {
+		t.Log("error should not be nil", err)
+		t.Fail()
+	}
 }
 
 func TestExitUserTeamError(t *testing.T) {
-
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	defer db.Close()
+	expectExitUserTeamError(mock)
+	err = ExitUserTeam(db, usernameAddUser, teamnameAddUser)
+	if err == nil {
+		t.Log("error should not be nil", err)
+		t.Fail()
+	}
 }
 
 func TestExitUserTeamCorrect(t *testing.T) {
-
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	defer db.Close()
+	expectExitUserTeamDefault(mock)
+	err = ExitUserTeam(db, usernameAddUser, teamnameAddUser)
+	if err != nil {
+		t.Log("error should be nil", err)
+		t.Fail()
+	}
 }
 
 // GetUsersFromTeam
 
+func expectGetUsersFromTeam(mock sqlmock.Sqlmock, teamname string, users []*User) {
+	expectGetTeam(mock, teamnameAddUser, defaultTeam())
+	columns := []string{"id", "username", "email", "pwhash", "type"}
+	rows := sqlmock.NewRows(columns)
+	for _, u := range users {
+		rows.AddRow(u.ID, u.Username, u.Email, u.Pwhash, u.Type)
+	}
+	mock.ExpectPrepare("SELECT (.+) FROM Users").ExpectQuery().WithArgs(defaultTeam().ID).WillReturnRows(rows)
+}
+
+func expectGetUsersFromTeamDefault(mock sqlmock.Sqlmock) {
+	expectGetUsersFromTeam(mock, teamnameAddUser, defaultUsers())
+}
+
+func defaultUsersFromTeam() []*User {
+	return defaultUsers()
+}
+
+func expectGetUsersFromTeamTeamnameNotFound(mock sqlmock.Sqlmock) {
+	expectGetTeamEmpty(mock, teamnameAddUser)
+	columns := []string{"id", "username", "email", "pwhash", "type"}
+	rows := sqlmock.NewRows(columns)
+	mock.ExpectPrepare("SELECT (.+) FROM Users").ExpectQuery().WithArgs(defaultTeam().ID).WillReturnRows(rows)
+}
+
+func expectGetUsersFromTeamError(mock sqlmock.Sqlmock) {
+	expectGetTeam(mock, teamnameAddUser, defaultTeam())
+	mock.ExpectPrepare("SELECT (.+) FROM Users").ExpectQuery().WithArgs(defaultTeam().ID).
+		WillReturnError(fmt.Errorf("Error"))
+}
+
+func expectGetUsersFromTeamEmpty(mock sqlmock.Sqlmock) {
+	expectGetTeam(mock, teamnameAddUser, defaultTeam())
+	columns := []string{"id", "username", "email", "pwhash", "type"}
+	rows := sqlmock.NewRows(columns)
+	mock.ExpectPrepare("SELECT (.+) FROM Users").ExpectQuery().WithArgs(defaultTeam().ID).WillReturnRows(rows)
+}
+
 func TestGetUsersFromTeamNilDB(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	defer db.Close()
+	expectGetUsersFromTeamDefault(mock)
+	u, err := GetUsersFromTeam(nil, teamnameAddUser)
+	if err == nil {
+		t.Log("error should not be nil", err)
+		t.Fail()
+	} else if u != nil {
+		t.Log("u should be nil")
+		t.Fail()
+	}
 }
 
 func TestGetUsersFromTeamClosedDB(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	db.Close()
+	expectGetUsersFromTeamDefault(mock)
+	u, err := GetUsersFromTeam(db, teamnameAddUser)
+	if err == nil {
+		t.Log("error should not be nil", err)
+		t.Fail()
+	} else if u != nil {
+		t.Log("u should be nil")
+		t.Fail()
+	}
 }
 
-func TestGetUsersFromTeamTeamnameError(t *testing.T) {
+func TestGetUsersFromTeamTeamnameNotFound(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	defer db.Close()
+	expectGetUsersFromTeamTeamnameNotFound(mock)
+	u, err := GetUsersFromTeam(db, teamnameAddUser)
+	if err == nil {
+		t.Log("error should not be nil", err)
+		t.Fail()
+	} else if u != nil {
+		t.Log("u should be nil")
+		t.Fail()
+	}
 }
 
 func TestGetUsersFromTeamError(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	defer db.Close()
+	expectGetUsersFromTeamError(mock)
+	u, err := GetUsersFromTeam(db, teamnameAddUser)
+	if err == nil {
+		t.Log("error should not be nil", err)
+		t.Fail()
+	} else if u != nil {
+		t.Log("u should be nil")
+		t.Fail()
+	}
 }
 
 func TestGetUsersFromTeamEmpty(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	defer db.Close()
+	expectGetUsersFromTeamEmpty(mock)
+	u, err := GetUsersFromTeam(db, teamnameAddUser)
+	if err != nil {
+		t.Log("error should be nil", err)
+		t.Fail()
+	} else if u != nil {
+		t.Log("u should be nil")
+		t.Fail()
+	}
 }
 
 func TestGetUsersFromTeamFound(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	defer db.Close()
+	expectGetUsersFromTeamDefault(mock)
+	u, err := GetUsersFromTeam(db, teamnameAddUser)
+	if err != nil {
+		t.Log("error should be nil", err)
+		t.Fail()
+	} else if u == nil {
+		t.Log("u should not be nil")
+		t.Fail()
+	}
+	us := defaultUsersFromTeam()
+	if len(u) != len(us) || u[0].Email.String() != us[0].Email.String() {
+		t.Log("emails incorrectos")
+		t.Fail()
+	}
 }
 
 // GetTeamAdmins
 
+func expectGetTeamAdmins(mock sqlmock.Sqlmock, teamname string, users []*User) {
+	expectGetTeam(mock, teamnameAddUser, defaultTeam())
+	columns := []string{"id", "username", "email", "pwhash", "type"}
+	rows := sqlmock.NewRows(columns)
+	for _, u := range users {
+		rows.AddRow(u.ID, u.Username, u.Email, u.Pwhash, u.Type)
+	}
+	mock.ExpectPrepare("SELECT (.+) FROM Users").ExpectQuery().WithArgs(defaultTeam().ID).WillReturnRows(rows)
+}
+
+func expectGetTeamAdminsDefault(mock sqlmock.Sqlmock) {
+	expectGetTeamAdmins(mock, teamnameAddUser, defaultTeamAdmins())
+}
+
+func expectGetTeamAdminsTeamnameNotFound(mock sqlmock.Sqlmock) {
+	expectGetTeamEmpty(mock, teamnameAddUser)
+	columns := []string{"id", "username", "email", "pwhash", "type"}
+	rows := sqlmock.NewRows(columns)
+	mock.ExpectPrepare("SELECT (.+) FROM Users").ExpectQuery().WithArgs(defaultTeam().ID).WillReturnRows(rows)
+}
+
+func expectGetTeamAdminsError(mock sqlmock.Sqlmock) {
+	expectGetTeam(mock, teamnameAddUser, defaultTeam())
+	mock.ExpectPrepare("SELECT (.+) FROM Users").ExpectQuery().WithArgs(defaultTeam().ID).
+		WillReturnError(fmt.Errorf("Error"))
+}
+
+func expectGetTeamAdminsEmpty(mock sqlmock.Sqlmock) {
+	expectGetTeam(mock, teamnameAddUser, defaultTeam())
+	columns := []string{"id", "username", "email", "pwhash", "type"}
+	rows := sqlmock.NewRows(columns)
+	mock.ExpectPrepare("SELECT (.+) FROM Users").ExpectQuery().WithArgs(defaultTeam().ID).WillReturnRows(rows)
+}
+
+func defaultTeamAdmins() []*User {
+	return defaultAdmins()
+}
+
 func TestGetTeamAdminsNilDB(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	defer db.Close()
+	expectGetTeamAdminsDefault(mock)
+	u, err := GetTeamAdmins(nil, teamnameAddUser)
+	if err == nil {
+		t.Log("error should not be nil", err)
+		t.Fail()
+	} else if u != nil {
+		t.Log("u should be nil")
+		t.Fail()
+	}
 }
 
 func TestGetTeamAdminsClosedDB(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	db.Close()
+	expectGetTeamAdminsDefault(mock)
+	u, err := GetTeamAdmins(db, teamnameAddUser)
+	if err == nil {
+		t.Log("error should not be nil", err)
+		t.Fail()
+	} else if u != nil {
+		t.Log("u should be nil")
+		t.Fail()
+	}
 }
 
-func TestGetTeamAdminsTeamnameError(t *testing.T) {
+func TestGetTeamAdminsTeamnameNotFound(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	defer db.Close()
+	expectGetTeamAdminsTeamnameNotFound(mock)
+	u, err := GetTeamAdmins(db, teamnameAddUser)
+	if err == nil {
+		t.Log("error should not be nil", err)
+		t.Fail()
+	} else if u != nil {
+		t.Log("u should be nil")
+		t.Fail()
+	}
 }
 
 func TestGetTeamAdminsError(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	defer db.Close()
+	expectGetTeamAdminsError(mock)
+	u, err := GetTeamAdmins(db, teamnameAddUser)
+	if err == nil {
+		t.Log("error should not be nil", err)
+		t.Fail()
+	} else if u != nil {
+		t.Log("u should be nil")
+		t.Fail()
+	}
 }
 
 func TestGetTeamAdminsEmpty(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	defer db.Close()
+	expectGetTeamAdminsEmpty(mock)
+	u, err := GetTeamAdmins(db, teamnameAddUser)
+	if err != nil {
+		t.Log("error should be nil", err)
+		t.Fail()
+	} else if u != nil {
+		t.Log("u should be nil")
+		t.Fail()
+	}
 }
 
 func TestGetTeamAdminsFound(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	defer db.Close()
+	expectGetTeamAdminsDefault(mock)
+	u, err := GetTeamAdmins(db, teamnameAddUser)
+	if err != nil {
+		t.Log("error should be nil", err)
+		t.Fail()
+	} else if u == nil {
+		t.Log("u should not be nil")
+		t.Fail()
+	}
+	us := defaultTeamAdmins()
+	if len(u) != len(us) || u[0].Email.String() != us[0].Email.String() {
+		t.Log("emails incorrectos")
+		t.Fail()
+	}
 }
