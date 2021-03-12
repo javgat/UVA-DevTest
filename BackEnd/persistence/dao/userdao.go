@@ -62,7 +62,7 @@ func rowsToUsers(rows *sql.Rows) ([]*User, error) {
 	var users []*User
 	for rows.Next() {
 		var us User
-		err := rows.Scan(&us.ID, &us.Username, &us.Email, &us.Pwhash, &us.Type)
+		err := rows.Scan(&us.ID, &us.Username, &us.Email, &us.Pwhash, &us.Type, &us.Fullname)
 		if err != nil {
 			return users, err
 		}

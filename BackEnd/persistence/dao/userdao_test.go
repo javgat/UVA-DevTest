@@ -125,22 +125,33 @@ var pwhash string = "AAAAAAAAAAA"
 var emailS = email.String()
 var typeTeacher string = models.UserTypeTeacher
 
-func expectGetUser(mock sqlmock.Sqlmock, arg string, u string, e string, p string, t string) {
-	columns := []string{"id", "username", "email", "pwhash", "type"}
+func expectGetUser(mock sqlmock.Sqlmock, arg string, user *User) {
+	columns := []string{"id", "username", "email", "pwhash", "type", "fullname"}
 	mock.ExpectPrepare("SELECT (.+) FROM Users").ExpectQuery().WithArgs(arg).
-		WillReturnRows(sqlmock.NewRows(columns).AddRow(1, u, e, p, t))
+		WillReturnRows(sqlmock.NewRows(columns).AddRow(user.ID, *user.Username, user.Email.String(), *user.Pwhash, user.Type, user.Fullname))
+}
+
+func defaultUser() *User {
+	return &User{
+		ID:       1,
+		Username: &username,
+		Email:    &email,
+		Pwhash:   &pwhash,
+		Type:     typeTeacher,
+		Fullname: username,
+	}
 }
 
 func expectGetEmail(mock sqlmock.Sqlmock) {
-	expectGetUser(mock, emailS, username, emailS, pwhash, typeTeacher)
+	expectGetUser(mock, emailS, defaultUser())
 }
 
 func expectGetUsername(mock sqlmock.Sqlmock) {
-	expectGetUser(mock, username, username, emailS, pwhash, typeTeacher)
+	expectGetUser(mock, username, defaultUser())
 }
 
 func expectGetUserEmpty(mock sqlmock.Sqlmock, arg string) {
-	columns := []string{"id", "username", "email", "pwhash", "type"}
+	columns := []string{"id", "username", "email", "pwhash", "type", "fullname"}
 	mock.ExpectPrepare("SELECT (.+) FROM Users").ExpectQuery().WithArgs(arg).
 		WillReturnRows(sqlmock.NewRows(columns))
 }
@@ -426,10 +437,10 @@ func defaultAdmins() []*User {
 }
 
 func expectGetUsers(mock sqlmock.Sqlmock, us []*User) {
-	columns := []string{"id", "username", "email", "pwhash", "type"}
+	columns := []string{"id", "username", "email", "pwhash", "type", "fullname"}
 	rows := sqlmock.NewRows(columns)
 	for _, u := range us {
-		rows.AddRow(u.ID, u.Username, u.Email, u.Pwhash, u.Type)
+		rows.AddRow(u.ID, u.Username, u.Email, u.Pwhash, u.Type, u.Fullname)
 	}
 	mock.ExpectPrepare("SELECT (.+) FROM Users").ExpectQuery().WillReturnRows(rows)
 }
@@ -565,10 +576,10 @@ func TestGetUsersFound(t *testing.T) {
 // GetAdmins
 
 func expectGetAdmins(mock sqlmock.Sqlmock, us []*User) {
-	columns := []string{"id", "username", "email", "pwhash", "type"}
+	columns := []string{"id", "username", "email", "pwhash", "type", "fullname"}
 	rows := sqlmock.NewRows(columns)
 	for _, u := range us {
-		rows.AddRow(u.ID, u.Username, u.Email, u.Pwhash, u.Type)
+		rows.AddRow(u.ID, u.Username, u.Email, u.Pwhash, u.Type, u.Fullname)
 	}
 	mock.ExpectPrepare("SELECT (.+) FROM Users WHERE type='Admin'").ExpectQuery().WillReturnRows(rows)
 }
@@ -930,15 +941,14 @@ func TestDeleteUserCorrect(t *testing.T) {
 }
 
 // AddUserTeam
-var usernameAddUser string = "username"
-var teamnameAddUser string = "teamname"
+var teamname string = "teamname"
 var useridAddUser int = 1
 var teamidAddUser int = 1
 
 func defaultTeam() *Team {
 	t := &Team{
 		ID:          1,
-		Teamname:    &teamnameAddUser,
+		Teamname:    &teamname,
 		Description: "description",
 	}
 	return t
@@ -957,8 +967,8 @@ func expectGetTeamEmpty(mock sqlmock.Sqlmock, arg string) {
 }
 
 func expectAddUserTeam(mock sqlmock.Sqlmock, userid int, teamid int) {
-	expectGetUser(mock, usernameAddUser, usernameAddUser, emailS, pwhash, typeTeacher)
-	expectGetTeam(mock, teamnameAddUser, defaultTeam())
+	expectGetUser(mock, username, defaultUser())
+	expectGetTeam(mock, teamname, defaultTeam())
 	mock.ExpectPrepare("INSERT INTO Teamroles").ExpectExec().
 		WithArgs(userid, teamid, models.TeamRoleRoleMember).WillReturnResult(sqlmock.NewResult(1, 1))
 }
@@ -968,15 +978,15 @@ func expectAddUserTeamDefault(mock sqlmock.Sqlmock) {
 }
 
 func expectAddUserTeamUsernameNotFound(mock sqlmock.Sqlmock) {
-	expectGetUserEmpty(mock, usernameAddUser)
-	expectGetTeam(mock, teamnameAddUser, defaultTeam())
+	expectGetUserEmpty(mock, username)
+	expectGetTeam(mock, teamname, defaultTeam())
 	mock.ExpectPrepare("INSERT INTO Teamroles").ExpectExec().
 		WithArgs(useridAddUser, teamidAddUser, models.TeamRoleRoleMember).WillReturnResult(sqlmock.NewResult(1, 1))
 }
 
 func expectAddUserTeamTeamnameNotFound(mock sqlmock.Sqlmock) {
-	expectGetUser(mock, usernameAddUser, usernameAddUser, emailS, pwhash, typeTeacher)
-	expectGetTeamEmpty(mock, teamnameAddUser)
+	expectGetUser(mock, username, defaultUser())
+	expectGetTeamEmpty(mock, teamname)
 	mock.ExpectPrepare("INSERT INTO Teamroles").ExpectExec().
 		WithArgs(useridAddUser, teamidAddUser, models.TeamRoleRoleMember).WillReturnResult(sqlmock.NewResult(1, 1))
 }
@@ -988,7 +998,7 @@ func TestAddUserTeamNilDB(t *testing.T) {
 	}
 	defer db.Close()
 	expectAddUserTeamDefault(mock)
-	err = AddUserTeam(nil, usernameAddUser, teamnameAddUser)
+	err = AddUserTeam(nil, username, teamname)
 	if err == nil {
 		t.Log("error should not be nil", err)
 		t.Fail()
@@ -1002,7 +1012,7 @@ func TestAddUserTeamClosedDB(t *testing.T) {
 	}
 	db.Close()
 	expectAddUserTeamDefault(mock)
-	err = AddUserTeam(db, usernameAddUser, teamnameAddUser)
+	err = AddUserTeam(db, username, teamname)
 	if err == nil {
 		t.Log("error should not be nil", err)
 		t.Fail()
@@ -1016,7 +1026,7 @@ func TestAddUserTeamUsernameNotFound(t *testing.T) {
 	}
 	defer db.Close()
 	expectAddUserTeamUsernameNotFound(mock)
-	err = AddUserTeam(db, usernameAddUser, teamnameAddUser)
+	err = AddUserTeam(db, username, teamname)
 	if err == nil {
 		t.Log("error should not be nil", err)
 		t.Fail()
@@ -1030,7 +1040,7 @@ func TestAddUserTeamTeamnameNotFound(t *testing.T) {
 	}
 	defer db.Close()
 	expectAddUserTeamTeamnameNotFound(mock)
-	err = AddUserTeam(db, usernameAddUser, teamnameAddUser)
+	err = AddUserTeam(db, username, teamname)
 	if err == nil {
 		t.Log("error should not be nil", err)
 		t.Fail()
@@ -1043,11 +1053,11 @@ func TestAddUserTeamError(t *testing.T) {
 		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
 	}
 	defer db.Close()
-	expectGetUser(mock, usernameAddUser, usernameAddUser, emailS, pwhash, typeTeacher)
-	expectGetTeam(mock, teamnameAddUser, defaultTeam())
+	expectGetUser(mock, username, defaultUser())
+	expectGetTeam(mock, teamname, defaultTeam())
 	mock.ExpectPrepare("INSERT INTO Teamroles").ExpectExec().
 		WithArgs(useridAddUser, teamidAddUser, models.TeamRoleRoleMember).WillReturnError(fmt.Errorf("Error"))
-	err = AddUserTeam(db, usernameAddUser, teamnameAddUser)
+	err = AddUserTeam(db, username, teamname)
 	if err == nil {
 		t.Log("error should not be nil", err)
 		t.Fail()
@@ -1061,7 +1071,7 @@ func TestAddUserTeamCorrect(t *testing.T) {
 	}
 	defer db.Close()
 	expectAddUserTeamDefault(mock)
-	err = AddUserTeam(db, usernameAddUser, teamnameAddUser)
+	err = AddUserTeam(db, username, teamname)
 	if err != nil {
 		t.Log("error should be nil", err)
 		t.Fail()
@@ -1071,8 +1081,8 @@ func TestAddUserTeamCorrect(t *testing.T) {
 // ExitUserTeam
 
 func expectExitUserTeam(mock sqlmock.Sqlmock, userid int, teamid int) {
-	expectGetUser(mock, usernameAddUser, usernameAddUser, emailS, pwhash, typeTeacher)
-	expectGetTeam(mock, teamnameAddUser, defaultTeam())
+	expectGetUser(mock, username, defaultUser())
+	expectGetTeam(mock, teamname, defaultTeam())
 	mock.ExpectPrepare("DELETE FROM Teamroles").ExpectExec().
 		WithArgs(userid, teamid).WillReturnResult(sqlmock.NewResult(1, 1))
 }
@@ -1082,22 +1092,22 @@ func expectExitUserTeamDefault(mock sqlmock.Sqlmock) {
 }
 
 func expectExitUserTeamUsernameNotFound(mock sqlmock.Sqlmock) {
-	expectGetUserEmpty(mock, usernameAddUser)
-	expectGetTeam(mock, teamnameAddUser, defaultTeam())
+	expectGetUserEmpty(mock, username)
+	expectGetTeam(mock, teamname, defaultTeam())
 	mock.ExpectPrepare("DELETE FROM Teamroles").ExpectExec().
 		WithArgs(useridAddUser, teamidAddUser).WillReturnResult(sqlmock.NewResult(1, 1))
 }
 
 func expectExitUserTeamTeamnameNotFound(mock sqlmock.Sqlmock) {
-	expectGetUser(mock, usernameAddUser, usernameAddUser, emailS, pwhash, typeTeacher)
-	expectGetTeamEmpty(mock, teamnameAddUser)
+	expectGetUser(mock, username, defaultUser())
+	expectGetTeamEmpty(mock, teamname)
 	mock.ExpectPrepare("DELETE FROM Teamroles").ExpectExec().
 		WithArgs(useridAddUser, teamidAddUser).WillReturnResult(sqlmock.NewResult(1, 1))
 }
 
 func expectExitUserTeamError(mock sqlmock.Sqlmock) {
-	expectGetUser(mock, usernameAddUser, usernameAddUser, emailS, pwhash, typeTeacher)
-	expectGetTeam(mock, teamnameAddUser, defaultTeam())
+	expectGetUser(mock, username, defaultUser())
+	expectGetTeam(mock, teamname, defaultTeam())
 	mock.ExpectPrepare("DELETE FROM Teamroles").ExpectExec().
 		WithArgs(useridAddUser, teamidAddUser).WillReturnError(fmt.Errorf("Error"))
 }
@@ -1108,7 +1118,7 @@ func TestExitUserTeamNilDB(t *testing.T) {
 	}
 	defer db.Close()
 	expectExitUserTeamDefault(mock)
-	err = ExitUserTeam(nil, usernameAddUser, teamnameAddUser)
+	err = ExitUserTeam(nil, username, teamname)
 	if err == nil {
 		t.Log("error should not be nil", err)
 		t.Fail()
@@ -1122,7 +1132,7 @@ func TestExitUserTeamClosedDB(t *testing.T) {
 	}
 	db.Close()
 	expectExitUserTeamDefault(mock)
-	err = ExitUserTeam(db, usernameAddUser, teamnameAddUser)
+	err = ExitUserTeam(db, username, teamname)
 	if err == nil {
 		t.Log("error should not be nil", err)
 		t.Fail()
@@ -1136,7 +1146,7 @@ func TestExitUserTeamUsernameNotFound(t *testing.T) {
 	}
 	defer db.Close()
 	expectExitUserTeamUsernameNotFound(mock)
-	err = ExitUserTeam(db, usernameAddUser, teamnameAddUser)
+	err = ExitUserTeam(db, username, teamname)
 	if err == nil {
 		t.Log("error should not be nil", err)
 		t.Fail()
@@ -1150,7 +1160,7 @@ func TestExitUserTeamTeamnameNotFound(t *testing.T) {
 	}
 	defer db.Close()
 	expectExitUserTeamTeamnameNotFound(mock)
-	err = ExitUserTeam(db, usernameAddUser, teamnameAddUser)
+	err = ExitUserTeam(db, username, teamname)
 	if err == nil {
 		t.Log("error should not be nil", err)
 		t.Fail()
@@ -1164,7 +1174,7 @@ func TestExitUserTeamError(t *testing.T) {
 	}
 	defer db.Close()
 	expectExitUserTeamError(mock)
-	err = ExitUserTeam(db, usernameAddUser, teamnameAddUser)
+	err = ExitUserTeam(db, username, teamname)
 	if err == nil {
 		t.Log("error should not be nil", err)
 		t.Fail()
@@ -1178,7 +1188,7 @@ func TestExitUserTeamCorrect(t *testing.T) {
 	}
 	defer db.Close()
 	expectExitUserTeamDefault(mock)
-	err = ExitUserTeam(db, usernameAddUser, teamnameAddUser)
+	err = ExitUserTeam(db, username, teamname)
 	if err != nil {
 		t.Log("error should be nil", err)
 		t.Fail()
@@ -1188,17 +1198,17 @@ func TestExitUserTeamCorrect(t *testing.T) {
 // GetUsersFromTeam
 
 func expectGetUsersFromTeam(mock sqlmock.Sqlmock, teamname string, users []*User) {
-	expectGetTeam(mock, teamnameAddUser, defaultTeam())
-	columns := []string{"id", "username", "email", "pwhash", "type"}
+	expectGetTeam(mock, teamname, defaultTeam())
+	columns := []string{"id", "username", "email", "pwhash", "type", "fullname"}
 	rows := sqlmock.NewRows(columns)
 	for _, u := range users {
-		rows.AddRow(u.ID, u.Username, u.Email, u.Pwhash, u.Type)
+		rows.AddRow(u.ID, u.Username, u.Email, u.Pwhash, u.Type, u.Fullname)
 	}
 	mock.ExpectPrepare("SELECT (.+) FROM Users").ExpectQuery().WithArgs(defaultTeam().ID).WillReturnRows(rows)
 }
 
 func expectGetUsersFromTeamDefault(mock sqlmock.Sqlmock) {
-	expectGetUsersFromTeam(mock, teamnameAddUser, defaultUsers())
+	expectGetUsersFromTeam(mock, teamname, defaultUsers())
 }
 
 func defaultUsersFromTeam() []*User {
@@ -1206,21 +1216,21 @@ func defaultUsersFromTeam() []*User {
 }
 
 func expectGetUsersFromTeamTeamnameNotFound(mock sqlmock.Sqlmock) {
-	expectGetTeamEmpty(mock, teamnameAddUser)
-	columns := []string{"id", "username", "email", "pwhash", "type"}
+	expectGetTeamEmpty(mock, teamname)
+	columns := []string{"id", "username", "email", "pwhash", "type", "fullname"}
 	rows := sqlmock.NewRows(columns)
 	mock.ExpectPrepare("SELECT (.+) FROM Users").ExpectQuery().WithArgs(defaultTeam().ID).WillReturnRows(rows)
 }
 
 func expectGetUsersFromTeamError(mock sqlmock.Sqlmock) {
-	expectGetTeam(mock, teamnameAddUser, defaultTeam())
+	expectGetTeam(mock, teamname, defaultTeam())
 	mock.ExpectPrepare("SELECT (.+) FROM Users").ExpectQuery().WithArgs(defaultTeam().ID).
 		WillReturnError(fmt.Errorf("Error"))
 }
 
 func expectGetUsersFromTeamEmpty(mock sqlmock.Sqlmock) {
-	expectGetTeam(mock, teamnameAddUser, defaultTeam())
-	columns := []string{"id", "username", "email", "pwhash", "type"}
+	expectGetTeam(mock, teamname, defaultTeam())
+	columns := []string{"id", "username", "email", "pwhash", "type", "fullname"}
 	rows := sqlmock.NewRows(columns)
 	mock.ExpectPrepare("SELECT (.+) FROM Users").ExpectQuery().WithArgs(defaultTeam().ID).WillReturnRows(rows)
 }
@@ -1232,7 +1242,7 @@ func TestGetUsersFromTeamNilDB(t *testing.T) {
 	}
 	defer db.Close()
 	expectGetUsersFromTeamDefault(mock)
-	u, err := GetUsersFromTeam(nil, teamnameAddUser)
+	u, err := GetUsersFromTeam(nil, teamname)
 	if err == nil {
 		t.Log("error should not be nil", err)
 		t.Fail()
@@ -1249,7 +1259,7 @@ func TestGetUsersFromTeamClosedDB(t *testing.T) {
 	}
 	db.Close()
 	expectGetUsersFromTeamDefault(mock)
-	u, err := GetUsersFromTeam(db, teamnameAddUser)
+	u, err := GetUsersFromTeam(db, teamname)
 	if err == nil {
 		t.Log("error should not be nil", err)
 		t.Fail()
@@ -1266,7 +1276,7 @@ func TestGetUsersFromTeamTeamnameNotFound(t *testing.T) {
 	}
 	defer db.Close()
 	expectGetUsersFromTeamTeamnameNotFound(mock)
-	u, err := GetUsersFromTeam(db, teamnameAddUser)
+	u, err := GetUsersFromTeam(db, teamname)
 	if err == nil {
 		t.Log("error should not be nil", err)
 		t.Fail()
@@ -1283,7 +1293,7 @@ func TestGetUsersFromTeamError(t *testing.T) {
 	}
 	defer db.Close()
 	expectGetUsersFromTeamError(mock)
-	u, err := GetUsersFromTeam(db, teamnameAddUser)
+	u, err := GetUsersFromTeam(db, teamname)
 	if err == nil {
 		t.Log("error should not be nil", err)
 		t.Fail()
@@ -1300,7 +1310,7 @@ func TestGetUsersFromTeamEmpty(t *testing.T) {
 	}
 	defer db.Close()
 	expectGetUsersFromTeamEmpty(mock)
-	u, err := GetUsersFromTeam(db, teamnameAddUser)
+	u, err := GetUsersFromTeam(db, teamname)
 	if err != nil {
 		t.Log("error should be nil", err)
 		t.Fail()
@@ -1317,7 +1327,7 @@ func TestGetUsersFromTeamFound(t *testing.T) {
 	}
 	defer db.Close()
 	expectGetUsersFromTeamDefault(mock)
-	u, err := GetUsersFromTeam(db, teamnameAddUser)
+	u, err := GetUsersFromTeam(db, teamname)
 	if err != nil {
 		t.Log("error should be nil", err)
 		t.Fail()
@@ -1335,35 +1345,35 @@ func TestGetUsersFromTeamFound(t *testing.T) {
 // GetTeamAdmins
 
 func expectGetTeamAdmins(mock sqlmock.Sqlmock, teamname string, users []*User) {
-	expectGetTeam(mock, teamnameAddUser, defaultTeam())
-	columns := []string{"id", "username", "email", "pwhash", "type"}
+	expectGetTeam(mock, teamname, defaultTeam())
+	columns := []string{"id", "username", "email", "pwhash", "type", "fullname"}
 	rows := sqlmock.NewRows(columns)
 	for _, u := range users {
-		rows.AddRow(u.ID, u.Username, u.Email, u.Pwhash, u.Type)
+		rows.AddRow(u.ID, u.Username, u.Email, u.Pwhash, u.Type, u.Fullname)
 	}
 	mock.ExpectPrepare("SELECT (.+) FROM Users").ExpectQuery().WithArgs(defaultTeam().ID).WillReturnRows(rows)
 }
 
 func expectGetTeamAdminsDefault(mock sqlmock.Sqlmock) {
-	expectGetTeamAdmins(mock, teamnameAddUser, defaultTeamAdmins())
+	expectGetTeamAdmins(mock, teamname, defaultTeamAdmins())
 }
 
 func expectGetTeamAdminsTeamnameNotFound(mock sqlmock.Sqlmock) {
-	expectGetTeamEmpty(mock, teamnameAddUser)
-	columns := []string{"id", "username", "email", "pwhash", "type"}
+	expectGetTeamEmpty(mock, teamname)
+	columns := []string{"id", "username", "email", "pwhash", "type", "fullname"}
 	rows := sqlmock.NewRows(columns)
 	mock.ExpectPrepare("SELECT (.+) FROM Users").ExpectQuery().WithArgs(defaultTeam().ID).WillReturnRows(rows)
 }
 
 func expectGetTeamAdminsError(mock sqlmock.Sqlmock) {
-	expectGetTeam(mock, teamnameAddUser, defaultTeam())
+	expectGetTeam(mock, teamname, defaultTeam())
 	mock.ExpectPrepare("SELECT (.+) FROM Users").ExpectQuery().WithArgs(defaultTeam().ID).
 		WillReturnError(fmt.Errorf("Error"))
 }
 
 func expectGetTeamAdminsEmpty(mock sqlmock.Sqlmock) {
-	expectGetTeam(mock, teamnameAddUser, defaultTeam())
-	columns := []string{"id", "username", "email", "pwhash", "type"}
+	expectGetTeam(mock, teamname, defaultTeam())
+	columns := []string{"id", "username", "email", "pwhash", "type", "fullname"}
 	rows := sqlmock.NewRows(columns)
 	mock.ExpectPrepare("SELECT (.+) FROM Users").ExpectQuery().WithArgs(defaultTeam().ID).WillReturnRows(rows)
 }
@@ -1379,7 +1389,7 @@ func TestGetTeamAdminsNilDB(t *testing.T) {
 	}
 	defer db.Close()
 	expectGetTeamAdminsDefault(mock)
-	u, err := GetTeamAdmins(nil, teamnameAddUser)
+	u, err := GetTeamAdmins(nil, teamname)
 	if err == nil {
 		t.Log("error should not be nil", err)
 		t.Fail()
@@ -1396,7 +1406,7 @@ func TestGetTeamAdminsClosedDB(t *testing.T) {
 	}
 	db.Close()
 	expectGetTeamAdminsDefault(mock)
-	u, err := GetTeamAdmins(db, teamnameAddUser)
+	u, err := GetTeamAdmins(db, teamname)
 	if err == nil {
 		t.Log("error should not be nil", err)
 		t.Fail()
@@ -1413,7 +1423,7 @@ func TestGetTeamAdminsTeamnameNotFound(t *testing.T) {
 	}
 	defer db.Close()
 	expectGetTeamAdminsTeamnameNotFound(mock)
-	u, err := GetTeamAdmins(db, teamnameAddUser)
+	u, err := GetTeamAdmins(db, teamname)
 	if err == nil {
 		t.Log("error should not be nil", err)
 		t.Fail()
@@ -1430,7 +1440,7 @@ func TestGetTeamAdminsError(t *testing.T) {
 	}
 	defer db.Close()
 	expectGetTeamAdminsError(mock)
-	u, err := GetTeamAdmins(db, teamnameAddUser)
+	u, err := GetTeamAdmins(db, teamname)
 	if err == nil {
 		t.Log("error should not be nil", err)
 		t.Fail()
@@ -1447,7 +1457,7 @@ func TestGetTeamAdminsEmpty(t *testing.T) {
 	}
 	defer db.Close()
 	expectGetTeamAdminsEmpty(mock)
-	u, err := GetTeamAdmins(db, teamnameAddUser)
+	u, err := GetTeamAdmins(db, teamname)
 	if err != nil {
 		t.Log("error should be nil", err)
 		t.Fail()
@@ -1464,7 +1474,7 @@ func TestGetTeamAdminsFound(t *testing.T) {
 	}
 	defer db.Close()
 	expectGetTeamAdminsDefault(mock)
-	u, err := GetTeamAdmins(db, teamnameAddUser)
+	u, err := GetTeamAdmins(db, teamname)
 	if err != nil {
 		t.Log("error should be nil", err)
 		t.Fail()

@@ -58,70 +58,6 @@ func rowsToTeam(rows *sql.Rows) (*Team, error) {
 	return team, err
 }
 
-// GetTeamsUsername gets all teams from user <username>
-// Param username: Username of the user
-func GetTeamsUsername(db *sql.DB, username string) ([]*Team, error) {
-	if db == nil {
-		return nil, errors.New("Parametro db nil")
-	}
-	u, err := GetUserUsername(db, username)
-	if err != nil {
-		return nil, err
-	}
-	query, err := db.Prepare("SELECT T FROM Teams T JOIN Teamroles R ON	T.id=R.teamid WHERE R.userid = ?")
-	var ts []*Team
-	if err != nil {
-		return ts, err
-	}
-	rows, err := query.Query(u.ID)
-	if err == nil {
-		ts, err = rowsToTeams(rows)
-	}
-	defer query.Close()
-	return ts, err
-}
-
-// GetTeams gets all teams
-func GetTeams(db *sql.DB) ([]*Team, error) {
-	if db == nil {
-		return nil, errors.New("Parametro db nil")
-	}
-	query, err := db.Prepare("SELECT * FROM Teams")
-	var ts []*Team
-	if err != nil {
-		return ts, err
-	}
-	rows, err := query.Query()
-	if err == nil {
-		ts, err = rowsToTeams(rows)
-	}
-	defer query.Close()
-	return ts, err
-}
-
-// GetTeamsTeamRoleAdmin gets all teams where user is Admin
-// Param username: Username of the user
-func GetTeamsTeamRoleAdmin(db *sql.DB, username string) ([]*Team, error) {
-	if db == nil {
-		return nil, errors.New("Parametro db nil")
-	}
-	u, err := GetUserUsername(db, username)
-	if err != nil {
-		return nil, err
-	}
-	query, err := db.Prepare("SELECT * FROM Teams T JOIN Teamroles R ON R.teamid=T.id WHERE R.userid=? AND R.role='Admin'")
-	var ts []*Team
-	if err != nil {
-		return ts, err
-	}
-	rows, err := query.Query(u.ID, username)
-	if err == nil {
-		ts, err = rowsToTeams(rows)
-	}
-	defer query.Close()
-	return ts, err
-}
-
 // GetTeam gets team <teamname>
 // Param teamname: Teamname of the team
 func GetTeam(db *sql.DB, teamname string) (*Team, error) {
@@ -200,4 +136,70 @@ func DeleteTeam(db *sql.DB, teamname string) error {
 	_, err = query.Exec(teamname)
 	defer query.Close()
 	return err
+}
+
+// GetTeams gets all teams
+func GetTeams(db *sql.DB) ([]*Team, error) {
+	if db == nil {
+		return nil, errors.New("Parametro db nil")
+	}
+	query, err := db.Prepare("SELECT * FROM Teams")
+	var ts []*Team
+	if err != nil {
+		return ts, err
+	}
+	rows, err := query.Query()
+	if err == nil {
+		ts, err = rowsToTeams(rows)
+	}
+	defer query.Close()
+	return ts, err
+}
+
+// GetTeamsUsername gets all teams from user <username>
+// Param username: Username of the user
+func GetTeamsUsername(db *sql.DB, username string) ([]*Team, error) {
+	if db == nil {
+		return nil, errors.New("Parametro db nil")
+	}
+	u, err := GetUserUsername(db, username)
+	if err != nil {
+		return nil, err
+	} else if u == nil {
+		return nil, errors.New("No se encontro al usuario")
+	}
+	query, err := db.Prepare("SELECT T FROM Teams T JOIN Teamroles R ON	T.id=R.teamid WHERE R.userid = ?")
+	var ts []*Team
+	if err != nil {
+		return ts, err
+	}
+	rows, err := query.Query(u.ID)
+	if err == nil {
+		ts, err = rowsToTeams(rows)
+	}
+	defer query.Close()
+	return ts, err
+}
+
+// GetTeamsTeamRoleAdmin gets all teams where user is Admin
+// Param username: Username of the user
+func GetTeamsTeamRoleAdmin(db *sql.DB, username string) ([]*Team, error) {
+	if db == nil {
+		return nil, errors.New("Parametro db nil")
+	}
+	u, err := GetUserUsername(db, username)
+	if err != nil {
+		return nil, err
+	}
+	query, err := db.Prepare("SELECT * FROM Teams T JOIN Teamroles R ON R.teamid=T.id WHERE R.userid=? AND R.role='Admin'")
+	var ts []*Team
+	if err != nil {
+		return ts, err
+	}
+	rows, err := query.Query(u.ID, username)
+	if err == nil {
+		ts, err = rowsToTeams(rows)
+	}
+	defer query.Close()
+	return ts, err
 }
