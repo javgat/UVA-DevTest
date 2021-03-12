@@ -63,7 +63,7 @@ func GetTeamsUsername(db *sql.DB, username string) ([]*Team, error) {
 	if err != nil {
 		return nil, err
 	}
-	query, err := db.Prepare("SELECT T FROM teams T JOIN teamroles R ON	T.id=R.teamid WHERE R.userid = ?")
+	query, err := db.Prepare("SELECT T FROM Teams T JOIN Teamroles R ON	T.id=R.teamid WHERE R.userid = ?")
 	var ts []*Team
 	if err != nil {
 		return ts, err
@@ -81,7 +81,7 @@ func GetTeams(db *sql.DB) ([]*Team, error) {
 	if db == nil {
 		return nil, errors.New("Parametro db nil")
 	}
-	query, err := db.Prepare("SELECT * FROM teams")
+	query, err := db.Prepare("SELECT * FROM Teams")
 	var ts []*Team
 	if err != nil {
 		return ts, err
@@ -94,12 +94,34 @@ func GetTeams(db *sql.DB) ([]*Team, error) {
 	return ts, err
 }
 
+// GetTeamsTeamRoleAdmin gets all teams where user is Admin
+func GetTeamsTeamRoleAdmin(db *sql.DB, username string) ([]*Team, error) {
+	if db == nil {
+		return nil, errors.New("Parametro db nil")
+	}
+	u, err := GetUserUsername(db, username)
+	if err != nil {
+		return nil, err
+	}
+	query, err := db.Prepare("SELECT * FROM Teams T JOIN Teamroles R ON R.teamid=T.id WHERE R.userid=? AND R.role='Admin'")
+	var ts []*Team
+	if err != nil {
+		return ts, err
+	}
+	rows, err := query.Query(u.ID, username)
+	if err == nil {
+		ts, err = rowsToTeams(rows)
+	}
+	defer query.Close()
+	return ts, err
+}
+
 // GetTeam gets team <teamname>
 func GetTeam(db *sql.DB, teamname string) (*Team, error) {
 	if db == nil {
 		return nil, errors.New("Parametro db nil")
 	}
-	query, err := db.Prepare("SELECT * FROM teams")
+	query, err := db.Prepare("SELECT * FROM Teams")
 	var t *Team
 	if err != nil {
 		return t, err
@@ -116,16 +138,28 @@ func GetTeam(db *sql.DB, teamname string) (*Team, error) {
 // Param db: Database to use
 // Param t: Team data to create
 // Return error if something wrong happens
-func PostTeam(db *sql.DB, t *models.Team) error {
+func PostTeam(db *sql.DB, t *models.Team, username string) error {
 	if db == nil || t == nil {
 		return errors.New("Argumento de entrada nil")
 	}
-	query, err := db.Prepare("INSERT INTO teams(teamname, description) VALUES(?, ?)")
+	query, err := db.Prepare("INSERT INTO Teams(teamname, description) VALUES(?, ?)")
 	if err != nil {
 		return err
 	}
 	_, err = query.Exec(t.Teamname, t.Description)
 	defer query.Close()
+	if err != nil {
+		return err
+	}
+	err = AddUserTeam(db, username, *t.Teamname)
+	if err != nil {
+		return err
+	}
+	roleString := models.TeamRoleRoleAdmin
+	role := &models.TeamRole{
+		Role: &roleString,
+	}
+	err = UpdateRole(db, username, *t.Teamname, role)
 	return err
 }
 
@@ -138,7 +172,7 @@ func UpdateTeam(db *sql.DB, t *models.Team, teamname string) error {
 	if db == nil || t == nil {
 		return errors.New("Argumento de entrada nil")
 	}
-	query, err := db.Prepare("UPDATE teams SET teamname=?, description=? WHERE teamname = ? ")
+	query, err := db.Prepare("UPDATE Teams SET teamname=?, description=? WHERE teamname = ? ")
 	if err != nil {
 		return err
 	}
@@ -152,7 +186,7 @@ func DeleteTeam(db *sql.DB, teamname string) error {
 	if db == nil {
 		return errors.New("Argumento de entrada nil")
 	}
-	query, err := db.Prepare("DELETE FROM teams WHERE teamname = ? ") //ESTO TENDRA QUE SER MAS COMPLEJO, RELACIONES
+	query, err := db.Prepare("DELETE FROM Teams WHERE teamname = ? ") //ESTO se supone que borra en cascade
 	if err != nil {
 		return err
 	}
