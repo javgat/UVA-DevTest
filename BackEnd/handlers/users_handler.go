@@ -1,3 +1,7 @@
+// UVa-DevTest. 2021.
+// Author: Javier Gatón Herguedas.
+
+// Package handlers provides functions that handle http requests
 package handlers
 
 import (
@@ -27,12 +31,6 @@ func isTeacher(u *models.User) bool {
 func isTeacherOrAdmin(u *models.User) bool {
 	return isAdmin(u) || isTeacher(u)
 }
-
-func isUser(u *models.User) bool {
-	return u.Username != nil
-}
-
-//TODO: Revisar Reqs y comentar
 
 func isTeamAdmin(teamname string, u *models.User) (bool, error) {
 	db, err := dbconnection.ConnectDb()
@@ -113,7 +111,7 @@ func GetUsers(params user.GetUsersParams, u *models.User) middleware.Responder {
 		log.Println("Error en users_handler GetUsers(): ", err)
 		return user.NewGetUsersBadRequest()
 	}
-	return user.NewGetUsersOK().WithPayload(dao.DaoToModelsUser(us))
+	return user.NewGetUsersOK().WithPayload(dao.ToModelsUser(us))
 }
 
 // GetUser GET /users/{username}
@@ -212,7 +210,7 @@ func GetTeamsOfUser(params user.GetTeamsOfUserParams, u *models.User) middleware
 		if err == nil {
 			teams, err := dao.GetTeamsUsername(db, params.Username)
 			if err == nil && teams != nil {
-				return user.NewGetTeamsOfUserOK().WithPayload(dao.DaoToModelsTeams(teams))
+				return user.NewGetTeamsOfUserOK().WithPayload(dao.ToModelsTeams(teams))
 			}
 		}
 		log.Println("Error en users_handler GetTeamsOfUser(): ", err)
@@ -247,7 +245,7 @@ func AddTeamOfUser(params user.AddTeamOfUserParams, u *models.User) middleware.R
 
 // DeleteTeamOfUser DELETE /users/{username}/teams/{teamname}
 // Auth: Current User, TeamAdmin or Admin
-// Req: No puede quedarse sin admins (ni miembros, pero como mucho sera admin)
+// Req: No puede quedarse sin admins (ni miembros, pero el ultimo siempre sera admin)
 func DeleteTeamOfUser(params user.DeleteTeamOfUserParams, u *models.User) middleware.Responder {
 	teamAdmin, err := isTeamAdmin(params.Teamname, u)
 	if err != nil {

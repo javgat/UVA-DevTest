@@ -1,3 +1,7 @@
+// UVa-DevTest. 2021.
+// Author: Javier Gatón Herguedas.
+
+// Package handlers provides functions that handle http requests
 package handlers
 
 import (
@@ -11,8 +15,6 @@ import (
 	"github.com/go-openapi/runtime/middleware"
 )
 
-// TODO: Comprobar los reqs y comentar bien
-
 // GetTeams returns all teams GET /teams
 // Auth: Admin
 func GetTeams(params team.GetTeamsParams, u *models.User) middleware.Responder {
@@ -21,7 +23,7 @@ func GetTeams(params team.GetTeamsParams, u *models.User) middleware.Responder {
 		if err == nil {
 			teams, err := dao.GetTeams(db)
 			if err == nil {
-				return team.NewGetTeamsOK().WithPayload(dao.DaoToModelsTeams(teams))
+				return team.NewGetTeamsOK().WithPayload(dao.ToModelsTeams(teams))
 			}
 		}
 		log.Println("Error en teams_handler GetTeams(): ", err)
@@ -60,7 +62,7 @@ func GetTeam(params team.GetTeamParams, u *models.User) middleware.Responder {
 		if err == nil {
 			t, err := dao.GetTeam(db, params.Teamname)
 			if err == nil {
-				return team.NewGetTeamOK().WithPayload(dao.DaoToModelTeam(t))
+				return team.NewGetTeamOK().WithPayload(dao.ToModelTeam(t))
 			}
 		}
 		log.Println("Error en teams_handler GetTeam(): ", err)
@@ -100,7 +102,7 @@ func DeleteTeam(params team.DeleteTeamParams, u *models.User) middleware.Respond
 	if teamAdmin || isAdmin(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			err := dao.DeleteTeam(db, params.Teamname)
+			err := dao.DeleteTeam(db, params.Teamname) // En principio borra en cascade las relaciones
 			if err == nil {
 				return team.NewDeleteTeamOK()
 			}
@@ -123,7 +125,7 @@ func GetUsersFromTeam(params user.GetUsersFromTeamParams, u *models.User) middle
 		if err == nil {
 			users, err := dao.GetUsersFromTeam(db, params.Teamname)
 			if err == nil {
-				return user.NewGetUsersFromTeamOK().WithPayload(dao.DaoToModelsUser(users))
+				return user.NewGetUsersFromTeamOK().WithPayload(dao.ToModelsUser(users))
 			}
 		}
 		log.Println("Error en teams_handler GetUsersFromTeam(): ", err)
@@ -166,18 +168,16 @@ func DeleteUserFromTeam(params user.DeleteUserFromTeamParams, u *models.User) mi
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			admins, err := dao.GetTeamAdmins(db, params.Teamname)
-			if err != nil {
-				log.Println("Error en users_handler DeleteUserFromTeam(): ", err)
-				return user.NewDeleteUserFromTeamInternalServerError()
-			}
-			if len(admins) == 1 && admins[0].Username == &params.Username {
-				log.Println("Error en users_handler DeleteUserFromTeam(): ", err)
-				s := "Es el unico administrador existente en el equipo"
-				return user.NewDeleteUserFromTeamBadRequest().WithPayload(&models.Error{Message: &s}) //Conflict???
-			}
-			err = dao.ExitUserTeam(db, params.Username, params.Teamname)
 			if err == nil {
-				return user.NewDeleteUserFromTeamOK()
+				if len(admins) == 1 && admins[0].Username == &params.Username {
+					log.Println("Error en users_handler DeleteUserFromTeam(): ", err)
+					s := "Es el unico administrador existente en el equipo"
+					return user.NewDeleteUserFromTeamBadRequest().WithPayload(&models.Error{Message: &s}) //Conflict???
+				}
+				err = dao.ExitUserTeam(db, params.Username, params.Teamname)
+				if err == nil {
+					return user.NewDeleteUserFromTeamOK()
+				}
 			}
 		}
 		log.Println("Error en teams_handler DeleteUserFromTeam(): ", err)

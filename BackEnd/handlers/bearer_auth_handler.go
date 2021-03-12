@@ -29,6 +29,6 @@ func BearerAuth(token string) (*models.User, error) {
 	if err != nil {
 		return nil, err
 	}
-	mu := dao.DaoToModelUser(u)
+	mu := dao.ToModelUser(u)
 	return mu, err
 }

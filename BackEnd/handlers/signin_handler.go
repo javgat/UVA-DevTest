@@ -40,7 +40,7 @@ func conflictErrorSignin(err error) middleware.Responder {
 // Responds with a 201 Created object and the user created
 func successSignin(u *dao.User) middleware.Responder {
 	log.Println("Usuario registrado")
-	mu := dao.DaoToModelUser(u)
+	mu := dao.ToModelUser(u)
 	return user.NewRegisterUserCreated().WithPayload(mu)
 }
 
@@ -68,6 +68,7 @@ func RegisterUser(params user.RegisterUserParams) middleware.Responder {
 		Username: lu.Username,
 		Email:    lu.Email,
 		Pwhash:   &pwhashstring,
+		Type:     models.UserTypeStudent,
 	}
 	db, err := dbconnection.ConnectDb()
 

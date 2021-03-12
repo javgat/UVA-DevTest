@@ -26,4 +26,8 @@ type User struct {
 	// Required: true
 	// Pattern: [^@]+
 	Username *string `json:"username"`
+
+	// type
+	// Enum: [student teacher admin]
+	Type string `json:"type,omitempty"`
 }

@@ -1,6 +1,8 @@
 CREATE DATABASE IF NOT EXISTS uva_devtest;
 USE uva_devtest;
 
+DROP TABLE IF EXISTS Teamroles;
+DROP TABLE IF EXISTS Teams;
 DROP TABLE IF EXISTS Users;
 CREATE TABLE Users (
   id int(11) NOT NULL AUTO_INCREMENT,
@@ -13,7 +15,6 @@ CREATE TABLE Users (
   PRIMARY KEY (id)
 );
 
-DROP TABLE IF EXISTS Teams;
 CREATE TABLE Teams (
   id int(11) NOT NULL AUTO_INCREMENT,
   teamname varchar(40) COLLATE utf8_unicode_ci NOT NULL,
@@ -22,7 +23,6 @@ CREATE TABLE Teams (
   PRIMARY KEY(id)
 );
 
-DROP TABLE IF EXISTS Teamroles;
 CREATE TABLE Teamroles(
   userid int(11) NOT NULL,
   teamid int(11) NOT NULL,

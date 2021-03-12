@@ -31,17 +31,19 @@ func userToInsert() *User {
 	su := signinUserToInsert()
 	bytes, _ := bcrypt.GenerateFromPassword([]byte(*su.Pass), 14)
 	pwhashstring := string(bytes)
+	studentType := models.UserTypeStudent
 	u := &User{
 		Username: su.Username,
 		Email:    su.Email,
 		Pwhash:   &pwhashstring,
+		Type:     studentType,
 	}
 	return u
 }
 
 func expectInsert(mock sqlmock.Sqlmock, u *User) {
-	mock.ExpectPrepare("INSERT INTO users").ExpectExec().
-		WithArgs(u.Username, u.Email, u.Pwhash).WillReturnResult(sqlmock.NewResult(1, 1))
+	mock.ExpectPrepare("INSERT INTO Users").ExpectExec().
+		WithArgs(u.Username, u.Email, u.Pwhash, u.Type).WillReturnResult(sqlmock.NewResult(1, 1))
 }
 
 func TestInsertUserNilDB(t *testing.T) {
@@ -109,39 +111,41 @@ func TestInsertUserCorrect(t *testing.T) {
 	expectInsert(mock, u)
 	err = InsertUser(db, u)
 	if err != nil {
-		t.Log("error should be nil")
+		t.Log("error should be nil", err)
 		t.Fail()
 	}
 }
 
 // Testing getUserUsername y getUserEmail
 
-const username string = "Test"
-const email string = "Test@mail.com"
-const pwhash string = "AAAAAAAAAAA"
+var username string = "Test"
+var email strfmt.Email = "Test@mail.com"
+var pwhash string = "AAAAAAAAAAA"
+var emailS = email.String()
+var typeTeacher string = models.UserTypeTeacher
 
-func expectGetUser(mock sqlmock.Sqlmock, arg string, u string, e string, p string) {
-	columns := []string{"id", "username", "email", "pwhash"}
-	mock.ExpectPrepare("SELECT (.+) FROM users").ExpectQuery().WithArgs(arg).
-		WillReturnRows(sqlmock.NewRows(columns).AddRow(1, u, e, p))
+func expectGetUser(mock sqlmock.Sqlmock, arg string, u string, e string, p string, t string) {
+	columns := []string{"id", "username", "email", "pwhash", "type"}
+	mock.ExpectPrepare("SELECT (.+) FROM Users").ExpectQuery().WithArgs(arg).
+		WillReturnRows(sqlmock.NewRows(columns).AddRow(1, u, e, p, t))
 }
 
 func expectGetEmail(mock sqlmock.Sqlmock) {
-	expectGetUser(mock, email, username, email, pwhash)
+	expectGetUser(mock, emailS, username, emailS, pwhash, typeTeacher)
 }
 
 func expectGetUsername(mock sqlmock.Sqlmock) {
-	expectGetUser(mock, username, username, email, pwhash)
+	expectGetUser(mock, username, username, emailS, pwhash, typeTeacher)
 }
 
 func expectGetUserEmpty(mock sqlmock.Sqlmock, arg string) {
-	columns := []string{"id", "username", "email", "pwhash"}
-	mock.ExpectPrepare("SELECT (.+) FROM users").ExpectQuery().WithArgs(arg).
+	columns := []string{"id", "username", "email", "pwhash", "type"}
+	mock.ExpectPrepare("SELECT (.+) FROM Users").ExpectQuery().WithArgs(arg).
 		WillReturnRows(sqlmock.NewRows(columns))
 }
 
 func expectGetEmailEmpty(mock sqlmock.Sqlmock) {
-	expectGetUserEmpty(mock, email)
+	expectGetUserEmpty(mock, emailS)
 }
 
 func expectGetUsernameEmpty(mock sqlmock.Sqlmock) {
@@ -155,11 +159,11 @@ func expectGetUserTablesWrong(mock sqlmock.Sqlmock, arg string, u string, e stri
 }
 
 func expectGetUsernameTablesWrong(mock sqlmock.Sqlmock) {
-	expectGetUserTablesWrong(mock, username, username, email)
+	expectGetUserTablesWrong(mock, username, username, emailS)
 }
 
 func expectGetEmailTablesWrong(mock sqlmock.Sqlmock) {
-	expectGetUserTablesWrong(mock, email, username, email)
+	expectGetUserTablesWrong(mock, emailS, username, emailS)
 }
 
 // Testing GetUserUsername
@@ -265,7 +269,7 @@ func TestGetUserUsernameFound(t *testing.T) {
 		t.Log("u should not be nil")
 		t.Fail()
 	}
-	if u.Email.String() != email {
+	if u.Email.String() != emailS {
 		t.Log("email incorrect")
 		t.Fail()
 	}
@@ -280,7 +284,7 @@ func TestGetUserEmailNilDB(t *testing.T) {
 	}
 	defer db.Close()
 	expectGetEmail(mock)
-	u, err := GetUserEmail(nil, email)
+	u, err := GetUserEmail(nil, emailS)
 	if err == nil {
 		t.Log("error should not be nil", err)
 		t.Fail()
@@ -297,7 +301,7 @@ func TestGetUserEmailClosedDb(t *testing.T) {
 	}
 	db.Close()
 	expectGetEmail(mock)
-	u, err := GetUserEmail(db, email)
+	u, err := GetUserEmail(db, emailS)
 	if err == nil {
 		t.Log("error should not be nil", err)
 		t.Fail()
@@ -315,7 +319,7 @@ func TestGetUserEmailError(t *testing.T) {
 	defer db.Close()
 	mock.ExpectPrepare("SELECT (.+) FROM users").ExpectQuery().WithArgs(email).
 		WillReturnError(fmt.Errorf("Error"))
-	u, err := GetUserEmail(db, email)
+	u, err := GetUserEmail(db, emailS)
 	if err == nil {
 		t.Log("error should not be nil", err)
 		t.Fail()
@@ -332,7 +336,7 @@ func TestGetUserEmailEmpty(t *testing.T) {
 	}
 	defer db.Close()
 	expectGetEmailEmpty(mock)
-	u, err := GetUserEmail(db, email)
+	u, err := GetUserEmail(db, emailS)
 	if err != nil {
 		t.Log("error should be nil", err)
 		t.Fail()
@@ -349,7 +353,7 @@ func TestGetUserEmailTablesWrong(t *testing.T) {
 	}
 	defer db.Close()
 	expectGetEmailTablesWrong(mock)
-	u, err := GetUserEmail(db, email)
+	u, err := GetUserEmail(db, emailS)
 	if err == nil {
 		t.Log("error should not be nil", err)
 		t.Fail()
@@ -366,7 +370,7 @@ func TestGetUserEmailFound(t *testing.T) {
 	}
 	defer db.Close()
 	expectGetEmail(mock)
-	u, err := GetUserEmail(db, email)
+	u, err := GetUserEmail(db, emailS)
 	if err != nil {
 		t.Log("error should be nil", err)
 		t.Fail()
@@ -376,6 +380,392 @@ func TestGetUserEmailFound(t *testing.T) {
 	}
 	if *u.Username != username {
 		t.Log("username incorrect")
+		t.Fail()
+	}
+}
+
+// GetUsers
+
+var username2 string = "Test2"
+var email2 strfmt.Email = "Test2@mail.com"
+var pwhash2 string = "AAAAAAAAAAA"
+var typeAdmin string = models.UserTypeAdmin
+
+func defaultAdmin1() *User {
+	u := &User{
+		ID:       2,
+		Username: &username2,
+		Email:    &email2,
+		Pwhash:   &pwhash2,
+		Type:     typeAdmin,
+	}
+	return u
+}
+
+func defaultUsers() []*User {
+	us := []*User{}
+	u1 := &User{
+		ID:       1,
+		Username: &username,
+		Email:    &email,
+		Pwhash:   &pwhash,
+		Type:     typeTeacher,
+	}
+	u2 := defaultAdmin1()
+	us = append(us, u1)
+	us = append(us, u2)
+	return us
+}
+
+func defaultAdmins() []*User {
+	us := []*User{}
+	u2 := defaultAdmin1()
+	us = append(us, u2)
+	return us
+}
+
+func expectGetUsers(mock sqlmock.Sqlmock, us []*User) {
+	columns := []string{"id", "username", "email", "pwhash", "type"}
+	rows := sqlmock.NewRows(columns)
+	for _, u := range us {
+		rows.AddRow(u.ID, u.Username, u.Email, u.Pwhash, u.Type)
+	}
+	mock.ExpectPrepare("SELECT (.+) FROM Users").ExpectQuery().WillReturnRows(rows)
+}
+
+func expectGetUsersDefault(mock sqlmock.Sqlmock) {
+	us := defaultUsers()
+	expectGetUsers(mock, us)
+}
+
+func expectGetUsersEmpty(mock sqlmock.Sqlmock) {
+	us := []*User{}
+	expectGetUsers(mock, us)
+}
+
+func expectGetUsersWrong(mock sqlmock.Sqlmock) {
+	columns := []string{"id", "username", "email"}
+	us := defaultUsers()
+	rows := sqlmock.NewRows(columns)
+	for _, u := range us {
+		rows.AddRow(u.ID, u.Username, u.Email)
+	}
+	mock.ExpectPrepare("SELECT (.+) FROM Users").ExpectQuery().WillReturnRows(rows)
+}
+
+func TestGetUsersNilDB(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	defer db.Close()
+	expectGetUsersDefault(mock)
+	u, err := GetUsers(nil)
+	if err == nil {
+		t.Log("error should not be nil", err)
+		t.Fail()
+	} else if u != nil {
+		t.Log("u should be nil")
+		t.Fail()
+	}
+}
+
+func TestGetUsersClosedDb(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	db.Close()
+	expectGetUsersDefault(mock)
+	u, err := GetUsers(db)
+	if err == nil {
+		t.Log("error should not be nil", err)
+		t.Fail()
+	} else if u != nil {
+		t.Log("u should be nil")
+		t.Fail()
+	}
+}
+
+func TestGetUsersError(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	defer db.Close()
+	mock.ExpectPrepare("SELECT (.+) FROM Users").ExpectQuery().
+		WillReturnError(fmt.Errorf("Error"))
+	u, err := GetUsers(db)
+	if err == nil {
+		t.Log("error should not be nil", err)
+		t.Fail()
+	} else if u != nil {
+		t.Log("u should be nil")
+		t.Fail()
+	}
+}
+
+func TestGetUsersEmpty(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	defer db.Close()
+	expectGetUsersEmpty(mock)
+	u, err := GetUsers(db)
+	if err != nil {
+		t.Log("error should be nil", err)
+		t.Fail()
+	} else if u != nil {
+		t.Log("u should be nil")
+		t.Fail()
+	}
+}
+
+func TestGetUsersTablesWrong(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	defer db.Close()
+	expectGetUsersWrong(mock)
+	u, err := GetUsers(db)
+	if err == nil {
+		t.Log("error should not be nil", err)
+		t.Fail()
+	} else if u != nil {
+		t.Log("u should be nil")
+		t.Fail()
+	}
+}
+
+func TestGetUsersFound(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	defer db.Close()
+	expectGetUsersDefault(mock)
+	u, err := GetUsers(db)
+	if err != nil {
+		t.Log("error should be nil", err)
+		t.Fail()
+	} else if u == nil {
+		t.Log("u should not be nil")
+		t.Fail()
+	}
+	us := defaultUsers()
+	if u[0].Email.String() != us[0].Email.String() || u[1].Email.String() != us[1].Email.String() {
+		t.Log("emails incorrectos")
+		t.Fail()
+	}
+}
+
+// GetAdmins
+
+func expectGetAdmins(mock sqlmock.Sqlmock, us []*User) {
+	columns := []string{"id", "username", "email", "pwhash", "type"}
+	rows := sqlmock.NewRows(columns)
+	for _, u := range us {
+		rows.AddRow(u.ID, u.Username, u.Email, u.Pwhash, u.Type)
+	}
+	mock.ExpectPrepare("SELECT (.+) FROM Users WHERE type='Admin'").ExpectQuery().WillReturnRows(rows)
+}
+
+func expectGetAdminsDefault(mock sqlmock.Sqlmock) {
+	us := defaultAdmins()
+	expectGetAdmins(mock, us)
+}
+
+func expectGetAdminsEmpty(mock sqlmock.Sqlmock) {
+	us := []*User{}
+	expectGetAdmins(mock, us)
+}
+
+func expectGetAdminsWrong(mock sqlmock.Sqlmock) {
+	columns := []string{"id", "username", "email"}
+	rows := sqlmock.NewRows(columns)
+	us := defaultAdmins()
+	for _, u := range us {
+		rows.AddRow(u.ID, u.Username, u.Email)
+	}
+	mock.ExpectPrepare("SELECT (.+) FROM Users WHERE type='Admin'").ExpectQuery().WillReturnRows(rows)
+}
+
+func TestGetAdminsNilDB(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	defer db.Close()
+	expectGetAdminsDefault(mock)
+	u, err := GetAdmins(nil)
+	if err == nil {
+		t.Log("error should not be nil", err)
+		t.Fail()
+	} else if u != nil {
+		t.Log("u should be nil")
+		t.Fail()
+	}
+}
+
+func TestGetAdminsClosedDb(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	db.Close()
+	expectGetAdminsDefault(mock)
+	u, err := GetAdmins(db)
+	if err == nil {
+		t.Log("error should not be nil", err)
+		t.Fail()
+	} else if u != nil {
+		t.Log("u should be nil")
+		t.Fail()
+	}
+}
+
+func TestGetAdminsError(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	defer db.Close()
+	mock.ExpectPrepare("SELECT (.+) FROM Users WHERE type='Admin'").ExpectQuery().
+		WillReturnError(fmt.Errorf("Error"))
+	u, err := GetAdmins(db)
+	if err == nil {
+		t.Log("error should not be nil", err)
+		t.Fail()
+	} else if u != nil {
+		t.Log("u should be nil")
+		t.Fail()
+	}
+}
+
+func TestGetAdminsEmpty(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	defer db.Close()
+	expectGetAdminsEmpty(mock)
+	u, err := GetAdmins(db)
+	if err != nil {
+		t.Log("error should be nil", err)
+		t.Fail()
+	} else if u != nil {
+		t.Log("u should be nil")
+		t.Fail()
+	}
+}
+
+func TestGetAdminsTablesWrong(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	defer db.Close()
+	expectGetAdminsWrong(mock)
+	u, err := GetAdmins(db)
+	if err == nil {
+		t.Log("error should not be nil", err)
+		t.Fail()
+	} else if u != nil {
+		t.Log("u should be nil")
+		t.Fail()
+	}
+}
+
+func TestGetAdminsFound(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	defer db.Close()
+	expectGetAdminsDefault(mock)
+	u, err := GetAdmins(db)
+	if err != nil {
+		t.Log("error should be nil", err)
+		t.Fail()
+	} else if u == nil {
+		t.Log("u should not be nil")
+		t.Fail()
+	}
+	us := defaultAdmins()
+	if u[0].Email.String() != us[0].Email.String() {
+		t.Log("emails incorrectos")
+		t.Fail()
+	}
+}
+
+// PutPasswordUsername
+
+const usernamePp string = "Test"
+const newPp string = "AAAAAAAAAAAAA"
+
+func expectPutPassword(mock sqlmock.Sqlmock, p string, username string) {
+	mock.ExpectPrepare("UPDATE Users").ExpectExec().
+		WithArgs(p, username).WillReturnResult(sqlmock.NewResult(1, 1))
+}
+
+func expectPutPasswordDefault(mock sqlmock.Sqlmock) {
+	expectPutPassword(mock, newPp, usernamePp)
+}
+func TestPutPasswordNilDB(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	defer db.Close()
+	expectPutPasswordDefault(mock)
+	err = PutPasswordUsername(nil, usernamePp, newPp)
+	if err == nil {
+		t.Log("error should not be nil", err)
+		t.Fail()
+	}
+}
+
+func TestPutPasswordClosedDb(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	db.Close()
+	expectPutPasswordDefault(mock)
+	err = PutPasswordUsername(db, usernamePp, newPp)
+	if err == nil {
+		t.Log("error should not be nil", err)
+		t.Fail()
+	}
+}
+
+func TestPutPasswordError(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	defer db.Close()
+	mock.ExpectPrepare("UPDATE Users").ExpectExec().
+		WithArgs(newPp, usernamePp).WillReturnError(fmt.Errorf("Error"))
+	err = PutPasswordUsername(db, usernamePp, newPp)
+	if err == nil {
+		t.Log("error should not be nil", err)
+		t.Fail()
+	}
+}
+
+func TestPutPasswordCorrect(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	defer db.Close()
+	expectPutPasswordDefault(mock)
+	err = PutPasswordUsername(db, usernamePp, newPp)
+	if err != nil {
+		t.Log("error should be nil", err)
 		t.Fail()
 	}
 }

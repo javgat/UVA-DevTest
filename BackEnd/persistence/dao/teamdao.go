@@ -1,3 +1,7 @@
+// UVa-DevTest. 2021.
+// Author: Javier Gatón Herguedas.
+
+// Package dao acts as a Data Access Object for the Types
 package dao
 
 import (
@@ -6,8 +10,8 @@ import (
 	"uva-devtest/models"
 )
 
-// DaoToModelTeam converts a teamdao.Team into a models.Team
-func DaoToModelTeam(t *Team) *models.Team {
+// ToModelTeam converts a teamdao.Team into a models.Team
+func ToModelTeam(t *Team) *models.Team {
 	mt := &models.Team{
 		Teamname:    t.Teamname,
 		Description: t.Description,
@@ -15,11 +19,11 @@ func DaoToModelTeam(t *Team) *models.Team {
 	return mt
 }
 
-// DaoToModelsTeams converts a splice of teamdao.Team into models.Team
-func DaoToModelsTeams(us []*Team) []*models.Team {
+// ToModelsTeams converts a splice of teamdao.Team into models.Team
+func ToModelsTeams(us []*Team) []*models.Team {
 	var mts = []*models.Team{}
 	for _, itemCopy := range us {
-		mts = append(mts, DaoToModelTeam(itemCopy))
+		mts = append(mts, ToModelTeam(itemCopy))
 	}
 	return mts
 }
@@ -55,6 +59,7 @@ func rowsToTeam(rows *sql.Rows) (*Team, error) {
 }
 
 // GetTeamsUsername gets all teams from user <username>
+// Param username: Username of the user
 func GetTeamsUsername(db *sql.DB, username string) ([]*Team, error) {
 	if db == nil {
 		return nil, errors.New("Parametro db nil")
@@ -95,6 +100,7 @@ func GetTeams(db *sql.DB) ([]*Team, error) {
 }
 
 // GetTeamsTeamRoleAdmin gets all teams where user is Admin
+// Param username: Username of the user
 func GetTeamsTeamRoleAdmin(db *sql.DB, username string) ([]*Team, error) {
 	if db == nil {
 		return nil, errors.New("Parametro db nil")
@@ -117,6 +123,7 @@ func GetTeamsTeamRoleAdmin(db *sql.DB, username string) ([]*Team, error) {
 }
 
 // GetTeam gets team <teamname>
+// Param teamname: Teamname of the team
 func GetTeam(db *sql.DB, teamname string) (*Team, error) {
 	if db == nil {
 		return nil, errors.New("Parametro db nil")

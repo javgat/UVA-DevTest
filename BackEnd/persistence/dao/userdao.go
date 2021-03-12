@@ -13,21 +13,23 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-// DaoToModelUser converts a dao.User into a models.User
-func DaoToModelUser(u *User) *models.User {
+// ToModelUser converts a dao.User into a models.User
+// Param u: dao.User to convert
+func ToModelUser(u *User) *models.User {
 	mu := &models.User{
 		Username: u.Username,
 		Email:    u.Email,
-		Type:     "admin", // CAMBIAR !!!!
+		Type:     u.Type,
 	}
 	return mu
 }
 
-// DaoToModelsUser converts a splice of dao.User into models.User
-func DaoToModelsUser(us []*User) []*models.User {
+// ToModelsUser converts a splice of dao.User into models.User
+// Param us: slice of dao.User to convert
+func ToModelsUser(us []*User) []*models.User {
 	var mus = []*models.User{}
 	for _, itemCopy := range us {
-		mus = append(mus, DaoToModelUser(itemCopy))
+		mus = append(mus, ToModelUser(itemCopy))
 	}
 	return mus
 }
@@ -40,13 +42,13 @@ func InsertUser(db *sql.DB, u *User) error {
 	if db == nil || u == nil {
 		return errors.New("Argumento de entrada nil")
 	}
-	query, err := db.Prepare("INSERT INTO Users(username, email, pwhash) VALUES (?,?,?)")
+	query, err := db.Prepare("INSERT INTO Users(username, email, pwhash, type) VALUES (?,?,?,?)")
 
 	if err != nil {
 		return err
 	}
 
-	_, err = query.Exec(u.Username, u.Email, u.Pwhash)
+	_, err = query.Exec(u.Username, u.Email, u.Pwhash, u.Type)
 	defer query.Close()
 	return err
 }
@@ -59,7 +61,7 @@ func rowsToUsers(rows *sql.Rows) ([]*User, error) {
 	var users []*User
 	for rows.Next() {
 		var us User
-		err := rows.Scan(&us.ID, &us.Username, &us.Email, &us.Pwhash)
+		err := rows.Scan(&us.ID, &us.Username, &us.Email, &us.Pwhash, &us.Type)
 		if err != nil {
 			return users, err
 		}
@@ -162,6 +164,8 @@ func GetAdmins(db *sql.DB) ([]*User, error) {
 }
 
 // PutPasswordUsername modifies the pwhash of user <username> in database <db>
+// Param username: Username of the user
+// Param newpwhash: New Password Hash to insert in the database
 func PutPasswordUsername(db *sql.DB, username string, newpwhash string) error {
 	if db == nil {
 		return errors.New("Parametro db nil")
@@ -194,6 +198,7 @@ func UpdateUser(db *sql.DB, u *models.User, username string) error {
 }
 
 // DeleteUser deletes user <username> from the database
+// Param username: Username of the user
 func DeleteUser(db *sql.DB, username string) error {
 	if db == nil {
 		return errors.New("Argumento de entrada nil")
@@ -208,6 +213,8 @@ func DeleteUser(db *sql.DB, username string) error {
 }
 
 // AddUserTeam adds a user to a team
+// Param username: Username of the user
+// Param teamname: Teamname of the team
 func AddUserTeam(db *sql.DB, username string, teamname string) error {
 	if db == nil {
 		return errors.New("Argumento de entrada nil")
@@ -230,6 +237,8 @@ func AddUserTeam(db *sql.DB, username string, teamname string) error {
 }
 
 // ExitUserTeam gets out a user from a team
+// Param username: Username of the user
+// Param teamname: Teamname of the team
 func ExitUserTeam(db *sql.DB, username string, teamname string) error {
 	if db == nil {
 		return errors.New("Argumento de entrada nil")
@@ -252,6 +261,7 @@ func ExitUserTeam(db *sql.DB, username string, teamname string) error {
 }
 
 // GetUsersFromTeam returns all users
+// Param teamname: Teamname of the team
 func GetUsersFromTeam(db *sql.DB, teamname string) ([]*User, error) {
 	if db == nil {
 		return nil, errors.New("Parametro db nil")
@@ -274,6 +284,7 @@ func GetUsersFromTeam(db *sql.DB, teamname string) ([]*User, error) {
 }
 
 // GetTeamAdmins returns all users of team that are admins in team
+// Param teamname: Teamname of the team
 func GetTeamAdmins(db *sql.DB, teamname string) ([]*User, error) {
 	if db == nil {
 		return nil, errors.New("Parametro db nil")
