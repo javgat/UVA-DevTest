@@ -769,3 +769,135 @@ func TestPutPasswordCorrect(t *testing.T) {
 		t.Fail()
 	}
 }
+
+// UpdateUser
+
+func TestUpdateUserNilDB(t *testing.T) {
+
+}
+
+func TestUpdateUserNilUser(t *testing.T) {
+
+}
+
+func TestUpdateUserClosedDB(t *testing.T) {
+
+}
+
+func TestUpdateUserError(t *testing.T) {
+
+}
+
+func TestUpdateUserCorrect(t *testing.T) {
+
+}
+
+// DeleteUser
+
+func TestDeleteUserNilDB(t *testing.T) {
+
+}
+
+func TestDeleteUserClosedDB(t *testing.T) {
+
+}
+
+func TestDeleteUserError(t *testing.T) {
+
+}
+
+func TestDeleteUserCorrect(t *testing.T) {
+
+}
+
+// AddUserTeam
+
+func TestAddUserTeamNilDB(t *testing.T) {
+
+}
+
+func TestAddUserTeamClosedDB(t *testing.T) {
+
+}
+
+func TestAddUserTeamUsernameError(t *testing.T) {
+
+}
+
+func TestAddUserTeamTeamnameError(t *testing.T) {
+
+}
+
+func TestAddUserTeamError(t *testing.T) {
+
+}
+
+func TestAddUserTeamCorrect(t *testing.T) {
+
+}
+
+// ExitUserTeam
+
+func TestExitUserTeamNilDB(t *testing.T) {
+
+}
+
+func TestExitUserTeamClosedDB(t *testing.T) {
+
+}
+
+func TestExitUserTeamUsernameError(t *testing.T) {
+
+}
+
+func TestExitUserTeamTeamnameError(t *testing.T) {
+
+}
+
+func TestExitUserTeamError(t *testing.T) {
+
+}
+
+func TestExitUserTeamCorrect(t *testing.T) {
+
+}
+
+// GetUsersFromTeam
+
+func TestGetUsersFromTeamNilDB(t *testing.T) {
+}
+
+func TestGetUsersFromTeamClosedDB(t *testing.T) {
+}
+
+func TestGetUsersFromTeamTeamnameError(t *testing.T) {
+}
+
+func TestGetUsersFromTeamError(t *testing.T) {
+}
+
+func TestGetUsersFromTeamEmpty(t *testing.T) {
+}
+
+func TestGetUsersFromTeamFound(t *testing.T) {
+}
+
+// GetTeamAdmins
+
+func TestGetTeamAdminsNilDB(t *testing.T) {
+}
+
+func TestGetTeamAdminsClosedDB(t *testing.T) {
+}
+
+func TestGetTeamAdminsTeamnameError(t *testing.T) {
+}
+
+func TestGetTeamAdminsError(t *testing.T) {
+}
+
+func TestGetTeamAdminsEmpty(t *testing.T) {
+}
+
+func TestGetTeamAdminsFound(t *testing.T) {
+}
