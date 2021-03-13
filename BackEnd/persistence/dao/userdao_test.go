@@ -125,10 +125,24 @@ var pwhash string = "AAAAAAAAAAA"
 var emailS = email.String()
 var typeTeacher string = models.UserTypeTeacher
 
-func expectGetUser(mock sqlmock.Sqlmock, arg string, user *User) {
+func rowsUsers(us []*User) *sqlmock.Rows {
 	columns := []string{"id", "username", "email", "pwhash", "type", "fullname"}
+	sqlcols := sqlmock.NewRows(columns)
+	for _, user := range us {
+		sqlcols.AddRow(user.ID, *user.Username, user.Email.String(), *user.Pwhash, user.Type, user.Fullname)
+	}
+	return sqlcols
+}
+
+func rowsUser(u *User) *sqlmock.Rows {
+	users := []*User{u}
+	return rowsUsers(users)
+}
+
+func expectGetUser(mock sqlmock.Sqlmock, arg string, user *User) {
+	rows := rowsUser(user)
 	mock.ExpectPrepare("SELECT (.+) FROM Users").ExpectQuery().WithArgs(arg).
-		WillReturnRows(sqlmock.NewRows(columns).AddRow(user.ID, *user.Username, user.Email.String(), *user.Pwhash, user.Type, user.Fullname))
+		WillReturnRows(rows)
 }
 
 func defaultUser() *User {
@@ -151,9 +165,9 @@ func expectGetUsername(mock sqlmock.Sqlmock) {
 }
 
 func expectGetUserEmpty(mock sqlmock.Sqlmock, arg string) {
-	columns := []string{"id", "username", "email", "pwhash", "type", "fullname"}
+	rows := rowsUsers([]*User{})
 	mock.ExpectPrepare("SELECT (.+) FROM Users").ExpectQuery().WithArgs(arg).
-		WillReturnRows(sqlmock.NewRows(columns))
+		WillReturnRows(rows)
 }
 
 func expectGetEmailEmpty(mock sqlmock.Sqlmock) {
@@ -437,11 +451,7 @@ func defaultAdmins() []*User {
 }
 
 func expectGetUsers(mock sqlmock.Sqlmock, us []*User) {
-	columns := []string{"id", "username", "email", "pwhash", "type", "fullname"}
-	rows := sqlmock.NewRows(columns)
-	for _, u := range us {
-		rows.AddRow(u.ID, u.Username, u.Email, u.Pwhash, u.Type, u.Fullname)
-	}
+	rows := rowsUsers(us)
 	mock.ExpectPrepare("SELECT (.+) FROM Users").ExpectQuery().WillReturnRows(rows)
 }
 
@@ -576,8 +586,7 @@ func TestGetUsersFound(t *testing.T) {
 // GetAdmins
 
 func expectGetAdmins(mock sqlmock.Sqlmock, us []*User) {
-	columns := []string{"id", "username", "email", "pwhash", "type", "fullname"}
-	rows := sqlmock.NewRows(columns)
+	rows := rowsUsers(us)
 	for _, u := range us {
 		rows.AddRow(u.ID, u.Username, u.Email, u.Pwhash, u.Type, u.Fullname)
 	}
@@ -954,16 +963,34 @@ func defaultTeam() *Team {
 	return t
 }
 
-func expectGetTeam(mock sqlmock.Sqlmock, arg string, team *Team) {
+func rowsTeams(ts []*Team) *sqlmock.Rows {
 	columns := []string{"id", "teamname", "description"}
+	sqlcols := sqlmock.NewRows(columns)
+	for _, team := range ts {
+		sqlcols.AddRow(team.ID, team.Teamname, team.Description)
+	}
+	return sqlcols
+}
+
+func rowsTeam(t *Team) *sqlmock.Rows {
+	ts := []*Team{t}
+	return rowsTeams(ts)
+}
+
+func rowsTeamEmpty() *sqlmock.Rows {
+	return rowsTeams([]*Team{})
+}
+
+func expectGetTeam(mock sqlmock.Sqlmock, arg string, team *Team) {
+	rows := rowsTeam(team)
 	mock.ExpectPrepare("SELECT (.+) FROM Teams").ExpectQuery().WithArgs(arg).
-		WillReturnRows(sqlmock.NewRows(columns).AddRow(team.ID, team.Teamname, team.Description))
+		WillReturnRows(rows)
 }
 
 func expectGetTeamEmpty(mock sqlmock.Sqlmock, arg string) {
-	columns := []string{"id", "teamname", "description"}
+	rows := rowsTeamEmpty()
 	mock.ExpectPrepare("SELECT (.+) FROM Teams").ExpectQuery().WithArgs(arg).
-		WillReturnRows(sqlmock.NewRows(columns))
+		WillReturnRows(rows)
 }
 
 func expectAddUserTeam(mock sqlmock.Sqlmock, userid int, teamid int) {
@@ -1199,16 +1226,12 @@ func TestExitUserTeamCorrect(t *testing.T) {
 
 func expectGetUsersFromTeam(mock sqlmock.Sqlmock, teamname string, users []*User) {
 	expectGetTeam(mock, teamname, defaultTeam())
-	columns := []string{"id", "username", "email", "pwhash", "type", "fullname"}
-	rows := sqlmock.NewRows(columns)
-	for _, u := range users {
-		rows.AddRow(u.ID, u.Username, u.Email, u.Pwhash, u.Type, u.Fullname)
-	}
+	rows := rowsUsers(users)
 	mock.ExpectPrepare("SELECT (.+) FROM Users").ExpectQuery().WithArgs(defaultTeam().ID).WillReturnRows(rows)
 }
 
 func expectGetUsersFromTeamDefault(mock sqlmock.Sqlmock) {
-	expectGetUsersFromTeam(mock, teamname, defaultUsers())
+	expectGetUsersFromTeam(mock, teamname, defaultUsersFromTeam())
 }
 
 func defaultUsersFromTeam() []*User {
@@ -1217,8 +1240,7 @@ func defaultUsersFromTeam() []*User {
 
 func expectGetUsersFromTeamTeamnameNotFound(mock sqlmock.Sqlmock) {
 	expectGetTeamEmpty(mock, teamname)
-	columns := []string{"id", "username", "email", "pwhash", "type", "fullname"}
-	rows := sqlmock.NewRows(columns)
+	rows := rowsUsers([]*User{})
 	mock.ExpectPrepare("SELECT (.+) FROM Users").ExpectQuery().WithArgs(defaultTeam().ID).WillReturnRows(rows)
 }
 
@@ -1230,8 +1252,7 @@ func expectGetUsersFromTeamError(mock sqlmock.Sqlmock) {
 
 func expectGetUsersFromTeamEmpty(mock sqlmock.Sqlmock) {
 	expectGetTeam(mock, teamname, defaultTeam())
-	columns := []string{"id", "username", "email", "pwhash", "type", "fullname"}
-	rows := sqlmock.NewRows(columns)
+	rows := rowsUsers([]*User{})
 	mock.ExpectPrepare("SELECT (.+) FROM Users").ExpectQuery().WithArgs(defaultTeam().ID).WillReturnRows(rows)
 }
 
@@ -1346,11 +1367,7 @@ func TestGetUsersFromTeamFound(t *testing.T) {
 
 func expectGetTeamAdmins(mock sqlmock.Sqlmock, teamname string, users []*User) {
 	expectGetTeam(mock, teamname, defaultTeam())
-	columns := []string{"id", "username", "email", "pwhash", "type", "fullname"}
-	rows := sqlmock.NewRows(columns)
-	for _, u := range users {
-		rows.AddRow(u.ID, u.Username, u.Email, u.Pwhash, u.Type, u.Fullname)
-	}
+	rows := rowsUsers(users)
 	mock.ExpectPrepare("SELECT (.+) FROM Users").ExpectQuery().WithArgs(defaultTeam().ID).WillReturnRows(rows)
 }
 
@@ -1360,8 +1377,7 @@ func expectGetTeamAdminsDefault(mock sqlmock.Sqlmock) {
 
 func expectGetTeamAdminsTeamnameNotFound(mock sqlmock.Sqlmock) {
 	expectGetTeamEmpty(mock, teamname)
-	columns := []string{"id", "username", "email", "pwhash", "type", "fullname"}
-	rows := sqlmock.NewRows(columns)
+	rows := rowsUsers([]*User{})
 	mock.ExpectPrepare("SELECT (.+) FROM Users").ExpectQuery().WithArgs(defaultTeam().ID).WillReturnRows(rows)
 }
 
@@ -1373,8 +1389,7 @@ func expectGetTeamAdminsError(mock sqlmock.Sqlmock) {
 
 func expectGetTeamAdminsEmpty(mock sqlmock.Sqlmock) {
 	expectGetTeam(mock, teamname, defaultTeam())
-	columns := []string{"id", "username", "email", "pwhash", "type", "fullname"}
-	rows := sqlmock.NewRows(columns)
+	rows := rowsUsers([]*User{})
 	mock.ExpectPrepare("SELECT (.+) FROM Users").ExpectQuery().WithArgs(defaultTeam().ID).WillReturnRows(rows)
 }
 

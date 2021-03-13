@@ -56,7 +56,7 @@ func GetRole(db *sql.DB, username string, teamname string) (role *models.TeamRol
 	if err != nil {
 		return nil, err
 	}
-	query, err := db.Prepare("SELECT * FROM teamroles WHERE userid = ? AND teamid = ? ")
+	query, err := db.Prepare("SELECT * FROM Teamroles WHERE userid = ? AND teamid = ? ")
 	if err != nil {
 		return nil, err
 	}
@@ -84,7 +84,7 @@ func UpdateRole(db *sql.DB, username string, teamname string, role *models.TeamR
 	if err != nil {
 		return err
 	}
-	query, err := db.Prepare("UPDATE teamroles SET role = ? WHERE userid = ? AND teamid = ? ")
+	query, err := db.Prepare("UPDATE Teamroles SET role = ? WHERE userid = ? AND teamid = ? ")
 	if err != nil {
 		return err
 	}

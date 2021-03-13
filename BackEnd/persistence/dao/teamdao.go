@@ -85,6 +85,12 @@ func PostTeam(db *sql.DB, t *models.Team, username string) error {
 	if db == nil || t == nil {
 		return errors.New("Argumento de entrada nil")
 	}
+	u, err := GetUserUsername(db, username)
+	if err != nil {
+		return err
+	} else if u == nil {
+		return errors.New("User not found")
+	}
 	query, err := db.Prepare("INSERT INTO Teams(teamname, description) VALUES(?, ?)")
 	if err != nil {
 		return err
@@ -190,13 +196,15 @@ func GetTeamsTeamRoleAdmin(db *sql.DB, username string) ([]*Team, error) {
 	u, err := GetUserUsername(db, username)
 	if err != nil {
 		return nil, err
+	} else if u == nil {
+		return nil, errors.New("User not found")
 	}
 	query, err := db.Prepare("SELECT * FROM Teams T JOIN Teamroles R ON R.teamid=T.id WHERE R.userid=? AND R.role='Admin'")
 	var ts []*Team
 	if err != nil {
 		return ts, err
 	}
-	rows, err := query.Query(u.ID, username)
+	rows, err := query.Query(u.ID)
 	if err == nil {
 		ts, err = rowsToTeams(rows)
 	}
