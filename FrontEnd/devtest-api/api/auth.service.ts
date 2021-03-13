@@ -20,6 +20,7 @@ import { Observable }                                        from 'rxjs';
 
 import { JWTJson } from '../model/jWTJson';
 import { LoginUser } from '../model/loginUser';
+import { PasswordUpdate } from '../model/passwordUpdate';
 import { SigninUser } from '../model/signinUser';
 import { User } from '../model/user';
 
@@ -66,11 +67,14 @@ export class AuthService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public login(loginUser?: LoginUser, observe?: 'body', reportProgress?: boolean): Observable<JWTJson>;
-    public login(loginUser?: LoginUser, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<JWTJson>>;
-    public login(loginUser?: LoginUser, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<JWTJson>>;
-    public login(loginUser?: LoginUser, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public login(loginUser: LoginUser, observe?: 'body', reportProgress?: boolean): Observable<JWTJson>;
+    public login(loginUser: LoginUser, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<JWTJson>>;
+    public login(loginUser: LoginUser, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<JWTJson>>;
+    public login(loginUser: LoginUser, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
+        if (loginUser === null || loginUser === undefined) {
+            throw new Error('Required parameter loginUser was null or undefined when calling login.');
+        }
 
         let headers = this.defaultHeaders;
 
@@ -104,17 +108,76 @@ export class AuthService {
     }
 
     /**
-     * adds an user
-     * Adds an user to the system
+     * Modifies the password of the user &lt;username&gt;
+     * Modifies the password of the user &lt;username&gt;
+     * @param username Username of the user to modify its password
+     * @param passwordUpdate Password update information
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public putPassword(username: string, passwordUpdate: PasswordUpdate, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public putPassword(username: string, passwordUpdate: PasswordUpdate, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public putPassword(username: string, passwordUpdate: PasswordUpdate, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public putPassword(username: string, passwordUpdate: PasswordUpdate, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (username === null || username === undefined) {
+            throw new Error('Required parameter username was null or undefined when calling putPassword.');
+        }
+
+        if (passwordUpdate === null || passwordUpdate === undefined) {
+            throw new Error('Required parameter passwordUpdate was null or undefined when calling putPassword.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerHeader) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Bearer"]) {
+            headers = headers.set('Bearer', this.configuration.apiKeys["Bearer"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.put<any>(`${this.basePath}/passwords/${encodeURIComponent(String(username))}`,
+            passwordUpdate,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * adds a user
+     * Adds a user to the system
      * @param signinUser User item to add
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public registerUser(signinUser?: SigninUser, observe?: 'body', reportProgress?: boolean): Observable<User>;
-    public registerUser(signinUser?: SigninUser, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<User>>;
-    public registerUser(signinUser?: SigninUser, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<User>>;
-    public registerUser(signinUser?: SigninUser, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public registerUser(signinUser: SigninUser, observe?: 'body', reportProgress?: boolean): Observable<User>;
+    public registerUser(signinUser: SigninUser, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<User>>;
+    public registerUser(signinUser: SigninUser, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<User>>;
+    public registerUser(signinUser: SigninUser, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
+        if (signinUser === null || signinUser === undefined) {
+            throw new Error('Required parameter signinUser was null or undefined when calling registerUser.');
+        }
 
         let headers = this.defaultHeaders;
 

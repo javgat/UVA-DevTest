@@ -8,11 +8,19 @@ import { LoginComponent } from './login/login.component';
 
 import { HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { ApiModule, BASE_PATH } from '@javgat/devtest-api';
+import { ApiModule, BASE_PATH, Configuration, ConfigurationParameters } from '@javgat/devtest-api';
 import { environment } from '../environments/environment';
 import { MainComponent } from './main/main.component';
 import { LoggedInComponent } from './main/logged-in/logged-in.component';
 import { NotLoggedInComponent } from './main/not-logged-in/not-logged-in.component';
+
+export function apiConfigFactory (): Configuration {
+  const params: ConfigurationParameters = {
+    // set configuration parameters here.
+  }
+  return new Configuration(params);
+}
+
 
 @NgModule({
   declarations: [
@@ -27,7 +35,7 @@ import { NotLoggedInComponent } from './main/not-logged-in/not-logged-in.compone
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    ApiModule,
+    ApiModule.forRoot(apiConfigFactory),
     FormsModule,
     HttpClientXsrfModule.withOptions({
       cookieName: 'Bearer-Cookie',

@@ -14,4 +14,14 @@
 export interface User { 
     username: string;
     email: string;
+    fullname?: string;
+    type?: User.TypeEnum;
+}
+export namespace User {
+    export type TypeEnum = 'student' | 'teacher' | 'admin';
+    export const TypeEnum = {
+        Student: 'student' as TypeEnum,
+        Teacher: 'teacher' as TypeEnum,
+        Admin: 'admin' as TypeEnum
+    };
 }

@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService, LoginUser } from '@javgat/devtest-api'
@@ -50,6 +51,7 @@ export class LoginComponent implements OnInit {
         this.datos.cambiarMensaje(new Mensaje("Inicio sesion con exito", Tipo.SUCCESS, true))
         this.session.cambiarSession(new SessionUser(true, resp.token, lu.loginid))
         console.log("Inicio sesion con exito")
+        this.authService.configuration.apiKeys = {["Bearer"]: resp.token}
       },
       err =>{
         let msg: string

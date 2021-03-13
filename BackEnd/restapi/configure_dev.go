@@ -108,7 +108,7 @@ func setupGlobalMiddleware(handler http.Handler) http.Handler {
 		AllowCredentials: true,
 		AllowedMethods:   []string{"POST", "PUT", "GET", "DELETE", "OPTIONS"},
 		AllowedHeaders: []string{"Accept", "Accept-Encoding", "Authorization", "Content-Type",
-			"cache-control", "Origin", "X-CSRF-Token"}, //por que el token?
+			"cache-control", "Origin", "X-CSRF-Token", "Bearer"}, //por que el token?
 		MaxAge: 300,
 		Debug:  true,
 	})

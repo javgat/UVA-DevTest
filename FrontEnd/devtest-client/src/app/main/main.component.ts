@@ -14,12 +14,13 @@ export class MainComponent implements OnInit {
 
   constructor(private datos: DataService, private session: SessionService) {
     this.sessionActual = new SessionUser(false)
-  }
-
-  ngOnInit(): void {
     this.session.sessionActual.subscribe(
       valor => this.sessionActual = valor
     )
+  }
+
+  ngOnInit(): void {
+    
   }
 
   logout(){
