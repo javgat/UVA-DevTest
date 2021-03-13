@@ -100,8 +100,8 @@ func TestGetTeamsEmpty(t *testing.T) {
 	if err != nil {
 		t.Log("error should be nil", err)
 		t.Fail()
-	} else if teams != nil {
-		t.Log("u should be nil")
+	} else if teams == nil {
+		t.Log("u should not be nil")
 		t.Fail()
 	}
 }
@@ -239,8 +239,8 @@ func TestGetTeamsUsernameEmpty(t *testing.T) {
 	if err != nil {
 		t.Log("error should be nil", err)
 		t.Fail()
-	} else if teams != nil {
-		t.Log("u should be nil")
+	} else if teams == nil {
+		t.Log("u should not be nil")
 		t.Fail()
 	}
 }

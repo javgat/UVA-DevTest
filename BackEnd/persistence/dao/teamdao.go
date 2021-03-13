@@ -65,11 +65,11 @@ func GetTeam(db *sql.DB, teamname string) (*Team, error) {
 		return nil, errors.New("Parametro db nil")
 	}
 	query, err := db.Prepare("SELECT * FROM Teams WHERE teamname=?")
-	defer query.Close()
 	var t *Team
 	if err != nil {
 		return t, err
 	}
+	defer query.Close()
 	rows, err := query.Query(teamname)
 	if err == nil {
 		t, err = rowsToTeam(rows)
@@ -92,10 +92,10 @@ func PostTeam(db *sql.DB, t *models.Team, username string) error {
 		return errors.New("User not found")
 	}
 	query, err := db.Prepare("INSERT INTO Teams(teamname, description) VALUES(?, ?)")
-	defer query.Close()
 	if err != nil {
 		return err
 	}
+	defer query.Close()
 	_, err = query.Exec(t.Teamname, t.Description)
 	if err != nil {
 		return err
@@ -122,10 +122,10 @@ func UpdateTeam(db *sql.DB, t *models.Team, teamname string) error {
 		return errors.New("Argumento de entrada nil")
 	}
 	query, err := db.Prepare("UPDATE Teams SET teamname=?, description=? WHERE teamname = ? ")
-	defer query.Close()
 	if err != nil {
 		return err
 	}
+	defer query.Close()
 	_, err = query.Exec(t.Teamname, t.Description, teamname)
 	return err
 }
@@ -136,10 +136,10 @@ func DeleteTeam(db *sql.DB, teamname string) error {
 		return errors.New("Argumento de entrada nil")
 	}
 	query, err := db.Prepare("DELETE FROM Teams WHERE teamname = ? ") //ESTO se supone que borra en cascade
-	defer query.Close()
 	if err != nil {
 		return err
 	}
+	defer query.Close()
 	_, err = query.Exec(teamname)
 	return err
 }
@@ -150,11 +150,11 @@ func GetTeams(db *sql.DB) ([]*Team, error) {
 		return nil, errors.New("Parametro db nil")
 	}
 	query, err := db.Prepare("SELECT * FROM Teams")
-	defer query.Close()
 	var ts []*Team
 	if err != nil {
 		return ts, err
 	}
+	defer query.Close()
 	rows, err := query.Query()
 	if err == nil {
 		ts, err = rowsToTeams(rows)
@@ -174,12 +174,12 @@ func GetTeamsUsername(db *sql.DB, username string) ([]*Team, error) {
 	} else if u == nil {
 		return nil, errors.New("No se encontro al usuario")
 	}
-	query, err := db.Prepare("SELECT T.* FROM Teams T JOIN Teamroles R ON	T.id=R.teamid WHERE R.userid = ?")
-	defer query.Close()
 	var ts []*Team
+	query, err := db.Prepare("SELECT T.* FROM Teams T JOIN Teamroles R ON	T.id=R.teamid WHERE R.userid = ?")
 	if err != nil {
 		return ts, err
 	}
+	defer query.Close()
 	rows, err := query.Query(u.ID)
 	if err == nil {
 		ts, err = rowsToTeams(rows)
@@ -199,12 +199,12 @@ func GetTeamsTeamRoleAdmin(db *sql.DB, username string) ([]*Team, error) {
 	} else if u == nil {
 		return nil, errors.New("User not found")
 	}
-	query, err := db.Prepare("SELECT * FROM Teams T JOIN Teamroles R ON R.teamid=T.id WHERE R.userid=? AND R.role='Admin'")
-	defer query.Close()
 	var ts []*Team
+	query, err := db.Prepare("SELECT * FROM Teams T JOIN Teamroles R ON R.teamid=T.id WHERE R.userid=? AND R.role='Admin'")
 	if err != nil {
 		return ts, err
 	}
+	defer query.Close()
 	rows, err := query.Query(u.ID)
 	if err == nil {
 		ts, err = rowsToTeams(rows)
