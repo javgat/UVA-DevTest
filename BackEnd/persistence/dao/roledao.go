@@ -16,10 +16,10 @@ import (
 // Return error if any
 func rowsToRoles(rows *sql.Rows) ([]*models.TeamRole, error) {
 	var roles []*models.TeamRole
-	var trash, userid, teamid int
+	var userid, teamid int
 	for rows.Next() {
 		var r models.TeamRole
-		err := rows.Scan(&trash, &userid, &teamid, &r.Role)
+		err := rows.Scan(&userid, &teamid, &r.Role)
 		if err != nil {
 			return roles, err
 		}
