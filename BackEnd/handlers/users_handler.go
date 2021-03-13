@@ -118,7 +118,24 @@ func GetUsers(params user.GetUsersParams, u *models.User) middleware.Responder {
 // Auth: Current User or Admin
 func GetUser(params user.GetUserParams, u *models.User) middleware.Responder {
 	if userOrAdmin(params.Username, u) {
-		return user.NewGetUserOK().WithPayload(u)
+		if *u.Username == params.Username {
+			return user.NewGetUserOK().WithPayload(u)
+		}
+		db, err := dbconnection.ConnectDb()
+		if err != nil {
+			log.Println("Error en users_handler GetUser(): ", err)
+			return user.NewGetUserInternalServerError()
+		}
+		us, err := dao.GetUserUsername(db, params.Username)
+		if err != nil {
+			log.Println("Error en users_handler GetUser(): ", err)
+			return user.NewGetUserInternalServerError()
+		} else if us == nil {
+			log.Println("No existe user en users_handler GetUser(): ", err)
+			return user.NewGetUserGone()
+		}
+		return user.NewGetUserOK().WithPayload(dao.ToModelUser(us))
+
 	}
 	return user.NewGetUserForbidden()
 }
@@ -171,12 +188,11 @@ func DeleteUser(params user.DeleteUserParams, u *models.User) middleware.Respond
 			log.Println("Error en users_handler DeleteUser(): ", err)
 			return user.NewDeleteUserInternalServerError()
 		}
-		if len(admins) == 1 && admins[0].Username == &params.Username {
-			if u.Type != models.UserTypeAdmin {
-				log.Println("Error en users_handler DeleteUser(), intento de borrar ultimo admin")
-				s := "Es el unico administrador existente"
-				return user.NewDeleteUserBadRequest().WithPayload(&models.Error{Message: &s})
-			} // BadRequest en vez de Conflict ????
+		if len(admins) == 1 && *admins[0].Username == params.Username {
+			log.Println("Error en users_handler DeleteUser(), intento de borrar ultimo admin")
+			s := "Es el unico administrador existente"
+			return user.NewDeleteUserBadRequest().WithPayload(&models.Error{Message: &s})
+			// BadRequest en vez de Conflict ????
 		}
 		teams, err := dao.GetTeamsTeamRoleAdmin(db, params.Username)
 		for _, team := range teams {
@@ -205,10 +221,11 @@ func DeleteUser(params user.DeleteUserParams, u *models.User) middleware.Respond
 // GetTeamsOfUser GET /users/{username}/teams
 // Auth: Current User or Admin
 func GetTeamsOfUser(params user.GetTeamsOfUserParams, u *models.User) middleware.Responder {
+	var teams []*dao.Team
 	if userOrAdmin(params.Username, u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			teams, err := dao.GetTeamsUsername(db, params.Username)
+			teams, err = dao.GetTeamsUsername(db, params.Username)
 			if err == nil && teams != nil {
 				return user.NewGetTeamsOfUserOK().WithPayload(dao.ToModelsTeams(teams))
 			}
@@ -259,7 +276,7 @@ func DeleteTeamOfUser(params user.DeleteTeamOfUserParams, u *models.User) middle
 				log.Println("Error en users_handler DeleteTeamOfUser(): ", err)
 				return user.NewDeleteTeamOfUserInternalServerError()
 			}
-			if len(admins) == 1 && admins[0].Username == &params.Username {
+			if len(admins) == 1 && *admins[0].Username == params.Username {
 				log.Println("Error en users_handler DeleteTeamOfUser(): ", err)
 				s := "Es el unico administrador existente en el equipo"
 				return user.NewDeleteTeamOfUserBadRequest().WithPayload(&models.Error{Message: &s}) //Conflict???
@@ -312,6 +329,8 @@ func PutUserTeamRole(params team.PutUserTeamRoleParams, u *models.User) middlewa
 			role, err := dao.GetRole(db, params.Username, params.Teamname)
 			if err != nil {
 				return team.NewPutUserTeamRoleInternalServerError()
+			} else if role == nil {
+				return team.NewPutUserTeamRoleGone()
 			}
 			if *role.Role == models.TeamRoleRoleAdmin && *params.Role.Role != models.TeamRoleRoleAdmin {
 				admins, err := dao.GetTeamAdmins(db, params.Teamname)

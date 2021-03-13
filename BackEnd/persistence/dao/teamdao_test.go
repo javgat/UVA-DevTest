@@ -470,6 +470,9 @@ func expectPostTeamDefault(mock sqlmock.Sqlmock) {
 
 func expectPostTeamUsernameNotFound(mock sqlmock.Sqlmock) {
 	expectGetUserEmpty(mock, username)
+	team := defaultTeam()
+	mock.ExpectPrepare("INSERT INTO Teams").ExpectExec().
+		WithArgs(team.Teamname, team.Description).WillReturnError(fmt.Errorf("Error"))
 }
 
 func expectPostTeamError(mock sqlmock.Sqlmock) {

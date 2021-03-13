@@ -42,6 +42,8 @@ func PostTeam(params team.PostTeamParams, u *models.User) middleware.Responder {
 			err := dao.PostTeam(db, params.Team, *u.Username)
 			if err == nil {
 				return team.NewPostTeamCreated().WithPayload(params.Team)
+			} else {
+				return team.NewPostTeamConflict()
 			}
 		}
 		log.Println("Error en teams_handler PostTeam(): ", err)
@@ -169,7 +171,7 @@ func DeleteUserFromTeam(params user.DeleteUserFromTeamParams, u *models.User) mi
 		if err == nil {
 			admins, err := dao.GetTeamAdmins(db, params.Teamname)
 			if err == nil {
-				if len(admins) == 1 && admins[0].Username == &params.Username {
+				if len(admins) == 1 && *admins[0].Username == params.Username {
 					log.Println("Error en users_handler DeleteUserFromTeam(): ", err)
 					s := "Es el unico administrador existente en el equipo"
 					return user.NewDeleteUserFromTeamBadRequest().WithPayload(&models.Error{Message: &s}) //Conflict???

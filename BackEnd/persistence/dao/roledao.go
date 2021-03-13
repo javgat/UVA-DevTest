@@ -51,12 +51,17 @@ func GetRole(db *sql.DB, username string, teamname string) (role *models.TeamRol
 	u, err := GetUserUsername(db, username)
 	if err != nil {
 		return nil, err
+	} else if u == nil {
+		return nil, errors.New("User no existe")
 	}
 	t, err := GetTeam(db, teamname)
 	if err != nil {
 		return nil, err
+	} else if t == nil {
+		return nil, errors.New("Team no existe")
 	}
 	query, err := db.Prepare("SELECT * FROM Teamroles WHERE userid = ? AND teamid = ? ")
+	defer query.Close()
 	if err != nil {
 		return nil, err
 	}
@@ -64,7 +69,6 @@ func GetRole(db *sql.DB, username string, teamname string) (role *models.TeamRol
 	if err == nil {
 		role, err = rowsToRole(rows)
 	}
-	defer query.Close()
 	return role, err
 }
 
@@ -79,16 +83,20 @@ func UpdateRole(db *sql.DB, username string, teamname string, role *models.TeamR
 	u, err := GetUserUsername(db, username)
 	if err != nil {
 		return err
+	} else if u == nil {
+		return errors.New("User no existe")
 	}
 	t, err := GetTeam(db, teamname)
 	if err != nil {
 		return err
+	} else if t == nil {
+		return errors.New("Team no existe")
 	}
 	query, err := db.Prepare("UPDATE Teamroles SET role = ? WHERE userid = ? AND teamid = ? ")
+	defer query.Close()
 	if err != nil {
 		return err
 	}
 	_, err = query.Exec(role.Role, u.ID, t.ID)
-	defer query.Close()
 	return err
 }

@@ -48,11 +48,16 @@ func expectGetRoleDefault(mock sqlmock.Sqlmock) {
 
 func expectGetRoleUsernameNotFound(mock sqlmock.Sqlmock) {
 	expectGetUserEmpty(mock, *defaultUser().Username)
+	expectGetTeam(mock, *defaultTeam().Teamname, defaultTeam())
+	mock.ExpectPrepare("SELECT (.+) FROM Teamroles").ExpectQuery().
+		WithArgs(defaultUser().ID, defaultTeam().ID).WillReturnError(fmt.Errorf("Error"))
 }
 
 func expectGetRoleTeamnameNotFound(mock sqlmock.Sqlmock) {
 	expectGetUser(mock, *defaultUser().Username, defaultUser())
 	expectGetTeamEmpty(mock, *defaultTeam().Teamname)
+	mock.ExpectPrepare("SELECT (.+) FROM Teamroles").ExpectQuery().
+		WithArgs(defaultUser().ID, defaultTeam().ID).WillReturnError(fmt.Errorf("Error"))
 }
 
 func expectGetRoleError(mock sqlmock.Sqlmock) {
@@ -177,13 +182,20 @@ func expectUpdateRoleDefault(mock sqlmock.Sqlmock) {
 }
 
 func expectUpdateRoleUsernameNotFound(mock sqlmock.Sqlmock) {
+	role := defaultRole().Role
 	expectGetUserEmpty(mock, username)
+	expectGetTeam(mock, teamname, defaultTeam())
+	mock.ExpectPrepare("UPDATE Teamroles").ExpectExec().
+		WithArgs(role, defaultUser().ID, defaultTeam().ID).WillReturnError(fmt.Errorf("Error"))
 
 }
 
 func expectUpdateRoleTeamnameNotFound(mock sqlmock.Sqlmock) {
+	role := defaultRole().Role
 	expectGetUser(mock, username, defaultUser())
 	expectGetTeamEmpty(mock, teamname)
+	mock.ExpectPrepare("UPDATE Teamroles").ExpectExec().
+		WithArgs(role, defaultUser().ID, defaultTeam().ID).WillReturnError(fmt.Errorf("Error"))
 
 }
 

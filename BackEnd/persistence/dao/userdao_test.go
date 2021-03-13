@@ -1032,20 +1032,6 @@ func TestAddUserTeamNilDB(t *testing.T) {
 	}
 }
 
-func TestAddUserTeamClosedDB(t *testing.T) {
-	db, mock, err := sqlmock.New()
-	if err != nil {
-		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
-	}
-	db.Close()
-	expectAddUserTeamDefault(mock)
-	err = AddUserTeam(db, username, teamname)
-	if err == nil {
-		t.Log("error should not be nil", err)
-		t.Fail()
-	}
-}
-
 func TestAddUserTeamUsernameNotFound(t *testing.T) {
 	db, mock, err := sqlmock.New()
 	if err != nil {
