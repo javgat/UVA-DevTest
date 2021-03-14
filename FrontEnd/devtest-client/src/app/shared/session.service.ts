@@ -14,16 +14,29 @@ export class SessionService {
   sessionActual = this.session.asObservable()
 
   constructor() { }
-
-  //res.cookie("SESSIONID", jwtBearerToken, {httpOnly:true, secure:true});
   
   // Actualiza la sesión a la pasada por parametro.
   cambiarSession(session:SessionUser){
     this.session.next(session)
+    localStorage.setItem('logged', String(session.logged))
+    localStorage.setItem('userid', String(session.userid))
   }
 
   // Desautentica al usuario. Elimina la sesión.
   borrarSession(){
-    this.session.next(new SessionUser(false))
+    this.cambiarSession(new SessionUser(false))
+  }
+
+  checkStorageSession(){
+    var logged = localStorage.getItem('logged')
+    var userid = localStorage.getItem('userid')
+    var loggedBool
+    if(logged == null || userid == null){
+      userid = "null"
+      loggedBool = false
+    }else{
+      loggedBool = ("true"==logged)
+    }
+    this.cambiarSession(new SessionUser(loggedBool, userid))
   }
 }

@@ -28,12 +28,7 @@ export class LoginComponent implements OnInit {
     private session: SessionService, private router: Router) {
     this.mensaje = new Mensaje()
     this.sessionUser = new SessionUser(false)
-  }
-
-  ngOnInit(): void {
-    this.datos.mensajeActual.subscribe(
-      valor => this.mensaje = valor
-    )
+    this.session.checkStorageSession()
     this.session.sessionActual.subscribe(
       valor => {
         this.sessionUser = valor
@@ -42,6 +37,13 @@ export class LoginComponent implements OnInit {
         }
       }
     )
+    this.datos.mensajeActual.subscribe(
+      valor => this.mensaje = valor
+    )
+  }
+
+  ngOnInit(): void {
+    
   }
 
   // Envío de petición de login a BackEnd, y manejo de la respuesta
@@ -49,9 +51,9 @@ export class LoginComponent implements OnInit {
     this.authService.login(lu).subscribe(
       resp => {        
         this.datos.cambiarMensaje(new Mensaje("Inicio sesion con exito", Tipo.SUCCESS, true))
-        this.session.cambiarSession(new SessionUser(true, resp.token, lu.loginid))
+        this.session.cambiarSession(new SessionUser(true, lu.loginid))
         console.log("Inicio sesion con exito")
-        this.authService.configuration.apiKeys = {["Bearer"]: resp.token}
+        //this.authService.configuration.apiKeys = {["Bearer"]: resp.token}
       },
       err =>{
         let msg: string

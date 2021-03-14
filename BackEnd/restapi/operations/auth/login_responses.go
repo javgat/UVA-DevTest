@@ -48,6 +48,16 @@ func (o *LoginOK) SetPayload(payload *models.JWTJSON) {
 // WriteResponse to the client
 func (o *LoginOK) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
 
+	//INTRODUCIDO POR MI
+	cookie := &http.Cookie{
+		Name:     "Bearer-Cookie",
+		Value:    *o.Payload.Token,
+		HttpOnly: true,
+		Secure:   true,
+		MaxAge:   0, //Poner fin?
+	}
+	http.SetCookie(rw, cookie)
+	// HASTA AQUI
 	rw.WriteHeader(200)
 	if o.Payload != nil {
 		payload := o.Payload

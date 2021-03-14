@@ -14,6 +14,7 @@ export class MainComponent implements OnInit {
 
   constructor(private datos: DataService, private session: SessionService) {
     this.sessionActual = new SessionUser(false)
+    this.session.checkStorageSession()
     this.session.sessionActual.subscribe(
       valor => this.sessionActual = valor
     )

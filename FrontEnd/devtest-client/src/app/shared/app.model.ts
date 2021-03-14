@@ -18,11 +18,9 @@ export class Mensaje{
 
 export class SessionUser{
     readonly logged: boolean
-    readonly jwt: String
     readonly userid: String
-    constructor(logged:boolean, jwt?:String, userid?:String){
+    constructor(logged:boolean, userid?:String){
         this.logged = logged
-        this.jwt = jwt || ""
         this.userid = userid || ""
     }
 }

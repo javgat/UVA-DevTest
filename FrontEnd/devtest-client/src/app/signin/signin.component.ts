@@ -27,12 +27,7 @@ export class SigninComponent implements OnInit {
     private session: SessionService, private router: Router) { 
     this.mensaje = new Mensaje()
     this.sessionUser = new SessionUser(false)
-  }
-
-  ngOnInit(): void {
-    this.datos.mensajeActual.subscribe(
-      valor => this.mensaje = valor
-    )
+    this.session.checkStorageSession()
     this.session.sessionActual.subscribe(
       valor => {
         this.sessionUser = valor
@@ -41,6 +36,12 @@ export class SigninComponent implements OnInit {
         }
       }
     )
+    this.datos.mensajeActual.subscribe(
+      valor => this.mensaje = valor
+    )
+  }
+
+  ngOnInit(): void {
   }
 
   // Envío de petición de registro a BackEnd, y manejo de la respuesta
