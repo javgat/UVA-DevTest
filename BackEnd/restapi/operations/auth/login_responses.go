@@ -52,9 +52,11 @@ func (o *LoginOK) WriteResponse(rw http.ResponseWriter, producer runtime.Produce
 	cookie := &http.Cookie{
 		Name:     "Bearer-Cookie",
 		Value:    *o.Payload.Token,
-		HttpOnly: true,
+		Path:     "/",
+		HttpOnly: false, //Si es true el frontend no lo puede copiar para xrcf
 		Secure:   true,
-		MaxAge:   0, //Poner fin?
+		MaxAge:   86400, //Poner fin en 24h
+		SameSite: http.SameSiteStrictMode,
 	}
 	http.SetCookie(rw, cookie)
 	// HASTA AQUI

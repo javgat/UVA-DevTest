@@ -48,6 +48,7 @@ export class LoginComponent implements OnInit {
 
   // Envío de petición de login a BackEnd, y manejo de la respuesta
   login(lu : LoginUser){
+    this.authService.configuration.withCredentials = true
     this.authService.login(lu).subscribe(
       resp => {        
         this.datos.cambiarMensaje(new Mensaje("Inicio sesion con exito", Tipo.SUCCESS, true))
@@ -59,10 +60,12 @@ export class LoginComponent implements OnInit {
         let msg: string
         if(err.status >= 500)
           msg = "Error al conectar con el servidor"
-        else
+        else if(err.error != undefined)
           msg = err.error.message
+        else
+          msg = "undefined"
         this.datos.cambiarMensaje(new Mensaje("Error al iniciar sesion: "+msg, Tipo.ERROR, true))
-        console.log("Error al iniciar sesion: "+msg)
+        console.log("Error al iniciar sesion: "+msg+ err.status)
       }
     )
   }

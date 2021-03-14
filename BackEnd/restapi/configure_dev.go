@@ -104,11 +104,12 @@ func setupMiddlewares(handler http.Handler) http.Handler {
 // So this is a good place to plug in a panic handling middleware, logging and metrics.
 func setupGlobalMiddleware(handler http.Handler) http.Handler {
 	var c = cors.New(cors.Options{
-		AllowedOrigins:   []string{"*"},
+		//AllowedOrigins:   []string{"*"},
+		AllowedOrigins:   []string{"https://localhost:*"},
 		AllowCredentials: true,
 		AllowedMethods:   []string{"POST", "PUT", "GET", "DELETE", "OPTIONS"},
 		AllowedHeaders: []string{"Accept", "Accept-Encoding", "Authorization", "Content-Type",
-			"cache-control", "Origin", "X-CSRF-Token", "Bearer"}, //por que el token?
+			"cache-control", "Origin", "Bearer"}, //"X-CSRF-Token" es el "Bearer"
 		MaxAge: 300,
 		Debug:  true,
 	})
