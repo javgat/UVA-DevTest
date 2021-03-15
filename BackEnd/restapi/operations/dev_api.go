@@ -108,9 +108,9 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 			return middleware.NotImplemented("operation user.PutUser has not yet been implemented")
 		}),
 
-		// Applies when the "Bearer" header is set
-		BearerHeaderAuth: func(token string) (*models.User, error) {
-			return nil, errors.NotImplemented("api key auth (BearerHeader) Bearer from header param [Bearer] has not yet been implemented")
+		// Applies when the "Cookie" header is set
+		BearerCookieAuth: func(token string) (*models.User, error) {
+			return nil, errors.NotImplemented("api key auth (BearerCookie) Cookie from header param [Cookie] has not yet been implemented")
 		},
 		// default authorizer is authorized meaning no requests are blocked
 		APIAuthorizer: security.Authorized(),
@@ -150,9 +150,9 @@ type DevAPI struct {
 	//   - application/json
 	JSONProducer runtime.Producer
 
-	// BearerHeaderAuth registers a function that takes a token and returns a principal
-	// it performs authentication based on an api key Bearer provided in the header
-	BearerHeaderAuth func(string) (*models.User, error)
+	// BearerCookieAuth registers a function that takes a token and returns a principal
+	// it performs authentication based on an api key Cookie provided in the header
+	BearerCookieAuth func(string) (*models.User, error)
 
 	// APIAuthorizer provides access control (ACL/RBAC/ABAC) by providing access to the request and authenticated principal
 	APIAuthorizer runtime.Authorizer
@@ -274,8 +274,8 @@ func (o *DevAPI) Validate() error {
 		unregistered = append(unregistered, "JSONProducer")
 	}
 
-	if o.BearerHeaderAuth == nil {
-		unregistered = append(unregistered, "BearerAuth")
+	if o.BearerCookieAuth == nil {
+		unregistered = append(unregistered, "CookieAuth")
 	}
 
 	if o.UserAddTeamOfUserHandler == nil {
@@ -356,10 +356,10 @@ func (o *DevAPI) AuthenticatorsFor(schemes map[string]spec.SecurityScheme) map[s
 	result := make(map[string]runtime.Authenticator)
 	for name := range schemes {
 		switch name {
-		case "BearerHeader":
+		case "BearerCookie":
 			scheme := schemes[name]
 			result[name] = o.APIKeyAuthenticator(scheme.Name, scheme.In, func(token string) (interface{}, error) {
-				return o.BearerHeaderAuth(token)
+				return o.BearerCookieAuth(token)
 			})
 
 		}

@@ -28,6 +28,7 @@ export class LoginComponent implements OnInit {
     private session: SessionService, private router: Router) {
     this.mensaje = new Mensaje()
     this.sessionUser = new SessionUser(false)
+    this.authService.configuration.withCredentials = true
     this.session.checkStorageSession()
     this.session.sessionActual.subscribe(
       valor => {
@@ -48,7 +49,6 @@ export class LoginComponent implements OnInit {
 
   // Envío de petición de login a BackEnd, y manejo de la respuesta
   login(lu : LoginUser){
-    this.authService.configuration.withCredentials = true
     this.authService.login(lu).subscribe(
       resp => {        
         this.datos.cambiarMensaje(new Mensaje("Inicio sesion con exito", Tipo.SUCCESS, true))

@@ -81,9 +81,9 @@ export class TeamService {
 
         let headers = this.defaultHeaders;
 
-        // authentication (BearerHeader) required
-        if (this.configuration.apiKeys && this.configuration.apiKeys["Bearer"]) {
-            headers = headers.set('Bearer', this.configuration.apiKeys["Bearer"]);
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
         }
 
         // to determine the Accept header
@@ -133,9 +133,9 @@ export class TeamService {
 
         let headers = this.defaultHeaders;
 
-        // authentication (BearerHeader) required
-        if (this.configuration.apiKeys && this.configuration.apiKeys["Bearer"]) {
-            headers = headers.set('Bearer', this.configuration.apiKeys["Bearer"]);
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
         }
 
         // to determine the Accept header
@@ -180,9 +180,9 @@ export class TeamService {
 
         let headers = this.defaultHeaders;
 
-        // authentication (BearerHeader) required
-        if (this.configuration.apiKeys && this.configuration.apiKeys["Bearer"]) {
-            headers = headers.set('Bearer', this.configuration.apiKeys["Bearer"]);
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
         }
 
         // to determine the Accept header
@@ -230,9 +230,9 @@ export class TeamService {
 
         let headers = this.defaultHeaders;
 
-        // authentication (BearerHeader) required
-        if (this.configuration.apiKeys && this.configuration.apiKeys["Bearer"]) {
-            headers = headers.set('Bearer', this.configuration.apiKeys["Bearer"]);
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
         }
 
         // to determine the Accept header
@@ -281,9 +281,9 @@ export class TeamService {
 
         let headers = this.defaultHeaders;
 
-        // authentication (BearerHeader) required
-        if (this.configuration.apiKeys && this.configuration.apiKeys["Bearer"]) {
-            headers = headers.set('Bearer', this.configuration.apiKeys["Bearer"]);
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
         }
 
         // to determine the Accept header
@@ -327,9 +327,9 @@ export class TeamService {
 
         let headers = this.defaultHeaders;
 
-        // authentication (BearerHeader) required
-        if (this.configuration.apiKeys && this.configuration.apiKeys["Bearer"]) {
-            headers = headers.set('Bearer', this.configuration.apiKeys["Bearer"]);
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
         }
 
         // to determine the Accept header
@@ -368,9 +368,9 @@ export class TeamService {
 
         let headers = this.defaultHeaders;
 
-        // authentication (BearerHeader) required
-        if (this.configuration.apiKeys && this.configuration.apiKeys["Bearer"]) {
-            headers = headers.set('Bearer', this.configuration.apiKeys["Bearer"]);
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
         }
 
         // to determine the Accept header
@@ -414,9 +414,9 @@ export class TeamService {
 
         let headers = this.defaultHeaders;
 
-        // authentication (BearerHeader) required
-        if (this.configuration.apiKeys && this.configuration.apiKeys["Bearer"]) {
-            headers = headers.set('Bearer', this.configuration.apiKeys["Bearer"]);
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
         }
 
         // to determine the Accept header
@@ -465,9 +465,9 @@ export class TeamService {
 
         let headers = this.defaultHeaders;
 
-        // authentication (BearerHeader) required
-        if (this.configuration.apiKeys && this.configuration.apiKeys["Bearer"]) {
-            headers = headers.set('Bearer', this.configuration.apiKeys["Bearer"]);
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
         }
 
         // to determine the Accept header
@@ -511,9 +511,9 @@ export class TeamService {
 
         let headers = this.defaultHeaders;
 
-        // authentication (BearerHeader) required
-        if (this.configuration.apiKeys && this.configuration.apiKeys["Bearer"]) {
-            headers = headers.set('Bearer', this.configuration.apiKeys["Bearer"]);
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
         }
 
         // to determine the Accept header
@@ -557,9 +557,9 @@ export class TeamService {
 
         let headers = this.defaultHeaders;
 
-        // authentication (BearerHeader) required
-        if (this.configuration.apiKeys && this.configuration.apiKeys["Bearer"]) {
-            headers = headers.set('Bearer', this.configuration.apiKeys["Bearer"]);
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
         }
 
         // to determine the Accept header
@@ -614,9 +614,9 @@ export class TeamService {
 
         let headers = this.defaultHeaders;
 
-        // authentication (BearerHeader) required
-        if (this.configuration.apiKeys && this.configuration.apiKeys["Bearer"]) {
-            headers = headers.set('Bearer', this.configuration.apiKeys["Bearer"]);
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
         }
 
         // to determine the Accept header
@@ -675,9 +675,9 @@ export class TeamService {
 
         let headers = this.defaultHeaders;
 
-        // authentication (BearerHeader) required
-        if (this.configuration.apiKeys && this.configuration.apiKeys["Bearer"]) {
-            headers = headers.set('Bearer', this.configuration.apiKeys["Bearer"]);
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
         }
 
         // to determine the Accept header

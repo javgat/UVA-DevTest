@@ -16,16 +16,15 @@ import (
 // LoginOKCode is the HTTP code returned for type LoginOK
 const LoginOKCode int = 200
 
-/*LoginOK Successful authentication
+/*LoginOK Successful authentication. Session JWT returned in Cookie "Bearer-Cookie". You need to include this cookie in subsequent requests.
 
 swagger:response loginOK
 */
 type LoginOK struct {
-
 	/*
-	  In: Body
-	*/
-	Payload *models.JWTJSON `json:"body,omitempty"`
+
+	 */
+	SetCookie string `json:"Set-Cookie"`
 }
 
 // NewLoginOK creates LoginOK with default headers values
@@ -34,39 +33,30 @@ func NewLoginOK() *LoginOK {
 	return &LoginOK{}
 }
 
-// WithPayload adds the payload to the login o k response
-func (o *LoginOK) WithPayload(payload *models.JWTJSON) *LoginOK {
-	o.Payload = payload
+// WithSetCookie adds the setCookie to the login o k response
+func (o *LoginOK) WithSetCookie(setCookie string) *LoginOK {
+	o.SetCookie = setCookie
 	return o
 }
 
-// SetPayload sets the payload to the login o k response
-func (o *LoginOK) SetPayload(payload *models.JWTJSON) {
-	o.Payload = payload
+// SetSetCookie sets the setCookie to the login o k response
+func (o *LoginOK) SetSetCookie(setCookie string) {
+	o.SetCookie = setCookie
 }
 
 // WriteResponse to the client
 func (o *LoginOK) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
 
-	//INTRODUCIDO POR MI
-	cookie := &http.Cookie{
-		Name:     "Bearer-Cookie",
-		Value:    *o.Payload.Token,
-		Path:     "/",
-		HttpOnly: false, //Si es true el frontend no lo puede copiar para xrcf
-		Secure:   true,
-		MaxAge:   86400, //Poner fin en 24h
-		SameSite: http.SameSiteStrictMode,
+	// response header Set-Cookie
+
+	setCookie := o.SetCookie
+	if setCookie != "" {
+		rw.Header().Set("Set-Cookie", setCookie)
 	}
-	http.SetCookie(rw, cookie)
-	// HASTA AQUI
+
+	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
+
 	rw.WriteHeader(200)
-	if o.Payload != nil {
-		payload := o.Payload
-		if err := producer.Produce(rw, payload); err != nil {
-			panic(err) // let the recovery middleware deal with this
-		}
-	}
 }
 
 // LoginBadRequestCode is the HTTP code returned for type LoginBadRequest

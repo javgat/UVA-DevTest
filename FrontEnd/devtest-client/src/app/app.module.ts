@@ -13,7 +13,6 @@ import { environment } from '../environments/environment';
 import { MainComponent } from './main/main.component';
 import { LoggedInComponent } from './main/logged-in/logged-in.component';
 import { NotLoggedInComponent } from './main/not-logged-in/not-logged-in.component';
-import { HttpXsrfCookieExtractor, HttpXsrfTokenExtractor, XsrfInterceptor, XSRF_COOKIE_NAME, XSRF_HEADER_NAME } from './xsrf-interceptor';
 
 export function apiConfigFactory (): Configuration {
   const params: ConfigurationParameters = {
@@ -38,19 +37,8 @@ export function apiConfigFactory (): Configuration {
     HttpClientModule,
     ApiModule.forRoot(apiConfigFactory),
     FormsModule,
-    /*HttpClientXsrfModule.withOptions({
-      cookieName: 'Bearer-Cookie',
-      headerName: 'Bearer',
-    }),*/
   ],
-  providers: [
-    {provide: BASE_PATH, useValue: environment.API_BASE_PATH },
-    HttpXsrfCookieExtractor,
-    XsrfInterceptor,
-    { provide: HTTP_INTERCEPTORS, useClass: XsrfInterceptor, multi: true }, 
-    { provide: HttpXsrfTokenExtractor, useClass: HttpXsrfCookieExtractor },
-    { provide: XSRF_COOKIE_NAME, useValue: 'Bearer-Cookie' },
-    { provide: XSRF_HEADER_NAME, useValue: 'Bearer' }],
+  providers: [{provide: BASE_PATH, useValue: environment.API_BASE_PATH },],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

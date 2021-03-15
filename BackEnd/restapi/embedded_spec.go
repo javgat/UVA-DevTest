@@ -64,9 +64,11 @@ func init() {
         ],
         "responses": {
           "200": {
-            "description": "Successful authentication",
-            "schema": {
-              "$ref": "#/definitions/JWTJson"
+            "description": "Successful authentication. Session JWT returned in Cookie \"Bearer-Cookie\". You need to include this cookie in subsequent requests.",
+            "headers": {
+              "Set-Cookie": {
+                "type": "string"
+              }
             }
           },
           "400": {
@@ -85,7 +87,7 @@ func init() {
       "put": {
         "security": [
           {
-            "BearerHeader": []
+            "BearerCookie": []
           }
         ],
         "description": "Modifies the password of the user \u003cusername\u003e",
@@ -139,7 +141,7 @@ func init() {
       "get": {
         "security": [
           {
-            "BearerHeader": []
+            "BearerCookie": []
           }
         ],
         "description": "Returns all teams.",
@@ -175,7 +177,7 @@ func init() {
       "post": {
         "security": [
           {
-            "BearerHeader": []
+            "BearerCookie": []
           }
         ],
         "description": "Adds a team to the system",
@@ -227,7 +229,7 @@ func init() {
       "get": {
         "security": [
           {
-            "BearerHeader": []
+            "BearerCookie": []
           }
         ],
         "description": "Finds a team by its teamname",
@@ -272,7 +274,7 @@ func init() {
       "put": {
         "security": [
           {
-            "BearerHeader": []
+            "BearerCookie": []
           }
         ],
         "description": "Modifies the team \u003cteamname\u003e",
@@ -326,7 +328,7 @@ func init() {
       "delete": {
         "security": [
           {
-            "BearerHeader": []
+            "BearerCookie": []
           }
         ],
         "description": "Deletes a team by its teamname",
@@ -367,7 +369,7 @@ func init() {
       "get": {
         "security": [
           {
-            "BearerHeader": []
+            "BearerCookie": []
           }
         ],
         "description": "Returns all users that are members of a team",
@@ -415,7 +417,7 @@ func init() {
       "put": {
         "security": [
           {
-            "BearerHeader": []
+            "BearerCookie": []
           }
         ],
         "description": "Adds user {username} to team {teamname}",
@@ -468,7 +470,7 @@ func init() {
       "delete": {
         "security": [
           {
-            "BearerHeader": []
+            "BearerCookie": []
           }
         ],
         "description": "Deletes user {username} from team {teamname}",
@@ -520,7 +522,7 @@ func init() {
       "get": {
         "security": [
           {
-            "BearerHeader": []
+            "BearerCookie": []
           }
         ],
         "description": "Returns all users. Only for admins",
@@ -601,7 +603,7 @@ func init() {
       "get": {
         "security": [
           {
-            "BearerHeader": []
+            "BearerCookie": []
           }
         ],
         "description": "Finds a user by its username",
@@ -646,7 +648,7 @@ func init() {
       "put": {
         "security": [
           {
-            "BearerHeader": []
+            "BearerCookie": []
           }
         ],
         "description": "Modifies the user \u003cusername\u003e",
@@ -700,7 +702,7 @@ func init() {
       "delete": {
         "security": [
           {
-            "BearerHeader": []
+            "BearerCookie": []
           }
         ],
         "description": "Deletes a user by its username",
@@ -741,7 +743,7 @@ func init() {
       "get": {
         "security": [
           {
-            "BearerHeader": []
+            "BearerCookie": []
           }
         ],
         "description": "Returns all teams of a user.",
@@ -789,7 +791,7 @@ func init() {
       "put": {
         "security": [
           {
-            "BearerHeader": []
+            "BearerCookie": []
           }
         ],
         "description": "Adds user {username} to team {teamname}",
@@ -842,7 +844,7 @@ func init() {
       "delete": {
         "security": [
           {
-            "BearerHeader": []
+            "BearerCookie": []
           }
         ],
         "description": "Deletes user {username} from team {teamname}",
@@ -894,7 +896,7 @@ func init() {
       "get": {
         "security": [
           {
-            "BearerHeader": []
+            "BearerCookie": []
           }
         ],
         "description": "Returns the role of a user in a team",
@@ -947,7 +949,7 @@ func init() {
       "put": {
         "security": [
           {
-            "BearerHeader": []
+            "BearerCookie": []
           }
         ],
         "description": "Modifies the role of a user in a team",
@@ -1192,9 +1194,9 @@ func init() {
     }
   },
   "securityDefinitions": {
-    "BearerHeader": {
+    "BearerCookie": {
       "type": "apiKey",
-      "name": "Bearer",
+      "name": "Cookie",
       "in": "header"
     }
   },
@@ -1260,9 +1262,11 @@ func init() {
         ],
         "responses": {
           "200": {
-            "description": "Successful authentication",
-            "schema": {
-              "$ref": "#/definitions/JWTJson"
+            "description": "Successful authentication. Session JWT returned in Cookie \"Bearer-Cookie\". You need to include this cookie in subsequent requests.",
+            "headers": {
+              "Set-Cookie": {
+                "type": "string"
+              }
             }
           },
           "400": {
@@ -1287,7 +1291,7 @@ func init() {
       "put": {
         "security": [
           {
-            "BearerHeader": []
+            "BearerCookie": []
           }
         ],
         "description": "Modifies the password of the user \u003cusername\u003e",
@@ -1350,7 +1354,7 @@ func init() {
       "get": {
         "security": [
           {
-            "BearerHeader": []
+            "BearerCookie": []
           }
         ],
         "description": "Returns all teams.",
@@ -1392,7 +1396,7 @@ func init() {
       "post": {
         "security": [
           {
-            "BearerHeader": []
+            "BearerCookie": []
           }
         ],
         "description": "Adds a team to the system",
@@ -1453,7 +1457,7 @@ func init() {
       "get": {
         "security": [
           {
-            "BearerHeader": []
+            "BearerCookie": []
           }
         ],
         "description": "Finds a team by its teamname",
@@ -1507,7 +1511,7 @@ func init() {
       "put": {
         "security": [
           {
-            "BearerHeader": []
+            "BearerCookie": []
           }
         ],
         "description": "Modifies the team \u003cteamname\u003e",
@@ -1573,7 +1577,7 @@ func init() {
       "delete": {
         "security": [
           {
-            "BearerHeader": []
+            "BearerCookie": []
           }
         ],
         "description": "Deletes a team by its teamname",
@@ -1623,7 +1627,7 @@ func init() {
       "get": {
         "security": [
           {
-            "BearerHeader": []
+            "BearerCookie": []
           }
         ],
         "description": "Returns all users that are members of a team",
@@ -1677,7 +1681,7 @@ func init() {
       "put": {
         "security": [
           {
-            "BearerHeader": []
+            "BearerCookie": []
           }
         ],
         "description": "Adds user {username} to team {teamname}",
@@ -1742,7 +1746,7 @@ func init() {
       "delete": {
         "security": [
           {
-            "BearerHeader": []
+            "BearerCookie": []
           }
         ],
         "description": "Deletes user {username} from team {teamname}",
@@ -1803,7 +1807,7 @@ func init() {
       "get": {
         "security": [
           {
-            "BearerHeader": []
+            "BearerCookie": []
           }
         ],
         "description": "Returns all users. Only for admins",
@@ -1896,7 +1900,7 @@ func init() {
       "get": {
         "security": [
           {
-            "BearerHeader": []
+            "BearerCookie": []
           }
         ],
         "description": "Finds a user by its username",
@@ -1950,7 +1954,7 @@ func init() {
       "put": {
         "security": [
           {
-            "BearerHeader": []
+            "BearerCookie": []
           }
         ],
         "description": "Modifies the user \u003cusername\u003e",
@@ -2016,7 +2020,7 @@ func init() {
       "delete": {
         "security": [
           {
-            "BearerHeader": []
+            "BearerCookie": []
           }
         ],
         "description": "Deletes a user by its username",
@@ -2066,7 +2070,7 @@ func init() {
       "get": {
         "security": [
           {
-            "BearerHeader": []
+            "BearerCookie": []
           }
         ],
         "description": "Returns all teams of a user.",
@@ -2120,7 +2124,7 @@ func init() {
       "put": {
         "security": [
           {
-            "BearerHeader": []
+            "BearerCookie": []
           }
         ],
         "description": "Adds user {username} to team {teamname}",
@@ -2185,7 +2189,7 @@ func init() {
       "delete": {
         "security": [
           {
-            "BearerHeader": []
+            "BearerCookie": []
           }
         ],
         "description": "Deletes user {username} from team {teamname}",
@@ -2246,7 +2250,7 @@ func init() {
       "get": {
         "security": [
           {
-            "BearerHeader": []
+            "BearerCookie": []
           }
         ],
         "description": "Returns the role of a user in a team",
@@ -2308,7 +2312,7 @@ func init() {
       "put": {
         "security": [
           {
-            "BearerHeader": []
+            "BearerCookie": []
           }
         ],
         "description": "Modifies the role of a user in a team",
@@ -2562,9 +2566,9 @@ func init() {
     }
   },
   "securityDefinitions": {
-    "BearerHeader": {
+    "BearerCookie": {
       "type": "apiKey",
-      "name": "Bearer",
+      "name": "Cookie",
       "in": "header"
     }
   },

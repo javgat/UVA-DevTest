@@ -18,7 +18,6 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
-import { JWTJson } from '../model/jWTJson';
 import { LoginUser } from '../model/loginUser';
 import { PasswordUpdate } from '../model/passwordUpdate';
 import { SigninUser } from '../model/signinUser';
@@ -67,9 +66,9 @@ export class AuthService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public login(loginUser: LoginUser, observe?: 'body', reportProgress?: boolean): Observable<JWTJson>;
-    public login(loginUser: LoginUser, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<JWTJson>>;
-    public login(loginUser: LoginUser, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<JWTJson>>;
+    public login(loginUser: LoginUser, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public login(loginUser: LoginUser, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public login(loginUser: LoginUser, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
     public login(loginUser: LoginUser, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (loginUser === null || loginUser === undefined) {
@@ -96,7 +95,7 @@ export class AuthService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.post<JWTJson>(`${this.basePath}/accesstokens`,
+        return this.httpClient.post<any>(`${this.basePath}/accesstokens`,
             loginUser,
             {
                 withCredentials: this.configuration.withCredentials,
@@ -130,9 +129,9 @@ export class AuthService {
 
         let headers = this.defaultHeaders;
 
-        // authentication (BearerHeader) required
-        if (this.configuration.apiKeys && this.configuration.apiKeys["Bearer"]) {
-            headers = headers.set('Bearer', this.configuration.apiKeys["Bearer"]);
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
         }
 
         // to determine the Accept header

@@ -6,6 +6,7 @@ package handlers
 
 import (
 	"errors"
+	"fmt"
 	"log"
 	"uva-devtest/models"
 	"uva-devtest/persistence/dao"
@@ -44,6 +45,33 @@ func authFailErrorLogin(err error, info string) middleware.Responder {
 	return auth.NewLoginGone().WithPayload(&prerr)
 }
 
+func createCookie(token string) string {
+
+	/*cookie := &http.Cookie{
+		Name:     "Bearer-Cookie",
+		Value:    *o.Payload.Token,
+		Path:     "/",
+		HttpOnly: true,                    // Evita ataques XSS
+		Secure:   true,                    // Fuerza HTTPS
+		MaxAge:   86400,                   //Poner fin en 24h
+		SameSite: http.SameSiteStrictMode, // Evita ataques XSRF
+	}*/
+	name := "Bearer-Cookie"
+	path := "/"
+	maxage := "86400"
+	samesite := "strict"
+	cookie := fmt.Sprintf("%s=%s; Path=%s; Secure; SameSite=%s; HttpOnly; Max-Age=%s ", name, token, path, samesite, maxage)
+	return cookie
+}
+
+func createDeprecatedCookie() string {
+	name := "Bearer-Cookie"
+	path := "/"
+	samesite := "strict"
+	cookie := fmt.Sprintf("%s=; Path=%s; Secure; SameSite=%s; HttpOnly; expires=Thu, 01 Jan 1970 00:00:00 GMT", name, path, samesite)
+	return cookie
+}
+
 // The user is logged in, the handler will try to respond with a JWT
 func successLogin(u dao.User) middleware.Responder {
 	log.Println("Usuario logged in")
@@ -57,7 +85,8 @@ func successLogin(u dao.User) middleware.Responder {
 	if err != nil {
 		return badReqErrorLogin(err)
 	}
-	return auth.NewLoginOK().WithPayload(&tokenJSON)
+	cookie := createCookie(*tokenJSON.Token)
+	return auth.NewLoginOK().WithSetCookie(cookie)
 }
 
 // Login is the main handler function for the login functionality

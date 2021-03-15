@@ -17,7 +17,7 @@ import (
 	"uva-devtest/restapi/operations/user"
 )
 
-//go:generate swagger generate server --target ../../BackEnd --name Dev --spec ../swagger.yml --principal interface{}
+//go:generate swagger generate server --target ../../BackEnd --name Dev --spec ../swagger.yml --principal models.User
 
 func configureFlags(api *operations.DevAPI) {
 	// api.CommandLineOptionsGroups = []swag.CommandLineOptionsGroup{ ... }
@@ -41,8 +41,8 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 
 	api.JSONProducer = runtime.JSONProducer()
 
-	// Applies when the "Bearer" header is set
-	api.BearerHeaderAuth = handlers.BearerAuth
+	// Applies when the "Cookie" header is set
+	api.BearerCookieAuth = handlers.BearerAuth
 
 	// Set your custom authorizer if needed. Default one is security.Authorized()
 	// Expected interface runtime.Authorizer
@@ -109,7 +109,7 @@ func setupGlobalMiddleware(handler http.Handler) http.Handler {
 		AllowCredentials: true,
 		AllowedMethods:   []string{"POST", "PUT", "GET", "DELETE", "OPTIONS"},
 		AllowedHeaders: []string{"Accept", "Accept-Encoding", "Authorization", "Content-Type",
-			"cache-control", "Origin", "Bearer"}, //"X-CSRF-Token" es el "Bearer"
+			"cache-control", "Origin"},
 		MaxAge: 300,
 		Debug:  true,
 	})

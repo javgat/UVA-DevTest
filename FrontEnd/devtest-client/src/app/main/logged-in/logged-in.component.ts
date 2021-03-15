@@ -12,8 +12,8 @@ import { UserService} from '@javgat/devtest-api'
 })
 export class LoggedInComponent extends MainComponent implements OnInit {
 
-  constructor(datos: DataService, session: SessionService, private userService : UserService){
-    super(datos, session);
+  constructor(datos: DataService, session: SessionService, userService : UserService){
+    super(datos, session, userService);
   }
 
   ngOnInit(): void {
