@@ -28,7 +28,6 @@ export class LoginComponent implements OnInit {
     private session: SessionService, private router: Router) {
     this.mensaje = new Mensaje()
     this.sessionUser = new SessionUser(false)
-    this.authService.configuration.withCredentials = true
     this.session.checkStorageSession()
     this.session.sessionActual.subscribe(
       valor => {
@@ -54,7 +53,6 @@ export class LoginComponent implements OnInit {
         this.datos.cambiarMensaje(new Mensaje("Inicio sesion con exito", Tipo.SUCCESS, true))
         this.session.cambiarSession(new SessionUser(true, lu.loginid))
         console.log("Inicio sesion con exito")
-        //this.authService.configuration.apiKeys = {["Bearer"]: resp.token}
       },
       err =>{
         let msg: string

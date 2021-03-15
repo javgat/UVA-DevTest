@@ -16,7 +16,7 @@ import { NotLoggedInComponent } from './main/not-logged-in/not-logged-in.compone
 
 export function apiConfigFactory (): Configuration {
   const params: ConfigurationParameters = {
-    // set configuration parameters here.
+    withCredentials: true,
   }
   return new Configuration(params);
 }
