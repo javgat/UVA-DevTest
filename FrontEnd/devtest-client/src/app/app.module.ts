@@ -13,6 +13,8 @@ import { environment } from '../environments/environment';
 import { MainComponent } from './main/main.component';
 import { LoggedInComponent } from './main/logged-in/logged-in.component';
 import { NotLoggedInComponent } from './main/not-logged-in/not-logged-in.component';
+import { NavBarComponent } from './nav-bar/nav-bar.component';
+import { ProfileComponent } from './profile/profile.component';
 
 export function apiConfigFactory (): Configuration {
   const params: ConfigurationParameters = {
@@ -29,7 +31,9 @@ export function apiConfigFactory (): Configuration {
     LoginComponent,
     MainComponent,
     LoggedInComponent,
-    NotLoggedInComponent
+    NotLoggedInComponent,
+    NavBarComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,

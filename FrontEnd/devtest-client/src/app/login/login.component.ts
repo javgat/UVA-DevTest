@@ -2,7 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService, LoginUser } from '@javgat/devtest-api'
-import { Mensaje, SessionUser, Tipo } from '../shared/app.model';
+import { Subscription } from 'rxjs';
+import { Mensaje, SessionLogin, Tipo } from '../shared/app.model';
 import { DataService } from '../shared/data.service';
 import { SessionService } from '../shared/session.service';
 
@@ -22,22 +23,24 @@ export class LoginComponent implements OnInit {
   // Variable que se modificara en el formulario de inicio de sesión
   loginUser = this.loginUserEmpty as LoginUser
   mensaje: Mensaje
-  sessionUser : SessionUser
+  sessionLogin : SessionLogin
+  private sessionSubscription : Subscription
+  private messageSubscription : Subscription
 
   constructor(private authService : AuthService, private datos: DataService,
     private session: SessionService, private router: Router) {
     this.mensaje = new Mensaje()
-    this.sessionUser = new SessionUser(false)
+    this.sessionLogin = new SessionLogin(false)
     this.session.checkStorageSession()
-    this.session.sessionActual.subscribe(
+    this.sessionSubscription = this.session.sessionLogin.subscribe(
       valor => {
-        this.sessionUser = valor
-        if(this.sessionUser.logged){
+        this.sessionLogin = valor
+        if(this.sessionLogin.logged){
           this.router.navigate(['/'])
         }
       }
     )
-    this.datos.mensajeActual.subscribe(
+    this.messageSubscription = this.datos.mensajeActual.subscribe(
       valor => this.mensaje = valor
     )
   }
@@ -46,12 +49,18 @@ export class LoginComponent implements OnInit {
     
   }
 
+
+  ngOnDestroy(): void {
+    this.sessionSubscription.unsubscribe();
+    this.messageSubscription.unsubscribe();
+  }
+
   // Envío de petición de login a BackEnd, y manejo de la respuesta
   login(lu : LoginUser){
     this.authService.login(lu).subscribe(
       resp => {        
         this.datos.cambiarMensaje(new Mensaje("Inicio sesion con exito", Tipo.SUCCESS, true))
-        this.session.cambiarSession(new SessionUser(true, lu.loginid))
+        this.session.cambiarSession(new SessionLogin(true, lu.loginid))
         console.log("Inicio sesion con exito")
       },
       err =>{

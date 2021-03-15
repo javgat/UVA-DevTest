@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '@javgat/devtest-api';
-import { SessionUser } from '../shared/app.model';
+import { Subscription } from 'rxjs';
+import { SessionLogin } from '../shared/app.model';
 import { DataService } from '../shared/data.service';
 import { SessionService } from '../shared/session.service';
 
@@ -11,22 +12,26 @@ import { SessionService } from '../shared/session.service';
 })
 export class MainComponent implements OnInit {
   
-  sessionActual : SessionUser
+  sessionLogin : SessionLogin
+  private sessionSubscription : Subscription
 
-  constructor(private datos: DataService, private session: SessionService, protected userService : UserService) {
-    this.sessionActual = new SessionUser(false)
+  constructor(private datos: DataService, protected session: SessionService, protected userService : UserService) {
+    this.sessionLogin = new SessionLogin(false)
     this.session.checkStorageSession()
-    this.session.sessionActual.subscribe(
-      valor => this.sessionActual = valor
+    this.sessionSubscription = this.session.sessionLogin.subscribe(
+      valor => {
+        this.sessionLogin = valor
+        //console.log(valor)//hay varias instancias de main component a la vez, porque se llama a si mismo
+      }
     )
+  }
+
+  ngOnDestroy(): void {
+    this.sessionSubscription.unsubscribe();
   }
 
   ngOnInit(): void {
     
-  }
-
-  logout(){
-    this.session.borrarSession()
   }
 
 }

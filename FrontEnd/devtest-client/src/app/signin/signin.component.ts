@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService, SigninUser } from '@javgat/devtest-api';
-import { Mensaje, SessionUser, Tipo } from '../shared/app.model';
+import { Subscription } from 'rxjs';
+import { Mensaje, SessionLogin, Tipo } from '../shared/app.model';
 import { DataService } from '../shared/data.service';
 import { SessionService } from '../shared/session.service';
 
@@ -19,16 +20,20 @@ export class SigninComponent implements OnInit {
     email:"",
     pass:""
   }
+
+  private messageSubscription : Subscription
+  private sessionSubscription : Subscription
+
   // Variable que se modificara en el formulario de registro
   signinUser = this.signinUserEmpty as SigninUser
   mensaje: Mensaje
-  sessionUser : SessionUser
+  sessionUser : SessionLogin
   constructor(private authService : AuthService, private datos : DataService,
     private session: SessionService, private router: Router) { 
     this.mensaje = new Mensaje()
-    this.sessionUser = new SessionUser(false)
+    this.sessionUser = new SessionLogin(false)
     this.session.checkStorageSession()
-    this.session.sessionActual.subscribe(
+    this.sessionSubscription = this.session.sessionLogin.subscribe(
       valor => {
         this.sessionUser = valor
         if(this.sessionUser.logged){
@@ -36,12 +41,17 @@ export class SigninComponent implements OnInit {
         }
       }
     )
-    this.datos.mensajeActual.subscribe(
+    this.messageSubscription = this.datos.mensajeActual.subscribe(
       valor => this.mensaje = valor
     )
   }
 
   ngOnInit(): void {
+  }
+
+  ngOnDestroy(): void {
+    this.sessionSubscription.unsubscribe();
+    this.messageSubscription.unsubscribe();
   }
 
   // Envío de petición de registro a BackEnd, y manejo de la respuesta

@@ -4,6 +4,7 @@ import { SessionService } from 'src/app/shared/session.service';
 import { MainComponent } from '../main.component';
 
 import { UserService} from '@javgat/devtest-api'
+import { SessionLogin } from 'src/app/shared/app.model';
 
 @Component({
   selector: 'app-logged-in',
@@ -17,18 +18,7 @@ export class LoggedInComponent extends MainComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getUser()
   }
 
-  getUser(){
-    this.userService.getUser(this.sessionActual.userid as string).subscribe(
-      resp => {
-        console.log(resp.username)
-      },
-      err => {
-        console.log("No se pudo obtener el usuario")
-      }
-    )
-  }
 
 }
