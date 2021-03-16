@@ -52,6 +52,7 @@ export class SigninComponent implements OnInit {
   ngOnDestroy(): void {
     this.sessionSubscription.unsubscribe();
     this.messageSubscription.unsubscribe();
+    this.datos.borrarMensaje()
   }
 
   // Envío de petición de registro a BackEnd, y manejo de la respuesta

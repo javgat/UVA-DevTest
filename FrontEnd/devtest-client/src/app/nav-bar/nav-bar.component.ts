@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { UserService } from '@javgat/devtest-api';
+import { User, UserService } from '@javgat/devtest-api';
 import { Subscription } from 'rxjs';
 import { SessionLogin, SessionUser } from '../shared/app.model';
 import { SessionService } from '../shared/session.service';
@@ -17,6 +17,7 @@ export class NavBarComponent implements OnInit {
   sessionUser : SessionUser
   private sessionSubscription : Subscription
   private sessionUserSubscription : Subscription
+  isAdmin : boolean
   
   constructor(private session: SessionService, private router: Router, private userService : UserService) {
     this.session.checkStorageSession()
@@ -29,9 +30,13 @@ export class NavBarComponent implements OnInit {
         }
       }
     )
+    this.isAdmin = false
     this.sessionUser = new SessionUser()
     this.sessionUserSubscription = this.session.sessionUser.subscribe(
-      valor => this.sessionUser = valor
+      valor =>{
+        this.sessionUser = valor
+        this.isAdmin = (valor.type == User.TypeEnum.Admin)
+      }
     )
   }
 

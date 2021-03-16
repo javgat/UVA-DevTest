@@ -2,6 +2,12 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://localhost:8080;
+   img-src *; script-src 'self' https://cdn.jsdelivr.net;
+   style-src 'self'  https://cdn.jsdelivr.net;"/> 
+   <!--El default la url del backend cambiar el localhost por lo que sea-->
+   <!--script: 'unsafe-eval' 'unsafe-inline' -->
+   <!--style: 'unsafe-inline'-->
   <title>DevTest</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
