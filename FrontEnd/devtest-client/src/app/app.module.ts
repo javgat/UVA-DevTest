@@ -18,6 +18,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { TestsComponent } from './tests/tests.component';
 import { TeamsComponent } from './teams/teams.component';
 import { AdminComponent } from './admin/admin.component';
+import { TeamComponent } from './team/team.component';
 
 export function apiConfigFactory (): Configuration {
   const params: ConfigurationParameters = {
@@ -39,7 +40,8 @@ export function apiConfigFactory (): Configuration {
     ProfileComponent,
     TestsComponent,
     TeamsComponent,
-    AdminComponent
+    AdminComponent,
+    TeamComponent
   ],
   imports: [
     BrowserModule,

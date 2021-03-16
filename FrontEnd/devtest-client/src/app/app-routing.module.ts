@@ -5,6 +5,7 @@ import { LoginComponent } from './login/login.component';
 import { MainComponent } from './main/main.component';
 import { ProfileComponent } from './profile/profile.component';
 import { SigninComponent } from './signin/signin.component';
+import { TeamComponent } from './team/team.component';
 import { TeamsComponent } from './teams/teams.component';
 import { TestsComponent } from './tests/tests.component';
 
@@ -15,6 +16,7 @@ const routes: Routes = [
   {path: 'admin', component: AdminComponent},
   {path: 'tests', component: TestsComponent},
   {path: 'teams', component: TeamsComponent},
+  {path: 'team/:id', component: TeamComponent},
   {path: '**', component: MainComponent, pathMatch:'full'}
 ];
 

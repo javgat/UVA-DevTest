@@ -1,2 +1,6 @@
 <app-nav-bar></app-nav-bar>
 <h2>Equipos</h2>
+<ul *ngFor="let team of teams">
+    <li>{{team.teamname}} | {{team.description}}</li>
+    <a class="button btn btn-primary" [routerLink]="['/team', team.teamname]">Ver detalles</a>
+</ul>

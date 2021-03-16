@@ -1,4 +1,4 @@
-import { User } from "@javgat/devtest-api";
+import { User, Team, TeamRole } from "@javgat/devtest-api";
 
 export enum Tipo{
     SUCCESS = "success",
@@ -46,5 +46,23 @@ export class SessionUser implements User{
         this.fullname = fullname
         this.type = type
         this.isEmpty = (this.username == "" || this.email == "")
+    }
+}
+
+export class CTeam implements Team{
+    teamname: string;
+    description?: string | undefined;
+    constructor(teamname: string, description?: string){
+        this.teamname = teamname
+        this.description = description
+    }
+}
+
+export class CTeamRole implements TeamRole{
+    role: TeamRole.RoleEnum;
+    user: SessionUser;
+    constructor(role: TeamRole.RoleEnum, user: SessionUser){
+        this.role = role
+        this.user = user
     }
 }
