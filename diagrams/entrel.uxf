@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<diagram program="umlet" version="13.3">
+<diagram program="umlet" version="14.3.0">
   <help_text>// Uncomment the following line to change the fontsize and font:
 fontsize=12
-// fontfamily=SansSerif //possible: SansSerif,Serif,Monospaced
 fontfamily=Monospaced
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -392,7 +391,8 @@ fontsize=10
       <h>70</h>
     </coordinates>
     <panel_attributes>context Equipo inv:
-self.equipoUsuarios -&gt; exists(e| e.rol=='Admin')
+self.equipoUsuarios -&gt;
+exists(e| e.rol=='Admin')
 fontsize=11
 bg=cyan</panel_attributes>
     <additional_attributes/>
@@ -406,7 +406,8 @@ bg=cyan</panel_attributes>
       <h>60</h>
     </coordinates>
     <panel_attributes>context EquipoUsuario inv:
-self.rol=='Admin' implies self.usuario.rol!='Estudiante'
+self.rol=='Admin' implies
+self.usuario.rol!='Estudiante'
 fontsize=11
 bg=cyan</panel_attributes>
     <additional_attributes/>
@@ -761,11 +762,12 @@ bg=yellow</panel_attributes>
     <coordinates>
       <x>1220</x>
       <y>580</y>
-      <w>230</w>
+      <w>240</w>
       <h>50</h>
     </coordinates>
     <panel_attributes>context Pregunta inv:
-self.test -&gt; notEmpty() implies self.editable==false
+self.test -&gt; notEmpty() implies
+self.editable==false
 fontsize=11
 bg=cyan</panel_attributes>
     <additional_attributes/>
@@ -778,7 +780,8 @@ bg=cyan</panel_attributes>
       <w>200</w>
       <h>70</h>
     </coordinates>
-    <panel_attributes>context TestPreguntaEditables inv:
+    <panel_attributes>context
+TestPreguntaEditables inv:
 self.test.editable==true and
 self.pregunta.editable==true
 fontsize=11
@@ -811,15 +814,15 @@ bg=cyan</panel_attributes>
     <id>UMLNote</id>
     <coordinates>
       <x>1560</x>
-      <y>260</y>
-      <w>250</w>
-      <h>80</h>
+      <y>230</y>
+      <w>290</w>
+      <h>100</h>
     </coordinates>
-    <panel_attributes>Pasar un test de editable a no editable es publicar el test,
-y lo que se hace es copiar el test y las preguntas pero con
+    <panel_attributes>Pasar un test de editable a no editable
+es publicar el test, y lo que se hace es
+copiar el test y las preguntas pero con
 parametro editable=false
-bg=blue
-
+bg=green
 fontsize=11</panel_attributes>
     <additional_attributes/>
   </element>
