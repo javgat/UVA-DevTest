@@ -50,10 +50,8 @@ CREATE TABLE EquipoUsuario(
   rol ENUM('admin', 'miembro') NOT NULL,
   FOREIGN KEY(usuarioid) REFERENCES Usuario(id) ON DELETE CASCADE,
   FOREIGN KEY(equipoid) REFERENCES Equipo(id) ON DELETE CASCADE,
-  CONSTRAINT CompKey_EquipoUsuario PRIMARY KEY(usuarioid, equipoid)
+  CONSTRAINT PRIMARY KEY(usuarioid, equipoid)
 );
-/* admin pass = admin1 */
-INSERT INTO Usuario(username, email, pwhash, rol, fullname) VALUES('admin', 'admin@mail.com', '$2a$14$C0gTluZGQVbau5vcsaB72e0iwiECRIJvCgwNk4cn7IFlEJEMFwuVC', 'administrador', 'admin');
 
 CREATE TABLE Test(
   id int(11) NOT NULL AUTO_INCREMENT,
@@ -71,21 +69,21 @@ CREATE TABLE GestionTestEquipo(
   testid int(11) NOT NULL,
   FOREIGN KEY(equipoid) REFERENCES Equipo(id) ON DELETE CASCADE,
   FOREIGN KEY(testid) REFERENCES Test(id) ON DELETE CASCADE,
-  CONSTRAINT CompKey_GestionTestEquipo PRIMARY KEY(equipoid, testid)
+  CONSTRAINT PRIMARY KEY(equipoid, testid)
 );
 CREATE TABLE InvitacionTestEquipo(
   equipoid int(11) NOT NULL,
   testid int(11) NOT NULL,
   FOREIGN KEY(equipoid) REFERENCES Equipo(id) ON DELETE CASCADE,
   FOREIGN KEY(testid) REFERENCES Test(id) ON DELETE CASCADE,
-  CONSTRAINT CompKey_InvitacionTestEquipo PRIMARY KEY(equipoid, testid)
+  CONSTRAINT PRIMARY KEY(equipoid, testid)
 );
 CREATE TABLE InvitacionTestUsuario(
   usuarioid int(11) NOT NULL,
   testid int(11) NOT NULL,
   FOREIGN KEY(usuarioid) REFERENCES Usuario(id) ON DELETE CASCADE,
   FOREIGN KEY(testid) REFERENCES Test(id) ON DELETE CASCADE,
-  CONSTRAINT CompKey_InvitacionTestUsuario PRIMARY KEY(usuarioid, testid)
+  CONSTRAINT PRIMARY KEY(usuarioid, testid)
 );
 
 CREATE TABLE Pregunta(
@@ -123,14 +121,14 @@ CREATE TABLE TestPreguntaEditables(
   preguntaid int(11) NOT NULL,
   FOREIGN KEY(testid) REFERENCES Test(id) ON DELETE CASCADE,
   FOREIGN KEY(preguntaid) REFERENCES Pregunta(id) ON DELETE CASCADE,
-  CONSTRAINT CompKey_TestPreguntaEditables PRIMARY KEY(testid, preguntaid)
+  CONSTRAINT PRIMARY KEY(testid, preguntaid)
 );
 CREATE TABLE PreguntaEquipo(
   preguntaid int(11) NOT NULL,
   equipoid int(11) NOT NULL,
   FOREIGN KEY(preguntaid) REFERENCES Pregunta(id) ON DELETE CASCADE,
   FOREIGN KEY(equipoid) REFERENCES Equipo(id) ON DELETE CASCADE,
-  CONSTRAINT CompKey_PreguntaEquipo PRIMARY KEY(preguntaid, equipoid)
+  CONSTRAINT PRIMARY KEY(preguntaid, equipoid)
 );
 
 CREATE TABLE Opcion(
@@ -139,7 +137,7 @@ CREATE TABLE Opcion(
   correcta boolean NOT NULL,
   preguntaOpcionesid int(11) NOT NULL,
   FOREIGN KEY(preguntaOpcionesid) REFERENCES PreguntaOpciones(id) ON DELETE CASCADE,
-  CONSTRAINT CompKey_Opcion PRIMARY KEY(preguntaOpcionesid, indice)
+  CONSTRAINT PRIMARY KEY(preguntaOpcionesid, indice)
 );
 
 CREATE TABLE Etiqueta(
@@ -151,7 +149,7 @@ CREATE TABLE PreguntaEtiqueta(
   etiquetanombre varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   FOREIGN KEY(preguntaid) REFERENCES Pregunta(id) ON DELETE CASCADE,
   FOREIGN KEY(etiquetanombre) REFERENCES Etiqueta(nombre) ON DELETE CASCADE,
-  CONSTRAINT CompKey_PreguntaEtiqueta PRIMARY KEY(preguntaid, etiquetanombre)
+  CONSTRAINT PRIMARY KEY(preguntaid, etiquetanombre)
 );
 
 CREATE TABLE RespuestaExamen(
@@ -169,7 +167,7 @@ CREATE TABLE RespuestaPregunta(
   preguntaid int(11) NOT NULL,
   FOREIGN KEY(respuestaExamenid) REFERENCES RespuestaExamen(id) ON DELETE CASCADE,
   FOREIGN KEY(preguntaid) REFERENCES Pregunta(id) ON DELETE CASCADE,
-  CONSTRAINT CompKey_RespuestaPregunta PRIMARY KEY(respuestaExamenid, preguntaid)
+  CONSTRAINT PRIMARY KEY(respuestaExamenid, preguntaid)
 );
 CREATE TABLE RespuestaOpcion(
   respuestaExamenid int(11) NOT NULL,
@@ -182,7 +180,7 @@ CREATE TABLE RespuestaOpcion(
   CONSTRAINT fk_RespuestaOpcion_RespuestaPregunta
       FOREIGN KEY(respuestaExamenid, preguntaid)
       REFERENCES RespuestaPregunta(respuestaExamenid, preguntaid) ON DELETE CASCADE,
-  CONSTRAINT CompKey_RespuestaOpcion PRIMARY KEY(respuestaExamenid, preguntaid)
+  CONSTRAINT PRIMARY KEY(respuestaExamenid, preguntaid)
 );
 CREATE TABLE RespuestaString(
   respuestaExamenid int(11) NOT NULL,
@@ -191,5 +189,8 @@ CREATE TABLE RespuestaString(
   CONSTRAINT fk_RespuestaString_RespuestaPregunta
       FOREIGN KEY(respuestaExamenid, preguntaid)
       REFERENCES RespuestaPregunta(respuestaExamenid, preguntaid) ON DELETE CASCADE,
-  CONSTRAINT CompKey_RespuestaString PRIMARY KEY(respuestaExamenid, preguntaid)
+  CONSTRAINT PRIMARY KEY(respuestaExamenid, preguntaid)
 );
+
+/* admin pass = admin1 */
+INSERT INTO Usuario(username, email, pwhash, rol, fullname) VALUES('admin', 'admin@mail.com', '$2a$14$C0gTluZGQVbau5vcsaB72e0iwiECRIJvCgwNk4cn7IFlEJEMFwuVC', 'administrador', 'admin');
