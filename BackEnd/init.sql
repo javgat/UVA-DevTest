@@ -192,5 +192,7 @@ CREATE TABLE RespuestaString(
   CONSTRAINT PRIMARY KEY(respuestaExamenid, preguntaid)
 );
 
+/* DATOS INICIALES */
+
 /* admin pass = admin1 */
 INSERT INTO Usuario(username, email, pwhash, rol, fullname) VALUES('admin', 'admin@mail.com', '$2a$14$C0gTluZGQVbau5vcsaB72e0iwiECRIJvCgwNk4cn7IFlEJEMFwuVC', 'administrador', 'admin');
