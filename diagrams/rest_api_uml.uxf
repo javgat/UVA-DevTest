@@ -233,8 +233,8 @@ bg=yellow
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1260</x>
-      <y>675</y>
+      <x>1233</x>
+      <y>666</y>
       <w>225</w>
       <h>72</h>
     </coordinates>
@@ -249,10 +249,10 @@ bg=yellow
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1233</x>
-      <y>819</y>
+      <x>1206</x>
+      <y>810</y>
       <w>252</w>
-      <h>99</h>
+      <h>81</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Resource&gt;&gt;
 *Member*
@@ -260,28 +260,27 @@ bg=yellow
 --
 --
 + &lt;&lt;GET&gt;&gt; getMember(): User
-+ &lt;&lt;PUT&gt;&gt; putMember(): void
-+ &lt;&lt;DELETE&gt;&gt; deleteMember(): void</panel_attributes>
++ &lt;&lt;PUT&gt;&gt; putMember(): void</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1350</x>
+      <x>1323</x>
       <y>567</y>
-      <w>198</w>
-      <h>126</h>
+      <w>225</w>
+      <h>117</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
 /members</panel_attributes>
-    <additional_attributes>10.0;120.0;50.0;50.0;200.0;50.0;200.0;10.0</additional_attributes>
+    <additional_attributes>10.0;110.0;80.0;50.0;230.0;50.0;230.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1350</x>
-      <y>738</y>
+      <x>1323</x>
+      <y>729</y>
       <w>108</w>
       <h>99</h>
     </coordinates>
@@ -512,7 +511,7 @@ bg=yellow
 --
 --
 + &lt;&lt;GET&gt;&gt; getAnswer(): Answer
-+ &lt;&lt;PUT&gt;&gt; finnishAnswer(): void</panel_attributes>
++ &lt;&lt;PUT&gt;&gt; finishAnswer(): void</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -567,12 +566,12 @@ bg=yellow
     <coordinates>
       <x>3249</x>
       <y>603</y>
-      <w>99</w>
+      <w>90</w>
       <h>99</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
-/questions</panel_attributes>
+/qanswers</panel_attributes>
     <additional_attributes>10.0;90.0;10.0;10.0</additional_attributes>
   </element>
   <element>
@@ -677,8 +676,8 @@ bg=yellow
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1521</x>
-      <y>675</y>
+      <x>1494</x>
+      <y>666</y>
       <w>216</w>
       <h>72</h>
     </coordinates>
@@ -695,21 +694,21 @@ bg=yellow
     <coordinates>
       <x>1521</x>
       <y>576</y>
-      <w>171</w>
-      <h>117</h>
+      <w>135</w>
+      <h>108</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
 /admins</panel_attributes>
-    <additional_attributes>170.0;110.0;130.0;40.0;10.0;40.0;10.0;10.0</additional_attributes>
+    <additional_attributes>130.0;100.0;130.0;40.0;10.0;40.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1521</x>
-      <y>819</y>
+      <x>1494</x>
+      <y>810</y>
       <w>252</w>
-      <h>99</h>
+      <h>81</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Resource&gt;&gt;
 *Admin*
@@ -717,15 +716,14 @@ bg=yellow
 --
 --
 + &lt;&lt;GET&gt;&gt; getAdmin(): User
-+ &lt;&lt;PUT&gt;&gt; putAdmin(): void
-+ &lt;&lt;DELETE&gt;&gt; deleteAdmin(): void</panel_attributes>
++ &lt;&lt;PUT&gt;&gt; putAdmin(): void</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1629</x>
-      <y>738</y>
+      <x>1602</x>
+      <y>729</y>
       <w>108</w>
       <h>99</h>
     </coordinates>
@@ -789,19 +787,19 @@ bg=yellow
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>3105</x>
-      <y>171</y>
+      <x>3114</x>
+      <y>81</y>
       <w>297</w>
       <h>117</h>
     </coordinates>
     <panel_attributes>Para iniciar la respuesta:
 POST /users/{id}/publishedTests/{id}/answers
 Añadir respuestas a preguntas:
-POST /.../answers/{id}/questions
+POST */answers/{id}/questions
 Editar una respuesta añadida
-PUT /.../answers/{id}/questions/{id}
+PUT */answers/{id}/questions/{id}
 Finalizar test:
-PUT /.../answers/{id}
+PUT */answers/{id}
 fontsize=12
 bg=cyan</panel_attributes>
     <additional_attributes/>
@@ -834,7 +832,7 @@ bg=cyan</panel_attributes>
 /users/x/publishedTests -&gt; TestsPublicados realizables por usuario
 /teams/x/publishedTests -&gt; TestsPublicados realizados por equipo
 
-POST .../tests/x/publishedTests -&gt; Publica el test x
+POST */tests/x/publishedTests -&gt; Publica el test x
 fontsize=12
 bg=cyan</panel_attributes>
     <additional_attributes/>
@@ -998,5 +996,221 @@ bg=yellow
 &lt;&lt;path&gt;&gt;
 /logout</panel_attributes>
     <additional_attributes>10.0;160.0;10.0;100.0;70.0;50.0;1040.0;50.0;1040.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1746</x>
+      <y>666</y>
+      <w>216</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*UsersFromTeam*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getUsers(): User[]</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1521</x>
+      <y>567</y>
+      <w>315</w>
+      <h>117</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/users</panel_attributes>
+    <additional_attributes>330.0;110.0;330.0;80.0;220.0;50.0;10.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1764</x>
+      <y>810</y>
+      <w>288</w>
+      <h>81</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*UserFromTeam*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getUserFromTeam(): User
++ &lt;&lt;DELETE&gt;&gt; deleteUserFromTeam(): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1845</x>
+      <y>720</y>
+      <w>108</w>
+      <h>108</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/{username}</panel_attributes>
+    <additional_attributes>10.0;100.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>2142</x>
+      <y>270</y>
+      <w>144</w>
+      <h>27</h>
+    </coordinates>
+    <panel_attributes>POST /users/x/tests
+fontsize=12
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1674</x>
+      <y>279</y>
+      <w>171</w>
+      <h>27</h>
+    </coordinates>
+    <panel_attributes>POST /users/x/questions
+fontsize=12
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1296</x>
+      <y>279</y>
+      <w>171</w>
+      <h>27</h>
+    </coordinates>
+    <panel_attributes>POST /users/x/teams
+fontsize=12
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1404</x>
+      <y>297</y>
+      <w>63</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;50.0;40.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1800</x>
+      <y>297</y>
+      <w>63</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;50.0;40.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2232</x>
+      <y>288</y>
+      <w>63</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;50.0;40.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>2502</x>
+      <y>270</y>
+      <w>261</w>
+      <h>27</h>
+    </coordinates>
+    <panel_attributes>POST */tests/x/publishedTests
+fontsize=12
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2655</x>
+      <y>288</y>
+      <w>63</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;50.0;40.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>2961</x>
+      <y>270</y>
+      <w>270</w>
+      <h>27</h>
+    </coordinates>
+    <panel_attributes>POST /users/x/publishedTests/y/answers
+fontsize=12
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3069</x>
+      <y>288</y>
+      <w>135</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;130.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1089</x>
+      <y>171</y>
+      <w>2214</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/answers</panel_attributes>
+    <additional_attributes>2440.0;180.0;2440.0;110.0;2310.0;50.0;10.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>2934</x>
+      <y>630</y>
+      <w>270</w>
+      <h>27</h>
+    </coordinates>
+    <panel_attributes>POST */answers/x/qanswers
+fontsize=12
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3078</x>
+      <y>648</y>
+      <w>63</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;50.0;40.0</additional_attributes>
   </element>
 </diagram>

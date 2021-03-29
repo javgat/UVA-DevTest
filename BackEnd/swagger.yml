@@ -13,12 +13,20 @@ info:
 
 # tags are used for organizing operations
 tags:
-- name: user
-  description: Operations related to users
 - name: auth
   description: Operations related to authentication
+- name: user
+  description: Operations that start with users
 - name: team
-  description: Operations related to teams
+  description: Operations that start with teams
+- name: question
+  description: Operations that start with questions
+- name: test
+  description: Operations that start with tests
+- name: publishedTest
+  description: Operations that start with publishedTests
+- name: answer
+  description: Operations that start with answers
 paths:
   /accesstokens:
     post:
@@ -39,7 +47,7 @@ paths:
         schema:
           $ref: '#/definitions/LoginUser'
       responses:
-        200:
+        201:
           description: Successful authentication. Session JWT returned in Cookie "Bearer-Cookie". You need to include this cookie in subsequent requests.
           headers:
             Set-Cookie:
@@ -47,6 +55,97 @@ paths:
               #example: Bearer-Cookie=eyJhbGciOiJIUzI1NiIsInR5; Path=/; Max-Age=86400; Secure; SameSite=Strict; HttpOnly;
         400:
           $ref: '#/responses/BadRequestError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  /accesstokens/{username}:
+    put:
+      security:
+        - BearerCookie: []
+      tags:
+      - auth
+      summary: Modifies the current JWT Cookie related to the current session, extending it.
+      operationId: relogin
+      description: Modifies the current JWT Cookie related to the current session, extending.
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the user with the token
+        required: true
+        type: string
+      responses:
+        200:
+          description: Successful cookie modification. Session JWT returned in Cookie "Bearer-Cookie".
+          headers:
+            Set-Cookie:
+              type: string
+              #example: Bearer-Cookie=eyJhbGciOiJIUzI1NiIsInR5; Path=/; Max-Age=86400; Secure; SameSite=Strict; HttpOnly;
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+    delete:
+      security:
+        - BearerCookie: []
+      tags:
+      - auth
+      summary: Deletes all sessions of the user. Makes every current JWT related to him useless.
+      operationId: closeSessions
+      description: Deletes all sessions of the user. Makes every current JWT related to him useless.
+      consumes:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the user with the token
+        required: true
+        type: string
+      - in: body
+        name: password
+        description: Current password of the user
+        required: true
+        schema:
+          $ref: '#/definitions/Password'
+      responses:
+        200:
+          description: Sessions deleted successfully
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  /logout:
+    get:
+      tags:
+      - auth
+      summary: Returns a useless cookie that will expire soon
+      operationId: Logout
+      description: Returns a useless cookie that will expire soon
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Logout cookie returned successfully
+          headers:
+            Set-Cookie:
+              type: string
+              #example: Bearer-Cookie=eyJhbGciOiJIUzI1NiIsInR5; Path=/; Max-Age=86400; Secure; SameSite=Strict; HttpOnly;
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
         410:
           $ref: '#/responses/GoneError'
         500:
@@ -151,11 +250,11 @@ paths:
         required: true
         type: string
       - in: body
-        name: user
+        name: userUpdate
         required: true
         description: User information updated
         schema:
-          $ref: '#/definitions/User'
+          $ref: '#/definitions/UserUpdate'
       responses:
         200:
           description: user updated
@@ -194,7 +293,7 @@ paths:
           $ref: '#/responses/GoneError'
         500:
           $ref: '#/responses/InternalServerError'
-  /passwords/{username}:
+  /users/{username}/password:
     put:
       security:
         - BearerCookie: []
@@ -235,7 +334,6 @@ paths:
         - BearerCookie: []
       tags:
       - user
-      - team
       summary: Returns all teams of a user.
       operationId: GetTeamsOfUser
       description: Returns all teams of a user.
@@ -260,156 +358,12 @@ paths:
           $ref: '#/responses/ForbiddenError'
         500:
           $ref: '#/responses/InternalServerError'
-  /users/{username}/teams/{teamname}:
-    put:
-      security:
-        - BearerCookie: []
-      tags:
-      - user
-      - team
-      summary: Adds user {username} to team {teamname}
-      operationId: AddTeamOfUser
-      description: Adds user {username} to team {teamname}
-      produces:
-      - application/json
-      parameters:
-      - in: path
-        name: teamname
-        description: Teamname of the team to modify
-        required: true
-        type: string
-      - in: path
-        name: username
-        description: Username of the user to add
-        required: true
-        type: string
-      responses:
-        200:
-          description: User added to team
-        400:
-          $ref: '#/responses/BadRequestError'
-        403:
-          $ref: '#/responses/ForbiddenError'
-        409:
-          $ref: '#/responses/ConflictError' #? lo quito? si ya esta añadido deberia devolver error?
-        410:
-          $ref: '#/responses/GoneError'
-        500:
-          $ref: '#/responses/InternalServerError'
-    delete:
-      security:
-        - BearerCookie: []
-      tags:
-      - user
-      - team
-      summary: Deletes user {username} from team {teamname}
-      operationId: DeleteTeamOfUser
-      description: Deletes user {username} from team {teamname}
-      produces:
-      - application/json
-      parameters:
-      - in: path
-        name: teamname
-        description: Teamname of the team to modify
-        required: true
-        type: string
-      - in: path
-        name: username
-        description: Username of the user to delete from team
-        required: true
-        type: string
-      responses:
-        200:
-          description: User deleted from team
-        400:
-          $ref: '#/responses/BadRequestError'
-        403:
-          $ref: '#/responses/ForbiddenError'
-        410:
-          $ref: '#/responses/GoneError'
-        500:
-          $ref: '#/responses/InternalServerError'
-  /users/{username}/teams/{teamname}/role:
-    get:
-      security:
-        - BearerCookie: []
-      tags:
-      - team
-      - user
-      summary: Returns the role of a user in a team
-      operationId: GetUserTeamRole
-      description: Returns the role of a user in a team
-      produces:
-      - application/json
-      parameters:
-      - in: path
-        name: teamname
-        description: Teamname of the team to modify
-        required: true
-        type: string
-      - in: path
-        name: username
-        description: Username of the user to modify its role
-        required: true
-        type: string
-      responses:
-        200:
-          description: Role found
-          schema:
-            $ref: '#/definitions/TeamRole'
-        400:
-          $ref: '#/responses/BadRequestError'
-        403:
-          $ref: '#/responses/ForbiddenError'
-        410:
-          $ref: '#/responses/GoneError'
-        500:
-          $ref: '#/responses/InternalServerError'
-    put:
-      security:
-        - BearerCookie: []
-      tags:
-      - team
-      - user
-      summary: Modifies the role of a user in a team
-      operationId: PutUserTeamRole
-      description: Modifies the role of a user in a team
-      consumes:
-      - application/json
-      parameters:
-      - in: body
-        name: role
-        description: New role of the user
-        required: true
-        schema:
-          $ref: '#/definitions/TeamRole'
-      - in: path
-        name: teamname
-        description: Teamname of the team to modify
-        required: true
-        type: string
-      - in: path
-        name: username
-        description: Username of the user to modify its role
-        required: true
-        type: string
-      responses:
-        200:
-          description: Role modified
-        400:
-          $ref: '#/responses/BadRequestError'
-        403:
-          $ref: '#/responses/ForbiddenError'
-        410:
-          $ref: '#/responses/GoneError'
-        500:
-          $ref: '#/responses/InternalServerError'
-  /teams:
     post:
       security:
         - BearerCookie: []
       tags:
       - team
+      - user
       summary: adds a team
       operationId: PostTeam
       description: Adds a team to the system
@@ -418,6 +372,11 @@ paths:
       produces:
       - application/json
       parameters:
+      - in: path
+        name: username
+        description: Username of the user to get their teams
+        required: true
+        type: string
       - in: body
         name: team
         description: Team item to add
@@ -437,6 +396,495 @@ paths:
           $ref: '#/responses/ConflictError'
         500:
           $ref: '#/responses/InternalServerError'
+  /users/{username}/teams/{teamname}:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - user
+      summary: Finds a team by its teamname, only if the user is in it
+      operationId: getTeamFromUser
+      description: Finds a team by its teamname, only if the user is in it
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the user to check
+        required: true
+        type: string
+      - in: path
+        name: teamname
+        description: Teamname of the team to find
+        required: true
+        type: string
+      responses:
+        200:
+          description: team found
+          schema:
+            $ref: '#/definitions/Team'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
+  /users/{username}/questions:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - user
+      summary: Returns all questions owned by the user
+      operationId: GetQuestionsOfUser
+      description: Returns all questions owned by the user
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the user who owns the questions
+        required: true
+        type: string
+      responses:
+        200:
+          description: questions found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Question'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+    post:
+      security:
+        - BearerCookie: []
+      tags:
+      - user
+      - question
+      summary: Creates a question
+      operationId: PostQuestion
+      description: Creates a question
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the user who owns the question
+        required: true
+        type: string
+      - in: body
+        name: question
+        description: Question to add
+        required: true
+        schema:
+          $ref: '#/definitions/Question'
+      responses:
+        201:
+          description: question created
+          schema:
+            $ref: '#/definitions/Question'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  /users/{username}/questions/{questionid}:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - user
+      summary: Returns a question of a user
+      operationId: GetQuestionFromUser
+      description: Returns a question of a user
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the user who owns the question
+        required: true
+        type: string
+      - in: path
+        name: questionid
+        description: id of the question to find
+        required: true
+        type: integer
+      responses:
+        200:
+          description: question found
+          schema:
+            $ref: '#/definitions/Question'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
+  /users/{username}/tests:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - user
+      summary: Returns all tests owned by a user (teacher).
+      operationId: GetTestsFromUser
+      description: Returns all tests owned by a user (teacher).
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the teacher who owns the question
+        required: true
+        type: string
+      responses:
+        200:
+          description: tests found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Test'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+    post:
+      security:
+        - BearerCookie: []
+      tags:
+      - user
+      - test
+      summary: Creates a new test. The user must be a teacher.
+      operationId: PostTest
+      description: Creates a new test. The user must be a teacher.
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the teacher who owns the question
+        required: true
+        type: string
+      - in: body
+        name: test
+        description: New Test to create
+        required: true
+        schema:
+          $ref: '#/definitions/Test'
+      responses:
+        201:
+          description: test created
+          schema:
+            $ref: '#/definitions/Test'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  /users/{username}/tests/{testid}:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - user
+      summary: Returns a test from its user owner
+      operationId: GetTestFromUser
+      description: Returns a test from its user owner
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the teacher who owns the question
+        required: true
+        type: string
+      - in: path
+        name: testid
+        description: Id of the test
+        required: true
+        type: integer
+      responses:
+        200:
+          description: test found
+          schema:
+            $ref: '#/definitions/Test'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
+  /users/{username}/publishedTests:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - user
+      summary: Returns all publishedTests that the user can answer
+      operationId: GetPublishedTestsFromUser
+      description: Returns all publishedTests that the user can answer
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the user who can answer the publishedTests
+        required: true
+        type: string
+      responses:
+        200:
+          description: publishedTests found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/PublishedTest'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  /users/{username}/publishedTests/{testid}:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - user
+      summary: Returns a publishedTest that the user can answer
+      operationId: GetPublishedTestFromUser
+      description: Returns a publishedTest that the user can answer
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the user who can answer the publishedTest
+        required: true
+        type: string
+      - in: path
+        name: testid
+        description: Id of the test
+        required: true
+        type: integer
+      responses:
+        200:
+          description: publishedTest found
+          schema:
+            $ref: '#/definitions/PublishedTest'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  /users/{username}/publishedTests/{testid}/answers:
+    post:
+      security:
+        - BearerCookie: []
+      tags:
+      - user
+      - answer
+      summary: Starts a new answer
+      operationId: StartAnswer
+      description: Starts a new answer
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the user who can answer the publishedTest
+        required: true
+        type: string
+      - in: path
+        name: testid
+        description: Id of the test
+        required: true
+        type: integer
+      responses:
+        201:
+          description: Answer started
+          schema:
+            $ref: '#/definitions/Answer'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
+  /users/{username}/answeredTests:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - user
+      summary: Returns all publishedTests that the user has answered
+      operationId: GetAnsweredTestsFromUser
+      description: Returns all publishedTests that the user has answered
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the user who has answered the publishedTests
+        required: true
+        type: string
+      responses:
+        200:
+          description: publishedTests found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/PublishedTest'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  /users/{username}/answeredTests/{testid}:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - user
+      summary: Returns a publishedTest that the user has answered
+      operationId: GetAnsweredTestFromUser
+      description: Returns a publishedTest that the user has answered
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the user who has answered the publishedTest
+        required: true
+        type: string
+      - in: path
+        name: testid
+        description: Id of the test
+        required: true
+        type: integer
+      responses:
+        200:
+          description: publishedTest found
+          schema:
+            $ref: '#/definitions/PublishedTest'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
+  /users/{username}/answers:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - user
+      summary: Returns all answers that the user has answered
+      operationId: GetAnswersFromUser
+      description: Returns all answers that the user has answered
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the user who is the author of the answers
+        required: true
+        type: string
+      responses:
+        200:
+          description: answers found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Answer'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  /users/{username}/answers/{answerid}:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - user
+      summary: Returns an answers that the user has answered
+      operationId: GetAnswerFromUser
+      description: Returns an answer that the user has answered
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the user who is the author of the answer
+        required: true
+        type: string
+      - in: path
+        name: answerid
+        description: Id of the answer
+        required: true
+        type: integer
+      responses:
+        200:
+          description: answer found
+          schema:
+            $ref: '#/definitions/Answer'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
+  /teams:
     get:
       security:
         - BearerCookie: []
@@ -550,22 +998,21 @@ paths:
           $ref: '#/responses/GoneError'
         500:
           $ref: '#/responses/InternalServerError'
-  /teams/{teamname}/users:
+  /teams/{teamname}/members:
     get:
       security:
         - BearerCookie: []
       tags:
-      - user
       - team
-      summary: Returns all users that are members of a team
-      operationId: GetUsersFromTeam
-      description: Returns all users that are members of a team
+      summary: Returns all users that have the role members in a team
+      operationId: GetMembers
+      description: Returns all users that have the role members in a team
       produces:
       - application/json
       parameters:
       - in: path
         name: teamname
-        description: Teamname of the team to get its users
+        description: Teamname of the team to get its members
         required: true
         type: string
       responses:
@@ -581,16 +1028,47 @@ paths:
           $ref: '#/responses/ForbiddenError'
         500:
           $ref: '#/responses/InternalServerError'
-  /teams/{teamname}/users/{username}:
+  /teams/{teamname}/members/{username}:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - team
+      summary: Returns a user that have the role member in a team
+      operationId: GetMember
+      description: Returns a user that have the role member in a team
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: teamname
+        description: Teamname of the team to get its member
+        required: true
+        type: string
+      - in: path
+        name: username
+        description: Username of the user to check if it is a member
+        required: true
+        type: string
+      responses:
+        200:
+          description: user found
+          schema:
+            $ref: '#/definitions/User'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        500:
+          $ref: '#/responses/InternalServerError'
     put:
       security:
         - BearerCookie: []
       tags:
-      - user
       - team
-      summary: Adds user {username} to team {teamname}
-      operationId: AddUserFromTeam
-      description: Adds user {username} to team {teamname}
+      summary: Adds user {username} to team {teamname} as a Member
+      operationId: AddMember
+      description: Adds user {username} to team {teamname} as a Member.
       produces:
       - application/json
       parameters:
@@ -617,11 +1095,170 @@ paths:
           $ref: '#/responses/GoneError'
         500:
           $ref: '#/responses/InternalServerError'
+  /teams/{teamname}/admins:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - team
+      summary: Returns all users that are admins of a team
+      operationId: GetAdmins
+      description: Returns all users that are admins of a team
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: teamname
+        description: Teamname of the team to get its admins
+        required: true
+        type: string
+      responses:
+        200:
+          description: admins found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  /teams/{teamname}/admins/{username}:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - team
+      summary: Returns a user that have the role admin in a team
+      operationId: GetAdmin
+      description: Returns a user that have the role admin in a team
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: teamname
+        description: Teamname of the team to get its admin
+        required: true
+        type: string
+      - in: path
+        name: username
+        description: Username of the user to check if it is an admin
+        required: true
+        type: string
+      responses:
+        200:
+          description: user found
+          schema:
+            $ref: '#/definitions/User'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        500:
+          $ref: '#/responses/InternalServerError'
+    put:
+      security:
+        - BearerCookie: []
+      tags:
+      - team
+      summary: Adds user {username} to team {teamname} as an Admin
+      operationId: AddAmbir
+      description: Adds user {username} to team {teamname} as an Admin.
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: teamname
+        description: Teamname of the team to modify
+        required: true
+        type: string
+      - in: path
+        name: username
+        description: Username of the user to add
+        required: true
+        type: string
+      responses:
+        200:
+          description: User added to team
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        409:
+          $ref: '#/responses/ConflictError' #? lo quito? si ya esta añadido deberia devolver error?
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  /teams/{teamname}/users:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - team
+      summary: Returns all users that are in a team
+      operationId: GetUsersFromTeam
+      description: Returns all users that are in a team
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: teamname
+        description: Teamname of the team to get its users
+        required: true
+        type: string
+      responses:
+        200:
+          description: users found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        500:
+          $ref: '#/responses/InternalServerError'   
+  /teams/{teamname}/users/{username}:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - team
+      summary: Returns a user that is in a team
+      operationId: GetUserFromTeam
+      description: Returns a user that is in a team
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: teamname
+        description: Teamname of the team to get its user
+        required: true
+        type: string
+      - in: path
+        name: username
+        description: Username of the user to check if it is in the team
+        required: true
+        type: string
+      responses:
+        200:
+          description: user found
+          schema:
+            $ref: '#/definitions/User'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        500:
+          $ref: '#/responses/InternalServerError'
     delete:
       security:
         - BearerCookie: []
       tags:
-      - user
       - team
       summary: Deletes user {username} from team {teamname}
       operationId: DeleteUserFromTeam
@@ -650,6 +1287,1022 @@ paths:
           $ref: '#/responses/GoneError'
         500:
           $ref: '#/responses/InternalServerError'
+
+  /teams/{teamname}/questions:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - team
+      summary: Returns all questions that the team administers
+      operationId: GetQuestionsFromTeam
+      description: Returns all questions that the team administers
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: teamname
+        description: Teamname of the team to get its questions
+        required: true
+        type: string
+      responses:
+        200:
+          description: questions found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Question'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  /teams/{teamname}/questions/{questionid}:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - team
+      summary: Returns a question that the team administers
+      operationId: GetQuestionFromTeam
+      description: Returns a question that the team administers
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: teamname
+        description: Teamname of the team to get its question
+        required: true
+        type: string
+      - in: path
+        name: questionid
+        description: Id of the question to find
+        required: true
+        type: integer
+      responses:
+        200:
+          description: question found
+          schema:
+            $ref: '#/definitions/Question'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  
+  /teams/{teamname}/tests:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - team
+      summary: Returns all tests that the team administers
+      operationId: GetTestsFromTeam
+      description: Returns all tests that the team administers
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: teamname
+        description: Teamname of the team to get its tests
+        required: true
+        type: string
+      responses:
+        200:
+          description: tests found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Test'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  /teams/{teamname}/tests/{testid}:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - team
+      summary: Returns a test that the team administers
+      operationId: GetTestFromTeam
+      description: Returns a test that the team administers
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: teamname
+        description: Teamname of the team to get its question
+        required: true
+        type: string
+      - in: path
+        name: testid
+        description: Id of the test to find
+        required: true
+        type: integer
+      responses:
+        200:
+          description: test found
+          schema:
+            $ref: '#/definitions/Test'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
+  /teams/{teamname}/publishedTests:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - team
+      summary: Returns all publishedTests that the team administers
+      operationId: GetPublishedTestsFromTeam
+      description: Returns all publishedTests that the team administers
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: teamname
+        description: Teamname of the team to get its publishedTests
+        required: true
+        type: string
+      responses:
+        200:
+          description: publishedTests found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/PublishedTest'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  /teams/{teamname}/publishedTests/{testid}:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - team
+      summary: Returns a publishedTest that the team administers
+      operationId: GetPublishedTestFromTeam
+      description: Returns a publishedTest that the team administers
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: teamname
+        description: Teamname of the team to get its publishedTest
+        required: true
+        type: string
+      - in: path
+        name: testid
+        description: Id of the publishedTest to find
+        required: true
+        type: integer
+      responses:
+        200:
+          description: publishedTest found
+          schema:
+            $ref: '#/definitions/PublishedTest'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
+  /questions:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - question
+      summary: Returns all questions
+      operationId: GetQuestions
+      description: Returns all questions
+      produces:
+      - application/json
+      responses:
+        200:
+          description: questions found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Question'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  /questions/{questionid}:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - question
+      summary: Returns a question
+      operationId: GetQuestion
+      description: Returns a question
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: questionid
+        description: Id of the question to find
+        required: true
+        type: integer
+      responses:
+        200:
+          description: Question found
+          schema:
+            $ref: '#/definitions/Question'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        500:
+          $ref: '#/responses/InternalServerError'
+    put:
+      security:
+        - BearerCookie: []
+      tags:
+      - question
+      summary: Updates a question
+      operationId: PutQuestion
+      description: Updates a question
+      consumes:
+      - application/json
+      parameters:
+      - in: path
+        name: questionid
+        description: Id of the question to update
+        required: true
+        type: integer
+      - in: body
+        name: question
+        description: Question modified
+        required: true
+        schema:
+          $ref: '#/definitions/Question'
+      responses:
+        200:
+          description: Question updated
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        500:
+          $ref: '#/responses/InternalServerError'
+    delete:
+      security:
+        - BearerCookie: []
+      tags:
+      - question
+      summary: Deletes a question
+      operationId: DeleteQuestion
+      description: Deletes a question
+      parameters:
+      - in: path
+        name: questionid
+        description: Id of the question to delete
+        required: true
+        type: integer
+      responses:
+        200:
+          description: Question deleted
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
+  /tests:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - test
+      summary: Returns all tests
+      operationId: GetTests
+      description: Returns all tests
+      produces:
+      - application/json
+      responses:
+        200:
+          description: tests found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Test'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  /tests/{testid}:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - test
+      summary: Returns a test
+      operationId: GetTest
+      description: Returns a test
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: testid
+        description: Id of the test to find
+        required: true
+        type: integer
+      responses:
+        200:
+          description: Test found
+          schema:
+            $ref: '#/definitions/Test'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+    put:
+      security:
+        - BearerCookie: []
+      tags:
+      - test
+      summary: Updates a test
+      operationId: PutTest
+      description: Updates a test
+      consumes:
+      - application/json
+      parameters:
+      - in: path
+        name: testid
+        description: Id of the test to update
+        required: true
+        type: integer
+      - in: body
+        name: test
+        description: Test modified
+        required: true
+        schema:
+          $ref: '#/definitions/Test'
+      responses:
+        200:
+          description: Test updated
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        500:
+          $ref: '#/responses/InternalServerError'
+    delete:
+      security:
+        - BearerCookie: []
+      tags:
+      - test
+      summary: Deletes a test
+      operationId: DeleteTest
+      description: Deletes a test
+      parameters:
+      - in: path
+        name: testid
+        description: Id of the test to delete
+        required: true
+        type: integer
+      responses:
+        200:
+          description: Test deleted
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
+  /tests/{testid}/publishedTests:
+    post:
+      security:
+        - BearerCookie: []
+      tags:
+      - test
+      - publishedTest
+      summary: Creates a new publishedTest. The user must be the owner of the test.
+      operationId: PostPublishedTest
+      description: Creates a new publishedTest. The user must be the owner of the test.
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: testid
+        description: Id of the test to publish
+        required: true
+        type: string
+      responses:
+        201:
+          description: publishedTest created
+          schema:
+            $ref: '#/definitions/PublishedTest'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
+  /tests/{testid}/questions:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - test
+      summary: Returns all questions of the test
+      operationId: GetQuestionsFromTest
+      description: Returns all questions of the test
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: testid
+        description: Id of the test
+        required: true
+        type: integer
+      responses:
+        200:
+          description: questions found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Question'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
+  /tests/{testid}/questions/{questionid}:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - test
+      summary: Returns a question from a test
+      operationId: GetQuestionFromTest
+      description: Returns a question from a test
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: testid
+        description: Id of the test to find a question from
+        required: true
+        type: integer
+      - in: path
+        name: questionid
+        description: Id of the question to find in the test
+        required: true
+        type: integer
+      responses:
+        200:
+          description: Question found
+          schema:
+            $ref: '#/definitions/Question'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+    put:
+      security:
+        - BearerCookie: []
+      tags:
+      - test
+      summary: Adds an existing question to a test
+      operationId: AddQuestionToTest
+      description: Adds an existing question to a test
+      parameters:
+      - in: path
+        name: testid
+        description: Id of the test to add a question to
+        required: true
+        type: integer
+      - in: path
+        name: questionid
+        description: Id of the question to add to the test
+        required: true
+        type: integer
+      responses:
+        200:
+          description: Question added
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+    delete:
+      security:
+        - BearerCookie: []
+      tags:
+      - test
+      summary: Removes an existing question from a test
+      operationId: RemoveQuestionFromTest
+      description: Removes an existing question from a test
+      parameters:
+      - in: path
+        name: testid
+        description: Id of the test to remove a question from
+        required: true
+        type: integer
+      - in: path
+        name: questionid
+        description: Id of the question to remove from the test
+        required: true
+        type: integer
+      responses:
+        200:
+          description: Question removed
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  
+  /publishedTests:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - publishedTest
+      summary: Returns all publishedTests
+      operationId: GetPublishedTests
+      description: Returns all publishedTests
+      produces:
+      - application/json
+      responses:
+        200:
+          description: PublishedTests found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/PublishedTest'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  /publishedTests/{testid}:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - publishedTest
+      summary: Returns a publishedTest
+      operationId: GetPublishedTest
+      description: Returns a publishedTest
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: testid
+        description: Id of the publishedTest
+        required: true
+        type: integer
+      responses:
+        200:
+          description: PublishedTest found
+          schema:
+            $ref: '#/definitions/PublishedTest'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+    delete:
+      security:
+        - BearerCookie: []
+      tags:
+      - publishedTest
+      summary: Deletes a publishedTest
+      operationId: DeletesPublishedTest
+      description: Deletes a publishedTest
+      parameters:
+      - in: path
+        name: testid
+        description: Id of the publishedTest
+        required: true
+        type: integer
+      responses:
+        200:
+          description: PublishedTest deleted
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  /publishedTests/{testid}/questions:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - publishedTest
+      summary: Returns all questions from a published test
+      operationId: GetQuestionsFromPublishedTests
+      description: Returns all questions from a published test
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: testid
+        description: Id of the publishedTest
+        required: true
+        type: integer
+      responses:
+        200:
+          description: Questions found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Question'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
+  /publishedTests/{testid}/questions/{questionid}:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - publishedTest
+      summary: Returns a question from a published test
+      operationId: GetQuestionFromPublishedTests
+      description: Returns a question from a published test
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: testid
+        description: Id of the publishedTest
+        required: true
+        type: integer
+      - in: path
+        name: questionid
+        description: Id of the question to get
+        required: true
+        type: integer
+      responses:
+        200:
+          description: Question found
+          schema:
+            $ref: '#/definitions/Question'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
+  /publishedTests/{testid}/answers:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - publishedTest
+      summary: Returns all answers from a published test
+      operationId: GetAnswersFromPublishedTests
+      description: Returns all answers from a published test
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: testid
+        description: Id of the publishedTest
+        required: true
+        type: integer
+      responses:
+        200:
+          description: Answers found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Answer'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
+  /publishedTests/{testid}/questions/{questionid}/qanswers:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - publishedTest
+      summary: Returns all questions answers to a question of a published test
+      operationId: GetQuestionAnswersFromPublishedTestQuestion
+      description: Returns all questions answers to a question of a published test
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: testid
+        description: Id of the publishedTest
+        required: true
+        type: integer
+      - in: path
+        name: questionid
+        description: Id of the question
+        required: true
+        type: integer
+      responses:
+        200:
+          description: QuestionAnswers found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/QuestionAnswer'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
+  /answers:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - answer
+      summary: Returns all answers
+      operationId: GetAnswers
+      description: Returns all answers
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Answers found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Answer'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  /answers/{answerid}:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - answer
+      summary: Returns an answers
+      operationId: GetAnswer
+      description: Returns an answers
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: answerid
+        description: Id of the answer
+        required: true
+        type: integer
+      responses:
+        200:
+          description: Answers found
+          schema:
+            $ref: '#/definitions/Answer'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+    put:
+      security:
+        - BearerCookie: []
+      tags:
+      - answer
+      summary: Finishes an answer
+      operationId: FinishAnswer
+      description: Finishes an answers
+      parameters:
+      - in: path
+        name: answerid
+        description: Id of the answer
+        required: true
+        type: integer
+      responses:
+        200:
+          description: Answers finished
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  /answers/{answerid}/qanswers:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - answer
+      summary: Returns an answer's questionAnswers
+      operationId: GetQuestionAnswersFromAnswer
+      description: Returns an answers's questionAnswers
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: answerid
+        description: Id of the answer
+        required: true
+        type: integer
+      responses:
+        200:
+          description: QuestionAnswers found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/QuestionAnswer'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+    post:
+      security:
+        - BearerCookie: []
+      tags:
+      - answer
+      summary: Answers a question
+      operationId: PostQuestionAnswer
+      description: Answers a question
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: answerid
+        description: Id of the answer
+        required: true
+        type: integer
+      - in: body
+        name: questionAnswer
+        description: QuestionAnswer to post
+        required: true
+        schema:
+          $ref: '#/definitions/QuestionAnswer'
+      responses:
+        201:
+          description: QuestionAnswer created
+          schema:
+            $ref: '#/definitions/QuestionAnswer'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
+  /answers/{answerid}/qanswers/{questionid}:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - answer
+      summary: Returns an answer's questionAnswer
+      operationId: GetQuestionAnswerFromAnswer
+      description: Returns an answers's questionAnswer
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: answerid
+        description: Id of the answer
+        required: true
+        type: integer
+      - in: path
+        name: questionid
+        description: Id of the question it is answering
+        required: true
+        type: integer
+      responses:
+        200:
+          description: QuestionAnswer found
+          schema:
+            $ref: '#/definitions/QuestionAnswer'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+    put:
+      security:
+        - BearerCookie: []
+      tags:
+      - answer
+      summary: Updates a QuestionAnswer
+      operationId: PutQuestionAnswerFromAnswer
+      description: Updates a QuestionAnswer
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: answerid
+        description: Id of the answer
+        required: true
+        type: integer
+      - in: path
+        name: questionid
+        description: Id of the question it is answering
+        required: true
+        type: integer
+      - in: body
+        name: questionAnswer
+        description: QuestionAnswer Updated
+        required: true
+        schema:
+          $ref: '#/definitions/QuestionAnswer'
+      responses:
+        200:
+          description: QuestionAnswer updated
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
 responses:
   BadRequestError:
     description: Incorrect Request, or invalida data
@@ -723,9 +2376,37 @@ definitions:
       fullname:
         type: string
         example: Javier Gatón Herguedas
-      type:
+      rol:
         type: string
         enum: [student, teacher, admin]
+  UserUpdate:
+    type: object
+    required:
+    - username
+    - email
+    - password
+    properties:
+      username:
+        type: string
+        example: carlosg72
+        pattern: '^[^@ \t\r\n]+$'
+      email:
+        type: string
+        example: carlos@mail.com
+        format: email
+        pattern: '^[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+$'
+      fullname:
+        type: string
+        example: Javier Gatón Herguedas
+      rol:
+        type: string
+        enum: [student, teacher, admin]
+      pass:
+        type: string
+        example: password
+        format: password
+        pattern: '^.{6,}$'
+
   Team:
     type: object
     required:
@@ -762,6 +2443,18 @@ definitions:
         example: password
         format: password
         pattern: '^.{6,}$'
+  Password:
+    type: object
+  Question:
+    type: object
+  Test:
+    type: object
+  PublishedTest:
+    type: object
+  Answer:
+    type: object
+  QuestionAnswer:
+    type: object
   Error:
     type: object
     required:
