@@ -23,14 +23,14 @@ fontfamily=Monospaced
 
 
 // This text will be stored with each diagram;  use it for notes.</help_text>
-  <zoom_level>9</zoom_level>
+  <zoom_level>6</zoom_level>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>837</x>
-      <y>324</y>
-      <w>342</w>
-      <h>90</h>
+      <x>558</x>
+      <y>432</y>
+      <w>228</w>
+      <h>60</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Resource&gt;&gt;
 *Users*
@@ -44,10 +44,10 @@ bg=yellow
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1035</x>
-      <y>135</y>
-      <w>135</w>
-      <h>45</h>
+      <x>690</x>
+      <y>306</y>
+      <w>90</w>
+      <h>30</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Application&gt;&gt;
 *DevTestAPI*
@@ -57,10 +57,10 @@ bg=yellow</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>369</x>
-      <y>315</y>
-      <w>333</w>
-      <h>72</h>
+      <x>246</x>
+      <y>426</y>
+      <w>222</w>
+      <h>48</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Resource&gt;&gt;
 *AccessTokens*
@@ -73,10 +73,10 @@ bg=yellow
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1395</x>
-      <y>333</y>
-      <w>261</w>
-      <h>72</h>
+      <x>930</x>
+      <y>438</y>
+      <w>174</w>
+      <h>48</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Resource&gt;&gt;
 *Teams*
@@ -90,36 +90,36 @@ bg=yellow
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>522</x>
-      <y>171</y>
-      <w>594</w>
-      <h>162</h>
+      <x>348</x>
+      <y>354</y>
+      <w>132</w>
+      <h>84</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
 /accesstokens</panel_attributes>
-    <additional_attributes>10.0;160.0;10.0;100.0;120.0;50.0;640.0;50.0;640.0;10.0</additional_attributes>
+    <additional_attributes>10.0;120.0;10.0;60.0;120.0;10.0;200.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1089</x>
-      <y>171</y>
-      <w>468</w>
-      <h>180</h>
+      <x>882</x>
+      <y>354</y>
+      <w>156</w>
+      <h>96</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
 /teams</panel_attributes>
-    <additional_attributes>500.0;180.0;500.0;120.0;300.0;50.0;10.0;50.0;10.0;10.0</additional_attributes>
+    <additional_attributes>240.0;140.0;240.0;80.0;40.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1008</x>
-      <y>171</y>
-      <w>108</w>
-      <h>171</h>
+      <x>672</x>
+      <y>330</y>
+      <w>72</w>
+      <h>114</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
@@ -129,10 +129,10 @@ bg=yellow
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1404</x>
-      <y>477</y>
-      <w>243</w>
-      <h>99</h>
+      <x>936</x>
+      <y>534</y>
+      <w>162</w>
+      <h>66</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Resource&gt;&gt;
 *Team*
@@ -147,10 +147,10 @@ bg=yellow
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>846</x>
-      <y>459</y>
-      <w>306</w>
-      <h>99</h>
+      <x>564</x>
+      <y>522</y>
+      <w>204</w>
+      <h>66</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Resource&gt;&gt;
 *User*
@@ -165,10 +165,10 @@ bg=yellow
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1521</x>
-      <y>396</y>
-      <w>108</w>
-      <h>99</h>
+      <x>1014</x>
+      <y>480</y>
+      <w>72</w>
+      <h>66</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
@@ -178,10 +178,10 @@ bg=yellow
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1008</x>
-      <y>405</y>
-      <w>108</w>
-      <h>72</h>
+      <x>672</x>
+      <y>486</y>
+      <w>72</w>
+      <h>48</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
@@ -191,10 +191,10 @@ bg=yellow
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>828</x>
+      <x>552</x>
       <y>648</y>
-      <w>360</w>
-      <h>63</h>
+      <w>240</w>
+      <h>42</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Resource&gt;&gt;
 *Password*
@@ -207,10 +207,10 @@ bg=yellow
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>999</x>
-      <y>549</y>
-      <w>90</w>
-      <h>117</h>
+      <x>666</x>
+      <y>582</y>
+      <w>60</w>
+      <h>78</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
@@ -220,10 +220,10 @@ bg=yellow
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1143</x>
-      <y>333</y>
-      <w>270</w>
-      <h>162</h>
+      <x>762</x>
+      <y>438</y>
+      <w>180</w>
+      <h>108</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
@@ -233,10 +233,10 @@ bg=yellow
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1233</x>
-      <y>666</y>
-      <w>225</w>
-      <h>72</h>
+      <x>822</x>
+      <y>660</y>
+      <w>150</w>
+      <h>48</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Resource&gt;&gt;
 *Members*
@@ -249,10 +249,10 @@ bg=yellow
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1206</x>
-      <y>810</y>
-      <w>252</w>
-      <h>81</h>
+      <x>804</x>
+      <y>756</y>
+      <w>168</w>
+      <h>54</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Resource&gt;&gt;
 *Member*
@@ -266,10 +266,10 @@ bg=yellow
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1323</x>
-      <y>567</y>
-      <w>225</w>
-      <h>117</h>
+      <x>882</x>
+      <y>594</y>
+      <w>150</w>
+      <h>78</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
@@ -279,10 +279,10 @@ bg=yellow
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1323</x>
-      <y>729</y>
-      <w>108</w>
-      <h>99</h>
+      <x>882</x>
+      <y>702</y>
+      <w>72</w>
+      <h>66</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
@@ -292,10 +292,10 @@ bg=yellow
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>306</x>
-      <y>459</y>
-      <w>450</w>
-      <h>81</h>
+      <x>204</x>
+      <y>522</y>
+      <w>300</w>
+      <h>54</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Resource&gt;&gt;
 *AccessToken*
@@ -309,10 +309,10 @@ bg=yellow
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>513</x>
-      <y>378</y>
-      <w>108</w>
-      <h>99</h>
+      <x>342</x>
+      <y>468</y>
+      <w>72</w>
+      <h>66</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
@@ -322,10 +322,10 @@ bg=yellow
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>2241</x>
-      <y>531</y>
-      <w>243</w>
-      <h>90</h>
+      <x>2070</x>
+      <y>570</y>
+      <w>162</w>
+      <h>60</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Resource&gt;&gt;
 *Test*
@@ -340,10 +340,10 @@ bg=yellow
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1800</x>
-      <y>333</y>
-      <w>342</w>
-      <h>81</h>
+      <x>1668</x>
+      <y>438</y>
+      <w>228</w>
+      <h>54</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Resource&gt;&gt;
 *Questions*
@@ -357,10 +357,10 @@ bg=yellow
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>2250</x>
-      <y>324</y>
-      <w>252</w>
-      <h>72</h>
+      <x>2076</x>
+      <y>432</y>
+      <w>168</w>
+      <h>48</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Resource&gt;&gt;
 *Tests*
@@ -374,10 +374,10 @@ bg=yellow
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1836</x>
-      <y>531</y>
-      <w>297</w>
-      <h>90</h>
+      <x>1692</x>
+      <y>552</y>
+      <w>198</w>
+      <h>60</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Resource&gt;&gt;
 *Question*
@@ -392,10 +392,10 @@ bg=yellow
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2367</x>
-      <y>387</y>
-      <w>90</w>
-      <h>162</h>
+      <x>2154</x>
+      <y>474</y>
+      <w>60</w>
+      <h>108</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
@@ -405,49 +405,49 @@ bg=yellow
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1962</x>
-      <y>405</y>
-      <w>126</w>
-      <h>144</h>
+      <x>1776</x>
+      <y>486</y>
+      <w>84</w>
+      <h>78</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
 /{questionid}</panel_attributes>
-    <additional_attributes>10.0;140.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;110.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1089</x>
-      <y>171</y>
-      <w>1296</w>
-      <h>171</h>
+      <x>2076</x>
+      <y>354</y>
+      <w>90</w>
+      <h>90</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
 /tests</panel_attributes>
-    <additional_attributes>1420.0;170.0;1420.0;110.0;1340.0;50.0;10.0;50.0;10.0;10.0</additional_attributes>
+    <additional_attributes>130.0;130.0;130.0;70.0;60.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2115</x>
-      <y>333</y>
-      <w>153</w>
-      <h>108</h>
+      <x>1992</x>
+      <y>438</y>
+      <w>96</w>
+      <h>72</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
 /tests</panel_attributes>
-    <additional_attributes>150.0;10.0;60.0;10.0;50.0;100.0;10.0;100.0</additional_attributes>
+    <additional_attributes>140.0;10.0;60.0;10.0;50.0;100.0;10.0;100.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1674</x>
-      <y>360</y>
-      <w>153</w>
-      <h>81</h>
+      <x>1584</x>
+      <y>456</y>
+      <w>102</w>
+      <h>54</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
@@ -457,10 +457,10 @@ bg=yellow
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2349</x>
-      <y>612</y>
-      <w>99</w>
-      <h>90</h>
+      <x>2142</x>
+      <y>624</y>
+      <w>66</w>
+      <h>60</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
@@ -470,23 +470,23 @@ bg=yellow
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1089</x>
-      <y>171</y>
-      <w>900</w>
-      <h>180</h>
+      <x>1644</x>
+      <y>354</y>
+      <w>150</w>
+      <h>96</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
 /questions</panel_attributes>
-    <additional_attributes>980.0;180.0;980.0;120.0;820.0;50.0;10.0;50.0;10.0;10.0</additional_attributes>
+    <additional_attributes>230.0;140.0;230.0;80.0;70.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>3141</x>
-      <y>333</y>
-      <w>252</w>
-      <h>81</h>
+      <x>2670</x>
+      <y>432</y>
+      <w>168</w>
+      <h>54</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Resource&gt;&gt;
 *Answers*
@@ -500,10 +500,10 @@ bg=yellow
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>3141</x>
-      <y>531</y>
-      <w>261</w>
-      <h>81</h>
+      <x>2670</x>
+      <y>570</y>
+      <w>174</w>
+      <h>54</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Resource&gt;&gt;
 *Answer*
@@ -517,10 +517,10 @@ bg=yellow
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>3033</x>
-      <y>684</y>
-      <w>468</w>
-      <h>90</h>
+      <x>2598</x>
+      <y>672</y>
+      <w>312</w>
+      <h>60</h>
     </coordinates>
     <panel_attributes>	&lt;&lt;Resource&gt;&gt;
 *QuestionAnswers*
@@ -534,10 +534,10 @@ bg=yellow
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>3060</x>
-      <y>846</y>
-      <w>396</w>
-      <h>90</h>
+      <x>2616</x>
+      <y>780</y>
+      <w>264</w>
+      <h>60</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Resource&gt;&gt;
 *QuestionAnswer*
@@ -551,23 +551,23 @@ bg=yellow
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>3258</x>
-      <y>405</y>
-      <w>108</w>
-      <h>144</h>
+      <x>2748</x>
+      <y>480</y>
+      <w>72</w>
+      <h>102</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
 /{answerid}</panel_attributes>
-    <additional_attributes>10.0;140.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;150.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>3249</x>
-      <y>603</y>
-      <w>90</w>
-      <h>99</h>
+      <x>2742</x>
+      <y>618</y>
+      <w>60</w>
+      <h>66</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
@@ -577,10 +577,10 @@ bg=yellow
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>3249</x>
-      <y>765</y>
-      <w>171</w>
-      <h>99</h>
+      <x>2742</x>
+      <y>726</y>
+      <w>114</w>
+      <h>66</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
@@ -590,23 +590,23 @@ bg=yellow
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2979</x>
-      <y>351</y>
-      <w>180</w>
-      <h>243</h>
+      <x>2550</x>
+      <y>444</y>
+      <w>132</w>
+      <h>168</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
 /answers</panel_attributes>
-    <additional_attributes>180.0;10.0;20.0;250.0;10.0;250.0</additional_attributes>
+    <additional_attributes>200.0;10.0;40.0;260.0;10.0;260.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2925</x>
-      <y>702</y>
-      <w>153</w>
-      <h>207</h>
+      <x>2526</x>
+      <y>684</y>
+      <w>102</w>
+      <h>138</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
@@ -616,10 +616,10 @@ bg=yellow
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>2232</x>
-      <y>684</y>
-      <w>270</w>
-      <h>63</h>
+      <x>2064</x>
+      <y>672</y>
+      <w>180</w>
+      <h>42</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Resource&gt;&gt;
 *QuestionsOfTest*
@@ -632,10 +632,10 @@ bg=yellow
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>2196</x>
-      <y>837</y>
-      <w>333</w>
-      <h>99</h>
+      <x>2040</x>
+      <y>774</y>
+      <w>222</w>
+      <h>66</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Resource&gt;&gt;
 *QuestionOfTest*
@@ -644,16 +644,16 @@ bg=yellow
 --
 + &lt;&lt;GET&gt;&gt; getQuestion(): Question
 + &lt;&lt;PUT&gt;&gt; addQuestionToTest(): void
-+ &lt;&lt;DELETE&gt;&gt; deleeteQuestionFromTest(): void</panel_attributes>
++ &lt;&lt;DELETE&gt;&gt; deleteQuestionFromTest(): void</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2349</x>
-      <y>738</y>
-      <w>126</w>
-      <h>117</h>
+      <x>2142</x>
+      <y>708</y>
+      <w>84</w>
+      <h>78</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
@@ -663,23 +663,23 @@ bg=yellow
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1143</x>
-      <y>351</y>
-      <w>2016</w>
-      <h>189</h>
+      <x>762</x>
+      <y>444</y>
+      <w>1920</w>
+      <h>132</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
 /answers</panel_attributes>
-    <additional_attributes>2220.0;10.0;2120.0;10.0;2110.0;80.0;110.0;80.0;10.0;190.0</additional_attributes>
+    <additional_attributes>3180.0;10.0;3110.0;10.0;3100.0;90.0;110.0;90.0;10.0;200.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1494</x>
-      <y>666</y>
-      <w>216</w>
-      <h>72</h>
+      <x>996</x>
+      <y>660</y>
+      <w>144</w>
+      <h>48</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Resource&gt;&gt;
 *Admins*
@@ -692,10 +692,10 @@ bg=yellow
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1521</x>
-      <y>576</y>
-      <w>135</w>
-      <h>108</h>
+      <x>1014</x>
+      <y>600</y>
+      <w>90</w>
+      <h>72</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
@@ -705,10 +705,10 @@ bg=yellow
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1494</x>
-      <y>810</y>
-      <w>252</w>
-      <h>81</h>
+      <x>996</x>
+      <y>756</y>
+      <w>168</w>
+      <h>54</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Resource&gt;&gt;
 *Admin*
@@ -722,10 +722,10 @@ bg=yellow
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1602</x>
-      <y>729</y>
-      <w>108</w>
-      <h>99</h>
+      <x>1068</x>
+      <y>702</y>
+      <w>72</w>
+      <h>66</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
@@ -735,36 +735,36 @@ bg=yellow
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2493</x>
-      <y>351</y>
-      <w>162</w>
+      <x>2238</x>
+      <y>450</y>
+      <w>120</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/publishedTests</panel_attributes>
+    <additional_attributes>180.0;10.0;40.0;10.0;30.0;80.0;10.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2364</x>
+      <y>354</y>
+      <w>156</w>
       <h>90</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
 /publishedTests</panel_attributes>
-    <additional_attributes>130.0;10.0;40.0;10.0;30.0;80.0;10.0;80.0</additional_attributes>
+    <additional_attributes>140.0;130.0;140.0;60.0;100.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1089</x>
-      <y>171</y>
-      <w>1827</w>
-      <h>171</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;.
-&lt;&lt;path&gt;&gt;
-/publishedTests</panel_attributes>
-    <additional_attributes>1910.0;170.0;1910.0;110.0;1860.0;50.0;10.0;50.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>2286</x>
-      <y>387</y>
-      <w>90</w>
-      <h>117</h>
+      <x>2100</x>
+      <y>474</y>
+      <w>60</w>
+      <h>78</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
@@ -774,23 +774,23 @@ bg=yellow
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2682</x>
-      <y>387</y>
-      <w>162</w>
-      <h>117</h>
+      <x>2364</x>
+      <y>474</y>
+      <w>108</w>
+      <h>78</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
 /answeredTests</panel_attributes>
-    <additional_attributes>120.0;10.0;40.0;110.0;40.0;40.0;10.0;40.0</additional_attributes>
+    <additional_attributes>140.0;10.0;40.0;110.0;40.0;40.0;10.0;40.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>3114</x>
-      <y>81</y>
-      <w>297</w>
-      <h>117</h>
+      <x>2652</x>
+      <y>270</y>
+      <w>198</w>
+      <h>78</h>
     </coordinates>
     <panel_attributes>Para iniciar la respuesta:
 POST /users/{id}/publishedTests/{id}/answers
@@ -807,23 +807,23 @@ bg=cyan</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1638</x>
-      <y>387</y>
-      <w>1386</w>
-      <h>162</h>
+      <x>1092</x>
+      <y>474</y>
+      <w>1506</w>
+      <h>108</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
 /publishedTests</panel_attributes>
-    <additional_attributes>1480.0;10.0;1400.0;120.0;1400.0;60.0;70.0;60.0;10.0;160.0</additional_attributes>
+    <additional_attributes>2430.0;10.0;2370.0;110.0;2370.0;60.0;70.0;60.0;10.0;160.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>2493</x>
-      <y>81</y>
-      <w>441</w>
-      <h>117</h>
+      <x>2238</x>
+      <y>270</y>
+      <w>294</w>
+      <h>78</h>
     </coordinates>
     <panel_attributes>/tests -&gt; Tests Editables que profesores ven
 /publishedTests -&gt; Tests Publicados, realizables por todos
@@ -840,44 +840,44 @@ bg=cyan</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>2610</x>
-      <y>324</y>
-      <w>378</w>
-      <h>72</h>
+      <x>2346</x>
+      <y>432</y>
+      <w>210</w>
+      <h>48</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Resource&gt;&gt;
 *PublishedTests*
 bg=yellow
 --
 --
-+ &lt;&lt;GET&gt;&gt; getPublishedTests(): PublishedTest[]
-+ &lt;&lt;POST&gt;&gt; publishTest(): PublishedTest</panel_attributes>
++ &lt;&lt;GET&gt;&gt; getPublishedTests(): Test[]
++ &lt;&lt;POST&gt;&gt; publishTest(): Test</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>2637</x>
-      <y>549</y>
-      <w>351</w>
-      <h>72</h>
+      <x>2346</x>
+      <y>582</y>
+      <w>210</w>
+      <h>48</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Resource&gt;&gt;
 *PublishedTest*
 bg=yellow
 --
 --
-+ &lt;&lt;GET&gt;&gt; getPublishedTest(): PublishedTest
++ &lt;&lt;GET&gt;&gt; getPublishedTest(): Test
 + &lt;&lt;DELETE&gt;&gt; deletePublishedTest(): void</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>2664</x>
-      <y>702</y>
-      <w>270</w>
-      <h>63</h>
+      <x>2352</x>
+      <y>684</y>
+      <w>180</w>
+      <h>42</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Resource&gt;&gt;
 *PublishedQuestions*
@@ -890,10 +890,10 @@ bg=yellow
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>2673</x>
-      <y>837</y>
-      <w>261</w>
-      <h>72</h>
+      <x>2358</x>
+      <y>774</y>
+      <w>174</w>
+      <h>48</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Resource&gt;&gt;
 *PublishedQuestion*
@@ -906,10 +906,10 @@ bg=yellow
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2808</x>
-      <y>612</y>
-      <w>99</w>
-      <h>108</h>
+      <x>2448</x>
+      <y>624</y>
+      <w>66</w>
+      <h>72</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
@@ -919,10 +919,10 @@ bg=yellow
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2790</x>
-      <y>756</y>
-      <w>126</w>
-      <h>99</h>
+      <x>2436</x>
+      <y>720</y>
+      <w>84</w>
+      <h>66</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
@@ -932,10 +932,10 @@ bg=yellow
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2808</x>
-      <y>387</y>
-      <w>90</w>
-      <h>180</h>
+      <x>2460</x>
+      <y>474</y>
+      <w>60</w>
+      <h>120</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
@@ -945,10 +945,10 @@ bg=yellow
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1845</x>
-      <y>405</y>
-      <w>117</w>
-      <h>99</h>
+      <x>1698</x>
+      <y>486</y>
+      <w>78</w>
+      <h>66</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
@@ -958,23 +958,23 @@ bg=yellow
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2475</x>
-      <y>387</y>
-      <w>243</w>
-      <h>225</h>
+      <x>2226</x>
+      <y>474</y>
+      <w>174</w>
+      <h>150</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
 /publishedTests</panel_attributes>
-    <additional_attributes>250.0;10.0;10.0;230.0</additional_attributes>
+    <additional_attributes>270.0;10.0;10.0;230.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
       <x>0</x>
-      <y>315</y>
-      <w>234</w>
-      <h>72</h>
+      <y>426</y>
+      <w>156</w>
+      <h>48</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Resource&gt;&gt;
 *LogoutTokens*
@@ -987,10 +987,10 @@ bg=yellow
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>162</x>
-      <y>171</y>
-      <w>954</w>
-      <h>162</h>
+      <x>108</x>
+      <y>330</y>
+      <w>636</w>
+      <h>108</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
@@ -1000,10 +1000,10 @@ bg=yellow
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1746</x>
-      <y>666</y>
-      <w>216</w>
-      <h>63</h>
+      <x>1164</x>
+      <y>660</y>
+      <w>144</w>
+      <h>42</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Resource&gt;&gt;
 *UsersFromTeam*
@@ -1016,10 +1016,10 @@ bg=yellow
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1521</x>
-      <y>567</y>
-      <w>315</w>
-      <h>117</h>
+      <x>1014</x>
+      <y>594</y>
+      <w>210</w>
+      <h>78</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
@@ -1029,10 +1029,10 @@ bg=yellow
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1764</x>
-      <y>810</y>
-      <w>288</w>
-      <h>81</h>
+      <x>1176</x>
+      <y>756</y>
+      <w>192</w>
+      <h>54</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Resource&gt;&gt;
 *UserFromTeam*
@@ -1046,10 +1046,10 @@ bg=yellow
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1845</x>
-      <y>720</y>
-      <w>108</w>
-      <h>108</h>
+      <x>1230</x>
+      <y>696</y>
+      <w>72</w>
+      <h>72</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
@@ -1059,10 +1059,10 @@ bg=yellow
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>2142</x>
-      <y>270</y>
-      <w>144</w>
-      <h>27</h>
+      <x>2004</x>
+      <y>396</y>
+      <w>96</w>
+      <h>18</h>
     </coordinates>
     <panel_attributes>POST /users/x/tests
 fontsize=12
@@ -1072,10 +1072,10 @@ bg=cyan</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>1674</x>
-      <y>279</y>
-      <w>171</w>
-      <h>27</h>
+      <x>1584</x>
+      <y>402</y>
+      <w>114</w>
+      <h>18</h>
     </coordinates>
     <panel_attributes>POST /users/x/questions
 fontsize=12
@@ -1085,10 +1085,10 @@ bg=cyan</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>1296</x>
-      <y>279</y>
-      <w>171</w>
-      <h>27</h>
+      <x>864</x>
+      <y>402</y>
+      <w>114</w>
+      <h>18</h>
     </coordinates>
     <panel_attributes>POST /users/x/teams
 fontsize=12
@@ -1098,10 +1098,10 @@ bg=cyan</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1404</x>
-      <y>297</y>
-      <w>63</w>
-      <h>54</h>
+      <x>936</x>
+      <y>414</y>
+      <w>42</w>
+      <h>36</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
     <additional_attributes>10.0;10.0;50.0;40.0</additional_attributes>
@@ -1109,10 +1109,10 @@ bg=cyan</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1800</x>
-      <y>297</y>
-      <w>63</w>
-      <h>54</h>
+      <x>1668</x>
+      <y>414</y>
+      <w>42</w>
+      <h>36</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
     <additional_attributes>10.0;10.0;50.0;40.0</additional_attributes>
@@ -1120,10 +1120,10 @@ bg=cyan</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2232</x>
-      <y>288</y>
-      <w>63</w>
-      <h>54</h>
+      <x>2064</x>
+      <y>408</y>
+      <w>42</w>
+      <h>36</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
     <additional_attributes>10.0;10.0;50.0;40.0</additional_attributes>
@@ -1131,10 +1131,10 @@ bg=cyan</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>2502</x>
-      <y>270</y>
-      <w>261</w>
-      <h>27</h>
+      <x>2244</x>
+      <y>396</y>
+      <w>174</w>
+      <h>18</h>
     </coordinates>
     <panel_attributes>POST */tests/x/publishedTests
 fontsize=12
@@ -1144,21 +1144,21 @@ bg=cyan</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2655</x>
-      <y>288</y>
-      <w>63</w>
-      <h>54</h>
+      <x>2346</x>
+      <y>408</y>
+      <w>54</w>
+      <h>36</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;50.0;40.0</additional_attributes>
+    <additional_attributes>10.0;10.0;70.0;40.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>2961</x>
-      <y>270</y>
-      <w>270</w>
-      <h>27</h>
+      <x>2550</x>
+      <y>396</y>
+      <w>180</w>
+      <h>18</h>
     </coordinates>
     <panel_attributes>POST /users/x/publishedTests/y/answers
 fontsize=12
@@ -1168,34 +1168,34 @@ bg=cyan</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>3069</x>
-      <y>288</y>
-      <w>135</w>
-      <h>63</h>
+      <x>2622</x>
+      <y>408</y>
+      <w>90</w>
+      <h>36</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;130.0;50.0</additional_attributes>
+    <additional_attributes>10.0;10.0;130.0;40.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1089</x>
-      <y>171</y>
-      <w>2214</w>
-      <h>180</h>
+      <x>726</x>
+      <y>330</y>
+      <w>2046</w>
+      <h>114</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
 /answers</panel_attributes>
-    <additional_attributes>2440.0;180.0;2440.0;110.0;2310.0;50.0;10.0;50.0;10.0;10.0</additional_attributes>
+    <additional_attributes>3390.0;170.0;3390.0;100.0;3270.0;50.0;10.0;50.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>2934</x>
-      <y>630</y>
-      <w>270</w>
-      <h>27</h>
+      <x>2532</x>
+      <y>636</y>
+      <w>180</w>
+      <h>18</h>
     </coordinates>
     <panel_attributes>POST */answers/x/qanswers
 fontsize=12
@@ -1205,12 +1205,233 @@ bg=cyan</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>3078</x>
+      <x>2628</x>
       <y>648</y>
-      <w>63</w>
-      <h>54</h>
+      <w>42</w>
+      <h>36</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
     <additional_attributes>10.0;10.0;50.0;40.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1608</x>
+      <y>660</y>
+      <w>198</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*Options*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getOptions(): Option[]
++ &lt;&lt;POST&gt;&gt; postOption(o: Option): Option</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1608</x>
+      <y>744</y>
+      <w>198</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*Option*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getOption(): Option
++ &lt;&lt;PUT&gt;&gt; putOption(o: Option): void
++ &lt;&lt;PUT&gt;&gt; deleteOption(): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1356</x>
+      <y>438</y>
+      <w>168</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*Tags*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getTags(): Tag[]</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1818</x>
+      <y>660</y>
+      <w>198</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*TagsOfQuestion*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getTags(): Tag[]</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1824</x>
+      <y>750</y>
+      <w>210</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*TagOfQuestion*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt;  getTag(): Tag
++ &lt;&lt;PUT&gt;&gt; addTagToQuestion(): void
++ &lt;&lt;DELETE&gt;&gt; removeTagFromQuestion(): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1692</x>
+      <y>606</y>
+      <w>114</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/options</panel_attributes>
+    <additional_attributes>10.0;90.0;10.0;50.0;170.0;50.0;170.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1698</x>
+      <y>708</y>
+      <w>90</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/{optionindex}</panel_attributes>
+    <additional_attributes>10.0;60.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1914</x>
+      <y>696</y>
+      <w>48</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/{tag}</panel_attributes>
+    <additional_attributes>10.0;90.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1788</x>
+      <y>606</y>
+      <w>120</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/tags</panel_attributes>
+    <additional_attributes>180.0;90.0;180.0;50.0;10.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1356</x>
+      <y>570</y>
+      <w>168</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*Tag*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getTag(): Tag</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1446</x>
+      <y>480</y>
+      <w>48</w>
+      <h>102</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/{tag}</panel_attributes>
+    <additional_attributes>10.0;150.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1308</x>
+      <y>354</y>
+      <w>150</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/tags</panel_attributes>
+    <additional_attributes>230.0;140.0;230.0;80.0;70.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1518</x>
+      <y>486</y>
+      <w>174</w>
+      <h>126</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/questions</panel_attributes>
+    <additional_attributes>270.0;10.0;10.0;190.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2640</x>
+      <y>876</y>
+      <w>198</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*Revision*
+bg=yellow
+--
+--
++ &lt;&lt;PUT&gt;&gt; putRevision(r: Revision): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2736</x>
+      <y>834</y>
+      <w>72</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/{revision}</panel_attributes>
+    <additional_attributes>10.0;70.0;10.0;10.0</additional_attributes>
   </element>
 </diagram>

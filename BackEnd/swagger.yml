@@ -667,7 +667,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/PublishedTest'
+              $ref: '#/definitions/Test'
         400:
           $ref: '#/responses/BadRequestError'
         403:
@@ -702,7 +702,7 @@ paths:
         200:
           description: publishedTest found
           schema:
-            $ref: '#/definitions/PublishedTest'
+            $ref: '#/definitions/Test'
         400:
           $ref: '#/responses/BadRequestError'
         403:
@@ -771,7 +771,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/PublishedTest'
+              $ref: '#/definitions/Test'
         400:
           $ref: '#/responses/BadRequestError'
         403:
@@ -806,7 +806,7 @@ paths:
         200:
           description: publishedTest found
           schema:
-            $ref: '#/definitions/PublishedTest'
+            $ref: '#/definitions/Test'
         400:
           $ref: '#/responses/BadRequestError'
         403:
@@ -1439,7 +1439,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/PublishedTest'
+              $ref: '#/definitions/Test'
         400:
           $ref: '#/responses/BadRequestError'
         403:
@@ -1472,13 +1472,23 @@ paths:
         200:
           description: publishedTest found
           schema:
-            $ref: '#/definitions/PublishedTest'
+            $ref: '#/definitions/Test'
         400:
           $ref: '#/responses/BadRequestError'
         403:
           $ref: '#/responses/ForbiddenError'
         500:
           $ref: '#/responses/InternalServerError'
+
+  /tags:
+    get:
+    #TODO
+  /tags/{tag}:
+    get:
+    #TODO
+  /tags/{tag}/questions:
+    get:
+    #TODO
 
   /questions:
     get:
@@ -1586,6 +1596,16 @@ paths:
           $ref: '#/responses/ForbiddenError'
         500:
           $ref: '#/responses/InternalServerError'
+  /questions/{questionid}/tags:
+    get:
+    #TODO
+  /questions/{questionid}/tags/{tag}:
+    get:
+    #TODO
+    put:
+    #TODO
+    delete:
+    #TODO
 
   /tests:
     get:
@@ -1720,7 +1740,7 @@ paths:
         201:
           description: publishedTest created
           schema:
-            $ref: '#/definitions/PublishedTest'
+            $ref: '#/definitions/Test'
         400:
           $ref: '#/responses/BadRequestError'
         403:
@@ -1876,7 +1896,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/PublishedTest'
+              $ref: '#/definitions/Test'
         400:
           $ref: '#/responses/BadRequestError'
         403:
@@ -1904,7 +1924,7 @@ paths:
         200:
           description: PublishedTest found
           schema:
-            $ref: '#/definitions/PublishedTest'
+            $ref: '#/definitions/Test'
         400:
           $ref: '#/responses/BadRequestError'
         403:
@@ -2303,6 +2323,10 @@ paths:
         500:
           $ref: '#/responses/InternalServerError'
 
+
+  /answers/{answerid}/qanswers/{questionid}/revision:
+    put:
+    #TODO
 responses:
   BadRequestError:
     description: Incorrect Request, or invalida data
@@ -2400,7 +2424,7 @@ definitions:
         example: Javier Gatón Herguedas
       rol:
         type: string
-        enum: [student, teacher, admin]
+        enum: [Estudiante, Profesor, Administrador]
       pass:
         type: string
         example: password
@@ -2445,16 +2469,92 @@ definitions:
         pattern: '^.{6,}$'
   Password:
     type: object
+    required:
+    - password
+    properties:
+      password:
+        type: string
+        example: password
+        format: password
+        pattern: '^.{6,}$'
   Question:
     type: object
+    required:
+    - title
+    - question
+    - estimatedTime
+    - autoCorrect
+    - editable
+    properties:
+      id:
+        type: integer
+        example: 1
+      title:
+        type: string
+        example: Paralelismo en C
+      question:
+        type: string
+        example: ¿Cual es el lenguaje que tiene un nombre más largo de todos?
+      estimatedTime:
+        type: integer
+        example: 32600
+      autoCorrect:
+        type: boolean
+        example: true
+      editable:
+        type: boolean
+        example: false
   Test:
     type: object
-  PublishedTest:
-    type: object
+    required:
+    - title
+    - description
+    - maxSeconds
+    - accesoPublico
+    - editable
+    properties:
+      id:
+        type: integer
+        example: 1
+      title:
+        type: string
+        example: Test de introduccion a Java
+      description:
+        type: string
+        example: En este test se evaluaran los conocimientos respecto al lenguaje de programación Java
+      maxSeconds:
+        type: int
+        example: 32600
+      accesoPublico:
+        type: boolean
+        example: true
+      editable:
+        type: boolean
+        example: false
   Answer:
     type: object
+    properties:
+      id:
+        type: integer
+        example: 1
+      startime:
+        type: string
+        example: 2021-02-25 14:44:55
   QuestionAnswer:
     type: object
+    properties:
+      respuesta:
+        type: string
+        example: Javadoc
+      indiceOpcion:
+        type: integer
+        example: 1
+      idPregunta:
+        type: integer
+        example: 1
+      idRespuesta:
+        type: integer
+        example: 1
   Error:
     type: object
     required:

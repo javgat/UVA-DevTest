@@ -9,10 +9,7 @@ DROP TABLE IF EXISTS PreguntaEtiqueta;
 DROP TABLE IF EXISTS Etiqueta;
 DROP TABLE IF EXISTS Opcion;
 DROP TABLE IF EXISTS PreguntaEquipo;
-DROP TABLE IF EXISTS TestPreguntaEditables;
-DROP TABLE IF EXISTS PreguntaCodigo;
-DROP TABLE IF EXISTS PreguntaString;
-DROP TABLE IF EXISTS PreguntaOpciones;
+DROP TABLE IF EXISTS TestPregunta;
 DROP TABLE IF EXISTS Pregunta;
 DROP TABLE IF EXISTS InvitacionTestUsuario;
 DROP TABLE IF EXISTS InvitacionTestEquipo;
@@ -95,30 +92,17 @@ CREATE TABLE Pregunta(
   editable boolean NOT NULL,
   usuarioid int(11) NOT NULL,
   testid int(11),
+  eleccionUnica boolean,
+  solucion varchar(100) COLLATE utf8_unicode_ci,
   FOREIGN KEY(usuarioid) REFERENCES Usuario(id) ON DELETE CASCADE,
   FOREIGN KEY(testid) REFERENCES Test(id),
   PRIMARY KEY(id)
 );
-CREATE TABLE PreguntaOpciones(
-  id int(11) NOT NULL,
-  eleccionUnica boolean NOT NULL,
-  FOREIGN KEY(id) REFERENCES Pregunta(id) ON DELETE CASCADE,
-  PRIMARY KEY(id)
-);
-CREATE TABLE PreguntaString(
-  id int(11) NOT NULL,
-  solucion varchar(100) COLLATE utf8_unicode_ci NOT NULL,
-  FOREIGN KEY(id) REFERENCES Pregunta(id) ON DELETE CASCADE,
-  PRIMARY KEY(id)
-);
-CREATE TABLE PreguntaCodigo(
-  id int(11) NOT NULL,
-  FOREIGN KEY(id) REFERENCES Pregunta(id) ON DELETE CASCADE,
-  PRIMARY KEY(id)
-);
-CREATE TABLE TestPreguntaEditables(
+
+CREATE TABLE TestPregunta(
   testid int(11) NOT NULL,
   preguntaid int(11) NOT NULL,
+  valorFinal int(11) NOT NULL,
   FOREIGN KEY(testid) REFERENCES Test(id) ON DELETE CASCADE,
   FOREIGN KEY(preguntaid) REFERENCES Pregunta(id) ON DELETE CASCADE,
   CONSTRAINT PRIMARY KEY(testid, preguntaid)
@@ -135,9 +119,9 @@ CREATE TABLE Opcion(
   indice int(11) NOT NULL,
   texto longtext COLLATE utf8_unicode_ci NOT NULL,
   correcta boolean NOT NULL,
-  preguntaOpcionesid int(11) NOT NULL,
-  FOREIGN KEY(preguntaOpcionesid) REFERENCES PreguntaOpciones(id) ON DELETE CASCADE,
-  CONSTRAINT PRIMARY KEY(preguntaOpcionesid, indice)
+  preguntaid int(11) NOT NULL,
+  FOREIGN KEY(preguntaid) REFERENCES Pregunta(id) ON DELETE CASCADE,
+  CONSTRAINT PRIMARY KEY(preguntaid, indice)
 );
 
 CREATE TABLE Etiqueta(
@@ -165,6 +149,8 @@ CREATE TABLE RespuestaExamen(
 CREATE TABLE RespuestaPregunta(
   respuestaExamenid int(11) NOT NULL,
   preguntaid int(11) NOT NULL,
+  puntuacion int(11),
+  corregida boolean NOT NULL,
   FOREIGN KEY(respuestaExamenid) REFERENCES RespuestaExamen(id) ON DELETE CASCADE,
   FOREIGN KEY(preguntaid) REFERENCES Pregunta(id) ON DELETE CASCADE,
   CONSTRAINT PRIMARY KEY(respuestaExamenid, preguntaid)
@@ -173,10 +159,9 @@ CREATE TABLE RespuestaOpcion(
   respuestaExamenid int(11) NOT NULL,
   preguntaid int(11) NOT NULL,
   opcionindice int(11) NOT NULL,
-  opcionPreguntaOpciones int(11) NOT NULL,
   CONSTRAINT fk_RespuestaOpcion_Opcion
-      FOREIGN KEY(opcionPreguntaOpciones, opcionindice)
-      REFERENCES Opcion(preguntaOpcionesid, indice) ON DELETE CASCADE,
+      FOREIGN KEY(preguntaid, opcionindice)
+      REFERENCES Opcion(preguntaid, indice) ON DELETE CASCADE,
   CONSTRAINT fk_RespuestaOpcion_RespuestaPregunta
       FOREIGN KEY(respuestaExamenid, preguntaid)
       REFERENCES RespuestaPregunta(respuestaExamenid, preguntaid) ON DELETE CASCADE,
