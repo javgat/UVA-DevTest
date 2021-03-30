@@ -63,7 +63,7 @@ func init() {
           }
         ],
         "responses": {
-          "200": {
+          "201": {
             "description": "Successful authentication. Session JWT returned in Cookie \"Bearer-Cookie\". You need to include this cookie in subsequent requests.",
             "headers": {
               "Set-Cookie": {
@@ -83,44 +83,1366 @@ func init() {
         }
       }
     },
-    "/passwords/{username}": {
+    "/accesstokens/{username}": {
       "put": {
         "security": [
           {
             "BearerCookie": []
           }
         ],
-        "description": "Modifies the password of the user \u003cusername\u003e",
+        "description": "Modifies the current JWT Cookie related to the current session, extending.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "auth"
+        ],
+        "summary": "Modifies the current JWT Cookie related to the current session, extending it.",
+        "operationId": "relogin",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user with the token",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful cookie modification. Session JWT returned in Cookie \"Bearer-Cookie\".",
+            "headers": {
+              "Set-Cookie": {
+                "type": "string"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Deletes all sessions of the user. Makes every current JWT related to him useless.",
         "consumes": [
           "application/json"
         ],
         "tags": [
-          "user",
           "auth"
         ],
-        "summary": "Modifies the password of the user \u003cusername\u003e",
-        "operationId": "putPassword",
+        "summary": "Deletes all sessions of the user. Makes every current JWT related to him useless.",
+        "operationId": "closeSessions",
         "parameters": [
           {
             "type": "string",
-            "description": "Username of the user to modify its password",
+            "description": "Username of the user with the token",
             "name": "username",
             "in": "path",
             "required": true
           },
           {
-            "description": "Password update information",
-            "name": "passwordUpdate",
+            "description": "Current password of the user",
+            "name": "password",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/PasswordUpdate"
+              "$ref": "#/definitions/Password"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Resource password modified correctly"
+            "description": "Sessions deleted successfully"
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/answers": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all answers",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "answer"
+        ],
+        "summary": "Returns all answers",
+        "operationId": "GetAnswers",
+        "responses": {
+          "200": {
+            "description": "Answers found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Answer"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/answers/{answerid}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns an answers",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "answer"
+        ],
+        "summary": "Returns an answers",
+        "operationId": "GetAnswer",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the answer",
+            "name": "answerid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Answers found",
+            "schema": {
+              "$ref": "#/definitions/Answer"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Finishes an answers",
+        "tags": [
+          "answer"
+        ],
+        "summary": "Finishes an answer",
+        "operationId": "FinishAnswer",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the answer",
+            "name": "answerid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Answers finished"
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/answers/{answerid}/qanswers": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns an answers's questionAnswers",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "answer"
+        ],
+        "summary": "Returns an answer's questionAnswers",
+        "operationId": "GetQuestionAnswersFromAnswer",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the answer",
+            "name": "answerid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "QuestionAnswers found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/QuestionAnswer"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      },
+      "post": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Answers a question",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "answer"
+        ],
+        "summary": "Answers a question",
+        "operationId": "PostQuestionAnswer",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the answer",
+            "name": "answerid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "QuestionAnswer to post",
+            "name": "questionAnswer",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/QuestionAnswer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "QuestionAnswer created",
+            "schema": {
+              "$ref": "#/definitions/QuestionAnswer"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/answers/{answerid}/qanswers/{questionid}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns an answers's questionAnswer",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "answer"
+        ],
+        "summary": "Returns an answer's questionAnswer",
+        "operationId": "GetQuestionAnswerFromAnswer",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the answer",
+            "name": "answerid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the question it is answering",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "QuestionAnswer found",
+            "schema": {
+              "$ref": "#/definitions/QuestionAnswer"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Updates a QuestionAnswer",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "answer"
+        ],
+        "summary": "Updates a QuestionAnswer",
+        "operationId": "PutQuestionAnswerFromAnswer",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the answer",
+            "name": "answerid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the question it is answering",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "QuestionAnswer Updated",
+            "name": "questionAnswer",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/QuestionAnswer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "QuestionAnswer updated"
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/answers/{answerid}/qanswers/{questionid}/review": {
+      "put": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Updates an answer review",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "answer"
+        ],
+        "summary": "Updates an answer review",
+        "operationId": "PutReview",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the answer",
+            "name": "answerid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the question it is answering",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Review Updated",
+            "name": "review",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Review"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Review updated"
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/logout": {
+      "get": {
+        "description": "Returns a useless cookie that will expire soon",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "auth"
+        ],
+        "summary": "Returns a useless cookie that will expire soon",
+        "operationId": "Logout",
+        "responses": {
+          "200": {
+            "description": "Logout cookie returned successfully",
+            "headers": {
+              "Set-Cookie": {
+                "type": "string"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/publishedTests": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all publishedTests",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "publishedTest"
+        ],
+        "summary": "Returns all publishedTests",
+        "operationId": "GetPublishedTests",
+        "responses": {
+          "200": {
+            "description": "PublishedTests found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Test"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/publishedTests/{testid}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns a publishedTest",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "publishedTest"
+        ],
+        "summary": "Returns a publishedTest",
+        "operationId": "GetPublishedTest",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the publishedTest",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "PublishedTest found",
+            "schema": {
+              "$ref": "#/definitions/Test"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Deletes a publishedTest",
+        "tags": [
+          "publishedTest"
+        ],
+        "summary": "Deletes a publishedTest",
+        "operationId": "DeletesPublishedTest",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the publishedTest",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "PublishedTest deleted"
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/publishedTests/{testid}/answers": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all answers from a published test",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "publishedTest"
+        ],
+        "summary": "Returns all answers from a published test",
+        "operationId": "GetAnswersFromPublishedTests",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the publishedTest",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Answers found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Answer"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/publishedTests/{testid}/questions": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all questions from a published test",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "publishedTest"
+        ],
+        "summary": "Returns all questions from a published test",
+        "operationId": "GetQuestionsFromPublishedTests",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the publishedTest",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Questions found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Question"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/publishedTests/{testid}/questions/{questionid}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns a question from a published test",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "publishedTest"
+        ],
+        "summary": "Returns a question from a published test",
+        "operationId": "GetQuestionFromPublishedTests",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the publishedTest",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the question to get",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Question found",
+            "schema": {
+              "$ref": "#/definitions/Question"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/publishedTests/{testid}/questions/{questionid}/qanswers": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all questions answers to a question of a published test",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "publishedTest"
+        ],
+        "summary": "Returns all questions answers to a question of a published test",
+        "operationId": "GetQuestionAnswersFromPublishedTestQuestion",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the publishedTest",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the question",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "QuestionAnswers found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/QuestionAnswer"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/questions": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all questions",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "question"
+        ],
+        "summary": "Returns all questions",
+        "operationId": "GetQuestions",
+        "responses": {
+          "200": {
+            "description": "questions found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Question"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/questions/{questionid}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns a question",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "question"
+        ],
+        "summary": "Returns a question",
+        "operationId": "GetQuestion",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the question to find",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Question found",
+            "schema": {
+              "$ref": "#/definitions/Question"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Updates a question",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "question"
+        ],
+        "summary": "Updates a question",
+        "operationId": "PutQuestion",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the question to update",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Question modified",
+            "name": "question",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Question"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Question updated"
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Deletes a question",
+        "tags": [
+          "question"
+        ],
+        "summary": "Deletes a question",
+        "operationId": "DeleteQuestion",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the question to delete",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Question deleted"
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/questions/{questionid}/tags": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all tags from a question.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "question"
+        ],
+        "summary": "Returns all tags from a question.",
+        "operationId": "GetTagsFromQuestion",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the question to find its tags",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "tags found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Tag"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/questions/{questionid}/tags/{tag}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns a tag from a question.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "question"
+        ],
+        "summary": "Returns a tag from a question.",
+        "operationId": "GetTagFromQuestion",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the question to find its tags",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "Tag to find",
+            "name": "tag",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "tag found",
+            "schema": {
+              "$ref": "#/definitions/Tag"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Adds a tag to a question",
+        "tags": [
+          "question"
+        ],
+        "summary": "Adds a tag to a question",
+        "operationId": "AddTagToQuestion",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the question to add a tag",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "Tag to add",
+            "name": "tag",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "tag added"
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Removes a tag from a question",
+        "tags": [
+          "question"
+        ],
+        "summary": "Removes a tag from a question",
+        "operationId": "RemoveTagFromQuestion",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the question to remove a tag",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "Tag to remove",
+            "name": "tag",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "tag removed"
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/tags": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all tags.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "tag"
+        ],
+        "summary": "Returns all tags.",
+        "operationId": "GetTags",
+        "responses": {
+          "200": {
+            "description": "tags found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Tag"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/tags/{tag}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns a tags.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "tag"
+        ],
+        "summary": "Returns a tags.",
+        "operationId": "GetTag",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Tag to find",
+            "name": "tag",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "tag found",
+            "schema": {
+              "$ref": "#/definitions/Tag"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/tags/{tag}/questions": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all questions from a tag.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "tag"
+        ],
+        "summary": "Returns all questions from a tag.",
+        "operationId": "GetQuestionsFromTag",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Tag to find its questions",
+            "name": "tag",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "questions found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Question"
+              }
+            }
           },
           "400": {
             "$ref": "#/responses/BadRequestError"
@@ -168,56 +1490,6 @@ func init() {
           },
           "403": {
             "$ref": "#/responses/ForbiddenError"
-          },
-          "500": {
-            "$ref": "#/responses/InternalServerError"
-          }
-        }
-      },
-      "post": {
-        "security": [
-          {
-            "BearerCookie": []
-          }
-        ],
-        "description": "Adds a team to the system",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "team"
-        ],
-        "summary": "adds a team",
-        "operationId": "PostTeam",
-        "parameters": [
-          {
-            "description": "Team item to add",
-            "name": "team",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/Team"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "team created",
-            "schema": {
-              "$ref": "#/definitions/Team"
-            }
-          },
-          "400": {
-            "$ref": "#/responses/BadRequestError"
-          },
-          "403": {
-            "$ref": "#/responses/ForbiddenError"
-          },
-          "409": {
-            "$ref": "#/responses/ConflictError"
           },
           "500": {
             "$ref": "#/responses/InternalServerError"
@@ -365,27 +1637,26 @@ func init() {
         }
       }
     },
-    "/teams/{teamname}/users": {
+    "/teams/{teamname}/admins": {
       "get": {
         "security": [
           {
             "BearerCookie": []
           }
         ],
-        "description": "Returns all users that are members of a team",
+        "description": "Returns all users that are admins of a team",
         "produces": [
           "application/json"
         ],
         "tags": [
-          "user",
           "team"
         ],
-        "summary": "Returns all users that are members of a team",
-        "operationId": "GetUsersFromTeam",
+        "summary": "Returns all users that are admins of a team",
+        "operationId": "GetAdmins",
         "parameters": [
           {
             "type": "string",
-            "description": "Teamname of the team to get its users",
+            "description": "Teamname of the team to get its admins",
             "name": "teamname",
             "in": "path",
             "required": true
@@ -393,7 +1664,7 @@ func init() {
         ],
         "responses": {
           "200": {
-            "description": "users found",
+            "description": "admins found",
             "schema": {
               "type": "array",
               "items": {
@@ -407,29 +1678,83 @@ func init() {
           "403": {
             "$ref": "#/responses/ForbiddenError"
           },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
           "500": {
             "$ref": "#/responses/InternalServerError"
           }
         }
       }
     },
-    "/teams/{teamname}/users/{username}": {
+    "/teams/{teamname}/admins/{username}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns a user that have the role admin in a team",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "team"
+        ],
+        "summary": "Returns a user that have the role admin in a team",
+        "operationId": "GetAdmin",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Teamname of the team to get its admin",
+            "name": "teamname",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "Username of the user to check if it is an admin",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "user found",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      },
       "put": {
         "security": [
           {
             "BearerCookie": []
           }
         ],
-        "description": "Adds user {username} to team {teamname}",
+        "description": "Adds user {username} to team {teamname} as an Admin.",
         "produces": [
           "application/json"
         ],
         "tags": [
-          "user",
           "team"
         ],
-        "summary": "Adds user {username} to team {teamname}",
-        "operationId": "AddUserFromTeam",
+        "summary": "Adds user {username} to team {teamname} as an Admin",
+        "operationId": "AddAmbir",
         "parameters": [
           {
             "type": "string",
@@ -466,6 +1791,578 @@ func init() {
             "$ref": "#/responses/InternalServerError"
           }
         }
+      }
+    },
+    "/teams/{teamname}/members": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all users that have the role members in a team",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "team"
+        ],
+        "summary": "Returns all users that have the role members in a team",
+        "operationId": "GetMembers",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Teamname of the team to get its members",
+            "name": "teamname",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "users found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/teams/{teamname}/members/{username}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns a user that have the role member in a team",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "team"
+        ],
+        "summary": "Returns a user that have the role member in a team",
+        "operationId": "GetMember",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Teamname of the team to get its member",
+            "name": "teamname",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "Username of the user to check if it is a member",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "user found",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Adds user {username} to team {teamname} as a Member.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "team"
+        ],
+        "summary": "Adds user {username} to team {teamname} as a Member",
+        "operationId": "AddMember",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Teamname of the team to modify",
+            "name": "teamname",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "Username of the user to add",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User added to team"
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "409": {
+            "$ref": "#/responses/ConflictError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/teams/{teamname}/publishedTests": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all publishedTests that the team administers",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "team"
+        ],
+        "summary": "Returns all publishedTests that the team administers",
+        "operationId": "GetPublishedTestsFromTeam",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Teamname of the team to get its publishedTests",
+            "name": "teamname",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "publishedTests found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Test"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/teams/{teamname}/publishedTests/{testid}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns a publishedTest that the team administers",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "team"
+        ],
+        "summary": "Returns a publishedTest that the team administers",
+        "operationId": "GetPublishedTestFromTeam",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Teamname of the team to get its publishedTest",
+            "name": "teamname",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the publishedTest to find",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "publishedTest found",
+            "schema": {
+              "$ref": "#/definitions/Test"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/teams/{teamname}/questions": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all questions that the team administers",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "team"
+        ],
+        "summary": "Returns all questions that the team administers",
+        "operationId": "GetQuestionsFromTeam",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Teamname of the team to get its questions",
+            "name": "teamname",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "questions found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Question"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/teams/{teamname}/questions/{questionid}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns a question that the team administers",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "team"
+        ],
+        "summary": "Returns a question that the team administers",
+        "operationId": "GetQuestionFromTeam",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Teamname of the team to get its question",
+            "name": "teamname",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the question to find",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "question found",
+            "schema": {
+              "$ref": "#/definitions/Question"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/teams/{teamname}/tests": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all tests that the team administers",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "team"
+        ],
+        "summary": "Returns all tests that the team administers",
+        "operationId": "GetTestsFromTeam",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Teamname of the team to get its tests",
+            "name": "teamname",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "tests found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Test"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/teams/{teamname}/tests/{testid}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns a test that the team administers",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "team"
+        ],
+        "summary": "Returns a test that the team administers",
+        "operationId": "GetTestFromTeam",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Teamname of the team to get its question",
+            "name": "teamname",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the test to find",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "test found",
+            "schema": {
+              "$ref": "#/definitions/Test"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/teams/{teamname}/users": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all users that are in a team",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "team"
+        ],
+        "summary": "Returns all users that are in a team",
+        "operationId": "GetUsersFromTeam",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Teamname of the team to get its users",
+            "name": "teamname",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "users found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/teams/{teamname}/users/{username}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns a user that is in a team",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "team"
+        ],
+        "summary": "Returns a user that is in a team",
+        "operationId": "GetUserFromTeam",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Teamname of the team to get its user",
+            "name": "teamname",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "Username of the user to check if it is in the team",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "user found",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
       },
       "delete": {
         "security": [
@@ -478,7 +2375,6 @@ func init() {
           "application/json"
         ],
         "tags": [
-          "user",
           "team"
         ],
         "summary": "Deletes user {username} from team {teamname}",
@@ -502,6 +2398,422 @@ func init() {
         "responses": {
           "200": {
             "description": "User deleted from team"
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/tests": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all tests",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "test"
+        ],
+        "summary": "Returns all tests",
+        "operationId": "GetTests",
+        "responses": {
+          "200": {
+            "description": "tests found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Test"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/tests/{testid}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns a test",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "test"
+        ],
+        "summary": "Returns a test",
+        "operationId": "GetTest",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the test to find",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Test found",
+            "schema": {
+              "$ref": "#/definitions/Test"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Updates a test",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "test"
+        ],
+        "summary": "Updates a test",
+        "operationId": "PutTest",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the test to update",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Test modified",
+            "name": "test",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Test"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Test updated"
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Deletes a test",
+        "tags": [
+          "test"
+        ],
+        "summary": "Deletes a test",
+        "operationId": "DeleteTest",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the test to delete",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Test deleted"
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/tests/{testid}/publishedTests": {
+      "post": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Creates a new publishedTest. The user must be the owner of the test.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "test",
+          "publishedTest"
+        ],
+        "summary": "Creates a new publishedTest. The user must be the owner of the test.",
+        "operationId": "PostPublishedTest",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Id of the test to publish",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "publishedTest created",
+            "schema": {
+              "$ref": "#/definitions/Test"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/tests/{testid}/questions": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all questions of the test",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "test"
+        ],
+        "summary": "Returns all questions of the test",
+        "operationId": "GetQuestionsFromTest",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the test",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "questions found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Question"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/tests/{testid}/questions/{questionid}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns a question from a test",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "test"
+        ],
+        "summary": "Returns a question from a test",
+        "operationId": "GetQuestionFromTest",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the test to find a question from",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the question to find in the test",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Question found",
+            "schema": {
+              "$ref": "#/definitions/Question"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Adds an existing question to a test",
+        "tags": [
+          "test"
+        ],
+        "summary": "Adds an existing question to a test",
+        "operationId": "AddQuestionToTest",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the test to add a question to",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the question to add to the test",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Question added"
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Removes an existing question from a test",
+        "tags": [
+          "test"
+        ],
+        "summary": "Removes an existing question from a test",
+        "operationId": "RemoveQuestionFromTest",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the test to remove a question from",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the question to remove from the test",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Question removed"
           },
           "400": {
             "$ref": "#/responses/BadRequestError"
@@ -670,11 +2982,11 @@ func init() {
           },
           {
             "description": "User information updated",
-            "name": "user",
+            "name": "userUpdate",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/User"
+              "$ref": "#/definitions/UserUpdate"
             }
           }
         ],
@@ -739,6 +3051,589 @@ func init() {
         }
       }
     },
+    "/users/{username}/answeredTests": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all publishedTests that the user has answered",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns all publishedTests that the user has answered",
+        "operationId": "GetAnsweredTestsFromUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who has answered the publishedTests",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "publishedTests found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Test"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/users/{username}/answeredTests/{testid}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns a publishedTest that the user has answered",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns a publishedTest that the user has answered",
+        "operationId": "GetAnsweredTestFromUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who has answered the publishedTest",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the test",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "publishedTest found",
+            "schema": {
+              "$ref": "#/definitions/Test"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/users/{username}/answers": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all answers that the user has answered",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns all answers that the user has answered",
+        "operationId": "GetAnswersFromUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who is the author of the answers",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "answers found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Answer"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/users/{username}/answers/{answerid}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns an answer that the user has answered",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns an answers that the user has answered",
+        "operationId": "GetAnswerFromUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who is the author of the answer",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the answer",
+            "name": "answerid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "answer found",
+            "schema": {
+              "$ref": "#/definitions/Answer"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/users/{username}/password": {
+      "put": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Modifies the password of the user \u003cusername\u003e",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "user",
+          "auth"
+        ],
+        "summary": "Modifies the password of the user \u003cusername\u003e",
+        "operationId": "putPassword",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user to modify its password",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Password update information",
+            "name": "passwordUpdate",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PasswordUpdate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resource password modified correctly"
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/users/{username}/publishedTests": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all publishedTests that the user can answer",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns all publishedTests that the user can answer",
+        "operationId": "GetPublishedTestsFromUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who can answer the publishedTests",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "publishedTests found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Test"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/users/{username}/publishedTests/{testid}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns a publishedTest that the user can answer",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns a publishedTest that the user can answer",
+        "operationId": "GetPublishedTestFromUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who can answer the publishedTest",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the test",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "publishedTest found",
+            "schema": {
+              "$ref": "#/definitions/Test"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/users/{username}/publishedTests/{testid}/answers": {
+      "post": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Starts a new answer",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user",
+          "answer"
+        ],
+        "summary": "Starts a new answer",
+        "operationId": "StartAnswer",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who can answer the publishedTest",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the test",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Answer started",
+            "schema": {
+              "$ref": "#/definitions/Answer"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/users/{username}/questions": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all questions owned by the user",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns all questions owned by the user",
+        "operationId": "GetQuestionsOfUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who owns the questions",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "questions found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Question"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      },
+      "post": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Creates a question",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user",
+          "question"
+        ],
+        "summary": "Creates a question",
+        "operationId": "PostQuestion",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who owns the question",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Question to add",
+            "name": "question",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Question"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "question created",
+            "schema": {
+              "$ref": "#/definitions/Question"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/users/{username}/questions/{questionid}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns a question of a user",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns a question of a user",
+        "operationId": "GetQuestionFromUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who owns the question",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "id of the question to find",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "question found",
+            "schema": {
+              "$ref": "#/definitions/Question"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
     "/users/{username}/teams": {
       "get": {
         "security": [
@@ -751,8 +3646,7 @@ func init() {
           "application/json"
         ],
         "tags": [
-          "user",
-          "team"
+          "user"
         ],
         "summary": "Returns all teams of a user.",
         "operationId": "GetTeamsOfUser",
@@ -785,44 +3679,50 @@ func init() {
             "$ref": "#/responses/InternalServerError"
           }
         }
-      }
-    },
-    "/users/{username}/teams/{teamname}": {
-      "put": {
+      },
+      "post": {
         "security": [
           {
             "BearerCookie": []
           }
         ],
-        "description": "Adds user {username} to team {teamname}",
+        "description": "Adds a team to the system",
+        "consumes": [
+          "application/json"
+        ],
         "produces": [
           "application/json"
         ],
         "tags": [
-          "user",
-          "team"
+          "team",
+          "user"
         ],
-        "summary": "Adds user {username} to team {teamname}",
-        "operationId": "AddTeamOfUser",
+        "summary": "adds a team",
+        "operationId": "PostTeam",
         "parameters": [
           {
             "type": "string",
-            "description": "Teamname of the team to modify",
-            "name": "teamname",
+            "description": "Username of the user to get their teams",
+            "name": "username",
             "in": "path",
             "required": true
           },
           {
-            "type": "string",
-            "description": "Username of the user to add",
-            "name": "username",
-            "in": "path",
-            "required": true
+            "description": "Team item to add",
+            "name": "team",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Team"
+            }
           }
         ],
         "responses": {
-          "200": {
-            "description": "User added to team"
+          "201": {
+            "description": "team created",
+            "schema": {
+              "$ref": "#/definitions/Team"
+            }
           },
           "400": {
             "$ref": "#/responses/BadRequestError"
@@ -833,49 +3733,50 @@ func init() {
           "409": {
             "$ref": "#/responses/ConflictError"
           },
-          "410": {
-            "$ref": "#/responses/GoneError"
-          },
           "500": {
             "$ref": "#/responses/InternalServerError"
           }
         }
-      },
-      "delete": {
+      }
+    },
+    "/users/{username}/teams/{teamname}": {
+      "get": {
         "security": [
           {
             "BearerCookie": []
           }
         ],
-        "description": "Deletes user {username} from team {teamname}",
+        "description": "Finds a team by its teamname, only if the user is in it",
         "produces": [
           "application/json"
         ],
         "tags": [
-          "user",
-          "team"
+          "user"
         ],
-        "summary": "Deletes user {username} from team {teamname}",
-        "operationId": "DeleteTeamOfUser",
+        "summary": "Finds a team by its teamname, only if the user is in it",
+        "operationId": "getTeamFromUser",
         "parameters": [
           {
             "type": "string",
-            "description": "Teamname of the team to modify",
-            "name": "teamname",
+            "description": "Username of the user to check",
+            "name": "username",
             "in": "path",
             "required": true
           },
           {
             "type": "string",
-            "description": "Username of the user to delete from team",
-            "name": "username",
+            "description": "Teamname of the team to find",
+            "name": "teamname",
             "in": "path",
             "required": true
           }
         ],
         "responses": {
           "200": {
-            "description": "User deleted from team"
+            "description": "team found",
+            "schema": {
+              "$ref": "#/definitions/Team"
+            }
           },
           "400": {
             "$ref": "#/responses/BadRequestError"
@@ -892,34 +3793,26 @@ func init() {
         }
       }
     },
-    "/users/{username}/teams/{teamname}/role": {
+    "/users/{username}/tests": {
       "get": {
         "security": [
           {
             "BearerCookie": []
           }
         ],
-        "description": "Returns the role of a user in a team",
+        "description": "Returns all tests owned by a user (teacher).",
         "produces": [
           "application/json"
         ],
         "tags": [
-          "team",
           "user"
         ],
-        "summary": "Returns the role of a user in a team",
-        "operationId": "GetUserTeamRole",
+        "summary": "Returns all tests owned by a user (teacher).",
+        "operationId": "GetTestsFromUser",
         "parameters": [
           {
             "type": "string",
-            "description": "Teamname of the team to modify",
-            "name": "teamname",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "description": "Username of the user to modify its role",
+            "description": "Username of the teacher who owns the question",
             "name": "username",
             "in": "path",
             "required": true
@@ -927,9 +3820,12 @@ func init() {
         ],
         "responses": {
           "200": {
-            "description": "Role found",
+            "description": "tests found",
             "schema": {
-              "$ref": "#/definitions/TeamRole"
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Test"
+              }
             }
           },
           "400": {
@@ -946,50 +3842,103 @@ func init() {
           }
         }
       },
-      "put": {
+      "post": {
         "security": [
           {
             "BearerCookie": []
           }
         ],
-        "description": "Modifies the role of a user in a team",
+        "description": "Creates a new test. The user must be a teacher.",
         "consumes": [
           "application/json"
         ],
-        "tags": [
-          "team",
-          "user"
+        "produces": [
+          "application/json"
         ],
-        "summary": "Modifies the role of a user in a team",
-        "operationId": "PutUserTeamRole",
+        "tags": [
+          "user",
+          "test"
+        ],
+        "summary": "Creates a new test. The user must be a teacher.",
+        "operationId": "PostTest",
         "parameters": [
           {
-            "description": "New role of the user",
-            "name": "role",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/TeamRole"
-            }
-          },
-          {
             "type": "string",
-            "description": "Teamname of the team to modify",
-            "name": "teamname",
+            "description": "Username of the teacher who owns the question",
+            "name": "username",
             "in": "path",
             "required": true
           },
           {
+            "description": "New Test to create",
+            "name": "test",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Test"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "test created",
+            "schema": {
+              "$ref": "#/definitions/Test"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/users/{username}/tests/{testid}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns a test from its user owner",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns a test from its user owner",
+        "operationId": "GetTestFromUser",
+        "parameters": [
+          {
             "type": "string",
-            "description": "Username of the user to modify its role",
+            "description": "Username of the teacher who owns the question",
             "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the test",
+            "name": "testid",
             "in": "path",
             "required": true
           }
         ],
         "responses": {
           "200": {
-            "description": "Role modified"
+            "description": "test found",
+            "schema": {
+              "$ref": "#/definitions/Test"
+            }
           },
           "400": {
             "$ref": "#/responses/BadRequestError"
@@ -1008,6 +3957,19 @@ func init() {
     }
   },
   "definitions": {
+    "Answer": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "example": 1
+        },
+        "startime": {
+          "type": "string",
+          "example": "2021-02-25 14:44:55"
+        }
+      }
+    },
     "Error": {
       "type": "object",
       "required": [
@@ -1017,18 +3979,6 @@ func init() {
         "message": {
           "type": "string",
           "example": "Object not found"
-        }
-      }
-    },
-    "JWTJson": {
-      "type": "object",
-      "required": [
-        "token"
-      ],
-      "properties": {
-        "token": {
-          "type": "string",
-          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
         }
       }
     },
@@ -1044,6 +3994,20 @@ func init() {
           "example": "carlosg72 || carlos@mail.com"
         },
         "pass": {
+          "type": "string",
+          "format": "password",
+          "pattern": "^.{6,}$",
+          "example": "password"
+        }
+      }
+    },
+    "Password": {
+      "type": "object",
+      "required": [
+        "password"
+      ],
+      "properties": {
+        "password": {
           "type": "string",
           "format": "password",
           "pattern": "^.{6,}$",
@@ -1072,6 +4036,75 @@ func init() {
         }
       }
     },
+    "Question": {
+      "type": "object",
+      "required": [
+        "title",
+        "question",
+        "estimatedTime",
+        "autoCorrect",
+        "editable"
+      ],
+      "properties": {
+        "autoCorrect": {
+          "type": "boolean",
+          "example": true
+        },
+        "editable": {
+          "type": "boolean",
+          "example": false
+        },
+        "estimatedTime": {
+          "type": "integer",
+          "example": 32600
+        },
+        "id": {
+          "type": "integer",
+          "example": 1
+        },
+        "question": {
+          "type": "string",
+          "example": "¿Cual es el lenguaje que tiene un nombre más largo de todos?"
+        },
+        "title": {
+          "type": "string",
+          "example": "Paralelismo en C"
+        }
+      }
+    },
+    "QuestionAnswer": {
+      "type": "object",
+      "properties": {
+        "idPregunta": {
+          "type": "integer",
+          "example": 1
+        },
+        "idRespuesta": {
+          "type": "integer",
+          "example": 1
+        },
+        "indiceOpcion": {
+          "type": "integer",
+          "example": 1
+        },
+        "respuesta": {
+          "type": "string",
+          "example": "Javadoc"
+        }
+      }
+    },
+    "Review": {
+      "type": "object",
+      "required": [
+        "puntuacion"
+      ],
+      "properties": {
+        "puntuacion": {
+          "type": "integer",
+          "example": 100
+        }
+      }
+    },
     "SigninUser": {
       "type": "object",
       "required": [
@@ -1096,6 +4129,18 @@ func init() {
           "type": "string",
           "pattern": "^[^@ \\t\\r\\n]+$",
           "example": "carlosg72"
+        }
+      }
+    },
+    "Tag": {
+      "type": "object",
+      "required": [
+        "tag"
+      ],
+      "properties": {
+        "tag": {
+          "type": "string",
+          "example": "Java"
         }
       }
     },
@@ -1131,6 +4176,42 @@ func init() {
         }
       }
     },
+    "Test": {
+      "type": "object",
+      "required": [
+        "title",
+        "description",
+        "maxSeconds",
+        "accesoPublico",
+        "editable"
+      ],
+      "properties": {
+        "accesoPublico": {
+          "type": "boolean",
+          "example": true
+        },
+        "description": {
+          "type": "string",
+          "example": "En este test se evaluaran los conocimientos respecto al lenguaje de programación Java"
+        },
+        "editable": {
+          "type": "boolean",
+          "example": false
+        },
+        "id": {
+          "type": "integer",
+          "example": 1
+        },
+        "maxSeconds": {
+          "type": "integer",
+          "example": 32600
+        },
+        "title": {
+          "type": "string",
+          "example": "Test de introduccion a Java"
+        }
+      }
+    },
     "User": {
       "type": "object",
       "required": [
@@ -1148,12 +4229,51 @@ func init() {
           "type": "string",
           "example": "Javier Gatón Herguedas"
         },
-        "type": {
+        "rol": {
           "type": "string",
           "enum": [
             "student",
             "teacher",
             "admin"
+          ]
+        },
+        "username": {
+          "type": "string",
+          "pattern": "^[^@ \\t\\r\\n]+$",
+          "example": "carlosg72"
+        }
+      }
+    },
+    "UserUpdate": {
+      "type": "object",
+      "required": [
+        "username",
+        "email",
+        "password"
+      ],
+      "properties": {
+        "email": {
+          "type": "string",
+          "format": "email",
+          "pattern": "^[^@ \\t\\r\\n]+@[^@ \\t\\r\\n]+\\.[^@ \\t\\r\\n]+$",
+          "example": "carlos@mail.com"
+        },
+        "fullname": {
+          "type": "string",
+          "example": "Javier Gatón Herguedas"
+        },
+        "password": {
+          "type": "string",
+          "format": "password",
+          "pattern": "^.{6,}$",
+          "example": "password"
+        },
+        "rol": {
+          "type": "string",
+          "enum": [
+            "Estudiante",
+            "Profesor",
+            "Administrador"
           ]
         },
         "username": {
@@ -1202,16 +4322,32 @@ func init() {
   },
   "tags": [
     {
-      "description": "Operations related to users",
-      "name": "user"
-    },
-    {
       "description": "Operations related to authentication",
       "name": "auth"
     },
     {
-      "description": "Operations related to teams",
+      "description": "Operations that start with users",
+      "name": "user"
+    },
+    {
+      "description": "Operations that start with teams",
       "name": "team"
+    },
+    {
+      "description": "Operations that start with questions",
+      "name": "question"
+    },
+    {
+      "description": "Operations that start with tests",
+      "name": "test"
+    },
+    {
+      "description": "Operations that start with publishedTests",
+      "name": "publishedTest"
+    },
+    {
+      "description": "Operations that start with answers",
+      "name": "answer"
     }
   ]
 }`))
@@ -1261,7 +4397,7 @@ func init() {
           }
         ],
         "responses": {
-          "200": {
+          "201": {
             "description": "Successful authentication. Session JWT returned in Cookie \"Bearer-Cookie\". You need to include this cookie in subsequent requests.",
             "headers": {
               "Set-Cookie": {
@@ -1287,44 +4423,1597 @@ func init() {
         }
       }
     },
-    "/passwords/{username}": {
+    "/accesstokens/{username}": {
       "put": {
         "security": [
           {
             "BearerCookie": []
           }
         ],
-        "description": "Modifies the password of the user \u003cusername\u003e",
+        "description": "Modifies the current JWT Cookie related to the current session, extending.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "auth"
+        ],
+        "summary": "Modifies the current JWT Cookie related to the current session, extending it.",
+        "operationId": "relogin",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user with the token",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful cookie modification. Session JWT returned in Cookie \"Bearer-Cookie\".",
+            "headers": {
+              "Set-Cookie": {
+                "type": "string"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Deletes all sessions of the user. Makes every current JWT related to him useless.",
         "consumes": [
           "application/json"
         ],
         "tags": [
-          "user",
           "auth"
         ],
-        "summary": "Modifies the password of the user \u003cusername\u003e",
-        "operationId": "putPassword",
+        "summary": "Deletes all sessions of the user. Makes every current JWT related to him useless.",
+        "operationId": "closeSessions",
         "parameters": [
           {
             "type": "string",
-            "description": "Username of the user to modify its password",
+            "description": "Username of the user with the token",
             "name": "username",
             "in": "path",
             "required": true
           },
           {
-            "description": "Password update information",
-            "name": "passwordUpdate",
+            "description": "Current password of the user",
+            "name": "password",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/PasswordUpdate"
+              "$ref": "#/definitions/Password"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Resource password modified correctly"
+            "description": "Sessions deleted successfully"
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/answers": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all answers",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "answer"
+        ],
+        "summary": "Returns all answers",
+        "operationId": "GetAnswers",
+        "responses": {
+          "200": {
+            "description": "Answers found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Answer"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/answers/{answerid}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns an answers",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "answer"
+        ],
+        "summary": "Returns an answers",
+        "operationId": "GetAnswer",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the answer",
+            "name": "answerid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Answers found",
+            "schema": {
+              "$ref": "#/definitions/Answer"
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Finishes an answers",
+        "tags": [
+          "answer"
+        ],
+        "summary": "Finishes an answer",
+        "operationId": "FinishAnswer",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the answer",
+            "name": "answerid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Answers finished"
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/answers/{answerid}/qanswers": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns an answers's questionAnswers",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "answer"
+        ],
+        "summary": "Returns an answer's questionAnswers",
+        "operationId": "GetQuestionAnswersFromAnswer",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the answer",
+            "name": "answerid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "QuestionAnswers found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/QuestionAnswer"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      },
+      "post": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Answers a question",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "answer"
+        ],
+        "summary": "Answers a question",
+        "operationId": "PostQuestionAnswer",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the answer",
+            "name": "answerid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "QuestionAnswer to post",
+            "name": "questionAnswer",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/QuestionAnswer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "QuestionAnswer created",
+            "schema": {
+              "$ref": "#/definitions/QuestionAnswer"
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/answers/{answerid}/qanswers/{questionid}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns an answers's questionAnswer",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "answer"
+        ],
+        "summary": "Returns an answer's questionAnswer",
+        "operationId": "GetQuestionAnswerFromAnswer",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the answer",
+            "name": "answerid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the question it is answering",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "QuestionAnswer found",
+            "schema": {
+              "$ref": "#/definitions/QuestionAnswer"
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Updates a QuestionAnswer",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "answer"
+        ],
+        "summary": "Updates a QuestionAnswer",
+        "operationId": "PutQuestionAnswerFromAnswer",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the answer",
+            "name": "answerid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the question it is answering",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "QuestionAnswer Updated",
+            "name": "questionAnswer",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/QuestionAnswer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "QuestionAnswer updated"
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/answers/{answerid}/qanswers/{questionid}/review": {
+      "put": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Updates an answer review",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "answer"
+        ],
+        "summary": "Updates an answer review",
+        "operationId": "PutReview",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the answer",
+            "name": "answerid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the question it is answering",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Review Updated",
+            "name": "review",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Review"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Review updated"
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/logout": {
+      "get": {
+        "description": "Returns a useless cookie that will expire soon",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "auth"
+        ],
+        "summary": "Returns a useless cookie that will expire soon",
+        "operationId": "Logout",
+        "responses": {
+          "200": {
+            "description": "Logout cookie returned successfully",
+            "headers": {
+              "Set-Cookie": {
+                "type": "string"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/publishedTests": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all publishedTests",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "publishedTest"
+        ],
+        "summary": "Returns all publishedTests",
+        "operationId": "GetPublishedTests",
+        "responses": {
+          "200": {
+            "description": "PublishedTests found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Test"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/publishedTests/{testid}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns a publishedTest",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "publishedTest"
+        ],
+        "summary": "Returns a publishedTest",
+        "operationId": "GetPublishedTest",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the publishedTest",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "PublishedTest found",
+            "schema": {
+              "$ref": "#/definitions/Test"
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Deletes a publishedTest",
+        "tags": [
+          "publishedTest"
+        ],
+        "summary": "Deletes a publishedTest",
+        "operationId": "DeletesPublishedTest",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the publishedTest",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "PublishedTest deleted"
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/publishedTests/{testid}/answers": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all answers from a published test",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "publishedTest"
+        ],
+        "summary": "Returns all answers from a published test",
+        "operationId": "GetAnswersFromPublishedTests",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the publishedTest",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Answers found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Answer"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/publishedTests/{testid}/questions": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all questions from a published test",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "publishedTest"
+        ],
+        "summary": "Returns all questions from a published test",
+        "operationId": "GetQuestionsFromPublishedTests",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the publishedTest",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Questions found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Question"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/publishedTests/{testid}/questions/{questionid}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns a question from a published test",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "publishedTest"
+        ],
+        "summary": "Returns a question from a published test",
+        "operationId": "GetQuestionFromPublishedTests",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the publishedTest",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the question to get",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Question found",
+            "schema": {
+              "$ref": "#/definitions/Question"
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/publishedTests/{testid}/questions/{questionid}/qanswers": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all questions answers to a question of a published test",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "publishedTest"
+        ],
+        "summary": "Returns all questions answers to a question of a published test",
+        "operationId": "GetQuestionAnswersFromPublishedTestQuestion",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the publishedTest",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the question",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "QuestionAnswers found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/QuestionAnswer"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/questions": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all questions",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "question"
+        ],
+        "summary": "Returns all questions",
+        "operationId": "GetQuestions",
+        "responses": {
+          "200": {
+            "description": "questions found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Question"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/questions/{questionid}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns a question",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "question"
+        ],
+        "summary": "Returns a question",
+        "operationId": "GetQuestion",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the question to find",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Question found",
+            "schema": {
+              "$ref": "#/definitions/Question"
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Updates a question",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "question"
+        ],
+        "summary": "Updates a question",
+        "operationId": "PutQuestion",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the question to update",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Question modified",
+            "name": "question",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Question"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Question updated"
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Deletes a question",
+        "tags": [
+          "question"
+        ],
+        "summary": "Deletes a question",
+        "operationId": "DeleteQuestion",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the question to delete",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Question deleted"
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/questions/{questionid}/tags": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all tags from a question.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "question"
+        ],
+        "summary": "Returns all tags from a question.",
+        "operationId": "GetTagsFromQuestion",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the question to find its tags",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "tags found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Tag"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/questions/{questionid}/tags/{tag}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns a tag from a question.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "question"
+        ],
+        "summary": "Returns a tag from a question.",
+        "operationId": "GetTagFromQuestion",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the question to find its tags",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "Tag to find",
+            "name": "tag",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "tag found",
+            "schema": {
+              "$ref": "#/definitions/Tag"
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Adds a tag to a question",
+        "tags": [
+          "question"
+        ],
+        "summary": "Adds a tag to a question",
+        "operationId": "AddTagToQuestion",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the question to add a tag",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "Tag to add",
+            "name": "tag",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "tag added"
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Removes a tag from a question",
+        "tags": [
+          "question"
+        ],
+        "summary": "Removes a tag from a question",
+        "operationId": "RemoveTagFromQuestion",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the question to remove a tag",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "Tag to remove",
+            "name": "tag",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "tag removed"
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/tags": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all tags.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "tag"
+        ],
+        "summary": "Returns all tags.",
+        "operationId": "GetTags",
+        "responses": {
+          "200": {
+            "description": "tags found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Tag"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/tags/{tag}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns a tags.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "tag"
+        ],
+        "summary": "Returns a tags.",
+        "operationId": "GetTag",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Tag to find",
+            "name": "tag",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "tag found",
+            "schema": {
+              "$ref": "#/definitions/Tag"
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/tags/{tag}/questions": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all questions from a tag.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "tag"
+        ],
+        "summary": "Returns all questions from a tag.",
+        "operationId": "GetQuestionsFromTag",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Tag to find its questions",
+            "name": "tag",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "questions found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Question"
+              }
+            }
           },
           "400": {
             "description": "Incorrect Request, or invalida data",
@@ -1384,65 +6073,6 @@ func init() {
           },
           "403": {
             "description": "Not authorized to this content",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          },
-          "500": {
-            "description": "Internal error"
-          }
-        }
-      },
-      "post": {
-        "security": [
-          {
-            "BearerCookie": []
-          }
-        ],
-        "description": "Adds a team to the system",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "team"
-        ],
-        "summary": "adds a team",
-        "operationId": "PostTeam",
-        "parameters": [
-          {
-            "description": "Team item to add",
-            "name": "team",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/Team"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "team created",
-            "schema": {
-              "$ref": "#/definitions/Team"
-            }
-          },
-          "400": {
-            "description": "Incorrect Request, or invalida data",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          },
-          "403": {
-            "description": "Not authorized to this content",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          },
-          "409": {
-            "description": "A user with same username/email already exists",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -1623,27 +6253,26 @@ func init() {
         }
       }
     },
-    "/teams/{teamname}/users": {
+    "/teams/{teamname}/admins": {
       "get": {
         "security": [
           {
             "BearerCookie": []
           }
         ],
-        "description": "Returns all users that are members of a team",
+        "description": "Returns all users that are admins of a team",
         "produces": [
           "application/json"
         ],
         "tags": [
-          "user",
           "team"
         ],
-        "summary": "Returns all users that are members of a team",
-        "operationId": "GetUsersFromTeam",
+        "summary": "Returns all users that are admins of a team",
+        "operationId": "GetAdmins",
         "parameters": [
           {
             "type": "string",
-            "description": "Teamname of the team to get its users",
+            "description": "Teamname of the team to get its admins",
             "name": "teamname",
             "in": "path",
             "required": true
@@ -1651,7 +6280,7 @@ func init() {
         ],
         "responses": {
           "200": {
-            "description": "users found",
+            "description": "admins found",
             "schema": {
               "type": "array",
               "items": {
@@ -1671,29 +6300,95 @@ func init() {
               "$ref": "#/definitions/Error"
             }
           },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
           "500": {
             "description": "Internal error"
           }
         }
       }
     },
-    "/teams/{teamname}/users/{username}": {
+    "/teams/{teamname}/admins/{username}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns a user that have the role admin in a team",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "team"
+        ],
+        "summary": "Returns a user that have the role admin in a team",
+        "operationId": "GetAdmin",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Teamname of the team to get its admin",
+            "name": "teamname",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "Username of the user to check if it is an admin",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "user found",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      },
       "put": {
         "security": [
           {
             "BearerCookie": []
           }
         ],
-        "description": "Adds user {username} to team {teamname}",
+        "description": "Adds user {username} to team {teamname} as an Admin.",
         "produces": [
           "application/json"
         ],
         "tags": [
-          "user",
           "team"
         ],
-        "summary": "Adds user {username} to team {teamname}",
-        "operationId": "AddUserFromTeam",
+        "summary": "Adds user {username} to team {teamname} as an Admin",
+        "operationId": "AddAmbir",
         "parameters": [
           {
             "type": "string",
@@ -1742,6 +6437,680 @@ func init() {
             "description": "Internal error"
           }
         }
+      }
+    },
+    "/teams/{teamname}/members": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all users that have the role members in a team",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "team"
+        ],
+        "summary": "Returns all users that have the role members in a team",
+        "operationId": "GetMembers",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Teamname of the team to get its members",
+            "name": "teamname",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "users found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/teams/{teamname}/members/{username}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns a user that have the role member in a team",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "team"
+        ],
+        "summary": "Returns a user that have the role member in a team",
+        "operationId": "GetMember",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Teamname of the team to get its member",
+            "name": "teamname",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "Username of the user to check if it is a member",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "user found",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Adds user {username} to team {teamname} as a Member.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "team"
+        ],
+        "summary": "Adds user {username} to team {teamname} as a Member",
+        "operationId": "AddMember",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Teamname of the team to modify",
+            "name": "teamname",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "Username of the user to add",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User added to team"
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "409": {
+            "description": "A user with same username/email already exists",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/teams/{teamname}/publishedTests": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all publishedTests that the team administers",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "team"
+        ],
+        "summary": "Returns all publishedTests that the team administers",
+        "operationId": "GetPublishedTestsFromTeam",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Teamname of the team to get its publishedTests",
+            "name": "teamname",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "publishedTests found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Test"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/teams/{teamname}/publishedTests/{testid}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns a publishedTest that the team administers",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "team"
+        ],
+        "summary": "Returns a publishedTest that the team administers",
+        "operationId": "GetPublishedTestFromTeam",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Teamname of the team to get its publishedTest",
+            "name": "teamname",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the publishedTest to find",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "publishedTest found",
+            "schema": {
+              "$ref": "#/definitions/Test"
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/teams/{teamname}/questions": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all questions that the team administers",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "team"
+        ],
+        "summary": "Returns all questions that the team administers",
+        "operationId": "GetQuestionsFromTeam",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Teamname of the team to get its questions",
+            "name": "teamname",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "questions found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Question"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/teams/{teamname}/questions/{questionid}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns a question that the team administers",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "team"
+        ],
+        "summary": "Returns a question that the team administers",
+        "operationId": "GetQuestionFromTeam",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Teamname of the team to get its question",
+            "name": "teamname",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the question to find",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "question found",
+            "schema": {
+              "$ref": "#/definitions/Question"
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/teams/{teamname}/tests": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all tests that the team administers",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "team"
+        ],
+        "summary": "Returns all tests that the team administers",
+        "operationId": "GetTestsFromTeam",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Teamname of the team to get its tests",
+            "name": "teamname",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "tests found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Test"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/teams/{teamname}/tests/{testid}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns a test that the team administers",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "team"
+        ],
+        "summary": "Returns a test that the team administers",
+        "operationId": "GetTestFromTeam",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Teamname of the team to get its question",
+            "name": "teamname",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the test to find",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "test found",
+            "schema": {
+              "$ref": "#/definitions/Test"
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/teams/{teamname}/users": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all users that are in a team",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "team"
+        ],
+        "summary": "Returns all users that are in a team",
+        "operationId": "GetUsersFromTeam",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Teamname of the team to get its users",
+            "name": "teamname",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "users found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/teams/{teamname}/users/{username}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns a user that is in a team",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "team"
+        ],
+        "summary": "Returns a user that is in a team",
+        "operationId": "GetUserFromTeam",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Teamname of the team to get its user",
+            "name": "teamname",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "Username of the user to check if it is in the team",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "user found",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
       },
       "delete": {
         "security": [
@@ -1754,7 +7123,6 @@ func init() {
           "application/json"
         ],
         "tags": [
-          "user",
           "team"
         ],
         "summary": "Deletes user {username} from team {teamname}",
@@ -1778,6 +7146,497 @@ func init() {
         "responses": {
           "200": {
             "description": "User deleted from team"
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/tests": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all tests",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "test"
+        ],
+        "summary": "Returns all tests",
+        "operationId": "GetTests",
+        "responses": {
+          "200": {
+            "description": "tests found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Test"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/tests/{testid}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns a test",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "test"
+        ],
+        "summary": "Returns a test",
+        "operationId": "GetTest",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the test to find",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Test found",
+            "schema": {
+              "$ref": "#/definitions/Test"
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Updates a test",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "test"
+        ],
+        "summary": "Updates a test",
+        "operationId": "PutTest",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the test to update",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Test modified",
+            "name": "test",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Test"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Test updated"
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Deletes a test",
+        "tags": [
+          "test"
+        ],
+        "summary": "Deletes a test",
+        "operationId": "DeleteTest",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the test to delete",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Test deleted"
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/tests/{testid}/publishedTests": {
+      "post": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Creates a new publishedTest. The user must be the owner of the test.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "test",
+          "publishedTest"
+        ],
+        "summary": "Creates a new publishedTest. The user must be the owner of the test.",
+        "operationId": "PostPublishedTest",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Id of the test to publish",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "publishedTest created",
+            "schema": {
+              "$ref": "#/definitions/Test"
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/tests/{testid}/questions": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all questions of the test",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "test"
+        ],
+        "summary": "Returns all questions of the test",
+        "operationId": "GetQuestionsFromTest",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the test",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "questions found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Question"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/tests/{testid}/questions/{questionid}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns a question from a test",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "test"
+        ],
+        "summary": "Returns a question from a test",
+        "operationId": "GetQuestionFromTest",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the test to find a question from",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the question to find in the test",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Question found",
+            "schema": {
+              "$ref": "#/definitions/Question"
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Adds an existing question to a test",
+        "tags": [
+          "test"
+        ],
+        "summary": "Adds an existing question to a test",
+        "operationId": "AddQuestionToTest",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the test to add a question to",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the question to add to the test",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Question added"
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Removes an existing question from a test",
+        "tags": [
+          "test"
+        ],
+        "summary": "Removes an existing question from a test",
+        "operationId": "RemoveQuestionFromTest",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the test to remove a question from",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the question to remove from the test",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Question removed"
           },
           "400": {
             "description": "Incorrect Request, or invalida data",
@@ -1976,11 +7835,11 @@ func init() {
           },
           {
             "description": "User information updated",
-            "name": "user",
+            "name": "userUpdate",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/User"
+              "$ref": "#/definitions/UserUpdate"
             }
           }
         ],
@@ -2066,6 +7925,688 @@ func init() {
         }
       }
     },
+    "/users/{username}/answeredTests": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all publishedTests that the user has answered",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns all publishedTests that the user has answered",
+        "operationId": "GetAnsweredTestsFromUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who has answered the publishedTests",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "publishedTests found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Test"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/users/{username}/answeredTests/{testid}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns a publishedTest that the user has answered",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns a publishedTest that the user has answered",
+        "operationId": "GetAnsweredTestFromUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who has answered the publishedTest",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the test",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "publishedTest found",
+            "schema": {
+              "$ref": "#/definitions/Test"
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/users/{username}/answers": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all answers that the user has answered",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns all answers that the user has answered",
+        "operationId": "GetAnswersFromUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who is the author of the answers",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "answers found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Answer"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/users/{username}/answers/{answerid}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns an answer that the user has answered",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns an answers that the user has answered",
+        "operationId": "GetAnswerFromUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who is the author of the answer",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the answer",
+            "name": "answerid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "answer found",
+            "schema": {
+              "$ref": "#/definitions/Answer"
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/users/{username}/password": {
+      "put": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Modifies the password of the user \u003cusername\u003e",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "user",
+          "auth"
+        ],
+        "summary": "Modifies the password of the user \u003cusername\u003e",
+        "operationId": "putPassword",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user to modify its password",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Password update information",
+            "name": "passwordUpdate",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PasswordUpdate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resource password modified correctly"
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/users/{username}/publishedTests": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all publishedTests that the user can answer",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns all publishedTests that the user can answer",
+        "operationId": "GetPublishedTestsFromUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who can answer the publishedTests",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "publishedTests found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Test"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/users/{username}/publishedTests/{testid}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns a publishedTest that the user can answer",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns a publishedTest that the user can answer",
+        "operationId": "GetPublishedTestFromUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who can answer the publishedTest",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the test",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "publishedTest found",
+            "schema": {
+              "$ref": "#/definitions/Test"
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/users/{username}/publishedTests/{testid}/answers": {
+      "post": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Starts a new answer",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user",
+          "answer"
+        ],
+        "summary": "Starts a new answer",
+        "operationId": "StartAnswer",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who can answer the publishedTest",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the test",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Answer started",
+            "schema": {
+              "$ref": "#/definitions/Answer"
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/users/{username}/questions": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all questions owned by the user",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns all questions owned by the user",
+        "operationId": "GetQuestionsOfUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who owns the questions",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "questions found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Question"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      },
+      "post": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Creates a question",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user",
+          "question"
+        ],
+        "summary": "Creates a question",
+        "operationId": "PostQuestion",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who owns the question",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Question to add",
+            "name": "question",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Question"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "question created",
+            "schema": {
+              "$ref": "#/definitions/Question"
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/users/{username}/questions/{questionid}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns a question of a user",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns a question of a user",
+        "operationId": "GetQuestionFromUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who owns the question",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "id of the question to find",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "question found",
+            "schema": {
+              "$ref": "#/definitions/Question"
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
     "/users/{username}/teams": {
       "get": {
         "security": [
@@ -2078,8 +8619,7 @@ func init() {
           "application/json"
         ],
         "tags": [
-          "user",
-          "team"
+          "user"
         ],
         "summary": "Returns all teams of a user.",
         "operationId": "GetTeamsOfUser",
@@ -2118,44 +8658,50 @@ func init() {
             "description": "Internal error"
           }
         }
-      }
-    },
-    "/users/{username}/teams/{teamname}": {
-      "put": {
+      },
+      "post": {
         "security": [
           {
             "BearerCookie": []
           }
         ],
-        "description": "Adds user {username} to team {teamname}",
+        "description": "Adds a team to the system",
+        "consumes": [
+          "application/json"
+        ],
         "produces": [
           "application/json"
         ],
         "tags": [
-          "user",
-          "team"
+          "team",
+          "user"
         ],
-        "summary": "Adds user {username} to team {teamname}",
-        "operationId": "AddTeamOfUser",
+        "summary": "adds a team",
+        "operationId": "PostTeam",
         "parameters": [
           {
             "type": "string",
-            "description": "Teamname of the team to modify",
-            "name": "teamname",
+            "description": "Username of the user to get their teams",
+            "name": "username",
             "in": "path",
             "required": true
           },
           {
-            "type": "string",
-            "description": "Username of the user to add",
-            "name": "username",
-            "in": "path",
-            "required": true
+            "description": "Team item to add",
+            "name": "team",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Team"
+            }
           }
         ],
         "responses": {
-          "200": {
-            "description": "User added to team"
+          "201": {
+            "description": "team created",
+            "schema": {
+              "$ref": "#/definitions/Team"
+            }
           },
           "400": {
             "description": "Incorrect Request, or invalida data",
@@ -2175,52 +8721,50 @@ func init() {
               "$ref": "#/definitions/Error"
             }
           },
-          "410": {
-            "description": "That user (password and name) does not exist",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          },
           "500": {
             "description": "Internal error"
           }
         }
-      },
-      "delete": {
+      }
+    },
+    "/users/{username}/teams/{teamname}": {
+      "get": {
         "security": [
           {
             "BearerCookie": []
           }
         ],
-        "description": "Deletes user {username} from team {teamname}",
+        "description": "Finds a team by its teamname, only if the user is in it",
         "produces": [
           "application/json"
         ],
         "tags": [
-          "user",
-          "team"
+          "user"
         ],
-        "summary": "Deletes user {username} from team {teamname}",
-        "operationId": "DeleteTeamOfUser",
+        "summary": "Finds a team by its teamname, only if the user is in it",
+        "operationId": "getTeamFromUser",
         "parameters": [
           {
             "type": "string",
-            "description": "Teamname of the team to modify",
-            "name": "teamname",
+            "description": "Username of the user to check",
+            "name": "username",
             "in": "path",
             "required": true
           },
           {
             "type": "string",
-            "description": "Username of the user to delete from team",
-            "name": "username",
+            "description": "Teamname of the team to find",
+            "name": "teamname",
             "in": "path",
             "required": true
           }
         ],
         "responses": {
           "200": {
-            "description": "User deleted from team"
+            "description": "team found",
+            "schema": {
+              "$ref": "#/definitions/Team"
+            }
           },
           "400": {
             "description": "Incorrect Request, or invalida data",
@@ -2246,34 +8790,26 @@ func init() {
         }
       }
     },
-    "/users/{username}/teams/{teamname}/role": {
+    "/users/{username}/tests": {
       "get": {
         "security": [
           {
             "BearerCookie": []
           }
         ],
-        "description": "Returns the role of a user in a team",
+        "description": "Returns all tests owned by a user (teacher).",
         "produces": [
           "application/json"
         ],
         "tags": [
-          "team",
           "user"
         ],
-        "summary": "Returns the role of a user in a team",
-        "operationId": "GetUserTeamRole",
+        "summary": "Returns all tests owned by a user (teacher).",
+        "operationId": "GetTestsFromUser",
         "parameters": [
           {
             "type": "string",
-            "description": "Teamname of the team to modify",
-            "name": "teamname",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "description": "Username of the user to modify its role",
+            "description": "Username of the teacher who owns the question",
             "name": "username",
             "in": "path",
             "required": true
@@ -2281,9 +8817,12 @@ func init() {
         ],
         "responses": {
           "200": {
-            "description": "Role found",
+            "description": "tests found",
             "schema": {
-              "$ref": "#/definitions/TeamRole"
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Test"
+              }
             }
           },
           "400": {
@@ -2309,50 +8848,112 @@ func init() {
           }
         }
       },
-      "put": {
+      "post": {
         "security": [
           {
             "BearerCookie": []
           }
         ],
-        "description": "Modifies the role of a user in a team",
+        "description": "Creates a new test. The user must be a teacher.",
         "consumes": [
           "application/json"
         ],
-        "tags": [
-          "team",
-          "user"
+        "produces": [
+          "application/json"
         ],
-        "summary": "Modifies the role of a user in a team",
-        "operationId": "PutUserTeamRole",
+        "tags": [
+          "user",
+          "test"
+        ],
+        "summary": "Creates a new test. The user must be a teacher.",
+        "operationId": "PostTest",
         "parameters": [
           {
-            "description": "New role of the user",
-            "name": "role",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/TeamRole"
-            }
-          },
-          {
             "type": "string",
-            "description": "Teamname of the team to modify",
-            "name": "teamname",
+            "description": "Username of the teacher who owns the question",
+            "name": "username",
             "in": "path",
             "required": true
           },
           {
+            "description": "New Test to create",
+            "name": "test",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Test"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "test created",
+            "schema": {
+              "$ref": "#/definitions/Test"
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/users/{username}/tests/{testid}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns a test from its user owner",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns a test from its user owner",
+        "operationId": "GetTestFromUser",
+        "parameters": [
+          {
             "type": "string",
-            "description": "Username of the user to modify its role",
+            "description": "Username of the teacher who owns the question",
             "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the test",
+            "name": "testid",
             "in": "path",
             "required": true
           }
         ],
         "responses": {
           "200": {
-            "description": "Role modified"
+            "description": "test found",
+            "schema": {
+              "$ref": "#/definitions/Test"
+            }
           },
           "400": {
             "description": "Incorrect Request, or invalida data",
@@ -2380,6 +8981,19 @@ func init() {
     }
   },
   "definitions": {
+    "Answer": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "example": 1
+        },
+        "startime": {
+          "type": "string",
+          "example": "2021-02-25 14:44:55"
+        }
+      }
+    },
     "Error": {
       "type": "object",
       "required": [
@@ -2389,18 +9003,6 @@ func init() {
         "message": {
           "type": "string",
           "example": "Object not found"
-        }
-      }
-    },
-    "JWTJson": {
-      "type": "object",
-      "required": [
-        "token"
-      ],
-      "properties": {
-        "token": {
-          "type": "string",
-          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
         }
       }
     },
@@ -2416,6 +9018,20 @@ func init() {
           "example": "carlosg72 || carlos@mail.com"
         },
         "pass": {
+          "type": "string",
+          "format": "password",
+          "pattern": "^.{6,}$",
+          "example": "password"
+        }
+      }
+    },
+    "Password": {
+      "type": "object",
+      "required": [
+        "password"
+      ],
+      "properties": {
+        "password": {
           "type": "string",
           "format": "password",
           "pattern": "^.{6,}$",
@@ -2444,6 +9060,75 @@ func init() {
         }
       }
     },
+    "Question": {
+      "type": "object",
+      "required": [
+        "title",
+        "question",
+        "estimatedTime",
+        "autoCorrect",
+        "editable"
+      ],
+      "properties": {
+        "autoCorrect": {
+          "type": "boolean",
+          "example": true
+        },
+        "editable": {
+          "type": "boolean",
+          "example": false
+        },
+        "estimatedTime": {
+          "type": "integer",
+          "example": 32600
+        },
+        "id": {
+          "type": "integer",
+          "example": 1
+        },
+        "question": {
+          "type": "string",
+          "example": "¿Cual es el lenguaje que tiene un nombre más largo de todos?"
+        },
+        "title": {
+          "type": "string",
+          "example": "Paralelismo en C"
+        }
+      }
+    },
+    "QuestionAnswer": {
+      "type": "object",
+      "properties": {
+        "idPregunta": {
+          "type": "integer",
+          "example": 1
+        },
+        "idRespuesta": {
+          "type": "integer",
+          "example": 1
+        },
+        "indiceOpcion": {
+          "type": "integer",
+          "example": 1
+        },
+        "respuesta": {
+          "type": "string",
+          "example": "Javadoc"
+        }
+      }
+    },
+    "Review": {
+      "type": "object",
+      "required": [
+        "puntuacion"
+      ],
+      "properties": {
+        "puntuacion": {
+          "type": "integer",
+          "example": 100
+        }
+      }
+    },
     "SigninUser": {
       "type": "object",
       "required": [
@@ -2468,6 +9153,18 @@ func init() {
           "type": "string",
           "pattern": "^[^@ \\t\\r\\n]+$",
           "example": "carlosg72"
+        }
+      }
+    },
+    "Tag": {
+      "type": "object",
+      "required": [
+        "tag"
+      ],
+      "properties": {
+        "tag": {
+          "type": "string",
+          "example": "Java"
         }
       }
     },
@@ -2503,6 +9200,42 @@ func init() {
         }
       }
     },
+    "Test": {
+      "type": "object",
+      "required": [
+        "title",
+        "description",
+        "maxSeconds",
+        "accesoPublico",
+        "editable"
+      ],
+      "properties": {
+        "accesoPublico": {
+          "type": "boolean",
+          "example": true
+        },
+        "description": {
+          "type": "string",
+          "example": "En este test se evaluaran los conocimientos respecto al lenguaje de programación Java"
+        },
+        "editable": {
+          "type": "boolean",
+          "example": false
+        },
+        "id": {
+          "type": "integer",
+          "example": 1
+        },
+        "maxSeconds": {
+          "type": "integer",
+          "example": 32600
+        },
+        "title": {
+          "type": "string",
+          "example": "Test de introduccion a Java"
+        }
+      }
+    },
     "User": {
       "type": "object",
       "required": [
@@ -2520,12 +9253,51 @@ func init() {
           "type": "string",
           "example": "Javier Gatón Herguedas"
         },
-        "type": {
+        "rol": {
           "type": "string",
           "enum": [
             "student",
             "teacher",
             "admin"
+          ]
+        },
+        "username": {
+          "type": "string",
+          "pattern": "^[^@ \\t\\r\\n]+$",
+          "example": "carlosg72"
+        }
+      }
+    },
+    "UserUpdate": {
+      "type": "object",
+      "required": [
+        "username",
+        "email",
+        "password"
+      ],
+      "properties": {
+        "email": {
+          "type": "string",
+          "format": "email",
+          "pattern": "^[^@ \\t\\r\\n]+@[^@ \\t\\r\\n]+\\.[^@ \\t\\r\\n]+$",
+          "example": "carlos@mail.com"
+        },
+        "fullname": {
+          "type": "string",
+          "example": "Javier Gatón Herguedas"
+        },
+        "password": {
+          "type": "string",
+          "format": "password",
+          "pattern": "^.{6,}$",
+          "example": "password"
+        },
+        "rol": {
+          "type": "string",
+          "enum": [
+            "Estudiante",
+            "Profesor",
+            "Administrador"
           ]
         },
         "username": {
@@ -2574,16 +9346,32 @@ func init() {
   },
   "tags": [
     {
-      "description": "Operations related to users",
-      "name": "user"
-    },
-    {
       "description": "Operations related to authentication",
       "name": "auth"
     },
     {
-      "description": "Operations related to teams",
+      "description": "Operations that start with users",
+      "name": "user"
+    },
+    {
+      "description": "Operations that start with teams",
       "name": "team"
+    },
+    {
+      "description": "Operations that start with questions",
+      "name": "question"
+    },
+    {
+      "description": "Operations that start with tests",
+      "name": "test"
+    },
+    {
+      "description": "Operations that start with publishedTests",
+      "name": "publishedTest"
+    },
+    {
+      "description": "Operations that start with answers",
+      "name": "answer"
     }
   ]
 }`))

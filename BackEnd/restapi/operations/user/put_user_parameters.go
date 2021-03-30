@@ -40,7 +40,7 @@ type PutUserParams struct {
 	  Required: true
 	  In: body
 	*/
-	User *models.User
+	UserUpdate *models.UserUpdate
 	/*Username of the user to modify its information
 	  Required: true
 	  In: path
@@ -59,12 +59,12 @@ func (o *PutUserParams) BindRequest(r *http.Request, route *middleware.MatchedRo
 
 	if runtime.HasBody(r) {
 		defer r.Body.Close()
-		var body models.User
+		var body models.UserUpdate
 		if err := route.Consumer.Consume(r.Body, &body); err != nil {
 			if err == io.EOF {
-				res = append(res, errors.Required("user", "body", ""))
+				res = append(res, errors.Required("userUpdate", "body", ""))
 			} else {
-				res = append(res, errors.NewParseError("user", "body", "", err))
+				res = append(res, errors.NewParseError("userUpdate", "body", "", err))
 			}
 		} else {
 			// validate body object
@@ -78,11 +78,11 @@ func (o *PutUserParams) BindRequest(r *http.Request, route *middleware.MatchedRo
 			}
 
 			if len(res) == 0 {
-				o.User = &body
+				o.UserUpdate = &body
 			}
 		}
 	} else {
-		res = append(res, errors.Required("user", "body", ""))
+		res = append(res, errors.Required("userUpdate", "body", ""))
 	}
 
 	rUsername, rhkUsername, _ := route.Params.GetOK("username")

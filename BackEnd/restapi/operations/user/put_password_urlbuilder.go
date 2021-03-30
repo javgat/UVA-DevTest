@@ -40,7 +40,7 @@ func (o *PutPasswordURL) SetBasePath(bp string) {
 func (o *PutPasswordURL) Build() (*url.URL, error) {
 	var _result url.URL
 
-	var _path = "/passwords/{username}"
+	var _path = "/users/{username}/password"
 
 	username := o.Username
 	if username != "" {

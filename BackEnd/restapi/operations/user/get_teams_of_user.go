@@ -31,7 +31,7 @@ func NewGetTeamsOfUser(ctx *middleware.Context, handler GetTeamsOfUserHandler) *
 	return &GetTeamsOfUser{Context: ctx, Handler: handler}
 }
 
-/* GetTeamsOfUser swagger:route GET /users/{username}/teams user team getTeamsOfUser
+/* GetTeamsOfUser swagger:route GET /users/{username}/teams user getTeamsOfUser
 
 Returns all teams of a user.
 

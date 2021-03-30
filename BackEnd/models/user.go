@@ -31,9 +31,9 @@ type User struct {
 	// Example: Javier Gatón Herguedas
 	Fullname string `json:"fullname,omitempty"`
 
-	// type
+	// rol
 	// Enum: [student teacher admin]
-	Type string `json:"type,omitempty"`
+	Rol string `json:"rol,omitempty"`
 
 	// username
 	// Example: carlosg72
@@ -50,7 +50,7 @@ func (m *User) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
-	if err := m.validateType(formats); err != nil {
+	if err := m.validateRol(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -81,7 +81,7 @@ func (m *User) validateEmail(formats strfmt.Registry) error {
 	return nil
 }
 
-var userTypeTypePropEnum []interface{}
+var userTypeRolPropEnum []interface{}
 
 func init() {
 	var res []string
@@ -89,37 +89,37 @@ func init() {
 		panic(err)
 	}
 	for _, v := range res {
-		userTypeTypePropEnum = append(userTypeTypePropEnum, v)
+		userTypeRolPropEnum = append(userTypeRolPropEnum, v)
 	}
 }
 
 const (
 
-	// UserTypeStudent captures enum value "student"
-	UserTypeStudent string = "student"
+	// UserRolStudent captures enum value "student"
+	UserRolStudent string = "student"
 
-	// UserTypeTeacher captures enum value "teacher"
-	UserTypeTeacher string = "teacher"
+	// UserRolTeacher captures enum value "teacher"
+	UserRolTeacher string = "teacher"
 
-	// UserTypeAdmin captures enum value "admin"
-	UserTypeAdmin string = "admin"
+	// UserRolAdmin captures enum value "admin"
+	UserRolAdmin string = "admin"
 )
 
 // prop value enum
-func (m *User) validateTypeEnum(path, location string, value string) error {
-	if err := validate.EnumCase(path, location, value, userTypeTypePropEnum, true); err != nil {
+func (m *User) validateRolEnum(path, location string, value string) error {
+	if err := validate.EnumCase(path, location, value, userTypeRolPropEnum, true); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (m *User) validateType(formats strfmt.Registry) error {
-	if swag.IsZero(m.Type) { // not required
+func (m *User) validateRol(formats strfmt.Registry) error {
+	if swag.IsZero(m.Rol) { // not required
 		return nil
 	}
 
 	// value enum
-	if err := m.validateTypeEnum("type", "body", m.Type); err != nil {
+	if err := m.validateRolEnum("rol", "body", m.Rol); err != nil {
 		return err
 	}
 

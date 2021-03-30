@@ -31,7 +31,7 @@ func NewPostTeam(ctx *middleware.Context, handler PostTeamHandler) *PostTeam {
 	return &PostTeam{Context: ctx, Handler: handler}
 }
 
-/* PostTeam swagger:route POST /teams team postTeam
+/* PostTeam swagger:route POST /users/{username}/teams team user postTeam
 
 adds a team
 

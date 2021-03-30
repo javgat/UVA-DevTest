@@ -9,11 +9,16 @@ import (
 	"errors"
 	"net/url"
 	golangswaggerpaths "path"
+	"strings"
 )
 
 // PostTeamURL generates an URL for the post team operation
 type PostTeamURL struct {
+	Username string
+
 	_basePath string
+	// avoid unkeyed usage
+	_ struct{}
 }
 
 // WithBasePath sets the base path for this url builder, only required when it's different from the
@@ -35,7 +40,14 @@ func (o *PostTeamURL) SetBasePath(bp string) {
 func (o *PostTeamURL) Build() (*url.URL, error) {
 	var _result url.URL
 
-	var _path = "/teams"
+	var _path = "/users/{username}/teams"
+
+	username := o.Username
+	if username != "" {
+		_path = strings.Replace(_path, "{username}", username, -1)
+	} else {
+		return nil, errors.New("username is required on PostTeamURL")
+	}
 
 	_basePath := o._basePath
 	if _basePath == "" {

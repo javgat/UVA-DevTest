@@ -61,6 +61,7 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 	api.UserPutUserHandler = user.PutUserHandlerFunc(handlers.PutUser)                            // PUT /users/{username}
 	api.UserDeleteUserHandler = user.DeleteUserHandlerFunc(handlers.DeleteUser)                   // DELETE /users/{username}
 	api.UserGetTeamsOfUserHandler = user.GetTeamsOfUserHandlerFunc(handlers.GetTeamsOfUser)       // GET /users/{username}/teams
+	api.UserGetTeamFromUserHandler = user.GetTeamFromUserHandlerFunc(handlers.GetTeamFromUser)    // GET /users/{username}/teams/{teamname}
 	api.UserAddTeamOfUserHandler = user.AddTeamOfUserHandlerFunc(handlers.AddTeamOfUser)          // PUT /users/{username}/teams/{teamname}
 	api.UserDeleteTeamOfUserHandler = user.DeleteTeamOfUserHandlerFunc(handlers.DeleteTeamOfUser) // DELETE /users/{username}/teams/{teamname}
 	api.TeamGetUserTeamRoleHandler = team.GetUserTeamRoleHandlerFunc(handlers.GetUserTeamRole)    // GET /users/{username}/teams/{teamname}/role
@@ -71,9 +72,9 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 	api.TeamGetTeamHandler = team.GetTeamHandlerFunc(handlers.GetTeam)                                  // GET /teams/{teamname}
 	api.TeamPutTeamHandler = team.PutTeamHandlerFunc(handlers.PutTeam)                                  // PUT /teams/{teamname}
 	api.TeamDeleteTeamHandler = team.DeleteTeamHandlerFunc(handlers.DeleteTeam)                         // DELETE /teams/{teamname}
-	api.UserGetUsersFromTeamHandler = user.GetUsersFromTeamHandlerFunc(handlers.GetUsersFromTeam)       // GET /teams/{teamname}/users
+	api.TeamGetUsersFromTeamHandler = user.GetUsersFromTeamHandlerFunc(handlers.GetUsersFromTeam)       // GET /teams/{teamname}/users
 	api.UserAddUserFromTeamHandler = user.AddUserFromTeamHandlerFunc(handlers.AddUserFromTeam)          // PUT /teams/{teamname}/users/{username}
-	api.UserDeleteUserFromTeamHandler = user.DeleteUserFromTeamHandlerFunc(handlers.DeleteUserFromTeam) // DELETE /teams/{teamname}/users/{username}
+	api.TeamDeleteUserFromTeamHandler = user.DeleteUserFromTeamHandlerFunc(handlers.DeleteUserFromTeam) // DELETE /teams/{teamname}/users/{username}
 
 	api.PreServerShutdown = func() {}
 

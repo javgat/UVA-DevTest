@@ -13,39 +13,39 @@ import (
 	"uva-devtest/models"
 )
 
-// LoginOKCode is the HTTP code returned for type LoginOK
-const LoginOKCode int = 200
+// LoginCreatedCode is the HTTP code returned for type LoginCreated
+const LoginCreatedCode int = 201
 
-/*LoginOK Successful authentication. Session JWT returned in Cookie "Bearer-Cookie". You need to include this cookie in subsequent requests.
+/*LoginCreated Successful authentication. Session JWT returned in Cookie "Bearer-Cookie". You need to include this cookie in subsequent requests.
 
-swagger:response loginOK
+swagger:response loginCreated
 */
-type LoginOK struct {
+type LoginCreated struct {
 	/*
 
 	 */
 	SetCookie string `json:"Set-Cookie"`
 }
 
-// NewLoginOK creates LoginOK with default headers values
-func NewLoginOK() *LoginOK {
+// NewLoginCreated creates LoginCreated with default headers values
+func NewLoginCreated() *LoginCreated {
 
-	return &LoginOK{}
+	return &LoginCreated{}
 }
 
-// WithSetCookie adds the setCookie to the login o k response
-func (o *LoginOK) WithSetCookie(setCookie string) *LoginOK {
+// WithSetCookie adds the setCookie to the login created response
+func (o *LoginCreated) WithSetCookie(setCookie string) *LoginCreated {
 	o.SetCookie = setCookie
 	return o
 }
 
-// SetSetCookie sets the setCookie to the login o k response
-func (o *LoginOK) SetSetCookie(setCookie string) {
+// SetSetCookie sets the setCookie to the login created response
+func (o *LoginCreated) SetSetCookie(setCookie string) {
 	o.SetCookie = setCookie
 }
 
 // WriteResponse to the client
-func (o *LoginOK) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+func (o *LoginCreated) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
 
 	// response header Set-Cookie
 
@@ -56,7 +56,7 @@ func (o *LoginOK) WriteResponse(rw http.ResponseWriter, producer runtime.Produce
 
 	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
 
-	rw.WriteHeader(200)
+	rw.WriteHeader(201)
 }
 
 // LoginBadRequestCode is the HTTP code returned for type LoginBadRequest

@@ -31,7 +31,7 @@ func NewPutPassword(ctx *middleware.Context, handler PutPasswordHandler) *PutPas
 	return &PutPassword{Context: ctx, Handler: handler}
 }
 
-/* PutPassword swagger:route PUT /passwords/{username} user auth putPassword
+/* PutPassword swagger:route PUT /users/{username}/password user auth putPassword
 
 Modifies the password of the user <username>
 
