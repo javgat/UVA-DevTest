@@ -17,15 +17,15 @@ import (
 )
 
 func userOrAdmin(username string, u *models.User) bool {
-	return username == *u.Username || u.Type == models.UserTypeAdmin
+	return username == *u.Username || u.Rol == models.UserRolAdmin
 }
 
 func isAdmin(u *models.User) bool {
-	return u.Type == models.UserTypeAdmin
+	return u.Rol == models.UserRolAdmin
 }
 
 func isTeacher(u *models.User) bool {
-	return u.Type == models.UserTypeTeacher
+	return u.Rol == models.UserRolTeacher
 }
 
 func isTeacherOrAdmin(u *models.User) bool {
@@ -156,7 +156,7 @@ func PutUser(params user.PutUserParams, u *models.User) middleware.Responder {
 			return user.NewPutUserInternalServerError()
 		}
 		if len(admins) == 1 && admins[0].Username == &params.Username {
-			if u.Type != models.UserTypeAdmin {
+			if u.Rol != models.UserRolAdmin {
 				log.Println("Error en users_handler PutUsers(), intento de quitar admin de ultimo admin")
 				s := "Es el unico administrador existente"
 				return user.NewPutUserConflict().WithPayload(&models.Error{Message: &s})
@@ -353,4 +353,45 @@ func PutUserTeamRole(params team.PutUserTeamRoleParams, u *models.User) middlewa
 		return team.NewPutUserTeamRoleInternalServerError()
 	}
 	return team.NewPutUserTeamRoleForbidden()
+}
+
+// GET /users/{username}/teams/{teamname}
+func GetTeamFromUser(params user.GetTeamFromUserParams, u *models.User) middleware.Responder {
+	if userOrAdmin(params.Username, u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			t, err := dao.GetTeamFromUser(db, params.Teamname, params.Username)
+			if err == nil {
+				if t != nil {
+					return user.NewGetTeamFromUserOK().WithPayload(dao.ToModelTeam(t))
+				}
+			}
+			return user.NewGetTeamFromUserGone()
+		}
+		return user.NewGetTeamFromUserInternalServerError()
+	}
+	return user.NewGetTeamFromUserForbidden()
+}
+
+// GET /users/{username}/questions
+func GetQuestionsOfUser(params user.GetQuestionsOfUserParams, u *models.User) middleware.Responder {
+	if userOrAdmin(params.Username, u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			q, err := dao.GetQuestionsOfUser(db, params.Username)
+			if err == nil {
+				if q != nil {
+					return user.NewGetQuestionsOfUserOK().WithPayload(dao.ToModelQuestions(q))
+				}
+			}
+			return user.NewGetQuestionsOfUserGone()
+		}
+		return user.NewGetQuestionsOfUserInternalServerError()
+	}
+	return user.NewGetQuestionsOfUserForbidden()
+}
+
+func PostQuestionOfUser(params user.PostQuestionParams, u *models.User) middleware.Responder {
+	db, err := dbconnection.ConnectDb()
+	dao.PostQuestion(db, params.Question, params.Username)
 }

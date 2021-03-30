@@ -19,7 +19,7 @@ func ToModelUser(u *User) *models.User {
 	mu := &models.User{
 		Username: u.Username,
 		Email:    u.Email,
-		Type:     u.Type,
+		Rol:      u.Rol,
 		Fullname: u.Fullname,
 	}
 	return mu
@@ -50,7 +50,7 @@ func InsertUser(db *sql.DB, u *User) error {
 	}
 	defer query.Close()
 
-	_, err = query.Exec(u.Username, u.Email, u.Pwhash, u.Type, u.Fullname)
+	_, err = query.Exec(u.Username, u.Email, u.Pwhash, u.Rol, u.Fullname)
 	return err
 }
 
@@ -62,7 +62,7 @@ func rowsToUsers(rows *sql.Rows) ([]*User, error) {
 	var users []*User
 	for rows.Next() {
 		var us User
-		err := rows.Scan(&us.ID, &us.Username, &us.Email, &us.Pwhash, &us.Type, &us.Fullname)
+		err := rows.Scan(&us.ID, &us.Username, &us.Email, &us.Pwhash, &us.Rol, &us.Fullname)
 		if err != nil {
 			return users, err
 		}
@@ -194,7 +194,7 @@ func UpdateUser(db *sql.DB, u *models.User, username string) error {
 		return err
 	}
 	defer query.Close()
-	_, err = query.Exec(u.Username, u.Email, u.Fullname, u.Type, username)
+	_, err = query.Exec(u.Username, u.Email, u.Fullname, u.Rol, username)
 	return err
 }
 

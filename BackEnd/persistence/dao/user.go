@@ -31,7 +31,7 @@ type User struct {
 	// Example: Javier Gatón Herguedas
 	Fullname string `json:"fullname,omitempty"`
 
-	// type
+	// rol
 	// Enum: [student teacher admin]
-	Type string `json:"type,omitempty"`
+	Rol string `json:"rol,omitempty"`
 }

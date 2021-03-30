@@ -815,6 +815,44 @@ paths:
           $ref: '#/responses/GoneError'
         500:
           $ref: '#/responses/InternalServerError'
+  /users/{username}/answeredTests/{testid}/answers:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - user
+      summary: Returns all answers that the user has answered to a test
+      operationId: GetAnswersFromUserAnsweredTest
+      description: Returns all answers that the user has answered to a test
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the user who has answered the test
+        required: true
+        type: string
+      - in: path
+        name: testid
+        description: Id of the test
+        required: true
+        type: integer
+      responses:
+        200:
+          description: answers found  
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Answer'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  
 
   /users/{username}/answers:
     get:

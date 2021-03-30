@@ -52,23 +52,43 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 
 	api.AuthLoginHandler = auth.LoginHandlerFunc(handlers.Login) // POST /accesstokens
 
-	api.UserPutPasswordHandler = user.PutPasswordHandlerFunc(handlers.PutPassword) // PUT /passwords/{username}
-
 	api.UserRegisterUserHandler = user.RegisterUserHandlerFunc(handlers.RegisterUser) // POST /users
 	api.UserGetUsersHandler = user.GetUsersHandlerFunc(handlers.GetUsers)             // GET /users
 
-	api.UserGetUserHandler = user.GetUserHandlerFunc(handlers.GetUser)                            // GET /users/{username}
-	api.UserPutUserHandler = user.PutUserHandlerFunc(handlers.PutUser)                            // PUT /users/{username}
-	api.UserDeleteUserHandler = user.DeleteUserHandlerFunc(handlers.DeleteUser)                   // DELETE /users/{username}
-	api.UserGetTeamsOfUserHandler = user.GetTeamsOfUserHandlerFunc(handlers.GetTeamsOfUser)       // GET /users/{username}/teams
-	api.UserGetTeamFromUserHandler = user.GetTeamFromUserHandlerFunc(handlers.GetTeamFromUser)    // GET /users/{username}/teams/{teamname}
-	api.UserAddTeamOfUserHandler = user.AddTeamOfUserHandlerFunc(handlers.AddTeamOfUser)          // PUT /users/{username}/teams/{teamname}
+	api.UserGetUserHandler = user.GetUserHandlerFunc(handlers.GetUser)             // GET /users/{username}
+	api.UserPutUserHandler = user.PutUserHandlerFunc(handlers.PutUser)             // PUT /users/{username}
+	api.UserDeleteUserHandler = user.DeleteUserHandlerFunc(handlers.DeleteUser)    // DELETE /users/{username}
+	api.UserPutPasswordHandler = user.PutPasswordHandlerFunc(handlers.PutPassword) // PUT /users/{username}/password
+
+	api.UserGetTeamsOfUserHandler = user.GetTeamsOfUserHandlerFunc(handlers.GetTeamsOfUser)    // GET /users/{username}/teams
+	api.TeamPostTeamHandler = team.PostTeamHandlerFunc(handlers.PostTeam)                      // POST /users/{username}/teams
+	api.UserGetTeamFromUserHandler = user.GetTeamFromUserHandlerFunc(handlers.GetTeamFromUser) // GET /users/{username}/teams/{teamname}
+
+	api.UserGetQuestionsOfUserHandler = user.GetQuestionsOfUserHandlerFunc(handlers.GetQuestionsOfUser)  // GET /users/{username}/questions
+	api.UserPostQuestionHandler = user.PostQuestionHandlerFunc(handlers.PostQuestionOfUser)              // POST /users/{username}/questions
+	api.UserGetQuestionFromUserHandler = user.GetQuestionFromUserHandlerFunc(handlers.GetQuestionOfUser) // GET /users/{username}/questions/{questionid}
+
+	api.UserGetTestsFromUserHandler = user.GetTestsFromUserHandlerFunc(handlers.GetTestsFromUser) // GET /users/{username}/tests
+	api.UserPostTestHandler = user.PostTestHandlerFunc(handlers.PostTest)                         // POST /users/{username}/tests
+	api.UserGetTestFromUserHandler = user.GetTestFromUserHandlerFunc(handlers.GetTestFromUser)    // GET /users/{username}/tests/{testid}
+
+	api.UserGetPublishedTestsFromUserHandler = user.GetPublishedTestsFromUserHandlerFunc(handlers.GetPTestsFromUser) // GET /users/{username}/publishedTests
+	api.UserGetPublishedTestFromUserHandler = user.GetPublishedTestFromUserHandlerFunc(handlers.GetPTestFromUser)    // GET /users/{username}/publishedTests/{testid}
+	api.UserStartAnswerHandler = user.StartAnswerHandlerFunc(handlers.StartAnswer)                                   // POST /users/{username}/publishedTests/{testid}/answers
+
+	api.UserGetAnsweredTestsFromUserHandler = user.GetAnsweredTestsFromUserHandlerFunc(handlers.GetATestsFromUser) // GET /users/{username}/answeredTests
+	api.UserGetAnsweredTestFromUserHandler = user.GetAnsweredTestFromUserHandlerFunc(handlers.GetATestFromUser)    // GET /users/{username}/answeredTests/{testid}
+	api.UserGetAnswersFromUserTest = user.GetAnswersFromUserTest(handlers.GetAnswersFromUserTest)                  // GET /users/{username}/answeredTests/{testid}/answers
+
+	api.UserGetAnswersFromUserHandler = user.GetAnswersFromUserHandlerFunc(handlers.GetAnswersFromUser) // GET /users/{username}/answers
+	api.UserGetAnswerFromUserHandler = user.GetAnswerFromUserHandlerFunc(handlers.GetAnswerFromUser)    // GET /users/{username}/answers/{answerid}
+
 	api.UserDeleteTeamOfUserHandler = user.DeleteTeamOfUserHandlerFunc(handlers.DeleteTeamOfUser) // DELETE /users/{username}/teams/{teamname}
 	api.TeamGetUserTeamRoleHandler = team.GetUserTeamRoleHandlerFunc(handlers.GetUserTeamRole)    // GET /users/{username}/teams/{teamname}/role
 	api.TeamPutUserTeamRoleHandler = team.PutUserTeamRoleHandlerFunc(handlers.PutUserTeamRole)    // PUT /users/{username}/teams/{teamname}/role
 
-	api.TeamGetTeamsHandler = team.GetTeamsHandlerFunc(handlers.GetTeams)                               // GET /teams
-	api.TeamPostTeamHandler = team.PostTeamHandlerFunc(handlers.PostTeam)                               // POST /teams
+	api.TeamGetTeamsHandler = team.GetTeamsHandlerFunc(handlers.GetTeams) // GET /teams
+
 	api.TeamGetTeamHandler = team.GetTeamHandlerFunc(handlers.GetTeam)                                  // GET /teams/{teamname}
 	api.TeamPutTeamHandler = team.PutTeamHandlerFunc(handlers.PutTeam)                                  // PUT /teams/{teamname}
 	api.TeamDeleteTeamHandler = team.DeleteTeamHandlerFunc(handlers.DeleteTeam)                         // DELETE /teams/{teamname}

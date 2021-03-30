@@ -106,6 +106,9 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		UserGetAnswersFromUserHandler: user.GetAnswersFromUserHandlerFunc(func(params user.GetAnswersFromUserParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation user.GetAnswersFromUser has not yet been implemented")
 		}),
+		UserGetAnswersFromUserAnsweredTestHandler: user.GetAnswersFromUserAnsweredTestHandlerFunc(func(params user.GetAnswersFromUserAnsweredTestParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation user.GetAnswersFromUserAnsweredTest has not yet been implemented")
+		}),
 		TeamGetMemberHandler: team.GetMemberHandlerFunc(func(params team.GetMemberParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation team.GetMember has not yet been implemented")
 		}),
@@ -378,6 +381,8 @@ type DevAPI struct {
 	PublishedTestGetAnswersFromPublishedTestsHandler published_test.GetAnswersFromPublishedTestsHandler
 	// UserGetAnswersFromUserHandler sets the operation handler for the get answers from user operation
 	UserGetAnswersFromUserHandler user.GetAnswersFromUserHandler
+	// UserGetAnswersFromUserAnsweredTestHandler sets the operation handler for the get answers from user answered test operation
+	UserGetAnswersFromUserAnsweredTestHandler user.GetAnswersFromUserAnsweredTestHandler
 	// TeamGetMemberHandler sets the operation handler for the get member operation
 	TeamGetMemberHandler team.GetMemberHandler
 	// TeamGetMembersHandler sets the operation handler for the get members operation
@@ -636,6 +641,9 @@ func (o *DevAPI) Validate() error {
 	}
 	if o.UserGetAnswersFromUserHandler == nil {
 		unregistered = append(unregistered, "user.GetAnswersFromUserHandler")
+	}
+	if o.UserGetAnswersFromUserAnsweredTestHandler == nil {
+		unregistered = append(unregistered, "user.GetAnswersFromUserAnsweredTestHandler")
 	}
 	if o.TeamGetMemberHandler == nil {
 		unregistered = append(unregistered, "team.GetMemberHandler")
@@ -994,6 +1002,10 @@ func (o *DevAPI) initHandlerCache() {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
 	o.handlers["GET"]["/users/{username}/answers"] = user.NewGetAnswersFromUser(o.context, o.UserGetAnswersFromUserHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/users/{username}/answeredTests/{testid}/answers"] = user.NewGetAnswersFromUserAnsweredTest(o.context, o.UserGetAnswersFromUserAnsweredTestHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}

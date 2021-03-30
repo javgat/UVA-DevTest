@@ -3155,6 +3155,63 @@ func init() {
         }
       }
     },
+    "/users/{username}/answeredTests/{testid}/answers": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all answers that the user has answered to a test",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns all answers that the user has answered to a test",
+        "operationId": "GetAnswersFromUserAnsweredTest",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who has answered the test",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the test",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "answers found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Answer"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
     "/users/{username}/answers": {
       "get": {
         "security": [
@@ -8021,6 +8078,72 @@ func init() {
             "description": "publishedTest found",
             "schema": {
               "$ref": "#/definitions/Test"
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/users/{username}/answeredTests/{testid}/answers": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all answers that the user has answered to a test",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns all answers that the user has answered to a test",
+        "operationId": "GetAnswersFromUserAnsweredTest",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who has answered the test",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the test",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "answers found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Answer"
+              }
             }
           },
           "400": {
