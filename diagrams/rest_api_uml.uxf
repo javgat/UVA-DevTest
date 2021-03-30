@@ -1418,7 +1418,7 @@ bg=yellow
 bg=yellow
 --
 --
-+ &lt;&lt;PUT&gt;&gt; putRevision(r: Revision): void</panel_attributes>
++ &lt;&lt;PUT&gt;&gt; putReview(r: Review): void</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -1426,12 +1426,12 @@ bg=yellow
     <coordinates>
       <x>2736</x>
       <y>834</y>
-      <w>72</w>
+      <w>60</w>
       <h>54</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
-/{revision}</panel_attributes>
+/{review}</panel_attributes>
     <additional_attributes>10.0;70.0;10.0;10.0</additional_attributes>
   </element>
 </diagram>

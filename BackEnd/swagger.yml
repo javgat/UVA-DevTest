@@ -1026,6 +1026,8 @@ paths:
           $ref: '#/responses/BadRequestError'
         403:
           $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
         500:
           $ref: '#/responses/InternalServerError'
   /teams/{teamname}/members/{username}:
@@ -1059,6 +1061,8 @@ paths:
           $ref: '#/responses/BadRequestError'
         403:
           $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
         500:
           $ref: '#/responses/InternalServerError'
     put:
@@ -1123,6 +1127,8 @@ paths:
           $ref: '#/responses/BadRequestError'
         403:
           $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
         500:
           $ref: '#/responses/InternalServerError'
   /teams/{teamname}/admins/{username}:
@@ -1156,6 +1162,8 @@ paths:
           $ref: '#/responses/BadRequestError'
         403:
           $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
         500:
           $ref: '#/responses/InternalServerError'
     put:
@@ -1220,6 +1228,8 @@ paths:
           $ref: '#/responses/BadRequestError'
         403:
           $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
         500:
           $ref: '#/responses/InternalServerError'   
   /teams/{teamname}/users/{username}:
@@ -1253,6 +1263,8 @@ paths:
           $ref: '#/responses/BadRequestError'
         403:
           $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
         500:
           $ref: '#/responses/InternalServerError'
     delete:
@@ -1316,6 +1328,8 @@ paths:
           $ref: '#/responses/BadRequestError'
         403:
           $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
         500:
           $ref: '#/responses/InternalServerError'
   /teams/{teamname}/questions/{questionid}:
@@ -1349,6 +1363,8 @@ paths:
           $ref: '#/responses/BadRequestError'
         403:
           $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
         500:
           $ref: '#/responses/InternalServerError'
   
@@ -1380,6 +1396,8 @@ paths:
           $ref: '#/responses/BadRequestError'
         403:
           $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
         500:
           $ref: '#/responses/InternalServerError'
   /teams/{teamname}/tests/{testid}:
@@ -1413,6 +1431,8 @@ paths:
           $ref: '#/responses/BadRequestError'
         403:
           $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
         500:
           $ref: '#/responses/InternalServerError'
 
@@ -1444,6 +1464,8 @@ paths:
           $ref: '#/responses/BadRequestError'
         403:
           $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
         500:
           $ref: '#/responses/InternalServerError'
   /teams/{teamname}/publishedTests/{testid}:
@@ -1477,18 +1499,98 @@ paths:
           $ref: '#/responses/BadRequestError'
         403:
           $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
         500:
           $ref: '#/responses/InternalServerError'
 
   /tags:
     get:
-    #TODO
+      security:
+        - BearerCookie: []
+      tags:
+      - tag
+      summary: Returns all tags.
+      operationId: GetTags
+      description: Returns all tags.
+      produces:
+      - application/json
+      responses:
+        200:
+          description: tags found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Tag'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        500:
+          $ref: '#/responses/InternalServerError'
+ 
   /tags/{tag}:
     get:
-    #TODO
+      security:
+        - BearerCookie: []
+      tags:
+      - tag
+      summary: Returns a tags.
+      operationId: GetTag
+      description: Returns a tags.
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: tag
+        description: Tag to find
+        required: true
+        type: string
+      responses:
+        200:
+          description: tag found
+          schema:
+            $ref: '#/definitions/Tag'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
   /tags/{tag}/questions:
     get:
-    #TODO
+      security:
+        - BearerCookie: []
+      tags:
+      - tag
+      summary: Returns all questions from a tag.
+      operationId: GetQuestionsFromTag
+      description: Returns all questions from a tag.
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: tag
+        description: Tag to find its questions
+        required: true
+        type: string
+      responses:
+        200:
+          description: questions found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Question'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
 
   /questions:
     get:
@@ -1598,14 +1700,132 @@ paths:
           $ref: '#/responses/InternalServerError'
   /questions/{questionid}/tags:
     get:
-    #TODO
+      security:
+        - BearerCookie: []
+      tags:
+      - question
+      summary: Returns all tags from a question.
+      operationId: GetTagsFromQuestion
+      description: Returns all tags from a question.
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: questionid
+        description: Id of the question to find its tags
+        required: true
+        type: integer
+      responses:
+        200:
+          description: tags found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Tag'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
   /questions/{questionid}/tags/{tag}:
     get:
-    #TODO
+      security:
+        - BearerCookie: []
+      tags:
+      - question
+      summary: Returns a tag from a question.
+      operationId: GetTagFromQuestion
+      description: Returns a tag from a question.
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: questionid
+        description: Id of the question to find its tags
+        required: true
+        type: integer
+      - in: path
+        name: tag
+        description: Tag to find
+        required: true
+        type: string
+      responses:
+        200:
+          description: tag found
+          schema:
+            $ref: '#/definitions/Tag'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
     put:
-    #TODO
+      security:
+        - BearerCookie: []
+      tags:
+      - question
+      summary: Adds a tag to a question
+      operationId: AddTagToQuestion
+      description: Adds a tag to a question
+      parameters:
+      - in: path
+        name: questionid
+        description: Id of the question to add a tag
+        required: true
+        type: integer
+      - in: path
+        name: tag
+        description: Tag to add
+        required: true
+        type: string
+      responses:
+        200:
+          description: tag added
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
     delete:
-    #TODO
+      security:
+        - BearerCookie: []
+      tags:
+      - question
+      summary: Removes a tag from a question
+      operationId: RemoveTagFromQuestion
+      description: Removes a tag from a question
+      parameters:
+      - in: path
+        name: questionid
+        description: Id of the question to remove a tag
+        required: true
+        type: integer
+      - in: path
+        name: tag
+        description: Tag to remove
+        required: true
+        type: string
+      responses:
+        200:
+          description: tag removed
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
 
   /tests:
     get:
@@ -2324,9 +2544,46 @@ paths:
           $ref: '#/responses/InternalServerError'
 
 
-  /answers/{answerid}/qanswers/{questionid}/revision:
+  /answers/{answerid}/qanswers/{questionid}/review:
     put:
-    #TODO
+      security:
+        - BearerCookie: []
+      tags:
+      - answer
+      summary: Updates an answer review
+      operationId: PutReview
+      description: Updates an answer review
+      consumes:
+      - application/json
+      parameters:
+      - in: path
+        name: answerid
+        description: Id of the answer
+        required: true
+        type: integer
+      - in: path
+        name: questionid
+        description: Id of the question it is answering
+        required: true
+        type: integer
+      - in: body
+        name: review
+        description: Review Updated
+        required: true
+        schema:
+          $ref: '#/definitions/Review'
+      responses:
+        200:
+          description: Review updated
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
 responses:
   BadRequestError:
     description: Incorrect Request, or invalida data
@@ -2523,7 +2780,7 @@ definitions:
         type: string
         example: En este test se evaluaran los conocimientos respecto al lenguaje de programación Java
       maxSeconds:
-        type: int
+        type: integer
         example: 32600
       accesoPublico:
         type: boolean
@@ -2555,6 +2812,22 @@ definitions:
       idRespuesta:
         type: integer
         example: 1
+  Tag:
+    type: object
+    required:
+    - tag
+    properties:
+      tag:
+        type: string
+        example: Java    
+  Review:
+    type: object
+    required:
+    - puntuacion
+    properties:
+      puntuacion:
+        type: integer
+        example: 100
   Error:
     type: object
     required:
