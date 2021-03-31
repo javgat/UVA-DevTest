@@ -41,7 +41,7 @@ func ToModelsUser(us []*User) []*models.User {
 // Return error if something wrong happens
 func InsertUser(db *sql.DB, u *User) error {
 	if db == nil || u == nil {
-		return errors.New("Argumento de entrada nil")
+		return errors.New(errorDBNil)
 	}
 	query, err := db.Prepare("INSERT INTO Users(username, email, pwhash, type, fullname) VALUES (?,?,?,?,?)")
 
@@ -91,7 +91,7 @@ func rowsToUser(rows *sql.Rows) (*User, error) {
 // Return error if something happened
 func GetUserUsername(db *sql.DB, username string) (*User, error) {
 	if db == nil {
-		return nil, errors.New("Parametro db nil")
+		return nil, errors.New(errorDBNil)
 	}
 	var u *User
 	query, err := db.Prepare("SELECT * FROM Users WHERE username=?")
@@ -113,7 +113,7 @@ func GetUserUsername(db *sql.DB, username string) (*User, error) {
 // Return error if something happened
 func GetUserEmail(db *sql.DB, email string) (*User, error) {
 	if db == nil {
-		return nil, errors.New("Parametro db nil")
+		return nil, errors.New(errorDBNil)
 	}
 	var u *User
 	query, err := db.Prepare("SELECT * FROM Users WHERE email=?")
@@ -131,7 +131,7 @@ func GetUserEmail(db *sql.DB, email string) (*User, error) {
 // GetUsers returns all users
 func GetUsers(db *sql.DB) ([]*User, error) {
 	if db == nil {
-		return nil, errors.New("Parametro db nil")
+		return nil, errors.New(errorDBNil)
 	}
 	query, err := db.Prepare("SELECT * FROM Users")
 	var us []*User
@@ -149,7 +149,7 @@ func GetUsers(db *sql.DB) ([]*User, error) {
 // GetAdmins returns all users that are admins
 func GetAdmins(db *sql.DB) ([]*User, error) {
 	if db == nil {
-		return nil, errors.New("Parametro db nil")
+		return nil, errors.New(errorDBNil)
 	}
 	query, err := db.Prepare("SELECT * FROM Users WHERE type='Admin'")
 	var us []*User
@@ -169,7 +169,7 @@ func GetAdmins(db *sql.DB) ([]*User, error) {
 // Param newpwhash: New Password Hash to insert in the database
 func PutPasswordUsername(db *sql.DB, username string, newpwhash string) error {
 	if db == nil {
-		return errors.New("Parametro db nil")
+		return errors.New(errorDBNil)
 	}
 	query, err := db.Prepare("UPDATE Users SET pwhash = ? WHERE username = ?")
 	if err != nil {
@@ -187,7 +187,7 @@ func PutPasswordUsername(db *sql.DB, username string, newpwhash string) error {
 // Return error if something wrong happens
 func UpdateUser(db *sql.DB, u *models.User, username string) error {
 	if db == nil || u == nil {
-		return errors.New("Argumento de entrada nil")
+		return errors.New(errorDBNil)
 	}
 	query, err := db.Prepare("UPDATE Users SET username=?, email=?, fullname=?, type=? WHERE username = ? ")
 	if err != nil {
@@ -202,7 +202,7 @@ func UpdateUser(db *sql.DB, u *models.User, username string) error {
 // Param username: Username of the user
 func DeleteUser(db *sql.DB, username string) error {
 	if db == nil {
-		return errors.New("Argumento de entrada nil")
+		return errors.New(errorDBNil)
 	}
 	query, err := db.Prepare("DELETE FROM Users WHERE username = ? ") //ESTO se supone que borra en cascade
 	if err != nil {
@@ -218,7 +218,7 @@ func DeleteUser(db *sql.DB, username string) error {
 // Param teamname: Teamname of the team
 func AddUserTeam(db *sql.DB, username string, teamname string) error {
 	if db == nil {
-		return errors.New("Argumento de entrada nil")
+		return errors.New(errorDBNil)
 	}
 	u, err := GetUserUsername(db, username)
 	if err != nil {
@@ -245,7 +245,7 @@ func AddUserTeam(db *sql.DB, username string, teamname string) error {
 // Param teamname: Teamname of the team
 func ExitUserTeam(db *sql.DB, username string, teamname string) error {
 	if db == nil {
-		return errors.New("Argumento de entrada nil")
+		return errors.New(errorDBNil)
 	}
 	u, err := GetUserUsername(db, username)
 	if err != nil {
@@ -271,7 +271,7 @@ func ExitUserTeam(db *sql.DB, username string, teamname string) error {
 // Param teamname: Teamname of the team
 func GetUsersFromTeam(db *sql.DB, teamname string) ([]*User, error) {
 	if db == nil {
-		return nil, errors.New("Parametro db nil")
+		return nil, errors.New(errorDBNil)
 	}
 	t, err := GetTeam(db, teamname)
 	if err != nil {
@@ -296,7 +296,7 @@ func GetUsersFromTeam(db *sql.DB, teamname string) ([]*User, error) {
 // Param teamname: Teamname of the team
 func GetTeamAdmins(db *sql.DB, teamname string) ([]*User, error) {
 	if db == nil {
-		return nil, errors.New("Parametro db nil")
+		return nil, errors.New(errorDBNil)
 	}
 	t, err := GetTeam(db, teamname)
 	if err != nil {

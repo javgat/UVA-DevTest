@@ -68,32 +68,6 @@ func isTeamMember(teamname string, u *models.User) (bool, error) {
 	return false, nil
 }
 
-// PutPassword PUT /password/{username} Modifies the password of a user.
-// Auth: Current User or Admin
-func PutPassword(params user.PutPasswordParams, u *models.User) middleware.Responder {
-	if userOrAdmin(params.Username, u) {
-		pu := params.PasswordUpdate
-		db, err := dbconnection.ConnectDb()
-		if err != nil {
-			log.Println("Error en users_handler PutPassword(): ", err)
-			return user.NewPutPasswordInternalServerError()
-		}
-		ud, _ := dao.GetUserUsername(db, params.Username)
-		if bcrypt.CompareHashAndPassword([]byte(*ud.Pwhash), []byte(*pu.Oldpass)) == nil {
-			bytes, errBcrypt := bcrypt.GenerateFromPassword([]byte(*pu.Newpass), Cost)
-			newpwhash := string(bytes)
-			err = dao.PutPasswordUsername(db, params.Username, newpwhash)
-			if err != nil || errBcrypt != nil {
-				log.Println("Error al modificar la contraseña: ", err, errBcrypt)
-				return user.NewPutPasswordInternalServerError()
-			}
-			return user.NewPutPasswordOK()
-		}
-		return user.NewPutPasswordBadRequest()
-	}
-	return user.NewPutPasswordForbidden()
-}
-
 // GetUsers GET /users. Returns all users.
 // Auth: Teacher or Admin
 func GetUsers(params user.GetUsersParams, u *models.User) middleware.Responder {
@@ -132,12 +106,22 @@ func GetUser(params user.GetUserParams, u *models.User) middleware.Responder {
 			return user.NewGetUserInternalServerError()
 		} else if us == nil {
 			log.Println("No existe user en users_handler GetUser(): ", err)
-			return user.NewGetUserGone()
+			return user.NewGetUserGone() //410
 		}
 		return user.NewGetUserOK().WithPayload(dao.ToModelUser(us))
 
 	}
 	return user.NewGetUserForbidden()
+}
+
+func userUpdateToUser(uu *models.UserUpdate) *models.User {
+	u := &models.User{
+		Email:    uu.Email,
+		Fullname: uu.Fullname,
+		Rol:      uu.Rol,
+		Username: uu.Username,
+	}
+	return u
 }
 
 // PutUser PUT /users/{username}
@@ -162,12 +146,17 @@ func PutUser(params user.PutUserParams, u *models.User) middleware.Responder {
 				return user.NewPutUserConflict().WithPayload(&models.Error{Message: &s})
 			}
 		}
-		err = dao.UpdateUser(db, params.User, params.Username)
-		if err != nil {
-			log.Println("Error en users_handler PutUsers(): ", err)
-			return user.NewPutUserGone()
+
+		ud, _ := dao.GetUserUsername(db, params.Username)
+		if bcrypt.CompareHashAndPassword([]byte(*ud.Pwhash), []byte(*params.UserUpdate.Password)) == nil {
+			u = userUpdateToUser(params.UserUpdate)
+			err = dao.UpdateUser(db, u, params.Username)
+			if err != nil {
+				log.Println("Error en users_handler PutUsers(): ", err)
+				return user.NewPutUserGone()
+			}
+			return user.NewPutUserOK()
 		}
-		return user.NewPutUserOK()
 	}
 	return user.NewPutUserForbidden()
 }
@@ -208,7 +197,7 @@ func DeleteUser(params user.DeleteUserParams, u *models.User) middleware.Respond
 				// BadRequest en vez de Conflict ????
 			}
 		}
-		err = dao.DeleteUser(db, params.Username) // EN principio borra cascade
+		err = dao.DeleteUser(db, params.Username) // en principio borra cascade
 		if err != nil {
 			log.Println("Error en users_handler DeleteUser(): ", err)
 			return user.NewDeleteUserGone()
@@ -216,6 +205,32 @@ func DeleteUser(params user.DeleteUserParams, u *models.User) middleware.Respond
 		return user.NewPutUserOK()
 	}
 	return user.NewDeleteUserForbidden()
+}
+
+// PutPassword PUT /users/{username}/password Modifies the password of a user.
+// Auth: Current User or Admin
+func PutPassword(params user.PutPasswordParams, u *models.User) middleware.Responder {
+	if userOrAdmin(params.Username, u) {
+		pu := params.PasswordUpdate
+		db, err := dbconnection.ConnectDb()
+		if err != nil {
+			log.Println("Error en users_handler PutPassword(): ", err)
+			return user.NewPutPasswordInternalServerError()
+		}
+		ud, _ := dao.GetUserUsername(db, params.Username)
+		if bcrypt.CompareHashAndPassword([]byte(*ud.Pwhash), []byte(*pu.Oldpass)) == nil {
+			bytes, errBcrypt := bcrypt.GenerateFromPassword([]byte(*pu.Newpass), Cost)
+			newpwhash := string(bytes)
+			err = dao.PutPasswordUsername(db, params.Username, newpwhash)
+			if err != nil || errBcrypt != nil {
+				log.Println("Error al modificar la contraseña: ", err, errBcrypt)
+				return user.NewPutPasswordInternalServerError()
+			}
+			return user.NewPutPasswordOK()
+		}
+		return user.NewPutPasswordBadRequest() //O forbidden?
+	}
+	return user.NewPutPasswordForbidden()
 }
 
 // GetTeamsOfUser GET /users/{username}/teams
@@ -235,6 +250,250 @@ func GetTeamsOfUser(params user.GetTeamsOfUserParams, u *models.User) middleware
 	}
 	return user.NewGetTeamsOfUserForbidden()
 }
+
+// GET /users/{username}/teams/{teamname}
+func GetTeamFromUser(params user.GetTeamFromUserParams, u *models.User) middleware.Responder {
+	if userOrAdmin(params.Username, u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			t, err := dao.GetTeamFromUser(db, params.Teamname, params.Username)
+			if err == nil {
+				if t != nil {
+					return user.NewGetTeamFromUserOK().WithPayload(dao.ToModelTeam(t))
+				}
+				return user.NewGetTeamFromUserGone()
+			}
+			return user.NewGetTeamFromUserGone()
+		}
+		return user.NewGetTeamFromUserInternalServerError()
+	}
+	return user.NewGetTeamFromUserForbidden()
+}
+
+// GET /users/{username}/questions
+func GetQuestionsOfUser(params user.GetQuestionsOfUserParams, u *models.User) middleware.Responder {
+	if userOrAdmin(params.Username, u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			q, err := dao.GetQuestionsOfUser(db, params.Username)
+			if err == nil {
+				if q != nil {
+					return user.NewGetQuestionsOfUserOK().WithPayload(dao.ToModelQuestions(q))
+				}
+			}
+		}
+		return user.NewGetQuestionsOfUserInternalServerError()
+	}
+	return user.NewGetQuestionsOfUserForbidden()
+}
+
+// POST /users/{username}/questions
+func PostQuestionOfUser(params user.PostQuestionParams, u *models.User) middleware.Responder {
+	if userOrAdmin(params.Username, u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			q, err := dao.PostQuestion(db, params.Question, params.Username)
+			if err == nil && q != nil {
+				return user.NewPostQuestionCreated().WithPayload(dao.ToModelQuestion(q))
+			}
+			return user.NewPostQuestionGone()
+		}
+		return user.NewPostQuestionInternalServerError()
+	}
+	return user.NewPostQuestionForbidden()
+}
+
+// GET /users/{username}/questions/{questionid}
+func GetQuestionOfUser(params user.GetQuestionFromUserParams, u *models.User) middleware.Responder {
+	if isTeacherOrAdmin(u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			q, err := dao.GetQuestionOfUser(db, params.Username, params.Questionid)
+			if err == nil && q != nil {
+				return user.NewGetQuestionFromUserOK().WithPayload(dao.ToModelQuestion(q))
+			}
+			return user.NewGetQuestionFromUserGone()
+		}
+		return user.NewGetQuestionFromUserInternalServerError()
+	}
+	return user.NewGetQuestionFromUserForbidden()
+}
+
+// GET /users/{username}/tests
+func GetTestsFromUser(params user.GetTestsFromUserParams, u *models.User) middleware.Responder {
+	if isTeacherOrAdmin(u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			t, err := dao.GetTestsFromUser(db, params.Username)
+			if err == nil && t != nil {
+				return user.NewGetTestsFromUserOK().WithPayload(dao.ToModelTests(t))
+			}
+		}
+		return user.NewGetTestsFromUserInternalServerError()
+	}
+	return user.NewGetTestsFromUserForbidden()
+}
+
+// POST /users/{username}/tests
+func PostTest(params user.PostTestParams, u *models.User) middleware.Responder {
+	if userOrAdmin(params.Username, u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			t, err := dao.PostTest(db, params.Username, params.Test)
+			if err == nil && t != nil {
+				return user.NewPostTestCreated().WithPayload(dao.ToModelTest(t))
+			}
+			return user.NewPostTestGone()
+		}
+		return user.NewPostTestInternalServerError()
+	}
+	return user.NewPostTestForbidden()
+}
+
+// GET /users/{username}/tests/{testid}
+func GetTestFromUser(params user.GetTestFromUserParams, u *models.User) middleware.Responder {
+	if userOrAdmin(params.Username, u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			t, err := dao.GetTestFromUser(db, params.Username, params.Testid)
+			if err == nil && t != nil {
+				return user.NewGetTestFromUserOK().WithPayload(dao.ToModelTest(t))
+			}
+			return user.NewGetTestFromUserGone()
+		}
+		return user.NewGetTestFromUserInternalServerError()
+	}
+	return user.NewGetTestFromUserForbidden()
+}
+
+// GET /users/{username}/publishedTests
+func GetPTestsFromUser(params user.GetPublishedTestsFromUserParams, u *models.User) middleware.Responder {
+	if isTeacherOrAdmin(u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			t, err := dao.GetPTestsFromUser(db, params.Username)
+			if err == nil && t != nil {
+				return user.NewGetPublishedTestsFromUserOK().WithPayload(dao.ToModelTests(t))
+			}
+		}
+		return user.NewGetPublishedTestsFromUserInternalServerError()
+	}
+	return user.NewGetPublishedTestsFromUserForbidden()
+}
+
+// GET /users/{username}/publishedTests/{testid}
+func GetPTestFromUser(params user.GetPublishedTestFromUserParams, u *models.User) middleware.Responder {
+	if userOrAdmin(u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			t, err := dao.GetPTestFromUser(db, params.Username, params.Testid)
+			if err == nil && t != nil {
+				return user.NewGetPublishedTestFromUserOK().WithPayload(dao.ToModelTest(t))
+			}
+			return user.NewGetPublishedTestFromUserGone()
+		}
+		return user.NewGetPublishedTestFromUserInternalServerError()
+	}
+	return user.NewGetPublishedTestFromUserForbidden()
+}
+
+// POST /users/{username}/publishedTests/{testid}/answers
+func StartAnswer(params user.StartAnswerParams, u *models.User) middleware.Responder {
+	if userOrAdmin(params.Username, u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			t, err := dao.GetPTestFromUser(db, params.Username, params.Testid)
+			if err == nil && t != nil {
+				a, err := dao.StartAnswer(db, params.Username, params.Testid)
+				if err == nil && a != nil {
+					return user.NewStartAnswerCreated().WithPayload(dao.ToModelAnswer(a))
+				}
+			}
+			return user.NewStartAnswerGone()
+		}
+		return user.NewStartAnswerInternalServerError()
+	}
+	return user.NewStartAnswerForbidden()
+}
+
+// GET /users/{username}/answeredTests
+func GetATestsFromUser(params user.GetAnsweredTestsFromUserParams, u *models.User) middleware.Responder {
+	if userOrAdmin(params.Username, u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			t, err := dao.GetATestsFromUser(db, params.Username)
+			if err == nil && t != nil {
+				return user.NewGetAnsweredTestsFromUserOK().WithPayload(dao.ToModelTests(t))
+			}
+		}
+		return user.NewGetAnsweredTestsFromUserInternalServerError()
+	}
+	return user.NewGetAnsweredTestsFromUserForbidden()
+}
+
+// GET /users/{username}/answeredTests/{testid}
+func GetATestFromUser(params user.GetAnsweredTestFromUserParams, u *models.User) middleware.Responder {
+	if userOrAdmin(params.Username, u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			t, err := dao.GetATestFromUser(db, params.Username, params.Testid)
+			if err == nil && t != nil {
+				return user.NewGetAnsweredTestFromUserOK().WithPayload(dao.ToModelTest(t))
+			}
+			return user.NewGetAnsweredTestFromUserGone()
+		}
+		return user.NewGetAnsweredTestFromUserInternalServerError()
+	}
+	return user.NewGetAnsweredTestFromUserForbidden()
+}
+
+// GET /users/{username}/answeredTests/{testid}/answers
+func GetAnswersFromUserAnsweredTest(params user.GetAnswersFromUserAnsweredTestParams, u *models.User) middleware.Responder {
+	if userOrAdmin(params.Username, u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			a, err := dao.GetAnswersFromUserAnsweredTest(db, params.Username, params.Testid)
+			if err == nil && a != nil {
+				return user.NewGetAnswersFromUserAnsweredTestOK().WithPayload(dao.ToModelAnswers(a))
+			}
+		}
+		return user.NewGetAnswersFromUserAnsweredTestInternalServerError()
+	}
+	return user.NewGetAnswersFromUserAnsweredTestForbidden()
+}
+
+// GET /users/{username}/answers
+func GetAnswersFromUser(params user.GetAnswersFromUserParams, u *models.User) middleware.Responder {
+	if userOrAdmin(params.Username, u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			a, err := dao.GetAnswersFromUser(db, params.Username)
+			if err == nil && a != nil {
+				return user.NewGetAnswersFromUserOK().WithPayload(dao.ToModelAnswers(a))
+			}
+		}
+		return user.NewGetAnswersFromUserInternalServerError()
+	}
+	return user.NewGetAnswersFromUserForbidden()
+}
+
+// GET /users/{username}/answers/{answerid}
+func GetAnswerFromUser(params user.GetAnswerFromUserParams, u *models.User) middleware.Responder {
+	if userOrAdmin(params.Username, u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			a, err := dao.GetAnswerFromUser(db, params.Username)
+			if err == nil && a != nil {
+				return user.NewGetAnswerFromUserOK().WithPayload(dao.ToModelAnswer(a))
+			}
+			return user.NewGetAnswerFromUserGone()
+		}
+		return user.NewGetAnswerFromUserInternalServerError()
+	}
+	return user.NewGetAnswerFromUserForbidden()
+}
+
+// YA NO (o se cambiara)
 
 // AddTeamOfUser PUT /users/{username}/teams/{teamname}
 // Auth: TeamAdmin or Admin
@@ -353,45 +612,4 @@ func PutUserTeamRole(params team.PutUserTeamRoleParams, u *models.User) middlewa
 		return team.NewPutUserTeamRoleInternalServerError()
 	}
 	return team.NewPutUserTeamRoleForbidden()
-}
-
-// GET /users/{username}/teams/{teamname}
-func GetTeamFromUser(params user.GetTeamFromUserParams, u *models.User) middleware.Responder {
-	if userOrAdmin(params.Username, u) {
-		db, err := dbconnection.ConnectDb()
-		if err == nil {
-			t, err := dao.GetTeamFromUser(db, params.Teamname, params.Username)
-			if err == nil {
-				if t != nil {
-					return user.NewGetTeamFromUserOK().WithPayload(dao.ToModelTeam(t))
-				}
-			}
-			return user.NewGetTeamFromUserGone()
-		}
-		return user.NewGetTeamFromUserInternalServerError()
-	}
-	return user.NewGetTeamFromUserForbidden()
-}
-
-// GET /users/{username}/questions
-func GetQuestionsOfUser(params user.GetQuestionsOfUserParams, u *models.User) middleware.Responder {
-	if userOrAdmin(params.Username, u) {
-		db, err := dbconnection.ConnectDb()
-		if err == nil {
-			q, err := dao.GetQuestionsOfUser(db, params.Username)
-			if err == nil {
-				if q != nil {
-					return user.NewGetQuestionsOfUserOK().WithPayload(dao.ToModelQuestions(q))
-				}
-			}
-			return user.NewGetQuestionsOfUserGone()
-		}
-		return user.NewGetQuestionsOfUserInternalServerError()
-	}
-	return user.NewGetQuestionsOfUserForbidden()
-}
-
-func PostQuestionOfUser(params user.PostQuestionParams, u *models.User) middleware.Responder {
-	db, err := dbconnection.ConnectDb()
-	dao.PostQuestion(db, params.Question, params.Username)
 }

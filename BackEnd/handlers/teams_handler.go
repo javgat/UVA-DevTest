@@ -32,14 +32,14 @@ func GetTeams(params team.GetTeamsParams, u *models.User) middleware.Responder {
 	return team.NewGetTeamsForbidden()
 }
 
-// PostTeam POST /teams
+// PostTeam POST /users/{username}/teams
 // Auth: Teacher or Admin
 // Req: Meterle el usuario como TeamAdmin
 func PostTeam(params team.PostTeamParams, u *models.User) middleware.Responder {
 	if isTeacherOrAdmin(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			err := dao.PostTeam(db, params.Team, *u.Username)
+			err := dao.PostTeam(db, params.Team, params.Username)
 			if err == nil {
 				return team.NewPostTeamCreated().WithPayload(params.Team)
 			} else {

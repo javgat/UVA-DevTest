@@ -50,7 +50,13 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 	// Example:
 	// api.APIAuthorizer = security.Authorized()
 
+	// Cookies y auth
+
+	//TODO
+
 	api.AuthLoginHandler = auth.LoginHandlerFunc(handlers.Login) // POST /accesstokens
+
+	// /users
 
 	api.UserRegisterUserHandler = user.RegisterUserHandlerFunc(handlers.RegisterUser) // POST /users
 	api.UserGetUsersHandler = user.GetUsersHandlerFunc(handlers.GetUsers)             // GET /users
@@ -76,16 +82,16 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 	api.UserGetPublishedTestFromUserHandler = user.GetPublishedTestFromUserHandlerFunc(handlers.GetPTestFromUser)    // GET /users/{username}/publishedTests/{testid}
 	api.UserStartAnswerHandler = user.StartAnswerHandlerFunc(handlers.StartAnswer)                                   // POST /users/{username}/publishedTests/{testid}/answers
 
-	api.UserGetAnsweredTestsFromUserHandler = user.GetAnsweredTestsFromUserHandlerFunc(handlers.GetATestsFromUser) // GET /users/{username}/answeredTests
-	api.UserGetAnsweredTestFromUserHandler = user.GetAnsweredTestFromUserHandlerFunc(handlers.GetATestFromUser)    // GET /users/{username}/answeredTests/{testid}
-	api.UserGetAnswersFromUserTest = user.GetAnswersFromUserTest(handlers.GetAnswersFromUserTest)                  // GET /users/{username}/answeredTests/{testid}/answers
+	api.UserGetAnsweredTestsFromUserHandler = user.GetAnsweredTestsFromUserHandlerFunc(handlers.GetATestsFromUser)        // GET /users/{username}/answeredTests
+	api.UserGetAnsweredTestFromUserHandler = user.GetAnsweredTestFromUserHandlerFunc(handlers.GetATestFromUser)           // GET /users/{username}/answeredTests/{testid}
+	api.UserGetAnswersFromUserAnsweredTestHandler = user.GetAnswersFromUserAnsweredTest(handlers.GetAnswersFromUserATest) // GET /users/{username}/answeredTests/{testid}/answers
 
 	api.UserGetAnswersFromUserHandler = user.GetAnswersFromUserHandlerFunc(handlers.GetAnswersFromUser) // GET /users/{username}/answers
 	api.UserGetAnswerFromUserHandler = user.GetAnswerFromUserHandlerFunc(handlers.GetAnswerFromUser)    // GET /users/{username}/answers/{answerid}
 
-	api.UserDeleteTeamOfUserHandler = user.DeleteTeamOfUserHandlerFunc(handlers.DeleteTeamOfUser) // DELETE /users/{username}/teams/{teamname}
-	api.TeamGetUserTeamRoleHandler = team.GetUserTeamRoleHandlerFunc(handlers.GetUserTeamRole)    // GET /users/{username}/teams/{teamname}/role
-	api.TeamPutUserTeamRoleHandler = team.PutUserTeamRoleHandlerFunc(handlers.PutUserTeamRole)    // PUT /users/{username}/teams/{teamname}/role
+	// /teams
+
+	//TODO
 
 	api.TeamGetTeamsHandler = team.GetTeamsHandlerFunc(handlers.GetTeams) // GET /teams
 
