@@ -429,7 +429,10 @@ func StartAnswer(params user.StartAnswerParams, u *models.User) middleware.Respo
 			if err == nil && t != nil {
 				a, err := dao.StartAnswer(db, params.Username, params.Testid)
 				if err == nil && a != nil {
-					return user.NewStartAnswerCreated().WithPayload(dao.ToModelAnswer(a))
+					ma, err := dao.ToModelAnswer(a)
+					if ma != nil && err == nil {
+						return user.NewStartAnswerCreated().WithPayload(ma)
+					}
 				}
 			}
 			return user.NewStartAnswerGone()
@@ -484,7 +487,11 @@ func GetAnswersFromUserATest(params user.GetAnswersFromUserAnsweredTestParams, u
 		if err == nil {
 			a, err := dao.GetAnswersFromUserAnsweredTest(db, params.Username, params.Testid)
 			if err == nil && a != nil {
-				return user.NewGetAnswersFromUserAnsweredTestOK().WithPayload(dao.ToModelAnswers(a))
+				ma, err := dao.ToModelAnswers(a)
+				if ma != nil && err == nil {
+					return user.NewGetAnswersFromUserAnsweredTestOK().WithPayload(ma)
+				}
+				return user.NewGetAnswersFromUserAnsweredTestGone()
 			}
 		}
 		return user.NewGetAnswersFromUserAnsweredTestInternalServerError()
@@ -499,7 +506,11 @@ func GetAnswersFromUser(params user.GetAnswersFromUserParams, u *models.User) mi
 		if err == nil {
 			a, err := dao.GetAnswersFromUser(db, params.Username)
 			if err == nil && a != nil {
-				return user.NewGetAnswersFromUserOK().WithPayload(dao.ToModelAnswers(a))
+				ma, err := dao.ToModelAnswers(a)
+				if ma != nil && err == nil {
+					return user.NewGetAnswersFromUserOK().WithPayload(ma)
+				}
+				return user.NewGetAnswersFromUserGone()
 			}
 		}
 		return user.NewGetAnswersFromUserInternalServerError()
@@ -512,9 +523,12 @@ func GetAnswerFromUser(params user.GetAnswerFromUserParams, u *models.User) midd
 	if userOrAdmin(params.Username, u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			a, err := dao.GetAnswerFromUser(db, params.Username)
+			a, err := dao.GetAnswerFromUser(db, params.Username, params.Answerid)
 			if err == nil && a != nil {
-				return user.NewGetAnswerFromUserOK().WithPayload(dao.ToModelAnswer(a))
+				ma, err := dao.ToModelAnswer(a)
+				if ma != nil && err == nil {
+					return user.NewGetAnswerFromUserOK().WithPayload(ma)
+				}
 			}
 			return user.NewGetAnswerFromUserGone()
 		}

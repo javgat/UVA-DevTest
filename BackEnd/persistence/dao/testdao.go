@@ -46,7 +46,7 @@ func ToModelTests(ts []*Test) ([]*models.Test, error) {
 	return mts, nil
 }
 
-// Transforms some sql.Test into a slice(array) of tests
+// Transforms some sql.Rows into a slice(array) of tests
 // Param rows: Rows which contains database information returned
 // Return []models.Test: Tests represented in rows
 // Return error if any

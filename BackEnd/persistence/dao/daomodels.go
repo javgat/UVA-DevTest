@@ -8,7 +8,7 @@ import "github.com/go-openapi/strfmt"
 type User struct {
 	// id
 	// Identificador SQL
-	ID int
+	ID int64
 
 	// email
 	// Example: carlos@mail.com
@@ -42,7 +42,7 @@ type User struct {
 type Team struct {
 	// id
 	// Identificador SQL
-	ID int
+	ID int64
 
 	// description
 	// Example: DevTest Team

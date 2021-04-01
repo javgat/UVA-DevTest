@@ -138,7 +138,8 @@ CREATE TABLE PreguntaEtiqueta(
 
 CREATE TABLE RespuestaExamen(
   id int(11) NOT NULL AUTO_INCREMENT,
-  /*startTime, ESTA AUN NO*/
+  startTime DateTime NOT NULL,
+  finished boolean NOT NULL,
   testid int(11) NOT NULL,
   usuarioid int(11) NOT NULL,
   FOREIGN KEY(testid) REFERENCES Test(id) ON DELETE CASCADE,
