@@ -47,6 +47,11 @@ type Test struct {
 	// Example: Test de introduccion a Java
 	// Required: true
 	Title *string `json:"title"`
+
+	// username
+	// Example: javgat
+	// Required: true
+	Username *string `json:"username"`
 }
 
 // Validate validates this test
@@ -70,6 +75,10 @@ func (m *Test) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateTitle(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateUsername(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -118,6 +127,15 @@ func (m *Test) validateMaxSeconds(formats strfmt.Registry) error {
 func (m *Test) validateTitle(formats strfmt.Registry) error {
 
 	if err := validate.Required("title", "body", m.Title); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Test) validateUsername(formats strfmt.Registry) error {
+
+	if err := validate.Required("username", "body", m.Username); err != nil {
 		return err
 	}
 

@@ -278,7 +278,11 @@ func GetQuestionsOfUser(params user.GetQuestionsOfUserParams, u *models.User) mi
 			q, err := dao.GetQuestionsOfUser(db, params.Username)
 			if err == nil {
 				if q != nil {
-					return user.NewGetQuestionsOfUserOK().WithPayload(dao.ToModelQuestions(q))
+					mq, err := dao.ToModelQuestions(q)
+					if mq != nil && err == nil {
+						return user.NewGetQuestionsOfUserOK().WithPayload(mq)
+					}
+					user.NewGetQuestionsOfUserGone()
 				}
 			}
 		}
@@ -292,9 +296,10 @@ func PostQuestionOfUser(params user.PostQuestionParams, u *models.User) middlewa
 	if userOrAdmin(params.Username, u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			q, err := dao.PostQuestion(db, params.Question, params.Username)
+			err := dao.PostQuestion(db, params.Question, params.Username)
+			q := params.Question
 			if err == nil && q != nil {
-				return user.NewPostQuestionCreated().WithPayload(dao.ToModelQuestion(q))
+				return user.NewPostQuestionCreated().WithPayload(q)
 			}
 			return user.NewPostQuestionGone()
 		}
@@ -310,7 +315,10 @@ func GetQuestionOfUser(params user.GetQuestionFromUserParams, u *models.User) mi
 		if err == nil {
 			q, err := dao.GetQuestionOfUser(db, params.Username, params.Questionid)
 			if err == nil && q != nil {
-				return user.NewGetQuestionFromUserOK().WithPayload(dao.ToModelQuestion(q))
+				mq, err := dao.ToModelQuestion(q)
+				if mq != nil && err == nil {
+					return user.NewGetQuestionFromUserOK().WithPayload(mq)
+				}
 			}
 			return user.NewGetQuestionFromUserGone()
 		}
@@ -326,7 +334,11 @@ func GetTestsFromUser(params user.GetTestsFromUserParams, u *models.User) middle
 		if err == nil {
 			t, err := dao.GetTestsFromUser(db, params.Username)
 			if err == nil && t != nil {
-				return user.NewGetTestsFromUserOK().WithPayload(dao.ToModelTests(t))
+				mt, err := dao.ToModelTests(t)
+				if mt != nil && err == nil {
+					return user.NewGetTestsFromUserOK().WithPayload(mt)
+				}
+				return user.NewGetTestsFromUserGone()
 			}
 		}
 		return user.NewGetTestsFromUserInternalServerError()
@@ -339,9 +351,10 @@ func PostTest(params user.PostTestParams, u *models.User) middleware.Responder {
 	if userOrAdmin(params.Username, u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			t, err := dao.PostTest(db, params.Username, params.Test)
+			err := dao.PostTest(db, params.Username, params.Test)
+			t := params.Test
 			if err == nil && t != nil {
-				return user.NewPostTestCreated().WithPayload(dao.ToModelTest(t))
+				return user.NewPostTestCreated().WithPayload(t)
 			}
 			return user.NewPostTestGone()
 		}
@@ -357,7 +370,10 @@ func GetTestFromUser(params user.GetTestFromUserParams, u *models.User) middlewa
 		if err == nil {
 			t, err := dao.GetTestFromUser(db, params.Username, params.Testid)
 			if err == nil && t != nil {
-				return user.NewGetTestFromUserOK().WithPayload(dao.ToModelTest(t))
+				mt, err := dao.ToModelTest(t)
+				if mt != nil && err == nil {
+					return user.NewGetTestFromUserOK().WithPayload(mt)
+				}
 			}
 			return user.NewGetTestFromUserGone()
 		}
@@ -373,7 +389,11 @@ func GetPTestsFromUser(params user.GetPublishedTestsFromUserParams, u *models.Us
 		if err == nil {
 			t, err := dao.GetPTestsFromUser(db, params.Username)
 			if err == nil && t != nil {
-				return user.NewGetPublishedTestsFromUserOK().WithPayload(dao.ToModelTests(t))
+				mt, err := dao.ToModelTests(t)
+				if mt != nil && err == nil {
+					return user.NewGetPublishedTestsFromUserOK().WithPayload(mt)
+				}
+				return user.NewGetPublishedTestsFromUserGone()
 			}
 		}
 		return user.NewGetPublishedTestsFromUserInternalServerError()
@@ -383,12 +403,15 @@ func GetPTestsFromUser(params user.GetPublishedTestsFromUserParams, u *models.Us
 
 // GET /users/{username}/publishedTests/{testid}
 func GetPTestFromUser(params user.GetPublishedTestFromUserParams, u *models.User) middleware.Responder {
-	if userOrAdmin(u) {
+	if userOrAdmin(params.Username, u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			t, err := dao.GetPTestFromUser(db, params.Username, params.Testid)
 			if err == nil && t != nil {
-				return user.NewGetPublishedTestFromUserOK().WithPayload(dao.ToModelTest(t))
+				mt, err := dao.ToModelTest(t)
+				if mt != nil && err == nil {
+					return user.NewGetPublishedTestFromUserOK().WithPayload(mt)
+				}
 			}
 			return user.NewGetPublishedTestFromUserGone()
 		}
@@ -423,7 +446,11 @@ func GetATestsFromUser(params user.GetAnsweredTestsFromUserParams, u *models.Use
 		if err == nil {
 			t, err := dao.GetATestsFromUser(db, params.Username)
 			if err == nil && t != nil {
-				return user.NewGetAnsweredTestsFromUserOK().WithPayload(dao.ToModelTests(t))
+				mt, err := dao.ToModelTests(t)
+				if mt != nil && err == nil {
+					return user.NewGetAnsweredTestsFromUserOK().WithPayload(mt)
+				}
+				return user.NewGetAnsweredTestsFromUserGone()
 			}
 		}
 		return user.NewGetAnsweredTestsFromUserInternalServerError()
@@ -438,7 +465,10 @@ func GetATestFromUser(params user.GetAnsweredTestFromUserParams, u *models.User)
 		if err == nil {
 			t, err := dao.GetATestFromUser(db, params.Username, params.Testid)
 			if err == nil && t != nil {
-				return user.NewGetAnsweredTestFromUserOK().WithPayload(dao.ToModelTest(t))
+				mt, err := dao.ToModelTest(t)
+				if mt != nil && err == nil {
+					return user.NewGetAnsweredTestFromUserOK().WithPayload(mt)
+				}
 			}
 			return user.NewGetAnsweredTestFromUserGone()
 		}
@@ -448,7 +478,7 @@ func GetATestFromUser(params user.GetAnsweredTestFromUserParams, u *models.User)
 }
 
 // GET /users/{username}/answeredTests/{testid}/answers
-func GetAnswersFromUserAnsweredTest(params user.GetAnswersFromUserAnsweredTestParams, u *models.User) middleware.Responder {
+func GetAnswersFromUserATest(params user.GetAnswersFromUserAnsweredTestParams, u *models.User) middleware.Responder {
 	if userOrAdmin(params.Username, u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
@@ -494,7 +524,7 @@ func GetAnswerFromUser(params user.GetAnswerFromUserParams, u *models.User) midd
 }
 
 // YA NO (o se cambiara)
-
+/*
 // AddTeamOfUser PUT /users/{username}/teams/{teamname}
 // Auth: TeamAdmin or Admin
 // DEBERIA devolver error o no modificar si ya exisite uno y hace PUT (no quitar de admin)
@@ -517,7 +547,7 @@ func AddTeamOfUser(params user.AddTeamOfUserParams, u *models.User) middleware.R
 		return user.NewAddTeamOfUserInternalServerError()
 	}
 	return user.NewAddTeamOfUserForbidden()
-}
+}*/
 
 // DeleteTeamOfUser DELETE /users/{username}/teams/{teamname}
 // Auth: Current User, TeamAdmin or Admin

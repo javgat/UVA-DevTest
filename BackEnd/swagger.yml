@@ -2780,6 +2780,7 @@ definitions:
     - estimatedTime
     - autoCorrect
     - editable
+    - username
     properties:
       id:
         type: integer
@@ -2799,6 +2800,18 @@ definitions:
       editable:
         type: boolean
         example: false
+      username:
+        type: string
+        example: javgat
+      testid:
+        type: integer
+        example: 1
+      eleccionUnica:
+        type: boolean
+        example: false
+      solucion:
+        type: string
+        example: Javadoc
   Test:
     type: object
     required:
@@ -2807,6 +2820,7 @@ definitions:
     - maxSeconds
     - accesoPublico
     - editable
+    - username
     properties:
       id:
         type: integer
@@ -2826,8 +2840,13 @@ definitions:
       editable:
         type: boolean
         example: false
+      username:
+        type: string
+        example: javgat
   Answer:
     type: object
+    required:
+    - finished
     properties:
       id:
         type: integer
@@ -2835,6 +2854,15 @@ definitions:
       startime:
         type: string
         example: 2021-02-25 14:44:55
+      finished:
+        type: boolean
+        example: false
+      testid:
+        type: integer
+        example: 343
+      username:
+        type: string
+        example: javgat
   QuestionAnswer:
     type: object
     properties:

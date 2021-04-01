@@ -4016,7 +4016,14 @@ func init() {
   "definitions": {
     "Answer": {
       "type": "object",
+      "required": [
+        "finished"
+      ],
       "properties": {
+        "finished": {
+          "type": "boolean",
+          "example": false
+        },
         "id": {
           "type": "integer",
           "example": 1
@@ -4024,6 +4031,14 @@ func init() {
         "startime": {
           "type": "string",
           "example": "2021-02-25 14:44:55"
+        },
+        "testid": {
+          "type": "integer",
+          "example": 343
+        },
+        "username": {
+          "type": "string",
+          "example": "javgat"
         }
       }
     },
@@ -4100,7 +4115,8 @@ func init() {
         "question",
         "estimatedTime",
         "autoCorrect",
-        "editable"
+        "editable",
+        "username"
       ],
       "properties": {
         "autoCorrect": {
@@ -4108,6 +4124,10 @@ func init() {
           "example": true
         },
         "editable": {
+          "type": "boolean",
+          "example": false
+        },
+        "eleccionUnica": {
           "type": "boolean",
           "example": false
         },
@@ -4123,9 +4143,21 @@ func init() {
           "type": "string",
           "example": "¿Cual es el lenguaje que tiene un nombre más largo de todos?"
         },
+        "solucion": {
+          "type": "string",
+          "example": "Javadoc"
+        },
+        "testid": {
+          "type": "integer",
+          "example": 1
+        },
         "title": {
           "type": "string",
           "example": "Paralelismo en C"
+        },
+        "username": {
+          "type": "string",
+          "example": "javgat"
         }
       }
     },
@@ -4240,7 +4272,8 @@ func init() {
         "description",
         "maxSeconds",
         "accesoPublico",
-        "editable"
+        "editable",
+        "username"
       ],
       "properties": {
         "accesoPublico": {
@@ -4266,6 +4299,10 @@ func init() {
         "title": {
           "type": "string",
           "example": "Test de introduccion a Java"
+        },
+        "username": {
+          "type": "string",
+          "example": "javgat"
         }
       }
     },
@@ -9106,7 +9143,14 @@ func init() {
   "definitions": {
     "Answer": {
       "type": "object",
+      "required": [
+        "finished"
+      ],
       "properties": {
+        "finished": {
+          "type": "boolean",
+          "example": false
+        },
         "id": {
           "type": "integer",
           "example": 1
@@ -9114,6 +9158,14 @@ func init() {
         "startime": {
           "type": "string",
           "example": "2021-02-25 14:44:55"
+        },
+        "testid": {
+          "type": "integer",
+          "example": 343
+        },
+        "username": {
+          "type": "string",
+          "example": "javgat"
         }
       }
     },
@@ -9190,7 +9242,8 @@ func init() {
         "question",
         "estimatedTime",
         "autoCorrect",
-        "editable"
+        "editable",
+        "username"
       ],
       "properties": {
         "autoCorrect": {
@@ -9198,6 +9251,10 @@ func init() {
           "example": true
         },
         "editable": {
+          "type": "boolean",
+          "example": false
+        },
+        "eleccionUnica": {
           "type": "boolean",
           "example": false
         },
@@ -9213,9 +9270,21 @@ func init() {
           "type": "string",
           "example": "¿Cual es el lenguaje que tiene un nombre más largo de todos?"
         },
+        "solucion": {
+          "type": "string",
+          "example": "Javadoc"
+        },
+        "testid": {
+          "type": "integer",
+          "example": 1
+        },
         "title": {
           "type": "string",
           "example": "Paralelismo en C"
+        },
+        "username": {
+          "type": "string",
+          "example": "javgat"
         }
       }
     },
@@ -9330,7 +9399,8 @@ func init() {
         "description",
         "maxSeconds",
         "accesoPublico",
-        "editable"
+        "editable",
+        "username"
       ],
       "properties": {
         "accesoPublico": {
@@ -9356,6 +9426,10 @@ func init() {
         "title": {
           "type": "string",
           "example": "Test de introduccion a Java"
+        },
+        "username": {
+          "type": "string",
+          "example": "javgat"
         }
       }
     },

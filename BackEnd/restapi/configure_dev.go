@@ -82,9 +82,10 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 	api.UserGetPublishedTestFromUserHandler = user.GetPublishedTestFromUserHandlerFunc(handlers.GetPTestFromUser)    // GET /users/{username}/publishedTests/{testid}
 	api.UserStartAnswerHandler = user.StartAnswerHandlerFunc(handlers.StartAnswer)                                   // POST /users/{username}/publishedTests/{testid}/answers
 
-	api.UserGetAnsweredTestsFromUserHandler = user.GetAnsweredTestsFromUserHandlerFunc(handlers.GetATestsFromUser)        // GET /users/{username}/answeredTests
-	api.UserGetAnsweredTestFromUserHandler = user.GetAnsweredTestFromUserHandlerFunc(handlers.GetATestFromUser)           // GET /users/{username}/answeredTests/{testid}
-	api.UserGetAnswersFromUserAnsweredTestHandler = user.GetAnswersFromUserAnsweredTest(handlers.GetAnswersFromUserATest) // GET /users/{username}/answeredTests/{testid}/answers
+	api.UserGetAnsweredTestsFromUserHandler = user.GetAnsweredTestsFromUserHandlerFunc(handlers.GetATestsFromUser) // GET /users/{username}/answeredTests
+	api.UserGetAnsweredTestFromUserHandler = user.GetAnsweredTestFromUserHandlerFunc(handlers.GetATestFromUser)    // GET /users/{username}/answeredTests/{testid}
+	api.UserGetAnswersFromUserAnsweredTestHandler =
+		user.GetAnswersFromUserAnsweredTestHandlerFunc(handlers.GetAnswersFromUserATest) // GET /users/{username}/answeredTests/{testid}/answers
 
 	api.UserGetAnswersFromUserHandler = user.GetAnswersFromUserHandlerFunc(handlers.GetAnswersFromUser) // GET /users/{username}/answers
 	api.UserGetAnswerFromUserHandler = user.GetAnswerFromUserHandlerFunc(handlers.GetAnswerFromUser)    // GET /users/{username}/answers/{answerid}
@@ -98,9 +99,9 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 	api.TeamGetTeamHandler = team.GetTeamHandlerFunc(handlers.GetTeam)                                  // GET /teams/{teamname}
 	api.TeamPutTeamHandler = team.PutTeamHandlerFunc(handlers.PutTeam)                                  // PUT /teams/{teamname}
 	api.TeamDeleteTeamHandler = team.DeleteTeamHandlerFunc(handlers.DeleteTeam)                         // DELETE /teams/{teamname}
-	api.TeamGetUsersFromTeamHandler = user.GetUsersFromTeamHandlerFunc(handlers.GetUsersFromTeam)       // GET /teams/{teamname}/users
-	api.UserAddUserFromTeamHandler = user.AddUserFromTeamHandlerFunc(handlers.AddUserFromTeam)          // PUT /teams/{teamname}/users/{username}
-	api.TeamDeleteUserFromTeamHandler = user.DeleteUserFromTeamHandlerFunc(handlers.DeleteUserFromTeam) // DELETE /teams/{teamname}/users/{username}
+	api.TeamGetUsersFromTeamHandler = team.GetUsersFromTeamHandlerFunc(handlers.GetUsersFromTeam)       // GET /teams/{teamname}/users
+	api.TeamAddMemberHandler = team.AddMemberHandlerFunc(handlers.AddUserFromTeam)                      // PUT /teams/{teamname}/users/{username}
+	api.TeamDeleteUserFromTeamHandler = team.DeleteUserFromTeamHandlerFunc(handlers.DeleteUserFromTeam) // DELETE /teams/{teamname}/users/{username}
 
 	api.PreServerShutdown = func() {}
 

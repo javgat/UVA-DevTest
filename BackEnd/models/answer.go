@@ -8,14 +8,21 @@ package models
 import (
 	"context"
 
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // Answer answer
 //
 // swagger:model Answer
 type Answer struct {
+
+	// finished
+	// Example: false
+	// Required: true
+	Finished *bool `json:"finished"`
 
 	// id
 	// Example: 1
@@ -24,10 +31,36 @@ type Answer struct {
 	// startime
 	// Example: 2021-02-25 14:44:55
 	Startime string `json:"startime,omitempty"`
+
+	// testid
+	// Example: 343
+	Testid int64 `json:"testid,omitempty"`
+
+	// username
+	// Example: javgat
+	Username string `json:"username,omitempty"`
 }
 
 // Validate validates this answer
 func (m *Answer) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.validateFinished(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *Answer) validateFinished(formats strfmt.Registry) error {
+
+	if err := validate.Required("finished", "body", m.Finished); err != nil {
+		return err
+	}
+
 	return nil
 }
 

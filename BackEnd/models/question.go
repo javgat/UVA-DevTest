@@ -29,6 +29,10 @@ type Question struct {
 	// Required: true
 	Editable *bool `json:"editable"`
 
+	// eleccion unica
+	// Example: false
+	EleccionUnica bool `json:"eleccionUnica,omitempty"`
+
 	// estimated time
 	// Example: 32600
 	// Required: true
@@ -43,10 +47,23 @@ type Question struct {
 	// Required: true
 	Question *string `json:"question"`
 
+	// solucion
+	// Example: Javadoc
+	Solucion string `json:"solucion,omitempty"`
+
+	// testid
+	// Example: 1
+	Testid int64 `json:"testid,omitempty"`
+
 	// title
 	// Example: Paralelismo en C
 	// Required: true
 	Title *string `json:"title"`
+
+	// username
+	// Example: javgat
+	// Required: true
+	Username *string `json:"username"`
 }
 
 // Validate validates this question
@@ -70,6 +87,10 @@ func (m *Question) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateTitle(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateUsername(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -118,6 +139,15 @@ func (m *Question) validateQuestion(formats strfmt.Registry) error {
 func (m *Question) validateTitle(formats strfmt.Registry) error {
 
 	if err := validate.Required("title", "body", m.Title); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Question) validateUsername(formats strfmt.Registry) error {
+
+	if err := validate.Required("username", "body", m.Username); err != nil {
 		return err
 	}
 
