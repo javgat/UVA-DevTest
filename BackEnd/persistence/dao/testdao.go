@@ -220,3 +220,83 @@ func GetATestFromUser(db *sql.DB, username string, testid int64) (*Test, error) 
 	}
 	return nil, err
 }
+
+func GetTestsFromTeam(db *sql.DB, teamname string) ([]*Test, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	u, err := GetTeam(db, teamname)
+	if err == nil {
+		var t []*Test
+		query, err := db.Prepare("SELECT T.* FROM Test T JOIN GestionTestEquipo G ON T.id=G.testid WHERE G.equipoid=?")
+		if err == nil {
+			defer query.Close()
+			rows, err := query.Query(u.ID)
+			if err == nil {
+				t, err = rowsToTests(rows)
+				return t, err
+			}
+		}
+	}
+	return nil, err
+}
+
+func GetTestFromTeam(db *sql.DB, teamname string, testid int64) (*Test, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	u, err := GetTeam(db, teamname)
+	if err == nil {
+		var t *Test
+		query, err := db.Prepare("SELECT T.* FROM Test T JOIN GestionTestEquipo G ON T.id=G.testid WHERE G.equipoid=? AND T.id=?")
+		if err == nil {
+			defer query.Close()
+			rows, err := query.Query(u.ID, testid)
+			if err == nil {
+				t, err = rowsToTest(rows)
+				return t, err
+			}
+		}
+	}
+	return nil, err
+}
+
+func GetPTestsFromTeam(db *sql.DB, teamname string) ([]*Test, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	u, err := GetTeam(db, teamname)
+	if err == nil {
+		var t []*Test
+		query, err := db.Prepare("SELECT T.* FROM Test T JOIN InvitacionTestEquipo I ON T.id=I.testid WHERE I.equipoid=?")
+		if err == nil {
+			defer query.Close()
+			rows, err := query.Query(u.ID)
+			if err == nil {
+				t, err = rowsToTests(rows)
+				return t, err
+			}
+		}
+	}
+	return nil, err
+}
+
+func GetPTestFromTeam(db *sql.DB, teamname string, testid int64) (*Test, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	u, err := GetTeam(db, teamname)
+	if err == nil {
+		var t *Test
+		query, err := db.Prepare("SELECT T.* FROM Test T JOIN InvitacionTestEquipo I ON T.id=I.testid WHERE I.equipoid=? AND T.id=?")
+		if err == nil {
+			defer query.Close()
+			rows, err := query.Query(u.ID, testid)
+			if err == nil {
+				t, err = rowsToTest(rows)
+				return t, err
+			}
+		}
+	}
+	return nil, err
+}

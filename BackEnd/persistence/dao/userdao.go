@@ -322,6 +322,31 @@ func GetUsersFromTeam(db *sql.DB, teamname string) ([]*User, error) {
 	return us, err
 }
 
+// GetUsersFromTeam returns a user
+// Param teamname: Teamname of the team
+func GetUserFromTeam(db *sql.DB, teamname string, username string) (*User, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	t, err := GetTeam(db, teamname)
+	if err != nil {
+		return nil, err
+	} else if t == nil {
+		return nil, errors.New(errorResourceNotFound)
+	}
+	query, err := db.Prepare("SELECT U.* FROM Usuario U JOIN EquipoUsuario R ON	U.id=R.userid WHERE R.teamid=? AND U.username=?")
+	var us *User
+	if err != nil {
+		return nil, err
+	}
+	defer query.Close()
+	rows, err := query.Query(t.ID, username)
+	if err == nil {
+		us, err = rowsToUser(rows)
+	}
+	return us, err
+}
+
 func getTeamUsersByRole(db *sql.DB, teamname string, teamrole string) ([]*User, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
@@ -355,4 +380,39 @@ func GetTeamAdmins(db *sql.DB, teamname string) ([]*User, error) {
 // Param teamname: Teamname of the team
 func GetTeamMembers(db *sql.DB, teamname string) ([]*User, error) {
 	return getTeamUsersByRole(db, teamname, models.TeamRoleRoleMember)
+}
+
+func getTeamUserByRole(db *sql.DB, teamname string, teamrole string, username string) (*User, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	t, err := GetTeam(db, teamname)
+	if err != nil {
+		return nil, err
+	} else if t == nil {
+		return nil, errors.New(errorResourceNotFound)
+	}
+	query, err := db.Prepare("SELECT U.* FROM Users U JOIN Teamroles R ON U.id=R.userid WHERE R.teamid=? AND R.role=? AND U.username=?")
+	var us *User
+	if err != nil {
+		return nil, err
+	}
+	defer query.Close()
+	rows, err := query.Query(t.ID, teamrole, username)
+	if err == nil {
+		us, err = rowsToUser(rows)
+	}
+	return us, err
+}
+
+// GetTeamAdmin returns a user of team that is admins in team
+// Param teamname: Teamname of the team
+func GetTeamAdmin(db *sql.DB, teamname string, username string) (*User, error) {
+	return getTeamUserByRole(db, teamname, models.TeamRoleRoleAdmin, username)
+}
+
+// GetTeamMember returns a user of team that is role member in team
+// Param teamname: Teamname of the team
+func GetTeamMember(db *sql.DB, teamname string, username string) (*User, error) {
+	return getTeamUserByRole(db, teamname, models.TeamRoleRoleMember, username)
 }

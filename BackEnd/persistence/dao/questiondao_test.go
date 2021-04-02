@@ -19,10 +19,11 @@ func rowsQuestions(qs []*Question) *sqlmock.Rows {
 	return sqlcols
 }
 
+/*
 func rowsQuestion(q *Question) *sqlmock.Rows {
 	questions := []*Question{q}
 	return rowsQuestions(questions)
-}
+}*/
 
 func defaultQuestion() *Question {
 	titulo := "Titulo"

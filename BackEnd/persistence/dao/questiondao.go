@@ -145,3 +145,43 @@ func PostQuestion(db *sql.DB, q *models.Question, username string) error {
 	_, err = query.Exec(q.Title, q.Question, q.EstimatedTime, q.AutoCorrect, q.Editable, u.ID, q.EleccionUnica, q.Solucion)
 	return err
 }
+
+func GetQuestionsFromTeam(db *sql.DB, teamname string) ([]*Question, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	u, err := GetTeam(db, teamname)
+	if err == nil {
+		var qs []*Question
+		query, err := db.Prepare("SELECT P.* FROM Pregunta P JOIN PreguntaEquipo E ON P.id=E.preguntaid WHERE E.teamid=?")
+		if err == nil {
+			defer query.Close()
+			rows, err := query.Query(u.ID)
+			if err == nil {
+				qs, err = rowsToQuestions(rows)
+				return qs, err
+			}
+		}
+	}
+	return nil, err
+}
+
+func GetQuestionFromTeam(db *sql.DB, teamname string, questionid int64) (*Question, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	u, err := GetTeam(db, teamname)
+	if err == nil {
+		var qs *Question
+		query, err := db.Prepare("SELECT P.* FROM Pregunta P JOIN PreguntaEquipo E ON P.id=E.preguntaid WHERE E.teamid=? AND P.id=?")
+		if err == nil {
+			defer query.Close()
+			rows, err := query.Query(u.ID, questionid)
+			if err == nil {
+				qs, err = rowsToQuestion(rows)
+				return qs, err
+			}
+		}
+	}
+	return nil, err
+}

@@ -92,21 +92,19 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 
 	// /teams
 
-	//TODO
-
 	api.TeamGetTeamsHandler = team.GetTeamsHandlerFunc(handlers.GetTeams) // GET /teams
 
 	api.TeamGetTeamHandler = team.GetTeamHandlerFunc(handlers.GetTeam)          // GET /teams/{teamname}
 	api.TeamPutTeamHandler = team.PutTeamHandlerFunc(handlers.PutTeam)          // PUT /teams/{teamname}
 	api.TeamDeleteTeamHandler = team.DeleteTeamHandlerFunc(handlers.DeleteTeam) // DELETE /teams/{teamname}
 
-	api.TeamGetAdminsHandler = team.GetAdminsHandlerFunc(handlers.GetUsersAdminsFromTeam) // GET /teams/{teamname}/admins
-	api.TeamGetAdminHandler = team.GetAdminHandlerFunc(handlers.GetUserAdminFromTeam)     // GET /teams/{teamname}/admins/{username}
-	api.TeamAddAdminHandler = team.AddAdminHandlerFunc(handlers.AddAdminToTeam)           // PUT /teams/{teamname}/admins/{username}
+	api.TeamGetAdminsHandler = team.GetAdminsHandlerFunc(handlers.GetAdminsFromTeam) // GET /teams/{teamname}/admins
+	api.TeamGetAdminHandler = team.GetAdminHandlerFunc(handlers.GetAdminFromTeam)    // GET /teams/{teamname}/admins/{username}
+	api.TeamAddAdminHandler = team.AddAdminHandlerFunc(handlers.AddAdminToTeam)      // PUT /teams/{teamname}/admins/{username}
 
-	api.TeamGetMembersHandler = team.GetMembersHandlerFunc(handlers.GetUsersMembersFromTeam) // GET /teams/{teamname}/members
-	api.TeamGetMemberHandler = team.GetMemberHandlerFunc(handlers.GetUserMemberFromTeam)     // GET /teams/{teamname}/members/{username}
-	api.TeamAddMemberHandler = team.AddMemberHandlerFunc(handlers.AddMemberToTeam)           // PUT /teams/{teamname}/members/{username}
+	api.TeamGetMembersHandler = team.GetMembersHandlerFunc(handlers.GetMembersFromTeam) // GET /teams/{teamname}/members
+	api.TeamGetMemberHandler = team.GetMemberHandlerFunc(handlers.GetMemberFromTeam)    // GET /teams/{teamname}/members/{username}
+	api.TeamAddMemberHandler = team.AddMemberHandlerFunc(handlers.AddMemberToTeam)      // PUT /teams/{teamname}/members/{username}
 
 	api.TeamGetUsersFromTeamHandler = team.GetUsersFromTeamHandlerFunc(handlers.GetUsersFromTeam)       // GET /teams/{teamname}/users
 	api.TeamGetUserFromTeamHandler = team.GetUserFromTeamHandlerFunc(handlers.GetUserFromTeam)          // GET /teams/{teamname}/users/{username}

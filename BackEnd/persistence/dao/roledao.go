@@ -46,13 +46,13 @@ func rowsToRole(rows *sql.Rows) (*models.TeamRole, error) {
 // Param teamname: Teamname of the team
 func GetRole(db *sql.DB, username string, teamname string) (role *models.TeamRole, err error) {
 	if db == nil {
-		return nil, errors.New("Argumento de entrada nil")
+		return nil, errors.New(errorDBNil)
 	}
 	u, err := GetUserUsername(db, username)
 	if err != nil {
 		return nil, err
 	} else if u == nil {
-		return nil, errors.New("User no existe")
+		return nil, errors.New(errorResourceNotFound)
 	}
 	t, err := GetTeam(db, teamname)
 	if err != nil {
@@ -60,7 +60,7 @@ func GetRole(db *sql.DB, username string, teamname string) (role *models.TeamRol
 	} else if t == nil {
 		return nil, errors.New("Team no existe")
 	}
-	query, err := db.Prepare("SELECT * FROM Teamroles WHERE userid = ? AND teamid = ? ")
+	query, err := db.Prepare("SELECT * FROM EquipoUsuario WHERE userid = ? AND teamid = ? ")
 	defer query.Close()
 	if err != nil {
 		return nil, err
@@ -78,13 +78,13 @@ func GetRole(db *sql.DB, username string, teamname string) (role *models.TeamRol
 // Param role: New role to update
 func UpdateRole(db *sql.DB, username string, teamname string, role *models.TeamRole) error {
 	if db == nil || role == nil {
-		return errors.New("Argumento de entrada nil")
+		return errors.New(errorDBNil)
 	}
 	u, err := GetUserUsername(db, username)
 	if err != nil {
 		return err
 	} else if u == nil {
-		return errors.New("User no existe")
+		return errors.New(errorResourceNotFound)
 	}
 	t, err := GetTeam(db, teamname)
 	if err != nil {
@@ -92,7 +92,7 @@ func UpdateRole(db *sql.DB, username string, teamname string, role *models.TeamR
 	} else if t == nil {
 		return errors.New("Team no existe")
 	}
-	query, err := db.Prepare("UPDATE Teamroles SET role = ? WHERE userid = ? AND teamid = ? ")
+	query, err := db.Prepare("UPDATE EquipoUsuario SET rol = ? WHERE userid = ? AND teamid = ? ")
 	defer query.Close()
 	if err != nil {
 		return err
