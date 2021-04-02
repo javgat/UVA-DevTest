@@ -48,6 +48,11 @@ type Team struct {
 	// Example: DevTest Team
 	Description string `json:"description,omitempty"`
 
+	// solo profesores
+	// Example: true
+	// Required: true
+	SoloProfesores *bool `json:"soloProfesores"`
+
 	// teamname
 	// Example: devtestTeam
 	// Required: true
@@ -173,4 +178,15 @@ type Answer struct {
 	// Example: 3
 	// Required: true
 	Usuarioid int64 `json:"usuarioid"`
+}
+
+// TeamRole team role
+//
+// swagger:model TeamRole
+type TeamRole struct {
+
+	// role
+	// Required: true
+	// Enum: [admin member]
+	Role *string `json:"role"`
 }

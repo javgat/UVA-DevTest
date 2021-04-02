@@ -43,7 +43,10 @@ func PostTeam(params team.PostTeamParams, u *models.User) middleware.Responder {
 			if err == nil {
 				return team.NewPostTeamCreated().WithPayload(params.Team)
 			} else {
-				return team.NewPostTeamConflict()
+				mess := err.Error()
+				return team.NewPostTeamConflict().WithPayload(&models.Error{
+					Message: &mess,
+				})
 			}
 		}
 		log.Println("Error en teams_handler PostTeam(): ", err)

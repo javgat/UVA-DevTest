@@ -2730,6 +2730,7 @@ definitions:
     type: object
     required:
     - teamname
+    - soloProfesores
     properties:
       teamname:
         type: string
@@ -2738,14 +2739,9 @@ definitions:
       description:
         type: string
         example: DevTest Team
-  TeamRole:
-    type: object
-    required:
-    - role
-    properties:
-      role:
-        type: string
-        enum: [admin, member]
+      soloProfesores:
+        type: boolean
+        example: true
   PasswordUpdate:
     type: object
     required:

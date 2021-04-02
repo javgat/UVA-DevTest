@@ -23,6 +23,11 @@ type Team struct {
 	// Example: DevTest Team
 	Description string `json:"description,omitempty"`
 
+	// solo profesores
+	// Example: true
+	// Required: true
+	SoloProfesores *bool `json:"soloProfesores"`
+
 	// teamname
 	// Example: devtestTeam
 	// Required: true
@@ -34,6 +39,10 @@ type Team struct {
 func (m *Team) Validate(formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.validateSoloProfesores(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateTeamname(formats); err != nil {
 		res = append(res, err)
 	}
@@ -41,6 +50,15 @@ func (m *Team) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *Team) validateSoloProfesores(formats strfmt.Registry) error {
+
+	if err := validate.Required("soloProfesores", "body", m.SoloProfesores); err != nil {
+		return err
+	}
+
 	return nil
 }
 

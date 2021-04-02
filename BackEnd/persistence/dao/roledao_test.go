@@ -13,15 +13,15 @@ import (
 
 // GetRole
 
-func defaultRole() *models.TeamRole {
+func defaultRole() *TeamRole {
 	rol := models.TeamRoleRoleMember
-	r := &models.TeamRole{
+	r := &TeamRole{
 		Role: &rol,
 	}
 	return r
 }
 
-func rowsRoles(rs []*models.TeamRole) *sqlmock.Rows {
+func rowsRoles(rs []*TeamRole) *sqlmock.Rows {
 	columns := []string{"userid", "teamid", "role"}
 	sqlcols := sqlmock.NewRows(columns)
 	for _, role := range rs {
@@ -30,11 +30,11 @@ func rowsRoles(rs []*models.TeamRole) *sqlmock.Rows {
 	return sqlcols
 }
 
-func rowsRole(rs *models.TeamRole) *sqlmock.Rows {
-	return rowsRoles([]*models.TeamRole{rs})
+func rowsRole(rs *TeamRole) *sqlmock.Rows {
+	return rowsRoles([]*TeamRole{rs})
 }
 
-func expectGetRole(mock sqlmock.Sqlmock, role *models.TeamRole) {
+func expectGetRole(mock sqlmock.Sqlmock, role *TeamRole) {
 	expectGetUser(mock, *defaultUser().Username, defaultUser())
 	expectGetTeam(mock, *defaultTeam().Teamname, defaultTeam())
 	rows := rowsRole(role)

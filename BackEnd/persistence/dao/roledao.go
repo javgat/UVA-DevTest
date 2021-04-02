@@ -7,18 +7,17 @@ package dao
 import (
 	"database/sql"
 	"errors"
-	"uva-devtest/models"
 )
 
 // Transforms some sql.Rows into a slice(array) of roles
 // Param rows: Rows which contains database information returned
 // Return []models.TeamRole: TeamRoles represented in rows
 // Return error if any
-func rowsToRoles(rows *sql.Rows) ([]*models.TeamRole, error) {
-	var roles []*models.TeamRole
+func rowsToRoles(rows *sql.Rows) ([]*TeamRole, error) {
+	var roles []*TeamRole
 	var userid, teamid int
 	for rows.Next() {
-		var r models.TeamRole
+		var r TeamRole
 		err := rows.Scan(&userid, &teamid, &r.Role)
 		if err != nil {
 			return roles, err
@@ -32,8 +31,8 @@ func rowsToRoles(rows *sql.Rows) ([]*models.TeamRole, error) {
 // Param rows: Rows which contains database info of 1 Role
 // Return *models.TeamRole: TeamRole that was represented in rows
 // Return error if something happens
-func rowsToRole(rows *sql.Rows) (*models.TeamRole, error) {
-	var role *models.TeamRole
+func rowsToRole(rows *sql.Rows) (*TeamRole, error) {
+	var role *TeamRole
 	roles, err := rowsToRoles(rows)
 	if len(roles) >= 1 {
 		role = roles[0]
@@ -44,7 +43,7 @@ func rowsToRole(rows *sql.Rows) (*models.TeamRole, error) {
 // GetRole gets the TeamRole of user <username> at team <teamname>
 // Param username: Username of the user
 // Param teamname: Teamname of the team
-func GetRole(db *sql.DB, username string, teamname string) (role *models.TeamRole, err error) {
+func GetRole(db *sql.DB, username string, teamname string) (role *TeamRole, err error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
@@ -60,11 +59,11 @@ func GetRole(db *sql.DB, username string, teamname string) (role *models.TeamRol
 	} else if t == nil {
 		return nil, errors.New("Team no existe")
 	}
-	query, err := db.Prepare("SELECT * FROM EquipoUsuario WHERE userid = ? AND teamid = ? ")
-	defer query.Close()
+	query, err := db.Prepare("SELECT * FROM EquipoUsuario WHERE usuarioid=? AND equipoid=?")
 	if err != nil {
 		return nil, err
 	}
+	defer query.Close()
 	rows, err := query.Query(u.ID, t.ID)
 	if err == nil {
 		role, err = rowsToRole(rows)
@@ -76,7 +75,7 @@ func GetRole(db *sql.DB, username string, teamname string) (role *models.TeamRol
 // Param username: Username of the user
 // Param teamname: Teamname of the team
 // Param role: New role to update
-func UpdateRole(db *sql.DB, username string, teamname string, role *models.TeamRole) error {
+func UpdateRole(db *sql.DB, username string, teamname string, role *TeamRole) error {
 	if db == nil || role == nil {
 		return errors.New(errorDBNil)
 	}
@@ -92,7 +91,7 @@ func UpdateRole(db *sql.DB, username string, teamname string, role *models.TeamR
 	} else if t == nil {
 		return errors.New("Team no existe")
 	}
-	query, err := db.Prepare("UPDATE EquipoUsuario SET rol = ? WHERE userid = ? AND teamid = ? ")
+	query, err := db.Prepare("UPDATE EquipoUsuario SET rol = ? WHERE usuarioid = ? AND equipoid = ? ")
 	defer query.Close()
 	if err != nil {
 		return err

@@ -1,1 +1,1 @@
-swagger generate server -P models.User
+go build -o bin/devtest cmd/dev-server/main.go

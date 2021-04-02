@@ -247,7 +247,7 @@ func addUserTeam(db *sql.DB, username string, teamname string, teamrole string) 
 	if u == nil || t == nil {
 		return errors.New(errorResourceNotFound)
 	}
-	query, err := db.Prepare("INSERT INTO EquipoUsuario(userid, teamid, role) VALUES (?, ?, ?) ")
+	query, err := db.Prepare("INSERT INTO EquipoUsuario(usuarioid, equipoid, rol) VALUES (?, ?, ?) ")
 	if err != nil {
 		return err
 	}
@@ -288,7 +288,7 @@ func ExitUserTeam(db *sql.DB, username string, teamname string) error {
 	if u == nil || t == nil {
 		return errors.New(errorResourceNotFound)
 	}
-	query, err := db.Prepare("DELETE FROM EquipoUsuario WHERE userid = ? AND teamid = ? ")
+	query, err := db.Prepare("DELETE FROM EquipoUsuario WHERE usuarioid = ? AND equipoid = ? ")
 	if err != nil {
 		return err
 	}
@@ -309,7 +309,7 @@ func GetUsersFromTeam(db *sql.DB, teamname string) ([]*User, error) {
 	} else if t == nil {
 		return nil, errors.New(errorResourceNotFound)
 	}
-	query, err := db.Prepare("SELECT U.* FROM Usuario U JOIN EquipoUsuario R ON	U.id=R.userid WHERE R.teamid=?")
+	query, err := db.Prepare("SELECT U.* FROM Usuario U JOIN EquipoUsuario R ON	U.id=R.usuarioid WHERE R.equipoid=?")
 	var us []*User
 	if err != nil {
 		return nil, err
@@ -334,7 +334,7 @@ func GetUserFromTeam(db *sql.DB, teamname string, username string) (*User, error
 	} else if t == nil {
 		return nil, errors.New(errorResourceNotFound)
 	}
-	query, err := db.Prepare("SELECT U.* FROM Usuario U JOIN EquipoUsuario R ON	U.id=R.userid WHERE R.teamid=? AND U.username=?")
+	query, err := db.Prepare("SELECT U.* FROM Usuario U JOIN EquipoUsuario R ON	U.id=R.usuarioid WHERE R.equipoid=? AND U.username=?")
 	var us *User
 	if err != nil {
 		return nil, err
@@ -357,7 +357,7 @@ func getTeamUsersByRole(db *sql.DB, teamname string, teamrole string) ([]*User, 
 	} else if t == nil {
 		return nil, errors.New(errorResourceNotFound)
 	}
-	query, err := db.Prepare("SELECT U.* FROM Users U JOIN Teamroles R ON	U.id=R.userid WHERE R.teamid=? AND R.role=?")
+	query, err := db.Prepare("SELECT U.* FROM Users U JOIN Teamroles R ON U.id=R.usuarioid WHERE R.equipoid=? AND R.rol=?")
 	var us []*User
 	if err != nil {
 		return nil, err
@@ -392,7 +392,7 @@ func getTeamUserByRole(db *sql.DB, teamname string, teamrole string, username st
 	} else if t == nil {
 		return nil, errors.New(errorResourceNotFound)
 	}
-	query, err := db.Prepare("SELECT U.* FROM Users U JOIN Teamroles R ON U.id=R.userid WHERE R.teamid=? AND R.role=? AND U.username=?")
+	query, err := db.Prepare("SELECT U.* FROM Users U JOIN Teamroles R ON U.id=R.usuarioid WHERE R.equipoid=? AND R.rol=? AND U.username=?")
 	var us *User
 	if err != nil {
 		return nil, err

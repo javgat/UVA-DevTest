@@ -13,8 +13,9 @@ import (
 // ToModelTeam converts a teamdao.Team into a models.Team
 func ToModelTeam(t *Team) *models.Team {
 	mt := &models.Team{
-		Teamname:    t.Teamname,
-		Description: t.Description,
+		Teamname:       t.Teamname,
+		Description:    t.Description,
+		SoloProfesores: t.SoloProfesores,
 	}
 	return mt
 }
@@ -36,7 +37,7 @@ func rowsToTeams(rows *sql.Rows) ([]*Team, error) {
 	teams := []*Team{}
 	for rows.Next() {
 		var t Team
-		err := rows.Scan(&t.ID, &t.Teamname, &t.Description)
+		err := rows.Scan(&t.ID, &t.Teamname, &t.Description, &t.SoloProfesores)
 		if err != nil {
 			return teams, err
 		}
@@ -91,12 +92,12 @@ func PostTeam(db *sql.DB, t *models.Team, username string) error {
 	} else if u == nil {
 		return errors.New("User not found")
 	}
-	query, err := db.Prepare("INSERT INTO Equipo(teamname, description) VALUES(?, ?)")
+	query, err := db.Prepare("INSERT INTO Equipo(teamname, description, soloProfesores) VALUES(?,?,?)")
 	if err != nil {
 		return err
 	}
 	defer query.Close()
-	_, err = query.Exec(t.Teamname, t.Description)
+	_, err = query.Exec(t.Teamname, t.Description, t.SoloProfesores)
 	if err != nil {
 		return err
 	}
@@ -105,7 +106,7 @@ func PostTeam(db *sql.DB, t *models.Team, username string) error {
 		return err
 	}
 	roleString := models.TeamRoleRoleAdmin
-	role := &models.TeamRole{
+	role := &TeamRole{
 		Role: &roleString,
 	}
 	err = UpdateRole(db, username, *t.Teamname, role)

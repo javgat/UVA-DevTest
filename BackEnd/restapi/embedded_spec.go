@@ -4236,32 +4236,22 @@ func init() {
     "Team": {
       "type": "object",
       "required": [
-        "teamname"
+        "teamname",
+        "soloProfesores"
       ],
       "properties": {
         "description": {
           "type": "string",
           "example": "DevTest Team"
         },
+        "soloProfesores": {
+          "type": "boolean",
+          "example": true
+        },
         "teamname": {
           "type": "string",
           "pattern": "^[^@ \\t\\r\\n]+$",
           "example": "devtestTeam"
-        }
-      }
-    },
-    "TeamRole": {
-      "type": "object",
-      "required": [
-        "role"
-      ],
-      "properties": {
-        "role": {
-          "type": "string",
-          "enum": [
-            "admin",
-            "member"
-          ]
         }
       }
     },
@@ -9363,32 +9353,22 @@ func init() {
     "Team": {
       "type": "object",
       "required": [
-        "teamname"
+        "teamname",
+        "soloProfesores"
       ],
       "properties": {
         "description": {
           "type": "string",
           "example": "DevTest Team"
         },
+        "soloProfesores": {
+          "type": "boolean",
+          "example": true
+        },
         "teamname": {
           "type": "string",
           "pattern": "^[^@ \\t\\r\\n]+$",
           "example": "devtestTeam"
-        }
-      }
-    },
-    "TeamRole": {
-      "type": "object",
-      "required": [
-        "role"
-      ],
-      "properties": {
-        "role": {
-          "type": "string",
-          "enum": [
-            "admin",
-            "member"
-          ]
         }
       }
     },

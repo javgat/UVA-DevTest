@@ -9,7 +9,6 @@ import (
 	"uva-devtest/models"
 	"uva-devtest/persistence/dao"
 	"uva-devtest/persistence/dbconnection"
-	"uva-devtest/restapi/operations/team"
 	"uva-devtest/restapi/operations/user"
 
 	"github.com/go-openapi/runtime/middleware"
@@ -43,7 +42,7 @@ func isTeamAdmin(teamname string, u *models.User) (bool, error) {
 		log.Println("Error en users_handler isTeamAdmin(): ", err)
 		return false, err
 	}
-	if *role.Role == models.TeamRoleRoleAdmin {
+	if role != nil && *role.Role == models.TeamRoleRoleAdmin {
 		return true, nil
 	}
 	return false, nil
@@ -597,6 +596,7 @@ func DeleteTeamOfUser(params user.DeleteTeamOfUserParams, u *models.User) middle
 	return user.NewDeleteTeamOfUserForbidden()
 }
 
+/*
 // GetUserTeamRole GET /users/{username}/teams/{teamname}/role
 // Auth: Team or Admin
 func GetUserTeamRole(params team.GetUserTeamRoleParams, u *models.User) middleware.Responder {
@@ -657,3 +657,4 @@ func PutUserTeamRole(params team.PutUserTeamRoleParams, u *models.User) middlewa
 	}
 	return team.NewPutUserTeamRoleForbidden()
 }
+*/

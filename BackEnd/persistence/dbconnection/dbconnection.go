@@ -44,7 +44,7 @@ func ConnectDb() (*sql.DB, error) {
 	if db != nil {
 		return db, nil
 	}
-	dbnew, err := connectDb("../config/dbinfo.json")
+	dbnew, err := connectDb("./config/dbinfo.json")
 	if err == nil && dbnew != nil {
 		db = dbnew
 		return db, nil
