@@ -460,7 +460,7 @@ func expectPostTeam(mock sqlmock.Sqlmock, team *Team) {
 	expectGetUser(mock, username, defaultUser())
 	mock.ExpectPrepare("INSERT INTO Teams").ExpectExec().
 		WithArgs(team.Teamname, team.Description).WillReturnResult(sqlmock.NewResult(1, 1))
-	expectAddUserTeam(mock, defaultUser().ID, team.ID)
+	expectAddUserTeamAdmin(mock, defaultUser().ID, team.ID)
 	expectUpdateRole(mock, models.TeamRoleRoleAdmin)
 }
 

@@ -174,7 +174,7 @@ func GetAdmins(db *sql.DB) ([]*User, error) {
 		return us, err
 	}
 	defer query.Close()
-	rows, err := query.Query(models.UserRolAdmin)
+	rows, err := query.Query(models.UserRolAdministrador)
 	if err == nil {
 		us, err = rowsToUsers(rows)
 	}

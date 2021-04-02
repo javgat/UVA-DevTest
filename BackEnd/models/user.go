@@ -32,7 +32,7 @@ type User struct {
 	Fullname string `json:"fullname,omitempty"`
 
 	// rol
-	// Enum: [student teacher admin]
+	// Enum: [estudiante profesor administrador]
 	Rol string `json:"rol,omitempty"`
 
 	// username
@@ -85,7 +85,7 @@ var userTypeRolPropEnum []interface{}
 
 func init() {
 	var res []string
-	if err := json.Unmarshal([]byte(`["student","teacher","admin"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["estudiante","profesor","administrador"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
@@ -95,14 +95,14 @@ func init() {
 
 const (
 
-	// UserRolStudent captures enum value "student"
-	UserRolStudent string = "student"
+	// UserRolEstudiante captures enum value "estudiante"
+	UserRolEstudiante string = "estudiante"
 
-	// UserRolTeacher captures enum value "teacher"
-	UserRolTeacher string = "teacher"
+	// UserRolProfesor captures enum value "profesor"
+	UserRolProfesor string = "profesor"
 
-	// UserRolAdmin captures enum value "admin"
-	UserRolAdmin string = "admin"
+	// UserRolAdministrador captures enum value "administrador"
+	UserRolAdministrador string = "administrador"
 )
 
 // prop value enum

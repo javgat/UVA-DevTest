@@ -64,7 +64,7 @@ func GetTeam(db *sql.DB, teamname string) (*Team, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
-	query, err := db.Prepare("SELECT * FROM Teams WHERE teamname=?")
+	query, err := db.Prepare("SELECT * FROM Equipo WHERE teamname=?")
 	var t *Team
 	if err != nil {
 		return t, err
@@ -91,7 +91,7 @@ func PostTeam(db *sql.DB, t *models.Team, username string) error {
 	} else if u == nil {
 		return errors.New("User not found")
 	}
-	query, err := db.Prepare("INSERT INTO Teams(teamname, description) VALUES(?, ?)")
+	query, err := db.Prepare("INSERT INTO Equipo(teamname, description) VALUES(?, ?)")
 	if err != nil {
 		return err
 	}
@@ -100,7 +100,7 @@ func PostTeam(db *sql.DB, t *models.Team, username string) error {
 	if err != nil {
 		return err
 	}
-	err = AddUserTeam(db, username, *t.Teamname)
+	err = AddUserTeamAdmin(db, username, *t.Teamname)
 	if err != nil {
 		return err
 	}
@@ -121,7 +121,7 @@ func UpdateTeam(db *sql.DB, t *models.Team, teamname string) error {
 	if db == nil || t == nil {
 		return errors.New(errorDBNil)
 	}
-	query, err := db.Prepare("UPDATE Teams SET teamname=?, description=? WHERE teamname = ? ")
+	query, err := db.Prepare("UPDATE Equipo SET teamname=?, description=? WHERE teamname = ? ")
 	if err != nil {
 		return err
 	}
@@ -135,7 +135,7 @@ func DeleteTeam(db *sql.DB, teamname string) error {
 	if db == nil {
 		return errors.New(errorDBNil)
 	}
-	query, err := db.Prepare("DELETE FROM Teams WHERE teamname = ? ") //ESTO se supone que borra en cascade
+	query, err := db.Prepare("DELETE FROM Equipo WHERE teamname = ? ") //ESTO se supone que borra en cascade
 	if err != nil {
 		return err
 	}
@@ -149,7 +149,7 @@ func GetTeams(db *sql.DB) ([]*Team, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
-	query, err := db.Prepare("SELECT * FROM Teams")
+	query, err := db.Prepare("SELECT * FROM Equipo")
 	var ts []*Team
 	if err != nil {
 		return ts, err
@@ -172,10 +172,10 @@ func GetTeamsUsername(db *sql.DB, username string) ([]*Team, error) {
 	if err != nil {
 		return nil, err
 	} else if u == nil {
-		return nil, errors.New("No se encontro al usuario")
+		return nil, errors.New(errorResourceNotFound)
 	}
 	var ts []*Team
-	query, err := db.Prepare("SELECT T.* FROM Teams T JOIN Teamroles R ON	T.id=R.teamid WHERE R.userid = ?")
+	query, err := db.Prepare("SELECT T.* FROM Equipo T JOIN EquipoUsuario R ON	T.id=R.equipoid WHERE R.usuarioid = ?")
 	if err != nil {
 		return ts, err
 	}
@@ -198,7 +198,7 @@ func GetTeamFromUser(db *sql.DB, teamname string, username string) (*Team, error
 		return nil, errors.New("no se encontro al usuario")
 	}
 	var t *Team
-	query, err := db.Prepare("SELECT T.* FROM Teams T JOIN Teamroles R ON	T.id=R.teamid WHERE R.userid = ? AND R.teamid = ?")
+	query, err := db.Prepare("SELECT T.* FROM Equipo T JOIN EquipoUsuario R ON	T.id=R.equipoid WHERE R.usuarioid = ? AND R.equipoid = ?")
 	if err != nil {
 		return nil, err
 	}
@@ -229,7 +229,7 @@ func GetTeamsTeamRoleAdmin(db *sql.DB, username string) ([]*Team, error) {
 		return nil, errors.New("User not found")
 	}
 	var ts []*Team
-	query, err := db.Prepare("SELECT * FROM Teams T JOIN Teamroles R ON R.teamid=T.id WHERE R.userid=? AND R.role='Admin'")
+	query, err := db.Prepare("SELECT * FROM Equipo T JOIN EquipoUsuario R ON R.equipoid=T.id WHERE R.usuarioid=? AND R.rol='Admin'")
 	if err != nil {
 		return ts, err
 	}

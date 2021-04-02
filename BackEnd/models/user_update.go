@@ -39,7 +39,7 @@ type UserUpdate struct {
 	Password *strfmt.Password `json:"password"`
 
 	// rol
-	// Enum: [Estudiante Profesor Administrador]
+	// Enum: [estudiante profesor administrador]
 	Rol string `json:"rol,omitempty"`
 
 	// username
@@ -113,7 +113,7 @@ var userUpdateTypeRolPropEnum []interface{}
 
 func init() {
 	var res []string
-	if err := json.Unmarshal([]byte(`["Estudiante","Profesor","Administrador"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["estudiante","profesor","administrador"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
@@ -123,14 +123,14 @@ func init() {
 
 const (
 
-	// UserUpdateRolEstudiante captures enum value "Estudiante"
-	UserUpdateRolEstudiante string = "Estudiante"
+	// UserUpdateRolEstudiante captures enum value "estudiante"
+	UserUpdateRolEstudiante string = "estudiante"
 
-	// UserUpdateRolProfesor captures enum value "Profesor"
-	UserUpdateRolProfesor string = "Profesor"
+	// UserUpdateRolProfesor captures enum value "profesor"
+	UserUpdateRolProfesor string = "profesor"
 
-	// UserUpdateRolAdministrador captures enum value "Administrador"
-	UserUpdateRolAdministrador string = "Administrador"
+	// UserUpdateRolAdministrador captures enum value "administrador"
+	UserUpdateRolAdministrador string = "administrador"
 )
 
 // prop value enum

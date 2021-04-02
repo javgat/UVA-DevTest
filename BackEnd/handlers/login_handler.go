@@ -86,7 +86,7 @@ func successLogin(u dao.User) middleware.Responder {
 		return badReqErrorLogin(err)
 	}
 	cookie := createCookie(*tokenJSON.Token)
-	return auth.NewLoginOK().WithSetCookie(cookie)
+	return auth.NewLoginCreated().WithSetCookie(cookie)
 }
 
 // Login is the main handler function for the login functionality

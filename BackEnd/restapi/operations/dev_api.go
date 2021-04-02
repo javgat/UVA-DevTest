@@ -52,8 +52,8 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 
 		JSONProducer: runtime.JSONProducer(),
 
-		TeamAddAmbirHandler: team.AddAmbirHandlerFunc(func(params team.AddAmbirParams, principal *models.User) middleware.Responder {
-			return middleware.NotImplemented("operation team.AddAmbir has not yet been implemented")
+		TeamAddAdminHandler: team.AddAdminHandlerFunc(func(params team.AddAdminParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation team.AddAdmin has not yet been implemented")
 		}),
 		TeamAddMemberHandler: team.AddMemberHandlerFunc(func(params team.AddMemberParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation team.AddMember has not yet been implemented")
@@ -345,8 +345,8 @@ type DevAPI struct {
 	// APIAuthorizer provides access control (ACL/RBAC/ABAC) by providing access to the request and authenticated principal
 	APIAuthorizer runtime.Authorizer
 
-	// TeamAddAmbirHandler sets the operation handler for the add ambir operation
-	TeamAddAmbirHandler team.AddAmbirHandler
+	// TeamAddAdminHandler sets the operation handler for the add admin operation
+	TeamAddAdminHandler team.AddAdminHandler
 	// TeamAddMemberHandler sets the operation handler for the add member operation
 	TeamAddMemberHandler team.AddMemberHandler
 	// TestAddQuestionToTestHandler sets the operation handler for the add question to test operation
@@ -588,8 +588,8 @@ func (o *DevAPI) Validate() error {
 		unregistered = append(unregistered, "CookieAuth")
 	}
 
-	if o.TeamAddAmbirHandler == nil {
-		unregistered = append(unregistered, "team.AddAmbirHandler")
+	if o.TeamAddAdminHandler == nil {
+		unregistered = append(unregistered, "team.AddAdminHandler")
 	}
 	if o.TeamAddMemberHandler == nil {
 		unregistered = append(unregistered, "team.AddMemberHandler")
@@ -933,7 +933,7 @@ func (o *DevAPI) initHandlerCache() {
 	if o.handlers["PUT"] == nil {
 		o.handlers["PUT"] = make(map[string]http.Handler)
 	}
-	o.handlers["PUT"]["/teams/{teamname}/admins/{username}"] = team.NewAddAmbir(o.context, o.TeamAddAmbirHandler)
+	o.handlers["PUT"]["/teams/{teamname}/admins/{username}"] = team.NewAddAdmin(o.context, o.TeamAddAdminHandler)
 	if o.handlers["PUT"] == nil {
 		o.handlers["PUT"] = make(map[string]http.Handler)
 	}

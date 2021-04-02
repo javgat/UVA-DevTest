@@ -32,7 +32,7 @@ func userToInsert() *User {
 	su := signinUserToInsert()
 	bytes, _ := bcrypt.GenerateFromPassword([]byte(*su.Pass), 14)
 	pwhashstring := string(bytes)
-	studentRol := models.UserRolStudent
+	studentRol := models.UserRolEstudiante
 	u := &User{
 		Username: su.Username,
 		Email:    su.Email,
@@ -124,7 +124,7 @@ var username string = "Test"
 var email strfmt.Email = "Test@mail.com"
 var pwhash string = "AAAAAAAAAAA"
 var emailS = email.String()
-var rolTeacher string = models.UserRolTeacher
+var rolTeacher string = models.UserRolProfesor
 var userid int64 = 1
 
 func rowsUsers(us []*User) *sqlmock.Rows {
@@ -513,7 +513,7 @@ func TestGetUserByIDNilFound(t *testing.T) {
 var username2 string = "Test2"
 var email2 strfmt.Email = "Test2@mail.com"
 var pwhash2 string = "AAAAAAAAAAA"
-var rolAdmin string = models.UserRolAdmin
+var rolAdmin string = models.UserRolAdministrador
 
 func defaultAdmin1() *User {
 	u := &User{
@@ -1049,8 +1049,8 @@ func TestDeleteUserCorrect(t *testing.T) {
 
 // AddUserTeamMember
 var teamname string = "teamname"
-var useridAddUser int = 1
-var teamidAddUser int = 1
+var useridAddUser int64 = 1
+var teamidAddUser int64 = 1
 
 func defaultTeam() *Team {
 	t := &Team{
@@ -1091,7 +1091,7 @@ func expectGetTeamEmpty(mock sqlmock.Sqlmock, arg string) {
 		WillReturnRows(rows)
 }
 
-func expectAddUserTeamMember(mock sqlmock.Sqlmock, userid int, teamid int) {
+func expectAddUserTeamMember(mock sqlmock.Sqlmock, userid int64, teamid int64) {
 	expectGetUser(mock, username, defaultUser())
 	expectGetTeam(mock, teamname, defaultTeam())
 	mock.ExpectPrepare("INSERT INTO EquipoUsuario").ExpectExec().
@@ -1191,7 +1191,7 @@ func TestAddUserTeamMemberCorrect(t *testing.T) {
 
 // AddUserTeamAdmin
 
-func expectAddUserTeamAdmin(mock sqlmock.Sqlmock, userid int, teamid int) {
+func expectAddUserTeamAdmin(mock sqlmock.Sqlmock, userid int64, teamid int64) {
 	expectGetUser(mock, username, defaultUser())
 	expectGetTeam(mock, teamname, defaultTeam())
 	mock.ExpectPrepare("INSERT INTO EquipoUsuario").ExpectExec().
@@ -1291,7 +1291,7 @@ func TestAddUserTeamAdminCorrect(t *testing.T) {
 
 // ExitUserTeam
 
-func expectExitUserTeam(mock sqlmock.Sqlmock, userid int, teamid int) {
+func expectExitUserTeam(mock sqlmock.Sqlmock, userid int64, teamid int64) {
 	expectGetUser(mock, username, defaultUser())
 	expectGetTeam(mock, teamname, defaultTeam())
 	mock.ExpectPrepare("DELETE FROM EquipoUsuario").ExpectExec().

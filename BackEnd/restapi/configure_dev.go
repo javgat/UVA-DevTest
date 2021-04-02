@@ -96,12 +96,32 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 
 	api.TeamGetTeamsHandler = team.GetTeamsHandlerFunc(handlers.GetTeams) // GET /teams
 
-	api.TeamGetTeamHandler = team.GetTeamHandlerFunc(handlers.GetTeam)                                  // GET /teams/{teamname}
-	api.TeamPutTeamHandler = team.PutTeamHandlerFunc(handlers.PutTeam)                                  // PUT /teams/{teamname}
-	api.TeamDeleteTeamHandler = team.DeleteTeamHandlerFunc(handlers.DeleteTeam)                         // DELETE /teams/{teamname}
+	api.TeamGetTeamHandler = team.GetTeamHandlerFunc(handlers.GetTeam)          // GET /teams/{teamname}
+	api.TeamPutTeamHandler = team.PutTeamHandlerFunc(handlers.PutTeam)          // PUT /teams/{teamname}
+	api.TeamDeleteTeamHandler = team.DeleteTeamHandlerFunc(handlers.DeleteTeam) // DELETE /teams/{teamname}
+
+	api.TeamGetAdminsHandler = team.GetAdminsHandlerFunc(handlers.GetUsersAdminsFromTeam) // GET /teams/{teamname}/admins
+	api.TeamGetAdminHandler = team.GetAdminHandlerFunc(handlers.GetUserAdminFromTeam)     // GET /teams/{teamname}/admins/{username}
+	api.TeamAddAdminHandler = team.AddAdminHandlerFunc(handlers.AddAdminToTeam)           // PUT /teams/{teamname}/admins/{username}
+
+	api.TeamGetMembersHandler = team.GetMembersHandlerFunc(handlers.GetUsersMembersFromTeam) // GET /teams/{teamname}/members
+	api.TeamGetMemberHandler = team.GetMemberHandlerFunc(handlers.GetUserMemberFromTeam)     // GET /teams/{teamname}/members/{username}
+	api.TeamAddMemberHandler = team.AddMemberHandlerFunc(handlers.AddMemberToTeam)           // PUT /teams/{teamname}/members/{username}
+
 	api.TeamGetUsersFromTeamHandler = team.GetUsersFromTeamHandlerFunc(handlers.GetUsersFromTeam)       // GET /teams/{teamname}/users
-	api.TeamAddMemberHandler = team.AddMemberHandlerFunc(handlers.AddUserFromTeam)                      // PUT /teams/{teamname}/users/{username}
+	api.TeamGetUserFromTeamHandler = team.GetUserFromTeamHandlerFunc(handlers.GetUserFromTeam)          // GET /teams/{teamname}/users/{username}
 	api.TeamDeleteUserFromTeamHandler = team.DeleteUserFromTeamHandlerFunc(handlers.DeleteUserFromTeam) // DELETE /teams/{teamname}/users/{username}
+
+	api.TeamGetQuestionsFromTeamHandler = team.GetQuestionsFromTeamHandlerFunc(handlers.GetQuestionsFromTeam) // GET /teams/{teamname}/questions
+	api.TeamGetQuestionFromTeamHandler = team.GetQuestionFromTeamHandlerFunc(handlers.GetQuestionFromTeam)    // GET /teams/{teamname}/questions/{questionid}
+
+	api.TeamGetTestsFromTeamHandler = team.GetTestsFromTeamHandlerFunc(handlers.GetTestsFromTeam) // GET /teams/{teamname}/tests
+	api.TeamGetTestFromTeamHandler = team.GetTestFromTeamHandlerFunc(handlers.GetTestFromTeam)    // GET /teams/{teamname}/tests/{testid}
+
+	api.TeamGetPublishedTestsFromTeamHandler = team.GetPublishedTestsFromTeamHandlerFunc(handlers.GetPTestsFromTeam) // GET /teams/{teamname}/publishedTests
+	api.TeamGetPublishedTestFromTeamHandler = team.GetPublishedTestFromTeamHandlerFunc(handlers.GetPTestFromTeam)    // GET /teams/{teamname}/publishedTests/{testid}
+
+	// TODO questions, tests...
 
 	api.PreServerShutdown = func() {}
 

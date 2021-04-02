@@ -136,6 +136,7 @@ func GetUsersFromTeam(params user.GetUsersFromTeamParams, u *models.User) middle
 	return user.NewGetUsersFromTeamForbidden()
 }
 
+/*
 // AddUserFromTeam adds user to team PUT /teams/{teamname}/users/{username}
 // Auth: TeamAdmin or Admin
 // DEBERIA: Si ya existe que pete o que no se cargue el rol (no quite de TeamAdmin)
@@ -156,12 +157,12 @@ func AddUserFromTeam(params user.AddUserFromTeamParams, u *models.User) middlewa
 		return user.NewAddUserFromTeamInternalServerError()
 	}
 	return user.NewAddUserFromTeamForbidden()
-}
+}*/
 
 // DeleteUserFromTeam kicks user from team DELETE /teams/{teamname}/users/{username}
 // Auth: Current User, TeamAdmin or Admin
 // Req: No quedarse sin TeamAdmins en Teams
-func DeleteUserFromTeam(params user.DeleteUserFromTeamParams, u *models.User) middleware.Responder {
+func DeleteUserFromTeam(params team.DeleteUserFromTeamParams, u *models.User) middleware.Responder {
 	teamAdmin, err := isTeamAdmin(params.Teamname, u)
 	if err != nil {
 		return user.NewDeleteUserFromTeamInternalServerError()

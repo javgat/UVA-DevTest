@@ -1754,7 +1754,7 @@ func init() {
           "team"
         ],
         "summary": "Adds user {username} to team {teamname} as an Admin",
-        "operationId": "AddAmbir",
+        "operationId": "AddAdmin",
         "parameters": [
           {
             "type": "string",
@@ -4326,9 +4326,9 @@ func init() {
         "rol": {
           "type": "string",
           "enum": [
-            "student",
-            "teacher",
-            "admin"
+            "estudiante",
+            "profesor",
+            "administrador"
           ]
         },
         "username": {
@@ -4365,9 +4365,9 @@ func init() {
         "rol": {
           "type": "string",
           "enum": [
-            "Estudiante",
-            "Profesor",
-            "Administrador"
+            "estudiante",
+            "profesor",
+            "administrador"
           ]
         },
         "username": {
@@ -6482,7 +6482,7 @@ func init() {
           "team"
         ],
         "summary": "Adds user {username} to team {teamname} as an Admin",
-        "operationId": "AddAmbir",
+        "operationId": "AddAdmin",
         "parameters": [
           {
             "type": "string",
@@ -9453,9 +9453,9 @@ func init() {
         "rol": {
           "type": "string",
           "enum": [
-            "student",
-            "teacher",
-            "admin"
+            "estudiante",
+            "profesor",
+            "administrador"
           ]
         },
         "username": {
@@ -9492,9 +9492,9 @@ func init() {
         "rol": {
           "type": "string",
           "enum": [
-            "Estudiante",
-            "Profesor",
-            "Administrador"
+            "estudiante",
+            "profesor",
+            "administrador"
           ]
         },
         "username": {

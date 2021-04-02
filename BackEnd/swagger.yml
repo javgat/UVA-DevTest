@@ -1210,7 +1210,7 @@ paths:
       tags:
       - team
       summary: Adds user {username} to team {teamname} as an Admin
-      operationId: AddAmbir
+      operationId: AddAdmin
       description: Adds user {username} to team {teamname} as an Admin.
       produces:
       - application/json
@@ -2697,7 +2697,7 @@ definitions:
         example: Javier Gatón Herguedas
       rol:
         type: string
-        enum: [student, teacher, admin]
+        enum: [estudiante, profesor, administrador]
   UserUpdate:
     type: object
     required:
@@ -2719,7 +2719,7 @@ definitions:
         example: Javier Gatón Herguedas
       rol:
         type: string
-        enum: [Estudiante, Profesor, Administrador]
+        enum: [estudiante, profesor, administrador]
       password:
         type: string
         example: password

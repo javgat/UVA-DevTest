@@ -17,15 +17,15 @@ import (
 )
 
 func userOrAdmin(username string, u *models.User) bool {
-	return username == *u.Username || u.Rol == models.UserRolAdmin
+	return username == *u.Username || u.Rol == models.UserRolAdministrador
 }
 
 func isAdmin(u *models.User) bool {
-	return u.Rol == models.UserRolAdmin
+	return u.Rol == models.UserRolAdministrador
 }
 
 func isTeacher(u *models.User) bool {
-	return u.Rol == models.UserRolTeacher
+	return u.Rol == models.UserRolAdministrador
 }
 
 func isTeacherOrAdmin(u *models.User) bool {
@@ -140,7 +140,7 @@ func PutUser(params user.PutUserParams, u *models.User) middleware.Responder {
 			return user.NewPutUserInternalServerError()
 		}
 		if len(admins) == 1 && admins[0].Username == &params.Username {
-			if u.Rol != models.UserRolAdmin {
+			if u.Rol != models.UserRolAdministrador {
 				log.Println("Error en users_handler PutUsers(), intento de quitar admin de ultimo admin")
 				s := "Es el unico administrador existente"
 				return user.NewPutUserConflict().WithPayload(&models.Error{Message: &s})
