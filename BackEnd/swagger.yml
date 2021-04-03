@@ -328,6 +328,40 @@ paths:
           $ref: '#/responses/GoneError'
         500:
           $ref: '#/responses/InternalServerError'
+  /users/{username}/role:
+    put:
+      security:
+        - BearerCookie: []
+      tags:
+      - user
+      summary: Modifies the role of the user <username>
+      operationId: putRole
+      description: Modifies the role of the user <username>
+      consumes:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the user to modify its role
+        required: true
+        type: string
+      - in: body
+        name: role
+        description: Role update information
+        required: true
+        schema:
+          $ref: '#/definitions/Role'
+      responses:
+        200:
+          description: Resource role modified correctly
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
   /users/{username}/teams:
     get:
       security:
@@ -1473,7 +1507,6 @@ paths:
           $ref: '#/responses/GoneError'
         500:
           $ref: '#/responses/InternalServerError'
-
   /teams/{teamname}/publishedTests:
     get:
       security:
@@ -1865,6 +1898,104 @@ paths:
         500:
           $ref: '#/responses/InternalServerError'
 
+  /questions/{questionid}/teams:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - question
+      summary: Returns all teams from a question.
+      operationId: GetTeamsFromQuestion
+      description: Returns all teams from a question.
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: questionid
+        description: Id of the question to find its teams
+        required: true
+        type: integer
+      responses:
+        200:
+          description: teams found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Team'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  /questions/{questionid}/teams/{teamname}:
+    put:
+      security:
+        - BearerCookie: []
+      tags:
+      - question
+      summary: Adds a team to administer a question
+      operationId: AddTeamToQuestion
+      description: Adds a team to administer a question
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: teamname
+        description: Teamname of the team to let administrate
+        required: true
+        type: string
+      - in: path
+        name: questionid
+        description: Id of the question to find
+        required: true
+        type: integer
+      responses:
+        200:
+          description: team added
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+    delete:
+      security:
+        - BearerCookie: []
+      tags:
+      - question
+      summary: Removes a team to administer a question
+      operationId: RemoveTeamToQuestion
+      description: Removes a team to administer a question
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: teamname
+        description: Teamname of the team to remove from question
+        required: true
+        type: string
+      - in: path
+        name: questionid
+        description: Id of the question to find
+        required: true
+        type: integer
+      responses:
+        200:
+          description: team removed
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
   /tests:
     get:
       security:
@@ -1967,6 +2098,104 @@ paths:
       responses:
         200:
           description: Test deleted
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
+  /tests/{testid}/teams:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - test
+      summary: Returns all teams from a test.
+      operationId: GetTeamsFromTest
+      description: Returns all teams from a test.
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: testid
+        description: Id of the test to find its teams
+        required: true
+        type: integer
+      responses:
+        200:
+          description: teams found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Team'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  /tests/{testid}/teams/{teamname}:
+    put:
+      security:
+        - BearerCookie: []
+      tags:
+      - test
+      summary: Adds a team to administer a test
+      operationId: AddTeamToTest
+      description: Adds a team to administer a test
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: teamname
+        description: Teamname of the team to let administrate
+        required: true
+        type: string
+      - in: path
+        name: testid
+        description: Id of the test to find
+        required: true
+        type: integer
+      responses:
+        200:
+          description: team added
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+    delete:
+      security:
+        - BearerCookie: []
+      tags:
+      - test
+      summary: Removes a team to administer a test
+      operationId: RemoveTeamToTest
+      description: Removes a team to administer a test
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: teamname
+        description: Teamname of the team to remove
+        required: true
+        type: string
+      - in: path
+        name: testid
+        description: Id of the test to find
+        required: true
+        type: integer
+      responses:
+        200:
+          description: team removed
         400:
           $ref: '#/responses/BadRequestError'
         403:
@@ -2216,6 +2445,203 @@ paths:
           $ref: '#/responses/GoneError'
         500:
           $ref: '#/responses/InternalServerError'
+
+  /publishedTests/{testid}/users:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - publishedTest
+      summary: Returns all users from a publishedTest.
+      operationId: GetUsersFromPublishedTest
+      description: Returns all users from a publishedTest.
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: testid
+        description: Id of the publishedTest to find its users
+        required: true
+        type: integer
+      responses:
+        200:
+          description: users found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'  
+  /publishedTests/{testid}/users/{username}:
+    put:
+      security:
+        - BearerCookie: []
+      tags:
+      - publishedTest
+      summary: Invites a user to do a test
+      operationId: InviteUserToPublishedTest
+      description: Invites a user to do a test
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the user who can answer the publishedTest
+        required: true
+        type: string
+      - in: path
+        name: testid
+        description: Id of the test
+        required: true
+        type: integer
+      responses:
+        200:
+          description: user invited
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+    delete:
+      security:
+        - BearerCookie: []
+      tags:
+      - publishedTest
+      summary: Removes a user from a test
+      operationId: RemoveUserToPublishedTest
+      description: Removes a user to do a test
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the user who cant answer the publishedTest
+        required: true
+        type: string
+      - in: path
+        name: testid
+        description: Id of the test
+        required: true
+        type: integer
+      responses:
+        200:
+          description: user removed
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
+  /publishedTests/{testid}/teams:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - publishedTest
+      summary: Returns all teams from a publishedTest.
+      operationId: GetTeamsFromPublishedTest
+      description: Returns all teams from a publishedTest.
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: testid
+        description: Id of the publishedTest to find its teams
+        required: true
+        type: integer
+      responses:
+        200:
+          description: teams found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Team'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'  
+  /publishedTests/{testid}/teams/{teamname}:
+    put:
+      security:
+        - BearerCookie: []
+      tags:
+      - publishedTest
+      summary: Invites a team to do a test
+      operationId: InviteTeamToPublishedTest
+      description: Invites a team to do a test
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: teamname
+        description: Teamname of the team to invite to test
+        required: true
+        type: string
+      - in: path
+        name: testid
+        description: Id of the test to find
+        required: true
+        type: integer
+      responses:
+        200:
+          description: team invited
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+    delete:
+      security:
+        - BearerCookie: []
+      tags:
+      - publishedTest
+      summary: Removes a team to do a test
+      operationId: RemoveTeamToPublishedTest
+      description: Removes a team to do a test
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: teamname
+        description: Teamname of the team to Remove from test
+        required: true
+        type: string
+      - in: path
+        name: testid
+        description: Id of the test to find
+        required: true
+        type: integer
+      responses:
+        200:
+          description: team removed
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
   /publishedTests/{testid}/questions:
     get:
       security:
@@ -2703,6 +3129,7 @@ definitions:
     required:
     - username
     - email
+    - fullname
     - password
     properties:
       username:
@@ -2717,15 +3144,19 @@ definitions:
       fullname:
         type: string
         example: Javier Gatón Herguedas
-      rol:
-        type: string
-        enum: [estudiante, profesor, administrador]
       password:
         type: string
         example: password
         format: password
         pattern: '^.{6,}$'
-
+  Role:
+    type: object
+    required:
+    - rol
+    properties:
+      rol:
+        type: string
+        enum: [estudiante, profesor, administrador]
   Team:
     type: object
     required:
@@ -2777,6 +3208,7 @@ definitions:
     - autoCorrect
     - editable
     - username
+    - tipoPregunta
     properties:
       id:
         type: integer
@@ -2808,6 +3240,9 @@ definitions:
       solucion:
         type: string
         example: Javadoc
+      tipoPregunta:
+        type: string
+        enum: [opciones, string, codigo]
   Test:
     type: object
     required:

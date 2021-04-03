@@ -2,6 +2,15 @@ package dao
 
 import "github.com/go-openapi/strfmt"
 
+const (
+
+	// TeamRoleRoleAdmin captures enum value "admin"
+	TeamRoleRoleAdmin string = "admin"
+
+	// TeamRoleRoleMember captures enum value "miembro"
+	TeamRoleRoleMember string = "miembro"
+)
+
 // User user
 //
 // userdao User
@@ -101,6 +110,11 @@ type Question struct {
 	// Example: 1
 	Testid int64 `json:"testid,omitempty"`
 
+	// tipo pregunta
+	// Required: true
+	// Enum: [opciones string codigo]
+	TipoPregunta *string `json:"tipoPregunta"`
+
 	// title
 	// Example: Paralelismo en C
 	// Required: true
@@ -189,4 +203,15 @@ type TeamRole struct {
 	// Required: true
 	// Enum: [admin member]
 	Role *string `json:"role"`
+}
+
+// Tag tag
+//
+// swagger:model Tag
+type Tag struct {
+
+	// tag
+	// Example: Java
+	// Required: true
+	Tag *string `json:"tag"`
 }

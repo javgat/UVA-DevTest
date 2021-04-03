@@ -1095,7 +1095,7 @@ func expectAddUserTeamMember(mock sqlmock.Sqlmock, userid int64, teamid int64) {
 	expectGetUser(mock, username, defaultUser())
 	expectGetTeam(mock, teamname, defaultTeam())
 	mock.ExpectPrepare("INSERT INTO EquipoUsuario").ExpectExec().
-		WithArgs(userid, teamid, models.TeamRoleRoleMember).WillReturnResult(sqlmock.NewResult(1, 1))
+		WithArgs(userid, teamid, TeamRoleRoleMember).WillReturnResult(sqlmock.NewResult(1, 1))
 }
 
 func expectAddUserTeamMemberDefault(mock sqlmock.Sqlmock) {
@@ -1106,14 +1106,14 @@ func expectAddUserTeamMemberUsernameNotFound(mock sqlmock.Sqlmock) {
 	expectGetUserEmpty(mock, username)
 	expectGetTeam(mock, teamname, defaultTeam())
 	mock.ExpectPrepare("INSERT INTO EquipoUsuario").ExpectExec().
-		WithArgs(useridAddUser, teamidAddUser, models.TeamRoleRoleMember).WillReturnResult(sqlmock.NewResult(1, 1))
+		WithArgs(useridAddUser, teamidAddUser, TeamRoleRoleMember).WillReturnResult(sqlmock.NewResult(1, 1))
 }
 
 func expectAddUserTeamMemberTeamnameNotFound(mock sqlmock.Sqlmock) {
 	expectGetUser(mock, username, defaultUser())
 	expectGetTeamEmpty(mock, teamname)
 	mock.ExpectPrepare("INSERT INTO EquipoUsuario").ExpectExec().
-		WithArgs(useridAddUser, teamidAddUser, models.TeamRoleRoleMember).WillReturnResult(sqlmock.NewResult(1, 1))
+		WithArgs(useridAddUser, teamidAddUser, TeamRoleRoleMember).WillReturnResult(sqlmock.NewResult(1, 1))
 }
 
 func TestAddUserTeamMemberNilDB(t *testing.T) {
@@ -1167,7 +1167,7 @@ func TestAddUserTeamMemberError(t *testing.T) {
 	expectGetUser(mock, username, defaultUser())
 	expectGetTeam(mock, teamname, defaultTeam())
 	mock.ExpectPrepare("INSERT INTO EquipoUsuario").ExpectExec().
-		WithArgs(useridAddUser, teamidAddUser, models.TeamRoleRoleMember).WillReturnError(fmt.Errorf("Error"))
+		WithArgs(useridAddUser, teamidAddUser, TeamRoleRoleMember).WillReturnError(fmt.Errorf("Error"))
 	err = AddUserTeamMember(db, username, teamname)
 	if err == nil {
 		t.Log("error should not be nil", err)
@@ -1195,7 +1195,7 @@ func expectAddUserTeamAdmin(mock sqlmock.Sqlmock, userid int64, teamid int64) {
 	expectGetUser(mock, username, defaultUser())
 	expectGetTeam(mock, teamname, defaultTeam())
 	mock.ExpectPrepare("INSERT INTO EquipoUsuario").ExpectExec().
-		WithArgs(userid, teamid, models.TeamRoleRoleAdmin).WillReturnResult(sqlmock.NewResult(1, 1))
+		WithArgs(userid, teamid, TeamRoleRoleAdmin).WillReturnResult(sqlmock.NewResult(1, 1))
 }
 
 func expectAddUserTeamAdminDefault(mock sqlmock.Sqlmock) {
@@ -1206,14 +1206,14 @@ func expectAddUserTeamAdminUsernameNotFound(mock sqlmock.Sqlmock) {
 	expectGetUserEmpty(mock, username)
 	expectGetTeam(mock, teamname, defaultTeam())
 	mock.ExpectPrepare("INSERT INTO EquipoUsuario").ExpectExec().
-		WithArgs(useridAddUser, teamidAddUser, models.TeamRoleRoleAdmin).WillReturnResult(sqlmock.NewResult(1, 1))
+		WithArgs(useridAddUser, teamidAddUser, TeamRoleRoleAdmin).WillReturnResult(sqlmock.NewResult(1, 1))
 }
 
 func expectAddUserTeamAdminTeamnameNotFound(mock sqlmock.Sqlmock) {
 	expectGetUser(mock, username, defaultUser())
 	expectGetTeamEmpty(mock, teamname)
 	mock.ExpectPrepare("INSERT INTO EquipoUsuario").ExpectExec().
-		WithArgs(useridAddUser, teamidAddUser, models.TeamRoleRoleAdmin).WillReturnResult(sqlmock.NewResult(1, 1))
+		WithArgs(useridAddUser, teamidAddUser, TeamRoleRoleAdmin).WillReturnResult(sqlmock.NewResult(1, 1))
 }
 
 func TestAddUserTeamAdminNilDB(t *testing.T) {
@@ -1267,7 +1267,7 @@ func TestAddUserTeamAdminError(t *testing.T) {
 	expectGetUser(mock, username, defaultUser())
 	expectGetTeam(mock, teamname, defaultTeam())
 	mock.ExpectPrepare("INSERT INTO EquipoUsuario").ExpectExec().
-		WithArgs(useridAddUser, teamidAddUser, models.TeamRoleRoleAdmin).WillReturnError(fmt.Errorf("Error"))
+		WithArgs(useridAddUser, teamidAddUser, TeamRoleRoleAdmin).WillReturnError(fmt.Errorf("Error"))
 	err = AddUserTeamAdmin(db, username, teamname)
 	if err == nil {
 		t.Log("error should not be nil", err)

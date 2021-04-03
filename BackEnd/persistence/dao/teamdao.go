@@ -105,7 +105,7 @@ func PostTeam(db *sql.DB, t *models.Team, username string) error {
 	if err != nil {
 		return err
 	}
-	roleString := models.TeamRoleRoleAdmin
+	roleString := TeamRoleRoleAdmin
 	role := &TeamRole{
 		Role: &roleString,
 	}
@@ -240,4 +240,21 @@ func GetTeamsTeamRoleAdmin(db *sql.DB, username string) ([]*Team, error) {
 		ts, err = rowsToTeams(rows)
 	}
 	return ts, err
+}
+
+func GetTeamsQuestion(db *sql.DB, questionid int64) ([]*Team, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var ts []*Team
+	query, err := db.Prepare("SELECT E.* FROM Equipo E JOIN PreguntaEquipo P ON P.equipoid=E.id WHERE P.preguntaid=?")
+	if err == nil {
+		defer query.Close()
+		rows, err := query.Query(questionid)
+		if err == nil {
+			ts, err = rowsToTeams(rows)
+			return ts, err
+		}
+	}
+	return nil, err
 }

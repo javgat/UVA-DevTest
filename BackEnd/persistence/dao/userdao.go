@@ -206,12 +206,12 @@ func UpdateUser(db *sql.DB, u *models.User, username string) error {
 	if db == nil || u == nil {
 		return errors.New(errorDBNil)
 	}
-	query, err := db.Prepare("UPDATE Usuario SET username=?, email=?, fullname=?, rol=? WHERE username = ? ")
+	query, err := db.Prepare("UPDATE Usuario SET username=?, email=?, fullname=?, WHERE username = ? ")
 	if err != nil {
 		return err
 	}
 	defer query.Close()
-	_, err = query.Exec(u.Username, u.Email, u.Fullname, u.Rol, username)
+	_, err = query.Exec(u.Username, u.Email, u.Fullname, username)
 	return err
 }
 
@@ -227,6 +227,19 @@ func DeleteUser(db *sql.DB, username string) error {
 	}
 	defer query.Close()
 	_, err = query.Exec(username)
+	return err
+}
+
+func PutRole(db *sql.DB, username string, r *models.Role) error {
+	if db == nil {
+		return errors.New(errorDBNil)
+	}
+	query, err := db.Prepare("UPDATE Usuario SET rol=? WHERE username = ? ")
+	if err != nil {
+		return err
+	}
+	defer query.Close()
+	_, err = query.Exec(r.Rol, username)
 	return err
 }
 
@@ -247,6 +260,10 @@ func addUserTeam(db *sql.DB, username string, teamname string, teamrole string) 
 	if u == nil || t == nil {
 		return errors.New(errorResourceNotFound)
 	}
+	err = ExitUserTeam(db, username, teamname)
+	if err != nil {
+		return err
+	}
 	query, err := db.Prepare("INSERT INTO EquipoUsuario(usuarioid, equipoid, rol) VALUES (?, ?, ?) ")
 	if err != nil {
 		return err
@@ -260,14 +277,14 @@ func addUserTeam(db *sql.DB, username string, teamname string, teamrole string) 
 // Param username: Username of the user
 // Param teamname: Teamname of the team
 func AddUserTeamMember(db *sql.DB, username string, teamname string) error {
-	return addUserTeam(db, username, teamname, models.TeamRoleRoleMember)
+	return addUserTeam(db, username, teamname, TeamRoleRoleMember)
 }
 
 // AddUserTeamAdmin adds a user to a team as an Admin
 // Param username: Username of the user
 // Param teamname: Teamname of the team
 func AddUserTeamAdmin(db *sql.DB, username string, teamname string) error {
-	return addUserTeam(db, username, teamname, models.TeamRoleRoleAdmin)
+	return addUserTeam(db, username, teamname, TeamRoleRoleAdmin)
 }
 
 // ExitUserTeam gets out a user from a team
@@ -357,7 +374,7 @@ func getTeamUsersByRole(db *sql.DB, teamname string, teamrole string) ([]*User, 
 	} else if t == nil {
 		return nil, errors.New(errorResourceNotFound)
 	}
-	query, err := db.Prepare("SELECT U.* FROM Users U JOIN Teamroles R ON U.id=R.usuarioid WHERE R.equipoid=? AND R.rol=?")
+	query, err := db.Prepare("SELECT U.* FROM Usuario U JOIN EquipoUsuario R ON U.id=R.usuarioid WHERE R.equipoid=? AND R.rol=?")
 	var us []*User
 	if err != nil {
 		return nil, err
@@ -373,13 +390,13 @@ func getTeamUsersByRole(db *sql.DB, teamname string, teamrole string) ([]*User, 
 // GetTeamAdmins returns all users of team that are admins in team
 // Param teamname: Teamname of the team
 func GetTeamAdmins(db *sql.DB, teamname string) ([]*User, error) {
-	return getTeamUsersByRole(db, teamname, models.TeamRoleRoleAdmin)
+	return getTeamUsersByRole(db, teamname, TeamRoleRoleAdmin)
 }
 
 // GetTeamMembers returns all users of team that are role members in team
 // Param teamname: Teamname of the team
 func GetTeamMembers(db *sql.DB, teamname string) ([]*User, error) {
-	return getTeamUsersByRole(db, teamname, models.TeamRoleRoleMember)
+	return getTeamUsersByRole(db, teamname, TeamRoleRoleMember)
 }
 
 func getTeamUserByRole(db *sql.DB, teamname string, teamrole string, username string) (*User, error) {
@@ -392,7 +409,7 @@ func getTeamUserByRole(db *sql.DB, teamname string, teamrole string, username st
 	} else if t == nil {
 		return nil, errors.New(errorResourceNotFound)
 	}
-	query, err := db.Prepare("SELECT U.* FROM Users U JOIN Teamroles R ON U.id=R.usuarioid WHERE R.equipoid=? AND R.rol=? AND U.username=?")
+	query, err := db.Prepare("SELECT U.* FROM Usuario U JOIN EquipoUsuario R ON U.id=R.usuarioid WHERE R.equipoid=? AND R.rol=? AND U.username=?")
 	var us *User
 	if err != nil {
 		return nil, err
@@ -408,11 +425,11 @@ func getTeamUserByRole(db *sql.DB, teamname string, teamrole string, username st
 // GetTeamAdmin returns a user of team that is admins in team
 // Param teamname: Teamname of the team
 func GetTeamAdmin(db *sql.DB, teamname string, username string) (*User, error) {
-	return getTeamUserByRole(db, teamname, models.TeamRoleRoleAdmin, username)
+	return getTeamUserByRole(db, teamname, TeamRoleRoleAdmin, username)
 }
 
 // GetTeamMember returns a user of team that is role member in team
 // Param teamname: Teamname of the team
 func GetTeamMember(db *sql.DB, teamname string, username string) (*User, error) {
-	return getTeamUserByRole(db, teamname, models.TeamRoleRoleMember, username)
+	return getTeamUserByRole(db, teamname, TeamRoleRoleMember, username)
 }

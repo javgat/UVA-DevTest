@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -55,6 +56,11 @@ type Question struct {
 	// Example: 1
 	Testid int64 `json:"testid,omitempty"`
 
+	// tipo pregunta
+	// Required: true
+	// Enum: [opciones string codigo]
+	TipoPregunta *string `json:"tipoPregunta"`
+
 	// title
 	// Example: Paralelismo en C
 	// Required: true
@@ -83,6 +89,10 @@ func (m *Question) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateQuestion(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateTipoPregunta(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -130,6 +140,52 @@ func (m *Question) validateEstimatedTime(formats strfmt.Registry) error {
 func (m *Question) validateQuestion(formats strfmt.Registry) error {
 
 	if err := validate.Required("question", "body", m.Question); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+var questionTypeTipoPreguntaPropEnum []interface{}
+
+func init() {
+	var res []string
+	if err := json.Unmarshal([]byte(`["opciones","string","codigo"]`), &res); err != nil {
+		panic(err)
+	}
+	for _, v := range res {
+		questionTypeTipoPreguntaPropEnum = append(questionTypeTipoPreguntaPropEnum, v)
+	}
+}
+
+const (
+
+	// QuestionTipoPreguntaOpciones captures enum value "opciones"
+	QuestionTipoPreguntaOpciones string = "opciones"
+
+	// QuestionTipoPreguntaString captures enum value "string"
+	QuestionTipoPreguntaString string = "string"
+
+	// QuestionTipoPreguntaCodigo captures enum value "codigo"
+	QuestionTipoPreguntaCodigo string = "codigo"
+)
+
+// prop value enum
+func (m *Question) validateTipoPreguntaEnum(path, location string, value string) error {
+	if err := validate.EnumCase(path, location, value, questionTypeTipoPreguntaPropEnum, true); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (m *Question) validateTipoPregunta(formats strfmt.Registry) error {
+
+	if err := validate.Required("tipoPregunta", "body", m.TipoPregunta); err != nil {
+		return err
+	}
+
+	// value enum
+	if err := m.validateTipoPreguntaEnum("tipoPregunta", "body", *m.TipoPregunta); err != nil {
 		return err
 	}
 

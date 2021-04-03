@@ -13,6 +13,7 @@ import (
 	"uva-devtest/handlers"
 	"uva-devtest/restapi/operations"
 	"uva-devtest/restapi/operations/auth"
+	"uva-devtest/restapi/operations/question"
 	"uva-devtest/restapi/operations/team"
 	"uva-devtest/restapi/operations/user"
 )
@@ -65,6 +66,7 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 	api.UserPutUserHandler = user.PutUserHandlerFunc(handlers.PutUser)             // PUT /users/{username}
 	api.UserDeleteUserHandler = user.DeleteUserHandlerFunc(handlers.DeleteUser)    // DELETE /users/{username}
 	api.UserPutPasswordHandler = user.PutPasswordHandlerFunc(handlers.PutPassword) // PUT /users/{username}/password
+	api.UserPutRoleHandler = user.PutRoleHandlerFunc(handlers.PutRole)             // PUT /users/{username}/role
 
 	api.UserGetTeamsOfUserHandler = user.GetTeamsOfUserHandlerFunc(handlers.GetTeamsOfUser)    // GET /users/{username}/teams
 	api.TeamPostTeamHandler = team.PostTeamHandlerFunc(handlers.PostTeam)                      // POST /users/{username}/teams
@@ -119,7 +121,23 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 	api.TeamGetPublishedTestsFromTeamHandler = team.GetPublishedTestsFromTeamHandlerFunc(handlers.GetPTestsFromTeam) // GET /teams/{teamname}/publishedTests
 	api.TeamGetPublishedTestFromTeamHandler = team.GetPublishedTestFromTeamHandlerFunc(handlers.GetPTestFromTeam)    // GET /teams/{teamname}/publishedTests/{testid}
 
-	// TODO questions, tests...
+	// /questions
+
+	api.QuestionGetQuestionsHandler = question.GetQuestionsHandlerFunc(handlers.GetQuestions)       // GET /questions
+	api.QuestionGetQuestionHandler = question.GetQuestionHandlerFunc(handlers.GetQuestion)          // GET /questions/{questionid}
+	api.QuestionPutQuestionHandler = question.PutQuestionHandlerFunc(handlers.PutQuestion)          // PUT /questions/{questionid}
+	api.QuestionDeleteQuestionHandler = question.DeleteQuestionHandlerFunc(handlers.DeleteQuestion) // DELETE /questions/{questionid}
+
+	api.QuestionGetTagsFromQuestionHandler = question.GetTagsFromQuestionHandlerFunc(handlers.GetQuestionTags)       // GET /questions/{questionid}/tags
+	api.QuestionGetTagFromQuestionHandler = question.GetTagFromQuestionHandlerFunc(handlers.GetQuestionTag)          // GET /questions/{questionid}/tags/{tag}
+	api.QuestionAddTagToQuestionHandler = question.AddTagToQuestionHandlerFunc(handlers.AddQuestionTag)              // PUT /questions/{questionid}/tags/{tag}
+	api.QuestionRemoveTagFromQuestionHandler = question.RemoveTagFromQuestionHandlerFunc(handlers.RemoveQuestionTag) // DELETE /questions/{questionid}/tags/{tag}
+
+	api.QuestionGetTeamsFromQuestionHandler = question.GetTeamsFromQuestionHandlerFunc(handlers.GetTeamsFromQuestion) // GET /questions/{questionid}/teams
+	api.QuestionAddTeamToQuestionHandler = question.AddTeamToQuestionHandlerFunc(handlers.AddQuestionTeam)            // PUT /questions/{questionid}/teams/{teamname}
+	api.QuestionRemoveTeamToQuestionHandler = question.RemoveTeamToQuestionHandlerFunc(handlers.RemoveQuestionTeam)   // DELETE /questions/{questionid}/teams/{teamname}
+
+	// TODO tests...
 
 	api.PreServerShutdown = func() {}
 

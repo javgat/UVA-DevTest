@@ -42,7 +42,7 @@ func isTeamAdmin(teamname string, u *models.User) (bool, error) {
 		log.Println("Error en users_handler isTeamAdmin(): ", err)
 		return false, err
 	}
-	if role != nil && *role.Role == models.TeamRoleRoleAdmin {
+	if role != nil && *role.Role == dao.TeamRoleRoleAdmin {
 		return true, nil
 	}
 	return false, nil
@@ -116,8 +116,7 @@ func GetUser(params user.GetUserParams, u *models.User) middleware.Responder {
 func userUpdateToUser(uu *models.UserUpdate) *models.User {
 	u := &models.User{
 		Email:    uu.Email,
-		Fullname: uu.Fullname,
-		Rol:      uu.Rol,
+		Fullname: *uu.Fullname,
 		Username: uu.Username,
 	}
 	return u
@@ -183,6 +182,9 @@ func DeleteUser(params user.DeleteUserParams, u *models.User) middleware.Respond
 			// BadRequest en vez de Conflict ????
 		}
 		teams, err := dao.GetTeamsTeamRoleAdmin(db, params.Username)
+		if err != nil {
+			return user.NewDeleteUserGone()
+		}
 		for _, team := range teams {
 			admins, err := dao.GetTeamAdmins(db, *team.Teamname)
 			if err != nil {
@@ -230,6 +232,24 @@ func PutPassword(params user.PutPasswordParams, u *models.User) middleware.Respo
 		return user.NewPutPasswordBadRequest() //O forbidden?
 	}
 	return user.NewPutPasswordForbidden()
+}
+
+// PutRole PUT /users/{username}/role Modifies the role of a user.
+// Auth: Admin
+func PutRole(params user.PutRoleParams, u *models.User) middleware.Responder {
+	if isAdmin(u) {
+		r := params.Role
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			err = dao.PutRole(db, params.Username, r)
+			if err == nil {
+				return user.NewPutRoleOK()
+			}
+		}
+		log.Println("Error en users_handler PutRole(): ", err)
+		return user.NewPutRoleInternalServerError()
+	}
+	return user.NewPutRoleForbidden()
 }
 
 // GetTeamsOfUser GET /users/{username}/teams
@@ -300,7 +320,8 @@ func PostQuestionOfUser(params user.PostQuestionParams, u *models.User) middlewa
 			if err == nil && q != nil {
 				return user.NewPostQuestionCreated().WithPayload(q)
 			}
-			return user.NewPostQuestionGone()
+			errSt := err.Error()
+			return user.NewPostQuestionGone().WithPayload(&models.Error{Message: &errSt})
 		}
 		return user.NewPostQuestionInternalServerError()
 	}
@@ -332,7 +353,9 @@ func GetTestsFromUser(params user.GetTestsFromUserParams, u *models.User) middle
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			t, err := dao.GetTestsFromUser(db, params.Username)
-			if err == nil && t != nil {
+			if err == nil {
+				log.Print(t)
+				log.Print(err)
 				mt, err := dao.ToModelTests(t)
 				if mt != nil && err == nil {
 					return user.NewGetTestsFromUserOK().WithPayload(mt)
@@ -387,7 +410,7 @@ func GetPTestsFromUser(params user.GetPublishedTestsFromUserParams, u *models.Us
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			t, err := dao.GetPTestsFromUser(db, params.Username)
-			if err == nil && t != nil {
+			if err == nil {
 				mt, err := dao.ToModelTests(t)
 				if mt != nil && err == nil {
 					return user.NewGetPublishedTestsFromUserOK().WithPayload(mt)
@@ -447,7 +470,7 @@ func GetATestsFromUser(params user.GetAnsweredTestsFromUserParams, u *models.Use
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			t, err := dao.GetATestsFromUser(db, params.Username)
-			if err == nil && t != nil {
+			if err == nil {
 				mt, err := dao.ToModelTests(t)
 				if mt != nil && err == nil {
 					return user.NewGetAnsweredTestsFromUserOK().WithPayload(mt)
@@ -535,126 +558,3 @@ func GetAnswerFromUser(params user.GetAnswerFromUserParams, u *models.User) midd
 	}
 	return user.NewGetAnswerFromUserForbidden()
 }
-
-// YA NO (o se cambiara)
-/*
-// AddTeamOfUser PUT /users/{username}/teams/{teamname}
-// Auth: TeamAdmin or Admin
-// DEBERIA devolver error o no modificar si ya exisite uno y hace PUT (no quitar de admin)
-func AddTeamOfUser(params user.AddTeamOfUserParams, u *models.User) middleware.Responder {
-	teamAdmin, err := isTeamAdmin(params.Teamname, u)
-	if err != nil {
-		return user.NewAddTeamOfUserInternalServerError()
-	}
-	if teamAdmin || isAdmin(u) {
-		db, err := dbconnection.ConnectDb()
-		if err == nil {
-			err = dao.AddUserTeam(db, params.Username, params.Teamname)
-			if err == nil {
-				return user.NewAddTeamOfUserOK()
-			}
-			log.Println("Error en users_handler AddTeamOfUser(): ", err)
-			return user.NewAddTeamOfUserConflict()
-		}
-		log.Println("Error en users_handler AddTeamOfUser(): ", err)
-		return user.NewAddTeamOfUserInternalServerError()
-	}
-	return user.NewAddTeamOfUserForbidden()
-}*/
-
-// DeleteTeamOfUser DELETE /users/{username}/teams/{teamname}
-// Auth: Current User, TeamAdmin or Admin
-// Req: No puede quedarse sin admins (ni miembros, pero el ultimo siempre sera admin)
-func DeleteTeamOfUser(params user.DeleteTeamOfUserParams, u *models.User) middleware.Responder {
-	teamAdmin, err := isTeamAdmin(params.Teamname, u)
-	if err != nil {
-		return user.NewDeleteTeamOfUserInternalServerError()
-	}
-	if userOrAdmin(params.Username, u) || teamAdmin {
-		db, err := dbconnection.ConnectDb()
-		if err == nil {
-			admins, err := dao.GetTeamAdmins(db, params.Teamname)
-			if err != nil {
-				log.Println("Error en users_handler DeleteTeamOfUser(): ", err)
-				return user.NewDeleteTeamOfUserInternalServerError()
-			}
-			if len(admins) == 1 && *admins[0].Username == params.Username {
-				log.Println("Error en users_handler DeleteTeamOfUser(): ", err)
-				s := "Es el unico administrador existente en el equipo"
-				return user.NewDeleteTeamOfUserBadRequest().WithPayload(&models.Error{Message: &s}) //Conflict???
-			}
-			err = dao.ExitUserTeam(db, params.Username, params.Teamname)
-			if err == nil {
-				return user.NewDeleteTeamOfUserOK()
-			}
-			log.Println("Error en users_handler DeleteTeamOfUser(): ", err)
-			return user.NewDeleteTeamOfUserGone()
-		}
-		log.Println("Error en users_handler DeleteTeamOfUser(): ", err)
-		return user.NewDeleteTeamOfUserInternalServerError()
-	}
-	return user.NewDeleteTeamOfUserForbidden()
-}
-
-/*
-// GetUserTeamRole GET /users/{username}/teams/{teamname}/role
-// Auth: Team or Admin
-func GetUserTeamRole(params team.GetUserTeamRoleParams, u *models.User) middleware.Responder {
-	teamMember, err := isTeamMember(params.Teamname, u)
-	if err != nil {
-		return team.NewGetUserTeamRoleInternalServerError()
-	}
-	if teamMember || isAdmin(u) {
-		db, err := dbconnection.ConnectDb()
-		if err == nil {
-			role, err := dao.GetRole(db, params.Username, params.Teamname)
-			if err == nil {
-				return team.NewGetUserTeamRoleOK().WithPayload(role)
-			}
-		}
-		log.Println("Error en users_handler GetUserTeamRole(): ", err)
-		return team.NewGetUserTeamRoleInternalServerError()
-	}
-	return team.NewGetUserTeamRoleForbidden()
-}
-
-// PutUserTeamRole PUT /users/{username}/teams/{teamname}/role
-// Auth: TeamAdmin or Admin
-// Req: NO puede quedarse sin TeamAdmins el equipo
-func PutUserTeamRole(params team.PutUserTeamRoleParams, u *models.User) middleware.Responder {
-	teamAdmin, err := isTeamAdmin(params.Teamname, u)
-	if err != nil {
-		return team.NewPutUserTeamRoleInternalServerError()
-	}
-	if teamAdmin || isAdmin(u) {
-		db, err := dbconnection.ConnectDb()
-		if err == nil {
-			role, err := dao.GetRole(db, params.Username, params.Teamname)
-			if err != nil {
-				return team.NewPutUserTeamRoleInternalServerError()
-			} else if role == nil {
-				return team.NewPutUserTeamRoleGone()
-			}
-			if *role.Role == models.TeamRoleRoleAdmin && *params.Role.Role != models.TeamRoleRoleAdmin {
-				admins, err := dao.GetTeamAdmins(db, params.Teamname)
-				if err != nil {
-					log.Println("Error en users_handler PutUserTeamRole(): ", err)
-					return team.NewPutUserTeamRoleInternalServerError()
-				}
-				if len(admins) == 1 {
-					log.Println("Error en users_handler PutUserTeamRole(): ", err)
-					s := "Es el unico administrador existente en el equipo"
-					return team.NewPutUserTeamRoleBadRequest().WithPayload(&models.Error{Message: &s}) //Conflict???
-				}
-			}
-			err = dao.UpdateRole(db, params.Username, params.Teamname, params.Role)
-			if err == nil {
-				return team.NewPutUserTeamRoleOK()
-			}
-		}
-		log.Println("Error en users_handler PutUserTeamRole(): ", err)
-		return team.NewPutUserTeamRoleInternalServerError()
-	}
-	return team.NewPutUserTeamRoleForbidden()
-}
-*/

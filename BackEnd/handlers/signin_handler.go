@@ -55,7 +55,7 @@ func RegisterUser(params user.RegisterUserParams) middleware.Responder {
 	log.Println("Registrando usuario...")
 	var lu *models.SigninUser = params.SigninUser
 	if lu == nil {
-		return serverErrorSignin(errors.New("Parametros de entrada vacios"))
+		return serverErrorSignin(errors.New("parametros de entrada vacio"))
 	}
 	log.Printf("Nombre de usuario: %v\n", *lu.Username)
 	log.Println("Email: " + *lu.Email)

@@ -6,7 +6,6 @@ package dao
 import (
 	"fmt"
 	"testing"
-	"uva-devtest/models"
 
 	"github.com/DATA-DOG/go-sqlmock"
 )
@@ -461,7 +460,7 @@ func expectPostTeam(mock sqlmock.Sqlmock, team *Team) {
 	mock.ExpectPrepare("INSERT INTO Teams").ExpectExec().
 		WithArgs(team.Teamname, team.Description).WillReturnResult(sqlmock.NewResult(1, 1))
 	expectAddUserTeamAdmin(mock, defaultUser().ID, team.ID)
-	expectUpdateRole(mock, models.TeamRoleRoleAdmin)
+	expectUpdateRole(mock, TeamRoleRoleAdmin)
 }
 
 func expectPostTeamDefault(mock sqlmock.Sqlmock) {

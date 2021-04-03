@@ -7,7 +7,6 @@ package models
 
 import (
 	"context"
-	"encoding/json"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -29,7 +28,8 @@ type UserUpdate struct {
 
 	// fullname
 	// Example: Javier Gatón Herguedas
-	Fullname string `json:"fullname,omitempty"`
+	// Required: true
+	Fullname *string `json:"fullname"`
 
 	// password
 	// Example: password
@@ -37,10 +37,6 @@ type UserUpdate struct {
 	// Pattern: ^.{6,}$
 	// Format: password
 	Password *strfmt.Password `json:"password"`
-
-	// rol
-	// Enum: [estudiante profesor administrador]
-	Rol string `json:"rol,omitempty"`
 
 	// username
 	// Example: carlosg72
@@ -57,11 +53,11 @@ func (m *UserUpdate) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
-	if err := m.validatePassword(formats); err != nil {
+	if err := m.validateFullname(formats); err != nil {
 		res = append(res, err)
 	}
 
-	if err := m.validateRol(formats); err != nil {
+	if err := m.validatePassword(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -92,6 +88,15 @@ func (m *UserUpdate) validateEmail(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *UserUpdate) validateFullname(formats strfmt.Registry) error {
+
+	if err := validate.Required("fullname", "body", m.Fullname); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (m *UserUpdate) validatePassword(formats strfmt.Registry) error {
 
 	if err := validate.Required("password", "body", m.Password); err != nil {
@@ -103,51 +108,6 @@ func (m *UserUpdate) validatePassword(formats strfmt.Registry) error {
 	}
 
 	if err := validate.FormatOf("password", "body", "password", m.Password.String(), formats); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-var userUpdateTypeRolPropEnum []interface{}
-
-func init() {
-	var res []string
-	if err := json.Unmarshal([]byte(`["estudiante","profesor","administrador"]`), &res); err != nil {
-		panic(err)
-	}
-	for _, v := range res {
-		userUpdateTypeRolPropEnum = append(userUpdateTypeRolPropEnum, v)
-	}
-}
-
-const (
-
-	// UserUpdateRolEstudiante captures enum value "estudiante"
-	UserUpdateRolEstudiante string = "estudiante"
-
-	// UserUpdateRolProfesor captures enum value "profesor"
-	UserUpdateRolProfesor string = "profesor"
-
-	// UserUpdateRolAdministrador captures enum value "administrador"
-	UserUpdateRolAdministrador string = "administrador"
-)
-
-// prop value enum
-func (m *UserUpdate) validateRolEnum(path, location string, value string) error {
-	if err := validate.EnumCase(path, location, value, userUpdateTypeRolPropEnum, true); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (m *UserUpdate) validateRol(formats strfmt.Registry) error {
-	if swag.IsZero(m.Rol) { // not required
-		return nil
-	}
-
-	// value enum
-	if err := m.validateRolEnum("rol", "body", m.Rol); err != nil {
 		return err
 	}
 

@@ -6,7 +6,6 @@ package dao
 import (
 	"fmt"
 	"testing"
-	"uva-devtest/models"
 
 	"github.com/DATA-DOG/go-sqlmock"
 )
@@ -14,7 +13,7 @@ import (
 // GetRole
 
 func defaultRole() *TeamRole {
-	rol := models.TeamRoleRoleMember
+	rol := TeamRoleRoleMember
 	r := &TeamRole{
 		Role: &rol,
 	}

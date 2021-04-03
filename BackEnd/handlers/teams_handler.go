@@ -10,7 +10,6 @@ import (
 	"uva-devtest/persistence/dao"
 	"uva-devtest/persistence/dbconnection"
 	"uva-devtest/restapi/operations/team"
-	"uva-devtest/restapi/operations/user"
 
 	"github.com/go-openapi/runtime/middleware"
 )
@@ -86,7 +85,7 @@ func PutTeam(params team.PutTeamParams, u *models.User) middleware.Responder {
 	if teamAdmin || isAdmin(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			err := dao.UpdateTeam(db, params.Team, params.Teamname)
+			err := dao.UpdateTeam(db, params.Team, params.Teamname) // NO puede cambiar el soloProfesores
 			if err == nil {
 				return team.NewPutTeamOK()
 			}
@@ -128,7 +127,8 @@ func GetAdminsFromTeam(params team.GetAdminsParams, u *models.User) middleware.R
 	if teamMember || isAdmin(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			users, err := dao.GetTeamAdmins(db, params.Teamname)
+			var users []*dao.User
+			users, err = dao.GetTeamAdmins(db, params.Teamname)
 			if err == nil {
 				return team.NewGetAdminsOK().WithPayload(dao.ToModelsUser(users))
 			}
@@ -150,7 +150,7 @@ func AddAdminToTeam(params team.AddAdminParams, u *models.User) middleware.Respo
 	if teamAdmin || isAdmin(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			err := dao.AddUserTeamAdmin(db, params.Username, params.Teamname)
+			err = dao.AddUserTeamAdmin(db, params.Username, params.Teamname)
 			if err == nil {
 				return team.NewAddAdminOK()
 			}
@@ -214,7 +214,7 @@ func AddMemberToTeam(params team.AddMemberParams, u *models.User) middleware.Res
 	if teamAdmin || isAdmin(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			err := dao.AddUserTeamMember(db, params.Username, params.Teamname)
+			err = dao.AddUserTeamMember(db, params.Username, params.Teamname)
 			if err == nil {
 				return team.NewAddMemberOK()
 			}
@@ -294,7 +294,7 @@ func GetUserFromTeam(params team.GetUserFromTeamParams, u *models.User) middlewa
 func DeleteUserFromTeam(params team.DeleteUserFromTeamParams, u *models.User) middleware.Responder {
 	teamAdmin, err := isTeamAdmin(params.Teamname, u)
 	if err != nil {
-		return user.NewDeleteUserFromTeamInternalServerError()
+		return team.NewDeleteUserFromTeamInternalServerError()
 	}
 	if teamAdmin || userOrAdmin(params.Username, u) {
 		db, err := dbconnection.ConnectDb()
@@ -304,18 +304,18 @@ func DeleteUserFromTeam(params team.DeleteUserFromTeamParams, u *models.User) mi
 				if len(admins) == 1 && *admins[0].Username == params.Username {
 					log.Println("Error en users_handler DeleteUserFromTeam(): ", err)
 					s := "Es el unico administrador existente en el equipo"
-					return user.NewDeleteUserFromTeamBadRequest().WithPayload(&models.Error{Message: &s}) //Conflict???
+					return team.NewDeleteUserFromTeamBadRequest().WithPayload(&models.Error{Message: &s}) //Conflict???
 				}
 				err = dao.ExitUserTeam(db, params.Username, params.Teamname)
 				if err == nil {
-					return user.NewDeleteUserFromTeamOK()
+					return team.NewDeleteUserFromTeamOK()
 				}
 			}
 		}
 		log.Println("Error en teams_handler DeleteUserFromTeam(): ", err)
-		return user.NewDeleteUserFromTeamInternalServerError()
+		return team.NewDeleteUserFromTeamInternalServerError()
 	}
-	return user.NewDeleteUserFromTeamForbidden()
+	return team.NewDeleteUserFromTeamForbidden()
 }
 
 // /teams/{teamname}/questions
@@ -351,14 +351,15 @@ func GetQuestionFromTeam(params team.GetQuestionFromTeamParams, u *models.User) 
 	if teamMember || isAdmin(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			question, err := dao.GetQuestionFromTeam(db, params.Teamname, params.Questionid)
-			if err == nil {
+			var question *dao.Question
+			question, err = dao.GetQuestionFromTeam(db, params.Teamname, params.Questionid)
+			if err == nil && question != nil {
 				mq, err := dao.ToModelQuestion(question)
 				if err == nil && mq != nil {
 					return team.NewGetQuestionFromTeamOK().WithPayload(mq)
 				}
-				return team.NewGetQuestionFromTeamGone()
 			}
+			return team.NewGetQuestionFromTeamGone()
 		}
 		log.Println("Error en teams_handler GetUsersFromTeam(): ", err)
 		return team.NewGetQuestionFromTeamInternalServerError()
@@ -400,13 +401,13 @@ func GetTestFromTeam(params team.GetTestFromTeamParams, u *models.User) middlewa
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			test, err := dao.GetTestFromTeam(db, params.Teamname, params.Testid)
-			if err == nil {
+			if err == nil && test != nil {
 				mt, err := dao.ToModelTest(test)
 				if err == nil && mt != nil {
 					return team.NewGetTestFromTeamOK().WithPayload(mt)
 				}
-				return team.NewGetTestFromTeamGone()
 			}
+			return team.NewGetTestFromTeamGone()
 		}
 		log.Println("Error en teams_handler GetUsersFromTeam(): ", err)
 		return team.NewGetTestFromTeamInternalServerError()
@@ -448,13 +449,13 @@ func GetPTestFromTeam(params team.GetPublishedTestFromTeamParams, u *models.User
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			tests, err := dao.GetPTestFromTeam(db, params.Teamname, params.Testid)
-			if err == nil {
+			if err == nil && tests != nil {
 				mt, err := dao.ToModelTest(tests)
 				if err == nil && mt != nil {
 					return team.NewGetPublishedTestFromTeamOK().WithPayload(mt)
 				}
-				return team.NewGetPublishedTestFromTeamGone()
 			}
+			return team.NewGetPublishedTestFromTeamGone()
 		}
 		log.Println("Error en teams_handler GetUsersFromTeam(): ", err)
 		return team.NewGetPublishedTestFromTeamInternalServerError()

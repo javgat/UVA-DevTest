@@ -7,6 +7,7 @@ package dao
 import (
 	"database/sql"
 	"errors"
+	"log"
 	"uva-devtest/models"
 	"uva-devtest/persistence/dbconnection"
 
@@ -31,6 +32,7 @@ func ToModelQuestion(q *Question) (*models.Question, error) {
 				Testid:        q.Testid,        //Puede ser nil
 				EleccionUnica: q.EleccionUnica, //Puede ser nil
 				Solucion:      q.Solucion,      //Puede ser nil
+				TipoPregunta:  q.TipoPregunta,
 			}
 			return mq, nil
 		}
@@ -58,8 +60,25 @@ func rowsToQuestions(rows *sql.Rows) ([]*Question, error) {
 	var questions []*Question
 	for rows.Next() {
 		var q Question
-		err := rows.Scan(&q.ID, &q.Title, &q.Question, &q.EstimatedTime, &q.AutoCorrect, &q.Editable, &q.Usuarioid, &q.Testid, &q.EleccionUnica, &q.Solucion)
+		var testid sql.NullInt64
+		var eleUni sql.NullBool
+		var solu sql.NullString
+		err := rows.Scan(&q.ID, &q.Title, &q.Question, &q.EstimatedTime, &q.AutoCorrect, &q.Editable, &q.Usuarioid, &testid, &eleUni, &solu)
+		if testid.Valid {
+			q.Testid = testid.Int64
+		}
+		var tipo string
+		if eleUni.Valid {
+			q.EleccionUnica = eleUni.Bool
+			tipo = models.QuestionTipoPreguntaOpciones
+		}
+		if solu.Valid {
+			q.Solucion = solu.String
+			tipo = models.QuestionTipoPreguntaString
+		}
+		q.TipoPregunta = &tipo
 		if err != nil {
+			log.Print(err)
 			return questions, err
 		}
 
@@ -79,6 +98,77 @@ func rowsToQuestion(rows *sql.Rows) (*Question, error) {
 		question = questions[0]
 	}
 	return question, err
+}
+
+func GetQuestions(db *sql.DB) ([]*Question, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var qs []*Question
+	query, err := db.Prepare("SELECT * FROM Pregunta")
+	if err == nil {
+		defer query.Close()
+		rows, err := query.Query()
+		if err == nil {
+			qs, err = rowsToQuestions(rows)
+			return qs, err
+		}
+	}
+	return nil, err
+}
+
+func GetQuestion(db *sql.DB, questionid int64) (*Question, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var qs *Question
+	query, err := db.Prepare("SELECT * FROM Pregunta WHERE id=?")
+	if err == nil {
+		defer query.Close()
+		rows, err := query.Query(questionid)
+		if err == nil {
+			qs, err = rowsToQuestion(rows)
+			return qs, err
+		}
+	}
+	return nil, err
+}
+
+func PutQuestion(db *sql.DB, questionid int64, q *models.Question) error {
+	if db == nil {
+		return errors.New(errorDBNil)
+	}
+	u, err := GetUserUsername(db, *q.Username)
+	if err != nil || u == nil {
+		return errors.New(errorResourceNotFound)
+	}
+	query, err := db.Prepare("UPDATE Pregunta SET title=?, question=?, estimatedTime=?, autoCorrect=?, editable=?, usuarioid=?, eleccionUnica=?, solucion=? WHERE id=? ")
+	if err != nil {
+		return err
+	}
+	var solucion *string = nil
+	var eleUni *bool = nil
+	if *q.TipoPregunta == models.QuestionTipoPreguntaOpciones {
+		eleUni = &q.EleccionUnica
+	} else if *q.TipoPregunta == models.QuestionTipoPreguntaString {
+		solucion = &q.Solucion
+	}
+	defer query.Close()
+	_, err = query.Exec(q.Title, q.Question, q.EstimatedTime, q.AutoCorrect, q.Editable, u.ID, eleUni, solucion, questionid)
+	return err
+}
+
+func DeleteQuestion(db *sql.DB, questionid int64) error {
+	if db == nil {
+		return errors.New(errorDBNil)
+	}
+	query, err := db.Prepare("DELETE FROM Pregunta WHERE id=? ")
+	if err != nil {
+		return err
+	}
+	defer query.Close()
+	_, err = query.Exec(questionid)
+	return err
 }
 
 //NOTESTED:
@@ -141,8 +231,15 @@ func PostQuestion(db *sql.DB, q *models.Question, username string) error {
 	if err != nil {
 		return err
 	}
+	var solucion *string = nil
+	var eleUni *bool = nil
+	if *q.TipoPregunta == models.QuestionTipoPreguntaOpciones {
+		eleUni = &q.EleccionUnica
+	} else if *q.TipoPregunta == models.QuestionTipoPreguntaString {
+		solucion = &q.Solucion
+	}
 	defer query.Close()
-	_, err = query.Exec(q.Title, q.Question, q.EstimatedTime, q.AutoCorrect, q.Editable, u.ID, q.EleccionUnica, q.Solucion)
+	_, err = query.Exec(q.Title, q.Question, q.EstimatedTime, q.AutoCorrect, q.Editable, u.ID, eleUni, solucion)
 	return err
 }
 
@@ -153,7 +250,7 @@ func GetQuestionsFromTeam(db *sql.DB, teamname string) ([]*Question, error) {
 	u, err := GetTeam(db, teamname)
 	if err == nil {
 		var qs []*Question
-		query, err := db.Prepare("SELECT P.* FROM Pregunta P JOIN PreguntaEquipo E ON P.id=E.preguntaid WHERE E.teamid=?")
+		query, err := db.Prepare("SELECT P.* FROM Pregunta P JOIN PreguntaEquipo E ON P.id=E.preguntaid WHERE E.equipoid=?")
 		if err == nil {
 			defer query.Close()
 			rows, err := query.Query(u.ID)
@@ -173,7 +270,8 @@ func GetQuestionFromTeam(db *sql.DB, teamname string, questionid int64) (*Questi
 	u, err := GetTeam(db, teamname)
 	if err == nil {
 		var qs *Question
-		query, err := db.Prepare("SELECT P.* FROM Pregunta P JOIN PreguntaEquipo E ON P.id=E.preguntaid WHERE E.teamid=? AND P.id=?")
+		var query *sql.Stmt
+		query, err = db.Prepare("SELECT P.* FROM Pregunta P JOIN PreguntaEquipo E ON P.id=E.preguntaid WHERE E.equipoid=? AND P.id=?")
 		if err == nil {
 			defer query.Close()
 			rows, err := query.Query(u.ID, questionid)
@@ -181,7 +279,43 @@ func GetQuestionFromTeam(db *sql.DB, teamname string, questionid int64) (*Questi
 				qs, err = rowsToQuestion(rows)
 				return qs, err
 			}
+		} else {
+			log.Print(err)
 		}
 	}
 	return nil, err
+}
+
+func AddQuestionTeam(db *sql.DB, questionid int64, teamname string) error {
+	if db == nil {
+		return errors.New(errorDBNil)
+	}
+	t, err := GetTeam(db, teamname)
+	if err == nil {
+		var query *sql.Stmt
+		query, err = db.Prepare("INSERT INTO PreguntaEquipo(preguntaid, equipoid) VALUES(?,?)")
+		if err == nil {
+			defer query.Close()
+			_, err = query.Query(questionid, t.ID)
+			return err
+		}
+	}
+	return err
+}
+
+func RemoveQuestionTeam(db *sql.DB, questionid int64, teamname string) error {
+	if db == nil {
+		return errors.New(errorDBNil)
+	}
+	t, err := GetTeam(db, teamname)
+	if err == nil {
+		var query *sql.Stmt
+		query, err = db.Prepare("DELETE FROM PreguntaEquipo WHERE preguntaid=? AND equipoid=?")
+		if err == nil {
+			defer query.Close()
+			_, err = query.Query(questionid, t.ID)
+			return err
+		}
+	}
+	return err
 }
