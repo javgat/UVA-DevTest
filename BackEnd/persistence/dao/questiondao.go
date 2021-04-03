@@ -220,8 +220,8 @@ func PostQuestion(db *sql.DB, q *models.Question, username string) (*models.Ques
 	if err != nil || u == nil {
 		return nil, errors.New(errorResourceNotFound)
 	}
-	query, err := db.Prepare("INSERT INTO Pregunta(title, question, estimatedTime, autoCorrect, editable, usuarioid, testid, eleccionUnica, solucion) " +
-		"VALUES (?,?,?,?,?,?,NULL,?,?)")
+	query, err := db.Prepare("INSERT INTO Pregunta(title, question, estimatedTime, autoCorrect, editable, usuarioid, eleccionUnica, solucion) " +
+		"VALUES (?,?,?,?,?,?,?,?)")
 
 	if err != nil {
 		return nil, err

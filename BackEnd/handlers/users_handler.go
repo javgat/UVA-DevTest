@@ -374,9 +374,10 @@ func PostTest(params user.PostTestParams, u *models.User) middleware.Responder {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			t, err := dao.PostTest(db, params.Username, params.Test)
-			if err == nil && t == nil {
+			if err == nil && t != nil {
 				return user.NewPostTestCreated().WithPayload(t)
 			}
+			log.Print("Error en PostTest(): ", err)
 			return user.NewPostTestGone()
 		}
 		return user.NewPostTestInternalServerError()

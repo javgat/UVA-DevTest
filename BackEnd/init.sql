@@ -94,7 +94,6 @@ CREATE TABLE Pregunta(
   eleccionUnica boolean,
   solucion varchar(100) COLLATE utf8_unicode_ci,
   FOREIGN KEY(usuarioid) REFERENCES Usuario(id) ON DELETE CASCADE,
-  FOREIGN KEY(testid) REFERENCES Test(id),
   PRIMARY KEY(id)
 );
 

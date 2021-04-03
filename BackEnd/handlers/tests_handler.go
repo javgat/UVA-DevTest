@@ -44,15 +44,16 @@ func GetTest(params test.GetTestParams, u *models.User) middleware.Responder {
 		if err == nil {
 			var ts *dao.Test
 			ts, err = dao.GetTest(db, params.Testid)
-			if err == nil {
+			if err == nil && ts != nil {
 				var mts *models.Test
 				mts, err = dao.ToModelTest(ts)
 				if err == nil {
 					return test.NewGetTestOK().WithPayload(mts)
 				}
 			}
+			log.Println("Error en users_handler GetTest(): ", err)
+			return test.NewGetTestGone()
 		}
-		log.Println("Error en users_handler GetTest(): ", err)
 		return test.NewGetTestInternalServerError()
 	}
 	return test.NewGetTestForbidden()
@@ -68,10 +69,12 @@ func isTestAdmin(u *models.User, testid int64) bool {
 		}
 		var ts []*dao.Team
 		ts, err = dao.GetTeamsUsername(db, *u.Username)
-		for _, itemCopy := range ts {
-			t, err = dao.GetTestFromTeam(db, *itemCopy.Teamname, testid)
-			if t != nil && err == nil {
-				return true
+		if err == nil {
+			for _, itemCopy := range ts {
+				t, err = dao.GetTestFromTeam(db, *itemCopy.Teamname, testid)
+				if t != nil && err == nil {
+					return true
+				}
 			}
 		}
 	}
@@ -140,7 +143,9 @@ func AddTeamToTest(params test.AddTeamToTestParams, u *models.User) middleware.R
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			err = dao.AddTeamToTest(db, params.Testid, params.Teamname)
-			return test.NewAddTeamToTestOK()
+			if err == nil {
+				return test.NewAddTeamToTestOK()
+			}
 		}
 		log.Println("Error en users_handler AddTeamToTest(): ", err)
 		return test.NewAddTeamToTestInternalServerError()
@@ -155,7 +160,9 @@ func RemoveTeamTest(params test.RemoveTeamToTestParams, u *models.User) middlewa
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			err = dao.RemoveTeamFromTest(db, params.Testid, params.Teamname)
-			return test.NewRemoveTeamToTestOK()
+			if err == nil {
+				return test.NewRemoveTeamToTestOK()
+			}
 		}
 		log.Println("Error en users_handler RemoveTeamTest(): ", err)
 		return test.NewRemoveTeamToTestInternalServerError()
@@ -172,7 +179,7 @@ func PublishTest(params test.PostPublishedTestParams, u *models.User) middleware
 			var ts *dao.Test
 			var pts *models.Test
 			ts, err = dao.GetTest(db, params.Testid)
-			if err == nil {
+			if err == nil && ts != nil {
 				var qs []*dao.Question
 				qs, err = dao.GetQuestionsFromTest(db, params.Testid)
 				if err == nil {
@@ -181,11 +188,10 @@ func PublishTest(params test.PostPublishedTestParams, u *models.User) middleware
 					if err == nil {
 						pts, err = dao.ToModelTest(ts)
 						if err == nil {
-							btrue := true
-							pts.Editable = &btrue
+							bfalse := false
+							pts.Editable = &bfalse
 							pts, err = dao.PostTest(db, *pts.Username, pts)
 							if err == nil {
-								bfalse := false
 								for _, itemCopy := range mqs {
 									itemCopy.Editable = &bfalse
 									qp, err := dao.PostQuestion(db, itemCopy, *pts.Username)
@@ -197,8 +203,19 @@ func PublishTest(params test.PostPublishedTestParams, u *models.User) middleware
 										return test.NewPostPublishedTestInternalServerError()
 									}
 								}
+								teams, err := dao.GetTeamsFromTest(db, params.Testid)
+								if err == nil {
+									for _, itemCopy := range teams {
+										if err == nil {
+											err = dao.AddTeamToTest(db, pts.ID, *itemCopy.Teamname)
+										}
+										if err != nil {
+											log.Println("Error en users_handler PublishTest(): ", err)
+											return test.NewPostPublishedTestInternalServerError()
+										}
+									}
+								}
 								return test.NewPostPublishedTestCreated().WithPayload(pts)
-
 							}
 						}
 					}
@@ -242,7 +259,7 @@ func GetQuestionFromTest(params test.GetQuestionFromTestParams, u *models.User) 
 			var qs *dao.Question
 			qs, err = dao.GetQuestionFromTest(db, params.Testid, params.Questionid)
 			var mqs *models.Question
-			if err == nil {
+			if err == nil && qs != nil {
 				mqs, err = dao.ToModelQuestion(qs)
 				if err == nil {
 					return test.NewGetQuestionFromTestOK().WithPayload(mqs)
@@ -255,11 +272,22 @@ func GetQuestionFromTest(params test.GetQuestionFromTestParams, u *models.User) 
 	return test.NewGetQuestionFromTestForbidden()
 }
 
+func testEditable(testid int64) bool {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		t, err := dao.GetTest(db, testid)
+		if err == nil && t != nil {
+			return *t.Editable
+		}
+	}
+	return false
+}
+
 // AddQuestionToTest PUT /tests/{testid}/questions/{questionid}. Add question to test
 // Auth: TestAdmin or Admin
-// Req: !Test.editable -> en SQL
+// Req: Test.editable
 func AddQuestionToTest(params test.AddQuestionToTestParams, u *models.User) middleware.Responder {
-	if isAdmin(u) || isTestAdmin(u, params.Testid) {
+	if testEditable(params.Testid) && (isAdmin(u) || isTestAdmin(u, params.Testid)) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			err = dao.AddQuestionTest(db, params.Testid, params.Questionid)
@@ -275,9 +303,9 @@ func AddQuestionToTest(params test.AddQuestionToTestParams, u *models.User) midd
 
 // RemoveQuestionTest DELETE /tests/{testid}/questions/{questionid}. Remove question from test
 // Auth: TestAdmin or Admin
-// Req: !Test.editable -> en SQL
+// Req: Test.editable
 func RemoveQuestionTest(params test.RemoveQuestionFromTestParams, u *models.User) middleware.Responder {
-	if isAdmin(u) || isTestAdmin(u, params.Testid) {
+	if testEditable(params.Testid) && (isAdmin(u) || isTestAdmin(u, params.Testid)) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			err = dao.RemoveQuestionTest(db, params.Testid, params.Questionid)

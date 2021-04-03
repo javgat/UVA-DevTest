@@ -98,7 +98,7 @@ func GetTest(db *sql.DB, testid int64) (*Test, error) {
 		return nil, errors.New(errorDBNil)
 	}
 	var ts *Test
-	query, err := db.Prepare("SELECT * FROM Test WHERE testid=?")
+	query, err := db.Prepare("SELECT * FROM Test WHERE id=?")
 	if err == nil {
 		defer query.Close()
 		rows, err := query.Query(testid)
@@ -118,13 +118,13 @@ func PutTest(db *sql.DB, testid int64, t *models.Test) error {
 	if err != nil || u == nil {
 		return errors.New(errorResourceNotFound)
 	}
-	query, err := db.Prepare("UPDATE Test set title=?, description=?, maxSeconds=?, accesoPublico=?, editable=?, usuarioid=? WHERE editable=true AND id=?")
+	query, err := db.Prepare("UPDATE Test SET title=?, description=?, maxSeconds=?, accesoPublico=?, editable=?, usuarioid=? WHERE editable=? AND id=?")
 
 	if err != nil {
 		return err
 	}
 	defer query.Close()
-	_, err = query.Exec(t.Title, t.Description, t.MaxSeconds, t.AccesoPublico, t.Editable, u.ID, t.ID)
+	_, err = query.Exec(t.Title, t.Description, t.MaxSeconds, t.AccesoPublico, t.Editable, u.ID, true, testid)
 	return err
 }
 
@@ -132,7 +132,7 @@ func DeleteTest(db *sql.DB, testid int64) error {
 	if db == nil {
 		return errors.New(errorDBNil)
 	}
-	query, err := db.Prepare("DELETE FROM Test WHERE testid=?")
+	query, err := db.Prepare("DELETE FROM Test WHERE id=?")
 	if err == nil {
 		defer query.Close()
 		_, err = query.Exec(testid)
