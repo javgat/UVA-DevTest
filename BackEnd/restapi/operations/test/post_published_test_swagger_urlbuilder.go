@@ -10,11 +10,13 @@ import (
 	"net/url"
 	golangswaggerpaths "path"
 	"strings"
+
+	"github.com/go-openapi/swag"
 )
 
 // PostPublishedTestURL generates an URL for the post published test operation
 type PostPublishedTestURL struct {
-	Testid string
+	Testid int64
 
 	_basePath string
 	// avoid unkeyed usage
@@ -42,7 +44,7 @@ func (o *PostPublishedTestURL) Build() (*url.URL, error) {
 
 	var _path = "/tests/{testid}/publishedTests"
 
-	testid := o.Testid
+	testid := swag.FormatInt64(o.Testid)
 	if testid != "" {
 		_path = strings.Replace(_path, "{testid}", testid, -1)
 	} else {

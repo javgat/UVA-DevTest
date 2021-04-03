@@ -315,10 +315,10 @@ func PostQuestionOfUser(params user.PostQuestionParams, u *models.User) middlewa
 	if userOrAdmin(params.Username, u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			err := dao.PostQuestion(db, params.Question, params.Username)
-			q := params.Question
-			if err == nil && q != nil {
-				return user.NewPostQuestionCreated().WithPayload(q)
+			var mq *models.Question
+			mq, err = dao.PostQuestion(db, params.Question, params.Username)
+			if err == nil && mq != nil {
+				return user.NewPostQuestionCreated().WithPayload(mq)
 			}
 			errSt := err.Error()
 			return user.NewPostQuestionGone().WithPayload(&models.Error{Message: &errSt})
@@ -373,9 +373,8 @@ func PostTest(params user.PostTestParams, u *models.User) middleware.Responder {
 	if userOrAdmin(params.Username, u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			err := dao.PostTest(db, params.Username, params.Test)
-			t := params.Test
-			if err == nil && t != nil {
+			t, err := dao.PostTest(db, params.Username, params.Test)
+			if err == nil && t == nil {
 				return user.NewPostTestCreated().WithPayload(t)
 			}
 			return user.NewPostTestGone()

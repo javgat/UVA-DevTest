@@ -3055,7 +3055,7 @@ func init() {
         "operationId": "PostPublishedTest",
         "parameters": [
           {
-            "type": "string",
+            "type": "integer",
             "description": "Id of the test to publish",
             "name": "testid",
             "in": "path",
@@ -4800,10 +4800,6 @@ func init() {
         "solucion": {
           "type": "string",
           "example": "Javadoc"
-        },
-        "testid": {
-          "type": "integer",
-          "example": 1
         },
         "tipoPregunta": {
           "type": "string",
@@ -8678,7 +8674,7 @@ func init() {
         "operationId": "PostPublishedTest",
         "parameters": [
           {
-            "type": "string",
+            "type": "integer",
             "description": "Id of the test to publish",
             "name": "testid",
             "in": "path",
@@ -10705,10 +10701,6 @@ func init() {
         "solucion": {
           "type": "string",
           "example": "Javadoc"
-        },
-        "testid": {
-          "type": "integer",
-          "example": 1
         },
         "tipoPregunta": {
           "type": "string",

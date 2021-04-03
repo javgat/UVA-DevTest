@@ -2222,7 +2222,7 @@ paths:
         name: testid
         description: Id of the test to publish
         required: true
-        type: string
+        type: integer
       responses:
         201:
           description: publishedTest created
@@ -3231,9 +3231,6 @@ definitions:
       username:
         type: string
         example: javgat
-      testid:
-        type: integer
-        example: 1
       eleccionUnica:
         type: boolean
         example: false

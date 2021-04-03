@@ -11,10 +11,10 @@ import (
 )
 
 func rowsQuestions(qs []*Question) *sqlmock.Rows {
-	columns := []string{"title", "question", "estimatedTime", "autoCorrect", "editable", "usuarioid", "testid", "eleccionUnica", "solucion"}
+	columns := []string{"title", "question", "estimatedTime", "autoCorrect", "editable", "usuarioid", "eleccionUnica", "solucion"}
 	sqlcols := sqlmock.NewRows(columns)
 	for _, q := range qs {
-		sqlcols.AddRow(q.Title, q.Question, q.EstimatedTime, q.AutoCorrect, q.Editable, q.Usuarioid, q.Testid, q.EleccionUnica, q.Solucion)
+		sqlcols.AddRow(q.Title, q.Question, q.EstimatedTime, q.AutoCorrect, q.Editable, q.Usuarioid, q.EleccionUnica, q.Solucion)
 	}
 	return sqlcols
 }

@@ -258,3 +258,52 @@ func GetTeamsQuestion(db *sql.DB, questionid int64) ([]*Team, error) {
 	}
 	return nil, err
 }
+
+func GetTeamsFromTest(db *sql.DB, testid int64) ([]*Team, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var ts []*Team
+	query, err := db.Prepare("SELECT E.* FROM Equipo E JOIN GestionTestEquipo G ON G.equipoid=E.id WHERE G.testid=?")
+	if err == nil {
+		defer query.Close()
+		rows, err := query.Query(testid)
+		if err == nil {
+			ts, err = rowsToTeams(rows)
+			return ts, err
+		}
+	}
+	return nil, err
+}
+
+func AddTeamToTest(db *sql.DB, testid int64, teamname string) error {
+	if db == nil {
+		return errors.New(errorDBNil)
+	}
+	ts, err := GetTeam(db, teamname)
+	if err != nil || ts == nil {
+		return err
+	}
+	query, err := db.Prepare("INSERT INTO GestionTestEquipo(equipoid, testid) VALUES(?,?)")
+	if err == nil {
+		defer query.Close()
+		_, err = query.Exec(ts.ID, testid)
+	}
+	return err
+}
+
+func RemoveTeamFromTest(db *sql.DB, testid int64, teamname string) error {
+	if db == nil {
+		return errors.New(errorDBNil)
+	}
+	ts, err := GetTeam(db, teamname)
+	if err != nil || ts == nil {
+		return err
+	}
+	query, err := db.Prepare("DELETE FROM GestionTestEquipo WHERE equipoid=? AND testid=?")
+	if err == nil {
+		defer query.Close()
+		_, err = query.Exec(ts.ID, testid)
+	}
+	return err
+}

@@ -76,6 +76,70 @@ func rowsToTest(rows *sql.Rows) (*Test, error) {
 	return test, err
 }
 
+func GetTests(db *sql.DB) ([]*Test, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var ts []*Test
+	query, err := db.Prepare("SELECT * FROM Test")
+	if err == nil {
+		defer query.Close()
+		rows, err := query.Query()
+		if err == nil {
+			ts, err = rowsToTests(rows)
+			return ts, err
+		}
+	}
+	return nil, err
+}
+
+func GetTest(db *sql.DB, testid int64) (*Test, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var ts *Test
+	query, err := db.Prepare("SELECT * FROM Test WHERE testid=?")
+	if err == nil {
+		defer query.Close()
+		rows, err := query.Query(testid)
+		if err == nil {
+			ts, err = rowsToTest(rows)
+			return ts, err
+		}
+	}
+	return nil, err
+}
+
+func PutTest(db *sql.DB, testid int64, t *models.Test) error {
+	if db == nil || t == nil {
+		return errors.New(errorDBNil)
+	}
+	u, err := GetUserUsername(db, *t.Username)
+	if err != nil || u == nil {
+		return errors.New(errorResourceNotFound)
+	}
+	query, err := db.Prepare("UPDATE Test set title=?, description=?, maxSeconds=?, accesoPublico=?, editable=?, usuarioid=? WHERE editable=true AND id=?")
+
+	if err != nil {
+		return err
+	}
+	defer query.Close()
+	_, err = query.Exec(t.Title, t.Description, t.MaxSeconds, t.AccesoPublico, t.Editable, u.ID, t.ID)
+	return err
+}
+
+func DeleteTest(db *sql.DB, testid int64) error {
+	if db == nil {
+		return errors.New(errorDBNil)
+	}
+	query, err := db.Prepare("DELETE FROM Test WHERE testid=?")
+	if err == nil {
+		defer query.Close()
+		_, err = query.Exec(testid)
+	}
+	return err
+}
+
 func GetTestsFromUser(db *sql.DB, username string) ([]*Test, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
@@ -96,23 +160,28 @@ func GetTestsFromUser(db *sql.DB, username string) ([]*Test, error) {
 	return nil, err
 }
 
-func PostTest(db *sql.DB, username string, t *models.Test) error {
+func PostTest(db *sql.DB, username string, t *models.Test) (*models.Test, error) {
 	if db == nil || t == nil {
-		return errors.New(errorDBNil)
+		return nil, errors.New(errorDBNil)
 	}
 	u, err := GetUserUsername(db, username)
 	if err != nil || u == nil {
-		return errors.New(errorResourceNotFound)
+		return nil, errors.New(errorResourceNotFound)
 	}
 	query, err := db.Prepare("INSERT INTO Test(title, description, maxSeconds, accesoPublico, editable, usuarioid) " +
 		"VALUES (?,?,?,?,?,?)")
 
 	if err != nil {
-		return err
+		return nil, err
 	}
 	defer query.Close()
-	_, err = query.Exec(t.Title, t.Description, t.MaxSeconds, t.AccesoPublico, t.Editable, u.ID)
-	return err
+	sol, err := query.Exec(t.Title, t.Description, t.MaxSeconds, t.AccesoPublico, t.Editable, u.ID)
+	if err == nil {
+		ts := t
+		ts.ID, err = sol.LastInsertId()
+		return ts, err
+	}
+	return nil, err
 }
 
 func GetTestFromUser(db *sql.DB, username string, testid int64) (*Test, error) {

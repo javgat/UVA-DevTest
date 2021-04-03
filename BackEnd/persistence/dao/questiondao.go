@@ -29,7 +29,6 @@ func ToModelQuestion(q *Question) (*models.Question, error) {
 				Question:      q.Question,
 				Title:         q.Title,
 				Username:      u.Username,
-				Testid:        q.Testid,        //Puede ser nil
 				EleccionUnica: q.EleccionUnica, //Puede ser nil
 				Solucion:      q.Solucion,      //Puede ser nil
 				TipoPregunta:  q.TipoPregunta,
@@ -60,13 +59,9 @@ func rowsToQuestions(rows *sql.Rows) ([]*Question, error) {
 	var questions []*Question
 	for rows.Next() {
 		var q Question
-		var testid sql.NullInt64
 		var eleUni sql.NullBool
 		var solu sql.NullString
-		err := rows.Scan(&q.ID, &q.Title, &q.Question, &q.EstimatedTime, &q.AutoCorrect, &q.Editable, &q.Usuarioid, &testid, &eleUni, &solu)
-		if testid.Valid {
-			q.Testid = testid.Int64
-		}
+		err := rows.Scan(&q.ID, &q.Title, &q.Question, &q.EstimatedTime, &q.AutoCorrect, &q.Editable, &q.Usuarioid, &eleUni, &solu)
 		var tipo string
 		if eleUni.Valid {
 			q.EleccionUnica = eleUni.Bool
@@ -217,19 +212,19 @@ func GetQuestionOfUser(db *sql.DB, username string, qid int64) (*Question, error
 
 //NOTESTED:
 
-func PostQuestion(db *sql.DB, q *models.Question, username string) error {
+func PostQuestion(db *sql.DB, q *models.Question, username string) (*models.Question, error) {
 	if db == nil || q == nil {
-		return errors.New(errorDBNil)
+		return nil, errors.New(errorDBNil)
 	}
 	u, err := GetUserUsername(db, username)
 	if err != nil || u == nil {
-		return errors.New(errorResourceNotFound)
+		return nil, errors.New(errorResourceNotFound)
 	}
 	query, err := db.Prepare("INSERT INTO Pregunta(title, question, estimatedTime, autoCorrect, editable, usuarioid, testid, eleccionUnica, solucion) " +
 		"VALUES (?,?,?,?,?,?,NULL,?,?)")
 
 	if err != nil {
-		return err
+		return nil, err
 	}
 	var solucion *string = nil
 	var eleUni *bool = nil
@@ -239,8 +234,13 @@ func PostQuestion(db *sql.DB, q *models.Question, username string) error {
 		solucion = &q.Solucion
 	}
 	defer query.Close()
-	_, err = query.Exec(q.Title, q.Question, q.EstimatedTime, q.AutoCorrect, q.Editable, u.ID, eleUni, solucion)
-	return err
+	sol, err := query.Exec(q.Title, q.Question, q.EstimatedTime, q.AutoCorrect, q.Editable, u.ID, eleUni, solucion)
+	if err == nil {
+		qs := q
+		qs.ID, err = sol.LastInsertId()
+		return qs, err
+	}
+	return nil, err
 }
 
 func GetQuestionsFromTeam(db *sql.DB, teamname string) ([]*Question, error) {
@@ -296,7 +296,7 @@ func AddQuestionTeam(db *sql.DB, questionid int64, teamname string) error {
 		query, err = db.Prepare("INSERT INTO PreguntaEquipo(preguntaid, equipoid) VALUES(?,?)")
 		if err == nil {
 			defer query.Close()
-			_, err = query.Query(questionid, t.ID)
+			_, err = query.Exec(questionid, t.ID)
 			return err
 		}
 	}
@@ -313,9 +313,73 @@ func RemoveQuestionTeam(db *sql.DB, questionid int64, teamname string) error {
 		query, err = db.Prepare("DELETE FROM PreguntaEquipo WHERE preguntaid=? AND equipoid=?")
 		if err == nil {
 			defer query.Close()
-			_, err = query.Query(questionid, t.ID)
+			_, err = query.Exec(questionid, t.ID)
 			return err
 		}
+	}
+	return err
+}
+
+func GetQuestionsFromTest(db *sql.DB, testid int64) ([]*Question, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var qs []*Question
+	query, err := db.Prepare("SELECT P.* FROM Pregunta P JOIN TestPregunta T ON P.id=T.preguntaid WHERE T.testid=?")
+	if err == nil {
+		defer query.Close()
+		rows, err := query.Query(testid)
+		if err == nil {
+			qs, err = rowsToQuestions(rows)
+			return qs, err
+		}
+	} else {
+		log.Print(err)
+	}
+	return nil, err
+}
+
+func GetQuestionFromTest(db *sql.DB, testid int64, questionid int64) (*Question, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var qs *Question
+	query, err := db.Prepare("SELECT P.* FROM Pregunta P JOIN TestPregunta T ON P.id=T.preguntaid WHERE T.testid=? AND P.id=?")
+	if err == nil {
+		defer query.Close()
+		rows, err := query.Query(testid, questionid)
+		if err == nil {
+			qs, err = rowsToQuestion(rows)
+			return qs, err
+		}
+	} else {
+		log.Print(err)
+	}
+	return nil, err
+}
+
+func AddQuestionTest(db *sql.DB, questionid int64, testid int64) error {
+	if db == nil {
+		return errors.New(errorDBNil)
+	}
+	query, err := db.Prepare("INSERT INTO TestPregunta(testid, preguntaid, valorFinal) VALUES(?,?,1)")
+	if err == nil {
+		defer query.Close()
+		_, err = query.Exec(testid, questionid)
+		return err
+	}
+	return err
+}
+
+func RemoveQuestionTest(db *sql.DB, questionid int64, testid int64) error {
+	if db == nil {
+		return errors.New(errorDBNil)
+	}
+	query, err := db.Prepare("DELETE FROM TestPregunta WHERE testid=? AND preguntaid=?")
+	if err == nil {
+		defer query.Close()
+		_, err = query.Exec(testid, questionid)
+		return err
 	}
 	return err
 }

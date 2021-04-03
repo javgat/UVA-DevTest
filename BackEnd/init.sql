@@ -91,7 +91,6 @@ CREATE TABLE Pregunta(
   autoCorrect boolean NOT NULL,
   editable boolean NOT NULL,
   usuarioid int(11) NOT NULL,
-  testid int(11),
   eleccionUnica boolean,
   solucion varchar(100) COLLATE utf8_unicode_ci,
   FOREIGN KEY(usuarioid) REFERENCES Usuario(id) ON DELETE CASCADE,

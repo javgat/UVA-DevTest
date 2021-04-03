@@ -52,10 +52,6 @@ type Question struct {
 	// Example: Javadoc
 	Solucion string `json:"solucion,omitempty"`
 
-	// testid
-	// Example: 1
-	Testid int64 `json:"testid,omitempty"`
-
 	// tipo pregunta
 	// Required: true
 	// Enum: [opciones string codigo]

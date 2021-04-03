@@ -14,7 +14,7 @@ import (
 	"github.com/go-openapi/runtime/middleware"
 )
 
-// GetUsers GET /questions. Returns all questions.
+// GetQuestions GET /questions. Returns all questions.
 // Auth: Teacher or Admin
 func GetQuestions(params question.GetQuestionsParams, u *models.User) middleware.Responder {
 	if isTeacherOrAdmin(u) {
@@ -63,6 +63,14 @@ func isQuestionAdmin(u *models.User, questionid int64) bool {
 		q, err = dao.GetQuestionOfUser(db, *u.Username, questionid)
 		if q != nil && err == nil {
 			return true
+		}
+		var ts []*dao.Team
+		ts, err = dao.GetTeamsUsername(db, *u.Username)
+		for _, itemCopy := range ts {
+			q, err = dao.GetQuestionFromTeam(db, *itemCopy.Teamname, questionid)
+			if q != nil && err == nil {
+				return true
+			}
 		}
 	}
 	return false
