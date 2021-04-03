@@ -2420,31 +2420,6 @@ paths:
           $ref: '#/responses/GoneError'
         500:
           $ref: '#/responses/InternalServerError'
-    delete:
-      security:
-        - BearerCookie: []
-      tags:
-      - publishedTest
-      summary: Deletes a publishedTest
-      operationId: DeletesPublishedTest
-      description: Deletes a publishedTest
-      parameters:
-      - in: path
-        name: testid
-        description: Id of the publishedTest
-        required: true
-        type: integer
-      responses:
-        200:
-          description: PublishedTest deleted
-        400:
-          $ref: '#/responses/BadRequestError'
-        403:
-          $ref: '#/responses/ForbiddenError'
-        410:
-          $ref: '#/responses/GoneError'
-        500:
-          $ref: '#/responses/InternalServerError'
 
   /publishedTests/{testid}/users:
     get:

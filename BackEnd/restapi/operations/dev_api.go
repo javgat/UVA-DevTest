@@ -79,9 +79,6 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		TeamDeleteUserFromTeamHandler: team.DeleteUserFromTeamHandlerFunc(func(params team.DeleteUserFromTeamParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation team.DeleteUserFromTeam has not yet been implemented")
 		}),
-		PublishedTestDeletesPublishedTestHandler: published_test.DeletesPublishedTestHandlerFunc(func(params published_test.DeletesPublishedTestParams, principal *models.User) middleware.Responder {
-			return middleware.NotImplemented("operation published_test.DeletesPublishedTest has not yet been implemented")
-		}),
 		AnswerFinishAnswerHandler: answer.FinishAnswerHandlerFunc(func(params answer.FinishAnswerParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation answer.FinishAnswer has not yet been implemented")
 		}),
@@ -402,8 +399,6 @@ type DevAPI struct {
 	TestDeleteTestHandler test.DeleteTestHandler
 	// TeamDeleteUserFromTeamHandler sets the operation handler for the delete user from team operation
 	TeamDeleteUserFromTeamHandler team.DeleteUserFromTeamHandler
-	// PublishedTestDeletesPublishedTestHandler sets the operation handler for the deletes published test operation
-	PublishedTestDeletesPublishedTestHandler published_test.DeletesPublishedTestHandler
 	// AnswerFinishAnswerHandler sets the operation handler for the finish answer operation
 	AnswerFinishAnswerHandler answer.FinishAnswerHandler
 	// TeamGetAdminHandler sets the operation handler for the get admin operation
@@ -679,9 +674,6 @@ func (o *DevAPI) Validate() error {
 	}
 	if o.TeamDeleteUserFromTeamHandler == nil {
 		unregistered = append(unregistered, "team.DeleteUserFromTeamHandler")
-	}
-	if o.PublishedTestDeletesPublishedTestHandler == nil {
-		unregistered = append(unregistered, "published_test.DeletesPublishedTestHandler")
 	}
 	if o.AnswerFinishAnswerHandler == nil {
 		unregistered = append(unregistered, "answer.FinishAnswerHandler")
@@ -1070,10 +1062,6 @@ func (o *DevAPI) initHandlerCache() {
 		o.handlers["DELETE"] = make(map[string]http.Handler)
 	}
 	o.handlers["DELETE"]["/teams/{teamname}/users/{username}"] = team.NewDeleteUserFromTeam(o.context, o.TeamDeleteUserFromTeamHandler)
-	if o.handlers["DELETE"] == nil {
-		o.handlers["DELETE"] = make(map[string]http.Handler)
-	}
-	o.handlers["DELETE"]["/publishedTests/{testid}"] = published_test.NewDeletesPublishedTest(o.context, o.PublishedTestDeletesPublishedTestHandler)
 	if o.handlers["PUT"] == nil {
 		o.handlers["PUT"] = make(map[string]http.Handler)
 	}

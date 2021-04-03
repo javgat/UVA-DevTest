@@ -710,45 +710,6 @@ func init() {
             "$ref": "#/responses/InternalServerError"
           }
         }
-      },
-      "delete": {
-        "security": [
-          {
-            "BearerCookie": []
-          }
-        ],
-        "description": "Deletes a publishedTest",
-        "tags": [
-          "publishedTest"
-        ],
-        "summary": "Deletes a publishedTest",
-        "operationId": "DeletesPublishedTest",
-        "parameters": [
-          {
-            "type": "integer",
-            "description": "Id of the publishedTest",
-            "name": "testid",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "PublishedTest deleted"
-          },
-          "400": {
-            "$ref": "#/responses/BadRequestError"
-          },
-          "403": {
-            "$ref": "#/responses/ForbiddenError"
-          },
-          "410": {
-            "$ref": "#/responses/GoneError"
-          },
-          "500": {
-            "$ref": "#/responses/InternalServerError"
-          }
-        }
       }
     },
     "/publishedTests/{testid}/answers": {
@@ -5889,54 +5850,6 @@ func init() {
             "schema": {
               "$ref": "#/definitions/Test"
             }
-          },
-          "400": {
-            "description": "Incorrect Request, or invalida data",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          },
-          "403": {
-            "description": "Not authorized to this content",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          },
-          "410": {
-            "description": "That user (password and name) does not exist",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          },
-          "500": {
-            "description": "Internal error"
-          }
-        }
-      },
-      "delete": {
-        "security": [
-          {
-            "BearerCookie": []
-          }
-        ],
-        "description": "Deletes a publishedTest",
-        "tags": [
-          "publishedTest"
-        ],
-        "summary": "Deletes a publishedTest",
-        "operationId": "DeletesPublishedTest",
-        "parameters": [
-          {
-            "type": "integer",
-            "description": "Id of the publishedTest",
-            "name": "testid",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "PublishedTest deleted"
           },
           "400": {
             "description": "Incorrect Request, or invalida data",
