@@ -1541,43 +1541,44 @@ bg=yellow
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>4130</x>
+      <x>4140</x>
       <y>690</y>
       <w>300</w>
-      <h>60</h>
+      <h>70</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Resource&gt;&gt;
 *InvitedTeams*
 bg=yellow
 --
---</panel_attributes>
+--
++ &lt;&lt;GET&gt;&gt; getInvitedTeams(): Team[]</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>4290</x>
+      <x>4300</x>
       <y>590</y>
-      <w>340</w>
+      <w>330</w>
       <h>120</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
 /teams</panel_attributes>
-    <additional_attributes>10.0;100.0;320.0;10.0</additional_attributes>
+    <additional_attributes>10.0;100.0;310.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>4270</x>
-      <y>740</y>
-      <w>120</w>
-      <h>120</h>
+      <y>750</y>
+      <w>130</w>
+      <h>110</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
 /{teamname}</panel_attributes>
-    <additional_attributes>10.0;100.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;90.0;20.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
@@ -1585,13 +1586,14 @@ bg=yellow
       <x>3800</x>
       <y>680</y>
       <w>300</w>
-      <h>60</h>
+      <h>70</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Resource&gt;&gt;
 *AdminTeams*
 bg=yellow
 --
---</panel_attributes>
+--
++ &lt;&lt;GET&gt;&gt; getAdminTeams(): Team[]</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -1628,14 +1630,14 @@ bg=yellow
     <id>Relation</id>
     <coordinates>
       <x>3950</x>
-      <y>730</y>
+      <y>740</y>
       <w>120</w>
-      <h>130</h>
+      <h>120</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
 /{teamname}</panel_attributes>
-    <additional_attributes>10.0;110.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;100.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
@@ -1659,7 +1661,7 @@ bg=yellow
     <coordinates>
       <x>2390</x>
       <y>650</y>
-      <w>250</w>
+      <w>260</w>
       <h>80</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Resource&gt;&gt;
@@ -1667,7 +1669,7 @@ bg=yellow
 bg=yellow
 --
 --
-&lt;&lt;GET&gt;&gt; getTeams(): void</panel_attributes>
+&lt;&lt;GET&gt;&gt; getAdminTeams(): Team[]</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
