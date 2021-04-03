@@ -98,7 +98,7 @@ func GetQuestionTags(db *sql.DB, questionid int64) ([]*Tag, error) {
 		return nil, errors.New(errorDBNil)
 	}
 	var ts []*Tag
-	query, err := db.Prepare("SELECT E* FROM Etiqueta E JOIN PreguntaEtiqueta P ON E.nombre=P.etiquetaNombre WHERE P.preguntaid=?")
+	query, err := db.Prepare("SELECT E.* FROM Etiqueta E JOIN PreguntaEtiqueta P ON E.nombre=P.etiquetaNombre WHERE P.preguntaid=?")
 	if err == nil {
 		defer query.Close()
 		rows, err := query.Query(questionid)
@@ -115,7 +115,7 @@ func GetQuestionTag(db *sql.DB, questionid int64, nombre string) (*Tag, error) {
 		return nil, errors.New(errorDBNil)
 	}
 	var ts *Tag
-	query, err := db.Prepare("SELECT E* FROM Etiqueta E JOIN PreguntaEtiqueta P ON E.nombre=P.etiquetaNombre WHERE P.preguntaid=? AND E.nombre=?")
+	query, err := db.Prepare("SELECT E.* FROM Etiqueta E JOIN PreguntaEtiqueta P ON E.nombre=P.etiquetaNombre WHERE P.preguntaid=? AND E.nombre=?")
 	if err == nil {
 		defer query.Close()
 		rows, err := query.Query(questionid, nombre)
@@ -172,7 +172,7 @@ func RemoveQuestionTag(db *sql.DB, questionid int64, nombre string) error {
 		return errors.New(errorDBNil)
 	}
 	nombre = strings.ToLower(nombre)
-	query, err := db.Prepare("DELETE FROM PreguntaEtiqueta WHERE P.preguntaid=? AND P.etiquetanombre=?")
+	query, err := db.Prepare("DELETE FROM PreguntaEtiqueta WHERE preguntaid=? AND etiquetanombre=?")
 	if err == nil {
 		defer query.Close()
 		_, err = query.Exec(questionid, nombre)

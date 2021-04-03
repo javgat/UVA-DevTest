@@ -43,7 +43,7 @@ func GetQuestion(params question.GetQuestionParams, u *models.User) middleware.R
 	if err == nil {
 		var qs *dao.Question
 		qs, err = dao.GetQuestion(db, params.Questionid)
-		if err == nil {
+		if err == nil && qs != nil {
 			var mqs *models.Question
 			mqs, err = dao.ToModelQuestion(qs)
 			if err == nil {
@@ -61,7 +61,7 @@ func isQuestionAdmin(u *models.User, questionid int64) bool {
 	if err == nil {
 		var q *dao.Question
 		q, err = dao.GetQuestionOfUser(db, *u.Username, questionid)
-		if q != nil {
+		if q != nil && err == nil {
 			return true
 		}
 	}
@@ -73,7 +73,7 @@ func isQuestionEditable(questionid int64) bool {
 	if err == nil {
 		var q *dao.Question
 		q, err = dao.GetQuestion(db, questionid)
-		if err == nil {
+		if err == nil && q != nil {
 			return *q.Editable
 		}
 	}
@@ -84,7 +84,7 @@ func isTeamSoloProfesores(teamname string) bool {
 	db, err := dbconnection.ConnectDb()
 	if err == nil {
 		t, err := dao.GetTeam(db, teamname)
-		if err == nil {
+		if err == nil && t != nil {
 			return *t.SoloProfesores
 		}
 	}
@@ -130,8 +130,8 @@ func GetQuestionTags(params question.GetTagsFromQuestionParams, u *models.User) 
 	if err == nil {
 		var ts []*dao.Tag
 		ts, err = dao.GetQuestionTags(db, params.Questionid)
+		var mts []*models.Tag
 		if err == nil {
-			var mts []*models.Tag
 			mts = dao.ToModelTags(ts)
 			if err == nil {
 				return question.NewGetTagsFromQuestionOK().WithPayload(mts)
@@ -149,13 +149,14 @@ func GetQuestionTag(params question.GetTagFromQuestionParams, u *models.User) mi
 	if err == nil {
 		var t *dao.Tag
 		t, err = dao.GetQuestionTag(db, params.Questionid, params.Tag)
-		if err == nil {
-			var mt *models.Tag
+		var mt *models.Tag
+		if err == nil && t != nil {
 			mt = dao.ToModelTag(t)
 			if err == nil {
 				return question.NewGetTagFromQuestionOK().WithPayload(mt)
 			}
 		}
+		return question.NewGetTagFromQuestionGone()
 	}
 	log.Println("Error en users_handler GetQuestionTag(): ", err)
 	return question.NewGetTagFromQuestionInternalServerError()
@@ -176,6 +177,7 @@ func AddQuestionTag(params question.AddTagToQuestionParams, u *models.User) midd
 			}
 		}
 		log.Println("Error en users_handler AddQuestionTag(): ", err)
+		return question.NewAddTagToQuestionGone()
 	}
 	return question.NewAddTagToQuestionForbidden()
 }
@@ -195,6 +197,7 @@ func RemoveQuestionTag(params question.RemoveTagFromQuestionParams, u *models.Us
 			}
 		}
 		log.Println("Error en users_handler RemoveQuestionTag(): ", err)
+		return question.NewRemoveTagFromQuestionGone()
 	}
 	return question.NewRemoveTagFromQuestionForbidden()
 }

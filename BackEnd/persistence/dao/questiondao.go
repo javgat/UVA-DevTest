@@ -200,7 +200,7 @@ func GetQuestionOfUser(db *sql.DB, username string, qid int64) (*Question, error
 		return nil, errors.New(errorDBNil)
 	}
 	u, err := GetUserUsername(db, username)
-	if err == nil {
+	if err == nil && u != nil {
 		var q *Question
 		query, err := db.Prepare("SELECT * FROM Pregunta WHERE usuarioid=? AND id=?")
 		if err == nil {
