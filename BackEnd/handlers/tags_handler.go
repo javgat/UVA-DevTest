@@ -49,18 +49,21 @@ func GetTag(params tag.GetTagParams, u *models.User) middleware.Responder {
 // GetQuestionsFromTag GET /tags/{tag}/questions. Returns all questions related to tag.
 // Auth: Teacher Or Admin
 func GetQuestionsFromTag(params tag.GetQuestionsFromTagParams, u *models.User) middleware.Responder {
-	db, err := dbconnection.ConnectDb()
-	if err == nil {
-		var ts []*dao.Question
-		ts, err = dao.GetQuestionsFromTag(db, params.Tag)
+	if isTeacherOrAdmin(u) {
+		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			var mts []*models.Question
-			mts, err = dao.ToModelQuestions(ts)
+			var ts []*dao.Question
+			ts, err = dao.GetQuestionsFromTag(db, params.Tag)
 			if err == nil {
-				return tag.NewGetQuestionsFromTagOK().WithPayload(mts)
+				var mts []*models.Question
+				mts, err = dao.ToModelQuestions(ts)
+				if err == nil {
+					return tag.NewGetQuestionsFromTagOK().WithPayload(mts)
+				}
 			}
 		}
+		log.Println("Error en users_handler GetTags(): ", err)
+		return tag.NewGetQuestionsFromTagInternalServerError()
 	}
-	log.Println("Error en users_handler GetTags(): ", err)
-	return tag.NewGetQuestionsFromTagInternalServerError()
+	return tag.NewGetQuestionsFromTagForbidden()
 }

@@ -32,6 +32,7 @@ func ToModelQuestion(q *Question) (*models.Question, error) {
 				EleccionUnica: q.EleccionUnica, //Puede ser nil
 				Solucion:      q.Solucion,      //Puede ser nil
 				TipoPregunta:  q.TipoPregunta,
+				ValorFinal:    q.ValorFinal,
 			}
 			return mq, nil
 		}
@@ -320,6 +321,30 @@ func RemoveQuestionTeam(db *sql.DB, questionid int64, teamname string) error {
 	return err
 }
 
+func addValorFinal(qs *Question, testid int64) error {
+	db, err := dbconnection.ConnectDb()
+	if err != nil {
+		return err
+	}
+	var vF *int64
+	vF, err = GetValorFinal(db, qs.ID, testid)
+	if err != nil || vF == nil {
+		return errors.New("no se pudo leer un valor final")
+	}
+	qs.ValorFinal = vF
+	return nil
+}
+
+func addValoresFinales(qs []*Question, testid int64) error {
+	for _, q := range qs {
+		err := addValorFinal(q, testid)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 func GetQuestionsFromTest(db *sql.DB, testid int64) ([]*Question, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
@@ -331,6 +356,7 @@ func GetQuestionsFromTest(db *sql.DB, testid int64) ([]*Question, error) {
 		rows, err := query.Query(testid)
 		if err == nil {
 			qs, err = rowsToQuestions(rows)
+			addValoresFinales(qs, testid)
 			return qs, err
 		}
 	} else {
@@ -350,6 +376,7 @@ func GetQuestionFromTest(db *sql.DB, testid int64, questionid int64) (*Question,
 		rows, err := query.Query(testid, questionid)
 		if err == nil {
 			qs, err = rowsToQuestion(rows)
+			addValorFinal(qs, testid)
 			return qs, err
 		}
 	} else {
@@ -358,14 +385,14 @@ func GetQuestionFromTest(db *sql.DB, testid int64, questionid int64) (*Question,
 	return nil, err
 }
 
-func AddQuestionTest(db *sql.DB, questionid int64, testid int64) error {
+func AddQuestionTest(db *sql.DB, questionid int64, testid int64, valorFinal int64) error {
 	if db == nil {
 		return errors.New(errorDBNil)
 	}
-	query, err := db.Prepare("INSERT INTO TestPregunta(testid, preguntaid, valorFinal) VALUES(?,?,1)")
+	query, err := db.Prepare("INSERT INTO TestPregunta(testid, preguntaid, valorFinal) VALUES(?,?,?)")
 	if err == nil {
 		defer query.Close()
-		_, err = query.Exec(testid, questionid)
+		_, err = query.Exec(testid, questionid, valorFinal)
 		return err
 	}
 	return err
@@ -396,6 +423,48 @@ func GetQuestionsFromTag(db *sql.DB, tag string) ([]*Question, error) {
 		if err == nil {
 			qs, err = rowsToQuestions(rows)
 			return qs, err
+		}
+	} else {
+		log.Print(err)
+	}
+	return nil, err
+}
+
+func rowsToInts64(rows *sql.Rows) ([]*int64, error) {
+	var ints []*int64
+	for rows.Next() {
+		var i *int64
+		err := rows.Scan(i)
+		if err != nil {
+			log.Print(err)
+			return ints, err
+		}
+		ints = append(ints, i)
+	}
+	return ints, nil
+}
+
+func rowsToInt64(rows *sql.Rows) (*int64, error) {
+	var i *int64
+	ints, err := rowsToInts64(rows)
+	if len(ints) >= 1 {
+		i = ints[0]
+	}
+	return i, err
+}
+
+func GetValorFinal(db *sql.DB, questionid int64, testid int64) (*int64, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var vF *int64
+	query, err := db.Prepare("SELECT valorFinal FROM TestPregunta WHERE preguntaid=? AND testid=?")
+	if err == nil {
+		defer query.Close()
+		rows, err := query.Query(questionid, testid)
+		if err == nil {
+			vF, err = rowsToInt64(rows)
+			return vF, err
 		}
 	} else {
 		log.Print(err)

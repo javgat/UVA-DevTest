@@ -120,6 +120,11 @@ type Question struct {
 	// Example: 3
 	// Required: true
 	Usuarioid int64 `json:"usuarioid"`
+
+	// valor final
+	// Required: true
+	// Minimum: 0
+	ValorFinal *int64 `json:"valorFinal"`
 }
 
 // Test test
@@ -210,4 +215,62 @@ type Tag struct {
 	// Example: Java
 	// Required: true
 	Tag *string `json:"tag"`
+}
+
+// QuestionAnswer question answer
+//
+// swagger:model QuestionAnswer
+type QuestionAnswer struct {
+
+	// corregida
+	// Example: true
+	// Required: true
+	Corregida *bool `json:"corregida"`
+
+	// id pregunta
+	// Example: 1
+	// Required: true
+	IDPregunta *int64 `json:"idPregunta"`
+
+	// id respuesta
+	// Example: 1
+	// Required: true
+	IDRespuesta *int64 `json:"idRespuesta"`
+
+	// indice opcion
+	// Example: 1
+	IndiceOpcion int64 `json:"indiceOpcion,omitempty"`
+
+	// puntuacion
+	// Example: 1
+	// Required: true
+	Puntuacion *int64 `json:"puntuacion"`
+
+	// respuesta
+	// Example: Javadoc
+	Respuesta string `json:"respuesta,omitempty"`
+}
+
+// Option option
+//
+// swagger:model Option
+type Option struct {
+
+	// correcta
+	// Example: false
+	// Required: true
+	Correcta *bool `json:"correcta"`
+
+	// indice
+	// Example: 1
+	Indice int64 `json:"indice,omitempty"`
+
+	// preguntaid
+	// Example: 1
+	Preguntaid int64 `json:"preguntaid,omitempty"`
+
+	// texto
+	// Example: Esta opcion es la buena
+	// Required: true
+	Texto *string `json:"texto"`
 }

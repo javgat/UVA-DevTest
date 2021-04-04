@@ -1,8 +1,6 @@
 CREATE DATABASE IF NOT EXISTS uva_devtest;
 USE uva_devtest;
 
-DROP TABLE IF EXISTS RespuestaString;
-DROP TABLE IF EXISTS RespuestaOpcion;
 DROP TABLE IF EXISTS RespuestaPregunta;
 DROP TABLE IF EXISTS RespuestaExamen;
 DROP TABLE IF EXISTS PreguntaEtiqueta;
@@ -101,6 +99,7 @@ CREATE TABLE TestPregunta(
   testid int(11) NOT NULL,
   preguntaid int(11) NOT NULL,
   valorFinal int(11) NOT NULL,
+  CONSTRAINT CHK_valorFinal CHECK (valorFinal>=0)
   FOREIGN KEY(testid) REFERENCES Test(id) ON DELETE CASCADE,
   FOREIGN KEY(preguntaid) REFERENCES Pregunta(id) ON DELETE CASCADE,
   CONSTRAINT PRIMARY KEY(testid, preguntaid)
@@ -114,7 +113,7 @@ CREATE TABLE PreguntaEquipo(
 );
 
 CREATE TABLE Opcion(
-  indice int(11) NOT NULL,
+  indice int(11) NOT NULL AUTO_INCREMENT,
   texto longtext COLLATE utf8_unicode_ci NOT NULL,
   correcta boolean NOT NULL,
   preguntaid int(11) NOT NULL,
@@ -148,31 +147,16 @@ CREATE TABLE RespuestaExamen(
 CREATE TABLE RespuestaPregunta(
   respuestaExamenid int(11) NOT NULL,
   preguntaid int(11) NOT NULL,
-  puntuacion int(11),
+  puntuacion int(11) NOT NULL, /*porcentaje*/
   corregida boolean NOT NULL,
-  FOREIGN KEY(respuestaExamenid) REFERENCES RespuestaExamen(id) ON DELETE CASCADE,
-  FOREIGN KEY(preguntaid) REFERENCES Pregunta(id) ON DELETE CASCADE,
-  CONSTRAINT PRIMARY KEY(respuestaExamenid, preguntaid)
-);
-CREATE TABLE RespuestaOpcion(
-  respuestaExamenid int(11) NOT NULL,
-  preguntaid int(11) NOT NULL,
-  opcionindice int(11) NOT NULL,
+  opcionindice int(11),
+  respuesta longtext COLLATE utf8_unicode_ci,
+  CONSTRAINT CHK_puntuacion CHECK (puntuacion>=0 AND puntuacion<=100)
   CONSTRAINT fk_RespuestaOpcion_Opcion
       FOREIGN KEY(preguntaid, opcionindice)
       REFERENCES Opcion(preguntaid, indice) ON DELETE CASCADE,
-  CONSTRAINT fk_RespuestaOpcion_RespuestaPregunta
-      FOREIGN KEY(respuestaExamenid, preguntaid)
-      REFERENCES RespuestaPregunta(respuestaExamenid, preguntaid) ON DELETE CASCADE,
-  CONSTRAINT PRIMARY KEY(respuestaExamenid, preguntaid)
-);
-CREATE TABLE RespuestaString(
-  respuestaExamenid int(11) NOT NULL,
-  preguntaid int(11) NOT NULL,
-  respuesta varchar(100) COLLATE utf8_unicode_ci NOT NULL,
-  CONSTRAINT fk_RespuestaString_RespuestaPregunta
-      FOREIGN KEY(respuestaExamenid, preguntaid)
-      REFERENCES RespuestaPregunta(respuestaExamenid, preguntaid) ON DELETE CASCADE,
+  FOREIGN KEY(respuestaExamenid) REFERENCES RespuestaExamen(id) ON DELETE CASCADE,
+  FOREIGN KEY(preguntaid) REFERENCES Pregunta(id) ON DELETE CASCADE,
   CONSTRAINT PRIMARY KEY(respuestaExamenid, preguntaid)
 );
 

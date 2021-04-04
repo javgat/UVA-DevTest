@@ -13,6 +13,7 @@ import (
 	"uva-devtest/handlers"
 	"uva-devtest/restapi/operations"
 	"uva-devtest/restapi/operations/auth"
+	"uva-devtest/restapi/operations/published_test"
 	"uva-devtest/restapi/operations/question"
 	"uva-devtest/restapi/operations/tag"
 	"uva-devtest/restapi/operations/team"
@@ -130,6 +131,13 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 	api.QuestionPutQuestionHandler = question.PutQuestionHandlerFunc(handlers.PutQuestion)          // PUT /questions/{questionid}
 	api.QuestionDeleteQuestionHandler = question.DeleteQuestionHandlerFunc(handlers.DeleteQuestion) // DELETE /questions/{questionid}
 
+	api.QuestionGetOptionsFromQuestionHandler = question.GetOptionsFromQuestionHandlerFunc(handlers.GetOptions) // GET /questions/{questionid}/options
+	api.QuestionPostOptionHandler = question.PostOptionHandlerFunc(handlers.PostOption)                         // POST /questions/{questionid}/options
+
+	api.QuestionGetOptionFromQuestionHandler = question.GetOptionFromQuestionHandlerFunc(handlers.GetOption) // GET /questions/{questionid}/options/{optionindice}
+	api.QuestionPutOptionHandler = question.PutOptionHandlerFunc(handlers.PutOption)                         // PUT /questions/{questionid}/options/{optionindice}
+	api.QuestionDeleteOptionHandler = question.DeleteOptionHandlerFunc(handlers.DeleteOption)                // DELETE /questions/{questionid}/options/{optionindice}
+
 	api.QuestionGetTagsFromQuestionHandler = question.GetTagsFromQuestionHandlerFunc(handlers.GetQuestionTags)       // GET /questions/{questionid}/tags
 	api.QuestionGetTagFromQuestionHandler = question.GetTagFromQuestionHandlerFunc(handlers.GetQuestionTag)          // GET /questions/{questionid}/tags/{tag}
 	api.QuestionAddTagToQuestionHandler = question.AddTagToQuestionHandlerFunc(handlers.AddQuestionTag)              // PUT /questions/{questionid}/tags/{tag}
@@ -156,29 +164,29 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 	api.TestGetQuestionFromTestHandler = test.GetQuestionFromTestHandlerFunc(handlers.GetQuestionFromTest)      // GET /tests/{testid}/questions/{questionid}
 	api.TestAddQuestionToTestHandler = test.AddQuestionToTestHandlerFunc(handlers.AddQuestionToTest)            // PUT /tests/{testid}/questions/{questionid}
 	api.TestRemoveQuestionFromTestHandler = test.RemoveQuestionFromTestHandlerFunc(handlers.RemoveQuestionTest) // DELETE /tests/{testid}/questions/{questionid}
+
+	// /publishedTests
+
+	api.PublishedTestGetPublishedTestsHandler = published_test.GetPublishedTestsHandlerFunc(handlers.GetPTests) // GET /publishedTests
+	api.PublishedTestGetPublishedTestHandler = published_test.GetPublishedTestHandlerFunc(handlers.GetPTest)    // GET /publishedTests/{testid}
+
+	api.PublishedTestGetUsersFromPublishedTestHandler = published_test.GetUsersFromPublishedTestHandlerFunc(handlers.GetUsersFromPTest) // GET /publishedTests/{testid}/users
+
+	api.PublishedTestInviteUserToPublishedTestHandler = published_test.InviteUserToPublishedTestHandlerFunc(handlers.InviteUserPTest) // PUT /publishedTests/{testid}/users/{username}
+	api.PublishedTestRemoveUserToPublishedTestHandler = published_test.RemoveUserToPublishedTestHandlerFunc(handlers.RemoveUserPTest) // DELETE /publishedTests/{testid}/users/{username}
+
+	api.PublishedTestGetTeamsFromPublishedTestHandler = published_test.GetTeamsFromPublishedTestHandlerFunc(handlers.GetTeamsFromPTest) // GET /publishedTests/{testid}/teams
+	api.PublishedTestInviteTeamToPublishedTestHandler = published_test.InviteTeamToPublishedTestHandlerFunc(handlers.InviteTeamPTest)   // PUT /publishedTests/{testid}/teams/{teamname}
+	api.PublishedTestRemoveTeamToPublishedTestHandler = published_test.RemoveTeamToPublishedTestHandlerFunc(handlers.RemoveTeamPTest)   // DELETE /publishedTests/{testid}/teams/{teamname}
+
+	api.PublishedTestGetQuestionsFromPublishedTestsHandler = published_test.GetQuestionsFromPublishedTestsHandlerFunc(handlers.GetQuestionsPTest) // GET /publishedTests/{testid}/questions
+	api.PublishedTestGetQuestionFromPublishedTestsHandler = published_test.GetQuestionFromPublishedTestsHandlerFunc(handlers.GetQuestionPTest)    // GET /publishedTests/{testid}/questions/{questionid}
+
+	api.PublishedTestGetAnswersFromPublishedTestsHandler = published_test.GetAnswersFromPublishedTestsHandlerFunc(handlers.GetAnswersPTest) // GET /publishedTests/{testid}/answers
+
+	api.PublishedTestGetQuestionAnswersFromPublishedTestQuestionHandler =
+		published_test.GetQuestionAnswersFromPublishedTestQuestionHandlerFunc(handlers.GetQuestionAnswersPTest) // GET /publishedTests/{testid}/questions/{questionid}/qanswers
 	/*
-		// /publishedTests
-
-		api.PublishedTestGetPublishedTestsHandler = published_test.GetPublishedTestsHandlerFunc(handlers.GetPTests) // GET /publishedTests
-		api.PublishedTestGetPublishedTestHandler = published_test.GetPublishedTestHandlerFunc(handlers.GetPTest)    // GET /publishedTests/{testid}
-
-		api.PublishedTestGetUsersFromPublishedTestHandler = published_test.GetUsersFromPublishedTestHandlerFunc(handlers.GetUsersFromPTest) // GET /publishedTests/{testid}/users
-
-		api.PublishedTestInviteUserToPublishedTestHandler = published_test.InviteUserToPublishedTestHandlerFunc(handlers.InviteUserPTest) // PUT /publishedTests/{testid}/users/{username}
-		api.PublishedTestRemoveUserToPublishedTestHandler = published_test.RemoveUserToPublishedTestHandlerFunc(handlers.RemoveUserPTest) // DELETE /publishedTests/{testid}/users/{username}
-
-		api.PublishedTestGetTeamsFromPublishedTestHandler = published_test.GetTeamsFromPublishedTestHandlerFunc(handlers.GetTeamsFromPTest) // GET /publishedTests/{testid}/teams
-		api.PublishedTestInviteTeamToPublishedTestHandler = published_test.InviteTeamToPublishedTestHandlerFunc(handlers.InviteTeamPTest)   // PUT /publishedTests/{testid}/teams/{teamname}
-		api.PublishedTestRemoveTeamToPublishedTestHandler = published_test.RemoveTeamToPublishedTestHandlerFunc(handlers.RemoveTeamPTest)   // DELETE /publishedTests/{testid}/teams/{teamname}
-
-		api.PublishedTestGetQuestionsFromPublishedTestsHandler = published_test.GetQuestionsFromPublishedTestsHandlerFunc(handlers.GetQuestionsPTest) // GET /publishedTests/{testid}/questions
-		api.PublishedTestGetQuestionFromPublishedTestsHandler = published_test.GetQuestionFromPublishedTestsHandlerFunc(handlers.GetQuestionPTest)    // GET /publishedTests/{testid}/questions/{questionid}
-
-		api.PublishedTestGetAnswersFromPublishedTestsHandler = published_test.GetAnswersFromPublishedTestsHandlerFunc(handlers.GetAnswersPTest) // GET /publishedTests/{testid}/answers
-
-		api.PublishedTestGetQuestionAnswersFromPublishedTestQuestionHandler =
-			published_test.GetQuestionAnswersFromPublishedTestQuestionHandlerFunc(handlers.GetQuestionAnswersPTest) // GET /publishedTests/{testid}/questions/{questionid}/qanswers
-
 		// /answers
 
 		api.AnswerGetAnswersHandler = answer.GetAnswersHandlerFunc(handlers.GetAnswers)       // GET /answers

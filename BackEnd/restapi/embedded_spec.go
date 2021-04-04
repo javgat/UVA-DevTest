@@ -1389,6 +1389,274 @@ func init() {
         }
       }
     },
+    "/questions/{questionid}/options": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all options from a question.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "question"
+        ],
+        "summary": "Returns all options from a question.",
+        "operationId": "GetOptionsFromQuestion",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the question to find its options",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "options found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Option"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      },
+      "post": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Creates new option to a question.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "question"
+        ],
+        "summary": "Creates new option to a question.",
+        "operationId": "PostOption",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the question to find its options",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Option to add",
+            "name": "option",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Option"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "option created",
+            "schema": {
+              "$ref": "#/definitions/Option"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/questions/{questionid}/options/{optionindex}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns an option from a question.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "question"
+        ],
+        "summary": "Returns an options from a question.",
+        "operationId": "GetOptionFromQuestion",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the question to find its option",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Index of the option to find",
+            "name": "optionindex",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "option found",
+            "schema": {
+              "$ref": "#/definitions/Option"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Updates an option to a question.",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "question"
+        ],
+        "summary": "Updates an option to a question.",
+        "operationId": "PutOption",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the question to find its option",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Index of the option to update",
+            "name": "optionindex",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Option updated",
+            "name": "option",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Option"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "option updated"
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Deletes an option to a question.",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "question"
+        ],
+        "summary": "Deletes an option to a question.",
+        "operationId": "DeleteOption",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the question to find its option",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Index of the option to delete",
+            "name": "optionindex",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "option deleted"
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
     "/questions/{questionid}/tags": {
       "get": {
         "security": [
@@ -3174,6 +3442,15 @@ func init() {
             "name": "questionid",
             "in": "path",
             "required": true
+          },
+          {
+            "description": "Valor que tendra la pregunta en el test",
+            "name": "valorFinal",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ValorFinal"
+            }
           }
         ],
         "responses": {
@@ -4687,6 +4964,31 @@ func init() {
         }
       }
     },
+    "Option": {
+      "type": "object",
+      "required": [
+        "texto",
+        "correcta"
+      ],
+      "properties": {
+        "correcta": {
+          "type": "boolean",
+          "example": false
+        },
+        "indice": {
+          "type": "integer",
+          "example": 1
+        },
+        "preguntaid": {
+          "type": "integer",
+          "example": 1
+        },
+        "texto": {
+          "type": "string",
+          "example": "Esta opcion es la buena"
+        }
+      }
+    },
     "Password": {
       "type": "object",
       "required": [
@@ -4777,12 +5079,25 @@ func init() {
         "username": {
           "type": "string",
           "example": "javgat"
+        },
+        "valorFinal": {
+          "type": "integer"
         }
       }
     },
     "QuestionAnswer": {
       "type": "object",
+      "required": [
+        "corregida",
+        "puntuacion",
+        "idPregunta",
+        "idRespuesta"
+      ],
       "properties": {
+        "corregida": {
+          "type": "boolean",
+          "example": true
+        },
         "idPregunta": {
           "type": "integer",
           "example": 1
@@ -4792,6 +5107,10 @@ func init() {
           "example": 1
         },
         "indiceOpcion": {
+          "type": "integer",
+          "example": 1
+        },
+        "puntuacion": {
           "type": "integer",
           "example": 1
         },
@@ -4992,6 +5311,18 @@ func init() {
           "type": "string",
           "pattern": "^[^@ \\t\\r\\n]+$",
           "example": "carlosg72"
+        }
+      }
+    },
+    "ValorFinal": {
+      "type": "object",
+      "required": [
+        "valorFinal"
+      ],
+      "properties": {
+        "valorFinal": {
+          "type": "integer",
+          "example": 1
         }
       }
     }
@@ -6666,6 +6997,319 @@ func init() {
         }
       }
     },
+    "/questions/{questionid}/options": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all options from a question.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "question"
+        ],
+        "summary": "Returns all options from a question.",
+        "operationId": "GetOptionsFromQuestion",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the question to find its options",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "options found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Option"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      },
+      "post": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Creates new option to a question.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "question"
+        ],
+        "summary": "Creates new option to a question.",
+        "operationId": "PostOption",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the question to find its options",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Option to add",
+            "name": "option",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Option"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "option created",
+            "schema": {
+              "$ref": "#/definitions/Option"
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/questions/{questionid}/options/{optionindex}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns an option from a question.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "question"
+        ],
+        "summary": "Returns an options from a question.",
+        "operationId": "GetOptionFromQuestion",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the question to find its option",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Index of the option to find",
+            "name": "optionindex",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "option found",
+            "schema": {
+              "$ref": "#/definitions/Option"
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Updates an option to a question.",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "question"
+        ],
+        "summary": "Updates an option to a question.",
+        "operationId": "PutOption",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the question to find its option",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Index of the option to update",
+            "name": "optionindex",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Option updated",
+            "name": "option",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Option"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "option updated"
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Deletes an option to a question.",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "question"
+        ],
+        "summary": "Deletes an option to a question.",
+        "operationId": "DeleteOption",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the question to find its option",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Index of the option to delete",
+            "name": "optionindex",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "option deleted"
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
     "/questions/{questionid}/tags": {
       "get": {
         "security": [
@@ -8772,6 +9416,15 @@ func init() {
             "name": "questionid",
             "in": "path",
             "required": true
+          },
+          {
+            "description": "Valor que tendra la pregunta en el test",
+            "name": "valorFinal",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ValorFinal"
+            }
           }
         ],
         "responses": {
@@ -10540,6 +11193,31 @@ func init() {
         }
       }
     },
+    "Option": {
+      "type": "object",
+      "required": [
+        "texto",
+        "correcta"
+      ],
+      "properties": {
+        "correcta": {
+          "type": "boolean",
+          "example": false
+        },
+        "indice": {
+          "type": "integer",
+          "example": 1
+        },
+        "preguntaid": {
+          "type": "integer",
+          "example": 1
+        },
+        "texto": {
+          "type": "string",
+          "example": "Esta opcion es la buena"
+        }
+      }
+    },
     "Password": {
       "type": "object",
       "required": [
@@ -10630,12 +11308,26 @@ func init() {
         "username": {
           "type": "string",
           "example": "javgat"
+        },
+        "valorFinal": {
+          "type": "integer",
+          "minimum": 0
         }
       }
     },
     "QuestionAnswer": {
       "type": "object",
+      "required": [
+        "corregida",
+        "puntuacion",
+        "idPregunta",
+        "idRespuesta"
+      ],
       "properties": {
+        "corregida": {
+          "type": "boolean",
+          "example": true
+        },
         "idPregunta": {
           "type": "integer",
           "example": 1
@@ -10645,6 +11337,10 @@ func init() {
           "example": 1
         },
         "indiceOpcion": {
+          "type": "integer",
+          "example": 1
+        },
+        "puntuacion": {
           "type": "integer",
           "example": 1
         },
@@ -10845,6 +11541,19 @@ func init() {
           "type": "string",
           "pattern": "^[^@ \\t\\r\\n]+$",
           "example": "carlosg72"
+        }
+      }
+    },
+    "ValorFinal": {
+      "type": "object",
+      "required": [
+        "valorFinal"
+      ],
+      "properties": {
+        "valorFinal": {
+          "type": "integer",
+          "minimum": 0,
+          "example": 1
         }
       }
     }

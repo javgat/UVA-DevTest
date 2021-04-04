@@ -632,9 +632,9 @@ bg=yellow
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>2720</x>
-      <y>672</y>
-      <w>296</w>
+      <x>2712</x>
+      <y>664</y>
+      <w>336</w>
       <h>88</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Resource&gt;&gt;
@@ -643,7 +643,7 @@ bg=yellow
 --
 --
 + &lt;&lt;GET&gt;&gt; getQuestion(): Question
-+ &lt;&lt;PUT&gt;&gt; addQuestionToTest(): void
++ &lt;&lt;PUT&gt;&gt; addQuestionToTest(valorFinal: int): void
 + &lt;&lt;DELETE&gt;&gt; deleteQuestionFromTest(): void</panel_attributes>
     <additional_attributes/>
   </element>
@@ -653,12 +653,12 @@ bg=yellow
       <x>2856</x>
       <y>584</y>
       <w>112</w>
-      <h>104</h>
+      <h>96</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
 /{questionid}</panel_attributes>
-    <additional_attributes>10.0;110.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;100.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -1583,7 +1583,7 @@ bg=yellow
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>3040</x>
+      <x>3056</x>
       <y>544</y>
       <w>240</w>
       <h>56</h>
@@ -1599,8 +1599,8 @@ bg=yellow
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>3040</x>
-      <y>672</y>
+      <x>3056</x>
+      <y>664</y>
       <w>240</w>
       <h>72</h>
     </coordinates>
@@ -1618,26 +1618,26 @@ bg=yellow
     <coordinates>
       <x>2856</x>
       <y>472</y>
-      <w>328</w>
+      <w>344</w>
       <h>88</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
 /teams</panel_attributes>
-    <additional_attributes>390.0;90.0;10.0;10.0</additional_attributes>
+    <additional_attributes>410.0;90.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>3160</x>
+      <x>3176</x>
       <y>592</y>
       <w>96</w>
-      <h>96</h>
+      <h>88</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
 /{teamname}</panel_attributes>
-    <additional_attributes>10.0;100.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;90.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>

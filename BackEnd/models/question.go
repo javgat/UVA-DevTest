@@ -66,6 +66,10 @@ type Question struct {
 	// Example: javgat
 	// Required: true
 	Username *string `json:"username"`
+
+	// valor final
+	// Minimum: 0
+	ValorFinal *int64 `json:"valorFinal,omitempty"`
 }
 
 // Validate validates this question
@@ -97,6 +101,10 @@ func (m *Question) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateUsername(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateValorFinal(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -200,6 +208,18 @@ func (m *Question) validateTitle(formats strfmt.Registry) error {
 func (m *Question) validateUsername(formats strfmt.Registry) error {
 
 	if err := validate.Required("username", "body", m.Username); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Question) validateValorFinal(formats strfmt.Registry) error {
+	if swag.IsZero(m.ValorFinal) { // not required
+		return nil
+	}
+
+	if err := validate.MinimumInt("valorFinal", "body", *m.ValorFinal, 0, false); err != nil {
 		return err
 	}
 

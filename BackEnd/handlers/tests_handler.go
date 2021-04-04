@@ -5,6 +5,7 @@
 package handlers
 
 import (
+	"errors"
 	"log"
 	"uva-devtest/models"
 	"uva-devtest/persistence/dao"
@@ -196,7 +197,13 @@ func PublishTest(params test.PostPublishedTestParams, u *models.User) middleware
 									itemCopy.Editable = &bfalse
 									qp, err := dao.PostQuestion(db, itemCopy, *pts.Username)
 									if err == nil {
-										err = dao.AddQuestionTest(db, qp.ID, pts.ID)
+										var vF *int64
+										vF, err = dao.GetValorFinal(db, qp.ID, ts.ID)
+										if err == nil && vF != nil {
+											err = dao.AddQuestionTest(db, qp.ID, pts.ID, *vF)
+										} else if err == nil {
+											err = errors.New("valor final no se pudo obtener")
+										}
 									}
 									if err != nil {
 										log.Println("Error en users_handler PublishTest(): ", err)
@@ -290,7 +297,7 @@ func AddQuestionToTest(params test.AddQuestionToTestParams, u *models.User) midd
 	if testEditable(params.Testid) && (isAdmin(u) || isTestAdmin(u, params.Testid)) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			err = dao.AddQuestionTest(db, params.Testid, params.Questionid)
+			err = dao.AddQuestionTest(db, params.Testid, params.Questionid, *params.ValorFinal.ValorFinal)
 			if err == nil {
 				return test.NewAddQuestionToTestOK()
 			}

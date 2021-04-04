@@ -70,6 +70,9 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		TestAddTeamToTestHandler: test.AddTeamToTestHandlerFunc(func(params test.AddTeamToTestParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation test.AddTeamToTest has not yet been implemented")
 		}),
+		QuestionDeleteOptionHandler: question.DeleteOptionHandlerFunc(func(params question.DeleteOptionParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation question.DeleteOption has not yet been implemented")
+		}),
 		QuestionDeleteQuestionHandler: question.DeleteQuestionHandlerFunc(func(params question.DeleteQuestionParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation question.DeleteQuestion has not yet been implemented")
 		}),
@@ -117,6 +120,12 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		}),
 		TeamGetMembersHandler: team.GetMembersHandlerFunc(func(params team.GetMembersParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation team.GetMembers has not yet been implemented")
+		}),
+		QuestionGetOptionFromQuestionHandler: question.GetOptionFromQuestionHandlerFunc(func(params question.GetOptionFromQuestionParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation question.GetOptionFromQuestion has not yet been implemented")
+		}),
+		QuestionGetOptionsFromQuestionHandler: question.GetOptionsFromQuestionHandlerFunc(func(params question.GetOptionsFromQuestionParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation question.GetOptionsFromQuestion has not yet been implemented")
 		}),
 		PublishedTestGetPublishedTestHandler: published_test.GetPublishedTestHandlerFunc(func(params published_test.GetPublishedTestParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation published_test.GetPublishedTest has not yet been implemented")
@@ -247,6 +256,9 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		AuthLogoutHandler: auth.LogoutHandlerFunc(func(params auth.LogoutParams) middleware.Responder {
 			return middleware.NotImplemented("operation auth.Logout has not yet been implemented")
 		}),
+		QuestionPostOptionHandler: question.PostOptionHandlerFunc(func(params question.PostOptionParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation question.PostOption has not yet been implemented")
+		}),
 		TestPostPublishedTestHandler: test.PostPublishedTestHandlerFunc(func(params test.PostPublishedTestParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation test.PostPublishedTest has not yet been implemented")
 		}),
@@ -261,6 +273,9 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		}),
 		UserPostTestHandler: user.PostTestHandlerFunc(func(params user.PostTestParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation user.PostTest has not yet been implemented")
+		}),
+		QuestionPutOptionHandler: question.PutOptionHandlerFunc(func(params question.PutOptionParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation question.PutOption has not yet been implemented")
 		}),
 		QuestionPutQuestionHandler: question.PutQuestionHandlerFunc(func(params question.PutQuestionParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation question.PutQuestion has not yet been implemented")
@@ -393,6 +408,8 @@ type DevAPI struct {
 	QuestionAddTeamToQuestionHandler question.AddTeamToQuestionHandler
 	// TestAddTeamToTestHandler sets the operation handler for the add team to test operation
 	TestAddTeamToTestHandler test.AddTeamToTestHandler
+	// QuestionDeleteOptionHandler sets the operation handler for the delete option operation
+	QuestionDeleteOptionHandler question.DeleteOptionHandler
 	// QuestionDeleteQuestionHandler sets the operation handler for the delete question operation
 	QuestionDeleteQuestionHandler question.DeleteQuestionHandler
 	// TestDeleteTestHandler sets the operation handler for the delete test operation
@@ -425,6 +442,10 @@ type DevAPI struct {
 	TeamGetMemberHandler team.GetMemberHandler
 	// TeamGetMembersHandler sets the operation handler for the get members operation
 	TeamGetMembersHandler team.GetMembersHandler
+	// QuestionGetOptionFromQuestionHandler sets the operation handler for the get option from question operation
+	QuestionGetOptionFromQuestionHandler question.GetOptionFromQuestionHandler
+	// QuestionGetOptionsFromQuestionHandler sets the operation handler for the get options from question operation
+	QuestionGetOptionsFromQuestionHandler question.GetOptionsFromQuestionHandler
 	// PublishedTestGetPublishedTestHandler sets the operation handler for the get published test operation
 	PublishedTestGetPublishedTestHandler published_test.GetPublishedTestHandler
 	// TeamGetPublishedTestFromTeamHandler sets the operation handler for the get published test from team operation
@@ -511,6 +532,8 @@ type DevAPI struct {
 	AuthLoginHandler auth.LoginHandler
 	// AuthLogoutHandler sets the operation handler for the logout operation
 	AuthLogoutHandler auth.LogoutHandler
+	// QuestionPostOptionHandler sets the operation handler for the post option operation
+	QuestionPostOptionHandler question.PostOptionHandler
 	// TestPostPublishedTestHandler sets the operation handler for the post published test operation
 	TestPostPublishedTestHandler test.PostPublishedTestHandler
 	// UserPostQuestionHandler sets the operation handler for the post question operation
@@ -521,6 +544,8 @@ type DevAPI struct {
 	TeamPostTeamHandler team.PostTeamHandler
 	// UserPostTestHandler sets the operation handler for the post test operation
 	UserPostTestHandler user.PostTestHandler
+	// QuestionPutOptionHandler sets the operation handler for the put option operation
+	QuestionPutOptionHandler question.PutOptionHandler
 	// QuestionPutQuestionHandler sets the operation handler for the put question operation
 	QuestionPutQuestionHandler question.PutQuestionHandler
 	// AnswerPutQuestionAnswerFromAnswerHandler sets the operation handler for the put question answer from answer operation
@@ -666,6 +691,9 @@ func (o *DevAPI) Validate() error {
 	if o.TestAddTeamToTestHandler == nil {
 		unregistered = append(unregistered, "test.AddTeamToTestHandler")
 	}
+	if o.QuestionDeleteOptionHandler == nil {
+		unregistered = append(unregistered, "question.DeleteOptionHandler")
+	}
 	if o.QuestionDeleteQuestionHandler == nil {
 		unregistered = append(unregistered, "question.DeleteQuestionHandler")
 	}
@@ -713,6 +741,12 @@ func (o *DevAPI) Validate() error {
 	}
 	if o.TeamGetMembersHandler == nil {
 		unregistered = append(unregistered, "team.GetMembersHandler")
+	}
+	if o.QuestionGetOptionFromQuestionHandler == nil {
+		unregistered = append(unregistered, "question.GetOptionFromQuestionHandler")
+	}
+	if o.QuestionGetOptionsFromQuestionHandler == nil {
+		unregistered = append(unregistered, "question.GetOptionsFromQuestionHandler")
 	}
 	if o.PublishedTestGetPublishedTestHandler == nil {
 		unregistered = append(unregistered, "published_test.GetPublishedTestHandler")
@@ -843,6 +877,9 @@ func (o *DevAPI) Validate() error {
 	if o.AuthLogoutHandler == nil {
 		unregistered = append(unregistered, "auth.LogoutHandler")
 	}
+	if o.QuestionPostOptionHandler == nil {
+		unregistered = append(unregistered, "question.PostOptionHandler")
+	}
 	if o.TestPostPublishedTestHandler == nil {
 		unregistered = append(unregistered, "test.PostPublishedTestHandler")
 	}
@@ -857,6 +894,9 @@ func (o *DevAPI) Validate() error {
 	}
 	if o.UserPostTestHandler == nil {
 		unregistered = append(unregistered, "user.PostTestHandler")
+	}
+	if o.QuestionPutOptionHandler == nil {
+		unregistered = append(unregistered, "question.PutOptionHandler")
 	}
 	if o.QuestionPutQuestionHandler == nil {
 		unregistered = append(unregistered, "question.PutQuestionHandler")
@@ -1053,6 +1093,10 @@ func (o *DevAPI) initHandlerCache() {
 	if o.handlers["DELETE"] == nil {
 		o.handlers["DELETE"] = make(map[string]http.Handler)
 	}
+	o.handlers["DELETE"]["/questions/{questionid}/options/{optionindex}"] = question.NewDeleteOption(o.context, o.QuestionDeleteOptionHandler)
+	if o.handlers["DELETE"] == nil {
+		o.handlers["DELETE"] = make(map[string]http.Handler)
+	}
 	o.handlers["DELETE"]["/questions/{questionid}"] = question.NewDeleteQuestion(o.context, o.QuestionDeleteQuestionHandler)
 	if o.handlers["DELETE"] == nil {
 		o.handlers["DELETE"] = make(map[string]http.Handler)
@@ -1114,6 +1158,14 @@ func (o *DevAPI) initHandlerCache() {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
 	o.handlers["GET"]["/teams/{teamname}/members"] = team.NewGetMembers(o.context, o.TeamGetMembersHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/questions/{questionid}/options/{optionindex}"] = question.NewGetOptionFromQuestion(o.context, o.QuestionGetOptionFromQuestionHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/questions/{questionid}/options"] = question.NewGetOptionsFromQuestion(o.context, o.QuestionGetOptionsFromQuestionHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
@@ -1289,6 +1341,10 @@ func (o *DevAPI) initHandlerCache() {
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
+	o.handlers["POST"]["/questions/{questionid}/options"] = question.NewPostOption(o.context, o.QuestionPostOptionHandler)
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
+	}
 	o.handlers["POST"]["/tests/{testid}/publishedTests"] = test.NewPostPublishedTest(o.context, o.TestPostPublishedTestHandler)
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)
@@ -1306,6 +1362,10 @@ func (o *DevAPI) initHandlerCache() {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
 	o.handlers["POST"]["/users/{username}/tests"] = user.NewPostTest(o.context, o.UserPostTestHandler)
+	if o.handlers["PUT"] == nil {
+		o.handlers["PUT"] = make(map[string]http.Handler)
+	}
+	o.handlers["PUT"]["/questions/{questionid}/options/{optionindex}"] = question.NewPutOption(o.context, o.QuestionPutOptionHandler)
 	if o.handlers["PUT"] == nil {
 		o.handlers["PUT"] = make(map[string]http.Handler)
 	}

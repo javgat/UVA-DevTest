@@ -267,3 +267,91 @@ func GetTeamsFromQuestion(params question.GetTeamsFromQuestionParams, u *models.
 	log.Println("Error en users_handler GetTeamsFromQuestion(): ", err)
 	return question.NewGetTeamsFromQuestionInternalServerError()
 }
+
+// GET /questions/{questionid}/options
+// Auth: ALL
+func GetOptions(params question.GetOptionsFromQuestionParams, u *models.User) middleware.Responder {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		var os []*dao.Option
+		os, err = dao.GetOptionsQuestion(db, params.Questionid)
+		if err == nil {
+			mos := dao.ToModelOptions(os)
+			if err == nil {
+				return question.NewGetOptionsFromQuestionOK().WithPayload(mos)
+			}
+		}
+	}
+	log.Println("Error en users_handler GetOptions(): ", err)
+	return question.NewGetOptionsFromQuestionInternalServerError()
+}
+
+// POST /questions/{questionid}/options
+// Auth: QuestionAdmin or Admin
+func PostOption(params question.PostOptionParams, u *models.User) middleware.Responder {
+	if isQuestionAdmin(u, params.Questionid) || isAdmin(u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			var os *dao.Option
+			os, err = dao.PostOption(db, params.Questionid, params.Option)
+			if err == nil {
+				mos := dao.ToModelOption(os)
+				if err == nil {
+					return question.NewPostOptionCreated().WithPayload(mos)
+				}
+			}
+		}
+		return question.NewPostOptionInternalServerError()
+	}
+	return question.NewPostOptionForbidden()
+}
+
+// GET /questions/{questionid}/options/{optionindex}
+// Auth: ALL
+func GetOption(params question.GetOptionFromQuestionParams, u *models.User) middleware.Responder {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		var os *dao.Option
+		os, err = dao.GetOptionQuestion(db, params.Questionid, params.Optionindex)
+		if err == nil {
+			mos := dao.ToModelOption(os)
+			if err == nil {
+				return question.NewGetOptionFromQuestionOK().WithPayload(mos)
+			}
+		}
+	}
+	log.Println("Error en users_handler GetOptions(): ", err)
+	return question.NewGetOptionFromQuestionInternalServerError()
+}
+
+// PUT /questions/{questionid}/options/{optionindex}
+// Auth: QuestionAdmin or Admin
+func PutOption(params question.PutOptionParams, u *models.User) middleware.Responder {
+	if isQuestionAdmin(u, params.Questionid) || isAdmin(u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			err = dao.PutOption(db, params.Questionid, params.Optionindex, params.Option)
+			if err == nil {
+				return question.NewPutOptionOK()
+			}
+		}
+		return question.NewPutOptionInternalServerError()
+	}
+	return question.NewPutOptionForbidden()
+}
+
+// DELETE /questions/{questionid}/options/{optionindex}
+// Auth: QuestionAdmin or Admin
+func DeleteOption(params question.DeleteOptionParams, u *models.User) middleware.Responder {
+	if isQuestionAdmin(u, params.Questionid) || isAdmin(u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			err = dao.DeleteOption(db, params.Questionid, params.Optionindex)
+			if err == nil {
+				return question.NewDeleteOptionOK()
+			}
+		}
+		return question.NewDeleteOptionInternalServerError()
+	}
+	return question.NewDeleteOptionForbidden()
+}

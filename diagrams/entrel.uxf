@@ -1,4 +1,6 @@
-<diagram program="umletino" version="14.4.0-SNAPSHOT"><zoom_level>10</zoom_level><help_text>// Uncomment the following line to change the fontsize and font:
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <help_text>// Uncomment the following line to change the fontsize and font:
 fontsize=12
 fontfamily=Monospaced
 
@@ -20,7 +22,17 @@ fontfamily=Monospaced
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 
-// This text will be stored with each diagram;  use it for notes.</help_text><element><id>UMLClass</id><coordinates><x>950</x><y>390</y><w>220</w><h>120</h></coordinates><panel_attributes>*Test*
+// This text will be stored with each diagram;  use it for notes.</help_text>
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>950</x>
+      <y>390</y>
+      <w>220</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>*Test*
 --
 - id: int {id}
 - title: String
@@ -28,34 +40,156 @@ fontfamily=Monospaced
 - maxSeconds: int
 - accesoPublico: bool
 - editable: bool
-bg=yellow</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1430</x><y>410</y><w>140</w><h>80</h></coordinates><panel_attributes>*RespuestaExamen*
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1430</x>
+      <y>410</y>
+      <w>140</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>*RespuestaExamen*
 bg=yellow
 --
 - id: int {id}
 - startTime: Time
-- finished: bool</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1440</x><y>640</y><w>150</w><h>60</h></coordinates><panel_attributes>*RespuestaPregunta*
+- finished: bool</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1440</x>
+      <y>630</y>
+      <w>160</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>*RespuestaPregunta*
 bg=yellow
 --
 - puntuacion: int
-- corregida: bool</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>570</x><y>410</y><w>400</w><h>50</h></coordinates><panel_attributes>lt=-
+- corregida: bool
+- respuesta: String</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>570</x>
+      <y>410</y>
+      <w>400</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=-
 m1=0..*
 m2=1
-testsEditables &gt;</panel_attributes><additional_attributes>380;20;10;20</additional_attributes></element><element><id>Relation</id><coordinates><x>450</x><y>520</y><w>560</w><h>220</h></coordinates><panel_attributes>lt=-
+testsEditables &gt;</panel_attributes>
+    <additional_attributes>380.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>450</x>
+      <y>520</y>
+      <w>560</w>
+      <h>220</h>
+    </coordinates>
+    <panel_attributes>lt=-
 m1=0..*
 m2=1
-preguntasEditables &gt;</panel_attributes><additional_attributes>540;190;10;190;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1030</x><y>500</y><w>50</w><h>130</h></coordinates><panel_attributes>lt=-&gt;&gt;&gt;&gt;
+preguntasEditables &gt;</panel_attributes>
+    <additional_attributes>540.0;190.0;10.0;190.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1030</x>
+      <y>500</y>
+      <w>60</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;&gt;&gt;
 m1=0..*
-m2=0..*</panel_attributes><additional_attributes>10;110;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1160</x><y>450</y><w>290</w><h>40</h></coordinates><panel_attributes>lt=-
+m2=0..*</panel_attributes>
+    <additional_attributes>10.0;110.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1160</x>
+      <y>450</y>
+      <w>290</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=-
 m1=0..*
-m2=1</panel_attributes><additional_attributes>270;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1170</x><y>650</y><w>290</w><h>40</h></coordinates><panel_attributes>lt=-
+m2=1</panel_attributes>
+    <additional_attributes>270.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1170</x>
+      <y>650</y>
+      <w>290</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=-
 m1=0..* &lt;&lt;weak&gt;&gt;
-m2=1</panel_attributes><additional_attributes>270;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1490</x><y>480</y><w>90</w><h>180</h></coordinates><panel_attributes>lt=-&gt;&gt;&gt;&gt;&gt;
+m2=1</panel_attributes>
+    <additional_attributes>270.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1490</x>
+      <y>480</y>
+      <w>110</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;&gt;&gt;&gt;
 m1=0..* &lt;&lt;weak&gt;&gt;
-m2=1</panel_attributes><additional_attributes>10;160;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>360</x><y>60</y><w>1170</w><h>370</h></coordinates><panel_attributes>lt=-
+m2=1</panel_attributes>
+    <additional_attributes>10.0;150.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>360</x>
+      <y>60</y>
+      <w>1180</w>
+      <h>370</h>
+    </coordinates>
+    <panel_attributes>lt=-
 m1=0..*
-m2=1</panel_attributes><additional_attributes>1130;350;1130;10;10;10;10;350</additional_attributes></element><element><id>Relation</id><coordinates><x>610</x><y>240</y><w>520</w><h>170</h></coordinates><panel_attributes>lt=-
+m2=1</panel_attributes>
+    <additional_attributes>1130.0;350.0;1130.0;10.0;10.0;10.0;10.0;350.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>610</x>
+      <y>240</y>
+      <w>530</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>lt=-
 m1=0..*
-m2=0..*</panel_attributes><additional_attributes>480;150;480;10;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>350</x><y>410</y><w>230</w><h>120</h></coordinates><panel_attributes>*Usuario*
+m2=0..*</panel_attributes>
+    <additional_attributes>480.0;150.0;480.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>350</x>
+      <y>410</y>
+      <w>230</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>*Usuario*
 --
 - id: int {id}
 - username: String {ak}
@@ -63,21 +197,87 @@ m2=0..*</panel_attributes><additional_attributes>480;150;480;10;10;10</additiona
 - pwhash: String
 - fullname: String
 - rol: RolUsuarioE
-bg=yellow</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>590</x><y>250</y><w>420</w><h>420</h></coordinates><panel_attributes>lt=-
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>590</x>
+      <y>250</y>
+      <w>420</w>
+      <h>420</h>
+    </coordinates>
+    <panel_attributes>lt=-
 m1=0..*
-m2=0..*</panel_attributes><additional_attributes>400;390;130;390;130;40;10;40;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>420</x><y>170</y><w>200</w><h>90</h></coordinates><panel_attributes>*Equipo*
+m2=0..*</panel_attributes>
+    <additional_attributes>400.0;390.0;130.0;390.0;130.0;40.0;10.0;40.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>420</x>
+      <y>170</y>
+      <w>200</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>*Equipo*
 --
 - id: int {id}
 - teamname: String {ak}
 - description: String
 - soloProfesores: bool
-bg=yellow</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>440</x><y>250</y><w>50</w><h>180</h></coordinates><panel_attributes>lt=-
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>440</x>
+      <y>250</y>
+      <w>60</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>lt=-
 m1=0..*
-m2=0..*</panel_attributes><additional_attributes>10;10;10;160</additional_attributes></element><element><id>Relation</id><coordinates><x>610</x><y>170</y><w>570</w><h>240</h></coordinates><panel_attributes>lt=-
+m2=0..*</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;160.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>610</x>
+      <y>170</y>
+      <w>580</w>
+      <h>240</h>
+    </coordinates>
+    <panel_attributes>lt=-
 m1=0..*
-m2=0..*</panel_attributes><additional_attributes>530;220;530;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>380</x><y>120</y><w>880</w><h>320</h></coordinates><panel_attributes>lt=-
+m2=0..*</panel_attributes>
+    <additional_attributes>530.0;220.0;530.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>380</x>
+      <y>120</y>
+      <w>880</w>
+      <h>320</h>
+    </coordinates>
+    <panel_attributes>lt=-
 m1=0..*
-m2=0..*</panel_attributes><additional_attributes>790;290;860;290;860;10;10;10;10;290</additional_attributes></element><element><id>UMLClass</id><coordinates><x>990</x><y>610</y><w>190</w><h>150</h></coordinates><panel_attributes>*Pregunta*
+m2=0..*</panel_attributes>
+    <additional_attributes>790.0;290.0;860.0;290.0;860.0;10.0;10.0;10.0;10.0;290.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>990</x>
+      <y>610</y>
+      <w>190</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>*Pregunta*
 --
 - id: int {id}
 - title: String
@@ -87,104 +287,658 @@ m2=0..*</panel_attributes><additional_attributes>790;290;860;290;860;10;10;10;10
 - editable: bool
 - eleccionUnica: bool
 - solucion: String
-bg=yellow</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>440</x><y>320</y><w>70</w><h>30</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>10;10;50;10</additional_attributes></element><element><id>UMLNote</id><coordinates><x>30</x><y>230</y><w>190</w><h>70</h></coordinates><panel_attributes>context Equipo inv:
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>440</x>
+      <y>320</y>
+      <w>70</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;50.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>30</x>
+      <y>230</y>
+      <w>190</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>context Equipo inv:
 self.equipoUsuarios -&gt;
 exists(e| e.rol=='Admin')
 fontsize=11
-bg=cyan</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLNote</id><coordinates><x>50</x><y>350</y><w>210</w><h>60</h></coordinates><panel_attributes>context EquipoUsuario inv:
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>50</x>
+      <y>350</y>
+      <w>210</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>context EquipoUsuario inv:
 self.rol=='Admin' implies
 self.usuario.rol!='Estudiante'
 fontsize=11
-bg=cyan</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLNote</id><coordinates><x>0</x><y>120</y><w>230</w><h>70</h></coordinates><panel_attributes>context Equipo inv:
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>0</x>
+      <y>120</y>
+      <w>230</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>context Equipo inv:
 self.soloProfesores==true implies
 self.usuarios.rol!='Estudiante'
 fontsize=11
-bg=cyan</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLNote</id><coordinates><x>760</x><y>270</y><w>230</w><h>40</h></coordinates><panel_attributes>context GestionTestEquipo inv:
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>760</x>
+      <y>270</y>
+      <w>230</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>context GestionTestEquipo inv:
 self.equipo.soloProfesores==true
 fontsize=11
-bg=cyan</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>680</x><y>660</y><w>160</w><h>30</h></coordinates><panel_attributes>*PreguntaEquipo*
-bg=yellow</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>730</x><y>630</y><w>50</w><h>50</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>30;10;10;30</additional_attributes></element><element><id>UMLClass</id><coordinates><x>840</x><y>200</y><w>140</w><h>30</h></coordinates><panel_attributes>*GestionTestEquipo*
-bg=yellow</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>930</x><y>220</y><w>30</w><h>50</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>10;10;10;30</additional_attributes></element><element><id>UMLClass</id><coordinates><x>700</x><y>140</y><w>170</w><h>30</h></coordinates><panel_attributes>*InvitacionTestEquipo*
-bg=yellow</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>860</x><y>150</y><w>80</w><h>50</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>60;30;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>570</x><y>80</y><w>170</w><h>30</h></coordinates><panel_attributes>*InvitacionTestUsuario*
-bg=yellow</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>650</x><y>100</y><w>70</w><h>50</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>10;10;50;30</additional_attributes></element><element><id>UMLClass</id><coordinates><x>800</x><y>550</y><w>180</w><h>50</h></coordinates><panel_attributes>*TestPregunta*
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>680</x>
+      <y>660</y>
+      <w>160</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>*PreguntaEquipo*
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>730</x>
+      <y>630</y>
+      <w>50</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>30.0;10.0;10.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>840</x>
+      <y>200</y>
+      <w>140</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>*GestionTestEquipo*
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>930</x>
+      <y>220</y>
+      <w>30</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>700</x>
+      <y>140</y>
+      <w>170</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>*InvitacionTestEquipo*
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>860</x>
+      <y>150</y>
+      <w>80</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>60.0;30.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>570</x>
+      <y>80</y>
+      <w>170</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>*InvitacionTestUsuario*
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>650</x>
+      <y>100</y>
+      <w>70</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;50.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>800</x>
+      <y>550</y>
+      <w>180</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>*TestPregunta*
 bg=yellow
 -
-- valorFinal: int</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>970</x><y>560</y><w>90</w><h>30</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>70;10;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1470</x><y>720</y><w>140</w><h>80</h></coordinates><panel_attributes>**Opción**
+- valorFinal: int</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>970</x>
+      <y>560</y>
+      <w>90</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>70.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1440</x>
+      <y>720</y>
+      <w>140</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>**Opción**
 bg=yellow
 --
 - indice: int {id}
 - texto: String
-- correcta: bool</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1170</x><y>730</y><w>320</w><h>40</h></coordinates><panel_attributes>lt=-
+- correcta: bool</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1170</x>
+      <y>730</y>
+      <w>290</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=-
 m1=0..* &lt;&lt;weak&gt;&gt;
-m2=1</panel_attributes><additional_attributes>300;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1580</x><y>650</y><w>90</w><h>60</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;40;10;40;40;70;40</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1650</x><y>660</y><w>160</w><h>40</h></coordinates><panel_attributes>*RespuestaString*
-bg=yellow
---
-- respuesta: String</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1650</x><y>610</y><w>170</w><h>30</h></coordinates><panel_attributes>*RespuestaOpcion*
-bg=yellow</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1580</x><y>610</y><w>110</w><h>70</h></coordinates><panel_attributes>lt=&lt;&lt;-
-fontsize=10
-
-{mandatory}</panel_attributes><additional_attributes>10;50;40;50;40;10;70;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1600</x><y>610</y><w>270</w><h>180</h></coordinates><panel_attributes>lt=-
-m1=1
-m2=0..*</panel_attributes><additional_attributes>10;150;250;150;250;10;220;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>490</x><y>310</y><w>190</w><h>50</h></coordinates><panel_attributes>*EquipoUsuario*
+m2=1</panel_attributes>
+    <additional_attributes>270.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1570</x>
+      <y>650</y>
+      <w>120</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=0..1
+m2=0..*</panel_attributes>
+    <additional_attributes>10.0;110.0;100.0;110.0;100.0;10.0;30.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>490</x>
+      <y>310</y>
+      <w>190</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>*EquipoUsuario*
 --
 - rol: RolEquipoUsuarioE
-bg=yellow</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1000</x><y>860</y><w>160</w><h>50</h></coordinates><panel_attributes>*Etiqueta*
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1000</x>
+      <y>860</y>
+      <w>160</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>*Etiqueta*
 --
 nombre: String {id}
-bg=yellow</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1070</x><y>750</y><w>50</w><h>130</h></coordinates><panel_attributes>lt=-
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1070</x>
+      <y>750</y>
+      <w>60</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>lt=-
 m1=0..*
-m2=0..*</panel_attributes><additional_attributes>10;110;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>870</x><y>810</y><w>130</w><h>30</h></coordinates><panel_attributes>*PreguntaEtiqueta*
-bg=yellow</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>990</x><y>810</y><w>110</w><h>30</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>90;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>810</x><y>220</y><w>70</w><h>70</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>50;10;10;50</additional_attributes></element><element><id>Relation</id><coordinates><x>220</x><y>150</y><w>220</w><h>90</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>200;70;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>250</x><y>330</y><w>260</w><h>80</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>240;10;10;60</additional_attributes></element><element><id>Relation</id><coordinates><x>210</x><y>240</y><w>230</w><h>40</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>210;10;10;20</additional_attributes></element><element><id>UMLNote</id><coordinates><x>1250</x><y>830</y><w>300</w><h>90</h></coordinates><panel_attributes>context Pregunta inv:
+m2=0..*</panel_attributes>
+    <additional_attributes>10.0;110.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>870</x>
+      <y>810</y>
+      <w>130</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>*PreguntaEtiqueta*
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>990</x>
+      <y>810</y>
+      <w>110</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>90.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>810</x>
+      <y>220</y>
+      <w>70</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>50.0;10.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>220</x>
+      <y>150</y>
+      <w>220</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>200.0;70.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>250</x>
+      <y>330</y>
+      <w>260</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>240.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>210</x>
+      <y>240</y>
+      <w>230</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>210.0;10.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1250</x>
+      <y>830</y>
+      <w>300</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>context Pregunta inv:
 self.editable==false implies
 self.tests -&gt; size() == 1 and
 self.tests -&gt; forAll(t| t.editable==false)
 self.editable==true implies
 self.tests -&gt; forAll(t| t.editable==true)
 fontsize=11
-bg=cyan</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1170</x><y>740</y><w>100</w><h>150</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>80;130;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1140</x><y>750</y><w>90</w><h>230</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>10;10;70;210</additional_attributes></element><element><id>UMLNote</id><coordinates><x>1560</x><y>230</y><w>290</w><h>100</h></coordinates><panel_attributes>Pasar un test de editable a no editable
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1170</x>
+      <y>740</y>
+      <w>100</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>80.0;130.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1140</x>
+      <y>750</y>
+      <w>90</w>
+      <h>230</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;70.0;210.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1560</x>
+      <y>230</y>
+      <w>290</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>Pasar un test de editable a no editable
 es publicar el test, y lo que se hace es
 copiar el test y las preguntas pero con
 parametro editable=false
 bg=green
-fontsize=11</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1160</x><y>290</y><w>420</w><h>170</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>10;150;400;10</additional_attributes></element><element><id>UMLNote</id><coordinates><x>1530</x><y>540</y><w>230</w><h>40</h></coordinates><panel_attributes>context RespuestaPregunta inv:
+fontsize=11</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1160</x>
+      <y>290</y>
+      <w>420</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;150.0;400.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1520</x>
+      <y>520</y>
+      <w>230</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>context RespuestaPregunta inv:
 self.pregunta.editable==false
 fontsize=11
-bg=cyan</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1570</x><y>570</y><w>50</w><h>90</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>10;70;30;10</additional_attributes></element><element><id>UMLNote</id><coordinates><x>1590</x><y>370</y><w>210</w><h>40</h></coordinates><panel_attributes>context RespuestaExamen inv:
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1570</x>
+      <y>550</y>
+      <w>40</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;80.0;20.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1590</x>
+      <y>370</y>
+      <w>210</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>context RespuestaExamen inv:
 self.test.editable==false
 fontsize=11
-bg=cyan</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1540</x><y>370</y><w>70</w><h>60</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>10;40;50;10</additional_attributes></element><element><id>UMLNote</id><coordinates><x>750</x><y>0</y><w>260</w><h>40</h></coordinates><panel_attributes>context InvitacionTestUsuario inv:
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1540</x>
+      <y>370</y>
+      <w>70</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;40.0;50.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>750</x>
+      <y>0</y>
+      <w>260</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>context InvitacionTestUsuario inv:
 self.test.editable==false
 fontsize=11
-bg=cyan</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>730</x><y>30</y><w>90</w><h>90</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>10;70;70;10</additional_attributes></element><element><id>UMLNote</id><coordinates><x>880</x><y>80</y><w>260</w><h>40</h></coordinates><panel_attributes>context InvitacionTestEquipo inv:
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>730</x>
+      <y>30</y>
+      <w>90</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;70.0;70.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>880</x>
+      <y>80</y>
+      <w>260</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>context InvitacionTestEquipo inv:
 self.test.editable==false
 fontsize=11
-bg=cyan</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>860</x><y>110</y><w>90</w><h>60</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>10;40;70;10</additional_attributes></element><element><id>UMLNote</id><coordinates><x>1140</x><y>520</y><w>310</w><h>80</h></coordinates><panel_attributes>context Test inv:
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>860</x>
+      <y>110</y>
+      <w>90</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;40.0;70.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1140</x>
+      <y>520</y>
+      <w>310</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>context Test inv:
 self.editable==true implies
 self.preguntas -&gt; forAll(p| p.editable==true)
 self.editable==false implies
 self.preguntas -&gt; forAll(p| p.editable==false)
 fontsize=11
-bg=cyan</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1110</x><y>500</y><w>60</w><h>40</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>40;20;10;10</additional_attributes></element><element><id>UMLNote</id><coordinates><x>480</x><y>580</y><w>230</w><h>40</h></coordinates><panel_attributes>context PreguntaEquipo inv:
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1110</x>
+      <y>500</y>
+      <w>60</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>40.0;20.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>480</x>
+      <y>580</y>
+      <w>230</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>context PreguntaEquipo inv:
 self.equipo.soloProfesores==true
 fontsize=11
-bg=cyan</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>630</x><y>610</y><w>70</w><h>90</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>50;70;10;10</additional_attributes></element><element><id>UMLNote</id><coordinates><x>750</x><y>330</y><w>240</w><h>40</h></coordinates><panel_attributes>context Test inv:
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>630</x>
+      <y>610</y>
+      <w>70</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>50.0;70.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>750</x>
+      <y>330</y>
+      <w>240</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>context Test inv:
 self.usuario.rol!='Estudiante'
 fontsize=11
-bg=cyan</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>910</x><y>360</y><w>60</w><h>60</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>10;10;40;40</additional_attributes></element><element><id>UMLNote</id><coordinates><x>630</x><y>740</y><w>240</w><h>40</h></coordinates><panel_attributes>context Pregunta inv:
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>910</x>
+      <y>360</y>
+      <w>60</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;40.0;40.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>630</x>
+      <y>740</y>
+      <w>240</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>context Pregunta inv:
 self.usuario.rol!='Estudiante'
 fontsize=11
-bg=cyan</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>860</x><y>730</y><w>150</w><h>50</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>10;30;130;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>70</x><y>630</y><w>120</w><h>90</h></coordinates><panel_attributes>&lt;&lt;enum&gt;&gt;
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>860</x>
+      <y>730</y>
+      <w>150</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;30.0;130.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>70</x>
+      <y>630</y>
+      <w>120</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;enum&gt;&gt;
 *RolUsuarioE*
 --
 - Estudiante
 - Profesor
 - Administrador
-bg=yellow</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>210</x><y>630</y><w>140</w><h>80</h></coordinates><panel_attributes>&lt;&lt;enum&gt;&gt;
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>210</x>
+      <y>630</y>
+      <w>140</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;enum&gt;&gt;
 *RolEquipoUsuarioE*
 --
 - Miembro
 - Admin
-bg=yellow</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLNote</id><coordinates><x>1170</x><y>960</y><w>280</w><h>160</h></coordinates><panel_attributes>context Pregunta inv:
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1170</x>
+      <y>960</y>
+      <w>280</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>context Pregunta inv:
 self.opciones -&gt; notEmpty() implies
 self. eleccionUnica -&gt; notEmpty()
 
@@ -196,4 +950,59 @@ self.solucion -&gt; notEmpty() implies
 self.opciones -&gt; isEmpty() and
 self.eleccionUnica -&gt; isEmpty()
 fontsize=11
-bg=cyan</panel_attributes><additional_attributes></additional_attributes></element></diagram>
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1650</x>
+      <y>590</y>
+      <w>230</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>context RespuestaPregunta inv:
+self.opcion -&gt; notEmpty() implies
+self.respuesta -&gt; isEmpty()
+fontsize=11
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1590</x>
+      <y>590</y>
+      <w>80</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;60.0;60.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1680</x>
+      <y>670</y>
+      <w>230</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>context RespuestaPregunta inv:
+self.puntuacion&lt;=100
+self.puntuacion&gt;=0
+fontsize=11
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1590</x>
+      <y>670</y>
+      <w>110</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;90.0;20.0</additional_attributes>
+  </element>
+</diagram>

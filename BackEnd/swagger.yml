@@ -1769,6 +1769,180 @@ paths:
           $ref: '#/responses/ForbiddenError'
         500:
           $ref: '#/responses/InternalServerError'
+  /questions/{questionid}/options:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - question
+      summary: Returns all options from a question.
+      operationId: GetOptionsFromQuestion
+      description: Returns all options from a question.
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: questionid
+        description: Id of the question to find its options
+        required: true
+        type: integer
+      responses:
+        200:
+          description: options found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Option'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+    post:
+      security:
+        - BearerCookie: []
+      tags:
+      - question
+      summary: Creates new option to a question.
+      operationId: PostOption
+      description: Creates new option to a question.
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: questionid
+        description: Id of the question to find its options
+        required: true
+        type: integer
+      - in: body
+        name: option
+        description: Option to add
+        required: true
+        schema:
+          $ref: '#/definitions/Option'
+      responses:
+        201:
+          description: option created
+          schema:
+            $ref: '#/definitions/Option'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  /questions/{questionid}/options/{optionindex}:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - question
+      summary: Returns an options from a question.
+      operationId: GetOptionFromQuestion
+      description: Returns an option from a question.
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: questionid
+        description: Id of the question to find its option
+        required: true
+        type: integer
+      - in: path
+        name: optionindex
+        description: Index of the option to find
+        required: true
+        type: integer
+      responses:
+        200:
+          description: option found
+          schema:
+            $ref: '#/definitions/Option'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+    put:
+      security:
+        - BearerCookie: []
+      tags:
+      - question
+      summary: Updates an option to a question.
+      operationId: PutOption
+      description: Updates an option to a question.
+      consumes:
+      - application/json
+      parameters:
+      - in: path
+        name: questionid
+        description: Id of the question to find its option
+        required: true
+        type: integer
+      - in: path
+        name: optionindex
+        description: Index of the option to update
+        required: true
+        type: integer
+      - in: body
+        name: option
+        description: Option updated
+        required: true
+        schema:
+          $ref: '#/definitions/Option'
+      responses:
+        200:
+          description: option updated
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+    delete:
+      security:
+        - BearerCookie: []
+      tags:
+      - question
+      summary: Deletes an option to a question.
+      operationId: DeleteOption
+      description: Deletes an option to a question.
+      consumes:
+      - application/json
+      parameters:
+      - in: path
+        name: questionid
+        description: Id of the question to find its option
+        required: true
+        type: integer
+      - in: path
+        name: optionindex
+        description: Index of the option to delete
+        required: true
+        type: integer
+      responses:
+        200:
+          description: option deleted
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
   /questions/{questionid}/tags:
     get:
       security:
@@ -2324,6 +2498,12 @@ paths:
         description: Id of the question to add to the test
         required: true
         type: integer
+      - in: body
+        name: valorFinal
+        description: Valor que tendra la pregunta en el test
+        required: true
+        schema:
+          $ref: '#/definitions/ValorFinal'
       responses:
         200:
           description: Question added
@@ -3215,6 +3395,9 @@ definitions:
       tipoPregunta:
         type: string
         enum: [opciones, string, codigo]
+      valorFinal:
+        type: integer
+        minimum: 0
   Test:
     type: object
     required:
@@ -3268,6 +3451,11 @@ definitions:
         example: javgat
   QuestionAnswer:
     type: object
+    required:
+      - corregida
+      - puntuacion
+      - idPregunta
+      - idRespuesta
     properties:
       respuesta:
         type: string
@@ -3281,6 +3469,12 @@ definitions:
       idRespuesta:
         type: integer
         example: 1
+      puntuacion:
+        type: integer
+        example: 1
+      corregida:
+        type: boolean
+        example: true
   Tag:
     type: object
     required:
@@ -3297,6 +3491,15 @@ definitions:
       puntuacion:
         type: integer
         example: 100
+  ValorFinal:
+    type: object
+    required:
+    - valorFinal
+    properties:
+      valorFinal:
+        type: integer
+        example: 1
+        minimum: 0
   Error:
     type: object
     required:
@@ -3305,6 +3508,24 @@ definitions:
       message:
         type: string
         example: Object not found
+  Option:
+    type: object
+    required:
+    - texto
+    - correcta
+    properties:
+      indice:
+        type: integer
+        example: 1
+      preguntaid:
+        type: integer
+        example: 1
+      texto:
+        type: string
+        example: Esta opcion es la buena
+      correcta:
+        type: boolean
+        example: false
 securityDefinitions:
   BearerCookie:
     type: apiKey

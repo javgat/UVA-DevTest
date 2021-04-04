@@ -8,8 +8,10 @@ package models
 import (
 	"context"
 
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // QuestionAnswer question answer
@@ -17,17 +19,29 @@ import (
 // swagger:model QuestionAnswer
 type QuestionAnswer struct {
 
+	// corregida
+	// Example: true
+	// Required: true
+	Corregida *bool `json:"corregida"`
+
 	// id pregunta
 	// Example: 1
-	IDPregunta int64 `json:"idPregunta,omitempty"`
+	// Required: true
+	IDPregunta *int64 `json:"idPregunta"`
 
 	// id respuesta
 	// Example: 1
-	IDRespuesta int64 `json:"idRespuesta,omitempty"`
+	// Required: true
+	IDRespuesta *int64 `json:"idRespuesta"`
 
 	// indice opcion
 	// Example: 1
 	IndiceOpcion int64 `json:"indiceOpcion,omitempty"`
+
+	// puntuacion
+	// Example: 1
+	// Required: true
+	Puntuacion *int64 `json:"puntuacion"`
 
 	// respuesta
 	// Example: Javadoc
@@ -36,6 +50,63 @@ type QuestionAnswer struct {
 
 // Validate validates this question answer
 func (m *QuestionAnswer) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.validateCorregida(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateIDPregunta(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateIDRespuesta(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validatePuntuacion(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *QuestionAnswer) validateCorregida(formats strfmt.Registry) error {
+
+	if err := validate.Required("corregida", "body", m.Corregida); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *QuestionAnswer) validateIDPregunta(formats strfmt.Registry) error {
+
+	if err := validate.Required("idPregunta", "body", m.IDPregunta); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *QuestionAnswer) validateIDRespuesta(formats strfmt.Registry) error {
+
+	if err := validate.Required("idRespuesta", "body", m.IDRespuesta); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *QuestionAnswer) validatePuntuacion(formats strfmt.Registry) error {
+
+	if err := validate.Required("puntuacion", "body", m.Puntuacion); err != nil {
+		return err
+	}
+
 	return nil
 }
 
