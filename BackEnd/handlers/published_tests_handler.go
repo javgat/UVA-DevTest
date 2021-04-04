@@ -40,7 +40,7 @@ func GetPTest(params published_test.GetPublishedTestParams, u *models.User) midd
 	if err == nil {
 		var ts *dao.Test
 		ts, err = dao.GetPublishedTest(db, params.Testid)
-		if err == nil {
+		if err == nil && ts != nil {
 			var mts *models.Test
 			mts, err = dao.ToModelTest(ts)
 			if err == nil {
@@ -60,8 +60,7 @@ func GetUsersFromPTest(params published_test.GetUsersFromPublishedTestParams, u 
 		var us []*dao.User
 		us, err = dao.GetUsersInvitedPTest(db, params.Testid)
 		if err == nil {
-			var mus []*models.User
-			mus = dao.ToModelsUser(us)
+			mus := dao.ToModelsUser(us)
 			if err == nil {
 				return published_test.NewGetUsersFromPublishedTestOK().WithPayload(mus)
 			}
@@ -113,8 +112,7 @@ func GetTeamsFromPTest(params published_test.GetTeamsFromPublishedTestParams, u 
 		var ts []*dao.Team
 		ts, err = dao.GetTeamsInvitedPTest(db, params.Testid)
 		if err == nil {
-			var mts []*models.Team
-			mts = dao.ToModelsTeams(ts)
+			mts := dao.ToModelsTeams(ts)
 			if err == nil {
 				return published_test.NewGetTeamsFromPublishedTestOK().WithPayload(mts)
 			}
@@ -284,8 +282,7 @@ func GetQuestionAnswersPTest(params published_test.GetQuestionAnswersFromPublish
 			var as []*dao.QuestionAnswer
 			as, err = dao.GetQuestionAnswersFromPTestQuestion(db, params.Testid, params.Questionid)
 			if err == nil {
-				var mas []*models.QuestionAnswer
-				mas = dao.ToModelQuestionAnswers(as)
+				mas := dao.ToModelQuestionAnswers(as)
 				if err == nil {
 					return published_test.NewGetQuestionAnswersFromPublishedTestQuestionOK().WithPayload(mas)
 				}
@@ -293,4 +290,62 @@ func GetQuestionAnswersPTest(params published_test.GetQuestionAnswersFromPublish
 		}
 	}
 	return published_test.NewGetQuestionAnswersFromPublishedTestQuestionInternalServerError()
+}
+
+// GetOptionsPQuestion GET /publishedTests/{testid}/questions/{questionid}/options
+// Auth: ALL if accesoPublico, else: TestInvited, TestAdmin or Admin
+func GetOptionsPQuestion(params published_test.GetOptionsFromPublishedQuestionParams, u *models.User) middleware.Responder {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		var ts *dao.Test
+		ts, err = dao.GetPublishedTest(db, params.Testid)
+		if err == nil && ts != nil {
+			if !*ts.AccesoPublico {
+				if !(isAdmin(u) || isTestAdmin(u, params.Testid) || isTestInvited(u, params.Testid)) {
+					return published_test.NewGetOptionsFromPublishedQuestionForbidden()
+				}
+			}
+			var qs *dao.Question
+			qs, err = dao.GetQuestionFromTest(db, params.Testid, params.Questionid)
+			if err == nil && qs != nil {
+				var os []*dao.Option
+				os, err = dao.GetOptionsQuestion(db, params.Questionid)
+				if err == nil {
+					mos := dao.ToModelOptions(os)
+					return published_test.NewGetOptionsFromPublishedQuestionOK().WithPayload(mos)
+				}
+			}
+			return published_test.NewGetOptionsFromPublishedQuestionGone()
+		}
+	}
+	return published_test.NewGetOptionsFromPublishedQuestionInternalServerError()
+}
+
+// GetOptionsPQuestion GET /publishedTests/{testid}/questions/{questionid}/tags
+// Auth: ALL if accesoPublico, else: TestInvited, TestAdmin or Admin
+func GetTagsPQuestion(params published_test.GetTagsFromPublishedQuestionParams, u *models.User) middleware.Responder {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		var ts *dao.Test
+		ts, err = dao.GetPublishedTest(db, params.Testid)
+		if err == nil && ts != nil {
+			if !*ts.AccesoPublico {
+				if !(isAdmin(u) || isTestAdmin(u, params.Testid) || isTestInvited(u, params.Testid)) {
+					return published_test.NewGetTagsFromPublishedQuestionForbidden()
+				}
+			}
+			var qs *dao.Question
+			qs, err = dao.GetQuestionFromTest(db, params.Testid, params.Questionid)
+			if err == nil && qs != nil {
+				var ts []*dao.Tag
+				ts, err = dao.GetQuestionTags(db, params.Questionid)
+				if err == nil {
+					mts := dao.ToModelTags(ts)
+					return published_test.NewGetTagsFromPublishedQuestionOK().WithPayload(mts)
+				}
+			}
+			return published_test.NewGetTagsFromPublishedQuestionGone()
+		}
+	}
+	return published_test.NewGetTagsFromPublishedQuestionInternalServerError()
 }

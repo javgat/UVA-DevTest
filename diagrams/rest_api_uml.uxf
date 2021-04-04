@@ -1698,4 +1698,75 @@ bg=yellow
 /teams</panel_attributes>
     <additional_attributes>10.0;60.0;10.0;20.0;330.0;20.0;330.0;30.0</additional_attributes>
   </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>3664</x>
+      <y>808</y>
+      <w>264</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*PublishedOptions*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getOptions(): Option[]</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>3944</x>
+      <y>808</y>
+      <w>264</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*PublishedTagsOfQuestion*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getTags(): Tag[]</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3776</x>
+      <y>736</y>
+      <w>152</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/options</panel_attributes>
+    <additional_attributes>10.0;90.0;10.0;50.0;170.0;50.0;170.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3904</x>
+      <y>736</y>
+      <w>160</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/tags</panel_attributes>
+    <additional_attributes>180.0;90.0;180.0;50.0;10.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2832</x>
+      <y>112</y>
+      <w>120</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/editTests</panel_attributes>
+    <additional_attributes>130.0;130.0;130.0;70.0;60.0;10.0;10.0;10.0</additional_attributes>
+  </element>
 </diagram>

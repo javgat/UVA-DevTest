@@ -134,42 +134,48 @@ func DeleteQuestion(params question.DeleteQuestionParams, u *models.User) middle
 }
 
 // GET /questions/{questionid}/tags
-// Auth: All
+// Auth: Teacher or admin
 func GetQuestionTags(params question.GetTagsFromQuestionParams, u *models.User) middleware.Responder {
-	db, err := dbconnection.ConnectDb()
-	if err == nil {
-		var ts []*dao.Tag
-		ts, err = dao.GetQuestionTags(db, params.Questionid)
-		var mts []*models.Tag
+	if isTeacherOrAdmin(u) {
+		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			mts = dao.ToModelTags(ts)
+			var ts []*dao.Tag
+			ts, err = dao.GetQuestionTags(db, params.Questionid)
+			var mts []*models.Tag
 			if err == nil {
-				return question.NewGetTagsFromQuestionOK().WithPayload(mts)
+				mts = dao.ToModelTags(ts)
+				if err == nil {
+					return question.NewGetTagsFromQuestionOK().WithPayload(mts)
+				}
 			}
 		}
+		log.Println("Error en users_handler GetQuestionTags(): ", err)
+		return question.NewGetTagsFromQuestionInternalServerError()
 	}
-	log.Println("Error en users_handler GetQuestionTags(): ", err)
-	return question.NewGetTagsFromQuestionInternalServerError()
+	return question.NewGetTagsFromQuestionForbidden()
 }
 
 // GET /questions/{questionid}/tags/{tag}
-// Auth: All
+// Auth: Teacher or admin
 func GetQuestionTag(params question.GetTagFromQuestionParams, u *models.User) middleware.Responder {
-	db, err := dbconnection.ConnectDb()
-	if err == nil {
-		var t *dao.Tag
-		t, err = dao.GetQuestionTag(db, params.Questionid, params.Tag)
-		var mt *models.Tag
-		if err == nil && t != nil {
-			mt = dao.ToModelTag(t)
-			if err == nil {
-				return question.NewGetTagFromQuestionOK().WithPayload(mt)
+	if isTeacherOrAdmin(u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			var t *dao.Tag
+			t, err = dao.GetQuestionTag(db, params.Questionid, params.Tag)
+			var mt *models.Tag
+			if err == nil && t != nil {
+				mt = dao.ToModelTag(t)
+				if err == nil {
+					return question.NewGetTagFromQuestionOK().WithPayload(mt)
+				}
 			}
+			return question.NewGetTagFromQuestionGone()
 		}
-		return question.NewGetTagFromQuestionGone()
+		log.Println("Error en users_handler GetQuestionTag(): ", err)
+		return question.NewGetTagFromQuestionInternalServerError()
 	}
-	log.Println("Error en users_handler GetQuestionTag(): ", err)
-	return question.NewGetTagFromQuestionInternalServerError()
+	return question.NewGetTagFromQuestionForbidden()
 }
 
 // PUT /questions/{questionid}/tags/{tag}
@@ -271,21 +277,24 @@ func GetTeamsFromQuestion(params question.GetTeamsFromQuestionParams, u *models.
 }
 
 // GET /questions/{questionid}/options
-// Auth: ALL
+// Auth: Teacher or admin
 func GetOptions(params question.GetOptionsFromQuestionParams, u *models.User) middleware.Responder {
-	db, err := dbconnection.ConnectDb()
-	if err == nil {
-		var os []*dao.Option
-		os, err = dao.GetOptionsQuestion(db, params.Questionid)
+	if isTeacherOrAdmin(u) {
+		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			mos := dao.ToModelOptions(os)
+			var os []*dao.Option
+			os, err = dao.GetOptionsQuestion(db, params.Questionid)
 			if err == nil {
-				return question.NewGetOptionsFromQuestionOK().WithPayload(mos)
+				mos := dao.ToModelOptions(os)
+				if err == nil {
+					return question.NewGetOptionsFromQuestionOK().WithPayload(mos)
+				}
 			}
 		}
+		log.Println("Error en users_handler GetOptions(): ", err)
+		return question.NewGetOptionsFromQuestionInternalServerError()
 	}
-	log.Println("Error en users_handler GetOptions(): ", err)
-	return question.NewGetOptionsFromQuestionInternalServerError()
+	return question.NewGetOptionsFromQuestionForbidden()
 }
 
 // POST /questions/{questionid}/options
@@ -310,24 +319,27 @@ func PostOption(params question.PostOptionParams, u *models.User) middleware.Res
 }
 
 // GET /questions/{questionid}/options/{optionindex}
-// Auth: ALL
+// Auth: Teacher or admin
 func GetOption(params question.GetOptionFromQuestionParams, u *models.User) middleware.Responder {
-	db, err := dbconnection.ConnectDb()
-	if err == nil {
-		var os *dao.Option
-		os, err = dao.GetOptionQuestion(db, params.Questionid, params.Optionindex)
+	if isTeacherOrAdmin(u) {
+		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			if os == nil {
-				return question.NewGetOptionFromQuestionGone()
-			}
-			mos := dao.ToModelOption(os)
+			var os *dao.Option
+			os, err = dao.GetOptionQuestion(db, params.Questionid, params.Optionindex)
 			if err == nil {
-				return question.NewGetOptionFromQuestionOK().WithPayload(mos)
+				if os == nil {
+					return question.NewGetOptionFromQuestionGone()
+				}
+				mos := dao.ToModelOption(os)
+				if err == nil {
+					return question.NewGetOptionFromQuestionOK().WithPayload(mos)
+				}
 			}
 		}
+		log.Println("Error en users_handler GetOption(): ", err)
+		return question.NewGetOptionFromQuestionInternalServerError()
 	}
-	log.Println("Error en users_handler GetOption(): ", err)
-	return question.NewGetOptionFromQuestionInternalServerError()
+	return question.NewGetOptionFromQuestionForbidden()
 }
 
 // PUT /questions/{questionid}/options/{optionindex}

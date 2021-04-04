@@ -124,6 +124,9 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		QuestionGetOptionFromQuestionHandler: question.GetOptionFromQuestionHandlerFunc(func(params question.GetOptionFromQuestionParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation question.GetOptionFromQuestion has not yet been implemented")
 		}),
+		PublishedTestGetOptionsFromPublishedQuestionHandler: published_test.GetOptionsFromPublishedQuestionHandlerFunc(func(params published_test.GetOptionsFromPublishedQuestionParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation published_test.GetOptionsFromPublishedQuestion has not yet been implemented")
+		}),
 		QuestionGetOptionsFromQuestionHandler: question.GetOptionsFromQuestionHandlerFunc(func(params question.GetOptionsFromQuestionParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation question.GetOptionsFromQuestion has not yet been implemented")
 		}),
@@ -195,6 +198,9 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		}),
 		TagGetTagsHandler: tag.GetTagsHandlerFunc(func(params tag.GetTagsParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation tag.GetTags has not yet been implemented")
+		}),
+		PublishedTestGetTagsFromPublishedQuestionHandler: published_test.GetTagsFromPublishedQuestionHandlerFunc(func(params published_test.GetTagsFromPublishedQuestionParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation published_test.GetTagsFromPublishedQuestion has not yet been implemented")
 		}),
 		QuestionGetTagsFromQuestionHandler: question.GetTagsFromQuestionHandlerFunc(func(params question.GetTagsFromQuestionParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation question.GetTagsFromQuestion has not yet been implemented")
@@ -444,6 +450,8 @@ type DevAPI struct {
 	TeamGetMembersHandler team.GetMembersHandler
 	// QuestionGetOptionFromQuestionHandler sets the operation handler for the get option from question operation
 	QuestionGetOptionFromQuestionHandler question.GetOptionFromQuestionHandler
+	// PublishedTestGetOptionsFromPublishedQuestionHandler sets the operation handler for the get options from published question operation
+	PublishedTestGetOptionsFromPublishedQuestionHandler published_test.GetOptionsFromPublishedQuestionHandler
 	// QuestionGetOptionsFromQuestionHandler sets the operation handler for the get options from question operation
 	QuestionGetOptionsFromQuestionHandler question.GetOptionsFromQuestionHandler
 	// PublishedTestGetPublishedTestHandler sets the operation handler for the get published test operation
@@ -492,6 +500,8 @@ type DevAPI struct {
 	QuestionGetTagFromQuestionHandler question.GetTagFromQuestionHandler
 	// TagGetTagsHandler sets the operation handler for the get tags operation
 	TagGetTagsHandler tag.GetTagsHandler
+	// PublishedTestGetTagsFromPublishedQuestionHandler sets the operation handler for the get tags from published question operation
+	PublishedTestGetTagsFromPublishedQuestionHandler published_test.GetTagsFromPublishedQuestionHandler
 	// QuestionGetTagsFromQuestionHandler sets the operation handler for the get tags from question operation
 	QuestionGetTagsFromQuestionHandler question.GetTagsFromQuestionHandler
 	// TeamGetTeamsHandler sets the operation handler for the get teams operation
@@ -745,6 +755,9 @@ func (o *DevAPI) Validate() error {
 	if o.QuestionGetOptionFromQuestionHandler == nil {
 		unregistered = append(unregistered, "question.GetOptionFromQuestionHandler")
 	}
+	if o.PublishedTestGetOptionsFromPublishedQuestionHandler == nil {
+		unregistered = append(unregistered, "published_test.GetOptionsFromPublishedQuestionHandler")
+	}
 	if o.QuestionGetOptionsFromQuestionHandler == nil {
 		unregistered = append(unregistered, "question.GetOptionsFromQuestionHandler")
 	}
@@ -816,6 +829,9 @@ func (o *DevAPI) Validate() error {
 	}
 	if o.TagGetTagsHandler == nil {
 		unregistered = append(unregistered, "tag.GetTagsHandler")
+	}
+	if o.PublishedTestGetTagsFromPublishedQuestionHandler == nil {
+		unregistered = append(unregistered, "published_test.GetTagsFromPublishedQuestionHandler")
 	}
 	if o.QuestionGetTagsFromQuestionHandler == nil {
 		unregistered = append(unregistered, "question.GetTagsFromQuestionHandler")
@@ -1165,6 +1181,10 @@ func (o *DevAPI) initHandlerCache() {
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
+	o.handlers["GET"]["/publishedTests/{testid}/questions/{questionid}/options"] = published_test.NewGetOptionsFromPublishedQuestion(o.context, o.PublishedTestGetOptionsFromPublishedQuestionHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
 	o.handlers["GET"]["/questions/{questionid}/options"] = question.NewGetOptionsFromQuestion(o.context, o.QuestionGetOptionsFromQuestionHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
@@ -1258,6 +1278,10 @@ func (o *DevAPI) initHandlerCache() {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
 	o.handlers["GET"]["/tags"] = tag.NewGetTags(o.context, o.TagGetTagsHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/publishedTests/{testid}/questions/{questionid}/tags"] = published_test.NewGetTagsFromPublishedQuestion(o.context, o.PublishedTestGetTagsFromPublishedQuestionHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}

@@ -69,6 +69,7 @@ func InviteUserPTest(db *sql.DB, testid int64, username string) error {
 	}
 	u, err := GetUserUsername(db, username)
 	if err == nil {
+		RemoveUserPTest(db, testid, username)
 		var query *sql.Stmt
 		query, err = db.Prepare("INSERT INTO InvitacionTestUsuario(usuarioid, testid) VALUES(?,?)")
 		if err == nil {
@@ -100,7 +101,7 @@ func GetTeamsInvitedPTest(db *sql.DB, testid int64) ([]*Team, error) {
 		return nil, errors.New(errorDBNil)
 	}
 	var ts []*Team
-	query, err := db.Prepare("SELECT E.* FROM Equipo E JOIN InvitacionTestEquipo I ON I.equipoid=U.id WHERE I.testid=?")
+	query, err := db.Prepare("SELECT E.* FROM Equipo E JOIN InvitacionTestEquipo I ON I.equipoid=E.id WHERE I.testid=?")
 	if err == nil {
 		defer query.Close()
 		rows, err := query.Query(testid)
@@ -118,6 +119,7 @@ func InviteTeamPTest(db *sql.DB, testid int64, teamname string) error {
 	}
 	t, err := GetTeam(db, teamname)
 	if err == nil {
+		RemoveTeamPTest(db, testid, teamname)
 		var query *sql.Stmt
 		query, err = db.Prepare("INSERT INTO InvitacionTestEquipo(equipoid, testid) VALUES(?,?)")
 		if err == nil {

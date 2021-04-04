@@ -2865,6 +2865,81 @@ paths:
           $ref: '#/responses/GoneError'
         500:
           $ref: '#/responses/InternalServerError'
+  /publishedTests/{testid}/questions/{questionid}/options:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - publishedTest
+      summary: Returns all options from a question.
+      operationId: GetOptionsFromPublishedQuestion
+      description: Returns all options from a question.
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: testid
+        description: Id of the publishedTest
+        required: true
+        type: integer
+      - in: path
+        name: questionid
+        description: Id of the question to find its options
+        required: true
+        type: integer
+      responses:
+        200:
+          description: options found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Option'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
+  /publishedTests/{testid}/questions/{questionid}/tags:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - publishedTest
+      summary: Returns all tags from a question.
+      operationId: GetTagsFromPublishedQuestion
+      description: Returns all tags from a question.
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: testid
+        description: Id of the publishedTest
+        required: true
+        type: integer
+      - in: path
+        name: questionid
+        description: Id of the question to find its tags
+        required: true
+        type: integer
+      responses:
+        200:
+          description: tags found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Tag'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
 
   /publishedTests/{testid}/answers:
     get:

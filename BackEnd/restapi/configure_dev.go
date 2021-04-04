@@ -182,6 +182,10 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 	api.PublishedTestGetQuestionsFromPublishedTestsHandler = published_test.GetQuestionsFromPublishedTestsHandlerFunc(handlers.GetQuestionsPTest) // GET /publishedTests/{testid}/questions
 	api.PublishedTestGetQuestionFromPublishedTestsHandler = published_test.GetQuestionFromPublishedTestsHandlerFunc(handlers.GetQuestionPTest)    // GET /publishedTests/{testid}/questions/{questionid}
 
+	api.PublishedTestGetOptionsFromPublishedQuestionHandler = published_test.GetOptionsFromPublishedQuestionHandlerFunc(handlers.GetOptionsPQuestion) // GET /publishedTests/{testid}/questions/{questionid}/options
+
+	api.PublishedTestGetTagsFromPublishedQuestionHandler = published_test.GetTagsFromPublishedQuestionHandlerFunc(handlers.GetTagsPQuestion) // GET /publishedTests/{testid}/questions/{questionid}/tags
+
 	api.PublishedTestGetAnswersFromPublishedTestsHandler = published_test.GetAnswersFromPublishedTestsHandlerFunc(handlers.GetAnswersPTest) // GET /publishedTests/{testid}/answers
 
 	api.PublishedTestGetQuestionAnswersFromPublishedTestQuestionHandler =

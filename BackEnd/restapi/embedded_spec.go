@@ -866,6 +866,63 @@ func init() {
         }
       }
     },
+    "/publishedTests/{testid}/questions/{questionid}/options": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all options from a question.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "publishedTest"
+        ],
+        "summary": "Returns all options from a question.",
+        "operationId": "GetOptionsFromPublishedQuestion",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the publishedTest",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the question to find its options",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "options found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Option"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
     "/publishedTests/{testid}/questions/{questionid}/qanswers": {
       "get": {
         "security": [
@@ -905,6 +962,63 @@ func init() {
               "type": "array",
               "items": {
                 "$ref": "#/definitions/QuestionAnswer"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/publishedTests/{testid}/questions/{questionid}/tags": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all tags from a question.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "publishedTest"
+        ],
+        "summary": "Returns all tags from a question.",
+        "operationId": "GetTagsFromPublishedQuestion",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the publishedTest",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the question to find its tags",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "tags found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Tag"
               }
             }
           },
@@ -6387,6 +6501,72 @@ func init() {
         }
       }
     },
+    "/publishedTests/{testid}/questions/{questionid}/options": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all options from a question.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "publishedTest"
+        ],
+        "summary": "Returns all options from a question.",
+        "operationId": "GetOptionsFromPublishedQuestion",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the publishedTest",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the question to find its options",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "options found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Option"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
     "/publishedTests/{testid}/questions/{questionid}/qanswers": {
       "get": {
         "security": [
@@ -6426,6 +6606,72 @@ func init() {
               "type": "array",
               "items": {
                 "$ref": "#/definitions/QuestionAnswer"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/publishedTests/{testid}/questions/{questionid}/tags": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all tags from a question.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "publishedTest"
+        ],
+        "summary": "Returns all tags from a question.",
+        "operationId": "GetTagsFromPublishedQuestion",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the publishedTest",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the question to find its tags",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "tags found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Tag"
               }
             }
           },
