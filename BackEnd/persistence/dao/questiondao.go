@@ -433,13 +433,13 @@ func GetQuestionsFromTag(db *sql.DB, tag string) ([]*Question, error) {
 func rowsToInts64(rows *sql.Rows) ([]*int64, error) {
 	var ints []*int64
 	for rows.Next() {
-		var i *int64
-		err := rows.Scan(i)
+		var i int64
+		err := rows.Scan(&i)
 		if err != nil {
 			log.Print(err)
 			return ints, err
 		}
-		ints = append(ints, i)
+		ints = append(ints, &i)
 	}
 	return ints, nil
 }

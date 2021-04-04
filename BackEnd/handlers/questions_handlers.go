@@ -66,10 +66,12 @@ func isQuestionAdmin(u *models.User, questionid int64) bool {
 		}
 		var ts []*dao.Team
 		ts, err = dao.GetTeamsUsername(db, *u.Username)
-		for _, itemCopy := range ts {
-			q, err = dao.GetQuestionFromTeam(db, *itemCopy.Teamname, questionid)
-			if q != nil && err == nil {
-				return true
+		if err == nil {
+			for _, itemCopy := range ts {
+				q, err = dao.GetQuestionFromTeam(db, *itemCopy.Teamname, questionid)
+				if q != nil && err == nil {
+					return true
+				}
 			}
 		}
 	}
@@ -294,13 +296,14 @@ func PostOption(params question.PostOptionParams, u *models.User) middleware.Res
 		if err == nil {
 			var os *dao.Option
 			os, err = dao.PostOption(db, params.Questionid, params.Option)
-			if err == nil {
+			if err == nil && os != nil {
 				mos := dao.ToModelOption(os)
 				if err == nil {
 					return question.NewPostOptionCreated().WithPayload(mos)
 				}
 			}
 		}
+		log.Print("Error en crear opcion: ", err)
 		return question.NewPostOptionInternalServerError()
 	}
 	return question.NewPostOptionForbidden()
@@ -314,20 +317,24 @@ func GetOption(params question.GetOptionFromQuestionParams, u *models.User) midd
 		var os *dao.Option
 		os, err = dao.GetOptionQuestion(db, params.Questionid, params.Optionindex)
 		if err == nil {
+			if os == nil {
+				return question.NewGetOptionFromQuestionGone()
+			}
 			mos := dao.ToModelOption(os)
 			if err == nil {
 				return question.NewGetOptionFromQuestionOK().WithPayload(mos)
 			}
 		}
 	}
-	log.Println("Error en users_handler GetOptions(): ", err)
+	log.Println("Error en users_handler GetOption(): ", err)
 	return question.NewGetOptionFromQuestionInternalServerError()
 }
 
 // PUT /questions/{questionid}/options/{optionindex}
 // Auth: QuestionAdmin or Admin
+// Req: Question.Editable
 func PutOption(params question.PutOptionParams, u *models.User) middleware.Responder {
-	if isQuestionAdmin(u, params.Questionid) || isAdmin(u) {
+	if isQuestionEditable(params.Questionid) && (isQuestionAdmin(u, params.Questionid) || isAdmin(u)) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			err = dao.PutOption(db, params.Questionid, params.Optionindex, params.Option)
@@ -335,6 +342,7 @@ func PutOption(params question.PutOptionParams, u *models.User) middleware.Respo
 				return question.NewPutOptionOK()
 			}
 		}
+		log.Println("Error en users_handler PutOption(): ", err)
 		return question.NewPutOptionInternalServerError()
 	}
 	return question.NewPutOptionForbidden()
@@ -342,8 +350,9 @@ func PutOption(params question.PutOptionParams, u *models.User) middleware.Respo
 
 // DELETE /questions/{questionid}/options/{optionindex}
 // Auth: QuestionAdmin or Admin
+// Req: Question.Editable
 func DeleteOption(params question.DeleteOptionParams, u *models.User) middleware.Responder {
-	if isQuestionAdmin(u, params.Questionid) || isAdmin(u) {
+	if isQuestionEditable(params.Questionid) && (isQuestionAdmin(u, params.Questionid) || isAdmin(u)) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			err = dao.DeleteOption(db, params.Questionid, params.Optionindex)

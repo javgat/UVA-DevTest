@@ -5,6 +5,7 @@
 package handlers
 
 import (
+	"database/sql"
 	"errors"
 	"log"
 	"uva-devtest/models"
@@ -171,58 +172,93 @@ func RemoveTeamTest(params test.RemoveTeamToTestParams, u *models.User) middlewa
 	return test.NewRemoveTeamToTestForbidden()
 }
 
+func cloneQuestions(db *sql.DB, mqs []*models.Question, newMTest *models.Test, oldDTest *dao.Test) error {
+	bfalse := false
+	for _, question := range mqs {
+		origqid := question.ID
+		question.Editable = &bfalse
+		qp, err := dao.PostQuestion(db, question, *newMTest.Username)
+		if err == nil {
+			if qp != nil {
+				newqid := qp.ID
+				var vF *int64
+				vF, err = dao.GetValorFinal(db, origqid, oldDTest.ID)
+				if err == nil {
+					if vF != nil {
+						err = dao.AddQuestionTest(db, newqid, newMTest.ID, *vF)
+						if err == nil {
+							var tags []*dao.Tag
+							tags, err = dao.GetQuestionTags(db, origqid)
+							if err == nil {
+								for _, tag := range tags {
+									err = dao.AddQuestionTag(db, newqid, *tag.Tag)
+									if err != nil {
+										return err
+									}
+								}
+								var opciones []*dao.Option
+								opciones, err = dao.GetOptionsQuestion(db, origqid)
+								for _, opc := range opciones {
+									_, err = dao.PostOption(db, newqid, dao.ToModelOption(opc))
+									if err != nil {
+										return err
+									}
+								}
+							}
+						}
+					} else {
+						err = errors.New("valor final no se pudo obtener")
+					}
+				}
+			} else {
+				err = errors.New("valor final no se pudo obtener")
+			}
+		}
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 // PublishTest POST /tests/{testid}/publishedTests. Copies test and questions to published version
 // Auth: TestAdmin or Admin
 func PublishTest(params test.PostPublishedTestParams, u *models.User) middleware.Responder {
 	if isAdmin(u) || isTestAdmin(u, params.Testid) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			var ts *dao.Test
-			var pts *models.Test
-			ts, err = dao.GetTest(db, params.Testid)
-			if err == nil && ts != nil {
+			var oldDaoTest *dao.Test
+			var newModelTest *models.Test
+			oldDaoTest, err = dao.GetTest(db, params.Testid)
+			if err == nil && oldDaoTest != nil {
 				var qs []*dao.Question
 				qs, err = dao.GetQuestionsFromTest(db, params.Testid)
 				if err == nil {
 					var mqs []*models.Question
 					mqs, err = dao.ToModelQuestions(qs)
 					if err == nil {
-						pts, err = dao.ToModelTest(ts)
+						newModelTest, err = dao.ToModelTest(oldDaoTest)
 						if err == nil {
 							bfalse := false
-							pts.Editable = &bfalse
-							pts, err = dao.PostTest(db, *pts.Username, pts)
+							newModelTest.Editable = &bfalse
+							newModelTest, err = dao.PostTest(db, *newModelTest.Username, newModelTest)
 							if err == nil {
-								for _, itemCopy := range mqs {
-									itemCopy.Editable = &bfalse
-									qp, err := dao.PostQuestion(db, itemCopy, *pts.Username)
-									if err == nil {
-										var vF *int64
-										vF, err = dao.GetValorFinal(db, qp.ID, ts.ID)
-										if err == nil && vF != nil {
-											err = dao.AddQuestionTest(db, qp.ID, pts.ID, *vF)
-										} else if err == nil {
-											err = errors.New("valor final no se pudo obtener")
-										}
-									}
-									if err != nil {
-										log.Println("Error en users_handler PublishTest(): ", err)
-										return test.NewPostPublishedTestInternalServerError()
-									}
-								}
-								teams, err := dao.GetTeamsFromTest(db, params.Testid)
+								err = cloneQuestions(db, mqs, newModelTest, oldDaoTest)
 								if err == nil {
-									for _, itemCopy := range teams {
-										if err == nil {
-											err = dao.AddTeamToTest(db, pts.ID, *itemCopy.Teamname)
-										}
-										if err != nil {
-											log.Println("Error en users_handler PublishTest(): ", err)
-											return test.NewPostPublishedTestInternalServerError()
+									teams, err := dao.GetTeamsFromTest(db, params.Testid)
+									if err == nil {
+										for _, team := range teams {
+											if err == nil {
+												err = dao.AddTeamToTest(db, newModelTest.ID, *team.Teamname)
+											}
+											if err != nil {
+												log.Println("Error en users_handler PublishTest(): ", err)
+												return test.NewPostPublishedTestInternalServerError()
+											}
 										}
 									}
+									return test.NewPostPublishedTestCreated().WithPayload(newModelTest)
 								}
-								return test.NewPostPublishedTestCreated().WithPayload(pts)
 							}
 						}
 					}

@@ -99,7 +99,7 @@ CREATE TABLE TestPregunta(
   testid int(11) NOT NULL,
   preguntaid int(11) NOT NULL,
   valorFinal int(11) NOT NULL,
-  CONSTRAINT CHK_valorFinal CHECK (valorFinal>=0)
+  CONSTRAINT CHK_valorFinal CHECK (valorFinal>=0),
   FOREIGN KEY(testid) REFERENCES Test(id) ON DELETE CASCADE,
   FOREIGN KEY(preguntaid) REFERENCES Pregunta(id) ON DELETE CASCADE,
   CONSTRAINT PRIMARY KEY(testid, preguntaid)
@@ -118,7 +118,8 @@ CREATE TABLE Opcion(
   correcta boolean NOT NULL,
   preguntaid int(11) NOT NULL,
   FOREIGN KEY(preguntaid) REFERENCES Pregunta(id) ON DELETE CASCADE,
-  CONSTRAINT PRIMARY KEY(preguntaid, indice)
+  PRIMARY KEY(indice)
+  /*CONSTRAINT PRIMARY KEY(preguntaid, indice)*/
 );
 
 CREATE TABLE Etiqueta(
@@ -151,7 +152,7 @@ CREATE TABLE RespuestaPregunta(
   corregida boolean NOT NULL,
   opcionindice int(11),
   respuesta longtext COLLATE utf8_unicode_ci,
-  CONSTRAINT CHK_puntuacion CHECK (puntuacion>=0 AND puntuacion<=100)
+  CONSTRAINT CHK_puntuacion CHECK (puntuacion>=0 AND puntuacion<=100),
   CONSTRAINT fk_RespuestaOpcion_Opcion
       FOREIGN KEY(preguntaid, opcionindice)
       REFERENCES Opcion(preguntaid, indice) ON DELETE CASCADE,

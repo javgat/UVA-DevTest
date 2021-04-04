@@ -92,10 +92,10 @@ func UpdateRole(db *sql.DB, username string, teamname string, role *TeamRole) er
 		return errors.New("Team no existe")
 	}
 	query, err := db.Prepare("UPDATE EquipoUsuario SET rol = ? WHERE usuarioid = ? AND equipoid = ? ")
-	defer query.Close()
 	if err != nil {
 		return err
 	}
+	defer query.Close()
 	_, err = query.Exec(role.Role, u.ID, t.ID)
 	return err
 }

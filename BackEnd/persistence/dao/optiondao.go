@@ -81,7 +81,8 @@ func PostOption(db *sql.DB, qid int64, o *models.Option) (*Option, error) {
 	query, err := db.Prepare("INSERT INTO Opcion(texto, correcta, preguntaid) VALUES(?,?,?)")
 	if err == nil {
 		defer query.Close()
-		sol, err := query.Exec(o.Texto, o.Correcta, qid)
+		var sol sql.Result
+		sol, err = query.Exec(o.Texto, o.Correcta, qid)
 		if err == nil {
 			id, err := sol.LastInsertId()
 			if err == nil {
@@ -114,7 +115,7 @@ func PutOption(db *sql.DB, questionid int64, optionindex int64, o *models.Option
 	if db == nil {
 		return errors.New(errorDBNil)
 	}
-	query, err := db.Prepare("UPDATE Opcion SET texto=?, correcta=? WHERE preguntaid=? AND optionindex=?")
+	query, err := db.Prepare("UPDATE Opcion SET texto=?, correcta=? WHERE preguntaid=? AND indice=?")
 	if err == nil {
 		defer query.Close()
 		_, err = query.Exec(o.Texto, o.Correcta, questionid, optionindex)
@@ -126,7 +127,7 @@ func DeleteOption(db *sql.DB, questionid int64, optionindex int64) error {
 	if db == nil {
 		return errors.New(errorDBNil)
 	}
-	query, err := db.Prepare("DELETE FROM Opcion WHERE preguntaid=? AND optionindex=?")
+	query, err := db.Prepare("DELETE FROM Opcion WHERE preguntaid=? AND indice=?")
 	if err == nil {
 		defer query.Close()
 		_, err = query.Exec(questionid, optionindex)
