@@ -5119,12 +5119,12 @@ func init() {
     "Option": {
       "type": "object",
       "required": [
-        "texto",
-        "correcta"
+        "texto"
       ],
       "properties": {
         "correcta": {
           "type": "boolean",
+          "default": false,
           "example": false
         },
         "indice": {
@@ -5258,9 +5258,11 @@ func init() {
           "type": "integer",
           "example": 1
         },
-        "indiceOpcion": {
-          "type": "integer",
-          "example": 1
+        "indicesOpciones": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
         },
         "puntuacion": {
           "type": "integer",
@@ -11524,12 +11526,12 @@ func init() {
     "Option": {
       "type": "object",
       "required": [
-        "texto",
-        "correcta"
+        "texto"
       ],
       "properties": {
         "correcta": {
           "type": "boolean",
+          "default": false,
           "example": false
         },
         "indice": {
@@ -11664,9 +11666,11 @@ func init() {
           "type": "integer",
           "example": 1
         },
-        "indiceOpcion": {
-          "type": "integer",
-          "example": 1
+        "indicesOpciones": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
         },
         "puntuacion": {
           "type": "integer",

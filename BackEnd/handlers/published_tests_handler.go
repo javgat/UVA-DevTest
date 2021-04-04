@@ -311,7 +311,7 @@ func GetOptionsPQuestion(params published_test.GetOptionsFromPublishedQuestionPa
 				var os []*dao.Option
 				os, err = dao.GetOptionsQuestion(db, params.Questionid)
 				if err == nil {
-					mos := dao.ToModelOptions(os)
+					mos := dao.ToModelOptionsNoCorrect(os)
 					return published_test.NewGetOptionsFromPublishedQuestionOK().WithPayload(mos)
 				}
 			}

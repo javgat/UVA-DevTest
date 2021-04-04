@@ -232,14 +232,13 @@ type QuestionAnswer struct {
 	// Required: true
 	IDPregunta *int64 `json:"idPregunta"`
 
+	// indices opciones
+	IndicesOpciones []int64 `json:"indicesOpciones"`
+
 	// id respuesta
 	// Example: 1
 	// Required: true
 	IDRespuesta *int64 `json:"idRespuesta"`
-
-	// indice opcion
-	// Example: 1
-	IndiceOpcion int64 `json:"indiceOpcion,omitempty"`
 
 	// puntuacion
 	// Example: 1
@@ -258,7 +257,6 @@ type Option struct {
 
 	// correcta
 	// Example: false
-	// Required: true
 	Correcta *bool `json:"correcta"`
 
 	// indice

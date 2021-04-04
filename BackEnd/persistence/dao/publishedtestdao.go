@@ -162,20 +162,3 @@ func GetAnswersFromPTest(db *sql.DB, testid int64) ([]*Answer, error) {
 	}
 	return nil, err
 }
-
-func GetQuestionAnswersFromPTestQuestion(db *sql.DB, testid int64, questionid int64) ([]*QuestionAnswer, error) {
-	if db == nil {
-		return nil, errors.New(errorDBNil)
-	}
-	var qas []*QuestionAnswer
-	query, err := db.Prepare("SELECT * FROM RespuestaPregunta WHERE preguntaid=? AND respuestaExamenid")
-	if err == nil {
-		defer query.Close()
-		rows, err := query.Query(testid)
-		if err == nil {
-			qas, err = rowsToQuestionAnswers(rows)
-			return qas, err
-		}
-	}
-	return nil, err
-}

@@ -3261,7 +3261,6 @@ paths:
         500:
           $ref: '#/responses/InternalServerError'
 
-
   /answers/{answerid}/qanswers/{questionid}/review:
     put:
       security:
@@ -3559,9 +3558,6 @@ definitions:
       respuesta:
         type: string
         example: Javadoc
-      indiceOpcion:
-        type: integer
-        example: 1
       idPregunta:
         type: integer
         example: 1
@@ -3574,6 +3570,10 @@ definitions:
       corregida:
         type: boolean
         example: true
+      indicesOpciones:
+        type: array
+        items: 
+          type: integer
   Tag:
     type: object
     required:
@@ -3611,7 +3611,6 @@ definitions:
     type: object
     required:
     - texto
-    - correcta
     properties:
       indice:
         type: integer
@@ -3625,6 +3624,7 @@ definitions:
       correcta:
         type: boolean
         example: false
+        default: false
 securityDefinitions:
   BearerCookie:
     type: apiKey

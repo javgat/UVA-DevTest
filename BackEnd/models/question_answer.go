@@ -34,9 +34,8 @@ type QuestionAnswer struct {
 	// Required: true
 	IDRespuesta *int64 `json:"idRespuesta"`
 
-	// indice opcion
-	// Example: 1
-	IndiceOpcion int64 `json:"indiceOpcion,omitempty"`
+	// indices opciones
+	IndicesOpciones []int64 `json:"indicesOpciones"`
 
 	// puntuacion
 	// Example: 1

@@ -33,6 +33,26 @@ func ToModelOptions(os []*Option) []*models.Option {
 	return mos
 }
 
+func ToModelOptionNoCorrect(o *Option) *models.Option {
+	bfalse := false
+	mo := &models.Option{
+		Correcta:   &bfalse,
+		Indice:     o.Indice,
+		Preguntaid: o.Preguntaid,
+		Texto:      o.Texto,
+	}
+	return mo
+}
+
+func ToModelOptionsNoCorrect(os []*Option) []*models.Option {
+	var mos = []*models.Option{}
+	for _, itemCopy := range os {
+		mo := ToModelOptionNoCorrect(itemCopy)
+		mos = append(mos, mo)
+	}
+	return mos
+}
+
 func rowsToOptions(rows *sql.Rows) ([]*Option, error) {
 	var options []*Option
 	for rows.Next() {
@@ -133,4 +153,21 @@ func DeleteOption(db *sql.DB, questionid int64, optionindex int64) error {
 		_, err = query.Exec(questionid, optionindex)
 	}
 	return err
+}
+
+func GetOptionsQuestionAnswer(db *sql.DB, qa *QuestionAnswer) ([]*Option, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var os []*Option
+	query, err := db.Prepare("SELECT O.* FROM Opcion O JOIN OpcionRespuesta R ON O.indice=R.opcionindice AND O.preguntaid=R.preguntaid WHERE R.preguntaid=? AND R.respuestaExamenid=?")
+	if err == nil {
+		defer query.Close()
+		rows, err := query.Query(qa.IDPregunta, qa.IDRespuesta)
+		if err == nil {
+			os, err = rowsToOptions(rows)
+			return os, err
+		}
+	}
+	return nil, err
 }

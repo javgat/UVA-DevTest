@@ -1,6 +1,7 @@
 CREATE DATABASE IF NOT EXISTS uva_devtest;
 USE uva_devtest;
 
+DROP TABLE IF EXISTS OpcionRespuesta;
 DROP TABLE IF EXISTS RespuestaPregunta;
 DROP TABLE IF EXISTS RespuestaExamen;
 DROP TABLE IF EXISTS PreguntaEtiqueta;
@@ -150,15 +151,24 @@ CREATE TABLE RespuestaPregunta(
   preguntaid int(11) NOT NULL,
   puntuacion int(11) NOT NULL, /*porcentaje*/
   corregida boolean NOT NULL,
-  opcionindice int(11),
   respuesta longtext COLLATE utf8_unicode_ci,
   CONSTRAINT CHK_puntuacion CHECK (puntuacion>=0 AND puntuacion<=100),
-  CONSTRAINT fk_RespuestaOpcion_Opcion
-      FOREIGN KEY(preguntaid, opcionindice)
-      REFERENCES Opcion(preguntaid, indice) ON DELETE CASCADE,
   FOREIGN KEY(respuestaExamenid) REFERENCES RespuestaExamen(id) ON DELETE CASCADE,
   FOREIGN KEY(preguntaid) REFERENCES Pregunta(id) ON DELETE CASCADE,
   CONSTRAINT PRIMARY KEY(respuestaExamenid, preguntaid)
+);
+
+CREATE TABLE OpcionRespuesta(
+  respuestaExamenid int(11) NOT NULL,
+  preguntaid int(11) NOT NULL,
+  opcionindice int(11) NOT NULL,
+  CONSTRAINT fk_ORRespPreg
+    FOREIGN KEY(respuestaExamenid, preguntaid)
+    REFERENCES RespuestaPregunta(respuestaExamenid, preguntaid) ON DELETE CASCADE,
+  CONSTRAINT fk_OROpcion
+    FOREIGN KEY(preguntaid, opcionindice)
+    REFERENCES Opcion(preguntaid, indice) ON DELETE CASCADE,
+  CONSTRAINT PRIMARY KEY(respuestaExamenid, preguntaid, opcionindice)
 );
 
 /* DATOS INICIALES */

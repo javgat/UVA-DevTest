@@ -21,8 +21,7 @@ type Option struct {
 
 	// correcta
 	// Example: false
-	// Required: true
-	Correcta *bool `json:"correcta"`
+	Correcta *bool `json:"correcta,omitempty"`
 
 	// indice
 	// Example: 1
@@ -42,10 +41,6 @@ type Option struct {
 func (m *Option) Validate(formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.validateCorrecta(formats); err != nil {
-		res = append(res, err)
-	}
-
 	if err := m.validateTexto(formats); err != nil {
 		res = append(res, err)
 	}
@@ -53,15 +48,6 @@ func (m *Option) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
-	return nil
-}
-
-func (m *Option) validateCorrecta(formats strfmt.Registry) error {
-
-	if err := validate.Required("correcta", "body", m.Correcta); err != nil {
-		return err
-	}
-
 	return nil
 }
 
