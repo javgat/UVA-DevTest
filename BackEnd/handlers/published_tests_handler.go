@@ -158,6 +158,36 @@ func RemoveTeamPTest(params published_test.RemoveTeamToPublishedTestParams, u *m
 	return published_test.NewRemoveTeamToPublishedTestForbidden()
 }
 
+func isTestInvited(u *models.User, testid int64) bool {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		var t *dao.Test
+		t, err = dao.GetPTestFromUser(db, *u.Username, testid)
+		if err == nil {
+			if t != nil {
+				return true
+			}
+			var tms []*dao.Team
+			tms, err = dao.GetTeamsUsername(db, *u.Username)
+			if err == nil {
+				for _, tm := range tms {
+					t, err = dao.GetPTestFromTeam(db, *tm.Teamname, testid)
+					if err != nil {
+						log.Print("Error en isTestInvited: ", err)
+						return false
+					}
+					if t != nil {
+						return true
+					}
+				}
+				return false
+			}
+		}
+	}
+	log.Print("Error en isTestInvited: ", err)
+	return false
+}
+
 // GetQuestionsPTest GET /publishedTests/{testid}/questions
 // Auth: ALL if accesoPublico, else: TestInvited, TestAdmin or Admin
 func GetQuestionsPTest(params published_test.GetQuestionsFromPublishedTestsParams, u *models.User) middleware.Responder {
@@ -255,7 +285,7 @@ func GetQuestionAnswersPTest(params published_test.GetQuestionAnswersFromPublish
 			as, err = dao.GetQuestionAnswersFromPTestQuestion(db, params.Testid, params.Questionid)
 			if err == nil {
 				var mas []*models.QuestionAnswer
-				mas, err = dao.ToModelQuestionAnswers(as)
+				mas = dao.ToModelQuestionAnswers(as)
 				if err == nil {
 					return published_test.NewGetQuestionAnswersFromPublishedTestQuestionOK().WithPayload(mas)
 				}

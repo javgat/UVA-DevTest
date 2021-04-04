@@ -5,6 +5,8 @@
 package dao
 
 import (
+	"database/sql"
+	"log"
 	"uva-devtest/models"
 
 	// Blank import of mysql driver
@@ -32,7 +34,6 @@ func ToModelQuestionAnswers(qs []*QuestionAnswer) []*models.QuestionAnswer {
 	return mqs
 }
 
-/*
 // Transforms some sql.Rows into a slice(array) of questionAnswers
 // Param rows: Rows which contains database information returned
 // Return []models.QuestionAnswer: QuestionsAnswer represented in rows
@@ -41,27 +42,15 @@ func rowsToQuestionAnswers(rows *sql.Rows) ([]*QuestionAnswer, error) {
 	var qas []*QuestionAnswer
 	for rows.Next() {
 		var qa QuestionAnswer
-		var eleUni sql.NullBool
-		var solu sql.NullString
-		err := rows.Scan(&q.ID, &q.Title, &q.Question, &q.EstimatedTime, &q.AutoCorrect, &q.Editable, &q.Usuarioid, &eleUni, &solu)
-		var tipo string
-		if eleUni.Valid {
-			q.EleccionUnica = eleUni.Bool
-			tipo = models.QuestionTipoPreguntaOpciones
-		}
-		if solu.Valid {
-			q.Solucion = solu.String
-			tipo = models.QuestionTipoPreguntaString
-		}
-		q.TipoPregunta = &tipo
+		err := rows.Scan(&qa.IDRespuesta, &qa.IDPregunta, &qa.Puntuacion, &qa.Corregida, &qa.IndiceOpcion, &qa.Respuesta)
 		if err != nil {
 			log.Print(err)
-			return questions, err
+			return qas, err
 		}
 
-		questions = append(questions, &q)
+		qas = append(qas, &qa)
 	}
-	return questions, nil
+	return qas, nil
 }
 
 // Transforms rows into a single question
@@ -76,4 +65,3 @@ func rowsToQuestionAnswer(rows *sql.Rows) (*QuestionAnswer, error) {
 	}
 	return question, err
 }
-*/
