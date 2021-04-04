@@ -356,8 +356,10 @@ func GetQuestionsFromTest(db *sql.DB, testid int64) ([]*Question, error) {
 		rows, err := query.Query(testid)
 		if err == nil {
 			qs, err = rowsToQuestions(rows)
-			addValoresFinales(qs, testid)
-			return qs, err
+			if err == nil {
+				err = addValoresFinales(qs, testid)
+				return qs, err
+			}
 		}
 	} else {
 		log.Print(err)
@@ -376,8 +378,10 @@ func GetQuestionFromTest(db *sql.DB, testid int64, questionid int64) (*Question,
 		rows, err := query.Query(testid, questionid)
 		if err == nil {
 			qs, err = rowsToQuestion(rows)
-			addValorFinal(qs, testid)
-			return qs, err
+			if qs != nil && err == nil {
+				err = addValorFinal(qs, testid)
+				return qs, err
+			}
 		}
 	} else {
 		log.Print(err)

@@ -333,9 +333,12 @@ func AddQuestionToTest(params test.AddQuestionToTestParams, u *models.User) midd
 	if testEditable(params.Testid) && (isAdmin(u) || isTestAdmin(u, params.Testid)) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			err = dao.AddQuestionTest(db, params.Testid, params.Questionid, *params.ValorFinal.ValorFinal)
+			err = dao.RemoveQuestionTest(db, params.Questionid, params.Testid)
 			if err == nil {
-				return test.NewAddQuestionToTestOK()
+				err = dao.AddQuestionTest(db, params.Questionid, params.Testid, *params.ValorFinal.ValorFinal)
+				if err == nil {
+					return test.NewAddQuestionToTestOK()
+				}
 			}
 			log.Println("Error en users_handler AddQuestionToTest(): ", err)
 			return test.NewAddQuestionToTestGone()
@@ -351,7 +354,7 @@ func RemoveQuestionTest(params test.RemoveQuestionFromTestParams, u *models.User
 	if testEditable(params.Testid) && (isAdmin(u) || isTestAdmin(u, params.Testid)) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			err = dao.RemoveQuestionTest(db, params.Testid, params.Questionid)
+			err = dao.RemoveQuestionTest(db, params.Questionid, params.Testid)
 			if err == nil {
 				return test.NewRemoveQuestionFromTestOK()
 			}
