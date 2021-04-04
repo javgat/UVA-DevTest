@@ -96,6 +96,23 @@ func rowsToQuestion(rows *sql.Rows) (*Question, error) {
 	return question, err
 }
 
+func GetEditQuestions(db *sql.DB) ([]*Question, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var qs []*Question
+	query, err := db.Prepare("SELECT * FROM Pregunta WHERE editable=1")
+	if err == nil {
+		defer query.Close()
+		rows, err := query.Query()
+		if err == nil {
+			qs, err = rowsToQuestions(rows)
+			return qs, err
+		}
+	}
+	return nil, err
+}
+
 func GetQuestions(db *sql.DB) ([]*Question, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)

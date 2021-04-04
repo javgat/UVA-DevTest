@@ -126,6 +126,8 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 
 	// /questions
 
+	api.QuestionGetEditQuestionsHandler = question.GetEditQuestionsHandlerFunc(handlers.GetEditQuestions) // GET /editQuestions
+
 	api.QuestionGetQuestionsHandler = question.GetQuestionsHandlerFunc(handlers.GetQuestions)       // GET /questions
 	api.QuestionGetQuestionHandler = question.GetQuestionHandlerFunc(handlers.GetQuestion)          // GET /questions/{questionid}
 	api.QuestionPutQuestionHandler = question.PutQuestionHandlerFunc(handlers.PutQuestion)          // PUT /questions/{questionid}

@@ -592,6 +592,44 @@ func init() {
         }
       }
     },
+    "/editQuestions": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all non-published questions",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "question"
+        ],
+        "summary": "Returns all non-published questions",
+        "operationId": "GetEditQuestions",
+        "responses": {
+          "200": {
+            "description": "questions found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Question"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
     "/editTests": {
       "get": {
         "security": [
@@ -6206,6 +6244,50 @@ func init() {
           },
           "410": {
             "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/editQuestions": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all non-published questions",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "question"
+        ],
+        "summary": "Returns all non-published questions",
+        "operationId": "GetEditQuestions",
+        "responses": {
+          "200": {
+            "description": "questions found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Question"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
             "schema": {
               "$ref": "#/definitions/Error"
             }

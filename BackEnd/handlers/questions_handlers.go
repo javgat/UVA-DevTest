@@ -14,6 +14,28 @@ import (
 	"github.com/go-openapi/runtime/middleware"
 )
 
+// GetEditQuestions GET /editQuestions. Returns all non-published questions.
+// Auth: Teacher or Admin
+func GetEditQuestions(params question.GetEditQuestionsParams, u *models.User) middleware.Responder {
+	if isTeacherOrAdmin(u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			var qs []*dao.Question
+			qs, err = dao.GetEditQuestions(db)
+			if err == nil {
+				var mqs []*models.Question
+				mqs, err = dao.ToModelQuestions(qs)
+				if err == nil {
+					return question.NewGetEditQuestionsOK().WithPayload(mqs)
+				}
+			}
+		}
+		log.Println("Error en users_handler GetEditQuestions(): ", err)
+		return question.NewGetEditQuestionsInternalServerError()
+	}
+	return question.NewGetEditQuestionsForbidden()
+}
+
 // GetQuestions GET /questions. Returns all questions.
 // Auth: Teacher or Admin
 func GetQuestions(params question.GetQuestionsParams, u *models.User) middleware.Responder {

@@ -115,6 +115,9 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		UserGetAnswersFromUserAnsweredTestHandler: user.GetAnswersFromUserAnsweredTestHandlerFunc(func(params user.GetAnswersFromUserAnsweredTestParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation user.GetAnswersFromUserAnsweredTest has not yet been implemented")
 		}),
+		QuestionGetEditQuestionsHandler: question.GetEditQuestionsHandlerFunc(func(params question.GetEditQuestionsParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation question.GetEditQuestions has not yet been implemented")
+		}),
 		TestGetEditTestsHandler: test.GetEditTestsHandlerFunc(func(params test.GetEditTestsParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation test.GetEditTests has not yet been implemented")
 		}),
@@ -447,6 +450,8 @@ type DevAPI struct {
 	UserGetAnswersFromUserHandler user.GetAnswersFromUserHandler
 	// UserGetAnswersFromUserAnsweredTestHandler sets the operation handler for the get answers from user answered test operation
 	UserGetAnswersFromUserAnsweredTestHandler user.GetAnswersFromUserAnsweredTestHandler
+	// QuestionGetEditQuestionsHandler sets the operation handler for the get edit questions operation
+	QuestionGetEditQuestionsHandler question.GetEditQuestionsHandler
 	// TestGetEditTestsHandler sets the operation handler for the get edit tests operation
 	TestGetEditTestsHandler test.GetEditTestsHandler
 	// TeamGetMemberHandler sets the operation handler for the get member operation
@@ -750,6 +755,9 @@ func (o *DevAPI) Validate() error {
 	}
 	if o.UserGetAnswersFromUserAnsweredTestHandler == nil {
 		unregistered = append(unregistered, "user.GetAnswersFromUserAnsweredTestHandler")
+	}
+	if o.QuestionGetEditQuestionsHandler == nil {
+		unregistered = append(unregistered, "question.GetEditQuestionsHandler")
 	}
 	if o.TestGetEditTestsHandler == nil {
 		unregistered = append(unregistered, "test.GetEditTestsHandler")
@@ -1174,6 +1182,10 @@ func (o *DevAPI) initHandlerCache() {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
 	o.handlers["GET"]["/users/{username}/answeredTests/{testid}/answers"] = user.NewGetAnswersFromUserAnsweredTest(o.context, o.UserGetAnswersFromUserAnsweredTestHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/editQuestions"] = question.NewGetEditQuestions(o.context, o.QuestionGetEditQuestionsHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}

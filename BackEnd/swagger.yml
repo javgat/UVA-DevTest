@@ -1663,6 +1663,30 @@ paths:
         500:
           $ref: '#/responses/InternalServerError'
 
+  /editQuestions:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - question
+      summary: Returns all non-published questions
+      operationId: GetEditQuestions
+      description: Returns all non-published questions
+      produces:
+      - application/json
+      responses:
+        200:
+          description: questions found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Question'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        500:
+          $ref: '#/responses/InternalServerError'
   /questions:
     get:
       security:
