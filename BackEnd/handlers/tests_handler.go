@@ -38,6 +38,28 @@ func GetTests(params test.GetTestsParams, u *models.User) middleware.Responder {
 	return test.NewGetTestsForbidden()
 }
 
+// GetTests GET /editTests. Returns all non-published tests.
+// Auth: Teacher or Admin
+func GetEditTests(params test.GetEditTestsParams, u *models.User) middleware.Responder {
+	if isTeacherOrAdmin(u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			var ts []*dao.Test
+			ts, err = dao.GetEditTests(db)
+			if err == nil {
+				var mts []*models.Test
+				mts, err = dao.ToModelTests(ts)
+				if err == nil {
+					return test.NewGetEditTestsOK().WithPayload(mts)
+				}
+			}
+		}
+		log.Println("Error en users_handler GetEditTests(): ", err)
+		return test.NewGetEditTestsInternalServerError()
+	}
+	return test.NewGetEditTestsForbidden()
+}
+
 // GetTest GET /tests/{testid}. Returns a test.
 // Auth: Teacher or Admin
 func GetTest(params test.GetTestParams, u *models.User) middleware.Responder {

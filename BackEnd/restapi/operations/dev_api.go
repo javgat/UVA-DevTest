@@ -115,6 +115,9 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		UserGetAnswersFromUserAnsweredTestHandler: user.GetAnswersFromUserAnsweredTestHandlerFunc(func(params user.GetAnswersFromUserAnsweredTestParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation user.GetAnswersFromUserAnsweredTest has not yet been implemented")
 		}),
+		TestGetEditTestsHandler: test.GetEditTestsHandlerFunc(func(params test.GetEditTestsParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation test.GetEditTests has not yet been implemented")
+		}),
 		TeamGetMemberHandler: team.GetMemberHandlerFunc(func(params team.GetMemberParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation team.GetMember has not yet been implemented")
 		}),
@@ -444,6 +447,8 @@ type DevAPI struct {
 	UserGetAnswersFromUserHandler user.GetAnswersFromUserHandler
 	// UserGetAnswersFromUserAnsweredTestHandler sets the operation handler for the get answers from user answered test operation
 	UserGetAnswersFromUserAnsweredTestHandler user.GetAnswersFromUserAnsweredTestHandler
+	// TestGetEditTestsHandler sets the operation handler for the get edit tests operation
+	TestGetEditTestsHandler test.GetEditTestsHandler
 	// TeamGetMemberHandler sets the operation handler for the get member operation
 	TeamGetMemberHandler team.GetMemberHandler
 	// TeamGetMembersHandler sets the operation handler for the get members operation
@@ -745,6 +750,9 @@ func (o *DevAPI) Validate() error {
 	}
 	if o.UserGetAnswersFromUserAnsweredTestHandler == nil {
 		unregistered = append(unregistered, "user.GetAnswersFromUserAnsweredTestHandler")
+	}
+	if o.TestGetEditTestsHandler == nil {
+		unregistered = append(unregistered, "test.GetEditTestsHandler")
 	}
 	if o.TeamGetMemberHandler == nil {
 		unregistered = append(unregistered, "team.GetMemberHandler")
@@ -1166,6 +1174,10 @@ func (o *DevAPI) initHandlerCache() {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
 	o.handlers["GET"]["/users/{username}/answeredTests/{testid}/answers"] = user.NewGetAnswersFromUserAnsweredTest(o.context, o.UserGetAnswersFromUserAnsweredTestHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/editTests"] = test.NewGetEditTests(o.context, o.TestGetEditTestsHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}

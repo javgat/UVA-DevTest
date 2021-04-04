@@ -149,6 +149,8 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 
 	// /tests
 
+	api.TestGetEditTestsHandler = test.GetEditTestsHandlerFunc(handlers.GetEditTests) // GET /editTests
+
 	api.TestGetTestsHandler = test.GetTestsHandlerFunc(handlers.GetTests)       // GET /tests
 	api.TestGetTestHandler = test.GetTestHandlerFunc(handlers.GetTest)          // GET /tests/{testid}
 	api.TestPutTestHandler = test.PutTestHandlerFunc(handlers.PutTest)          // PUT /tests/{testid}

@@ -592,6 +592,44 @@ func init() {
         }
       }
     },
+    "/editTests": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all non-published tests",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "test"
+        ],
+        "summary": "Returns all non-published tests",
+        "operationId": "GetEditTests",
+        "responses": {
+          "200": {
+            "description": "tests found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Test"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
     "/logout": {
       "get": {
         "description": "Returns a useless cookie that will expire soon",
@@ -6166,6 +6204,50 @@ func init() {
           },
           "410": {
             "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/editTests": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all non-published tests",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "test"
+        ],
+        "summary": "Returns all non-published tests",
+        "operationId": "GetEditTests",
+        "responses": {
+          "200": {
+            "description": "tests found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Test"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
             "schema": {
               "$ref": "#/definitions/Error"
             }

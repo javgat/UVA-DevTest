@@ -93,6 +93,23 @@ func GetTests(db *sql.DB) ([]*Test, error) {
 	return nil, err
 }
 
+func GetEditTests(db *sql.DB) ([]*Test, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var ts []*Test
+	query, err := db.Prepare("SELECT * FROM Test WHERE editable=1")
+	if err == nil {
+		defer query.Close()
+		rows, err := query.Query()
+		if err == nil {
+			ts, err = rowsToTests(rows)
+			return ts, err
+		}
+	}
+	return nil, err
+}
+
 func GetTest(db *sql.DB, testid int64) (*Test, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)

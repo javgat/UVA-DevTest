@@ -2170,6 +2170,30 @@ paths:
         500:
           $ref: '#/responses/InternalServerError'
 
+  /editTests:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - test
+      summary: Returns all non-published tests
+      operationId: GetEditTests
+      description: Returns all non-published tests
+      produces:
+      - application/json
+      responses:
+        200:
+          description: tests found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Test'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        500:
+          $ref: '#/responses/InternalServerError'
   /tests:
     get:
       security:
