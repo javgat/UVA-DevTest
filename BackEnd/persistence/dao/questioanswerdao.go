@@ -214,7 +214,7 @@ func PutQuestionAnswer(db *sql.DB, answerid int64, questionid int64, qa *models.
 			err = DeleteIndiceOpcionesQuestionAnswer(db, answerid, questionid)
 			if err == nil {
 				for _, i := range qa.IndicesOpciones {
-					err = AddOptionQuestionAnswer(db, *qa.IDPregunta, *qa.IDRespuesta, i)
+					err = AddOptionQuestionAnswer(db, questionid, answerid, i)
 					if err != nil {
 						return err
 					}
