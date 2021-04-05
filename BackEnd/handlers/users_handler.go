@@ -448,15 +448,21 @@ func StartAnswer(params user.StartAnswerParams, u *models.User) middleware.Respo
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			t, err := dao.GetPTestFromUser(db, params.Username, params.Testid)
+			if t == nil && err == nil && isAdmin(u) {
+				t, err = dao.GetPublishedTest(db, params.Testid)
+			}
 			if err == nil && t != nil {
-				a, err := dao.StartAnswer(db, params.Username, params.Testid)
+				var a *dao.Answer
+				a, err = dao.StartAnswer(db, params.Username, params.Testid)
 				if err == nil && a != nil {
-					ma, err := dao.ToModelAnswer(a)
+					var ma *models.Answer
+					ma, err = dao.ToModelAnswer(a)
 					if ma != nil && err == nil {
 						return user.NewStartAnswerCreated().WithPayload(ma)
 					}
 				}
 			}
+			log.Print("error StartUser: ", err)
 			return user.NewStartAnswerGone()
 		}
 		return user.NewStartAnswerInternalServerError()

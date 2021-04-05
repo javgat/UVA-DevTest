@@ -273,7 +273,7 @@ func GetATestsFromUser(db *sql.DB, username string) ([]*Test, error) {
 	u, err := GetUserUsername(db, username)
 	if err == nil {
 		var ts []*Test
-		query, err := db.Prepare("SELECT T.* FROM Test T JOIN Pregunta P ON T.id=P.testid WHERE P.usuarioid=?")
+		query, err := db.Prepare("SELECT T.* FROM Test T JOIN RespuestaExamen R ON T.id=R.testid WHERE R.usuarioid=?")
 
 		if err == nil {
 			defer query.Close()
@@ -294,7 +294,7 @@ func GetATestFromUser(db *sql.DB, username string, testid int64) (*Test, error) 
 	u, err := GetUserUsername(db, username)
 	if err == nil {
 		var ts *Test
-		query, err := db.Prepare("SELECT T.* FROM Test T JOIN Pregunta P ON T.id=P.testid WHERE P.usuarioid=? AND P.testid=?")
+		query, err := db.Prepare("SELECT T.* FROM Test T JOIN RespuestaExamen R ON T.id=R.testid WHERE R.usuarioid=? AND R.testid=?")
 		if err == nil {
 			defer query.Close()
 			rows, err := query.Query(u.ID, testid)

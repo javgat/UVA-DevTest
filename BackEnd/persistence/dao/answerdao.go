@@ -117,21 +117,31 @@ func StartAnswer(db *sql.DB, username string, testid int64) (*Answer, error) {
 	if err != nil || u == nil {
 		return nil, errors.New(errorResourceNotFound)
 	}
-	query, err := db.Prepare("INSERT INTO RespuestaExamen(startime, finished, testid, usuarioid) VALUES (?,?,?,?)")
+	query, err := db.Prepare("INSERT INTO RespuestaExamen(startTime, finished, testid, usuarioid) VALUES (?,?,?,?)")
 
 	if err != nil {
 		return nil, err
 	}
 	defer query.Close()
 	now := time.Now()
-	_, err = query.Exec(now, false, testid, u.ID)
-	bfalse := false
-	ar := &Answer{
-		Finished:  &bfalse,
-		Testid:    testid,
-		Usuarioid: u.ID,
+	var res sql.Result
+	res, err = query.Exec(now, false, testid, u.ID)
+	if err == nil {
+		var id int64
+		id, err = res.LastInsertId()
+		if err == nil {
+			bfalse := false
+			ar := &Answer{
+				Finished:  &bfalse,
+				Testid:    testid,
+				Usuarioid: u.ID,
+				Startime:  now.String(),
+				ID:        id,
+			}
+			return ar, err
+		}
 	}
-	return ar, err
+	return nil, err
 }
 
 func FinishAnswer(db *sql.DB, answerid int64) error {

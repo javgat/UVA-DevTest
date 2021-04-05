@@ -1,7 +1,7 @@
 // UVa-DevTest. 2021.
 // Author: Javier Gatón Herguedas.
 
-// Package handlers provides functions that handle http requests
+// Package handlers provides functions that handle http Authuests
 package handlers
 
 import (
@@ -15,7 +15,7 @@ import (
 )
 
 // GET /answers
-// Req: Teacher or Admin
+// Auth: Teacher or Admin
 func GetAnswers(params answer.GetAnswersParams, u *models.User) middleware.Responder {
 	if isTeacherOrAdmin(u) {
 		db, err := dbconnection.ConnectDb()
@@ -53,7 +53,7 @@ func isAnswerOwner(answerid int64, u *models.User) bool {
 }
 
 // GET /answers/{answerid}
-// Req: Teacher or Admin OR AnswerOwner
+// Auth: Teacher or Admin OR AnswerOwner
 func GetAnswer(params answer.GetAnswerParams, u *models.User) middleware.Responder {
 	if isTeacherOrAdmin(u) || isAnswerOwner(params.Answerid, u) {
 		db, err := dbconnection.ConnectDb()
@@ -75,7 +75,7 @@ func GetAnswer(params answer.GetAnswerParams, u *models.User) middleware.Respond
 }
 
 // PUT /answers/{answerid}
-// Req: Admin OR AnswerOwner
+// Auth: Admin OR AnswerOwner
 func FinishAnswer(params answer.FinishAnswerParams, u *models.User) middleware.Responder {
 	if isAdmin(u) || isAnswerOwner(params.Answerid, u) {
 		db, err := dbconnection.ConnectDb()
@@ -92,7 +92,7 @@ func FinishAnswer(params answer.FinishAnswerParams, u *models.User) middleware.R
 }
 
 // GET /answers/{answerid}/qanswers
-// Req: Teacher or Admin OR AnswerOwner
+// Auth: Teacher or Admin OR AnswerOwner
 func GetQuestionAnswers(params answer.GetQuestionAnswersFromAnswerParams, u *models.User) middleware.Responder {
 	if isTeacherOrAdmin(u) || isAnswerOwner(params.Answerid, u) {
 		db, err := dbconnection.ConnectDb()
@@ -110,15 +110,29 @@ func GetQuestionAnswers(params answer.GetQuestionAnswersFromAnswerParams, u *mod
 	return answer.NewGetQuestionAnswersFromAnswerForbidden()
 }
 
+func isAnswerFinished(answerid int64) bool {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		a, err := dao.GetAnswer(db, answerid)
+		if err == nil {
+			return *a.Finished
+		}
+	}
+	return false
+}
+
 // POST /answers/{answerid}/qanswers
-// Req: Admin OR AnswerOwner
+// Auth: Admin OR AnswerOwner
+// Req: Question no finished
 func PostQuestionAnswer(params answer.PostQuestionAnswerParams, u *models.User) middleware.Responder {
-	if isAdmin(u) || isAnswerOwner(params.Answerid, u) {
+	if !isAnswerFinished(params.Answerid) && (isAdmin(u) || isAnswerOwner(params.Answerid, u)) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var pqa *models.QuestionAnswer
 			pqa, err = dao.PostQuestionAnswer(db, params.Answerid, params.QuestionAnswer)
-			return answer.NewPostQuestionAnswerCreated().WithPayload(pqa)
+			if err == nil && pqa != nil {
+				return answer.NewPostQuestionAnswerCreated().WithPayload(pqa)
+			}
 		}
 		log.Println("Error en answers_handler PostQuestionAnswer(): ", err)
 		return answer.NewPostQuestionAnswerInternalServerError()
@@ -127,7 +141,7 @@ func PostQuestionAnswer(params answer.PostQuestionAnswerParams, u *models.User) 
 }
 
 // GET /answers/{answerid}/qanswers/{questionid}
-// Req: Teacher or Admin OR AnswerOwner
+// Auth: Teacher or Admin OR AnswerOwner
 func GetQuestionAnswer(params answer.GetQuestionAnswerFromAnswerParams, u *models.User) middleware.Responder {
 	if isTeacherOrAdmin(u) || isAnswerOwner(params.Answerid, u) {
 		db, err := dbconnection.ConnectDb()
@@ -146,13 +160,16 @@ func GetQuestionAnswer(params answer.GetQuestionAnswerFromAnswerParams, u *model
 }
 
 // PUT /answers/{answerid}/qanswers/{questionid}
-// Req: Admin OR AnswerOwner
+// Auth: Admin OR AnswerOwner
+// Req: Question no finished
 func PutQuestionAnswer(params answer.PutQuestionAnswerFromAnswerParams, u *models.User) middleware.Responder {
-	if isAdmin(u) || isAnswerOwner(params.Answerid, u) {
+	if !isAnswerFinished(params.Answerid) && (isAdmin(u) || isAnswerOwner(params.Answerid, u)) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			err = dao.PutQuestionAnswer(db, params.Answerid, params.Questionid, params.QuestionAnswer)
-			return answer.NewPutQuestionAnswerFromAnswerOK()
+			if err == nil {
+				return answer.NewPutQuestionAnswerFromAnswerOK()
+			}
 		}
 		log.Println("Error en answers_handler PutQuestionAnswer(): ", err)
 		return answer.NewPutQuestionAnswerFromAnswerInternalServerError()
@@ -173,7 +190,7 @@ func isAnswerTestAdmin(u *models.User, answerid int64) bool {
 }
 
 // PUT /answers/{answerid}/qanswers/{questionid}/review
-// Req: TestAdmin or Admin
+// Auth: TestAdmin or Admin
 func PutReview(params answer.PutReviewParams, u *models.User) middleware.Responder {
 	if isAnswerTestAdmin(u, params.Answerid) || isAnswerOwner(params.Answerid, u) {
 		db, err := dbconnection.ConnectDb()

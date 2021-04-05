@@ -140,7 +140,7 @@ func GetQuestionAnswerFromAnswer(db *sql.DB, answerid int64, questionid int64) (
 		rows, err := query.Query(questionid, answerid)
 		if err == nil {
 			qas, err = rowsToQuestionAnswer(rows)
-			if err == nil {
+			if err == nil && qas != nil {
 				err = addOptionsChosen(db, qas)
 				if err != nil {
 					return nil, err
@@ -174,6 +174,10 @@ func PostQuestionAnswer(db *sql.DB, answerid int64, qa *models.QuestionAnswer) (
 		_, err = query.Exec(answerid, qa.IDPregunta, qa.Respuesta)
 		if err == nil {
 			qa.IDRespuesta = &answerid
+			bfalse := false
+			qa.Corregida = &bfalse
+			var bzero int64 = 0
+			qa.Puntuacion = &bzero
 			for _, i := range qa.IndicesOpciones {
 				err = AddOptionQuestionAnswer(db, *qa.IDPregunta, *qa.IDRespuesta, i)
 				if err != nil {
