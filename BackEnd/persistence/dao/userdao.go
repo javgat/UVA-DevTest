@@ -206,7 +206,7 @@ func UpdateUser(db *sql.DB, u *models.User, username string) error {
 	if db == nil || u == nil {
 		return errors.New(errorDBNil)
 	}
-	query, err := db.Prepare("UPDATE Usuario SET username=?, email=?, fullname=?, WHERE username = ? ")
+	query, err := db.Prepare("UPDATE Usuario SET username=?, email=?, fullname=? WHERE username=? ")
 	if err != nil {
 		return err
 	}
@@ -221,7 +221,7 @@ func DeleteUser(db *sql.DB, username string) error {
 	if db == nil {
 		return errors.New(errorDBNil)
 	}
-	query, err := db.Prepare("DELETE FROM Usuario WHERE username = ? ") //ESTO se supone que borra en cascade
+	query, err := db.Prepare("DELETE FROM Usuario WHERE username=? ") //ESTO se supone que borra en cascade
 	if err != nil {
 		return err
 	}
