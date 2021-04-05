@@ -2,15 +2,6 @@ package jwtauth
 
 import "testing"
 
-func TestCreateJwtJson(t *testing.T) {
-	st := "eeee"
-	j := CreateJwtJSON(st)
-	if *j.Token != st {
-		t.Log("Token shouldn't change")
-		t.Fail()
-	}
-}
-
 const email string = "Test@mail.com"
 
 func TestGenerateToken(t *testing.T) {

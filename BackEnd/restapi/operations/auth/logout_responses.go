@@ -24,7 +24,8 @@ type LogoutOK struct {
 	/*
 
 	 */
-	SetCookie string `json:"Set-Cookie"`
+	AuthJWTCookie   *http.Cookie
+	ReAuthJWTCookie *http.Cookie
 }
 
 // NewLogoutOK creates LogoutOK with default headers values
@@ -33,15 +34,26 @@ func NewLogoutOK() *LogoutOK {
 	return &LogoutOK{}
 }
 
-// WithSetCookie adds the setCookie to the logout o k response
-func (o *LogoutOK) WithSetCookie(setCookie string) *LogoutOK {
-	o.SetCookie = setCookie
+// WithAuthJWTCookie adds the AuthJWTCookie to the LogoutOK response
+func (o *LogoutOK) WithAuth(cookie *http.Cookie) *LogoutOK {
+	o.AuthJWTCookie = cookie
 	return o
 }
 
-// SetSetCookie sets the setCookie to the logout o k response
-func (o *LogoutOK) SetSetCookie(setCookie string) {
-	o.SetCookie = setCookie
+// WithReAuthJWTCookie adds the ReAuthJWTCookie to the LogoutOK response
+func (o *LogoutOK) WithReAuth(cookie *http.Cookie) *LogoutOK {
+	o.ReAuthJWTCookie = cookie
+	return o
+}
+
+// SetAuthJWTCookie sets the AuthJWTCookie to the LogoutOK response
+func (o *LogoutOK) SetAuthJWTCookie(cookie *http.Cookie) {
+	o.AuthJWTCookie = cookie
+}
+
+// SetReAuthJWTCookie sets the ReAuthJWTCookie to the LogoutOK response
+func (o *LogoutOK) SetReAuthJWTCookie(cookie *http.Cookie) {
+	o.ReAuthJWTCookie = cookie
 }
 
 // WriteResponse to the client
@@ -49,10 +61,8 @@ func (o *LogoutOK) WriteResponse(rw http.ResponseWriter, producer runtime.Produc
 
 	// response header Set-Cookie
 
-	setCookie := o.SetCookie
-	if setCookie != "" {
-		rw.Header().Set("Set-Cookie", setCookie)
-	}
+	http.SetCookie(rw, o.AuthJWTCookie)
+	http.SetCookie(rw, o.ReAuthJWTCookie)
 
 	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
 

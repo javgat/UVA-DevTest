@@ -24,7 +24,8 @@ type LoginCreated struct {
 	/*
 
 	 */
-	SetCookie string `json:"Set-Cookie"`
+	AuthJWTCookie   *http.Cookie
+	ReAuthJWTCookie *http.Cookie
 }
 
 // NewLoginCreated creates LoginCreated with default headers values
@@ -33,26 +34,35 @@ func NewLoginCreated() *LoginCreated {
 	return &LoginCreated{}
 }
 
-// WithSetCookie adds the setCookie to the login created response
-func (o *LoginCreated) WithSetCookie(setCookie string) *LoginCreated {
-	o.SetCookie = setCookie
+// WithAuthJWTCookie adds the AuthJWTCookie to the login created response
+func (o *LoginCreated) WithAuth(cookie *http.Cookie) *LoginCreated {
+	o.AuthJWTCookie = cookie
 	return o
 }
 
-// SetSetCookie sets the setCookie to the login created response
-func (o *LoginCreated) SetSetCookie(setCookie string) {
-	o.SetCookie = setCookie
+// WithReAuthJWTCookie adds the ReAuthJWTCookie to the login created response
+func (o *LoginCreated) WithReAuth(cookie *http.Cookie) *LoginCreated {
+	o.ReAuthJWTCookie = cookie
+	return o
+}
+
+// SetAuthJWTCookie sets the AuthJWTCookie to the login created response
+func (o *LoginCreated) SetAuthJWTCookie(cookie *http.Cookie) {
+	o.AuthJWTCookie = cookie
+}
+
+// SetReAuthJWTCookie sets the ReAuthJWTCookie to the login created response
+func (o *LoginCreated) SetReAuthJWTCookie(cookie *http.Cookie) {
+	o.ReAuthJWTCookie = cookie
 }
 
 // WriteResponse to the client
 func (o *LoginCreated) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
 
-	// response header Set-Cookie
+	// response cookie AuthJWT
 
-	setCookie := o.SetCookie
-	if setCookie != "" {
-		rw.Header().Set("Set-Cookie", setCookie)
-	}
+	http.SetCookie(rw, o.AuthJWTCookie)
+	http.SetCookie(rw, o.ReAuthJWTCookie)
 
 	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
 

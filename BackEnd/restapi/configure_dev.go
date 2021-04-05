@@ -61,6 +61,12 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 
 	api.AuthLoginHandler = auth.LoginHandlerFunc(handlers.Login) // POST /accesstokens
 
+	api.AuthReloginHandler = auth.ReloginHandlerFunc(handlers.Relogin) // PUT /accesstokens/{username}
+
+	api.AuthCloseSessionsHandler = auth.CloseSessionsHandlerFunc(handlers.CloseSessions)
+
+	api.AuthLogoutHandler = auth.LogoutHandlerFunc(handlers.Logout) // GET /logout
+
 	// /users
 
 	api.UserRegisterUserHandler = user.RegisterUserHandlerFunc(handlers.RegisterUser) // POST /users

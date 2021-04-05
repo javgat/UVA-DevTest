@@ -10,19 +10,7 @@ import (
 	"time"
 
 	jwt "github.com/dgrijalva/jwt-go"
-
-	"uva-devtest/models"
 )
-
-// CreateJwtJSON creates a JwtJson from the signed jwt in the string
-// Param signedToken represents the JWT Token
-// Returns models.JWTJSON to send
-func CreateJwtJSON(signedToken string) models.JWTJSON {
-	jsonToken := models.JWTJSON{
-		Token: &signedToken,
-	}
-	return jsonToken
-}
 
 // JwtWrapper represents the wrapper that contains values of the JWT except for
 // the claims
@@ -56,7 +44,9 @@ func (j *JwtWrapper) GenerateToken(email string) (signedToken string, err error)
 }
 
 // GetEmailToken returns the email associated with the jwt token
-func GetEmailToken(token string) (email string, err error) {
+func GetEmailToken(token string) (string, error) {
+	var email string
+	var err error
 	tok, _ := jwt.ParseWithClaims(
 		token,
 		&JwtClaim{},
@@ -64,17 +54,20 @@ func GetEmailToken(token string) (email string, err error) {
 			return []byte(token.Signature), nil
 		},
 	)
-	claims, ok := tok.Claims.(*JwtClaim)
-	if !ok {
-		err = errors.New("Couldn't parse claims")
-		return
+	if tok != nil {
+		claims, ok := tok.Claims.(*JwtClaim)
+		if !ok {
+			err = errors.New("couldn't parse claims")
+			return email, err
+		}
+		if claims.ExpiresAt < time.Now().Local().Unix() {
+			err = errors.New("JWT is expired")
+			return email, err
+		}
+		email = claims.Email
 	}
-	if claims.ExpiresAt < time.Now().Local().Unix() {
-		err = errors.New("JWT is expired")
-		return
-	}
-	email = claims.Email
-	return
+	return email, err
+
 }
 
 // ValidateToken validates the token signedToken and returns the claims
@@ -96,7 +89,7 @@ func (j *JwtWrapper) ValidateToken(signedToken string) (claims *JwtClaim, err er
 	}
 	claims, ok := token.Claims.(*JwtClaim)
 	if !ok {
-		err = errors.New("Couldn't parse claims")
+		err = errors.New("couldn't parse claims")
 		return
 	}
 	if claims.ExpiresAt < time.Now().Local().Unix() {

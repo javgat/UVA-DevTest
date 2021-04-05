@@ -61,8 +61,6 @@ paths:
           $ref: '#/responses/InternalServerError'
   /accesstokens/{username}:
     put:
-      security:
-        - BearerCookie: []
       tags:
       - auth
       summary: Modifies the current JWT Cookie related to the current session, extending it.
@@ -141,7 +139,7 @@ paths:
           headers:
             Set-Cookie:
               type: string
-              #example: Bearer-Cookie=eyJhbGciOiJIUzI1NiIsInR5; Path=/; Max-Age=86400; Secure; SameSite=Strict; HttpOnly;
+              #example: Bearer-Cookie=eyJhbGciOiJIUzI1NiIsInR5; Path=/; Max-Age=1; Secure; SameSite=Strict; HttpOnly;
         400:
           $ref: '#/responses/BadRequestError'
         403:
