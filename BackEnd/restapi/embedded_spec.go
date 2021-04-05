@@ -87,7 +87,7 @@ func init() {
       "put": {
         "security": [
           {
-            "BearerCookie": []
+            "ReAuthCookie": []
           }
         ],
         "description": "Modifies the current JWT Cookie related to the current session, extending.",
@@ -5553,6 +5553,11 @@ func init() {
       "type": "apiKey",
       "name": "Cookie",
       "in": "header"
+    },
+    "ReAuthCookie": {
+      "type": "apiKey",
+      "name": "Cookie",
+      "in": "header"
     }
   },
   "tags": [
@@ -5662,7 +5667,7 @@ func init() {
       "put": {
         "security": [
           {
-            "BearerCookie": []
+            "ReAuthCookie": []
           }
         ],
         "description": "Modifies the current JWT Cookie related to the current session, extending.",
@@ -12003,6 +12008,11 @@ func init() {
   },
   "securityDefinitions": {
     "BearerCookie": {
+      "type": "apiKey",
+      "name": "Cookie",
+      "in": "header"
+    },
+    "ReAuthCookie": {
       "type": "apiKey",
       "name": "Cookie",
       "in": "header"

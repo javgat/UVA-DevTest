@@ -61,6 +61,8 @@ paths:
           $ref: '#/responses/InternalServerError'
   /accesstokens/{username}:
     put:
+      security:
+        - ReAuthCookie: []
       tags:
       - auth
       summary: Modifies the current JWT Cookie related to the current session, extending it.
@@ -3652,6 +3654,10 @@ securityDefinitions:
     type: apiKey
     in: header # Realmente en cookie, pero las cookies estan en header
     name: Cookie # La cookie Bearer-Cookie
+  ReAuthCookie:
+    type: apiKey
+    in: header # Realmente en cookie, pero las cookies estan en header
+    name: Cookie # La cookie ReAuth-Cookie
 host: localhost
 basePath: /DevTest
 schemes:

@@ -24,7 +24,8 @@ type ReloginOK struct {
 	/*
 
 	 */
-	SetCookie string `json:"Set-Cookie"`
+	AuthJWTCookie   *http.Cookie
+	ReAuthJWTCookie *http.Cookie
 }
 
 // NewReloginOK creates ReloginOK with default headers values
@@ -33,15 +34,26 @@ func NewReloginOK() *ReloginOK {
 	return &ReloginOK{}
 }
 
-// WithSetCookie adds the setCookie to the relogin o k response
-func (o *ReloginOK) WithSetCookie(setCookie string) *ReloginOK {
-	o.SetCookie = setCookie
+// WithAuthJWTCookie adds the AuthJWTCookie to the login created response
+func (o *ReloginOK) WithAuth(cookie *http.Cookie) *ReloginOK {
+	o.AuthJWTCookie = cookie
 	return o
 }
 
-// SetSetCookie sets the setCookie to the relogin o k response
-func (o *ReloginOK) SetSetCookie(setCookie string) {
-	o.SetCookie = setCookie
+// WithReAuthJWTCookie adds the ReAuthJWTCookie to the login created response
+func (o *ReloginOK) WithReAuth(cookie *http.Cookie) *ReloginOK {
+	o.ReAuthJWTCookie = cookie
+	return o
+}
+
+// SetAuthJWTCookie sets the AuthJWTCookie to the login created response
+func (o *ReloginOK) SetAuthJWTCookie(cookie *http.Cookie) {
+	o.AuthJWTCookie = cookie
+}
+
+// SetReAuthJWTCookie sets the ReAuthJWTCookie to the login created response
+func (o *ReloginOK) SetReAuthJWTCookie(cookie *http.Cookie) {
+	o.ReAuthJWTCookie = cookie
 }
 
 // WriteResponse to the client
@@ -49,10 +61,8 @@ func (o *ReloginOK) WriteResponse(rw http.ResponseWriter, producer runtime.Produ
 
 	// response header Set-Cookie
 
-	setCookie := o.SetCookie
-	if setCookie != "" {
-		rw.Header().Set("Set-Cookie", setCookie)
-	}
+	http.SetCookie(rw, o.AuthJWTCookie)
+	http.SetCookie(rw, o.ReAuthJWTCookie)
 
 	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
 

@@ -13,6 +13,7 @@ import (
 	"uva-devtest/restapi/operations/auth"
 
 	"github.com/go-openapi/runtime/middleware"
+	"golang.org/x/crypto/bcrypt"
 )
 
 const BearerCookieName string = "Bearer-Cookie"
@@ -65,7 +66,7 @@ func CreateJWT(u dao.User, expirationHours int64) (string, error) {
 	return signedToken, err
 }
 
-func GetJWTModelUserCookies(cookieSlice []string, expectedName string) (*models.User, error) {
+func GetJWTModelUserCookies(cookieSlice []string, expectedName string, expectedHours int64) (*models.User, error) {
 	for _, cookie := range cookieSlice {
 		cookieName := cookie[0:14]
 		var err error
@@ -80,7 +81,7 @@ func GetJWTModelUserCookies(cookieSlice []string, expectedName string) (*models.
 					var u *dao.User
 					u, err = dao.GetUserEmail(db, email)
 					if u != nil || err == nil {
-						wrap := CreateJWTWrapper(*u, int64(AuthHours))
+						wrap := CreateJWTWrapper(*u, expectedHours)
 						_, err = wrap.ValidateToken(token)
 						if err == nil {
 							mu := dao.ToModelUser(u)
@@ -98,10 +99,25 @@ func GetJWTModelUserCookies(cookieSlice []string, expectedName string) (*models.
 
 // BearerAuth gets the model User for the token, if valid JWT
 func BearerAuth(cookies string) (*models.User, error) {
-	// PRECACUCION Si hay mas de una cookie esto petaria si no va la primera, hacer bien
-	expectedName := "Bearer-Cookie="
+	expectedName := strings.Join([]string{BearerCookieName, "="}, "")
 	cookieSlice := strings.Split(cookies, ";")
-	mu, err := GetJWTModelUserCookies(cookieSlice, expectedName)
+	mu, err := GetJWTModelUserCookies(cookieSlice, expectedName, int64(AuthHours))
+	if err == nil && mu != nil {
+		return mu, err
+	}
+	return nil, err
+}
+
+func ReAuth(cookies string) (*models.User, error) {
+	expectedName := strings.Join([]string{BearerCookieName, "="}, "")
+	cookieSlice := strings.Split(cookies, ";")
+	mu, err := GetJWTModelUserCookies(cookieSlice, expectedName, int64(AuthHours))
+	if err == nil && mu != nil {
+		return mu, err
+	}
+
+	expectedName = strings.Join([]string{ReauthCookieName, "="}, "")
+	mu, err = GetJWTModelUserCookies(cookieSlice, expectedName, int64(ReauthHours))
 	if err == nil && mu != nil {
 		return mu, err
 	}
@@ -114,6 +130,58 @@ func Logout(auth.LogoutParams) middleware.Responder {
 	return auth.NewLogoutOK().WithAuth(bcookie).WithReAuth(rcookie)
 }
 
-func Relogin(auth.ReloginParams) middleware.Responder {
+func Relogin(params auth.ReloginParams, u *models.User) middleware.Responder {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		var du *dao.User
+		du, err = dao.GetUserUsername(db, *u.Username)
+		if err == nil && du != nil {
+			var btoken, rtoken string
+			btoken, err = CreateJWT(*du, int64(AuthHours))
+			if err == nil {
+				rtoken, err = CreateJWT(*du, int64(ReauthHours))
+				if err == nil {
+					bcookie := CreateCookie(BearerCookieName, btoken, hoursToSeconds(AuthHours))
+					recookie := CreateCookie(ReauthCookieName, rtoken, hoursToSeconds(ReauthHours))
+					return auth.NewReloginOK().WithAuth(bcookie).WithReAuth(recookie)
+				}
+			}
+		}
+	}
+	return auth.NewReloginInternalServerError()
+}
 
+func CloseSessions(params auth.CloseSessionsParams, u *models.User) middleware.Responder {
+	if userOrAdmin(params.Username, u) {
+		p := params.Password
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			ud, _ := dao.GetUserUsername(db, params.Username)
+			oldHash := []byte(*ud.Pwhash)
+			oldHashSt := string(oldHash)
+			var newHashSt string
+			if bcrypt.CompareHashAndPassword(oldHash, []byte(*p.Password)) == nil {
+				for {
+					bytes, errBcrypt := bcrypt.GenerateFromPassword([]byte(*p.Password), Cost)
+					if errBcrypt != nil {
+						log.Print("Error en encriptacion CloseSessions", errBcrypt)
+						return auth.NewCloseSessionsInternalServerError()
+					}
+					newHashSt = string(bytes)
+					if oldHashSt != newHashSt {
+						break
+					}
+				}
+				err = dao.PutPasswordUsername(db, params.Username, newHashSt)
+				if err != nil {
+					log.Println("Error al modificar la contraseña con el mismo valor en CloseSessions: ", err)
+					return auth.NewCloseSessionsInternalServerError()
+				}
+
+				return auth.NewCloseSessionsOK()
+			}
+			return auth.NewCloseSessionsForbidden() //O forbidden?
+		}
+	}
+	return auth.NewCloseSessionsInternalServerError()
 }

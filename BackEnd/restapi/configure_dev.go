@@ -49,6 +49,8 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 	// Applies when the "Cookie" header is set
 	api.BearerCookieAuth = handlers.BearerAuth
 
+	api.ReAuthCookieAuth = handlers.ReAuth
+
 	// Set your custom authorizer if needed. Default one is security.Authorized()
 	// Expected interface runtime.Authorizer
 	//
@@ -63,7 +65,7 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 
 	api.AuthReloginHandler = auth.ReloginHandlerFunc(handlers.Relogin) // PUT /accesstokens/{username}
 
-	api.AuthCloseSessionsHandler = auth.CloseSessionsHandlerFunc(handlers.CloseSessions)
+	api.AuthCloseSessionsHandler = auth.CloseSessionsHandlerFunc(handlers.CloseSessions) // DELETE /accesstokens/{username}
 
 	api.AuthLogoutHandler = auth.LogoutHandlerFunc(handlers.Logout) // GET /logout
 

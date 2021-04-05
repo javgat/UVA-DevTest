@@ -363,6 +363,10 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		BearerCookieAuth: func(token string) (*models.User, error) {
 			return nil, errors.NotImplemented("api key auth (BearerCookie) Cookie from header param [Cookie] has not yet been implemented")
 		},
+		// Applies when the "Cookie" header is set
+		ReAuthCookieAuth: func(token string) (*models.User, error) {
+			return nil, errors.NotImplemented("api key auth (ReAuthCookie) Cookie from header param [Cookie] has not yet been implemented")
+		},
 		// default authorizer is authorized meaning no requests are blocked
 		APIAuthorizer: security.Authorized(),
 	}
@@ -404,6 +408,10 @@ type DevAPI struct {
 	// BearerCookieAuth registers a function that takes a token and returns a principal
 	// it performs authentication based on an api key Cookie provided in the header
 	BearerCookieAuth func(string) (*models.User, error)
+
+	// ReAuthCookieAuth registers a function that takes a token and returns a principal
+	// it performs authentication based on an api key Cookie provided in the header
+	ReAuthCookieAuth func(string) (*models.User, error)
 
 	// APIAuthorizer provides access control (ACL/RBAC/ABAC) by providing access to the request and authenticated principal
 	APIAuthorizer runtime.Authorizer
@@ -690,6 +698,9 @@ func (o *DevAPI) Validate() error {
 	}
 
 	if o.BearerCookieAuth == nil {
+		unregistered = append(unregistered, "CookieAuth")
+	}
+	if o.ReAuthCookieAuth == nil {
 		unregistered = append(unregistered, "CookieAuth")
 	}
 
@@ -1021,6 +1032,12 @@ func (o *DevAPI) AuthenticatorsFor(schemes map[string]spec.SecurityScheme) map[s
 			scheme := schemes[name]
 			result[name] = o.APIKeyAuthenticator(scheme.Name, scheme.In, func(token string) (interface{}, error) {
 				return o.BearerCookieAuth(token)
+			})
+
+		case "ReAuthCookie":
+			scheme := schemes[name]
+			result[name] = o.APIKeyAuthenticator(scheme.Name, scheme.In, func(token string) (interface{}, error) {
+				return o.ReAuthCookieAuth(token)
 			})
 
 		}
