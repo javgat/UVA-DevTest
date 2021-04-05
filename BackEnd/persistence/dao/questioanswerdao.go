@@ -84,7 +84,7 @@ func GetQuestionAnswersFromPTestQuestion(db *sql.DB, testid int64, questionid in
 		return nil, errors.New(errorDBNil)
 	}
 	var qas []*QuestionAnswer
-	query, err := db.Prepare("SELECT * FROM RespuestaPregunta WHERE preguntaid=? AND respuestaExamenid=?")
+	query, err := db.Prepare("SELECT R.* FROM RespuestaPregunta R JOIN RespuestaExamen E ON R.respuestaExamenid=E.id WHERE R.preguntaid=? AND E.testid=?")
 	if err == nil {
 		defer query.Close()
 		rows, err := query.Query(questionid, testid)
@@ -102,4 +102,133 @@ func GetQuestionAnswersFromPTestQuestion(db *sql.DB, testid int64, questionid in
 		}
 	}
 	return nil, err
+}
+
+func GetQuestionAnswersFromAnswer(db *sql.DB, answerid int64) ([]*QuestionAnswer, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var qas []*QuestionAnswer
+	query, err := db.Prepare("SELECT * FROM RespuestaPregunta WHERE respuestaExamenid=?")
+	if err == nil {
+		defer query.Close()
+		rows, err := query.Query(answerid)
+		if err == nil {
+			qas, err = rowsToQuestionAnswers(rows)
+			if err == nil {
+				for _, qa := range qas {
+					err = addOptionsChosen(db, qa)
+					if err != nil {
+						return nil, err
+					}
+				}
+			}
+			return qas, err
+		}
+	}
+	return nil, err
+}
+
+func GetQuestionAnswerFromAnswer(db *sql.DB, answerid int64, questionid int64) (*QuestionAnswer, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var qas *QuestionAnswer
+	query, err := db.Prepare("SELECT * FROM RespuestaPregunta WHERE preguntaid=? AND respuestaExamenid=?")
+	if err == nil {
+		defer query.Close()
+		rows, err := query.Query(questionid, answerid)
+		if err == nil {
+			qas, err = rowsToQuestionAnswer(rows)
+			if err == nil {
+				err = addOptionsChosen(db, qas)
+				if err != nil {
+					return nil, err
+				}
+			}
+			return qas, err
+		}
+	}
+	return nil, err
+}
+
+func AddOptionQuestionAnswer(db *sql.DB, questionid int64, answerid int64, optionindex int64) error {
+	if db == nil {
+		return errors.New(errorDBNil)
+	}
+	query, err := db.Prepare("INSERT INTO OpcionRespuesta(respuestaExamenid, preguntaid, opcionindice) VALUES(?,?,?)")
+	if err == nil {
+		defer query.Close()
+		_, err = query.Exec(answerid, questionid, optionindex)
+	}
+	return err
+}
+
+func PostQuestionAnswer(db *sql.DB, answerid int64, qa *models.QuestionAnswer) (*models.QuestionAnswer, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	query, err := db.Prepare("INSERT INTO RespuestaPregunta(respuestaExamenid, preguntaid, puntuacion, corregida, respuesta) VALUES(?,?,0,0,?)")
+	if err == nil {
+		defer query.Close()
+		_, err = query.Exec(answerid, qa.IDPregunta, qa.Respuesta)
+		if err == nil {
+			qa.IDRespuesta = &answerid
+			for _, i := range qa.IndicesOpciones {
+				err = AddOptionQuestionAnswer(db, *qa.IDPregunta, *qa.IDRespuesta, i)
+				if err != nil {
+					return nil, err
+				}
+			}
+			return qa, err
+		}
+	}
+	return nil, err
+}
+
+func DeleteIndiceOpcionesQuestionAnswer(db *sql.DB, answerid int64, questionid int64) error {
+	if db == nil {
+		return errors.New(errorDBNil)
+	}
+	query, err := db.Prepare("DELETE FROM OpcionRespuesta WHERE respuestaExamenid=? AND preguntaid=?")
+	if err == nil {
+		defer query.Close()
+		_, err = query.Exec(answerid, questionid)
+	}
+	return err
+}
+
+func PutQuestionAnswer(db *sql.DB, answerid int64, questionid int64, qa *models.QuestionAnswer) error {
+	if db == nil {
+		return errors.New(errorDBNil)
+	}
+	query, err := db.Prepare("UPDATE RespuestaPregunta SET respuesta=? WHERE respuestaExamenid=? AND preguntaid=?")
+	if err == nil {
+		defer query.Close()
+		_, err = query.Exec(qa.Respuesta, answerid, questionid)
+		if err == nil {
+			err = DeleteIndiceOpcionesQuestionAnswer(db, answerid, questionid)
+			if err == nil {
+				for _, i := range qa.IndicesOpciones {
+					err = AddOptionQuestionAnswer(db, *qa.IDPregunta, *qa.IDRespuesta, i)
+					if err != nil {
+						return err
+					}
+				}
+			}
+		}
+	}
+	return err
+}
+
+func PutReview(db *sql.DB, answerid int64, questionid int64, rev *models.Review) error {
+	if db == nil {
+		return errors.New(errorDBNil)
+	}
+	query, err := db.Prepare("UPDATE RespuestaPregunta SET puntuacion=?, corregida=1 WHERE respuestaExamenid=? AND preguntaid=?")
+	if err == nil {
+		defer query.Close()
+		_, err = query.Exec(rev.Puntuacion, answerid, questionid)
+	}
+	return err
 }

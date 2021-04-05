@@ -75,6 +75,40 @@ func ToModelAnswers(as []*Answer) ([]*models.Answer, error) {
 	return mas, nil
 }
 
+func GetAnswers(db *sql.DB) ([]*Answer, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var a []*Answer
+	query, err := db.Prepare("SELECT * FROM RespuestaExamen")
+	if err == nil {
+		defer query.Close()
+		rows, err := query.Query()
+		if err == nil {
+			a, err = rowsToAnswers(rows)
+			return a, err
+		}
+	}
+	return nil, err
+}
+
+func GetAnswer(db *sql.DB, answerid int64) (*Answer, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var a *Answer
+	query, err := db.Prepare("SELECT * FROM RespuestaExamen WHERE id=?")
+	if err == nil {
+		defer query.Close()
+		rows, err := query.Query(answerid)
+		if err == nil {
+			a, err = rowsToAnswer(rows)
+			return a, err
+		}
+	}
+	return nil, err
+}
+
 func StartAnswer(db *sql.DB, username string, testid int64) (*Answer, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
@@ -98,6 +132,18 @@ func StartAnswer(db *sql.DB, username string, testid int64) (*Answer, error) {
 		Usuarioid: u.ID,
 	}
 	return ar, err
+}
+
+func FinishAnswer(db *sql.DB, answerid int64) error {
+	if db == nil {
+		return errors.New(errorDBNil)
+	}
+	query, err := db.Prepare("UPDATE RespuestaExamen SET finished=1 WHERE id=?")
+	if err == nil {
+		defer query.Close()
+		_, err = query.Exec(answerid)
+	}
+	return err
 }
 
 func GetAnswersFromUserAnsweredTest(db *sql.DB, username string, testid int64) ([]*Answer, error) {

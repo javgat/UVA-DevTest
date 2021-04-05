@@ -12,6 +12,7 @@ import (
 
 	"uva-devtest/handlers"
 	"uva-devtest/restapi/operations"
+	"uva-devtest/restapi/operations/answer"
 	"uva-devtest/restapi/operations/auth"
 	"uva-devtest/restapi/operations/published_test"
 	"uva-devtest/restapi/operations/question"
@@ -194,20 +195,20 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 
 	api.PublishedTestGetQuestionAnswersFromPublishedTestQuestionHandler =
 		published_test.GetQuestionAnswersFromPublishedTestQuestionHandlerFunc(handlers.GetQuestionAnswersPTest) // GET /publishedTests/{testid}/questions/{questionid}/qanswers
-	/*
-		// /answers
 
-		api.AnswerGetAnswersHandler = answer.GetAnswersHandlerFunc(handlers.GetAnswers)       // GET /answers
-		api.AnswerGetAnswerHandler = answer.GetAnswerHandlerFunc(handlers.GetAnswer)          // GET /answers/{answerid}
-		api.AnswerFinishAnswerHandler = answer.FinishAnswerHandlerFunc(handlers.FinishAnswer) // PUT /answers/{answerid}
+	// /answers
 
-		api.AnswerGetQuestionAnswersFromAnswerHandler = answer.GetQuestionAnswersFromAnswerHandlerFunc(handlers.GetQuestionAnswers) // GET /answers/{answerid}/qanswers
-		api.AnswerPostQuestionAnswerHandler = answer.PostQuestionAnswerHandlerFunc(handlers.PostQuestionAnswer)                     // POST /answers/{answerid}/qanswers
-		api.AnswerGetQuestionAnswerFromAnswerHandler = answer.GetQuestionAnswerFromAnswerHandlerFunc(handlers.GetQuestionAnswer)    // GET /answers/{answerid}/qanswers/{questionid}
-		api.AnswerPutQuestionAnswerFromAnswerHandler = answer.PutQuestionAnswerFromAnswerHandlerFunc(handlers.PutQuestionAnswer)    // PUT /answers/{answerid}/qanswers/{questionid}
+	api.AnswerGetAnswersHandler = answer.GetAnswersHandlerFunc(handlers.GetAnswers)       // GET /answers
+	api.AnswerGetAnswerHandler = answer.GetAnswerHandlerFunc(handlers.GetAnswer)          // GET /answers/{answerid}
+	api.AnswerFinishAnswerHandler = answer.FinishAnswerHandlerFunc(handlers.FinishAnswer) // PUT /answers/{answerid}
 
-		api.AnswerPutReviewHandler = answer.PutReviewHandlerFunc(handlers.PutReview) // PUT /answers/{answerid}/qanswers/{questionid}/review
-	*/
+	api.AnswerGetQuestionAnswersFromAnswerHandler = answer.GetQuestionAnswersFromAnswerHandlerFunc(handlers.GetQuestionAnswers) // GET /answers/{answerid}/qanswers
+	api.AnswerPostQuestionAnswerHandler = answer.PostQuestionAnswerHandlerFunc(handlers.PostQuestionAnswer)                     // POST /answers/{answerid}/qanswers
+	api.AnswerGetQuestionAnswerFromAnswerHandler = answer.GetQuestionAnswerFromAnswerHandlerFunc(handlers.GetQuestionAnswer)    // GET /answers/{answerid}/qanswers/{questionid}
+	api.AnswerPutQuestionAnswerFromAnswerHandler = answer.PutQuestionAnswerFromAnswerHandlerFunc(handlers.PutQuestionAnswer)    // PUT /answers/{answerid}/qanswers/{questionid}
+
+	api.AnswerPutReviewHandler = answer.PutReviewHandlerFunc(handlers.PutReview) // PUT /answers/{answerid}/qanswers/{questionid}/review
+
 	// /tags
 
 	api.TagGetTagsHandler = tag.GetTagsHandlerFunc(handlers.GetTags)                                     // GET /tags
