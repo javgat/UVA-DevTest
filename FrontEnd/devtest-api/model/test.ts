@@ -11,8 +11,12 @@
  */
 
 
-export interface Team { 
-    teamname: string;
-    description?: string;
-    soloProfesores: boolean;
+export interface Test { 
+    id?: number;
+    title: string;
+    description: string;
+    maxSeconds: number;
+    accesoPublico: boolean;
+    editable: boolean;
+    username: string;
 }

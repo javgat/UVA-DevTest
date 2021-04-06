@@ -11,13 +11,10 @@
  */
 
 
-export interface User { 
-    username: string;
-    email: string;
-    fullname?: string;
-    rol?: User.RolEnum;
+export interface Role { 
+    rol: Role.RolEnum;
 }
-export namespace User {
+export namespace Role {
     export type RolEnum = 'estudiante' | 'profesor' | 'administrador';
     export const RolEnum = {
         Estudiante: 'estudiante' as RolEnum,

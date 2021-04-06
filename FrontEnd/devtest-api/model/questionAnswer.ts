@@ -11,8 +11,11 @@
  */
 
 
-export interface Team { 
-    teamname: string;
-    description?: string;
-    soloProfesores: boolean;
+export interface QuestionAnswer { 
+    respuesta?: string;
+    idPregunta: number;
+    idRespuesta: number;
+    puntuacion: number;
+    corregida: boolean;
+    indicesOpciones?: Array<number>;
 }

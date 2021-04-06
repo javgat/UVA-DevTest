@@ -11,8 +11,10 @@
  */
 
 
-export interface Team { 
-    teamname: string;
-    description?: string;
-    soloProfesores: boolean;
+export interface Answer { 
+    id?: number;
+    startime?: string;
+    finished: boolean;
+    testid?: number;
+    username?: string;
 }

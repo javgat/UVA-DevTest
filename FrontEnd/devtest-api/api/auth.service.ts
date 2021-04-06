@@ -19,6 +19,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { LoginUser } from '../model/loginUser';
+import { Password } from '../model/password';
 import { PasswordUpdate } from '../model/passwordUpdate';
 import { SigninUser } from '../model/signinUser';
 import { User } from '../model/user';
@@ -60,6 +61,61 @@ export class AuthService {
 
 
     /**
+     * Deletes all sessions of the user. Makes every current JWT related to him useless.
+     * Deletes all sessions of the user. Makes every current JWT related to him useless.
+     * @param username Username of the user with the token
+     * @param password Current password of the user
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public closeSessions(username: string, password: Password, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public closeSessions(username: string, password: Password, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public closeSessions(username: string, password: Password, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public closeSessions(username: string, password: Password, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (username === null || username === undefined) {
+            throw new Error('Required parameter username was null or undefined when calling closeSessions.');
+        }
+
+        if (password === null || password === undefined) {
+            throw new Error('Required parameter password was null or undefined when calling closeSessions.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.delete<any>(`${this.basePath}/accesstokens/${encodeURIComponent(String(username))}`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Registers a new authorized connection token
      * Tries to login, and gets a JWT auth token if successful
      * @param loginUser User who is trying to generate a token
@@ -97,6 +153,42 @@ export class AuthService {
 
         return this.httpClient.post<any>(`${this.basePath}/accesstokens`,
             loginUser,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns a useless cookie that will expire soon
+     * Returns a useless cookie that will expire soon
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public logout(observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public logout(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public logout(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public logout(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<any>(`${this.basePath}/logout`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -151,7 +243,7 @@ export class AuthService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.put<any>(`${this.basePath}/passwords/${encodeURIComponent(String(username))}`,
+        return this.httpClient.put<any>(`${this.basePath}/users/${encodeURIComponent(String(username))}/password`,
             passwordUpdate,
             {
                 withCredentials: this.configuration.withCredentials,
@@ -200,6 +292,54 @@ export class AuthService {
 
         return this.httpClient.post<User>(`${this.basePath}/users`,
             signinUser,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Modifies the current JWT Cookie related to the current session, extending it.
+     * Modifies the current JWT Cookie related to the current session, extending.
+     * @param username Username of the user with the token
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public relogin(username: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public relogin(username: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public relogin(username: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public relogin(username: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (username === null || username === undefined) {
+            throw new Error('Required parameter username was null or undefined when calling relogin.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (ReAuthCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+
+        return this.httpClient.put<any>(`${this.basePath}/accesstokens/${encodeURIComponent(String(username))}`,
+            null,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

@@ -3,8 +3,13 @@ import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
 
 
+import { AnswerService } from './api/answer.service';
 import { AuthService } from './api/auth.service';
+import { PublishedTestService } from './api/publishedTest.service';
+import { QuestionService } from './api/question.service';
+import { TagService } from './api/tag.service';
 import { TeamService } from './api/team.service';
+import { TestService } from './api/test.service';
 import { UserService } from './api/user.service';
 
 @NgModule({
@@ -12,8 +17,13 @@ import { UserService } from './api/user.service';
   declarations: [],
   exports:      [],
   providers: [
+    AnswerService,
     AuthService,
+    PublishedTestService,
+    QuestionService,
+    TagService,
     TeamService,
+    TestService,
     UserService ]
 })
 export class ApiModule {

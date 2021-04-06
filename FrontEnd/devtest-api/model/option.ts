@@ -11,8 +11,9 @@
  */
 
 
-export interface Team { 
-    teamname: string;
-    description?: string;
-    soloProfesores: boolean;
+export interface Option { 
+    indice?: number;
+    preguntaid?: number;
+    texto: string;
+    correcta?: boolean;
 }

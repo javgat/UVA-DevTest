@@ -11,8 +11,6 @@
  */
 
 
-export interface Team { 
-    teamname: string;
-    description?: string;
-    soloProfesores: boolean;
+export interface ValorFinal { 
+    valorFinal: number;
 }

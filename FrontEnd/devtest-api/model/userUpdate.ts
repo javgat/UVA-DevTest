@@ -11,8 +11,9 @@
  */
 
 
-export interface Team { 
-    teamname: string;
-    description?: string;
-    soloProfesores: boolean;
+export interface UserUpdate { 
+    username: string;
+    email: string;
+    fullname: string;
+    password: string;
 }
