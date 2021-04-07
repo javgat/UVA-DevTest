@@ -39,11 +39,11 @@ func authFailErrorLogin(err error, info string) middleware.Responder {
 func successLogin(u dao.User) middleware.Responder {
 	log.Println("Usuario logged in")
 
-	signedToken, err := CreateJWT(u, int64(AuthHours))
+	signedToken, err := CreateJWT(u, int64(hoursToSeconds(AuthHours)))
 	if err != nil {
 		return badReqErrorLogin(err)
 	}
-	resignedToken, err := CreateJWT(u, int64(ReauthHours))
+	resignedToken, err := CreateJWT(u, int64(hoursToSeconds(ReauthHours)))
 	if err != nil {
 		return badReqErrorLogin(err)
 	}

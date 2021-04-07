@@ -304,18 +304,13 @@ export class AuthService {
     /**
      * Modifies the current JWT Cookie related to the current session, extending it.
      * Modifies the current JWT Cookie related to the current session, extending.
-     * @param username Username of the user with the token
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public relogin(username: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public relogin(username: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public relogin(username: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public relogin(username: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (username === null || username === undefined) {
-            throw new Error('Required parameter username was null or undefined when calling relogin.');
-        }
+    public relogin(observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public relogin(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public relogin(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public relogin(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -335,10 +330,9 @@ export class AuthService {
 
         // to determine the Content-Type header
         const consumes: string[] = [
-            'application/json'
         ];
 
-        return this.httpClient.put<any>(`${this.basePath}/accesstokens/${encodeURIComponent(String(username))}`,
+        return this.httpClient.post<any>(`${this.basePath}/relogin`,
             null,
             {
                 withCredentials: this.configuration.withCredentials,

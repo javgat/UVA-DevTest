@@ -84,56 +84,6 @@ func init() {
       }
     },
     "/accesstokens/{username}": {
-      "put": {
-        "security": [
-          {
-            "ReAuthCookie": []
-          }
-        ],
-        "description": "Modifies the current JWT Cookie related to the current session, extending.",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "auth"
-        ],
-        "summary": "Modifies the current JWT Cookie related to the current session, extending it.",
-        "operationId": "relogin",
-        "parameters": [
-          {
-            "type": "string",
-            "description": "Username of the user with the token",
-            "name": "username",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful cookie modification. Session JWT returned in Cookie \"Bearer-Cookie\".",
-            "headers": {
-              "Set-Cookie": {
-                "type": "string"
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/responses/BadRequestError"
-          },
-          "403": {
-            "$ref": "#/responses/ForbiddenError"
-          },
-          "410": {
-            "$ref": "#/responses/GoneError"
-          },
-          "500": {
-            "$ref": "#/responses/InternalServerError"
-          }
-        }
-      },
       "delete": {
         "security": [
           {
@@ -2177,6 +2127,46 @@ func init() {
         "responses": {
           "200": {
             "description": "team removed"
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/relogin": {
+      "post": {
+        "security": [
+          {
+            "ReAuthCookie": []
+          }
+        ],
+        "description": "Modifies the current JWT Cookie related to the current session, extending.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "auth"
+        ],
+        "summary": "Modifies the current JWT Cookie related to the current session, extending it.",
+        "operationId": "relogin",
+        "responses": {
+          "200": {
+            "description": "Successful cookie modification. Session JWT returned in Cookie \"Bearer-Cookie\".",
+            "headers": {
+              "Set-Cookie": {
+                "type": "string"
+              }
+            }
           },
           "400": {
             "$ref": "#/responses/BadRequestError"
@@ -5666,65 +5656,6 @@ func init() {
       }
     },
     "/accesstokens/{username}": {
-      "put": {
-        "security": [
-          {
-            "ReAuthCookie": []
-          }
-        ],
-        "description": "Modifies the current JWT Cookie related to the current session, extending.",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "auth"
-        ],
-        "summary": "Modifies the current JWT Cookie related to the current session, extending it.",
-        "operationId": "relogin",
-        "parameters": [
-          {
-            "type": "string",
-            "description": "Username of the user with the token",
-            "name": "username",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful cookie modification. Session JWT returned in Cookie \"Bearer-Cookie\".",
-            "headers": {
-              "Set-Cookie": {
-                "type": "string"
-              }
-            }
-          },
-          "400": {
-            "description": "Incorrect Request, or invalida data",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          },
-          "403": {
-            "description": "Not authorized to this content",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          },
-          "410": {
-            "description": "That user (password and name) does not exist",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          },
-          "500": {
-            "description": "Internal error"
-          }
-        }
-      },
       "delete": {
         "security": [
           {
@@ -8113,6 +8044,55 @@ func init() {
         "responses": {
           "200": {
             "description": "team removed"
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/relogin": {
+      "post": {
+        "security": [
+          {
+            "ReAuthCookie": []
+          }
+        ],
+        "description": "Modifies the current JWT Cookie related to the current session, extending.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "auth"
+        ],
+        "summary": "Modifies the current JWT Cookie related to the current session, extending it.",
+        "operationId": "relogin",
+        "responses": {
+          "200": {
+            "description": "Successful cookie modification. Session JWT returned in Cookie \"Bearer-Cookie\".",
+            "headers": {
+              "Set-Cookie": {
+                "type": "string"
+              }
+            }
           },
           "400": {
             "description": "Incorrect Request, or invalida data",

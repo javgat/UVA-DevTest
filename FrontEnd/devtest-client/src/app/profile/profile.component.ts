@@ -35,9 +35,7 @@ export class ProfileComponent implements OnInit {
     this.routeSub = this.route.params.subscribe(params => {
       this.id = params['id']
       this.data.borrarMensaje()
-      if (this.id != "" && this.id != undefined) {
-        this.getProfileUser(this.id)
-      }
+      this.getProfile(true)
     });
     this.mensaje = new Mensaje()
     this.messageSubscription = this.data.mensajeActual.subscribe(
@@ -56,18 +54,32 @@ export class ProfileComponent implements OnInit {
     this.data.borrarMensaje()
   }
 
-  getProfileUser(id: string): void {
+  getProfile(primera: boolean){
+    if (this.id != "" && this.id != undefined) {
+      this.getProfileUser(this.id, primera)
+    } else{
+      let msg = "No se pudo obtener el id del usuario"
+      this.data.cambiarMensaje(new Mensaje(msg, Tipo.ERROR, true))
+      console.log(msg)
+    }
+  }
+
+  getProfileUser(id: string, primera: boolean): void {
     this.userService.getUser(id).subscribe(
       resp => {
         this.profileUser = new Usuario(resp.username, resp.email, resp.fullname, resp.rol)
       },
       err => {
-        this.data.handleShowErr(err, "obtener datos de usuario")
+        this.session.handleErrRelog(err, "obtener datos de perfil de usuario", primera, this.getProfile, this)
       }
     )
   }
 
   changePassSubmit(): void {
+    this.changePass(true)
+  }
+
+  changePass(primera: boolean){
     if (this.id == undefined) return
     this.userService.putPassword(this.id, this.pUpdate).subscribe(
       resp => {
@@ -90,7 +102,7 @@ export class ProfileComponent implements OnInit {
         }
       },
       err => {
-        this.data.handleShowErr(err, "cambio de contraseña")
+        this.session.handleErrRelog(err, "cambio de contraseña", primera, this.changePass, this)
       }
     )
   }

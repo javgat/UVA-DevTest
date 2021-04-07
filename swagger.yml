@@ -59,8 +59,8 @@ paths:
           $ref: '#/responses/GoneError'
         500:
           $ref: '#/responses/InternalServerError'
-  /accesstokens/{username}:
-    put:
+  /relogin:
+    post:
       security:
         - ReAuthCookie: []
       tags:
@@ -68,16 +68,8 @@ paths:
       summary: Modifies the current JWT Cookie related to the current session, extending it.
       operationId: relogin
       description: Modifies the current JWT Cookie related to the current session, extending.
-      consumes:
-      - application/json
       produces:
       - application/json
-      parameters:
-      - in: path
-        name: username
-        description: Username of the user with the token
-        required: true
-        type: string
       responses:
         200:
           description: Successful cookie modification. Session JWT returned in Cookie "Bearer-Cookie".
@@ -93,6 +85,7 @@ paths:
           $ref: '#/responses/GoneError'
         500:
           $ref: '#/responses/InternalServerError'
+  /accesstokens/{username}:
     delete:
       security:
         - BearerCookie: []

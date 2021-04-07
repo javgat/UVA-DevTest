@@ -42,7 +42,7 @@ export class NavBarComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.sessionUser.isEmpty()){
-      this.getUser()
+      this.getUser(true)
     }
   }
 
@@ -55,15 +55,14 @@ export class NavBarComponent implements OnInit {
     this.session.logout()
   }
 
-
-  getUser(){
+  getUser(primera: boolean){
     this.userService.getUser(this.sessionLogin.getUserUsername() as string).subscribe(
       resp => {
         this.session.cambiarSession(new SessionLogin(true, this.sessionLogin.getUserUsername()))
         this.session.cambiarUser(new SessionUser(resp.username, resp.email, resp.fullname, resp.rol))
       },
       err => {
-        console.log("No se pudo obtener el usuario")
+        this.session.handleErrRelog(err, "obtencion del usuario", primera, this.getUser, this)        
       }
     )
   }

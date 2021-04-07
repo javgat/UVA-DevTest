@@ -1519,10 +1519,10 @@ func (o *DevAPI) initHandlerCache() {
 		o.handlers["PUT"] = make(map[string]http.Handler)
 	}
 	o.handlers["PUT"]["/users/{username}"] = user.NewPutUser(o.context, o.UserPutUserHandler)
-	if o.handlers["PUT"] == nil {
-		o.handlers["PUT"] = make(map[string]http.Handler)
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
 	}
-	o.handlers["PUT"]["/accesstokens/{username}"] = auth.NewRelogin(o.context, o.AuthReloginHandler)
+	o.handlers["POST"]["/relogin"] = auth.NewRelogin(o.context, o.AuthReloginHandler)
 }
 
 // Serve creates a http handler to serve the API over HTTP

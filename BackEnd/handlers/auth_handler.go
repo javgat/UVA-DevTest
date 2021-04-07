@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"database/sql"
-	"errors"
 	"log"
 	"net/http"
 	"strings"
@@ -12,6 +11,8 @@ import (
 	"uva-devtest/persistence/dbconnection"
 	"uva-devtest/restapi/operations/auth"
 
+	"github.com/go-openapi/errors"
+
 	"github.com/go-openapi/runtime/middleware"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -19,8 +20,8 @@ import (
 const BearerCookieName string = "Bearer-Cookie"
 const ReauthCookieName string = "ReAuth-Cookie"
 
-const AuthHours int = 1
-const ReauthHours int = 48
+const AuthHours float32 = 0.5
+const ReauthHours float32 = 48
 
 func CreateCookie(name string, token string, maxage int) *http.Cookie {
 
@@ -47,31 +48,32 @@ func CreateDeprecatedCookie(name string) *http.Cookie {
 	return CreateCookie(name, "", 1)
 }
 
-func hoursToSeconds(hours int) int {
-	return hours * 3600
+func hoursToSeconds(hours float32) int {
+	return (int)(hours * 3600)
 }
 
-func CreateJWTWrapper(u dao.User, expirationHours int64) jwtauth.JwtWrapper {
+func CreateJWTWrapper(u dao.User, expirationSeconds int64) jwtauth.JwtWrapper {
 	var wrap jwtauth.JwtWrapper
 	wrap.SecretKey = *u.Pwhash
 	wrap.Issuer = "DevTest"
-	wrap.ExpirationHours = expirationHours
+	wrap.ExpirationSeconds = expirationSeconds
 	return wrap
 }
 
-func CreateJWT(u dao.User, expirationHours int64) (string, error) {
-	wrap := CreateJWTWrapper(u, expirationHours)
+func CreateJWT(u dao.User, expirationSeconds int64) (string, error) {
+	wrap := CreateJWTWrapper(u, expirationSeconds)
 	signedToken, err := wrap.GenerateToken(u.Email.String())
 	log.Println(wrap.SecretKey, u.Email.String(), signedToken)
 	return signedToken, err
 }
 
-func GetJWTModelUserCookies(cookieSlice []string, expectedName string, expectedHours int64) (*models.User, error) {
+func GetJWTModelUserCookies(cookieSlice []string, expectedName string, expectedSeconds int64) (*models.User, error) {
 	for _, cookie := range cookieSlice {
-		cookieName := cookie[0:14]
+		cookieElems := strings.Split(cookie, "=")
+		cookieName := cookieElems[0]
 		var err error
 		if expectedName == cookieName {
-			token := cookie[14:]
+			token := cookieElems[1]
 			var email string
 			email, err = jwtauth.GetEmailToken(token)
 			if err == nil {
@@ -81,7 +83,7 @@ func GetJWTModelUserCookies(cookieSlice []string, expectedName string, expectedH
 					var u *dao.User
 					u, err = dao.GetUserEmail(db, email)
 					if u != nil || err == nil {
-						wrap := CreateJWTWrapper(*u, expectedHours)
+						wrap := CreateJWTWrapper(*u, expectedSeconds)
 						_, err = wrap.ValidateToken(token)
 						if err == nil {
 							mu := dao.ToModelUser(u)
@@ -91,17 +93,17 @@ func GetJWTModelUserCookies(cookieSlice []string, expectedName string, expectedH
 				}
 			}
 		}
-		log.Println("Cookie incorrecta: ", err)
+		log.Println("Cookie incorrecta:", err)
+		log.Println("Se esperaba:", expectedName, "y se obtuvo:", cookieName)
 	}
 	errMsg := strings.Join([]string{"no se puede leer la cookie", expectedName}, " ")
-	return nil, errors.New(errMsg)
+	return nil, errors.New(401, errMsg)
 }
 
 // BearerAuth gets the model User for the token, if valid JWT
 func BearerAuth(cookies string) (*models.User, error) {
-	expectedName := strings.Join([]string{BearerCookieName, "="}, "")
-	cookieSlice := strings.Split(cookies, ";")
-	mu, err := GetJWTModelUserCookies(cookieSlice, expectedName, int64(AuthHours))
+	cookieSlice := strings.Split(cookies, "; ")
+	mu, err := GetJWTModelUserCookies(cookieSlice, BearerCookieName, int64(hoursToSeconds(AuthHours)))
 	if err == nil && mu != nil {
 		return mu, err
 	}
@@ -109,15 +111,13 @@ func BearerAuth(cookies string) (*models.User, error) {
 }
 
 func ReAuth(cookies string) (*models.User, error) {
-	expectedName := strings.Join([]string{BearerCookieName, "="}, "")
 	cookieSlice := strings.Split(cookies, ";")
-	mu, err := GetJWTModelUserCookies(cookieSlice, expectedName, int64(AuthHours))
+	mu, err := GetJWTModelUserCookies(cookieSlice, BearerCookieName, int64(hoursToSeconds(AuthHours)))
 	if err == nil && mu != nil {
 		return mu, err
 	}
 
-	expectedName = strings.Join([]string{ReauthCookieName, "="}, "")
-	mu, err = GetJWTModelUserCookies(cookieSlice, expectedName, int64(ReauthHours))
+	mu, err = GetJWTModelUserCookies(cookieSlice, ReauthCookieName, int64(hoursToSeconds(ReauthHours)))
 	if err == nil && mu != nil {
 		return mu, err
 	}
@@ -135,11 +135,12 @@ func Relogin(params auth.ReloginParams, u *models.User) middleware.Responder {
 	if err == nil {
 		var du *dao.User
 		du, err = dao.GetUserUsername(db, *u.Username)
+		log.Println("username relogin: ", *du.Username)
 		if err == nil && du != nil {
 			var btoken, rtoken string
-			btoken, err = CreateJWT(*du, int64(AuthHours))
+			btoken, err = CreateJWT(*du, int64(hoursToSeconds(AuthHours)))
 			if err == nil {
-				rtoken, err = CreateJWT(*du, int64(ReauthHours))
+				rtoken, err = CreateJWT(*du, int64(hoursToSeconds(ReauthHours)))
 				if err == nil {
 					bcookie := CreateCookie(BearerCookieName, btoken, hoursToSeconds(AuthHours))
 					recookie := CreateCookie(ReauthCookieName, rtoken, hoursToSeconds(ReauthHours))

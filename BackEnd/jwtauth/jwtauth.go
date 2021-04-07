@@ -15,9 +15,9 @@ import (
 // JwtWrapper represents the wrapper that contains values of the JWT except for
 // the claims
 type JwtWrapper struct {
-	SecretKey       string
-	Issuer          string
-	ExpirationHours int64
+	SecretKey         string
+	Issuer            string
+	ExpirationSeconds int64
 }
 
 // JwtClaim contains the claims that will issue the JWT.
@@ -34,7 +34,7 @@ func (j *JwtWrapper) GenerateToken(email string) (signedToken string, err error)
 	claims := &JwtClaim{
 		Email: email,
 		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: time.Now().Local().Add(time.Hour * time.Duration(j.ExpirationHours)).Unix(),
+			ExpiresAt: time.Now().Local().Add(time.Second * time.Duration(j.ExpirationSeconds)).Unix(),
 			Issuer:    j.Issuer,
 		},
 	}

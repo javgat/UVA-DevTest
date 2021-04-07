@@ -6,9 +6,9 @@ const email string = "Test@mail.com"
 
 func TestGenerateToken(t *testing.T) {
 	wrap := JwtWrapper{
-		SecretKey:       "secret",
-		Issuer:          "yo",
-		ExpirationHours: 1,
+		SecretKey:         "secret",
+		Issuer:            "yo",
+		ExpirationSeconds: 3600,
 	}
 	_, err := wrap.GenerateToken(email)
 	if err != nil {
@@ -19,9 +19,9 @@ func TestGenerateToken(t *testing.T) {
 
 func TestGenerateValidateToken(t *testing.T) {
 	wrap := JwtWrapper{
-		SecretKey:       "secret",
-		Issuer:          "yo",
-		ExpirationHours: 1,
+		SecretKey:         "secret",
+		Issuer:            "yo",
+		ExpirationSeconds: 3600,
 	}
 	signed, _ := wrap.GenerateToken(email)
 	claims, err := wrap.ValidateToken(signed)
@@ -39,9 +39,9 @@ func TestGenerateValidateToken(t *testing.T) {
 
 func TestGenerateValidateTokenChangeSecret(t *testing.T) {
 	wrap := JwtWrapper{
-		SecretKey:       "secret",
-		Issuer:          "yo",
-		ExpirationHours: 1,
+		SecretKey:         "secret",
+		Issuer:            "yo",
+		ExpirationSeconds: 3600,
 	}
 	signed, _ := wrap.GenerateToken(email)
 	wrap.SecretKey = "secret2"

@@ -31,7 +31,7 @@ func NewRelogin(ctx *middleware.Context, handler ReloginHandler) *Relogin {
 	return &Relogin{Context: ctx, Handler: handler}
 }
 
-/* Relogin swagger:route PUT /accesstokens/{username} auth relogin
+/* Relogin swagger:route POST /relogin auth relogin
 
 Modifies the current JWT Cookie related to the current session, extending it.
 

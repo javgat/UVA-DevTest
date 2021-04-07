@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AuthService } from '@javgat/devtest-api';
 import { BehaviorSubject } from 'rxjs';
 import { SessionLogin, SessionUser } from './app.model';
+import { DataService } from './data.service';
 
 // SessionService aporta información global sobre la sesión actual,
 // el jwt que tiene que transmitir, etc.
@@ -17,7 +18,7 @@ export class SessionService {
   private user = new BehaviorSubject<SessionUser>(new SessionUser())
   sessionUser = this.user.asObservable()
 
-  constructor(private auth: AuthService) { }
+  constructor(private auth: AuthService, private data: DataService) { }
   
   // Actualiza la sesión a la pasada por parametro.
   cambiarSession(session:SessionLogin){
@@ -60,4 +61,24 @@ export class SessionService {
   borrarUser(){
     this.cambiarUser(new SessionUser())
   }
+
+  handleErrRelog<T>(err: any, action: string, primera: boolean, callbackFn: (this: T, prim: boolean) => void, that: T): void{
+    if (err.status==401){
+      if(!primera){
+        this.data.handleShowErr(err, "alargar sesión de usuario")
+      }else{
+        this.auth.relogin().subscribe(
+          resp =>{
+            return callbackFn.call(that, false)
+          },
+          err => {
+            this.data.handleShowErr(err, "alargar sesión de usuario")
+          }
+        )
+      }
+    }else{
+      this.data.handleShowErr(err, action)
+    }
+  }
+
 }
