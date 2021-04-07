@@ -2,10 +2,10 @@
 <div class="container">
     <div class="alert alert-{{mensaje.type}}" *ngIf="mensaje.mostrar" id="message" role="alert">{{mensaje.texto}}</div>
     <ul>
-        <li>{{profileUser.username}}</li>
-        <li>{{profileUser.email}}</li>
-        <li>{{profileUser.fullname}}</li>
-        <li>{{profileUser.type}}</li>
+        <li>{{profileUser.getUsername()}}</li>
+        <li>{{profileUser.getEmail()}}</li>
+        <li>{{profileUser.getFullname()}}</li>
+        <li>{{profileUser.getRol()}}</li>
     </ul>
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editPassModal">
         Editar contraseña

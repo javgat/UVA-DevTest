@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService, LoginUser } from '@javgat/devtest-api'
+import { AuthService, LoginUser, UserService } from '@javgat/devtest-api'
 import { Subscription } from 'rxjs';
 import { Mensaje, SessionLogin, Tipo } from '../shared/app.model';
 import { DataService } from '../shared/data.service';
@@ -28,14 +28,14 @@ export class LoginComponent implements OnInit {
   private messageSubscription : Subscription
 
   constructor(private authService : AuthService, private datos: DataService,
-    private session: SessionService, private router: Router) {
+    private session: SessionService, private router: Router, private userService: UserService) {
     this.mensaje = new Mensaje()
     this.sessionLogin = new SessionLogin(false)
     this.session.checkStorageSession()
     this.sessionSubscription = this.session.sessionLogin.subscribe(
       valor => {
         this.sessionLogin = valor
-        if(this.sessionLogin.logged){
+        if(this.sessionLogin.isLoggedIn()){
           this.router.navigate(['/'])
         }
       }
@@ -56,24 +56,27 @@ export class LoginComponent implements OnInit {
     this.datos.borrarMensaje()
   }
 
+  logidToUsername(id: string): void{
+    this.userService.getUser(id).subscribe(
+      resp =>{
+        this.datos.cambiarMensaje(new Mensaje("Inicio de sesión con éxito", Tipo.SUCCESS, true))
+        this.session.cambiarSession(new SessionLogin(true, resp.username))
+        console.log("Inicio de sesión con éxito")
+      },
+      err =>{
+        this.datos.handleShowErr(err, "obtención de datos del usuario")
+      }
+    )
+  }
+
   // Envío de petición de login a BackEnd, y manejo de la respuesta
   login(lu : LoginUser){
     this.authService.login(lu).subscribe(
       resp => {        
-        this.datos.cambiarMensaje(new Mensaje("Inicio sesion con exito", Tipo.SUCCESS, true))
-        this.session.cambiarSession(new SessionLogin(true, lu.loginid))
-        console.log("Inicio sesion con exito")
+        this.logidToUsername(lu.loginid)
       },
       err =>{
-        let msg: string
-        if(err.status >= 500)
-          msg = "Error al conectar con el servidor"
-        else if(err.error != undefined)
-          msg = err.error.message
-        else
-          msg = "undefined"
-        this.datos.cambiarMensaje(new Mensaje("Error al iniciar sesion: "+msg, Tipo.ERROR, true))
-        console.log("Error al iniciar sesion: "+msg+ err.status)
+        this.datos.handleShowErr(err, "inicio de sesión")
       }
     )
   }

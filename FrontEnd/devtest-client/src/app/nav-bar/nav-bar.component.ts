@@ -25,7 +25,7 @@ export class NavBarComponent implements OnInit {
     this.sessionSubscription = this.session.sessionLogin.subscribe(
       valor => {
         this.sessionLogin = valor
-        if(!this.sessionLogin.logged){
+        if(!this.sessionLogin.isLoggedIn()){
           this.router.navigate(['/'])
         }
       }
@@ -35,13 +35,13 @@ export class NavBarComponent implements OnInit {
     this.sessionUserSubscription = this.session.sessionUser.subscribe(
       valor =>{
         this.sessionUser = valor
-        this.isAdmin = (valor.type == User.TypeEnum.Admin)
+        this.isAdmin = (valor.getRol() == User.RolEnum.Administrador)
       }
     )
   }
 
   ngOnInit(): void {
-    if (this.sessionUser.isEmpty){
+    if (this.sessionUser.isEmpty()){
       this.getUser()
     }
   }
@@ -57,10 +57,10 @@ export class NavBarComponent implements OnInit {
 
 
   getUser(){
-    this.userService.getUser(this.sessionLogin.userid as string).subscribe(
+    this.userService.getUser(this.sessionLogin.getUserUsername() as string).subscribe(
       resp => {
-        this.session.cambiarSession(new SessionLogin(true, this.sessionLogin.userid))
-        this.session.cambiarUser(new SessionUser(resp.username, resp.email, resp.fullname, resp.type))
+        this.session.cambiarSession(new SessionLogin(true, this.sessionLogin.getUserUsername()))
+        this.session.cambiarUser(new SessionUser(resp.username, resp.email, resp.fullname, resp.rol))
       },
       err => {
         console.log("No se pudo obtener el usuario")

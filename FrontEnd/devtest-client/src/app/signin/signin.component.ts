@@ -36,7 +36,7 @@ export class SigninComponent implements OnInit {
     this.sessionSubscription = this.session.sessionLogin.subscribe(
       valor => {
         this.sessionUser = valor
-        if(this.sessionUser.logged){
+        if(this.sessionUser.isLoggedIn()){
           this.router.navigate(['/'])
         }
       }

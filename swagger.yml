@@ -3385,6 +3385,8 @@ definitions:
     required:
     - username
     - email
+    - fullname
+    - rol
     properties:
       username:
         type: string

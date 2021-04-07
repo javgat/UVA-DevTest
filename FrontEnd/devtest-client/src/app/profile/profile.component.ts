@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService, LoginUser, PasswordUpdate, UserService } from '@javgat/devtest-api';
 import { Subscription } from 'rxjs';
-import { Mensaje, SessionUser, Tipo } from '../shared/app.model';
+import { Mensaje, SessionUser, Tipo, Usuario } from '../shared/app.model';
 import { DataService } from '../shared/data.service';
 import { SessionService } from '../shared/session.service';
 
@@ -14,7 +14,7 @@ import { SessionService } from '../shared/session.service';
 export class ProfileComponent implements OnInit {
 
   sessionUser: SessionUser
-  profileUser: SessionUser
+  profileUser: Usuario
   mensaje: Mensaje
   private sessionUserSubscription: Subscription
   private routeSub: Subscription
@@ -59,11 +59,10 @@ export class ProfileComponent implements OnInit {
   getProfileUser(id: string): void {
     this.userService.getUser(id).subscribe(
       resp => {
-        this.profileUser = new SessionUser(resp.username, resp.email, resp.fullname, resp.type)
+        this.profileUser = new Usuario(resp.username, resp.email, resp.fullname, resp.rol)
       },
       err => {
-        this.data.cambiarMensaje(new Mensaje("No se pudo obtener el usuario: Error " + err.status, Tipo.ERROR, true))
-        console.log("No se pudo obtener el usuario")
+        this.data.handleShowErr(err, "obtener datos de usuario")
       }
     )
   }
@@ -72,20 +71,26 @@ export class ProfileComponent implements OnInit {
     if (this.id == undefined) return
     this.userService.putPassword(this.id, this.pUpdate).subscribe(
       resp => {
-        this.data.cambiarMensaje(new Mensaje("Contraseña cambiada con éxito", Tipo.SUCCESS, true))
+        console.log("Contraseña cambiada")
         if (this.id == this.sessionUser.username) {
           var loginUser: LoginUser = {
             loginid: this.sessionUser.username,
             pass: this.pUpdate.newpass
           }
           this.authService.login(loginUser).subscribe(
-            resp => console.log("Sesion JWT recuperada con exito tras cambiar la contraseña"),
-            err => console.log("Error al recuperar sesion JWT tras cambiar la contraseña")
+            resp => {
+              console.log("Sesion JWT recuperada con exito tras cambiar la contraseña")
+              this.data.cambiarMensaje(new Mensaje("Contraseña cambiada con éxito", Tipo.SUCCESS, true))
+            },
+            err => {
+              this.data.handleShowErr(err, "recuperar sesion JWT tras cambiar la contraseña")
+              this.session.logout()
+            }
           )
         }
       },
       err => {
-        this.data.cambiarMensaje(new Mensaje("No se pudo cambiar la contraseña: Error " + err.status, Tipo.ERROR, true))
+        this.data.handleShowErr(err, "cambio de contraseña")
       }
     )
   }

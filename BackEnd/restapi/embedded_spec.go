@@ -5446,7 +5446,9 @@ func init() {
       "type": "object",
       "required": [
         "username",
-        "email"
+        "email",
+        "fullname",
+        "rol"
       ],
       "properties": {
         "email": {
@@ -11903,7 +11905,9 @@ func init() {
       "type": "object",
       "required": [
         "username",
-        "email"
+        "email",
+        "fullname",
+        "rol"
       ],
       "properties": {
         "email": {

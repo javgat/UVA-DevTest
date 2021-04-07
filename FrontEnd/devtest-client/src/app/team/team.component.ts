@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Team, TeamService } from '@javgat/devtest-api';
 import { Subscription } from 'rxjs';
-import { Mensaje, Tipo } from '../shared/app.model';
+import { Equipo, Mensaje, Tipo, Usuario } from '../shared/app.model';
 import { DataService } from '../shared/data.service';
 
 @Component({
@@ -15,12 +15,15 @@ export class TeamComponent implements OnInit {
 
   private routeSub: Subscription
   id: string | undefined
-  team : Team = {
-    teamname: ""
-  }
+  equipo : Equipo
+  admins: Usuario[]
+  miembros: Usuario[]
 
   constructor(private route: ActivatedRoute, private data: DataService,
     private teamService: TeamService) {
+    this.equipo = new Equipo("", "", false)
+    this.admins = []
+    this.miembros = []
     this.routeSub = this.route.params.subscribe(params => {
       this.id = params['id']
       this.data.borrarMensaje()
@@ -41,7 +44,8 @@ export class TeamComponent implements OnInit {
   getTeam(id: string){
     this.teamService.getTeam(id).subscribe(
       resp => {
-        this.team = resp
+        let team = resp
+        this.equipo = new Equipo(team.teamname, team.description || "", team.soloProfesores)
         // Aqui pillar usuarios y roles
       },
       err => {

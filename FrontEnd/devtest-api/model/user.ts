@@ -14,8 +14,8 @@
 export interface User { 
     username: string;
     email: string;
-    fullname?: string;
-    rol?: User.RolEnum;
+    fullname: string;
+    rol: User.RolEnum;
 }
 export namespace User {
     export type RolEnum = 'estudiante' | 'profesor' | 'administrador';

@@ -29,11 +29,13 @@ type User struct {
 
 	// fullname
 	// Example: Javier Gatón Herguedas
-	Fullname string `json:"fullname,omitempty"`
+	// Required: true
+	Fullname *string `json:"fullname"`
 
 	// rol
+	// Required: true
 	// Enum: [estudiante profesor administrador]
-	Rol string `json:"rol,omitempty"`
+	Rol *string `json:"rol"`
 
 	// username
 	// Example: carlosg72
@@ -47,6 +49,10 @@ func (m *User) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateEmail(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateFullname(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -75,6 +81,15 @@ func (m *User) validateEmail(formats strfmt.Registry) error {
 	}
 
 	if err := validate.FormatOf("email", "body", "email", m.Email.String(), formats); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *User) validateFullname(formats strfmt.Registry) error {
+
+	if err := validate.Required("fullname", "body", m.Fullname); err != nil {
 		return err
 	}
 
@@ -114,12 +129,13 @@ func (m *User) validateRolEnum(path, location string, value string) error {
 }
 
 func (m *User) validateRol(formats strfmt.Registry) error {
-	if swag.IsZero(m.Rol) { // not required
-		return nil
+
+	if err := validate.Required("rol", "body", m.Rol); err != nil {
+		return err
 	}
 
 	// value enum
-	if err := m.validateRolEnum("rol", "body", m.Rol); err != nil {
+	if err := m.validateRolEnum("rol", "body", *m.Rol); err != nil {
 		return err
 	}
 

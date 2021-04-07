@@ -1,4 +1,4 @@
-import { User, Team, TeamRole } from "@javgat/devtest-api";
+import { User, Team } from "@javgat/devtest-api";
 
 export enum Tipo{
     SUCCESS = "success",
@@ -19,20 +19,28 @@ export class Mensaje{
 }
 
 export class SessionLogin{
-    readonly logged: boolean
-    readonly userid: String // identificador para iniciar sesion
-    constructor(logged:boolean, userid?:String){
+    private readonly logged: boolean
+    private readonly username: string
+    constructor(logged:boolean, username?:string){
         this.logged = logged
-        this.userid = userid || ""
+        this.username = username || ""
+    }
+
+    isLoggedIn(): boolean{
+        return this.logged
+    }
+
+    getUserUsername(): string{
+        return this.username
     }
 }
 
 export class SessionUser implements User{
-    readonly isEmpty: boolean
+    readonly empty: boolean
     readonly username: string;
     readonly email: string;
-    readonly fullname?: string | undefined;
-    readonly type?: User.TypeEnum | undefined;
+    readonly fullname: string;
+    readonly rol: User.RolEnum;
     /**
      * 
      * @param username If undefined, SessionUser isEmpty
@@ -40,29 +48,67 @@ export class SessionUser implements User{
      * @param fullname 
      * @param type 
      */
-    constructor(username?:string, email?:string, fullname?:string, type?:User.TypeEnum){
+    constructor(username?:string, email?:string, fullname?:string, rol?:User.RolEnum){
         this.username = username || ""
         this.email = email || ""
-        this.fullname = fullname
-        this.type = type
-        this.isEmpty = (this.username == "" || this.email == "")
+        this.fullname = fullname || ""
+        this.rol = rol || User.RolEnum.Estudiante
+        this.empty = (this.username == "" || this.email == "")
+    }
+
+    isEmpty() : boolean{
+        return this.empty
+    }
+
+    getUsername(): string{
+        return this.username
+    }
+
+    getEmail(): string{
+        return this.email
+    }
+
+    getFullname(): string{
+        return this.fullname
+    }
+
+    getRol() : User.RolEnum{
+        return this.rol
     }
 }
 
-export class CTeam implements Team{
+export class Usuario extends SessionUser{
+    /**
+     * 
+     * @param username
+     * @param email
+     * @param fullname 
+     * @param type 
+     */
+    constructor(username:string, email:string, fullname:string, rol:User.RolEnum){
+        super(username, email, fullname, rol)
+    }
+}
+
+export class Equipo implements Team{
     teamname: string;
-    description?: string | undefined;
-    constructor(teamname: string, description?: string){
+    description: string;
+    soloProfesores: boolean;
+    constructor(teamname: string, description: string, soloProfesores: boolean){
         this.teamname = teamname
         this.description = description
+        this.soloProfesores = soloProfesores
     }
-}
 
-export class CTeamRole implements TeamRole{
-    role: TeamRole.RoleEnum;
-    user: SessionUser;
-    constructor(role: TeamRole.RoleEnum, user: SessionUser){
-        this.role = role
-        this.user = user
+    getTeamname(): string{
+        return this.teamname
+    }
+
+    getDescription(): string{
+        return this.description
+    }
+
+    isSoloProfesores(): boolean{
+        return this.soloProfesores
     }
 }

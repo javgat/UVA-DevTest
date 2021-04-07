@@ -16,15 +16,15 @@ import (
 )
 
 func userOrAdmin(username string, u *models.User) bool {
-	return username == *u.Username || u.Rol == models.UserRolAdministrador
+	return username == *u.Username || *u.Rol == models.UserRolAdministrador
 }
 
 func isAdmin(u *models.User) bool {
-	return u.Rol == models.UserRolAdministrador
+	return *u.Rol == models.UserRolAdministrador
 }
 
 func isTeacher(u *models.User) bool {
-	return u.Rol == models.UserRolAdministrador
+	return *u.Rol == models.UserRolAdministrador
 }
 
 func isTeacherOrAdmin(u *models.User) bool {
@@ -104,8 +104,11 @@ func GetUser(params user.GetUserParams, u *models.User) middleware.Responder {
 			log.Println("Error en users_handler GetUser(): ", err)
 			return user.NewGetUserInternalServerError()
 		} else if us == nil {
-			log.Println("No existe user en users_handler GetUser(): ", err)
-			return user.NewGetUserGone() //410
+			us, err = dao.GetUserEmail(db, params.Username)
+			if err != nil || us == nil {
+				log.Println("No existe user en users_handler GetUser(): ", err)
+				return user.NewGetUserGone() //410
+			}
 		}
 		return user.NewGetUserOK().WithPayload(dao.ToModelUser(us))
 
@@ -116,7 +119,7 @@ func GetUser(params user.GetUserParams, u *models.User) middleware.Responder {
 func userUpdateToUser(uu *models.UserUpdate) *models.User {
 	u := &models.User{
 		Email:    uu.Email,
-		Fullname: *uu.Fullname,
+		Fullname: uu.Fullname,
 		Username: uu.Username,
 	}
 	return u
@@ -138,7 +141,7 @@ func PutUser(params user.PutUserParams, u *models.User) middleware.Responder {
 			return user.NewPutUserInternalServerError()
 		}
 		if len(admins) == 1 && admins[0].Username == &params.Username {
-			if u.Rol != models.UserRolAdministrador {
+			if *u.Rol != models.UserRolAdministrador {
 				log.Println("Error en users_handler PutUsers(), intento de quitar admin de ultimo admin")
 				s := "Es el unico administrador existente"
 				return user.NewPutUserConflict().WithPayload(&models.Error{Message: &s})

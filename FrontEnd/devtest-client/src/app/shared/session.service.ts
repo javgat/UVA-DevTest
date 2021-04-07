@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { User } from '@javgat/devtest-api';
+import { AuthService } from '@javgat/devtest-api';
 import { BehaviorSubject } from 'rxjs';
 import { SessionLogin, SessionUser } from './app.model';
 
@@ -17,18 +17,22 @@ export class SessionService {
   private user = new BehaviorSubject<SessionUser>(new SessionUser())
   sessionUser = this.user.asObservable()
 
-  constructor() { }
+  constructor(private auth: AuthService) { }
   
   // Actualiza la sesión a la pasada por parametro.
   cambiarSession(session:SessionLogin){
-    localStorage.setItem('logged', String(session.logged))
-    localStorage.setItem('userid', String(session.userid))
+    localStorage.setItem('logged', String(session.isLoggedIn()))
+    localStorage.setItem('username', String(session.getUserUsername()))
     this.session.next(session)
   }
 
   // Desautentica al usuario. Elimina la sesión.
   borrarSession(){
     this.cambiarSession(new SessionLogin(false))
+    this.auth.logout().subscribe(
+      _ => console.log("Sesion cerrada con exito"),
+      _ => console.log("Error al cerrar sesion")
+    )
   }
 
   logout(){
@@ -38,15 +42,15 @@ export class SessionService {
 
   checkStorageSession(){
     var logged = localStorage.getItem('logged')
-    var userid = localStorage.getItem('userid')
+    var username = localStorage.getItem('username')
     var loggedBool
-    if(logged == null || userid == null){
-      userid = "null"
+    if(logged == null || username == null){
+      username = ""
       loggedBool = false
     }else{
       loggedBool = ("true"==logged)
     }
-    this.cambiarSession(new SessionLogin(loggedBool, userid))
+    this.cambiarSession(new SessionLogin(loggedBool, username))
   }
 
   cambiarUser(user:SessionUser){

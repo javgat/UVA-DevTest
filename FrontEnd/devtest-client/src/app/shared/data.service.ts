@@ -42,4 +42,17 @@ export class DataService {
   borrarMensaje(){
     this.cambiarMensaje(new Mensaje());
   }
+
+  handleShowErr(err: any, action: string){
+    let msg: string
+    if(err.status >= 500)
+      msg = "Error al conectar con el servidor"
+    else if(err.error != undefined && err.error.message != undefined)
+      msg = err.error.message
+    else
+      msg = ""
+    msg = "Error en "+action+": "+err.status+" "+msg
+    this.cambiarMensaje(new Mensaje(msg, Tipo.ERROR, true))
+    console.log(msg)
+  }
 }

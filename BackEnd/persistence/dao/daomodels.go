@@ -38,11 +38,13 @@ type User struct {
 
 	// fullname
 	// Example: Javier Gatón Herguedas
-	Fullname string `json:"fullname,omitempty"`
+	// Required: true
+	Fullname *string `json:"fullname"`
 
 	// rol
-	// Enum: [student teacher admin]
-	Rol string `json:"rol,omitempty"`
+	// Required: true
+	// Enum: [estudiante profesor administrador]
+	Rol *string `json:"rol"`
 }
 
 // Team team

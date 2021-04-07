@@ -37,8 +37,8 @@ func userToInsert() *User {
 		Username: su.Username,
 		Email:    su.Email,
 		Pwhash:   &pwhashstring,
-		Rol:      studentRol,
-		Fullname: *su.Username,
+		Rol:      &studentRol,
+		Fullname: su.Username,
 	}
 	return u
 }
@@ -153,8 +153,8 @@ func defaultUser() *User {
 		Username: &username,
 		Email:    &email,
 		Pwhash:   &pwhash,
-		Rol:      rolTeacher,
-		Fullname: username,
+		Rol:      &rolTeacher,
+		Fullname: &username,
 	}
 }
 
@@ -521,7 +521,7 @@ func defaultAdmin1() *User {
 		Username: &username2,
 		Email:    &email2,
 		Pwhash:   &pwhash2,
-		Rol:      rolAdmin,
+		Rol:      &rolAdmin,
 	}
 	return u
 }
@@ -533,7 +533,7 @@ func defaultUsers() []*User {
 		Username: &username,
 		Email:    &email,
 		Pwhash:   &pwhash,
-		Rol:      rolTeacher,
+		Rol:      &rolTeacher,
 	}
 	u2 := defaultAdmin1()
 	us = append(us, u1)

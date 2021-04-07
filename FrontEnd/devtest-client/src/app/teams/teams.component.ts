@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Team, TeamService } from '@javgat/devtest-api';
+import { Team, UserService } from '@javgat/devtest-api';
 import { Subscription } from 'rxjs';
 import { SessionUser } from '../shared/app.model';
 import { SessionService } from '../shared/session.service';
@@ -16,7 +16,7 @@ export class TeamsComponent implements OnInit {
 
   private sessionUserSubscription : Subscription
 
-  constructor(private session : SessionService, private teamServ : TeamService) {
+  constructor(private session : SessionService, private userS : UserService) {
     this.teams = []
     this.sessionUser = new SessionUser()
     this.sessionUserSubscription = this.session.sessionUser.subscribe(
@@ -35,7 +35,7 @@ export class TeamsComponent implements OnInit {
   }
 
   getTeamsOfUser(username : string){
-    this.teamServ.getTeamsOfUser(username).subscribe(
+    this.userS.getTeamsOfUser(username).subscribe(
       resp => {
         this.teams = resp
       },
