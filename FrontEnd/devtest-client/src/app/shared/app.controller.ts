@@ -14,19 +14,13 @@ export class LoggedInController {
     private mensaje: Mensaje
     private messageSubscription: Subscription
 
-    isLoggedIn: boolean
-    isAdmin: boolean
-    isTeacher: boolean
-    isStudent: boolean
     constructor(protected session: SessionService, protected router: Router, private data: DataService, protected userS: UserService) {
-        this.isLoggedIn = this.isAdmin = this.isTeacher = this.isStudent = false
         this.session.checkStorageSession()
         this.sessionLogin = new SessionLogin(false)
         this.mensaje = new Mensaje()
         this.sessionSubscription = this.session.sessionLogin.subscribe(
             valor => {
                 this.sessionLogin = valor
-                this.isLoggedIn = valor.isLoggedIn()
                 if (!this.sessionLogin.isLoggedIn()) {
                     this.router.navigate(['/'])
                 }
@@ -36,14 +30,8 @@ export class LoggedInController {
         this.sessionUserSubscription = this.session.sessionUser.subscribe(
             valor => {
                 this.sessionUser = valor
-                if (this.sessionLogin.isLoggedIn()) {
-                    if (this.sessionUser.isEmpty()) {
-                        this.downloadUser(true)
-                    } else {
-                        this.isStudent = valor.getRol() == User.RolEnum.Estudiante
-                        this.isTeacher = valor.getRol() == User.RolEnum.Profesor
-                        this.isAdmin = valor.getRol() == User.RolEnum.Administrador
-                    }
+                if (this.sessionLogin.isLoggedIn() && this.sessionUser.isEmpty()) {
+                    this.downloadUser(true)
                 }
             }
         )

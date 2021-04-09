@@ -75,6 +75,22 @@ export class SessionUser implements User {
     getRol(): User.RolEnum {
         return this.rol
     }
+
+    isStudent(): boolean{
+        return this.getRol() == User.RolEnum.Estudiante
+    }
+
+    isTeacher(): boolean{
+        return this.getRol() == User.RolEnum.Profesor
+    }
+
+    isAdmin(): boolean{
+        return this.getRol() == User.RolEnum.Administrador
+    }
+
+    isTeacherOrAdmin(): boolean{
+        return (this.isTeacher() || this.isAdmin())
+    }
 }
 
 export class Usuario extends SessionUser {

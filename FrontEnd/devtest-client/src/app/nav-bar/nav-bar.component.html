@@ -8,16 +8,16 @@
   <div class="col-sm d-grid gap-2">
     <a type="button" [routerLink]="['/teams']" class="btn btn-primary">Equipos</a>
   </div>
-  <div class="col-sm d-grid gap-2" *ngIf="isAdmin">
+  <div class="col-sm d-grid gap-2" *ngIf="getSessionUser().isAdmin()">
     <a type="button" [routerLink]="['/admin']" class="btn btn-primary">Administración</a>
   </div>
   <div class="col-sm dropdown">
     <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
       aria-expanded="false">
-      {{getSessionUser().username}}
+      {{getSessionUser().getUsername()}}
     </a>
     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-      <li><a class="dropdown-item" [routerLink]="['/profile', getSessionUser().username]">Editar perfil</a></li>
+      <li><a class="dropdown-item" [routerLink]="['/profile', getSessionUser().getUsername()]">Editar perfil</a></li>
       <li>
         <hr class="dropdown-divider">
       </li>

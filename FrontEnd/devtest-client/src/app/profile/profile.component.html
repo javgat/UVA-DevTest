@@ -1,40 +1,46 @@
 <app-nav-bar></app-nav-bar>
 <div class="container">
-    <div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message" role="alert">{{getMensaje().texto}}</div>
+    <div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message" role="alert">
+        {{getMensaje().texto}}</div>
     <ul>
         <li>{{profileUser.getUsername()}}</li>
         <li>{{profileUser.getEmail()}}</li>
         <li>{{profileUser.getFullname()}}</li>
         <li>{{profileUser.getRol()}}</li>
     </ul>
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editPassModal">
-        Editar contraseña
-    </button>
-    <!-- Modal -->
-    <div class="modal fade" id="editPassModal" tabindex="-1" aria-labelledby="editPassModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form (ngSubmit)='changePassSubmit()' ngNativeValidate>
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="editPassModalLabel">Editar contraseña</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="oldpass" class="form-label">Contraseña actual</label>
-                            <input type="password" class="form-control" id="oldpass" name="oldpass" [(ngModel)]="pUpdate.oldpass" required>
+    <div *ngIf="checkMostrarPasswordUpdate()">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editPassModal">
+            Editar contraseña
+        </button>
+        <!-- Modal -->
+        <div class="modal fade" id="editPassModal" tabindex="-1" aria-labelledby="editPassModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form (ngSubmit)='changePassSubmit()' ngNativeValidate>
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editPassModalLabel">Editar contraseña</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="mb-3">
-                            <label for="newpass" class="form-label">Nueva contraseña</label>
-                            <input type="password" class="form-control" id="newpass" name="newpass" [(ngModel)]="pUpdate.newpass" required>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="oldpass" class="form-label">Contraseña actual</label>
+                                <input type="password" class="form-control" id="oldpass" name="oldpass"
+                                    [(ngModel)]="pUpdate.oldpass" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="newpass" class="form-label">Nueva contraseña</label>
+                                <input type="password" class="form-control" id="newpass" name="newpass"
+                                    [(ngModel)]="pUpdate.newpass" required>
+                            </div>
+                            <!-- PEDIR REPETIR CONTRASEÑA ? -->
                         </div>
-                        <!-- PEDIR REPETIR CONTRASEÑA ? -->
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <input type="submit" value="Guardar" class="btn btn-primary" id="buttonChangePass"/>
-                    </div>
-                </form>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <input type="submit" value="Guardar" class="btn btn-primary" id="buttonChangePass" />
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

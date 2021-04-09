@@ -17,7 +17,7 @@ const routes: Routes = [
   {path: 'admin', component: AdminComponent},
   {path: 'tests', component: TestsComponent},
   {path: 'teams', component: TeamsComponent},
-  {path: 'team/:id', component: TeamComponent},
+  {path: 'teams/:id', component: TeamComponent},
   {path: 'createTeam', component: CreateTeamComponent},
   {path: '**', component: MainComponent, pathMatch:'full'}
 ];

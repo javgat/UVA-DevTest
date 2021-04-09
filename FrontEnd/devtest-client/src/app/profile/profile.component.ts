@@ -95,4 +95,9 @@ export class ProfileComponent extends LoggedInController implements OnInit {
     )
   }
 
+  checkMostrarPasswordUpdate(): boolean{
+    let us = this.getSessionUser()
+    return us.isAdmin() || (us.getUsername()==this.profileUser.getUsername())
+  }
+
 }

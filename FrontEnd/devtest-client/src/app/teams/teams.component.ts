@@ -16,29 +16,28 @@ export class TeamsComponent extends LoggedInController implements OnInit {
 
   teams: Team[]
 
+  private sUserSub: Subscription = new Subscription;
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService) {
     super(session, router, data, userS)
     this.teams = []
-    this.getTeams(true)
   }
 
   ngOnInit(): void {
+    this.getTeams(true)
   }
 
   ngOnDestroy(): void {
+    this.sUserSub.unsubscribe()
     super.onDestroy()
   }
 
   getTeams(primera: boolean) {
-    let sUserSub = this.session.sessionUser.subscribe(
+    this.sUserSub.unsubscribe()
+    this.sUserSub = this.session.sessionUser.subscribe(
       valor => {
         if(!valor.isEmpty()){
           this.getTeamsOfUser(valor.username, primera)
         }
-      },
-      err =>{},
-      () =>{
-        sUserSub.unsubscribe()
       }
     )
   }
