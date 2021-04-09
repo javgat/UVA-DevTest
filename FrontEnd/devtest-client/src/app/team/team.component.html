@@ -1,3 +1,26 @@
 <app-nav-bar></app-nav-bar>
+<div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message" role="alert">
+    {{getMensaje().texto}}</div>
 <h2>Equipo: {{equipo.getTeamname()}}</h2>
 {{equipo.getDescription()}}
+<h4>Administradores:</h4>
+<ul *ngFor="let admin of admins">
+    <li>{{admin.username}} | {{admin.email}}</li>
+    <a class="button btn btn-primary" [routerLink]="['/profile', admin.username]">Ver perfil</a>
+</ul>
+<h4>Miembros:</h4>
+<div *ngIf="checkTeamAdmin()">
+    <form (ngSubmit)='addMemberSubmit()' ngNativeValidate>
+        <div class="input-group">
+            <input type="text" class="form-control" name="inputAddMember" aria-describedby="inputAddMemberHelp"
+                [(ngModel)]="addMiembroUsername" placeholder="Nombre de usuario" required pattern="[^@]+" />
+            <input class="button btn btn-primary" type="submit" value="Añadir miembro"/>
+        </div>
+    </form>
+</div>
+<ul *ngFor="let miembro of miembros">
+    <li>{{miembro.username}} | {{miembro.email}}</li>
+    <a class="button btn btn-primary" [routerLink]="['/profile', miembro.username]">Ver perfil</a>
+    <a class="button btn btn-success" (click)="putAdminClick(miembro.username)"*ngIf="checkTeamAdmin()">Convertir en admin</a>
+    <a class="button btn btn-danger" *ngIf="checkTeamAdmin()">Eliminar</a>
+</ul>
