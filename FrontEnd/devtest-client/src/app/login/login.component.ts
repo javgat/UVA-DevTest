@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService, LoginUser, UserService } from '@javgat/devtest-api'
 import { Subscription } from 'rxjs';
-import { Mensaje, SessionLogin, Tipo } from '../shared/app.model';
+import { Mensaje, SessionLogin, Tipo, Usuario } from '../shared/app.model';
 import { DataService } from '../shared/data.service';
 import { SessionService } from '../shared/session.service';
 
@@ -61,6 +61,7 @@ export class LoginComponent implements OnInit {
       resp =>{
         this.datos.cambiarMensaje(new Mensaje("Inicio de sesión con éxito", Tipo.SUCCESS, true))
         this.session.cambiarSession(new SessionLogin(true, resp.username))
+        this.session.cambiarUser(new Usuario(resp.username, resp.email, resp.fullname, resp.rol))
         console.log("Inicio de sesión con éxito")
       },
       err =>{

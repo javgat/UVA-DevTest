@@ -1,41 +1,41 @@
 import { User, Team } from "@javgat/devtest-api";
 
-export enum Tipo{
+export enum Tipo {
     SUCCESS = "success",
     ERROR = "danger",
-    WARNING= "warning",
-    INFO="info"
+    WARNING = "warning",
+    INFO = "info"
 }
 
-export class Mensaje{
+export class Mensaje {
     readonly texto: String;
-    readonly type : Tipo;
-    readonly mostrar : boolean;
-    constructor(mensaje?:String, type?:Tipo, mostrar?:boolean){
+    readonly type: Tipo;
+    readonly mostrar: boolean;
+    constructor(mensaje?: String, type?: Tipo, mostrar?: boolean) {
         this.texto = mensaje || "";
         this.type = type || Tipo.INFO;
         this.mostrar = mostrar || false;
     }
 }
 
-export class SessionLogin{
+export class SessionLogin {
     private readonly logged: boolean
     private readonly username: string
-    constructor(logged:boolean, username?:string){
+    constructor(logged: boolean, username?: string) {
         this.logged = logged
         this.username = username || ""
     }
 
-    isLoggedIn(): boolean{
+    isLoggedIn(): boolean {
         return this.logged
     }
 
-    getUserUsername(): string{
+    getUserUsername(): string {
         return this.username
     }
 }
 
-export class SessionUser implements User{
+export class SessionUser implements User {
     readonly empty: boolean
     readonly username: string;
     readonly email: string;
@@ -48,7 +48,7 @@ export class SessionUser implements User{
      * @param fullname 
      * @param type 
      */
-    constructor(username?:string, email?:string, fullname?:string, rol?:User.RolEnum){
+    constructor(username?: string, email?: string, fullname?: string, rol?: User.RolEnum) {
         this.username = username || ""
         this.email = email || ""
         this.fullname = fullname || ""
@@ -56,28 +56,28 @@ export class SessionUser implements User{
         this.empty = (this.username == "" || this.email == "")
     }
 
-    isEmpty() : boolean{
+    isEmpty(): boolean {
         return this.empty
     }
 
-    getUsername(): string{
+    getUsername(): string {
         return this.username
     }
 
-    getEmail(): string{
+    getEmail(): string {
         return this.email
     }
 
-    getFullname(): string{
+    getFullname(): string {
         return this.fullname
     }
 
-    getRol() : User.RolEnum{
+    getRol(): User.RolEnum {
         return this.rol
     }
 }
 
-export class Usuario extends SessionUser{
+export class Usuario extends SessionUser {
     /**
      * 
      * @param username
@@ -85,30 +85,30 @@ export class Usuario extends SessionUser{
      * @param fullname 
      * @param type 
      */
-    constructor(username:string, email:string, fullname:string, rol:User.RolEnum){
+    constructor(username: string, email: string, fullname: string, rol: User.RolEnum) {
         super(username, email, fullname, rol)
     }
 }
 
-export class Equipo implements Team{
+export class Equipo implements Team {
     teamname: string;
     description: string;
     soloProfesores: boolean;
-    constructor(teamname: string, description: string, soloProfesores: boolean){
+    constructor(teamname: string, description: string, soloProfesores: boolean) {
         this.teamname = teamname
         this.description = description
         this.soloProfesores = soloProfesores
     }
 
-    getTeamname(): string{
+    getTeamname(): string {
         return this.teamname
     }
 
-    getDescription(): string{
+    getDescription(): string {
         return this.description
     }
 
-    isSoloProfesores(): boolean{
+    isSoloProfesores(): boolean {
         return this.soloProfesores
     }
 }

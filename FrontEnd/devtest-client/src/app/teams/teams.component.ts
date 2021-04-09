@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Team, UserService } from '@javgat/devtest-api';
+import { Router } from '@angular/router';
+import { User, Team, UserService } from '@javgat/devtest-api';
 import { Subscription } from 'rxjs';
+import { LoggedInController } from '../shared/app.controller';
 import { SessionUser } from '../shared/app.model';
+import { DataService } from '../shared/data.service';
 import { SessionService } from '../shared/session.service';
 
 @Component({
@@ -9,38 +12,44 @@ import { SessionService } from '../shared/session.service';
   templateUrl: './teams.component.html',
   styleUrls: ['./teams.component.css']
 })
-export class TeamsComponent implements OnInit {
+export class TeamsComponent extends LoggedInController implements OnInit {
 
-  teams : Team[]
-  sessionUser : SessionUser
+  teams: Team[]
 
-  private sessionUserSubscription : Subscription
-
-  constructor(private session : SessionService, private userS : UserService) {
+  constructor(session: SessionService, router: Router, data: DataService, userS: UserService) {
+    super(session, router, data, userS)
     this.teams = []
-    this.sessionUser = new SessionUser()
-    this.sessionUserSubscription = this.session.sessionUser.subscribe(
-      valor =>{
-        this.sessionUser = valor
-        this.getTeamsOfUser(valor.username)
-      }
-    )
+    this.getTeams(true)
   }
 
   ngOnInit(): void {
   }
 
-  ngOnDestroy() :void{
-    this.sessionUserSubscription.unsubscribe()
+  ngOnDestroy(): void {
+    super.onDestroy()
   }
 
-  getTeamsOfUser(username : string){
+  getTeams(primera: boolean) {
+    let sUserSub = this.session.sessionUser.subscribe(
+      valor => {
+        if(!valor.isEmpty()){
+          this.getTeamsOfUser(valor.username, primera)
+        }
+      },
+      err =>{},
+      () =>{
+        sUserSub.unsubscribe()
+      }
+    )
+  }
+
+  getTeamsOfUser(username: string, primera: boolean) {
     this.userS.getTeamsOfUser(username).subscribe(
       resp => {
         this.teams = resp
       },
-      err =>{
-        console.log(err)
+      err => {
+        this.handleErrRelog(err, "obtener equipos de usuario", primera, this.getTeams, this)
       }
     )
   }

@@ -4,7 +4,7 @@ import { SessionService } from 'src/app/shared/session.service';
 import { MainComponent } from '../main.component';
 
 import { UserService} from '@javgat/devtest-api'
-import { SessionLogin } from 'src/app/shared/app.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-logged-in',
@@ -13,8 +13,8 @@ import { SessionLogin } from 'src/app/shared/app.model';
 })
 export class LoggedInComponent extends MainComponent implements OnInit {
 
-  constructor(datos: DataService, session: SessionService, userService : UserService){
-    super(datos, session, userService);
+  constructor(session: SessionService, router: Router, datos: DataService, userService : UserService){
+    super(session, router, datos, userService);
   }
 
   ngOnInit(): void {

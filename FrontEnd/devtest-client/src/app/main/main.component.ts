@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { UserService } from '@javgat/devtest-api';
-import { Subscription } from 'rxjs';
-import { SessionLogin } from '../shared/app.model';
+import { LoggedInController } from '../shared/app.controller';
 import { DataService } from '../shared/data.service';
 import { SessionService } from '../shared/session.service';
 
@@ -10,24 +10,15 @@ import { SessionService } from '../shared/session.service';
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.css']
 })
-export class MainComponent implements OnInit {
-  
-  sessionLogin : SessionLogin
-  private sessionSubscription : Subscription
+export class MainComponent extends LoggedInController implements OnInit {
 
-  constructor(private datos: DataService, protected session: SessionService, protected userService : UserService) {
-    this.sessionLogin = new SessionLogin(false)
-    this.session.checkStorageSession()
-    this.sessionSubscription = this.session.sessionLogin.subscribe(
-      valor => {
-        this.sessionLogin = valor
-        //console.log(valor)//hay varias instancias de main component a la vez, porque se llama a si mismo
-      }
-    )
+  constructor(session: SessionService, router: Router, datos: DataService, userS : UserService) {
+    super(session, router, datos, userS)
   }
 
   ngOnDestroy(): void {
-    this.sessionSubscription.unsubscribe();
+    this.borrarMensaje()
+    super.onDestroy()
   }
 
   ngOnInit(): void {

@@ -1,6 +1,6 @@
 <app-nav-bar></app-nav-bar>
 <div class="container">
-    <div class="alert alert-{{mensaje.type}}" *ngIf="mensaje.mostrar" id="message" role="alert">{{mensaje.texto}}</div>
+    <div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message" role="alert">{{getMensaje().texto}}</div>
     <ul>
         <li>{{profileUser.getUsername()}}</li>
         <li>{{profileUser.getEmail()}}</li>

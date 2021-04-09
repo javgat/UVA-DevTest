@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { User, UserService } from '@javgat/devtest-api';
 import { Subscription } from 'rxjs';
+import { LoggedInController } from '../shared/app.controller';
 import { SessionLogin, SessionUser } from '../shared/app.model';
+import { DataService } from '../shared/data.service';
 import { SessionService } from '../shared/session.service';
 
 @Component({
@@ -10,61 +12,17 @@ import { SessionService } from '../shared/session.service';
   templateUrl: './nav-bar.component.html',
   styleUrls: ['./nav-bar.component.css']
 })
-export class NavBarComponent implements OnInit {
-
-
-  private sessionLogin : SessionLogin
-  sessionUser : SessionUser
-  private sessionSubscription : Subscription
-  private sessionUserSubscription : Subscription
-  isAdmin : boolean
+export class NavBarComponent extends LoggedInController implements OnInit {
   
-  constructor(private session: SessionService, private router: Router, private userService : UserService) {
-    this.session.checkStorageSession()
-    this.sessionLogin = new SessionLogin(false)
-    this.sessionSubscription = this.session.sessionLogin.subscribe(
-      valor => {
-        this.sessionLogin = valor
-        if(!this.sessionLogin.isLoggedIn()){
-          this.router.navigate(['/'])
-        }
-      }
-    )
-    this.isAdmin = false
-    this.sessionUser = new SessionUser()
-    this.sessionUserSubscription = this.session.sessionUser.subscribe(
-      valor =>{
-        this.sessionUser = valor
-        this.isAdmin = (valor.getRol() == User.RolEnum.Administrador)
-      }
-    )
+  constructor(session: SessionService, router: Router, data: DataService, userS : UserService) {
+    super(session, router, data, userS)
   }
 
   ngOnInit(): void {
-    if (this.sessionUser.isEmpty()){
-      this.getUser(true)
-    }
   }
 
   ngOnDestroy(): void {
-    this.sessionSubscription.unsubscribe();
-    this.sessionUserSubscription.unsubscribe();
-  }
-
-  logout(){
-    this.session.logout()
-  }
-
-  getUser(primera: boolean){
-    this.userService.getUser(this.sessionLogin.getUserUsername() as string).subscribe(
-      resp => {
-        this.session.cambiarSession(new SessionLogin(true, this.sessionLogin.getUserUsername()))
-        this.session.cambiarUser(new SessionUser(resp.username, resp.email, resp.fullname, resp.rol))
-      },
-      err => {
-        this.session.handleErrRelog(err, "obtencion del usuario", primera, this.getUser, this)        
-      }
-    )
+    super.onDestroy()
   }
 
 }

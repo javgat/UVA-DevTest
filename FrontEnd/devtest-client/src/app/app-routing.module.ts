@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminComponent } from './admin/admin.component';
+import { CreateTeamComponent } from './create-team/create-team.component';
 import { LoginComponent } from './login/login.component';
 import { MainComponent } from './main/main.component';
 import { ProfileComponent } from './profile/profile.component';
@@ -17,6 +18,7 @@ const routes: Routes = [
   {path: 'tests', component: TestsComponent},
   {path: 'teams', component: TeamsComponent},
   {path: 'team/:id', component: TeamComponent},
+  {path: 'createTeam', component: CreateTeamComponent},
   {path: '**', component: MainComponent, pathMatch:'full'}
 ];
 

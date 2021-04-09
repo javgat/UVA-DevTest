@@ -1,6 +1,6 @@
-<div *ngIf="sessionLogin.isLoggedIn()">
+<div *ngIf="isLoggedIn">
     <app-logged-in></app-logged-in>
 </div>
-<div *ngIf="!sessionLogin.isLoggedIn()">
+<div *ngIf="!isLoggedIn">
     <app-not-logged-in></app-not-logged-in>
 </div>

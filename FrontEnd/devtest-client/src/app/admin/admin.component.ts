@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { User, UserService } from '@javgat/devtest-api';
 import { Subscription } from 'rxjs';
-import { SessionUser } from '../shared/app.model';
+import { LoggedInController } from '../shared/app.controller';
+import { DataService } from '../shared/data.service';
 import { SessionService } from '../shared/session.service';
 
 @Component({
@@ -10,41 +11,44 @@ import { SessionService } from '../shared/session.service';
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.css']
 })
-export class AdminComponent implements OnInit {
+export class AdminComponent extends LoggedInController implements OnInit {
 
   users : User[]
-  sessionUser : SessionUser
 
-  private sessionUserSubscription : Subscription
+  private userSub : Subscription
 
-  constructor(private session: SessionService, private userService: UserService,
-    private router : Router) {
+  constructor(session: SessionService, userS: UserService,
+    router : Router, data: DataService) {
+    super(session, router, data, userS)
     this.users = []
-    this.sessionUser = new SessionUser()
-    this.sessionUserSubscription = this.session.sessionUser.subscribe(
-      valor =>{
-        this.sessionUser = valor
-        this.getUsers()
+
+    this.userSub = this.session.sessionUser.subscribe(
+      valor => {
+        if (valor.getRol()==User.RolEnum.Administrador){
+          this.getUsers(true)
+        }else if(!valor.isEmpty()){
+          this.router.navigate(['/'])
+        }
       }
     )
   }
 
   ngOnInit(): void {
+
   }
 
   ngOnDestroy(): void{
-    this.sessionUserSubscription.unsubscribe()
+    this.userSub.unsubscribe()
+    super.onDestroy()
   }
 
-  getUsers(){
-    this.userService.getUsers().subscribe(
+  getUsers(primera: boolean){
+    this.userS.getUsers().subscribe(
       resp => {
         this.users = resp
       },
       err =>{
-        console.log("Error, no tienes permisos para acceder a los usuarios "+err.status)
-        // Esta comentado para mostrar que no estan los usuarios
-        //this.router.navigate(['/'])
+        this.handleErrRelog(err, "Obtener usuarios del panel de administración", primera, this.getUsers, this)
       }
     )
   }

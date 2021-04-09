@@ -14,10 +14,10 @@
   <div class="col-sm dropdown">
     <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
       aria-expanded="false">
-      {{sessionUser.username}}
+      {{getSessionUser().username}}
     </a>
     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-      <li><a class="dropdown-item" [routerLink]="['/profile', sessionUser.username]">Editar perfil</a></li>
+      <li><a class="dropdown-item" [routerLink]="['/profile', getSessionUser().username]">Editar perfil</a></li>
       <li>
         <hr class="dropdown-divider">
       </li>
