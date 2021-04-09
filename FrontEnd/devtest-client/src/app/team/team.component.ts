@@ -22,6 +22,8 @@ export class TeamComponent extends LoggedInController implements OnInit {
   miembros: User[]
   addMiembroUsername: string
   usernamePutAdmin: string
+  kickingUsername: string
+  mightKickUsername: string
 
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService,
     private route: ActivatedRoute, private teamService: TeamService) {
@@ -29,9 +31,7 @@ export class TeamComponent extends LoggedInController implements OnInit {
     this.equipo = new Equipo("", "", false)
     this.admins = []
     this.miembros = []
-    this.id = ""
-    this.addMiembroUsername = ""
-    this.usernamePutAdmin = ""
+    this.id = this.addMiembroUsername = this.usernamePutAdmin = this.kickingUsername = this.mightKickUsername = ""
     this.routeSub = this.route.params.subscribe(params => {
       this.id = params['id']
       this.borrarMensaje()
@@ -107,7 +107,7 @@ export class TeamComponent extends LoggedInController implements OnInit {
 
   addMember(primera: boolean) {
     if (this.isTeamAdmin(this.addMiembroUsername) || this.isTeamMiembro(this.addMiembroUsername)) {
-      this.cambiarMensaje(new Mensaje("Ese usuario ya pertenece al equipo", Tipo.WARNING, true))
+      this.cambiarMensaje(new Mensaje("Ese usuario ya pertenece al equipo", Tipo.ERROR, true))
     } else {
       this.teamService.addMember(this.id, this.addMiembroUsername).subscribe(
         resp => this.getMiembros(true),
@@ -116,18 +116,55 @@ export class TeamComponent extends LoggedInController implements OnInit {
     }
   }
 
-  putAdminClick(username: string){
+  putAdminClick(username: string) {
     this.usernamePutAdmin = username
     this.putAdmin(true)
   }
 
-  putAdmin(primera: boolean){
+  putMemberClick(username: string) {
+    this.usernamePutAdmin = username
+    if (this.admins.length > 1) {
+      this.putMember(true)
+    } else {
+      this.cambiarMensaje(new Mensaje("No se puede dejar al equipo sin administradores", Tipo.ERROR, true))
+    }
+  }
+
+  putAdmin(primera: boolean) {
     this.teamService.addAdmin(this.id, this.usernamePutAdmin).subscribe(
-      resp=> {
+      resp => {
         this.getMiembros(true)
         this.getAdmins(true)
       },
       err => this.handleErrRelog(err, "otorgar permisos de administracion en un equipo", primera, this.putAdmin, this)
+    )
+  }
+
+  putMember(primera: boolean) {
+    this.teamService.addMember(this.id, this.usernamePutAdmin).subscribe(
+      resp => {
+        this.getMiembros(true)
+        this.getAdmins(true)
+      },
+      err => this.handleErrRelog(err, "retirar permisos de administracion en un equipo", primera, this.putMember, this)
+    )
+  }
+
+  mighDeleteClick(username:string){
+    this.mightKickUsername = username
+  }
+
+  deleteMemberClick(username: string) {
+    this.kickingUsername = username
+    this.deleteMember(true)
+  }
+
+  deleteMember(primera: boolean) {
+    this.teamService.deleteUserFromTeam(this.id, this.kickingUsername).subscribe(
+      resp=>{
+        this.getMiembros(true)
+      },
+      err => this.handleErrRelog(err, "expulsar miembro de un equipo", primera, this.deleteMember, this)
     )
   }
 
