@@ -1,8 +1,44 @@
 <app-nav-bar></app-nav-bar>
 <div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message" role="alert">
     {{getMensaje().texto}}</div>
-<h2>Equipo: {{equipo.getTeamname()}}</h2>
+<h3 *ngIf="equipo.isSoloProfesores()">Equipo de profesores</h3>
+<h3 *ngIf="!equipo.isSoloProfesores()">Equipo de estudiantes</h3>
+<h2>{{equipo.getTeamname()}}</h2>
 <h3><small class="text-muted">{{equipo.getDescription()}}</small></h3>
+<button data-bs-toggle="modal" data-bs-target="#updateTeamModal" class="button btn btn-primary"
+    *ngIf="checkTeamAdmin()">Modificar Datos</button>
+<!-- Modal modificar -->
+<div class="modal fade" id="updateTeamModal" tabindex="-1" aria-labelledby="updateTeamModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form ngNativeValidate>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updateTeamModalLabel">Modificar equipo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancelar"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="inputTeamname" class="form-label">Nombre del equipo</label>
+                        <input type="text" class="form-control" name="inputTeamname" aria-describedby="teamnameHelp"
+                            [(ngModel)]="teamEdit.teamname" required />
+                        <div id="teamnameHelp" class="form-text text-muted">El nombre único del équipo</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputDescription" class="form-label">Descripción</label>
+                        <input type="text" class="form-control" name="inputDescription"
+                            aria-describedby="descriptionHelp" [(ngModel)]="teamEdit.description" />
+                        <div id="descriptionHelp" class="form-text text-muted">Información detallada del equipo
+                            (opcional)</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" class="btn btn-success" role="button" data-bs-dismiss="modal" (click)="updateTeamClick()" value="Guardar"/>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <div class="my-4">
     <h4>Administradores:</h4>
     <table class="table table-striped table-hover table-primary">
@@ -84,7 +120,7 @@
             </tr>
         </tbody>
     </table>
-    <!-- Modal -->
+    <!-- Modal expulsar -->
     <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">

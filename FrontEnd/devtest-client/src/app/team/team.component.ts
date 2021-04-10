@@ -24,6 +24,7 @@ export class TeamComponent extends LoggedInController implements OnInit {
   usernamePutAdmin: string
   kickingUsername: string
   mightKickUsername: string
+  teamEdit: Team
 
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService,
     private route: ActivatedRoute, private teamService: TeamService) {
@@ -31,6 +32,7 @@ export class TeamComponent extends LoggedInController implements OnInit {
     this.equipo = new Equipo("", "", false)
     this.admins = []
     this.miembros = []
+    this.teamEdit = new Equipo("", "", false)
     this.id = this.addMiembroUsername = this.usernamePutAdmin = this.kickingUsername = this.mightKickUsername = ""
     this.routeSub = this.route.params.subscribe(params => {
       this.id = params['id']
@@ -165,6 +167,20 @@ export class TeamComponent extends LoggedInController implements OnInit {
         this.getMiembros(true)
       },
       err => this.handleErrRelog(err, "expulsar miembro de un equipo", primera, this.deleteMember, this)
+    )
+  }
+
+  updateTeamClick(){
+    console.log("updating team...")
+    this.updateTeam(true)
+  }
+
+  updateTeam(primera: boolean){
+    this.teamService.putTeam(this.id, this.teamEdit).subscribe(
+      resp => {
+        this.router.navigate(['/teams',this.teamEdit.teamname])
+      },
+      err=> this.handleErrRelog(err, "actualizar equipo", primera, this.updateTeam, this)
     )
   }
 

@@ -54,15 +54,13 @@ func isTeamMember(teamname string, u *models.User) (bool, error) {
 		log.Println("Error en users_handler isTeamMember(): ", err)
 		return false, err
 	}
-	users, err := dao.GetUsersFromTeam(db, teamname)
+	user, err := dao.GetUserFromTeam(db, teamname, *u.Username)
 	if err != nil {
 		log.Println("Error en users_handler isTeamMember(): ", err)
 		return false, err
 	}
-	for _, us := range users {
-		if us.Username == u.Username {
-			return true, nil
-		}
+	if user != nil {
+		return true, nil
 	}
 	return false, nil
 }
