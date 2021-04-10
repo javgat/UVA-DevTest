@@ -1,6 +1,4 @@
 <app-nav-bar></app-nav-bar>
-<h2>Usuarios</h2>
-<ul *ngFor="let user of users">
-    <li>{{user.username}} | {{user.fullname}}</li>
-    <a class="button btn btn-primary" [routerLink]="['/profile', user.username]">Ver perfil</a>
-</ul>
+<h2>Panel de administración</h2>
+<p><a class="button btn btn-primary" [routerLink]="['/admin/users']">Administrar Usuarios</a></p>
+<p><a class="button btn btn-primary" [routerLink]="['/admin/teams']">Administrar Equipos</a></p>

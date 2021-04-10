@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AdminTeamsComponent } from './admin/admin-teams/admin-teams.component';
+import { AdminUsersComponent } from './admin/admin-users/admin-users.component';
 import { AdminComponent } from './admin/admin.component';
 import { CreateTeamComponent } from './create-team/create-team.component';
 import { LoginComponent } from './login/login.component';
@@ -15,6 +17,8 @@ const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'profile/:id', component: ProfileComponent},
   {path: 'admin', component: AdminComponent},
+  {path: 'admin/users', component: AdminUsersComponent},
+  {path: 'admin/teams', component: AdminTeamsComponent},
   {path: 'tests', component: TestsComponent},
   {path: 'teams', component: TeamsComponent},
   {path: 'teams/:id', component: TeamComponent},

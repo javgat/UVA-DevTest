@@ -1,0 +1,6 @@
+<app-nav-bar></app-nav-bar>
+<h2>Administración: Equipos</h2>
+<ul *ngFor="let team of teams">
+    <li>{{team.teamname}} | {{team.soloProfesores}}</li>
+    <a class="button btn btn-primary" [routerLink]="['/teams', team.teamname]">Ver equipo</a>
+</ul>

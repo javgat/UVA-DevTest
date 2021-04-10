@@ -20,6 +20,8 @@ import { TeamsComponent } from './teams/teams.component';
 import { AdminComponent } from './admin/admin.component';
 import { TeamComponent } from './team/team.component';
 import { CreateTeamComponent } from './create-team/create-team.component';
+import { AdminUsersComponent } from './admin/admin-users/admin-users.component';
+import { AdminTeamsComponent } from './admin/admin-teams/admin-teams.component';
 
 export function apiConfigFactory (): Configuration {
   const params: ConfigurationParameters = {
@@ -43,7 +45,9 @@ export function apiConfigFactory (): Configuration {
     TeamsComponent,
     AdminComponent,
     TeamComponent,
-    CreateTeamComponent
+    CreateTeamComponent,
+    AdminUsersComponent,
+    AdminTeamsComponent
   ],
   imports: [
     BrowserModule,

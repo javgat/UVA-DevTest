@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { User, UserService } from '@javgat/devtest-api';
+import { TeamService, User, UserService } from '@javgat/devtest-api';
 import { Subscription } from 'rxjs';
 import { LoggedInController } from '../shared/app.controller';
 import { DataService } from '../shared/data.service';
@@ -13,20 +13,17 @@ import { SessionService } from '../shared/session.service';
 })
 export class AdminComponent extends LoggedInController implements OnInit {
 
-  users : User[]
 
-  private userSub : Subscription
+  private userSub: Subscription
 
-  constructor(session: SessionService, userS: UserService,
-    router : Router, data: DataService) {
+  constructor(session: SessionService, router: Router, data: DataService, userS: UserService, protected teamS: TeamService) {
     super(session, router, data, userS)
-    this.users = []
 
     this.userSub = this.session.sessionUser.subscribe(
       valor => {
-        if (valor.getRol()==User.RolEnum.Administrador){
-          this.getUsers(true)
-        }else if(!valor.isEmpty()){
+        if (valor.getRol() == User.RolEnum.Administrador) {
+          this.doAdminAction()
+        } else if (!valor.isEmpty()) {
           this.router.navigate(['/'])
         }
       }
@@ -37,20 +34,13 @@ export class AdminComponent extends LoggedInController implements OnInit {
 
   }
 
-  ngOnDestroy(): void{
+  ngOnDestroy(): void {
     this.userSub.unsubscribe()
     super.onDestroy()
   }
 
-  getUsers(primera: boolean){
-    this.userS.getUsers().subscribe(
-      resp => {
-        this.users = resp
-      },
-      err =>{
-        this.handleErrRelog(err, "Obtener usuarios del panel de administración", primera, this.getUsers, this)
-      }
-    )
-  }
+  doAdminAction(){}
+
+
 
 }
