@@ -48,21 +48,16 @@ func isTeamAdmin(teamname string, u *models.User) (bool, error) {
 	return false, nil
 }
 
-func isTeamMember(teamname string, u *models.User) (bool, error) {
+func isTeamMember(teamname string, u *models.User) bool {
 	db, err := dbconnection.ConnectDb()
 	if err != nil {
-		log.Println("Error en users_handler isTeamMember(): ", err)
-		return false, err
+		return false
 	}
 	user, err := dao.GetUserFromTeam(db, teamname, *u.Username)
-	if err != nil {
-		log.Println("Error en users_handler isTeamMember(): ", err)
-		return false, err
+	if err != nil || user == nil {
+		return false
 	}
-	if user != nil {
-		return true, nil
-	}
-	return false, nil
+	return true
 }
 
 // GetUsers GET /users. Returns all users.

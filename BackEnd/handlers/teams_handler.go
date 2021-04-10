@@ -57,15 +57,12 @@ func PostTeam(params team.PostTeamParams, u *models.User) middleware.Responder {
 // GetTeam returns team GET /teams/{teamname}
 // Auth: TeamMember or Admin
 func GetTeam(params team.GetTeamParams, u *models.User) middleware.Responder {
-	teamMember, err := isTeamMember(params.Teamname, u)
-	if err != nil {
-		return team.NewGetTeamInternalServerError()
-	}
-	if teamMember || isAdmin(u) {
+	if isTeamMember(params.Teamname, u) || isAdmin(u) {
+		log.Println("entro")
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			t, err := dao.GetTeam(db, params.Teamname)
-			if err == nil {
+			if err == nil && t != nil {
 				return team.NewGetTeamOK().WithPayload(dao.ToModelTeam(t))
 			}
 		}
@@ -120,11 +117,7 @@ func DeleteTeam(params team.DeleteTeamParams, u *models.User) middleware.Respond
 // GetAdminsFromTeam returns users from team GET /teams/{teamname}/admins
 // Auth: TeamMember or Admin
 func GetAdminsFromTeam(params team.GetAdminsParams, u *models.User) middleware.Responder {
-	teamMember, err := isTeamMember(params.Teamname, u)
-	if err != nil {
-		return team.NewGetAdminsInternalServerError()
-	}
-	if teamMember || isAdmin(u) {
+	if isTeamMember(params.Teamname, u) || isAdmin(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var users []*dao.User
@@ -164,11 +157,7 @@ func AddAdminToTeam(params team.AddAdminParams, u *models.User) middleware.Respo
 // GetAdminFromTeam returns users from team GET /teams/{teamname}/admins/{username}
 // Auth: TeamMember or Admin
 func GetAdminFromTeam(params team.GetAdminParams, u *models.User) middleware.Responder {
-	teamMember, err := isTeamMember(params.Teamname, u)
-	if err != nil {
-		return team.NewGetAdminInternalServerError()
-	}
-	if teamMember || isAdmin(u) {
+	if isTeamMember(params.Teamname, u) || isAdmin(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			user, err := dao.GetTeamAdmin(db, params.Teamname, params.Username)
@@ -185,11 +174,7 @@ func GetAdminFromTeam(params team.GetAdminParams, u *models.User) middleware.Res
 // GetMembersFromTeam returns users from team GET /teams/{teamname}/members
 // Auth: TeamMember or Admin
 func GetMembersFromTeam(params team.GetMembersParams, u *models.User) middleware.Responder {
-	teamMember, err := isTeamMember(params.Teamname, u)
-	if err != nil {
-		return team.NewGetMembersInternalServerError()
-	}
-	if teamMember || isAdmin(u) {
+	if isTeamMember(params.Teamname, u) || isAdmin(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			users, err := dao.GetTeamMembers(db, params.Teamname)
@@ -228,11 +213,7 @@ func AddMemberToTeam(params team.AddMemberParams, u *models.User) middleware.Res
 // GetMemberFromTeam returns users from team GET /teams/{teamname}/members/{username}
 // Auth: TeamMember or Admin
 func GetMemberFromTeam(params team.GetMemberParams, u *models.User) middleware.Responder {
-	teamMember, err := isTeamMember(params.Teamname, u)
-	if err != nil {
-		return team.NewGetMemberInternalServerError()
-	}
-	if teamMember || isAdmin(u) {
+	if isTeamMember(params.Teamname, u) || isAdmin(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			user, err := dao.GetTeamMember(db, params.Teamname, params.Username)
@@ -249,11 +230,7 @@ func GetMemberFromTeam(params team.GetMemberParams, u *models.User) middleware.R
 // GetUsersFromTeam returns users from team GET /teams/{teamname}/users
 // Auth: TeamMember or Admin
 func GetUsersFromTeam(params team.GetUsersFromTeamParams, u *models.User) middleware.Responder {
-	teamMember, err := isTeamMember(params.Teamname, u)
-	if err != nil {
-		return team.NewGetUsersFromTeamInternalServerError()
-	}
-	if teamMember || isAdmin(u) {
+	if isTeamMember(params.Teamname, u) || isAdmin(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			users, err := dao.GetUsersFromTeam(db, params.Teamname)
@@ -270,11 +247,7 @@ func GetUsersFromTeam(params team.GetUsersFromTeamParams, u *models.User) middle
 // GetUserFromTeam returns users from team GET /teams/{teamname}/users/{username}
 // Auth: TeamMember or Admin
 func GetUserFromTeam(params team.GetUserFromTeamParams, u *models.User) middleware.Responder {
-	teamMember, err := isTeamMember(params.Teamname, u)
-	if err != nil {
-		return team.NewGetUserFromTeamInternalServerError()
-	}
-	if teamMember || isAdmin(u) {
+	if isTeamMember(params.Teamname, u) || isAdmin(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			user, err := dao.GetUserFromTeam(db, params.Teamname, params.Username)
@@ -320,11 +293,7 @@ func DeleteUserFromTeam(params team.DeleteUserFromTeamParams, u *models.User) mi
 
 // /teams/{teamname}/questions
 func GetQuestionsFromTeam(params team.GetQuestionsFromTeamParams, u *models.User) middleware.Responder {
-	teamMember, err := isTeamMember(params.Teamname, u)
-	if err != nil {
-		return team.NewGetQuestionsFromTeamInternalServerError()
-	}
-	if teamMember || isAdmin(u) {
+	if isTeamMember(params.Teamname, u) || isAdmin(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			questions, err := dao.GetQuestionsFromTeam(db, params.Teamname)
@@ -344,11 +313,7 @@ func GetQuestionsFromTeam(params team.GetQuestionsFromTeamParams, u *models.User
 
 // /teams/{teamname}/questions/{questionid}
 func GetQuestionFromTeam(params team.GetQuestionFromTeamParams, u *models.User) middleware.Responder {
-	teamMember, err := isTeamMember(params.Teamname, u)
-	if err != nil {
-		return team.NewGetQuestionFromTeamInternalServerError()
-	}
-	if teamMember || isAdmin(u) {
+	if isTeamMember(params.Teamname, u) || isAdmin(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var question *dao.Question
@@ -369,11 +334,7 @@ func GetQuestionFromTeam(params team.GetQuestionFromTeamParams, u *models.User) 
 
 // /teams/{teamname}/tests
 func GetTestsFromTeam(params team.GetTestsFromTeamParams, u *models.User) middleware.Responder {
-	teamMember, err := isTeamMember(params.Teamname, u)
-	if err != nil {
-		return team.NewGetTestsFromTeamInternalServerError()
-	}
-	if teamMember || isAdmin(u) {
+	if isTeamMember(params.Teamname, u) || isAdmin(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			tests, err := dao.GetTestsFromTeam(db, params.Teamname)
@@ -393,11 +354,7 @@ func GetTestsFromTeam(params team.GetTestsFromTeamParams, u *models.User) middle
 
 // /teams/{teamname}/tests/{testid}
 func GetTestFromTeam(params team.GetTestFromTeamParams, u *models.User) middleware.Responder {
-	teamMember, err := isTeamMember(params.Teamname, u)
-	if err != nil {
-		return team.NewGetTestFromTeamInternalServerError()
-	}
-	if teamMember || isAdmin(u) {
+	if isTeamMember(params.Teamname, u) || isAdmin(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			test, err := dao.GetTestFromTeam(db, params.Teamname, params.Testid)
@@ -417,11 +374,7 @@ func GetTestFromTeam(params team.GetTestFromTeamParams, u *models.User) middlewa
 
 // /teams/{teamname}/publishedTests
 func GetPTestsFromTeam(params team.GetPublishedTestsFromTeamParams, u *models.User) middleware.Responder {
-	teamMember, err := isTeamMember(params.Teamname, u)
-	if err != nil {
-		return team.NewGetPublishedTestsFromTeamInternalServerError()
-	}
-	if teamMember || isAdmin(u) {
+	if isTeamMember(params.Teamname, u) || isAdmin(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			tests, err := dao.GetPTestsFromTeam(db, params.Teamname)
@@ -441,11 +394,7 @@ func GetPTestsFromTeam(params team.GetPublishedTestsFromTeamParams, u *models.Us
 
 // /teams/{teamname}/publishedTests/{publishedTestsid}
 func GetPTestFromTeam(params team.GetPublishedTestFromTeamParams, u *models.User) middleware.Responder {
-	teamMember, err := isTeamMember(params.Teamname, u)
-	if err != nil {
-		return team.NewGetPublishedTestFromTeamInternalServerError()
-	}
-	if teamMember || isAdmin(u) {
+	if isTeamMember(params.Teamname, u) || isAdmin(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			tests, err := dao.GetPTestFromTeam(db, params.Teamname, params.Testid)

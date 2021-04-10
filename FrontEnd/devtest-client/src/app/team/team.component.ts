@@ -184,4 +184,17 @@ export class TeamComponent extends LoggedInController implements OnInit {
     )
   }
 
+  leaveTeamClick(){
+    this.leaveTeam(true)
+  }
+
+  leaveTeam(primera: boolean){
+    this.teamService.deleteUserFromTeam(this.id, this.getSessionUser().getUsername()).subscribe(
+      resp => {
+        this.router.navigate(['/teams'])
+      },
+      err => this.handleErrRelog(err, "abandonar equipo", primera, this.leaveTeam, this)
+    )
+  }
+
 }

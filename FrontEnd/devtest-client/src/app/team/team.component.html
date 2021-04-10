@@ -5,10 +5,12 @@
 <h3 *ngIf="!equipo.isSoloProfesores()">Equipo de estudiantes</h3>
 <h2>{{equipo.getTeamname()}}</h2>
 <h3><small class="text-muted">{{equipo.getDescription()}}</small></h3>
-<button data-bs-toggle="modal" data-bs-target="#updateTeamModal" class="button btn btn-primary"
+<button data-bs-toggle="modal" data-bs-target="#updateTeamModal" class="button btn btn-primary mx-1"
     *ngIf="checkTeamAdmin()">Modificar Datos</button>
+<button class="button btn btn-danger mx-1" data-bs-toggle="modal" data-bs-target="#leaveModal">Abandonar</button>
 <!-- Modal modificar -->
-<div class="modal fade" id="updateTeamModal" tabindex="-1" aria-labelledby="updateTeamModalLabel" aria-hidden="true">
+<div *ngIf="checkTeamAdmin()" class="modal fade" id="updateTeamModal" tabindex="-1"
+    aria-labelledby="updateTeamModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <form ngNativeValidate>
@@ -32,10 +34,31 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <input type="submit" class="btn btn-success" role="button" data-bs-dismiss="modal" (click)="updateTeamClick()" value="Guardar"/>
+                    <input type="submit" class="btn btn-success" role="button" data-bs-dismiss="modal"
+                        (click)="updateTeamClick()" value="Guardar" />
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                 </div>
             </form>
+        </div>
+    </div>
+</div>
+<!-- Modal salir -->
+<div class="modal fade" id="leaveModal" tabindex="-1" aria-labelledby="leaveModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="leaveModalLabel">
+                    ¿Abandonar el equipo?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancelar"></button>
+            </div>
+            <div class="modal-body">
+                ¿Abandonar el equipo?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" role="button" data-bs-dismiss="modal"
+                    (click)="leaveTeamClick()">Abandonar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            </div>
         </div>
     </div>
 </div>
@@ -56,7 +79,7 @@
                 <td>{{admin.email}}</td>
                 <td>{{admin.fullname}}</td>
                 <td style="width:1%">
-                    <div class="btn-group dropstart" role="button">
+                    <div class="btn-group dropstart" role="button" *ngIf="checkTeamAdmin()">
                         <a data-bs-toggle="dropdown" class="link-dark" aria-expanded="false">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                 class="bi bi-list" viewBox="0 0 16 16">
@@ -100,7 +123,7 @@
                 <td>{{miembro.email}}</td>
                 <td>{{miembro.fullname}}</td>
                 <td style="width:1%">
-                    <div class="btn-group dropstart" role="button">
+                    <div class="btn-group dropstart" role="button" *ngIf="checkTeamAdmin()">
                         <a data-bs-toggle="dropdown" class="link-dark" aria-expanded="false">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                 class="bi bi-list" viewBox="0 0 16 16">
