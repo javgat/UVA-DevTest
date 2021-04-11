@@ -7,7 +7,7 @@
 <h3><small class="text-muted">{{equipo.getDescription()}}</small></h3>
 <button data-bs-toggle="modal" data-bs-target="#updateTeamModal" class="button btn btn-primary mx-1"
     *ngIf="checkTeamAdmin()">Modificar Datos</button>
-<button class="button btn btn-danger mx-1" data-bs-toggle="modal" data-bs-target="#leaveModal">Abandonar</button>
+<button class="button btn btn-danger mx-1" data-bs-toggle="modal" *ngIf="checkTeamMember()" data-bs-target="#leaveModal">Abandonar</button>
 <!-- Modal modificar -->
 <div *ngIf="checkTeamAdmin()" class="modal fade" id="updateTeamModal" tabindex="-1"
     aria-labelledby="updateTeamModalLabel" aria-hidden="true">
@@ -43,7 +43,7 @@
     </div>
 </div>
 <!-- Modal salir -->
-<div class="modal fade" id="leaveModal" tabindex="-1" aria-labelledby="leaveModalLabel" aria-hidden="true">
+<div *ngIf="checkTeamMember()" class="modal fade" id="leaveModal" tabindex="-1" aria-labelledby="leaveModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">

@@ -197,4 +197,8 @@ export class TeamComponent extends LoggedInController implements OnInit {
     )
   }
 
+  checkTeamMember(): boolean{
+    return (this.isTeamAdmin(this.getSessionUser().getUsername()) || this.isTeamMiembro(this.getSessionUser().getUsername()))
+  }
+
 }
