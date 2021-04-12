@@ -11,7 +11,7 @@
   <div class="col-sm d-grid gap-2" *ngIf="getSessionUser().isAdmin()">
     <a type="button" [routerLink]="['/admin']" class="btn btn-primary">Administración</a>
   </div>
-  <div class="col-sm dropdown">
+  <div class="col-sm dropdown d-grid gap-2">
     <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
       aria-expanded="false">
       {{getSessionUser().getUsername()}}

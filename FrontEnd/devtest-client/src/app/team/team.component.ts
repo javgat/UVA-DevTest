@@ -180,7 +180,12 @@ export class TeamComponent extends LoggedInController implements OnInit {
       resp => {
         this.router.navigate(['/teams',this.teamEdit.teamname])
       },
-      err=> this.handleErrRelog(err, "actualizar equipo", primera, this.updateTeam, this)
+      err=>{
+        if(err.status == 409){
+          this.cambiarMensaje(new Mensaje("Ya existe un equipo con ese nombre de equipo", Tipo.ERROR, true))
+        }else
+          this.handleErrRelog(err, "actualizar equipo", primera, this.updateTeam, this)
+      }
     )
   }
 

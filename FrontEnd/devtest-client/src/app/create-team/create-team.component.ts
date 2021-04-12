@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Team, User, UserService } from '@javgat/devtest-api';
 import { Subscription } from 'rxjs';
 import { LoggedInController } from '../shared/app.controller';
+import { Mensaje, Tipo } from '../shared/app.model';
 import { DataService } from '../shared/data.service';
 import { SessionService } from '../shared/session.service';
 
@@ -56,7 +57,10 @@ export class CreateTeamComponent extends LoggedInController implements OnInit {
         this.router.navigate(['/teams', this.team.teamname])
       },
       err =>{
-        this.handleErrRelog(err, "crear nuevo equipo", primera, this.teamPost, this)
+        if(err.status == 409){
+          this.cambiarMensaje(new Mensaje("Ya existe un equipo con ese nombre de equipo", Tipo.ERROR, true))
+        }else
+          this.handleErrRelog(err, "crear nuevo equipo", primera, this.teamPost, this)
       }
     )
   }

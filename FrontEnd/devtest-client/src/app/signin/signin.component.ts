@@ -16,27 +16,27 @@ import { SessionService } from '../shared/session.service';
 export class SigninComponent implements OnInit {
 
   signinUserEmpty = {
-    username:"",
-    email:"",
-    pass:""
+    username: "",
+    email: "",
+    pass: ""
   }
 
-  private messageSubscription : Subscription
-  private sessionSubscription : Subscription
+  private messageSubscription: Subscription
+  private sessionSubscription: Subscription
 
   // Variable que se modificara en el formulario de registro
   signinUser = this.signinUserEmpty as SigninUser
   mensaje: Mensaje
-  sessionUser : SessionLogin
-  constructor(private authService : AuthService, private datos : DataService,
-    private session: SessionService, private router: Router) { 
+  sessionUser: SessionLogin
+  constructor(private authService: AuthService, private datos: DataService,
+    private session: SessionService, private router: Router) {
     this.mensaje = new Mensaje()
     this.sessionUser = new SessionLogin(false)
     this.session.checkStorageSession()
     this.sessionSubscription = this.session.sessionLogin.subscribe(
       valor => {
         this.sessionUser = valor
-        if(this.sessionUser.isLoggedIn()){
+        if (this.sessionUser.isLoggedIn()) {
           this.router.navigate(['/'])
         }
       }
@@ -56,27 +56,31 @@ export class SigninComponent implements OnInit {
   }
 
   // Envío de petición de registro a BackEnd, y manejo de la respuesta
-  signin(su: SigninUser){
+  signin(su: SigninUser) {
     this.authService.registerUser(su).subscribe(
-      resp => {        
+      resp => {
         this.datos.cambiarMensaje(new Mensaje("Registro con exito", Tipo.SUCCESS, true))
         console.log("Registro con exito")
         this.router.navigate(['login'])
       },
-      err =>{
-        let msg: string
-        if(err.status >= 500)
-          msg = "Error al conectar con el servidor"
-        else
-          msg = err.error.message
-        this.datos.cambiarMensaje(new Mensaje("Error al registrar nuevo usuario: "+msg, Tipo.ERROR, true))
-        console.log("Error al registrar nuevo usuario: "+msg)
+      err => {
+        if (err.status == 409) {
+          this.datos.cambiarMensaje(new Mensaje("Ya existe un usuario con ese nombre de usuario o correo electrónico", Tipo.ERROR, true))
+        } else {
+          let msg: string
+          if (err.status >= 500)
+            msg = "Error al conectar con el servidor"
+          else
+            msg = err.error.message
+          this.datos.cambiarMensaje(new Mensaje("Error al registrar nuevo usuario: " + msg, Tipo.ERROR, true))
+          console.log("Error al registrar nuevo usuario: " + msg)
+        }
       }
     )
   }
 
   // Cuando el formulario se envia, se ejecuta la funcio
-  signinSubmit(){
+  signinSubmit() {
     this.signin(this.signinUser)
   }
 

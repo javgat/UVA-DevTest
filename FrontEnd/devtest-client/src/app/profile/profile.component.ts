@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService, LoginUser, PasswordUpdate, UserService } from '@javgat/devtest-api';
+import { AuthService, LoginUser, PasswordUpdate, Role, User, UserService, UserUpdate } from '@javgat/devtest-api';
 import { Subscription } from 'rxjs';
 import { LoggedInController } from '../shared/app.controller';
 import { Mensaje, SessionUser, Tipo, Usuario } from '../shared/app.model';
@@ -22,6 +22,15 @@ export class ProfileComponent extends LoggedInController implements OnInit {
     newpass: "",
   }
 
+  editUser: UserUpdate = {
+    username: "",
+    email: "",
+    fullname: "",
+    password: ""
+  }
+  editRol: Role = {
+    rol: User.RolEnum.Estudiante
+  }
   constructor(session: SessionService, router: Router, private route: ActivatedRoute,
     userS: UserService, data: DataService, private authService: AuthService) {
     super(session, router, data, userS)
@@ -56,6 +65,9 @@ export class ProfileComponent extends LoggedInController implements OnInit {
     this.userS.getUser(id).subscribe(
       resp => {
         this.profileUser = new Usuario(resp.username, resp.email, resp.fullname, resp.rol)
+        this.editUser.username = resp.username
+        this.editUser.email = resp.email
+        this.editUser.fullname = resp.fullname
       },
       err => {
         this.handleErrRelog(err, "obtener datos de perfil de usuario", primera, this.getProfile, this)
@@ -95,9 +107,66 @@ export class ProfileComponent extends LoggedInController implements OnInit {
     )
   }
 
-  checkMostrarPasswordUpdate(): boolean{
+  checkPermisosEditarUser(): boolean{
     let us = this.getSessionUser()
     return us.isAdmin() || (us.getUsername()==this.profileUser.getUsername())
+  }
+
+  editUserSubmit(){
+    this.updateUser(true)
+  }
+
+  updateUser(primera: boolean){
+    if (this.id == undefined) return
+    this.userS.putUser(this.id, this.editUser).subscribe(
+      resp =>{
+        this.id = this.editUser.username
+        this.cambiarMensaje(new Mensaje("Perfil actualizado con éxito", Tipo.SUCCESS, true))
+        this.router.navigate(['/profile', this.id])
+        this.getProfile(true)
+      },
+      err => {
+        if(err.status == 409){
+          this.cambiarMensaje(new Mensaje("Ya usuario con ese nombre de usuario o correo electrónico", Tipo.ERROR, true))
+        }else
+          this.handleErrRelog(err, "actualizar datos del usuario", primera, this.updateUser, this)
+      }
+    )
+  }
+
+  checkAdmin(): boolean{
+    return this.getSessionUser().isAdmin()
+  }
+
+  onSelectRol(rol: string){
+    switch(rol){
+      case User.RolEnum.Administrador:
+        this.editRol.rol = User.RolEnum.Administrador
+        break
+      case User.RolEnum.Profesor:
+        this.editRol.rol = User.RolEnum.Profesor
+        break
+      case User.RolEnum.Estudiante:
+        this.editRol.rol = User.RolEnum.Estudiante
+        break
+      default:
+        console.log("Error al detectar el nuevo rol")
+    }
+  }
+
+  changeRolSubmit(){
+    this.changeRol(true)
+  }
+  
+  changeRol(primera: boolean){
+    if (this.id == undefined) return
+    this.userS.putRole(this.id, this.editRol).subscribe(
+      resp=>{
+        this.cambiarMensaje(new Mensaje("Rol actualizado con éxito", Tipo.SUCCESS, true))
+        this.getProfile(true)
+      },
+      err => this.handleErrRelog(err, "cambiar rol de un usuario", primera, this.changeRol, this)
+    )
   }
 
 }

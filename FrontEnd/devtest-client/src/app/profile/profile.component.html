@@ -1,23 +1,118 @@
 <app-nav-bar></app-nav-bar>
-<div class="container">
+<div class="container my-5">
     <div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message" role="alert">
         {{getMensaje().texto}}</div>
+    <h2>Usuario: {{profileUser.getUsername()}}</h2>
+    <hr/>
     <ul>
-        <li>{{profileUser.getUsername()}}</li>
-        <li>{{profileUser.getEmail()}}</li>
-        <li>{{profileUser.getFullname()}}</li>
-        <li>{{profileUser.getRol()}}</li>
+        <li>Nombre de usuario: {{profileUser.getUsername()}}</li>
+        <li>Correo electrónico: {{profileUser.getEmail()}}</li>
+        <li>Nombre completo: {{profileUser.getFullname()}}</li>
+        <li>Rol: {{profileUser.getRol()}}</li>
     </ul>
-    <div *ngIf="checkMostrarPasswordUpdate()">
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editPassModal">
-            Editar contraseña
-        </button>
-        <!-- Modal -->
+    <div *ngIf="checkAdmin()">
+        <p><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editRolModal">
+            Modificar Rol
+        </button></p>
+    </div>
+    <div *ngIf="checkPermisosEditarUser()">
+        <p><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editUserModal">
+            Editar datos
+        </button></p>
+        <p><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editPassModal">
+            Cambiar contraseña
+        </button></p>
+    </div>
+    <div *ngIf="checkAdmin()">
+        <!-- Modal edit rol-->
+        <div class="modal fade" id="editRolModal" tabindex="-1" aria-labelledby="editRolModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form ngNativeValidate>
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editRolModalLabel">Modificar Rol</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="inputRol" id="inputRolAdmin"
+                                    required (change)="onSelectRol('administrador')"/>
+                                <label class="form-check-label" for="inputRolAdmin">
+                                    Administrador
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="inputRol" id="inputRolProfesor"
+                                    required (change)="onSelectRol('profesor')"/>
+                                <label class="form-check-label" for="inputRolProfesor">
+                                    Profesor
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="inputRol" id="inputRolEstudiante"
+                                    required (change)="onSelectRol('estudiante')" />
+                                <label class="form-check-label" for="inputRolEstudiante">
+                                    Estudiante
+                                </label>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <input type="submit" value="Guardar" (click)='changeRolSubmit()' data-bs-dismiss="modal" class="btn btn-primary" id="buttonChangeRol"/>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="checkPermisosEditarUser()">
+        <!-- Modal edit datos-->
+        <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form ngNativeValidate>
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editUserModalLabel">Editar datos</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="inputUsername" class="form-label">Nombre de usuario</label>
+                                <input type="text" class="form-control" id="inputUsername" name="inputUsername"
+                                    [(ngModel)]="editUser.username" value="{{profileUser.getUsername()}}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="inputEmail" class="form-label">Correo electrónico</label>
+                                <input type="text" class="form-control" id="inputEmail" name="inputEmail"
+                                    [(ngModel)]="editUser.email" value="{{profileUser.getEmail()}}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="inputFullname" class="form-label">Nombre completo</label>
+                                <input type="text" class="form-control" id="inputFullname" name="inputFullname"
+                                    [(ngModel)]="editUser.fullname" value="{{profileUser.getFullname()}}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="inputPassword" class="form-label">Contraseña actual</label>
+                                <input type="password" class="form-control" id="inputPassword" name="inputPassword"
+                                    [(ngModel)]="editUser.password" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <input type="submit" (click)='editUserSubmit()' value="Guardar" data-bs-dismiss="modal" class="btn btn-primary" id="buttonChangeUser" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Modal edit contra-->
         <div class="modal fade" id="editPassModal" tabindex="-1" aria-labelledby="editPassModalLabel"
             aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <form (ngSubmit)='changePassSubmit()' ngNativeValidate>
+                    <form ngNativeValidate>
                         <div class="modal-header">
                             <h5 class="modal-title" id="editPassModalLabel">Editar contraseña</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -37,7 +132,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <input type="submit" value="Guardar" class="btn btn-primary" id="buttonChangePass" />
+                            <input type="submit" value="Guardar" (click)='changePassSubmit()' data-bs-dismiss="modal" class="btn btn-primary" id="buttonChangePass" />
                         </div>
                     </form>
                 </div>

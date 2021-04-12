@@ -66,6 +66,7 @@ export class SessionService {
     if (err.status==401){
       if(!primera){
         this.data.handleShowErr(err, "alargar sesión de usuario")
+        this.logout()
       }else{
         this.auth.relogin().subscribe(
           resp =>{
