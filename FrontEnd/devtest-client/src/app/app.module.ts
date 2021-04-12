@@ -22,6 +22,9 @@ import { TeamComponent } from './team/team.component';
 import { CreateTeamComponent } from './create-team/create-team.component';
 import { AdminUsersComponent } from './admin/admin-users/admin-users.component';
 import { AdminTeamsComponent } from './admin/admin-teams/admin-teams.component';
+import { QuestionsComponent } from './questions/questions.component';
+import { QuestionComponent } from './question/question.component';
+import { QuestionCreateComponent } from './question-create/question-create.component';
 
 export function apiConfigFactory (): Configuration {
   const params: ConfigurationParameters = {
@@ -47,7 +50,10 @@ export function apiConfigFactory (): Configuration {
     TeamComponent,
     CreateTeamComponent,
     AdminUsersComponent,
-    AdminTeamsComponent
+    AdminTeamsComponent,
+    QuestionsComponent,
+    QuestionComponent,
+    QuestionCreateComponent
   ],
   imports: [
     BrowserModule,

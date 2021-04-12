@@ -7,6 +7,9 @@ import { CreateTeamComponent } from './create-team/create-team.component';
 import { LoginComponent } from './login/login.component';
 import { MainComponent } from './main/main.component';
 import { ProfileComponent } from './profile/profile.component';
+import { QuestionCreateComponent } from './question-create/question-create.component';
+import { QuestionComponent } from './question/question.component';
+import { QuestionsComponent } from './questions/questions.component';
 import { SigninComponent } from './signin/signin.component';
 import { TeamComponent } from './team/team.component';
 import { TeamsComponent } from './teams/teams.component';
@@ -19,10 +22,13 @@ const routes: Routes = [
   {path: 'admin', component: AdminComponent},
   {path: 'admin/users', component: AdminUsersComponent},
   {path: 'admin/teams', component: AdminTeamsComponent},
-  {path: 'tests', component: TestsComponent},
+  {path: 'ptests', component: TestsComponent},
   {path: 'teams', component: TeamsComponent},
   {path: 'teams/:id', component: TeamComponent},
   {path: 'createTeam', component: CreateTeamComponent},
+  {path: 'q', component: QuestionsComponent},
+  {path: 'q/:id', component: QuestionComponent},
+  {path: 'qCreate', component: QuestionCreateComponent},
   {path: '**', component: MainComponent, pathMatch:'full'}
 ];
 

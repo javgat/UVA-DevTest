@@ -1,9 +1,29 @@
 <div class="row m-3">
-  <div class="col-sm d-grid gap-2">
-    <a type="button" [routerLink]="['/']" class="btn btn-primary">Inicio</a>
+  <div class="col-sm d-grid gap-2" *ngIf="getSessionUser().isStudent()">
+    <a type="button" [routerLink]="['/ptests']" class="btn btn-primary">Tests</a>
   </div>
-  <div class="col-sm d-grid gap-2">
-    <a type="button" [routerLink]="['/tests']" class="btn btn-primary">Tests</a>
+  <div class="col-sm dropdown d-grid gap-2" *ngIf="!getSessionUser().isStudent()">
+    <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="testsMenuLink" data-bs-toggle="dropdown"
+      aria-expanded="false">Tests</a>
+    <ul class="dropdown-menu" aria-labelledby="testsMenuLink">
+      <li><a class="dropdown-item" [routerLink]="['/etests']">Explorar Tests</a></li>
+      <li><a class="dropdown-item" [routerLink]="['/etestsCreate']">Crear Test</a></li>
+      <li><a class="dropdown-item" [routerLink]="['/u', getSessionUser().getUsername(), 'etests' ]">Mis Tests</a></li>
+      <li>
+        <hr class="dropdown-divider">
+      </li>
+      <li><a class="dropdown-item" [routerLink]="['/ptests']">Resolver tests</a></li>
+    </ul>
+  </div>
+  <div class="col-sm dropdown d-grid gap-2" *ngIf="!getSessionUser().isStudent()">
+    <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="questionsMenuLink" data-bs-toggle="dropdown"
+      aria-expanded="false">Preguntas</a>
+    <ul class="dropdown-menu" aria-labelledby="questionsMenuLink">
+      <li><a class="dropdown-item" [routerLink]="['/q']">Explorar Preguntas</a></li>
+      <li><a class="dropdown-item" [routerLink]="['/qCreate']">Crear Pregunta</a></li>
+      <li><a class="dropdown-item" [routerLink]="['/u', getSessionUser().getUsername(), 'q' ]">Mis Preguntas</a>
+      </li>
+    </ul>
   </div>
   <div class="col-sm d-grid gap-2">
     <a type="button" [routerLink]="['/teams']" class="btn btn-primary">Equipos</a>

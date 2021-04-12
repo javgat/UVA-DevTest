@@ -1,0 +1,64 @@
+<app-nav-bar></app-nav-bar>
+<div class="mt-5">
+    <h2>Crear Pregunta</h2>
+    <div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message" role="alert">
+        {{getMensaje().texto}}</div>
+    <form (ngSubmit)='questionSubmit()' ngNativeValidate>
+        <div class="mb-3">
+            <label for="inputTitle" class="form-label">Título de la pregunta</label>
+            <input type="text" class="form-control" name="inputTitle" [(ngModel)]="question.title" required />
+        </div>
+        <div class="mb-3">
+            <label for="inputQuestion" class="form-label">Cuerpo de la pregunta</label>
+            <textarea type="text" class="form-control" name="inputQuestion" [(ngModel)]="question.question" required
+                rows=3></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="inputTime" class="form-label">Tiempo estimado (segundos)</label>
+            <input type="number" class="form-control" name="inputTime" [(ngModel)]="question.estimatedTime" required
+                min=0 />
+        </div>
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" [checked]="question.autoCorrect"
+                (change)="question.autoCorrect = !question.autoCorrect">
+            <label class="form-check-label" for="flexSwitchCheckDefault">Corrección automática</label>
+        </div>
+        <div class="my-3">
+            <label class="form-label">Tipo de pregunta:</label>
+            <div id="tipoHelp" class="form-text text-muted">Una vez crees la pregunta, se te redirigirá a el panel de
+                edición de pregunta para que configures las opciones de respuesta correspondientes al tipo seleccionado
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="inputTipo" id="inputTipoString" checked required
+                    (change)="onSelectTipoString()" />
+                <label class="form-check-label" for="inputTipoString">
+                    Pregunta de texto
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="inputTipo" id="inputTipoRadio" required
+                    (change)="onSelectTipoRadio()" />
+                <label class="form-check-label" for="inputTipoRadio">
+                    Pregunta tipo test de respuesta única
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="inputTipo" id="inputTipoCheck" required
+                    (change)="onSelectTipoCheck()" />
+                <label class="form-check-label" for="inputTipoCheck">
+                    Pregunta tipo test de respuesta múltiple
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="inputTipo" id="inputTipoCode" required
+                    (change)="onSelectTipoCode()" />
+                <label class="form-check-label" for="inputTipoCode">
+                    Pregunta de código
+                </label>
+            </div>
+        </div>
+        <div class="d-grid gap-2">
+            <input type="submit" value="Crear" class="btn btn-primary" id="buttonSendQuestion" />
+        </div>
+    </form>
+</div>

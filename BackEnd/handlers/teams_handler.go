@@ -143,9 +143,14 @@ func AddAdminToTeam(params team.AddAdminParams, u *models.User) middleware.Respo
 	if teamAdmin || isAdmin(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			err = dao.AddUserTeamAdmin(db, params.Username, params.Teamname)
-			if err == nil {
-				return team.NewAddAdminOK()
+			if canBeAddedTeam(params.Username, params.Teamname) {
+				err = dao.AddUserTeamAdmin(db, params.Username, params.Teamname)
+				if err == nil {
+					return team.NewAddAdminOK()
+				}
+			} else {
+				s := "No se puede añadir un estudiante a un equipo de solo profesores"
+				return team.NewAddAdminBadRequest().WithPayload(&models.Error{Message: &s})
 			}
 		}
 		log.Println("Error en teams_handler AddUserFromTeam(): ", err)
@@ -188,6 +193,23 @@ func GetMembersFromTeam(params team.GetMembersParams, u *models.User) middleware
 	return team.NewGetMembersForbidden()
 }
 
+func canBeAddedTeam(username string, teamname string) bool {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		team, err := dao.GetTeam(db, teamname)
+		if err == nil {
+			if *team.SoloProfesores {
+				return true
+			}
+			user, err := dao.GetUserUsername(db, username)
+			if err == nil {
+				return *user.Rol != models.UserRolEstudiante
+			}
+		}
+	}
+	return false
+}
+
 // AddMemberToTeam adds user to team PUT /teams/{teamname}/members/{username}
 // Auth: TeamMember or Member
 // DEBERIA: Si ya existe cambiar rol
@@ -199,9 +221,22 @@ func AddMemberToTeam(params team.AddMemberParams, u *models.User) middleware.Res
 	if teamAdmin || isAdmin(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			err = dao.AddUserTeamMember(db, params.Username, params.Teamname)
-			if err == nil {
-				return team.NewAddMemberOK()
+			if canBeAddedTeam(params.Username, params.Teamname) {
+				admins, err := dao.GetTeamAdmins(db, params.Teamname)
+				if err == nil {
+					if len(admins) == 1 && *admins[0].Username == params.Username {
+						log.Println("Error en users_handler AddMemberToTeam(): ", err)
+						s := "Es el unico administrador existente en el equipo"
+						return team.NewAddMemberBadRequest().WithPayload(&models.Error{Message: &s}) //Conflict???
+					}
+					err = dao.AddUserTeamMember(db, params.Username, params.Teamname)
+					if err == nil {
+						return team.NewAddMemberOK()
+					}
+				}
+			} else {
+				s := "No se puede añadir un estudiante a un equipo de solo profesores"
+				return team.NewAddMemberBadRequest().WithPayload(&models.Error{Message: &s})
 			}
 		}
 		log.Println("Error en teams_handler AddUserFromTeam(): ", err)

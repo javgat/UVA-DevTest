@@ -32,6 +32,8 @@ export class LoggedInController {
                 this.sessionUser = valor
                 if (this.sessionLogin.isLoggedIn() && this.sessionUser.isEmpty()) {
                     this.downloadUser(true)
+                }else{
+                    this.doHasUserAction()
                 }
             }
         )
@@ -40,6 +42,8 @@ export class LoggedInController {
             valor => this.mensaje = valor
         )
     }
+
+    doHasUserAction(){}
 
     getSessionLogin(): SessionLogin {
         return this.sessionLogin
