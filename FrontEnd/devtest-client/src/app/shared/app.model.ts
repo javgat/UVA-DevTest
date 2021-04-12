@@ -1,4 +1,4 @@
-import { User, Team } from "@javgat/devtest-api";
+import { User, Team, Question } from "@javgat/devtest-api";
 
 export enum Tipo {
     SUCCESS = "success",
@@ -76,19 +76,19 @@ export class SessionUser implements User {
         return this.rol
     }
 
-    isStudent(): boolean{
+    isStudent(): boolean {
         return this.getRol() == User.RolEnum.Estudiante
     }
 
-    isTeacher(): boolean{
+    isTeacher(): boolean {
         return this.getRol() == User.RolEnum.Profesor
     }
 
-    isAdmin(): boolean{
+    isAdmin(): boolean {
         return this.getRol() == User.RolEnum.Administrador
     }
 
-    isTeacherOrAdmin(): boolean{
+    isTeacherOrAdmin(): boolean {
         return (this.isTeacher() || this.isAdmin())
     }
 }
@@ -126,5 +126,35 @@ export class Equipo implements Team {
 
     isSoloProfesores(): boolean {
         return this.soloProfesores
+    }
+}
+
+export class Pregunta implements Question {
+    id: number | undefined;
+    title: string;
+    question: string;
+    estimatedTime: number;
+    autoCorrect: boolean;
+    editable: boolean;
+    username: string;
+    eleccionUnica: boolean | undefined;
+    solucion: string | undefined;
+    tipoPregunta: Question.TipoPreguntaEnum;
+    valorFinal: number | undefined;
+
+    constructor(id: number | undefined, title: string, question: string, estT: number, autoC: boolean,
+        edit: boolean, username: string, eleUni: boolean | undefined, solu: string | undefined,
+        tipo: Question.TipoPreguntaEnum, valor: number | undefined) {
+        this.id = id
+        this.title = title
+        this.question = question
+        this.estimatedTime = estT
+        this.autoCorrect = autoC
+        this.editable = edit
+        this.username = username
+        this.eleccionUnica = eleUni
+        this.solucion = solu
+        this.tipoPregunta = tipo
+        this.valorFinal = valor
     }
 }

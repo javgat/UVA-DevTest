@@ -1,15 +1,18 @@
 <div class="alert alert-{{mensaje.type}}" *ngIf="mensaje.mostrar" id="message" role="alert">{{mensaje.texto}}</div>
-<form (ngSubmit)='loginSubmit()' ngNativeValidate>
-    <div class="mb-3">
-        <label for="inputUsername" class="form-label">Nombre de usuario o Correo electrónico</label>
-        <input type="text" class="form-control" name="inputUsername" aria-describedby="usernameHelp" [(ngModel)]="loginUser.loginid" required/>
-        <div id="usernameHelp" class="form-text text-muted">El nick o correo asociado a tu cuenta</div>
-    </div>
-    <div class="mb-3">
-        <label for="inputPassword" class="form-label">Contraseña</label>
-        <input type="password" class="form-control" name="inputPassword" [(ngModel)]="loginUser.pass" required/>
-    </div>
-    <div class="d-grid gap-2">
-        <input type="submit" value="Acceder" class="btn btn-primary" id="buttonLoginSignin"/>
-    </div>
-</form>
+<div class="container my-5">
+    <form (ngSubmit)='loginSubmit()' ngNativeValidate>
+        <div class="mb-3">
+            <label for="inputUsername" class="form-label">Nombre de usuario o Correo electrónico</label>
+            <input type="text" class="form-control" name="inputUsername" aria-describedby="usernameHelp"
+                [(ngModel)]="loginUser.loginid" required />
+            <div id="usernameHelp" class="form-text text-muted">El nick o correo asociado a tu cuenta</div>
+        </div>
+        <div class="mb-3">
+            <label for="inputPassword" class="form-label">Contraseña</label>
+            <input type="password" class="form-control" name="inputPassword" [(ngModel)]="loginUser.pass" required />
+        </div>
+        <div class="d-grid gap-2">
+            <input type="submit" value="Acceder" class="btn btn-primary btn-lg" id="buttonLoginSignin" />
+        </div>
+    </form>
+</div>

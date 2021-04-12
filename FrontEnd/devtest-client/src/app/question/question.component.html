@@ -2,46 +2,155 @@
 <div class="mt-5">
     <div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message" role="alert">
         {{getMensaje().texto}}</div>
-    <h4>Pregunta #{{question.id}}</h4>
-    <h2>{{question.title}}</h2>
-    <p>Autor: <a [routerLink]="['/profile', question.username]">{{question.username}}</a></p>
-    <hr />
-    <p>{{question.question}}</p>
-    <p>Tiempo estimado: {{question.estimatedTime}} segundos</p>
-    <p>Corrección automática: <span *ngIf="question.autoCorrect">Sí</span><span *ngElse>No</span></p>
-    <p>Tipo: {{tipoPrint}}</p>
-    <button *ngIf="checkPermisosEdicion()" type="button" class="btn btn-primary">Editar pregunta</button>
-
-    <div class="m-3" *ngIf="question.tipoPregunta=='string'">
-        <p>Respuesta esperada: {{question.solucion}}</p>
-        <button *ngIf="checkPermisosEdicion()" type="button" class="btn btn-primary">Editar respuesta esperada</button>
-    </div>
-    <div class="m-3" *ngIf="question.tipoPregunta=='opciones'">
-        <p>Opciones:</p>
-        <div *ngFor="let opc of opciones">
-            <div class="form-check form-switch my-4">
-                <div>
-                    {{opc.texto}}
-                    <button *ngIf="checkPermisosEdicion()" type="button" (click)="deleteOpc(opc.indice)" class="btn btn-danger mx-3">Eliminar</button>
+    <div class="card">
+        <div class="card-body">
+            <h4>Pregunta #{{question.id}}</h4>
+            <h2>{{question.title}}</h2>
+            <p>Autor: <a [routerLink]="['/profile', question.username]">{{question.username}}</a></p>
+            <p>Etiquetas: <span *ngFor="let tag of tags"><span class="bg-warning">{{tag.tag}}</span>; </span></p>
+            <form *ngIf="checkPermisosEdicion()" (ngSubmit)='addTagSubmit()' ngNativeValidate>
+                <div class="input-group my-3">
+                    <input class="button btn btn-primary" type="submit" value="Añadir etiqueta" />
+                    <input type="text" class="form-control" name="inputAddTag" [(ngModel)]="newTag.tag"
+                        placeholder="Etiqueta" required pattern=".+" />
                 </div>
-                <div class="">
-                    <input *ngIf="checkPermisosEdicion()" class="form-check-input" type="checkbox"
-                        id="flexSwitchCheckDefault" [checked]="opc.correcta" (change)="changeCorrectaOpc(opc)">
-                    <input *ngIf="!checkPermisosEdicion()" disabled class="form-check-input" type="checkbox"
-                        id="flexSwitchCheckDefault" [checked]="opc.correcta">
-                    <label class="form-check-label" for="flexSwitchCheckDefault">Respuesta correcta</label>
+            </form>
+            <p>Tiempo estimado: {{question.estimatedTime}} segundos</p>
+            <p>Corrección automática: <span *ngIf="question.autoCorrect">Sí</span><span
+                    *ngIf="!question.autoCorrect">No</span></p>
+            <p>Tipo: {{tipoPrint}}</p>
+            <p><button class="btn btn-primary" type="button" [routerLink]="['/q', question.id, 'teams']">Ver equipos administradores</button></p>
+            <p><button *ngIf="checkPermisosEdicion()" type="button" class="btn btn-primary" data-bs-toggle="modal"
+                data-bs-target="#editQuestionModal">Editar pregunta</button></p>
+            <hr />
+            <p>{{question.question}}</p>
+        </div>
+    </div>
+    <div class="my-3">
+        <h3>Solución:</h3>
+        <div class="m-3" *ngIf="question.tipoPregunta=='string'">
+            <p>Respuesta esperada:</p>
+            <form (ngSubmit)='putQuestionSubmit()' ngNativeValidate>
+                <div *ngIf="checkPermisosEdicion()" class="input-group my-3">
+                    <input type="text" class="form-control" name="inputAddOption" [(ngModel)]="questionEdit.solucion"
+                        required pattern=".+" />
+                </div>
+                <input class="button btn btn-primary" type="submit" value="Guardar respuesta esperada" />
+            </form>
+        </div>
+        <div class="m-3" *ngIf="question.tipoPregunta=='opciones'">
+            <p>Opciones:</p>
+            <form (ngSubmit)='addOptionSubmit()' ngNativeValidate>
+                <div *ngIf="checkPermisosEdicion()" class="input-group my-3">
+                    <input class="button btn btn-primary" type="submit" value="Añadir opción" />
+                    <input type="text" class="form-control" name="inputAddOption" [(ngModel)]="nuevaOpcion.texto"
+                        placeholder="Nueva opción" required pattern=".+" />
+                </div>
+            </form>
+            <div *ngFor="let opc of opciones">
+                <div class="my-4 card">
+                    <div class="card-body">
+                        <div class="my-1">{{opc.texto}}</div>
+                        <div class="form-check form-switch my-1">
+                            <div class="row">
+                                <div class="col-sm">
+                                    <input *ngIf="checkPermisosEdicion()" class="form-check-input" type="checkbox"
+                                        id="flexSwitchCheck{{opc.indice}}" role="button" [checked]="opc.correcta"
+                                        (change)="changeCorrectaOpc(opc)">
+                                    <input *ngIf="!checkPermisosEdicion()" disabled class="form-check-input"
+                                        type="checkbox" id="flexSwitchCheck{{opc.indice}}" [checked]="opc.correcta">
+                                    <label class="form-check-label" role="button"
+                                        for="flexSwitchCheck{{opc.indice}}">Respuesta
+                                        correcta</label>
+                                </div>
+                                <div class="col-sm">
+                                    <div class="d-grid gap-2 d-md-flex d-inline-flex justify-content-md-end col-sm">
+                                        <button *ngIf="checkPermisosEdicion()" type="button"
+                                            (click)="deleteOpc(opc.indice)"
+                                            class="btn btn-danger btn-sm mx-4 me-md-2">Eliminar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <form (ngSubmit)='addOptionSubmit()' ngNativeValidate>
-            <div *ngIf="checkPermisosEdicion()" class="input-group my-3">
-                <input class="button btn btn-primary" type="submit" value="Añadir opción" />
-                <input type="text" class="form-control" name="inputAddOption" [(ngModel)]="nuevaOpcion.texto"
-                    placeholder="Nueva opción" required pattern=".+" />
-            </div>
-        </form>
+        <div class="m-3" *ngIf="question.tipoPregunta=='codigo'">
+            <p>Tests:</p>
+        </div>
     </div>
-    <div class="m-3" *ngIf="question.tipoPregunta=='codigo'">
-        <p>Tests:</p>
+</div>
+<!-- Modal edit question-->
+<div class="modal fade" id="editQuestionModal" *ngIf="checkPermisosEdicion()" tabindex="-1"
+    aria-labelledby="editQuestionModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form ngNativeValidate>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editQuestionModalLabel">Modificar Pregunta</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="inputTitle" class="form-label">Título de la pregunta</label>
+                        <input type="text" class="form-control" name="inputTitle" [(ngModel)]="questionEdit.title"
+                            required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputQuestion" class="form-label">Cuerpo de la pregunta</label>
+                        <textarea type="text" class="form-control" name="inputQuestion"
+                            [(ngModel)]="questionEdit.question" required rows=3></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputTime" class="form-label">Tiempo estimado (segundos)</label>
+                        <input type="number" class="form-control" name="inputTime"
+                            [(ngModel)]="questionEdit.estimatedTime" required min=0 />
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault"
+                            [checked]="questionEdit.autoCorrect"
+                            (change)="questionEdit.autoCorrect = !questionEdit.autoCorrect">
+                        <label class="form-check-label" for="flexSwitchCheckDefault">Corrección automática</label>
+                    </div>
+                    <div class="my-3">
+                        <label class="form-label">Tipo de pregunta:</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="inputTipo" id="inputTipoString" required
+                                (change)="onSelectTipoString()" />
+                            <label class="form-check-label" for="inputTipoString">
+                                Pregunta de texto
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="inputTipo" id="inputTipoRadio" required
+                                (change)="onSelectTipoRadio()" />
+                            <label class="form-check-label" for="inputTipoRadio">
+                                Pregunta tipo test de respuesta única
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="inputTipo" id="inputTipoCheck" required
+                                (change)="onSelectTipoCheck()" />
+                            <label class="form-check-label" for="inputTipoCheck">
+                                Pregunta tipo test de respuesta múltiple
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="inputTipo" id="inputTipoCode" required
+                                (change)="onSelectTipoCode()" />
+                            <label class="form-check-label" for="inputTipoCode">
+                                Pregunta de código
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <input type="submit" value="Guardar" (click)='putQuestionSubmit()' data-bs-dismiss="modal"
+                        class="btn btn-primary" id="buttonChangeRol" />
+                </div>
+            </form>
+        </div>
     </div>
 </div>

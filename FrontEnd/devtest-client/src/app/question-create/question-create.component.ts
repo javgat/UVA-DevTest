@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Question, QuestionService, UserService } from '@javgat/devtest-api';
-import { LoggedInController } from '../shared/app.controller';
+import { LoggedInTeacherController } from '../shared/app.controller';
 import { Mensaje, Tipo } from '../shared/app.model';
 import { DataService } from '../shared/data.service';
 import { SessionService } from '../shared/session.service';
@@ -11,7 +11,7 @@ import { SessionService } from '../shared/session.service';
   templateUrl: './question-create.component.html',
   styleUrls: ['./question-create.component.css']
 })
-export class QuestionCreateComponent extends LoggedInController implements OnInit {
+export class QuestionCreateComponent extends LoggedInTeacherController implements OnInit {
 
   question: Question
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private qS : QuestionService) {

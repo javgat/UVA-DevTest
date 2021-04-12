@@ -24,7 +24,7 @@ func isAdmin(u *models.User) bool {
 }
 
 func isTeacher(u *models.User) bool {
-	return *u.Rol == models.UserRolAdministrador
+	return *u.Rol == models.UserRolProfesor
 }
 
 func isTeacherOrAdmin(u *models.User) bool {

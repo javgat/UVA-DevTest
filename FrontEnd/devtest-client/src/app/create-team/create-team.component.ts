@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Team, User, UserService } from '@javgat/devtest-api';
 import { Subscription } from 'rxjs';
-import { LoggedInController } from '../shared/app.controller';
+import { LoggedInTeacherController } from '../shared/app.controller';
 import { Mensaje, Tipo } from '../shared/app.model';
 import { DataService } from '../shared/data.service';
 import { SessionService } from '../shared/session.service';
@@ -12,7 +12,7 @@ import { SessionService } from '../shared/session.service';
   templateUrl: './create-team.component.html',
   styleUrls: ['./create-team.component.css']
 })
-export class CreateTeamComponent extends LoggedInController implements OnInit {
+export class CreateTeamComponent extends LoggedInTeacherController implements OnInit {
 
   team: Team
 

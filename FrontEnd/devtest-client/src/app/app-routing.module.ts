@@ -8,6 +8,7 @@ import { LoginComponent } from './login/login.component';
 import { MainComponent } from './main/main.component';
 import { ProfileComponent } from './profile/profile.component';
 import { QuestionCreateComponent } from './question-create/question-create.component';
+import { QuestionTeamsComponent } from './question-teams/question-teams.component';
 import { QuestionComponent } from './question/question.component';
 import { QuestionsComponent } from './questions/questions.component';
 import { SigninComponent } from './signin/signin.component';
@@ -28,6 +29,7 @@ const routes: Routes = [
   {path: 'createTeam', component: CreateTeamComponent},
   {path: 'q', component: QuestionsComponent},
   {path: 'q/:id', component: QuestionComponent},
+  {path: 'q/:id/teams', component: QuestionTeamsComponent},
   {path: 'qCreate', component: QuestionCreateComponent},
   {path: '**', component: MainComponent, pathMatch:'full'}
 ];

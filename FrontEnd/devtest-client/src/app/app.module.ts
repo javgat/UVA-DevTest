@@ -25,6 +25,7 @@ import { AdminTeamsComponent } from './admin/admin-teams/admin-teams.component';
 import { QuestionsComponent } from './questions/questions.component';
 import { QuestionComponent } from './question/question.component';
 import { QuestionCreateComponent } from './question-create/question-create.component';
+import { QuestionTeamsComponent } from './question-teams/question-teams.component';
 
 export function apiConfigFactory (): Configuration {
   const params: ConfigurationParameters = {
@@ -53,7 +54,8 @@ export function apiConfigFactory (): Configuration {
     AdminTeamsComponent,
     QuestionsComponent,
     QuestionComponent,
-    QuestionCreateComponent
+    QuestionCreateComponent,
+    QuestionTeamsComponent
   ],
   imports: [
     BrowserModule,
