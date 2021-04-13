@@ -28,6 +28,11 @@ import { QuestionCreateComponent } from './question-create/question-create.compo
 import { QuestionTeamsComponent } from './question-teams/question-teams.component';
 import { QuestionsSharedUserComponent } from './questions-shared-user/questions-shared-user.component';
 import { QuestionsUserComponent } from './questions-user/questions-user.component';
+import { TestComponent } from './test/test.component';
+import { TestCreateComponent } from './test-create/test-create.component';
+import { TestTeamsComponent } from './test-teams/test-teams.component';
+import { TestsUserComponent } from './tests-user/tests-user.component';
+import { TestsSharedUserComponent } from './tests-shared-user/tests-shared-user.component';
 
 export function apiConfigFactory (): Configuration {
   const params: ConfigurationParameters = {
@@ -59,7 +64,12 @@ export function apiConfigFactory (): Configuration {
     QuestionCreateComponent,
     QuestionTeamsComponent,
     QuestionsSharedUserComponent,
-    QuestionsUserComponent
+    QuestionsUserComponent,
+    TestComponent,
+    TestCreateComponent,
+    TestTeamsComponent,
+    TestsUserComponent,
+    TestsSharedUserComponent
   ],
   imports: [
     BrowserModule,

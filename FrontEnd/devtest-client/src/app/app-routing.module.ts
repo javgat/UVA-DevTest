@@ -16,6 +16,11 @@ import { QuestionsComponent } from './questions/questions.component';
 import { SigninComponent } from './signin/signin.component';
 import { TeamComponent } from './team/team.component';
 import { TeamsComponent } from './teams/teams.component';
+import { TestCreateComponent } from './test-create/test-create.component';
+import { TestTeamsComponent } from './test-teams/test-teams.component';
+import { TestComponent } from './test/test.component';
+import { TestsSharedUserComponent } from './tests-shared-user/tests-shared-user.component';
+import { TestsUserComponent } from './tests-user/tests-user.component';
 import { TestsComponent } from './tests/tests.component';
 
 const routes: Routes = [
@@ -35,6 +40,12 @@ const routes: Routes = [
   {path: 'qCreate', component: QuestionCreateComponent},
   {path: 'u/:username/q', component: QuestionsUserComponent},
   {path: 'u/:username/sq', component: QuestionsSharedUserComponent},
+  {path: 'et', component: TestsComponent},
+  {path: 'et/:testid', component: TestComponent},
+  {path: 'etCreate', component: TestCreateComponent},
+  {path: 'et/:testid/teams', component: TestTeamsComponent},
+  {path: 'u/:username/et', component: TestsUserComponent},
+  {path: 'u/:username/set', component: TestsSharedUserComponent},
   {path: '**', component: MainComponent, pathMatch:'full'}
 ];
 

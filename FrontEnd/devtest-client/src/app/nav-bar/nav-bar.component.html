@@ -6,9 +6,10 @@
     <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="testsMenuLink" data-bs-toggle="dropdown"
       aria-expanded="false">Tests</a>
     <ul class="dropdown-menu" aria-labelledby="testsMenuLink">
-      <li><a class="dropdown-item" [routerLink]="['/etests']">Explorar Tests</a></li>
-      <li><a class="dropdown-item" [routerLink]="['/etestsCreate']">Crear Test</a></li>
-      <li><a class="dropdown-item" [routerLink]="['/u', getSessionUser().getUsername(), 'etests' ]">Mis Tests</a></li>
+      <li><a class="dropdown-item" [routerLink]="['/et']">Explorar Tests</a></li>
+      <li><a class="dropdown-item" [routerLink]="['/etCreate']">Crear Test</a></li>
+      <li><a class="dropdown-item" [routerLink]="['/u', getSessionUser().getUsername(), 'et' ]">Mis Tests</a></li>
+      <li><a class="dropdown-item" [routerLink]="['/u', getSessionUser().getUsername(), 'set' ]">Compartiendo conmigo</a>
       <li>
         <hr class="dropdown-divider">
       </li>

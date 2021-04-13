@@ -1,0 +1,36 @@
+<app-nav-bar></app-nav-bar>
+<div class="mt-5">
+    <div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message" role="alert">
+    {{getMensaje().texto}}</div>
+    <div class="card">
+        <div class="card-body">
+            <h4>Test #{{test.id}}</h4>
+            <h2>{{test.title}}</h2>
+            <p>Autor: <a [routerLink]="['/profile', test.username]">{{test.username}}</a></p>
+            <!--<p>Etiquetas:
+                <span *ngFor="let tag of tags">
+                        <span class="bg-warning" role="button" id="{{tag.tag}}" data-bs-toggle="dropdown" aria-expanded="false">{{tag.tag}}</span>;
+                        <ul class="dropdown-menu" attr.aria-labelledby="{{tag.tag}}">
+                            <li><a class="dropdown-item" role="button" (click)="deleteTagClick(tag.tag)">Eliminar</a></li>
+                        </ul>
+                </span>
+            </p>
+            <form *ngIf="checkPermisosEdicion()" (ngSubmit)='addTagSubmit()' ngNativeValidate>
+                <div class="input-group my-3">
+                    <input class="button btn btn-primary" type="submit" value="Añadir etiqueta" />
+                    <input type="text" class="form-control" name="inputAddTag" [(ngModel)]="newTag.tag"
+                        placeholder="Etiqueta" required pattern=".+" />
+                </div>
+            </form>-->
+            <p>Descripción: {{test.description}}</p>
+            <p>Tiempo disponible: {{test.maxSeconds}} segundos</p>
+            <p>Acceso público: <span *ngIf="test.accesoPublico">Sí</span><span
+                    *ngIf="!test.accesoPublico">No</span></p>
+            <p><button class="btn btn-primary" type="button" [routerLink]="['/et', test.id, 'teams']">Ver equipos
+                    administradores</button></p>
+            <p><button *ngIf="checkPermisosEdicion()" type="button" class="btn btn-primary" data-bs-toggle="modal"
+                    data-bs-target="#editTestModal">Editar pregunta</button></p>
+            <hr />
+        </div>
+    </div>
+</div>

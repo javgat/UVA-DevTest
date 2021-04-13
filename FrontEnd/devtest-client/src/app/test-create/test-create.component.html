@@ -1,0 +1,25 @@
+<app-nav-bar></app-nav-bar>
+<div class="mt-5">
+    <h2>Crear Test</h2>
+    <div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message" role="alert">
+        {{getMensaje().texto}}</div>
+    <form (ngSubmit)='testSubmit()' ngNativeValidate>
+        <div class="mb-3">
+            <label for="inputTitle" class="form-label">Título del test</label>
+            <input type="text" class="form-control" name="inputTitle" [(ngModel)]="test.title" required />
+        </div>
+        <div class="mb-3">
+            <label for="inputDescription" class="form-label">Descripción</label>
+            <textarea type="text" class="form-control" name="inputDescription" [(ngModel)]="test.description" required
+                rows=3></textarea>
+        </div>
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" [checked]="test.accesoPublico"
+                (change)="test.accesoPublico = !test.accesoPublico">
+            <label class="form-check-label" for="flexSwitchCheckDefault">Acceso público</label>
+        </div>
+        <div class="d-grid gap-2">
+            <input type="submit" value="Crear" class="btn btn-primary" id="buttonSendQuestion" />
+        </div>
+    </form>
+</div>

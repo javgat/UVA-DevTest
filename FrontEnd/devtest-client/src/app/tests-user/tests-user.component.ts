@@ -6,11 +6,11 @@ import { DataService } from '../shared/data.service';
 import { SessionService } from '../shared/session.service';
 
 @Component({
-  selector: 'app-tests',
-  templateUrl: './tests.component.html',
-  styleUrls: ['./tests.component.css']
+  selector: 'app-tests-user',
+  templateUrl: './tests-user.component.html',
+  styleUrls: ['./tests-user.component.css']
 })
-export class TestsComponent extends LoggedInTeacherController implements OnInit {
+export class TestsUserComponent extends LoggedInTeacherController implements OnInit {
 
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService) {
     super(session, router, data, userS)
