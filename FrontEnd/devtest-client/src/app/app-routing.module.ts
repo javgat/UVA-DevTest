@@ -10,6 +10,8 @@ import { ProfileComponent } from './profile/profile.component';
 import { QuestionCreateComponent } from './question-create/question-create.component';
 import { QuestionTeamsComponent } from './question-teams/question-teams.component';
 import { QuestionComponent } from './question/question.component';
+import { QuestionsSharedUserComponent } from './questions-shared-user/questions-shared-user.component';
+import { QuestionsUserComponent } from './questions-user/questions-user.component';
 import { QuestionsComponent } from './questions/questions.component';
 import { SigninComponent } from './signin/signin.component';
 import { TeamComponent } from './team/team.component';
@@ -31,6 +33,8 @@ const routes: Routes = [
   {path: 'q/:id', component: QuestionComponent},
   {path: 'q/:id/teams', component: QuestionTeamsComponent},
   {path: 'qCreate', component: QuestionCreateComponent},
+  {path: 'u/:username/q', component: QuestionsUserComponent},
+  {path: 'u/:username/sq', component: QuestionsSharedUserComponent},
   {path: '**', component: MainComponent, pathMatch:'full'}
 ];
 

@@ -46,7 +46,7 @@ type PutQuestionAnswerFromAnswer struct {
 func (o *PutQuestionAnswerFromAnswer) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	route, rCtx, _ := o.Context.RouteInfo(r)
 	if rCtx != nil {
-		r = rCtx
+		*r = *rCtx
 	}
 	var Params = NewPutQuestionAnswerFromAnswerParams()
 	uprinc, aCtx, err := o.Context.Authorize(r, route)
@@ -55,7 +55,7 @@ func (o *PutQuestionAnswerFromAnswer) ServeHTTP(rw http.ResponseWriter, r *http.
 		return
 	}
 	if aCtx != nil {
-		r = aCtx
+		*r = *aCtx
 	}
 	var principal *models.User
 	if uprinc != nil {

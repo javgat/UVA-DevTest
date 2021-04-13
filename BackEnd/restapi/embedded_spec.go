@@ -4762,6 +4762,56 @@ func init() {
         }
       }
     },
+    "/users/{username}/sharedQuestions": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all questions is shared to the user",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns all questions is shared to the user",
+        "operationId": "GetSharedQuestionsOfUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who is shared the questions",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "questions found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Question"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
     "/users/{username}/teams": {
       "get": {
         "security": [
@@ -11134,6 +11184,65 @@ func init() {
         "responses": {
           "200": {
             "description": "Resource role modified correctly"
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/users/{username}/sharedQuestions": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all questions is shared to the user",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns all questions is shared to the user",
+        "operationId": "GetSharedQuestionsOfUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who is shared the questions",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "questions found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Question"
+              }
+            }
           },
           "400": {
             "description": "Incorrect Request, or invalida data",

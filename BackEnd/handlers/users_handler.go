@@ -296,6 +296,26 @@ func GetTeamFromUser(params user.GetTeamFromUserParams, u *models.User) middlewa
 	return user.NewGetTeamFromUserForbidden()
 }
 
+// GET /users/{username}/sharedQuestions
+func GetSharedQuestions(params user.GetSharedQuestionsOfUserParams, u *models.User) middleware.Responder {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		q, err := dao.GetSharedQuestionsOfUser(db, params.Username)
+		if err == nil {
+			if q != nil {
+				mq, err := dao.ToModelQuestions(q)
+				if mq != nil && err == nil {
+					return user.NewGetSharedQuestionsOfUserOK().WithPayload(mq)
+				}
+				user.NewGetSharedQuestionsOfUserInternalServerError()
+			}
+			mq := []*models.Question{}
+			return user.NewGetSharedQuestionsOfUserOK().WithPayload(mq)
+		}
+	}
+	return user.NewGetSharedQuestionsOfUserInternalServerError()
+}
+
 // GET /users/{username}/questions
 func GetQuestionsOfUser(params user.GetQuestionsOfUserParams, u *models.User) middleware.Responder {
 	if userOrAdmin(params.Username, u) {
@@ -308,8 +328,10 @@ func GetQuestionsOfUser(params user.GetQuestionsOfUserParams, u *models.User) mi
 					if mq != nil && err == nil {
 						return user.NewGetQuestionsOfUserOK().WithPayload(mq)
 					}
-					user.NewGetQuestionsOfUserGone()
+					user.NewGetQuestionsOfUserInternalServerError()
 				}
+				mq := []*models.Question{}
+				return user.NewGetQuestionsOfUserOK().WithPayload(mq)
 			}
 		}
 		return user.NewGetQuestionsOfUserInternalServerError()

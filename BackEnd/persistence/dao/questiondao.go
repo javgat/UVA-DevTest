@@ -492,3 +492,22 @@ func GetValorFinal(db *sql.DB, questionid int64, testid int64) (*int64, error) {
 	}
 	return nil, err
 }
+
+func GetSharedQuestionsOfUser(db *sql.DB, username string) ([]*Question, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var qs []*Question
+	query, err := db.Prepare("SELECT DISTINCT P.* FROM Pregunta P JOIN PreguntaEquipo E ON P.id=E.preguntaid JOIN EquipoUsuario U ON U.equipoid=E.equipoid JOIN Usuario V ON V.id=U.usuarioid WHERE V.username=?")
+	if err == nil {
+		defer query.Close()
+		rows, err := query.Query(username)
+		if err == nil {
+			qs, err = rowsToQuestions(rows)
+			return qs, err
+		}
+	} else {
+		log.Print(err)
+	}
+	return nil, err
+}

@@ -196,6 +196,9 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		UserGetQuestionsOfUserHandler: user.GetQuestionsOfUserHandlerFunc(func(params user.GetQuestionsOfUserParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation user.GetQuestionsOfUser has not yet been implemented")
 		}),
+		UserGetSharedQuestionsOfUserHandler: user.GetSharedQuestionsOfUserHandlerFunc(func(params user.GetSharedQuestionsOfUserParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation user.GetSharedQuestionsOfUser has not yet been implemented")
+		}),
 		TagGetTagHandler: tag.GetTagHandlerFunc(func(params tag.GetTagParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation tag.GetTag has not yet been implemented")
 		}),
@@ -512,6 +515,8 @@ type DevAPI struct {
 	TestGetQuestionsFromTestHandler test.GetQuestionsFromTestHandler
 	// UserGetQuestionsOfUserHandler sets the operation handler for the get questions of user operation
 	UserGetQuestionsOfUserHandler user.GetQuestionsOfUserHandler
+	// UserGetSharedQuestionsOfUserHandler sets the operation handler for the get shared questions of user operation
+	UserGetSharedQuestionsOfUserHandler user.GetSharedQuestionsOfUserHandler
 	// TagGetTagHandler sets the operation handler for the get tag operation
 	TagGetTagHandler tag.GetTagHandler
 	// QuestionGetTagFromQuestionHandler sets the operation handler for the get tag from question operation
@@ -847,6 +852,9 @@ func (o *DevAPI) Validate() error {
 	}
 	if o.UserGetQuestionsOfUserHandler == nil {
 		unregistered = append(unregistered, "user.GetQuestionsOfUserHandler")
+	}
+	if o.UserGetSharedQuestionsOfUserHandler == nil {
+		unregistered = append(unregistered, "user.GetSharedQuestionsOfUserHandler")
 	}
 	if o.TagGetTagHandler == nil {
 		unregistered = append(unregistered, "tag.GetTagHandler")
@@ -1307,6 +1315,10 @@ func (o *DevAPI) initHandlerCache() {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
 	o.handlers["GET"]["/users/{username}/questions"] = user.NewGetQuestionsOfUser(o.context, o.UserGetQuestionsOfUserHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/users/{username}/sharedQuestions"] = user.NewGetSharedQuestionsOfUser(o.context, o.UserGetSharedQuestionsOfUserHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}

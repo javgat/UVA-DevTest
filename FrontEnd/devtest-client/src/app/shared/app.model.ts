@@ -158,3 +158,19 @@ export class Pregunta implements Question {
         this.valorFinal = valor
     }
 }
+
+export function tipoPrint(tipo: string, eleccionUnica: boolean | undefined): string {
+    switch (tipo) {
+        case Question.TipoPreguntaEnum.String:
+            return "Texto"
+        case Question.TipoPreguntaEnum.Codigo:
+            return "Código"
+        case Question.TipoPreguntaEnum.Opciones:
+            if (eleccionUnica)
+                return "Respuesta única"
+            else
+                return "Respuesta múltiple"
+        default:
+            return ""
+    }
+}

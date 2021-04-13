@@ -459,6 +459,38 @@ paths:
         500:
           $ref: '#/responses/InternalServerError'
 
+  /users/{username}/sharedQuestions:
+   get:
+      security:
+        - BearerCookie: []
+      tags:
+      - user
+      summary: Returns all questions is shared to the user
+      operationId: GetSharedQuestionsOfUser
+      description: Returns all questions is shared to the user
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the user who is shared the questions
+        required: true
+        type: string
+      responses:
+        200:
+          description: questions found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Question'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
   /users/{username}/questions:
     get:
       security:
