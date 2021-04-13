@@ -451,7 +451,7 @@ func GetEditQuestionsFromTag(db *sql.DB, tag string) ([]*Question, error) {
 		return nil, errors.New(errorDBNil)
 	}
 	var qs []*Question
-	query, err := db.Prepare("SELECT P.* FROM Pregunta P JOIN PreguntaEtiqueta E ON P.id=E.preguntaid WHERE E.etiquetaNombre=? AND E.editable=1")
+	query, err := db.Prepare("SELECT P.* FROM Pregunta P JOIN PreguntaEtiqueta E ON P.id=E.preguntaid WHERE E.etiquetaNombre=? AND P.editable=1")
 	if err == nil {
 		defer query.Close()
 		rows, err := query.Query(tag)

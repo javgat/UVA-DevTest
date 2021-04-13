@@ -16,41 +16,69 @@ export class QuestionsComponent extends LoggedInTeacherController implements OnI
 
   questions: Question[]
   searchTag: string
+  includeNonEdit: boolean
+  tagPressed: boolean
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private qS: QuestionService, private tagS: TagService) {
     super(session, router, data, userS)
+    this.includeNonEdit = false
+    this.tagPressed = false
     this.searchTag = ""
     this.questions = []
-    this.getEditQuestions(true)
+    this.getQuestions(true)
   }
 
   ngOnInit(): void {
   }
 
-  ngOnDestroy(): void{
+  ngOnDestroy(): void {
     super.onDestroy()
   }
 
-  getEditQuestions(primera: boolean){
-    this.qS.getEditQuestions().subscribe(
-      resp => this.questions = resp,
-      err => this.handleErrRelog(err, "obtener preguntas editables", primera, this.getEditQuestions, this)
-    )
+  getQuestions(primera: boolean) {
+    if (this.includeNonEdit) {
+      this.qS.getQuestions().subscribe(
+        resp => this.questions = resp,
+        err => this.handleErrRelog(err, "obtener preguntas", primera, this.getQuestions, this)
+      )
+    } else {
+      this.qS.getEditQuestions().subscribe(
+        resp => this.questions = resp,
+        err => this.handleErrRelog(err, "obtener preguntas editables", primera, this.getQuestions, this)
+      )
+    }
   }
 
-  getQuestionsWithTagSubmit(){
+  getQuestionsWithTagSubmit() {
+    this.tagPressed=true
     this.getQuestionsWithTag(true)
   }
 
-  getQuestionsWithTag(primera: boolean){
-    this.tagS.getQuestionsFromTag(this.searchTag).subscribe(
-      resp => this.questions = resp,
-      err => this.handleErrRelog(err, "obtener preguntas por etiqueta", primera, this.getQuestionsWithTag, this)
-    )
+  getQuestionsWithTag(primera: boolean) {
+    if (this.includeNonEdit) {
+      this.tagS.getQuestionsFromTag(this.searchTag).subscribe(
+        resp => this.questions = resp,
+        err => this.handleErrRelog(err, "obtener preguntas por etiqueta", primera, this.getQuestionsWithTag, this)
+      )
+    } else {
+      this.tagS.getEditQuestionsFromTag(this.searchTag).subscribe(
+        resp => this.questions = resp,
+        err => this.handleErrRelog(err, "obtener preguntas no publicadas por etiqueta", primera, this.getQuestionsWithTag, this)
+      )
+    }
   }
 
 
-  tipoPrint(tipo: string, eleUni: boolean | undefined){
+  tipoPrint(tipo: string, eleUni: boolean | undefined) {
     return tipoPrint(tipo, eleUni)
+  }
+
+  changeFlexInclude() {
+    this.includeNonEdit = !this.includeNonEdit
+    if(this.tagPressed){
+      this.getQuestionsWithTag(true)
+    }else{
+      this.getQuestions(true)
+    }
   }
 
 }
