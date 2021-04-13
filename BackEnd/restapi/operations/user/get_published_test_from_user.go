@@ -33,9 +33,9 @@ func NewGetPublishedTestFromUser(ctx *middleware.Context, handler GetPublishedTe
 
 /* GetPublishedTestFromUser swagger:route GET /users/{username}/publishedTests/{testid} user getPublishedTestFromUser
 
-Returns a publishedTest that the user can answer
+Returns a publishedTest that the user can answer, including public ones and team ones.
 
-Returns a publishedTest that the user can answer
+Returns a publishedTest that the user can answer, including public ones and team ones.
 
 */
 type GetPublishedTestFromUser struct {

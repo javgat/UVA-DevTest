@@ -14,29 +14,29 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// NewGetTestFromUserParams creates a new GetTestFromUserParams object
+// NewGetSharedQuestionFromUserParams creates a new GetSharedQuestionFromUserParams object
 //
 // There are no default values defined in the spec.
-func NewGetTestFromUserParams() GetTestFromUserParams {
+func NewGetSharedQuestionFromUserParams() GetSharedQuestionFromUserParams {
 
-	return GetTestFromUserParams{}
+	return GetSharedQuestionFromUserParams{}
 }
 
-// GetTestFromUserParams contains all the bound params for the get test from user operation
+// GetSharedQuestionFromUserParams contains all the bound params for the get shared question from user operation
 // typically these are obtained from a http.Request
 //
-// swagger:parameters GetTestFromUser
-type GetTestFromUserParams struct {
+// swagger:parameters GetSharedQuestionFromUser
+type GetSharedQuestionFromUserParams struct {
 
 	// HTTP Request Object
 	HTTPRequest *http.Request `json:"-"`
 
-	/*Id of the test
+	/*id of the question to find
 	  Required: true
 	  In: path
 	*/
-	Testid int64
-	/*Username of the teacher who owns the test
+	Questionid int64
+	/*Username of the user who is shared the question
 	  Required: true
 	  In: path
 	*/
@@ -46,14 +46,14 @@ type GetTestFromUserParams struct {
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
 // for simple values it will use straight method calls.
 //
-// To ensure default values, the struct must have been initialized with NewGetTestFromUserParams() beforehand.
-func (o *GetTestFromUserParams) BindRequest(r *http.Request, route *middleware.MatchedRoute) error {
+// To ensure default values, the struct must have been initialized with NewGetSharedQuestionFromUserParams() beforehand.
+func (o *GetSharedQuestionFromUserParams) BindRequest(r *http.Request, route *middleware.MatchedRoute) error {
 	var res []error
 
 	o.HTTPRequest = r
 
-	rTestid, rhkTestid, _ := route.Params.GetOK("testid")
-	if err := o.bindTestid(rTestid, rhkTestid, route.Formats); err != nil {
+	rQuestionid, rhkQuestionid, _ := route.Params.GetOK("questionid")
+	if err := o.bindQuestionid(rQuestionid, rhkQuestionid, route.Formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -67,8 +67,8 @@ func (o *GetTestFromUserParams) BindRequest(r *http.Request, route *middleware.M
 	return nil
 }
 
-// bindTestid binds and validates parameter Testid from path.
-func (o *GetTestFromUserParams) bindTestid(rawData []string, hasKey bool, formats strfmt.Registry) error {
+// bindQuestionid binds and validates parameter Questionid from path.
+func (o *GetSharedQuestionFromUserParams) bindQuestionid(rawData []string, hasKey bool, formats strfmt.Registry) error {
 	var raw string
 	if len(rawData) > 0 {
 		raw = rawData[len(rawData)-1]
@@ -79,15 +79,15 @@ func (o *GetTestFromUserParams) bindTestid(rawData []string, hasKey bool, format
 
 	value, err := swag.ConvertInt64(raw)
 	if err != nil {
-		return errors.InvalidType("testid", "path", "int64", raw)
+		return errors.InvalidType("questionid", "path", "int64", raw)
 	}
-	o.Testid = value
+	o.Questionid = value
 
 	return nil
 }
 
 // bindUsername binds and validates parameter Username from path.
-func (o *GetTestFromUserParams) bindUsername(rawData []string, hasKey bool, formats strfmt.Registry) error {
+func (o *GetSharedQuestionFromUserParams) bindUsername(rawData []string, hasKey bool, formats strfmt.Registry) error {
 	var raw string
 	if len(rawData) > 0 {
 		raw = rawData[len(rawData)-1]

@@ -511,3 +511,22 @@ func GetSharedQuestionsOfUser(db *sql.DB, username string) ([]*Question, error) 
 	}
 	return nil, err
 }
+
+func GetSharedQuestionFromUser(db *sql.DB, username string, questionid int64) (*Question, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var qs *Question
+	query, err := db.Prepare("SELECT P.* FROM Pregunta P JOIN PreguntaEquipo E ON P.id=E.preguntaid JOIN EquipoUsuario U ON U.equipoid=E.equipoid JOIN Usuario V ON V.id=U.usuarioid WHERE V.username=? AND P.id=?")
+	if err == nil {
+		defer query.Close()
+		rows, err := query.Query(username, questionid)
+		if err == nil {
+			qs, err = rowsToQuestion(rows)
+			return qs, err
+		}
+	} else {
+		log.Print(err)
+	}
+	return nil, err
+}

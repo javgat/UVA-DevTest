@@ -41,7 +41,7 @@ type PostTestParams struct {
 	  In: body
 	*/
 	Test *models.Test
-	/*Username of the teacher who owns the question
+	/*Username of the teacher who owns the test
 	  Required: true
 	  In: path
 	*/

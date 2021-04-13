@@ -355,8 +355,105 @@ export class UserService {
     }
 
     /**
-     * Returns a publishedTest that the user can answer
-     * Returns a publishedTest that the user can answer
+     * Returns a publishedTest where the user is invited as a user
+     * Returns a publishedTest where the user is invited as a user
+     * @param username Username of the user who is invited
+     * @param testid Id of the test
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getInvitedTestFromUser(username: string, testid: number, observe?: 'body', reportProgress?: boolean): Observable<Test>;
+    public getInvitedTestFromUser(username: string, testid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Test>>;
+    public getInvitedTestFromUser(username: string, testid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Test>>;
+    public getInvitedTestFromUser(username: string, testid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (username === null || username === undefined) {
+            throw new Error('Required parameter username was null or undefined when calling getInvitedTestFromUser.');
+        }
+
+        if (testid === null || testid === undefined) {
+            throw new Error('Required parameter testid was null or undefined when calling getInvitedTestFromUser.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Test>(`${this.basePath}/users/${encodeURIComponent(String(username))}/invitedTests/${encodeURIComponent(String(testid))}`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns all publishedTests where the user is invited a user
+     * Returns all publishedTests where the user is invited as a user
+     * @param username Username of the user who is invited
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getInvitedTestsFromUser(username: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
+    public getInvitedTestsFromUser(username: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
+    public getInvitedTestsFromUser(username: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
+    public getInvitedTestsFromUser(username: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (username === null || username === undefined) {
+            throw new Error('Required parameter username was null or undefined when calling getInvitedTestsFromUser.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Array<Test>>(`${this.basePath}/users/${encodeURIComponent(String(username))}/invitedTests`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns a publishedTest that the user can answer, including public ones and team ones.
+     * Returns a publishedTest that the user can answer, including public ones and team ones.
      * @param username Username of the user who can answer the publishedTest
      * @param testid Id of the test
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -406,8 +503,8 @@ export class UserService {
     }
 
     /**
-     * Returns all publishedTests that the user can answer
-     * Returns all publishedTests that the user can answer
+     * Returns all publishedTests that the user can answer, including public ones and team ones.
+     * Returns all publishedTests that the user can answer, including public ones and team ones.
      * @param username Username of the user who can answer the publishedTests
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -549,6 +646,57 @@ export class UserService {
     }
 
     /**
+     * Returns a question shared to a user
+     * Returns a question shared to a user
+     * @param username Username of the user who is shared the question
+     * @param questionid id of the question to find
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getSharedQuestionFromUser(username: string, questionid: number, observe?: 'body', reportProgress?: boolean): Observable<Question>;
+    public getSharedQuestionFromUser(username: string, questionid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Question>>;
+    public getSharedQuestionFromUser(username: string, questionid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Question>>;
+    public getSharedQuestionFromUser(username: string, questionid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (username === null || username === undefined) {
+            throw new Error('Required parameter username was null or undefined when calling getSharedQuestionFromUser.');
+        }
+
+        if (questionid === null || questionid === undefined) {
+            throw new Error('Required parameter questionid was null or undefined when calling getSharedQuestionFromUser.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Question>(`${this.basePath}/users/${encodeURIComponent(String(username))}/sharedQuestions/${encodeURIComponent(String(questionid))}`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Returns all questions is shared to the user
      * Returns all questions is shared to the user
      * @param username Username of the user who is shared the questions
@@ -585,6 +733,103 @@ export class UserService {
         ];
 
         return this.httpClient.get<Array<Question>>(`${this.basePath}/users/${encodeURIComponent(String(username))}/sharedQuestions`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns a test from a user that is shared the test
+     * Returns a test from a user that is shared the test
+     * @param username Username of the teacher who is shared the test
+     * @param testid Id of the test
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getSharedTestFromUser(username: string, testid: number, observe?: 'body', reportProgress?: boolean): Observable<Test>;
+    public getSharedTestFromUser(username: string, testid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Test>>;
+    public getSharedTestFromUser(username: string, testid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Test>>;
+    public getSharedTestFromUser(username: string, testid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (username === null || username === undefined) {
+            throw new Error('Required parameter username was null or undefined when calling getSharedTestFromUser.');
+        }
+
+        if (testid === null || testid === undefined) {
+            throw new Error('Required parameter testid was null or undefined when calling getSharedTestFromUser.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Test>(`${this.basePath}/users/${encodeURIComponent(String(username))}/sharedTests/${encodeURIComponent(String(testid))}`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns all tests shared to a user (teacher).
+     * Returns all tests shared to a user (teacher).
+     * @param username Username of the teacher who is shared the tests
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getSharedTestsFromUser(username: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
+    public getSharedTestsFromUser(username: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
+    public getSharedTestsFromUser(username: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
+    public getSharedTestsFromUser(username: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (username === null || username === undefined) {
+            throw new Error('Required parameter username was null or undefined when calling getSharedTestsFromUser.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Array<Test>>(`${this.basePath}/users/${encodeURIComponent(String(username))}/sharedTests`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -694,7 +939,7 @@ export class UserService {
     /**
      * Returns a test from its user owner
      * Returns a test from its user owner
-     * @param username Username of the teacher who owns the question
+     * @param username Username of the teacher who owns the test
      * @param testid Id of the test
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -745,7 +990,7 @@ export class UserService {
     /**
      * Returns all tests owned by a user (teacher).
      * Returns all tests owned by a user (teacher).
-     * @param username Username of the teacher who owns the question
+     * @param username Username of the teacher who owns the tests
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -992,7 +1237,7 @@ export class UserService {
     /**
      * Creates a new test. The user must be a teacher.
      * Creates a new test. The user must be a teacher.
-     * @param username Username of the teacher who owns the question
+     * @param username Username of the teacher who owns the test
      * @param test New Test to create
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.

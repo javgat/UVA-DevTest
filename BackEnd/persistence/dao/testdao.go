@@ -221,92 +221,6 @@ func GetTestFromUser(db *sql.DB, username string, testid int64) (*Test, error) {
 	return nil, err
 }
 
-// PublishedTests
-
-func GetPTestsFromUser(db *sql.DB, username string) ([]*Test, error) {
-	if db == nil {
-		return nil, errors.New(errorDBNil)
-	}
-	u, err := GetUserUsername(db, username)
-	if err == nil {
-		var ts []*Test
-		query, err := db.Prepare("SELECT T.* FROM Test T JOIN InvitacionTestUsuario I ON T.id=I.testid WHERE I.usuarioid=?")
-
-		if err == nil {
-			defer query.Close()
-			rows, err := query.Query(u.ID)
-			if err == nil {
-				ts, err = rowsToTests(rows)
-				return ts, err
-			}
-		}
-	}
-	return nil, err
-}
-
-func GetPTestFromUser(db *sql.DB, username string, testid int64) (*Test, error) {
-	if db == nil {
-		return nil, errors.New(errorDBNil)
-	}
-	u, err := GetUserUsername(db, username)
-	if err == nil {
-		var ts *Test
-		query, err := db.Prepare("SELECT T.* FROM Test T JOIN InvitacionTestUsuario I ON T.id=I.testid WHERE I.usuarioid=? AND I.testid=?")
-		if err == nil {
-			defer query.Close()
-			rows, err := query.Query(u.ID, testid)
-			if err == nil {
-				ts, err = rowsToTest(rows)
-				return ts, err
-			}
-		}
-	}
-	return nil, err
-}
-
-// AnsweredTests
-
-func GetATestsFromUser(db *sql.DB, username string) ([]*Test, error) {
-	if db == nil {
-		return nil, errors.New(errorDBNil)
-	}
-	u, err := GetUserUsername(db, username)
-	if err == nil {
-		var ts []*Test
-		query, err := db.Prepare("SELECT T.* FROM Test T JOIN RespuestaExamen R ON T.id=R.testid WHERE R.usuarioid=?")
-
-		if err == nil {
-			defer query.Close()
-			rows, err := query.Query(u.ID)
-			if err == nil {
-				ts, err = rowsToTests(rows)
-				return ts, err
-			}
-		}
-	}
-	return nil, err
-}
-
-func GetATestFromUser(db *sql.DB, username string, testid int64) (*Test, error) {
-	if db == nil {
-		return nil, errors.New(errorDBNil)
-	}
-	u, err := GetUserUsername(db, username)
-	if err == nil {
-		var ts *Test
-		query, err := db.Prepare("SELECT T.* FROM Test T JOIN RespuestaExamen R ON T.id=R.testid WHERE R.usuarioid=? AND R.testid=?")
-		if err == nil {
-			defer query.Close()
-			rows, err := query.Query(u.ID, testid)
-			if err == nil {
-				ts, err = rowsToTest(rows)
-				return ts, err
-			}
-		}
-	}
-	return nil, err
-}
-
 func GetTestsFromTeam(db *sql.DB, teamname string) ([]*Test, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
@@ -347,41 +261,35 @@ func GetTestFromTeam(db *sql.DB, teamname string, testid int64) (*Test, error) {
 	return nil, err
 }
 
-func GetPTestsFromTeam(db *sql.DB, teamname string) ([]*Test, error) {
+func GetSharedTestsFromUser(db *sql.DB, username string) ([]*Test, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
-	u, err := GetTeam(db, teamname)
+	var t []*Test
+	query, err := db.Prepare("SELECT DISTINCT T.* FROM Test T JOIN GestionTestEquipo G ON T.id=G.testid JOIN EquipoUsuario E ON G.equipoid=E.equipoid JOIN Usuario U ON U.id=E.usuarioid WHERE U.username=?")
 	if err == nil {
-		var t []*Test
-		query, err := db.Prepare("SELECT T.* FROM Test T JOIN InvitacionTestEquipo I ON T.id=I.testid WHERE I.equipoid=?")
+		defer query.Close()
+		rows, err := query.Query(username)
 		if err == nil {
-			defer query.Close()
-			rows, err := query.Query(u.ID)
-			if err == nil {
-				t, err = rowsToTests(rows)
-				return t, err
-			}
+			t, err = rowsToTests(rows)
+			return t, err
 		}
 	}
 	return nil, err
 }
 
-func GetPTestFromTeam(db *sql.DB, teamname string, testid int64) (*Test, error) {
+func GetSharedTestFromUser(db *sql.DB, username string, testid int64) (*Test, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
-	u, err := GetTeam(db, teamname)
+	var t *Test
+	query, err := db.Prepare("SELECT DISTINCT T.* FROM Test T JOIN GestionTestEquipo G ON T.id=G.testid JOIN EquipoUsuario E ON G.equipoid=E.equipoid JOIN Usuario U ON U.id=E.usuarioid WHERE U.username=? AND T.testid=?")
 	if err == nil {
-		var t *Test
-		query, err := db.Prepare("SELECT T.* FROM Test T JOIN InvitacionTestEquipo I ON T.id=I.testid WHERE I.equipoid=? AND T.id=?")
+		defer query.Close()
+		rows, err := query.Query(username, testid)
 		if err == nil {
-			defer query.Close()
-			rows, err := query.Query(u.ID, testid)
-			if err == nil {
-				t, err = rowsToTest(rows)
-				return t, err
-			}
+			t, err = rowsToTest(rows)
+			return t, err
 		}
 	}
 	return nil, err

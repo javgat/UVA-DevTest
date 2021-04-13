@@ -14,42 +14,86 @@ import (
 	"github.com/go-openapi/runtime/middleware"
 )
 
-// GetPTests GET /publishedTests. Returns all published tests.
+// GetPTests GET /publicPublishedTests. Returns all public published tests.
 // Auth: ALL
-func GetPTests(params published_test.GetPublishedTestsParams, u *models.User) middleware.Responder {
+func GetPublicPTests(params published_test.GetPublicPublishedTestsParams, u *models.User) middleware.Responder {
 	db, err := dbconnection.ConnectDb()
 	if err == nil {
 		var ts []*dao.Test
-		ts, err = dao.GetPublishedTests(db)
+		ts, err = dao.GetPublicPublishedTests(db)
 		if err == nil {
 			var mts []*models.Test
 			mts, err = dao.ToModelTests(ts)
 			if err == nil {
-				return published_test.NewGetPublishedTestsOK().WithPayload(mts)
+				return published_test.NewGetPublicPublishedTestsOK().WithPayload(mts)
 			}
 		}
 	}
-	log.Println("Error en users_handler GetPTests(): ", err)
-	return published_test.NewGetPublishedTestsInternalServerError()
+	log.Println("Error en users_handler GetPublicPTests(): ", err)
+	return published_test.NewGetPublicPublishedTestsInternalServerError()
 }
 
-// GetPTest GET /publishedTests/{testid}. Returns a published tests.
+// GetPTest GET /publicPublishedTests/{testid}. Returns a public published tests.
 // Auth: ALL
-func GetPTest(params published_test.GetPublishedTestParams, u *models.User) middleware.Responder {
+func GetPublicPTest(params published_test.GetPublicPublishedTestParams, u *models.User) middleware.Responder {
 	db, err := dbconnection.ConnectDb()
 	if err == nil {
 		var ts *dao.Test
-		ts, err = dao.GetPublishedTest(db, params.Testid)
+		ts, err = dao.GetPublicPublishedTest(db, params.Testid)
 		if err == nil && ts != nil {
 			var mts *models.Test
 			mts, err = dao.ToModelTest(ts)
 			if err == nil {
-				return published_test.NewGetPublishedTestOK().WithPayload(mts)
+				return published_test.NewGetPublicPublishedTestOK().WithPayload(mts)
 			}
 		}
 	}
-	log.Println("Error en users_handler GetPTest(): ", err)
-	return published_test.NewGetPublishedTestInternalServerError()
+	log.Println("Error en users_handler GetPublicPTest(): ", err)
+	return published_test.NewGetPublicPublishedTestInternalServerError()
+}
+
+// GetPTests GET /publishedTests. Returns all published tests.
+// Auth: Admin
+func GetPTests(params published_test.GetPublishedTestsParams, u *models.User) middleware.Responder {
+	db, err := dbconnection.ConnectDb()
+	if isAdmin(u) {
+		if err == nil {
+			var ts []*dao.Test
+			ts, err = dao.GetPublishedTests(db)
+			if err == nil {
+				var mts []*models.Test
+				mts, err = dao.ToModelTests(ts)
+				if err == nil {
+					return published_test.NewGetPublishedTestsOK().WithPayload(mts)
+				}
+			}
+		}
+		log.Println("Error en users_handler GetPTests(): ", err)
+		return published_test.NewGetPublishedTestsInternalServerError()
+	}
+	return published_test.NewGetPublishedTestsForbidden()
+}
+
+// GetPTest GET /publishedTests/{testid}. Returns a published tests.
+// Auth: Admin
+func GetPTest(params published_test.GetPublishedTestParams, u *models.User) middleware.Responder {
+	db, err := dbconnection.ConnectDb()
+	if isAdmin(u) {
+		if err == nil {
+			var ts *dao.Test
+			ts, err = dao.GetPublishedTest(db, params.Testid)
+			if err == nil && ts != nil {
+				var mts *models.Test
+				mts, err = dao.ToModelTest(ts)
+				if err == nil {
+					return published_test.NewGetPublishedTestOK().WithPayload(mts)
+				}
+			}
+		}
+		log.Println("Error en users_handler GetPTest(): ", err)
+		return published_test.NewGetPublishedTestInternalServerError()
+	}
+	return published_test.NewGetPublishedTestForbidden()
 }
 
 // GetUsersFromPTest GET /publishedTests/{testid}/users. Returns a published tests users.

@@ -121,6 +121,12 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		TestGetEditTestsHandler: test.GetEditTestsHandlerFunc(func(params test.GetEditTestsParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation test.GetEditTests has not yet been implemented")
 		}),
+		UserGetInvitedTestFromUserHandler: user.GetInvitedTestFromUserHandlerFunc(func(params user.GetInvitedTestFromUserParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation user.GetInvitedTestFromUser has not yet been implemented")
+		}),
+		UserGetInvitedTestsFromUserHandler: user.GetInvitedTestsFromUserHandlerFunc(func(params user.GetInvitedTestsFromUserParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation user.GetInvitedTestsFromUser has not yet been implemented")
+		}),
 		TeamGetMemberHandler: team.GetMemberHandlerFunc(func(params team.GetMemberParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation team.GetMember has not yet been implemented")
 		}),
@@ -135,6 +141,12 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		}),
 		QuestionGetOptionsFromQuestionHandler: question.GetOptionsFromQuestionHandlerFunc(func(params question.GetOptionsFromQuestionParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation question.GetOptionsFromQuestion has not yet been implemented")
+		}),
+		PublishedTestGetPublicPublishedTestHandler: published_test.GetPublicPublishedTestHandlerFunc(func(params published_test.GetPublicPublishedTestParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation published_test.GetPublicPublishedTest has not yet been implemented")
+		}),
+		PublishedTestGetPublicPublishedTestsHandler: published_test.GetPublicPublishedTestsHandlerFunc(func(params published_test.GetPublicPublishedTestsParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation published_test.GetPublicPublishedTests has not yet been implemented")
 		}),
 		PublishedTestGetPublishedTestHandler: published_test.GetPublishedTestHandlerFunc(func(params published_test.GetPublishedTestParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation published_test.GetPublishedTest has not yet been implemented")
@@ -196,8 +208,17 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		UserGetQuestionsOfUserHandler: user.GetQuestionsOfUserHandlerFunc(func(params user.GetQuestionsOfUserParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation user.GetQuestionsOfUser has not yet been implemented")
 		}),
+		UserGetSharedQuestionFromUserHandler: user.GetSharedQuestionFromUserHandlerFunc(func(params user.GetSharedQuestionFromUserParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation user.GetSharedQuestionFromUser has not yet been implemented")
+		}),
 		UserGetSharedQuestionsOfUserHandler: user.GetSharedQuestionsOfUserHandlerFunc(func(params user.GetSharedQuestionsOfUserParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation user.GetSharedQuestionsOfUser has not yet been implemented")
+		}),
+		UserGetSharedTestFromUserHandler: user.GetSharedTestFromUserHandlerFunc(func(params user.GetSharedTestFromUserParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation user.GetSharedTestFromUser has not yet been implemented")
+		}),
+		UserGetSharedTestsFromUserHandler: user.GetSharedTestsFromUserHandlerFunc(func(params user.GetSharedTestsFromUserParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation user.GetSharedTestsFromUser has not yet been implemented")
 		}),
 		TagGetTagHandler: tag.GetTagHandlerFunc(func(params tag.GetTagParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation tag.GetTag has not yet been implemented")
@@ -465,6 +486,10 @@ type DevAPI struct {
 	QuestionGetEditQuestionsHandler question.GetEditQuestionsHandler
 	// TestGetEditTestsHandler sets the operation handler for the get edit tests operation
 	TestGetEditTestsHandler test.GetEditTestsHandler
+	// UserGetInvitedTestFromUserHandler sets the operation handler for the get invited test from user operation
+	UserGetInvitedTestFromUserHandler user.GetInvitedTestFromUserHandler
+	// UserGetInvitedTestsFromUserHandler sets the operation handler for the get invited tests from user operation
+	UserGetInvitedTestsFromUserHandler user.GetInvitedTestsFromUserHandler
 	// TeamGetMemberHandler sets the operation handler for the get member operation
 	TeamGetMemberHandler team.GetMemberHandler
 	// TeamGetMembersHandler sets the operation handler for the get members operation
@@ -475,6 +500,10 @@ type DevAPI struct {
 	PublishedTestGetOptionsFromPublishedQuestionHandler published_test.GetOptionsFromPublishedQuestionHandler
 	// QuestionGetOptionsFromQuestionHandler sets the operation handler for the get options from question operation
 	QuestionGetOptionsFromQuestionHandler question.GetOptionsFromQuestionHandler
+	// PublishedTestGetPublicPublishedTestHandler sets the operation handler for the get public published test operation
+	PublishedTestGetPublicPublishedTestHandler published_test.GetPublicPublishedTestHandler
+	// PublishedTestGetPublicPublishedTestsHandler sets the operation handler for the get public published tests operation
+	PublishedTestGetPublicPublishedTestsHandler published_test.GetPublicPublishedTestsHandler
 	// PublishedTestGetPublishedTestHandler sets the operation handler for the get published test operation
 	PublishedTestGetPublishedTestHandler published_test.GetPublishedTestHandler
 	// TeamGetPublishedTestFromTeamHandler sets the operation handler for the get published test from team operation
@@ -515,8 +544,14 @@ type DevAPI struct {
 	TestGetQuestionsFromTestHandler test.GetQuestionsFromTestHandler
 	// UserGetQuestionsOfUserHandler sets the operation handler for the get questions of user operation
 	UserGetQuestionsOfUserHandler user.GetQuestionsOfUserHandler
+	// UserGetSharedQuestionFromUserHandler sets the operation handler for the get shared question from user operation
+	UserGetSharedQuestionFromUserHandler user.GetSharedQuestionFromUserHandler
 	// UserGetSharedQuestionsOfUserHandler sets the operation handler for the get shared questions of user operation
 	UserGetSharedQuestionsOfUserHandler user.GetSharedQuestionsOfUserHandler
+	// UserGetSharedTestFromUserHandler sets the operation handler for the get shared test from user operation
+	UserGetSharedTestFromUserHandler user.GetSharedTestFromUserHandler
+	// UserGetSharedTestsFromUserHandler sets the operation handler for the get shared tests from user operation
+	UserGetSharedTestsFromUserHandler user.GetSharedTestsFromUserHandler
 	// TagGetTagHandler sets the operation handler for the get tag operation
 	TagGetTagHandler tag.GetTagHandler
 	// QuestionGetTagFromQuestionHandler sets the operation handler for the get tag from question operation
@@ -778,6 +813,12 @@ func (o *DevAPI) Validate() error {
 	if o.TestGetEditTestsHandler == nil {
 		unregistered = append(unregistered, "test.GetEditTestsHandler")
 	}
+	if o.UserGetInvitedTestFromUserHandler == nil {
+		unregistered = append(unregistered, "user.GetInvitedTestFromUserHandler")
+	}
+	if o.UserGetInvitedTestsFromUserHandler == nil {
+		unregistered = append(unregistered, "user.GetInvitedTestsFromUserHandler")
+	}
 	if o.TeamGetMemberHandler == nil {
 		unregistered = append(unregistered, "team.GetMemberHandler")
 	}
@@ -792,6 +833,12 @@ func (o *DevAPI) Validate() error {
 	}
 	if o.QuestionGetOptionsFromQuestionHandler == nil {
 		unregistered = append(unregistered, "question.GetOptionsFromQuestionHandler")
+	}
+	if o.PublishedTestGetPublicPublishedTestHandler == nil {
+		unregistered = append(unregistered, "published_test.GetPublicPublishedTestHandler")
+	}
+	if o.PublishedTestGetPublicPublishedTestsHandler == nil {
+		unregistered = append(unregistered, "published_test.GetPublicPublishedTestsHandler")
 	}
 	if o.PublishedTestGetPublishedTestHandler == nil {
 		unregistered = append(unregistered, "published_test.GetPublishedTestHandler")
@@ -853,8 +900,17 @@ func (o *DevAPI) Validate() error {
 	if o.UserGetQuestionsOfUserHandler == nil {
 		unregistered = append(unregistered, "user.GetQuestionsOfUserHandler")
 	}
+	if o.UserGetSharedQuestionFromUserHandler == nil {
+		unregistered = append(unregistered, "user.GetSharedQuestionFromUserHandler")
+	}
 	if o.UserGetSharedQuestionsOfUserHandler == nil {
 		unregistered = append(unregistered, "user.GetSharedQuestionsOfUserHandler")
+	}
+	if o.UserGetSharedTestFromUserHandler == nil {
+		unregistered = append(unregistered, "user.GetSharedTestFromUserHandler")
+	}
+	if o.UserGetSharedTestsFromUserHandler == nil {
+		unregistered = append(unregistered, "user.GetSharedTestsFromUserHandler")
 	}
 	if o.TagGetTagHandler == nil {
 		unregistered = append(unregistered, "tag.GetTagHandler")
@@ -1218,6 +1274,14 @@ func (o *DevAPI) initHandlerCache() {
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
+	o.handlers["GET"]["/users/{username}/invitedTests/{testid}"] = user.NewGetInvitedTestFromUser(o.context, o.UserGetInvitedTestFromUserHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/users/{username}/invitedTests"] = user.NewGetInvitedTestsFromUser(o.context, o.UserGetInvitedTestsFromUserHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
 	o.handlers["GET"]["/teams/{teamname}/members/{username}"] = team.NewGetMember(o.context, o.TeamGetMemberHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
@@ -1235,6 +1299,14 @@ func (o *DevAPI) initHandlerCache() {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
 	o.handlers["GET"]["/questions/{questionid}/options"] = question.NewGetOptionsFromQuestion(o.context, o.QuestionGetOptionsFromQuestionHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/publicPublishedTests/{testid}"] = published_test.NewGetPublicPublishedTest(o.context, o.PublishedTestGetPublicPublishedTestHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/publicPublishedTests"] = published_test.NewGetPublicPublishedTests(o.context, o.PublishedTestGetPublicPublishedTestsHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
@@ -1318,7 +1390,19 @@ func (o *DevAPI) initHandlerCache() {
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
+	o.handlers["GET"]["/users/{username}/sharedQuestions/{questionid}"] = user.NewGetSharedQuestionFromUser(o.context, o.UserGetSharedQuestionFromUserHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
 	o.handlers["GET"]["/users/{username}/sharedQuestions"] = user.NewGetSharedQuestionsOfUser(o.context, o.UserGetSharedQuestionsOfUserHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/users/{username}/sharedTests/{testid}"] = user.NewGetSharedTestFromUser(o.context, o.UserGetSharedTestFromUserHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/users/{username}/sharedTests"] = user.NewGetSharedTestsFromUser(o.context, o.UserGetSharedTestsFromUserHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}

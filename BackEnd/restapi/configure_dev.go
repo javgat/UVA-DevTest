@@ -84,15 +84,22 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 	api.TeamPostTeamHandler = team.PostTeamHandlerFunc(handlers.PostTeam)                      // POST /users/{username}/teams
 	api.UserGetTeamFromUserHandler = user.GetTeamFromUserHandlerFunc(handlers.GetTeamFromUser) // GET /users/{username}/teams/{teamname}
 
-	api.UserGetSharedQuestionsOfUserHandler = user.GetSharedQuestionsOfUserHandlerFunc(handlers.GetSharedQuestions) // GET /users/{username}/sharedQuestions
+	api.UserGetSharedQuestionsOfUserHandler = user.GetSharedQuestionsOfUserHandlerFunc(handlers.GetSharedQuestions)  // GET /users/{username}/sharedQuestions
+	api.UserGetSharedQuestionFromUserHandler = user.GetSharedQuestionFromUserHandlerFunc(handlers.GetSharedQuestion) // GET /users/{username}/sharedQuestions/{testid}
 
 	api.UserGetQuestionsOfUserHandler = user.GetQuestionsOfUserHandlerFunc(handlers.GetQuestionsOfUser)  // GET /users/{username}/questions
 	api.UserPostQuestionHandler = user.PostQuestionHandlerFunc(handlers.PostQuestionOfUser)              // POST /users/{username}/questions
 	api.UserGetQuestionFromUserHandler = user.GetQuestionFromUserHandlerFunc(handlers.GetQuestionOfUser) // GET /users/{username}/questions/{questionid}
 
+	api.UserGetSharedTestsFromUserHandler = user.GetSharedTestsFromUserHandlerFunc(handlers.GetSharedTests) // GET /users/{username}/sharedTests
+	api.UserGetSharedTestFromUserHandler = user.GetSharedTestFromUserHandlerFunc(handlers.GetSharedTest)    // GET /users/{username}/sharedTests/{testid}
+
 	api.UserGetTestsFromUserHandler = user.GetTestsFromUserHandlerFunc(handlers.GetTestsFromUser) // GET /users/{username}/tests
 	api.UserPostTestHandler = user.PostTestHandlerFunc(handlers.PostTest)                         // POST /users/{username}/tests
 	api.UserGetTestFromUserHandler = user.GetTestFromUserHandlerFunc(handlers.GetTestFromUser)    // GET /users/{username}/tests/{testid}
+
+	api.UserGetInvitedTestsFromUserHandler = user.GetInvitedTestsFromUserHandlerFunc(handlers.GetInvitedTests) // GET /users/{username}/invitedTests
+	api.UserGetInvitedTestFromUserHandler = user.GetInvitedTestFromUserHandlerFunc(handlers.GetInvitedTest)    // GET /users/{username}/invitedTests/{testid}
 
 	api.UserGetPublishedTestsFromUserHandler = user.GetPublishedTestsFromUserHandlerFunc(handlers.GetPTestsFromUser) // GET /users/{username}/publishedTests
 	api.UserGetPublishedTestFromUserHandler = user.GetPublishedTestFromUserHandlerFunc(handlers.GetPTestFromUser)    // GET /users/{username}/publishedTests/{testid}
@@ -181,6 +188,9 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 	api.TestRemoveQuestionFromTestHandler = test.RemoveQuestionFromTestHandlerFunc(handlers.RemoveQuestionTest) // DELETE /tests/{testid}/questions/{questionid}
 
 	// /publishedTests
+
+	api.PublishedTestGetPublicPublishedTestsHandler = published_test.GetPublicPublishedTestsHandlerFunc(handlers.GetPublicPTests) // GET /publishedTests
+	api.PublishedTestGetPublicPublishedTestHandler = published_test.GetPublicPublishedTestHandlerFunc(handlers.GetPublicPTest)    // GET /publishedTests/{testid}
 
 	api.PublishedTestGetPublishedTestsHandler = published_test.GetPublishedTestsHandlerFunc(handlers.GetPTests) // GET /publishedTests
 	api.PublishedTestGetPublishedTestHandler = published_test.GetPublishedTestHandlerFunc(handlers.GetPTest)    // GET /publishedTests/{testid}

@@ -13,24 +13,24 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// NewGetTestsFromUserParams creates a new GetTestsFromUserParams object
+// NewGetInvitedTestsFromUserParams creates a new GetInvitedTestsFromUserParams object
 //
 // There are no default values defined in the spec.
-func NewGetTestsFromUserParams() GetTestsFromUserParams {
+func NewGetInvitedTestsFromUserParams() GetInvitedTestsFromUserParams {
 
-	return GetTestsFromUserParams{}
+	return GetInvitedTestsFromUserParams{}
 }
 
-// GetTestsFromUserParams contains all the bound params for the get tests from user operation
+// GetInvitedTestsFromUserParams contains all the bound params for the get invited tests from user operation
 // typically these are obtained from a http.Request
 //
-// swagger:parameters GetTestsFromUser
-type GetTestsFromUserParams struct {
+// swagger:parameters GetInvitedTestsFromUser
+type GetInvitedTestsFromUserParams struct {
 
 	// HTTP Request Object
 	HTTPRequest *http.Request `json:"-"`
 
-	/*Username of the teacher who owns the tests
+	/*Username of the user who is invited
 	  Required: true
 	  In: path
 	*/
@@ -40,8 +40,8 @@ type GetTestsFromUserParams struct {
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
 // for simple values it will use straight method calls.
 //
-// To ensure default values, the struct must have been initialized with NewGetTestsFromUserParams() beforehand.
-func (o *GetTestsFromUserParams) BindRequest(r *http.Request, route *middleware.MatchedRoute) error {
+// To ensure default values, the struct must have been initialized with NewGetInvitedTestsFromUserParams() beforehand.
+func (o *GetInvitedTestsFromUserParams) BindRequest(r *http.Request, route *middleware.MatchedRoute) error {
 	var res []error
 
 	o.HTTPRequest = r
@@ -57,7 +57,7 @@ func (o *GetTestsFromUserParams) BindRequest(r *http.Request, route *middleware.
 }
 
 // bindUsername binds and validates parameter Username from path.
-func (o *GetTestsFromUserParams) bindUsername(rawData []string, hasKey bool, formats strfmt.Registry) error {
+func (o *GetInvitedTestsFromUserParams) bindUsername(rawData []string, hasKey bool, formats strfmt.Registry) error {
 	var raw string
 	if len(rawData) > 0 {
 		raw = rawData[len(rawData)-1]

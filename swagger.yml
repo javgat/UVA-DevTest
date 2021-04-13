@@ -491,6 +491,42 @@ paths:
           $ref: '#/responses/GoneError'
         500:
           $ref: '#/responses/InternalServerError'
+  /users/{username}/sharedQuestions/{questionid}:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - user
+      summary: Returns a question shared to a user
+      operationId: GetSharedQuestionFromUser
+      description: Returns a question shared to a user
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the user who is shared the question
+        required: true
+        type: string
+      - in: path
+        name: questionid
+        description: id of the question to find
+        required: true
+        type: integer
+      responses:
+        200:
+          description: question found
+          schema:
+            $ref: '#/definitions/Question'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
   /users/{username}/questions:
     get:
       security:
@@ -597,6 +633,74 @@ paths:
         500:
           $ref: '#/responses/InternalServerError'
 
+  /users/{username}/sharedTests:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - user
+      summary: Returns all tests shared to a user (teacher).
+      operationId: GetSharedTestsFromUser
+      description: Returns all tests shared to a user (teacher).
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the teacher who is shared the tests
+        required: true
+        type: string
+      responses:
+        200:
+          description: tests found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Test'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  /users/{username}/sharedTests/{testid}:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - user
+      summary: Returns a test from a user that is shared the test
+      operationId: GetSharedTestFromUser
+      description: Returns a test from a user that is shared the test
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the teacher who is shared the test
+        required: true
+        type: string
+      - in: path
+        name: testid
+        description: Id of the test
+        required: true
+        type: integer
+      responses:
+        200:
+          description: test found
+          schema:
+            $ref: '#/definitions/Test'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
   /users/{username}/tests:
     get:
       security:
@@ -611,7 +715,7 @@ paths:
       parameters:
       - in: path
         name: username
-        description: Username of the teacher who owns the question
+        description: Username of the teacher who owns the tests
         required: true
         type: string
       responses:
@@ -645,7 +749,7 @@ paths:
       parameters:
       - in: path
         name: username
-        description: Username of the teacher who owns the question
+        description: Username of the teacher who owns the test
         required: true
         type: string
       - in: body
@@ -681,7 +785,7 @@ paths:
       parameters:
       - in: path
         name: username
-        description: Username of the teacher who owns the question
+        description: Username of the teacher who owns the test
         required: true
         type: string
       - in: path
@@ -703,15 +807,83 @@ paths:
         500:
           $ref: '#/responses/InternalServerError'
 
+  /users/{username}/invitedTests:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - user
+      summary: Returns all publishedTests where the user is invited a user
+      operationId: GetInvitedTestsFromUser
+      description: Returns all publishedTests where the user is invited as a user
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the user who is invited
+        required: true
+        type: string
+      responses:
+        200:
+          description: publishedTests found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Test'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  /users/{username}/invitedTests/{testid}:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - user
+      summary: Returns a publishedTest where the user is invited as a user
+      operationId: GetInvitedTestFromUser
+      description: Returns a publishedTest where the user is invited as a user
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the user who is invited
+        required: true
+        type: string
+      - in: path
+        name: testid
+        description: Id of the test
+        required: true
+        type: integer
+      responses:
+        200:
+          description: publishedTest found
+          schema:
+            $ref: '#/definitions/Test'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
   /users/{username}/publishedTests:
     get:
       security:
         - BearerCookie: []
       tags:
       - user
-      summary: Returns all publishedTests that the user can answer
+      summary: Returns all publishedTests that the user can answer, including public ones and team ones.
       operationId: GetPublishedTestsFromUser
-      description: Returns all publishedTests that the user can answer
+      description: Returns all publishedTests that the user can answer, including public ones and team ones.
       produces:
       - application/json
       parameters:
@@ -741,9 +913,9 @@ paths:
         - BearerCookie: []
       tags:
       - user
-      summary: Returns a publishedTest that the user can answer
+      summary: Returns a publishedTest that the user can answer, including public ones and team ones.
       operationId: GetPublishedTestFromUser
-      description: Returns a publishedTest that the user can answer
+      description: Returns a publishedTest that the user can answer, including public ones and team ones.
       produces:
       - application/json
       parameters:
@@ -2618,7 +2790,62 @@ paths:
           $ref: '#/responses/GoneError'
         500:
           $ref: '#/responses/InternalServerError'
-  
+
+  /publicPublishedTests:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - publishedTest
+      summary: Returns all public publishedTests
+      operationId: GetPublicPublishedTests
+      description: Returns all public publishedTests
+      produces:
+      - application/json
+      responses:
+        200:
+          description: PublishedTests found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Test'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  /publicPublishedTests/{testid}:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - publishedTest
+      summary: Returns a public publishedTest
+      operationId: GetPublicPublishedTest
+      description: Returns a public publishedTest
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: testid
+        description: Id of the publishedTest
+        required: true
+        type: integer
+      responses:
+        200:
+          description: PublishedTest found
+          schema:
+            $ref: '#/definitions/Test'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+          
   /publishedTests:
     get:
       security:

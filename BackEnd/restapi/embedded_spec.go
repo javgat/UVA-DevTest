@@ -653,6 +653,91 @@ func init() {
         }
       }
     },
+    "/publicPublishedTests": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all public publishedTests",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "publishedTest"
+        ],
+        "summary": "Returns all public publishedTests",
+        "operationId": "GetPublicPublishedTests",
+        "responses": {
+          "200": {
+            "description": "PublishedTests found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Test"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/publicPublishedTests/{testid}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns a public publishedTest",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "publishedTest"
+        ],
+        "summary": "Returns a public publishedTest",
+        "operationId": "GetPublicPublishedTest",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the publishedTest",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "PublishedTest found",
+            "schema": {
+              "$ref": "#/definitions/Test"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
     "/publishedTests": {
       "get": {
         "security": [
@@ -4334,6 +4419,110 @@ func init() {
         }
       }
     },
+    "/users/{username}/invitedTests": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all publishedTests where the user is invited as a user",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns all publishedTests where the user is invited a user",
+        "operationId": "GetInvitedTestsFromUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who is invited",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "publishedTests found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Test"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/users/{username}/invitedTests/{testid}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns a publishedTest where the user is invited as a user",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns a publishedTest where the user is invited as a user",
+        "operationId": "GetInvitedTestFromUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who is invited",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the test",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "publishedTest found",
+            "schema": {
+              "$ref": "#/definitions/Test"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
     "/users/{username}/password": {
       "put": {
         "security": [
@@ -4395,14 +4584,14 @@ func init() {
             "BearerCookie": []
           }
         ],
-        "description": "Returns all publishedTests that the user can answer",
+        "description": "Returns all publishedTests that the user can answer, including public ones and team ones.",
         "produces": [
           "application/json"
         ],
         "tags": [
           "user"
         ],
-        "summary": "Returns all publishedTests that the user can answer",
+        "summary": "Returns all publishedTests that the user can answer, including public ones and team ones.",
         "operationId": "GetPublishedTestsFromUser",
         "parameters": [
           {
@@ -4445,14 +4634,14 @@ func init() {
             "BearerCookie": []
           }
         ],
-        "description": "Returns a publishedTest that the user can answer",
+        "description": "Returns a publishedTest that the user can answer, including public ones and team ones.",
         "produces": [
           "application/json"
         ],
         "tags": [
           "user"
         ],
-        "summary": "Returns a publishedTest that the user can answer",
+        "summary": "Returns a publishedTest that the user can answer, including public ones and team ones.",
         "operationId": "GetPublishedTestFromUser",
         "parameters": [
           {
@@ -4812,6 +5001,164 @@ func init() {
         }
       }
     },
+    "/users/{username}/sharedQuestions/{questionid}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns a question shared to a user",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns a question shared to a user",
+        "operationId": "GetSharedQuestionFromUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who is shared the question",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "id of the question to find",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "question found",
+            "schema": {
+              "$ref": "#/definitions/Question"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/users/{username}/sharedTests": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all tests shared to a user (teacher).",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns all tests shared to a user (teacher).",
+        "operationId": "GetSharedTestsFromUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the teacher who is shared the tests",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "tests found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Test"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/users/{username}/sharedTests/{testid}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns a test from a user that is shared the test",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns a test from a user that is shared the test",
+        "operationId": "GetSharedTestFromUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the teacher who is shared the test",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the test",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "test found",
+            "schema": {
+              "$ref": "#/definitions/Test"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
     "/users/{username}/teams": {
       "get": {
         "security": [
@@ -4990,7 +5337,7 @@ func init() {
         "parameters": [
           {
             "type": "string",
-            "description": "Username of the teacher who owns the question",
+            "description": "Username of the teacher who owns the tests",
             "name": "username",
             "in": "path",
             "required": true
@@ -5042,7 +5389,7 @@ func init() {
         "parameters": [
           {
             "type": "string",
-            "description": "Username of the teacher who owns the question",
+            "description": "Username of the teacher who owns the test",
             "name": "username",
             "in": "path",
             "required": true
@@ -5098,7 +5445,7 @@ func init() {
         "parameters": [
           {
             "type": "string",
-            "description": "Username of the teacher who owns the question",
+            "description": "Username of the teacher who owns the test",
             "name": "username",
             "in": "path",
             "required": true
@@ -6374,6 +6721,106 @@ func init() {
         }
       }
     },
+    "/publicPublishedTests": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all public publishedTests",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "publishedTest"
+        ],
+        "summary": "Returns all public publishedTests",
+        "operationId": "GetPublicPublishedTests",
+        "responses": {
+          "200": {
+            "description": "PublishedTests found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Test"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/publicPublishedTests/{testid}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns a public publishedTest",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "publishedTest"
+        ],
+        "summary": "Returns a public publishedTest",
+        "operationId": "GetPublicPublishedTest",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the publishedTest",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "PublishedTest found",
+            "schema": {
+              "$ref": "#/definitions/Test"
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
     "/publishedTests": {
       "get": {
         "security": [
@@ -10709,6 +11156,128 @@ func init() {
         }
       }
     },
+    "/users/{username}/invitedTests": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all publishedTests where the user is invited as a user",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns all publishedTests where the user is invited a user",
+        "operationId": "GetInvitedTestsFromUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who is invited",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "publishedTests found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Test"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/users/{username}/invitedTests/{testid}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns a publishedTest where the user is invited as a user",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns a publishedTest where the user is invited as a user",
+        "operationId": "GetInvitedTestFromUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who is invited",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the test",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "publishedTest found",
+            "schema": {
+              "$ref": "#/definitions/Test"
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
     "/users/{username}/password": {
       "put": {
         "security": [
@@ -10779,14 +11348,14 @@ func init() {
             "BearerCookie": []
           }
         ],
-        "description": "Returns all publishedTests that the user can answer",
+        "description": "Returns all publishedTests that the user can answer, including public ones and team ones.",
         "produces": [
           "application/json"
         ],
         "tags": [
           "user"
         ],
-        "summary": "Returns all publishedTests that the user can answer",
+        "summary": "Returns all publishedTests that the user can answer, including public ones and team ones.",
         "operationId": "GetPublishedTestsFromUser",
         "parameters": [
           {
@@ -10838,14 +11407,14 @@ func init() {
             "BearerCookie": []
           }
         ],
-        "description": "Returns a publishedTest that the user can answer",
+        "description": "Returns a publishedTest that the user can answer, including public ones and team ones.",
         "produces": [
           "application/json"
         ],
         "tags": [
           "user"
         ],
-        "summary": "Returns a publishedTest that the user can answer",
+        "summary": "Returns a publishedTest that the user can answer, including public ones and team ones.",
         "operationId": "GetPublishedTestFromUser",
         "parameters": [
           {
@@ -11268,6 +11837,191 @@ func init() {
         }
       }
     },
+    "/users/{username}/sharedQuestions/{questionid}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns a question shared to a user",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns a question shared to a user",
+        "operationId": "GetSharedQuestionFromUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who is shared the question",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "id of the question to find",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "question found",
+            "schema": {
+              "$ref": "#/definitions/Question"
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/users/{username}/sharedTests": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all tests shared to a user (teacher).",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns all tests shared to a user (teacher).",
+        "operationId": "GetSharedTestsFromUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the teacher who is shared the tests",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "tests found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Test"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/users/{username}/sharedTests/{testid}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns a test from a user that is shared the test",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns a test from a user that is shared the test",
+        "operationId": "GetSharedTestFromUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the teacher who is shared the test",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the test",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "test found",
+            "schema": {
+              "$ref": "#/definitions/Test"
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
     "/users/{username}/teams": {
       "get": {
         "security": [
@@ -11470,7 +12224,7 @@ func init() {
         "parameters": [
           {
             "type": "string",
-            "description": "Username of the teacher who owns the question",
+            "description": "Username of the teacher who owns the tests",
             "name": "username",
             "in": "path",
             "required": true
@@ -11531,7 +12285,7 @@ func init() {
         "parameters": [
           {
             "type": "string",
-            "description": "Username of the teacher who owns the question",
+            "description": "Username of the teacher who owns the test",
             "name": "username",
             "in": "path",
             "required": true
@@ -11596,7 +12350,7 @@ func init() {
         "parameters": [
           {
             "type": "string",
-            "description": "Username of the teacher who owns the question",
+            "description": "Username of the teacher who owns the test",
             "name": "username",
             "in": "path",
             "required": true

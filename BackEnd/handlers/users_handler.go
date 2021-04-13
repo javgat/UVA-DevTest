@@ -316,6 +316,25 @@ func GetSharedQuestions(params user.GetSharedQuestionsOfUserParams, u *models.Us
 	return user.NewGetSharedQuestionsOfUserInternalServerError()
 }
 
+// GET /users/{username}/sharedQuestions/{questionid}
+func GetSharedQuestion(params user.GetSharedQuestionFromUserParams, u *models.User) middleware.Responder {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		q, err := dao.GetSharedQuestionFromUser(db, params.Username, params.Questionid)
+		if err == nil {
+			if q != nil {
+				mq, err := dao.ToModelQuestion(q)
+				if mq != nil && err == nil {
+					return user.NewGetSharedQuestionFromUserOK().WithPayload(mq)
+				}
+				user.NewGetSharedQuestionFromUserInternalServerError()
+			}
+			return user.NewGetSharedQuestionFromUserGone()
+		}
+	}
+	return user.NewGetSharedQuestionFromUserInternalServerError()
+}
+
 // GET /users/{username}/questions
 func GetQuestionsOfUser(params user.GetQuestionsOfUserParams, u *models.User) middleware.Responder {
 	if userOrAdmin(params.Username, u) {
@@ -376,6 +395,45 @@ func GetQuestionOfUser(params user.GetQuestionFromUserParams, u *models.User) mi
 	return user.NewGetQuestionFromUserForbidden()
 }
 
+// GET /users/{username}/sharedTests
+func GetSharedTests(params user.GetSharedTestsFromUserParams, u *models.User) middleware.Responder {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		t, err := dao.GetSharedTestsFromUser(db, params.Username)
+		if err == nil {
+			if t != nil {
+				mt, err := dao.ToModelTests(t)
+				if mt != nil && err == nil {
+					return user.NewGetSharedTestsFromUserOK().WithPayload(mt)
+				}
+				user.NewGetSharedTestsFromUserInternalServerError()
+			}
+			mt := []*models.Test{}
+			return user.NewGetSharedTestsFromUserOK().WithPayload(mt)
+		}
+	}
+	return user.NewGetSharedTestsFromUserInternalServerError()
+}
+
+// GET /users/{username}/sharedTests/{testid}
+func GetSharedTest(params user.GetSharedTestFromUserParams, u *models.User) middleware.Responder {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		t, err := dao.GetSharedTestFromUser(db, params.Username, params.Testid)
+		if err == nil {
+			if t != nil {
+				mt, err := dao.ToModelTest(t)
+				if mt != nil && err == nil {
+					return user.NewGetSharedTestFromUserOK().WithPayload(mt)
+				}
+				user.NewGetSharedTestFromUserInternalServerError()
+			}
+			return user.NewGetSharedTestFromUserGone()
+		}
+	}
+	return user.NewGetSharedTestFromUserInternalServerError()
+}
+
 // GET /users/{username}/tests
 func GetTestsFromUser(params user.GetTestsFromUserParams, u *models.User) middleware.Responder {
 	if isTeacherOrAdmin(u) {
@@ -433,9 +491,47 @@ func GetTestFromUser(params user.GetTestFromUserParams, u *models.User) middlewa
 	return user.NewGetTestFromUserForbidden()
 }
 
+// GET /users/{username}/invitedTests
+func GetInvitedTests(params user.GetInvitedTestsFromUserParams, u *models.User) middleware.Responder {
+	if userOrAdmin(params.Username, u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			t, err := dao.GetInvitedPTestsFromUser(db, params.Username)
+			if err == nil {
+				mt, err := dao.ToModelTests(t)
+				if mt != nil && err == nil {
+					return user.NewGetInvitedTestsFromUserOK().WithPayload(mt)
+				}
+				return user.NewGetInvitedTestsFromUserGone()
+			}
+		}
+		return user.NewGetInvitedTestsFromUserInternalServerError()
+	}
+	return user.NewGetInvitedTestsFromUserForbidden()
+}
+
+// GET /users/{username}/invitedTests/{testid}
+func GetInvitedTest(params user.GetInvitedTestFromUserParams, u *models.User) middleware.Responder {
+	if userOrAdmin(params.Username, u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			t, err := dao.GetInvitedPTestFromUser(db, params.Username, params.Testid)
+			if err == nil {
+				mt, err := dao.ToModelTest(t)
+				if mt != nil && err == nil {
+					return user.NewGetInvitedTestFromUserOK().WithPayload(mt)
+				}
+				return user.NewGetInvitedTestFromUserGone()
+			}
+		}
+		return user.NewGetInvitedTestFromUserInternalServerError()
+	}
+	return user.NewGetInvitedTestFromUserForbidden()
+}
+
 // GET /users/{username}/publishedTests
 func GetPTestsFromUser(params user.GetPublishedTestsFromUserParams, u *models.User) middleware.Responder {
-	if isTeacherOrAdmin(u) {
+	if userOrAdmin(params.Username, u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			t, err := dao.GetPTestsFromUser(db, params.Username)

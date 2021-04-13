@@ -537,7 +537,7 @@ export class TestService {
     /**
      * Creates a new test. The user must be a teacher.
      * Creates a new test. The user must be a teacher.
-     * @param username Username of the teacher who owns the question
+     * @param username Username of the teacher who owns the test
      * @param test New Test to create
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
