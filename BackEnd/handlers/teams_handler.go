@@ -198,7 +198,7 @@ func canBeAddedTeam(username string, teamname string) bool {
 	if err == nil {
 		team, err := dao.GetTeam(db, teamname)
 		if err == nil {
-			if *team.SoloProfesores {
+			if !*team.SoloProfesores {
 				return true
 			}
 			user, err := dao.GetUserUsername(db, username)

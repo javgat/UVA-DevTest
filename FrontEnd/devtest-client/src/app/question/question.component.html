@@ -7,7 +7,14 @@
             <h4>Pregunta #{{question.id}}</h4>
             <h2>{{question.title}}</h2>
             <p>Autor: <a [routerLink]="['/profile', question.username]">{{question.username}}</a></p>
-            <p>Etiquetas: <span *ngFor="let tag of tags"><span class="bg-warning">{{tag.tag}}</span>; </span></p>
+            <p>Etiquetas:
+                <span *ngFor="let tag of tags">
+                        <span class="bg-warning" role="button" id="{{tag.tag}}" data-bs-toggle="dropdown" aria-expanded="false">{{tag.tag}}</span>;
+                        <ul class="dropdown-menu" attr.aria-labelledby="{{tag.tag}}">
+                            <li><a class="dropdown-item" role="button" (click)="deleteTagClick(tag.tag)">Eliminar</a></li>
+                        </ul>
+                </span>
+            </p>
             <form *ngIf="checkPermisosEdicion()" (ngSubmit)='addTagSubmit()' ngNativeValidate>
                 <div class="input-group my-3">
                     <input class="button btn btn-primary" type="submit" value="Añadir etiqueta" />
@@ -19,9 +26,10 @@
             <p>Corrección automática: <span *ngIf="question.autoCorrect">Sí</span><span
                     *ngIf="!question.autoCorrect">No</span></p>
             <p>Tipo: {{tipoPrint}}</p>
-            <p><button class="btn btn-primary" type="button" [routerLink]="['/q', question.id, 'teams']">Ver equipos administradores</button></p>
+            <p><button class="btn btn-primary" type="button" [routerLink]="['/q', question.id, 'teams']">Ver equipos
+                    administradores</button></p>
             <p><button *ngIf="checkPermisosEdicion()" type="button" class="btn btn-primary" data-bs-toggle="modal"
-                data-bs-target="#editQuestionModal">Editar pregunta</button></p>
+                    data-bs-target="#editQuestionModal">Editar pregunta</button></p>
             <hr />
             <p>{{question.question}}</p>
         </div>
@@ -117,28 +125,32 @@
                         <label class="form-label">Tipo de pregunta:</label>
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="inputTipo" id="inputTipoString" required
-                                (change)="onSelectTipoString()" />
+                                (change)="onSelectTipoString()"
+                                [checked]="tipPrint(questionEdit.tipoPregunta, questionEdit.eleccionUnica)=='Texto'" />
                             <label class="form-check-label" for="inputTipoString">
                                 Pregunta de texto
                             </label>
                         </div>
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="inputTipo" id="inputTipoRadio" required
-                                (change)="onSelectTipoRadio()" />
+                                (change)="onSelectTipoRadio()"
+                                [checked]="tipPrint(questionEdit.tipoPregunta, questionEdit.eleccionUnica)=='Respuesta única'" />
                             <label class="form-check-label" for="inputTipoRadio">
                                 Pregunta tipo test de respuesta única
                             </label>
                         </div>
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="inputTipo" id="inputTipoCheck" required
-                                (change)="onSelectTipoCheck()" />
+                                (change)="onSelectTipoCheck()"
+                                [checked]="tipPrint(questionEdit.tipoPregunta, questionEdit.eleccionUnica)=='Respuesta múltiple'" />
                             <label class="form-check-label" for="inputTipoCheck">
                                 Pregunta tipo test de respuesta múltiple
                             </label>
                         </div>
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="inputTipo" id="inputTipoCode" required
-                                (change)="onSelectTipoCode()" />
+                                (change)="onSelectTipoCode()"
+                                [checked]="tipPrint(questionEdit.tipoPregunta, questionEdit.eleccionUnica)=='Código'" />
                             <label class="form-check-label" for="inputTipoCode">
                                 Pregunta de código
                             </label>

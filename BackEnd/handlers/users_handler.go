@@ -240,12 +240,10 @@ func PutRole(params user.PutRoleParams, u *models.User) middleware.Responder {
 			var admins []*dao.User
 			admins, err = dao.GetAdmins(db)
 			if err == nil {
-				if len(admins) == 1 && admins[0].Username == &params.Username {
-					if *u.Rol != models.UserRolAdministrador {
-						log.Println("Error en users_handler PutRole(), intento de quitar admin de ultimo admin")
-						s := "Es el unico administrador existente"
-						return user.NewPutRoleBadRequest().WithPayload(&models.Error{Message: &s})
-					}
+				if len(admins) == 1 && *admins[0].Username == params.Username {
+					log.Println("Error en users_handler PutRole(), intento de quitar admin de ultimo admin")
+					s := "Es el unico administrador existente"
+					return user.NewPutRoleBadRequest().WithPayload(&models.Error{Message: &s})
 				}
 				err = dao.PutRole(db, params.Username, r)
 				if err == nil {

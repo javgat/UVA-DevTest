@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Option, Question, QuestionService, Tag, Team, UserService } from '@javgat/devtest-api';
 import { Subscription } from 'rxjs';
 import { LoggedInTeacherController } from '../shared/app.controller';
-import { Mensaje, Pregunta, Tipo } from '../shared/app.model';
+import { Mensaje, Pregunta, Tipo, tipoPrint } from '../shared/app.model';
 import { DataService } from '../shared/data.service';
 import { SessionService } from '../shared/session.service';
 
@@ -26,20 +26,20 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
   deleteIndex: number
   newTag: Tag
   tags: Tag[]
-  teams: Team[]
-  userTeams: Team[]
+  isInAdminTeam: boolean
+  deletingTag: string
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private qS: QuestionService, private route: ActivatedRoute) {
     super(session, router, data, userS)
+    this.isInAdminTeam = false
     this.newTag = {
       tag: ""
     }
     this.opciones = []
     this.tags = []
     this.deleteIndex = -1
+    this.deletingTag = ""
     this.question = new Pregunta(undefined, "", "", 0, false, true, "", undefined, undefined, Question.TipoPreguntaEnum.String, undefined)
     this.questionEdit = new Pregunta(undefined, "", "", 0, false, true, "", undefined, undefined, Question.TipoPreguntaEnum.String, undefined)
-    this.teams = []
-    this.userTeams = []
     this.nuevaOpcion = {
       correcta: false,
       texto: ""
@@ -63,8 +63,9 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
     super.onDestroy()
   }
 
-  doHasUserAction(){
-    this.getUserTeams(true)
+  doHasUserAction() {
+    if (this.id!=undefined && this.id != 0)
+      this.getIsInAdminTeam(true)
   }
 
   setTipoPrint() {
@@ -86,6 +87,10 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
     }
   }
 
+  tipPrint(tipo: string, eleUni: boolean| undefined): string{
+    return tipoPrint(tipo, eleUni)
+  }
+
   getPregunta(primera: boolean) {
     this.qS.getQuestion(this.id).subscribe(
       resp => {
@@ -100,27 +105,20 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
           this.getOptions(true)
         }
         this.getTags(true)
-        this.getTeamsPregunta(true)
+        if (!this.getSessionUser().isEmpty())
+          this.getIsInAdminTeam(true)
       },
       err => this.handleErrRelog(err, "obtener pregunta", primera, this.getPregunta, this)
     )
   }
 
-  getUserTeams(primera: boolean){
-    this.userS.getTeamsOfUser(this.getSessionUser().getUsername()).subscribe(
-      resp =>{
-        this.userTeams = resp
-      },
-      err => this.handleErrRelog(err, "obtener equipos de usuario", primera, this.getUserTeams, this)
-    )
-  }
-
-  getTeamsPregunta(primera: boolean){
-    this.qS.getTeamsFromQuestion(this.id).subscribe(
-      resp =>{
-        this.teams = resp
-      },
-      err => this.handleErrRelog(err, "obtener equipos de la pregunta", primera, this.getTeamsPregunta, this)
+  getIsInAdminTeam(primera: boolean) {
+    this.userS.getSharedQuestionFromUser(this.getSessionUser().getUsername(), this.id).subscribe(
+      resp => this.isInAdminTeam = true,
+      err => {
+        if(err.status!=410)
+          this.handleErrRelog(err, "saber si el usuario administra la pregunta", primera, this.getIsInAdminTeam, this)
+      }
     )
   }
 
@@ -133,18 +131,8 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
     )
   }
 
-  isInAdminTeam() : boolean{
-    for(var i: number = 0; i < this.teams.length; i++){
-      for(var j: number = 0; j < this.userTeams.length; j++){
-        if(this.teams[i].teamname == this.userTeams[j].teamname)
-          return true
-      }
-    }
-    return false
-  }
-
-  isPermisosAdministracion() : boolean{
-    return (this.getSessionUser().getUsername() == this.question.username) || this.isInAdminTeam()
+  isPermisosAdministracion(): boolean {
+    return (this.getSessionUser().getUsername() == this.question.username) || this.isInAdminTeam
   }
 
   checkPermisosEdicion(): boolean {
@@ -248,6 +236,18 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
         this.cambiarMensaje(new Mensaje("Pregunta actualizada", Tipo.SUCCESS, true))
       },
       err => this.handleErrRelog(err, "modificar pregunta", primera, this.putQuestion, this)
+    )
+  }
+
+  deleteTagClick(tag: string){
+    this.deletingTag = tag
+    this.deleteTag(true)
+  }
+
+  deleteTag(primera: boolean){
+    this.qS.removeTagFromQuestion(this.id, this.deletingTag).subscribe(
+      resp=> this.getTags(true),
+      err=> this.handleErrRelog(err, "eliminar etiqueta de una pregunta", primera, this.deleteTag, this)
     )
   }
 }
