@@ -2353,6 +2353,56 @@ func init() {
         }
       }
     },
+    "/tags/{tag}/editQuestions": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all non-published questions from a tag.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "tag"
+        ],
+        "summary": "Returns all non-published questions from a tag.",
+        "operationId": "GetEditQuestionsFromTag",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Tag to find its questions",
+            "name": "tag",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "questions found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Question"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
     "/tags/{tag}/questions": {
       "get": {
         "security": [
@@ -4402,6 +4452,56 @@ func init() {
             "description": "answer found",
             "schema": {
               "$ref": "#/definitions/Answer"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/users/{username}/editQuestions": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all non-published questions owned by the user",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns all non-published questions owned by the user",
+        "operationId": "GetEditQuestionsOfUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who owns the questions",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "questions found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Question"
+              }
             }
           },
           "400": {
@@ -8715,6 +8815,65 @@ func init() {
         }
       }
     },
+    "/tags/{tag}/editQuestions": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all non-published questions from a tag.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "tag"
+        ],
+        "summary": "Returns all non-published questions from a tag.",
+        "operationId": "GetEditQuestionsFromTag",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Tag to find its questions",
+            "name": "tag",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "questions found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Question"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
     "/tags/{tag}/questions": {
       "get": {
         "security": [
@@ -11130,6 +11289,65 @@ func init() {
             "description": "answer found",
             "schema": {
               "$ref": "#/definitions/Answer"
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/users/{username}/editQuestions": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all non-published questions owned by the user",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns all non-published questions owned by the user",
+        "operationId": "GetEditQuestionsOfUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who owns the questions",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "questions found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Question"
+              }
             }
           },
           "400": {

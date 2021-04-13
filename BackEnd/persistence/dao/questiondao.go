@@ -184,8 +184,6 @@ func DeleteQuestion(db *sql.DB, questionid int64) error {
 	return err
 }
 
-//NOTESTED:
-
 func GetQuestionsOfUser(db *sql.DB, username string) ([]*Question, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
@@ -206,7 +204,25 @@ func GetQuestionsOfUser(db *sql.DB, username string) ([]*Question, error) {
 	return nil, err
 }
 
-//NOTESTED:
+func GetEditQuestionsOfUser(db *sql.DB, username string) ([]*Question, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	u, err := GetUserUsername(db, username)
+	if err == nil {
+		var qs []*Question
+		query, err := db.Prepare("SELECT * FROM Pregunta WHERE usuarioid=? AND editable=1")
+		if err == nil {
+			defer query.Close()
+			rows, err := query.Query(u.ID)
+			if err == nil {
+				qs, err = rowsToQuestions(rows)
+				return qs, err
+			}
+		}
+	}
+	return nil, err
+}
 
 func GetQuestionOfUser(db *sql.DB, username string, qid int64) (*Question, error) {
 	if db == nil {
@@ -227,8 +243,6 @@ func GetQuestionOfUser(db *sql.DB, username string, qid int64) (*Question, error
 	}
 	return nil, err
 }
-
-//NOTESTED:
 
 func PostQuestion(db *sql.DB, q *models.Question, username string) (*models.Question, error) {
 	if db == nil || q == nil {
@@ -430,6 +444,25 @@ func RemoveQuestionTest(db *sql.DB, questionid int64, testid int64) error {
 		return err
 	}
 	return err
+}
+
+func GetEditQuestionsFromTag(db *sql.DB, tag string) ([]*Question, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var qs []*Question
+	query, err := db.Prepare("SELECT P.* FROM Pregunta P JOIN PreguntaEtiqueta E ON P.id=E.preguntaid WHERE E.etiquetaNombre=? AND E.editable=1")
+	if err == nil {
+		defer query.Close()
+		rows, err := query.Query(tag)
+		if err == nil {
+			qs, err = rowsToQuestions(rows)
+			return qs, err
+		}
+	} else {
+		log.Print(err)
+	}
+	return nil, err
 }
 
 func GetQuestionsFromTag(db *sql.DB, tag string) ([]*Question, error) {

@@ -58,6 +58,52 @@ export class TagService {
 
 
     /**
+     * Returns all non-published questions from a tag.
+     * Returns all non-published questions from a tag.
+     * @param tag Tag to find its questions
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getEditQuestionsFromTag(tag: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Question>>;
+    public getEditQuestionsFromTag(tag: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Question>>>;
+    public getEditQuestionsFromTag(tag: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Question>>>;
+    public getEditQuestionsFromTag(tag: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (tag === null || tag === undefined) {
+            throw new Error('Required parameter tag was null or undefined when calling getEditQuestionsFromTag.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Array<Question>>(`${this.basePath}/tags/${encodeURIComponent(String(tag))}/editQuestions`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Returns all questions from a tag.
      * Returns all questions from a tag.
      * @param tag Tag to find its questions

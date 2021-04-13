@@ -67,3 +67,25 @@ func GetQuestionsFromTag(params tag.GetQuestionsFromTagParams, u *models.User) m
 	}
 	return tag.NewGetQuestionsFromTagForbidden()
 }
+
+// GetQuestionsFromTag GET /tags/{tag}/editQuestions. Returns all non-published questions related to tag.
+// Auth: Teacher Or Admin
+func GetEditQuestionsFromTag(params tag.GetEditQuestionsFromTagParams, u *models.User) middleware.Responder {
+	if isTeacherOrAdmin(u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			var ts []*dao.Question
+			ts, err = dao.GetEditQuestionsFromTag(db, params.Tag)
+			if err == nil {
+				var mts []*models.Question
+				mts, err = dao.ToModelQuestions(ts)
+				if err == nil {
+					return tag.NewGetEditQuestionsFromTagOK().WithPayload(mts)
+				}
+			}
+		}
+		log.Println("Error en users_handler GetEditQuestionsFromTags(): ", err)
+		return tag.NewGetEditQuestionsFromTagInternalServerError()
+	}
+	return tag.NewGetEditQuestionsFromTagForbidden()
+}

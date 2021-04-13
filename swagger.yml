@@ -459,6 +459,39 @@ paths:
         500:
           $ref: '#/responses/InternalServerError'
 
+  /users/{username}/editQuestions:
+   get:
+      security:
+        - BearerCookie: []
+      tags:
+      - user
+      summary: Returns all non-published questions owned by the user
+      operationId: GetEditQuestionsOfUser
+      description: Returns all non-published questions owned by the user
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the user who owns the questions
+        required: true
+        type: string
+      responses:
+        200:
+          description: questions found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Question'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
   /users/{username}/sharedQuestions:
    get:
       security:
@@ -1819,6 +1852,38 @@ paths:
           description: tag found
           schema:
             $ref: '#/definitions/Tag'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  /tags/{tag}/editQuestions:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - tag
+      summary: Returns all non-published questions from a tag.
+      operationId: GetEditQuestionsFromTag
+      description: Returns all non-published questions from a tag.
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: tag
+        description: Tag to find its questions
+        required: true
+        type: string
+      responses:
+        200:
+          description: questions found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Question'
         400:
           $ref: '#/responses/BadRequestError'
         403:

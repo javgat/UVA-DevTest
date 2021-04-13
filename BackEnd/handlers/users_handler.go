@@ -333,6 +333,29 @@ func GetSharedQuestion(params user.GetSharedQuestionFromUserParams, u *models.Us
 	return user.NewGetSharedQuestionFromUserInternalServerError()
 }
 
+// GET /users/{username}/editQuestions
+func GetEditQuestionsOfUser(params user.GetEditQuestionsOfUserParams, u *models.User) middleware.Responder {
+	if userOrAdmin(params.Username, u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			q, err := dao.GetEditQuestionsOfUser(db, params.Username)
+			if err == nil {
+				if q != nil {
+					mq, err := dao.ToModelQuestions(q)
+					if mq != nil && err == nil {
+						return user.NewGetEditQuestionsOfUserOK().WithPayload(mq)
+					}
+					user.NewGetEditQuestionsOfUserInternalServerError()
+				}
+				mq := []*models.Question{}
+				return user.NewGetEditQuestionsOfUserOK().WithPayload(mq)
+			}
+		}
+		return user.NewGetEditQuestionsOfUserInternalServerError()
+	}
+	return user.NewGetEditQuestionsOfUserForbidden()
+}
+
 // GET /users/{username}/questions
 func GetQuestionsOfUser(params user.GetQuestionsOfUserParams, u *models.User) middleware.Responder {
 	if userOrAdmin(params.Username, u) {

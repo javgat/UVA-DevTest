@@ -355,6 +355,52 @@ export class UserService {
     }
 
     /**
+     * Returns all non-published questions owned by the user
+     * Returns all non-published questions owned by the user
+     * @param username Username of the user who owns the questions
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getEditQuestionsOfUser(username: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Question>>;
+    public getEditQuestionsOfUser(username: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Question>>>;
+    public getEditQuestionsOfUser(username: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Question>>>;
+    public getEditQuestionsOfUser(username: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (username === null || username === undefined) {
+            throw new Error('Required parameter username was null or undefined when calling getEditQuestionsOfUser.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Array<Question>>(`${this.basePath}/users/${encodeURIComponent(String(username))}/editQuestions`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Returns a publishedTest where the user is invited as a user
      * Returns a publishedTest where the user is invited as a user
      * @param username Username of the user who is invited

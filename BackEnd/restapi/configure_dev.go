@@ -87,6 +87,8 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 	api.UserGetSharedQuestionsOfUserHandler = user.GetSharedQuestionsOfUserHandlerFunc(handlers.GetSharedQuestions)  // GET /users/{username}/sharedQuestions
 	api.UserGetSharedQuestionFromUserHandler = user.GetSharedQuestionFromUserHandlerFunc(handlers.GetSharedQuestion) // GET /users/{username}/sharedQuestions/{testid}
 
+	api.UserGetEditQuestionsOfUserHandler = user.GetEditQuestionsOfUserHandlerFunc(handlers.GetEditQuestionsOfUser) // GET /users/{username}/editQuestions
+
 	api.UserGetQuestionsOfUserHandler = user.GetQuestionsOfUserHandlerFunc(handlers.GetQuestionsOfUser)  // GET /users/{username}/questions
 	api.UserPostQuestionHandler = user.PostQuestionHandlerFunc(handlers.PostQuestionOfUser)              // POST /users/{username}/questions
 	api.UserGetQuestionFromUserHandler = user.GetQuestionFromUserHandlerFunc(handlers.GetQuestionOfUser) // GET /users/{username}/questions/{questionid}
@@ -231,9 +233,10 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 
 	// /tags
 
-	api.TagGetTagsHandler = tag.GetTagsHandlerFunc(handlers.GetTags)                                     // GET /tags
-	api.TagGetTagHandler = tag.GetTagHandlerFunc(handlers.GetTag)                                        // GET /tags/{tag}
-	api.TagGetQuestionsFromTagHandler = tag.GetQuestionsFromTagHandlerFunc(handlers.GetQuestionsFromTag) // GET /tags/{tag}/questions
+	api.TagGetTagsHandler = tag.GetTagsHandlerFunc(handlers.GetTags)                                                 // GET /tags
+	api.TagGetTagHandler = tag.GetTagHandlerFunc(handlers.GetTag)                                                    // GET /tags/{tag}
+	api.TagGetQuestionsFromTagHandler = tag.GetQuestionsFromTagHandlerFunc(handlers.GetQuestionsFromTag)             // GET /tags/{tag}/questions
+	api.TagGetEditQuestionsFromTagHandler = tag.GetEditQuestionsFromTagHandlerFunc(handlers.GetEditQuestionsFromTag) // GET /tags/{tag}/editQuestions
 
 	api.PreServerShutdown = func() {}
 
