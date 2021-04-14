@@ -3833,6 +3833,202 @@ func init() {
         }
       }
     },
+    "/tests/{testid}/tags": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all tags from a test.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "test"
+        ],
+        "summary": "Returns all tags from a test.",
+        "operationId": "GetTagsFromTest",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the tset to find its tags",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "tags found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Tag"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/tests/{testid}/tags/{tag}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns a tag from a test.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "test"
+        ],
+        "summary": "Returns a tag from a test.",
+        "operationId": "GetTagFromTest",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the test to find its tags",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "Tag to find",
+            "name": "tag",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "tag found",
+            "schema": {
+              "$ref": "#/definitions/Tag"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Adds a tag to a test",
+        "tags": [
+          "test"
+        ],
+        "summary": "Adds a tag to a test",
+        "operationId": "AddTagToTest",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the test to add a tag",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "Tag to add",
+            "name": "tag",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "tag added"
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Removes a tag from a test",
+        "tags": [
+          "test"
+        ],
+        "summary": "Removes a tag from a test",
+        "operationId": "RemoveTagFromTest",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the test to remove a tag",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "Tag to remove",
+            "name": "tag",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "tag removed"
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
     "/tests/{testid}/teams": {
       "get": {
         "security": [
@@ -10540,6 +10736,238 @@ func init() {
         "responses": {
           "200": {
             "description": "Question removed"
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/tests/{testid}/tags": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all tags from a test.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "test"
+        ],
+        "summary": "Returns all tags from a test.",
+        "operationId": "GetTagsFromTest",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the tset to find its tags",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "tags found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Tag"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/tests/{testid}/tags/{tag}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns a tag from a test.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "test"
+        ],
+        "summary": "Returns a tag from a test.",
+        "operationId": "GetTagFromTest",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the test to find its tags",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "Tag to find",
+            "name": "tag",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "tag found",
+            "schema": {
+              "$ref": "#/definitions/Tag"
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Adds a tag to a test",
+        "tags": [
+          "test"
+        ],
+        "summary": "Adds a tag to a test",
+        "operationId": "AddTagToTest",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the test to add a tag",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "Tag to add",
+            "name": "tag",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "tag added"
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Removes a tag from a test",
+        "tags": [
+          "test"
+        ],
+        "summary": "Removes a tag from a test",
+        "operationId": "RemoveTagFromTest",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the test to remove a tag",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "Tag to remove",
+            "name": "tag",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "tag removed"
           },
           "400": {
             "description": "Incorrect Request, or invalida data",

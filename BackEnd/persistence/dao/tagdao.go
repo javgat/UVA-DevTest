@@ -127,6 +127,40 @@ func GetQuestionTag(db *sql.DB, questionid int64, nombre string) (*Tag, error) {
 	return nil, err
 }
 
+func GetTestTags(db *sql.DB, testid int64) ([]*Tag, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var ts []*Tag
+	query, err := db.Prepare("SELECT E.* FROM Etiqueta E JOIN TestEtiqueta T ON E.nombre=T.etiquetaNombre WHERE T.testid=?")
+	if err == nil {
+		defer query.Close()
+		rows, err := query.Query(testid)
+		if err == nil {
+			ts, err = rowsToTags(rows)
+			return ts, err
+		}
+	}
+	return nil, err
+}
+
+func GetTestTag(db *sql.DB, testid int64, nombre string) (*Tag, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var ts *Tag
+	query, err := db.Prepare("SELECT E.* FROM Etiqueta E JOIN TestEtiqueta T ON E.nombre=T.etiquetaNombre WHERE T.testid=? AND E.nombre=?")
+	if err == nil {
+		defer query.Close()
+		rows, err := query.Query(testid, nombre)
+		if err == nil {
+			ts, err = rowsToTag(rows)
+			return ts, err
+		}
+	}
+	return nil, err
+}
+
 func CreateTag(db *sql.DB, nombre string) (*Tag, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
@@ -176,6 +210,43 @@ func RemoveQuestionTag(db *sql.DB, questionid int64, nombre string) error {
 	if err == nil {
 		defer query.Close()
 		_, err = query.Exec(questionid, nombre)
+	}
+	return err
+}
+
+func AddTestTag(db *sql.DB, testid int64, nombre string) error {
+	if db == nil {
+		return errors.New(errorDBNil)
+	}
+	nombre = strings.ToLower(nombre)
+	tag, err := GetTag(db, nombre)
+	if err == nil {
+		if tag == nil {
+			_, err = CreateTag(db, nombre)
+			if err != nil {
+				return err
+			}
+		}
+		query, err := db.Prepare("INSERT INTO TestEtiqueta(testid, etiquetanombre) VALUES(?,?)")
+		if err == nil {
+			defer query.Close()
+			_, err = query.Exec(testid, nombre)
+		}
+		return err
+
+	}
+	return err
+}
+
+func RemoveTestTag(db *sql.DB, testid int64, nombre string) error {
+	if db == nil {
+		return errors.New(errorDBNil)
+	}
+	nombre = strings.ToLower(nombre)
+	query, err := db.Prepare("DELETE FROM TestEtiqueta WHERE testid=? AND etiquetanombre=?")
+	if err == nil {
+		defer query.Close()
+		_, err = query.Exec(testid, nombre)
 	}
 	return err
 }

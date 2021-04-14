@@ -64,6 +64,9 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		QuestionAddTagToQuestionHandler: question.AddTagToQuestionHandlerFunc(func(params question.AddTagToQuestionParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation question.AddTagToQuestion has not yet been implemented")
 		}),
+		TestAddTagToTestHandler: test.AddTagToTestHandlerFunc(func(params test.AddTagToTestParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation test.AddTagToTest has not yet been implemented")
+		}),
 		QuestionAddTeamToQuestionHandler: question.AddTeamToQuestionHandlerFunc(func(params question.AddTeamToQuestionParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation question.AddTeamToQuestion has not yet been implemented")
 		}),
@@ -232,6 +235,9 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		QuestionGetTagFromQuestionHandler: question.GetTagFromQuestionHandlerFunc(func(params question.GetTagFromQuestionParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation question.GetTagFromQuestion has not yet been implemented")
 		}),
+		TestGetTagFromTestHandler: test.GetTagFromTestHandlerFunc(func(params test.GetTagFromTestParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation test.GetTagFromTest has not yet been implemented")
+		}),
 		TagGetTagsHandler: tag.GetTagsHandlerFunc(func(params tag.GetTagsParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation tag.GetTags has not yet been implemented")
 		}),
@@ -240,6 +246,9 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		}),
 		QuestionGetTagsFromQuestionHandler: question.GetTagsFromQuestionHandlerFunc(func(params question.GetTagsFromQuestionParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation question.GetTagsFromQuestion has not yet been implemented")
+		}),
+		TestGetTagsFromTestHandler: test.GetTagsFromTestHandlerFunc(func(params test.GetTagsFromTestParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation test.GetTagsFromTest has not yet been implemented")
 		}),
 		TeamGetTeamsHandler: team.GetTeamsHandlerFunc(func(params team.GetTeamsParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation team.GetTeams has not yet been implemented")
@@ -339,6 +348,9 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		}),
 		QuestionRemoveTagFromQuestionHandler: question.RemoveTagFromQuestionHandlerFunc(func(params question.RemoveTagFromQuestionParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation question.RemoveTagFromQuestion has not yet been implemented")
+		}),
+		TestRemoveTagFromTestHandler: test.RemoveTagFromTestHandlerFunc(func(params test.RemoveTagFromTestParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation test.RemoveTagFromTest has not yet been implemented")
 		}),
 		PublishedTestRemoveTeamToPublishedTestHandler: published_test.RemoveTeamToPublishedTestHandlerFunc(func(params published_test.RemoveTeamToPublishedTestParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation published_test.RemoveTeamToPublishedTest has not yet been implemented")
@@ -454,6 +466,8 @@ type DevAPI struct {
 	TestAddQuestionToTestHandler test.AddQuestionToTestHandler
 	// QuestionAddTagToQuestionHandler sets the operation handler for the add tag to question operation
 	QuestionAddTagToQuestionHandler question.AddTagToQuestionHandler
+	// TestAddTagToTestHandler sets the operation handler for the add tag to test operation
+	TestAddTagToTestHandler test.AddTagToTestHandler
 	// QuestionAddTeamToQuestionHandler sets the operation handler for the add team to question operation
 	QuestionAddTeamToQuestionHandler question.AddTeamToQuestionHandler
 	// TestAddTeamToTestHandler sets the operation handler for the add team to test operation
@@ -566,12 +580,16 @@ type DevAPI struct {
 	TagGetTagHandler tag.GetTagHandler
 	// QuestionGetTagFromQuestionHandler sets the operation handler for the get tag from question operation
 	QuestionGetTagFromQuestionHandler question.GetTagFromQuestionHandler
+	// TestGetTagFromTestHandler sets the operation handler for the get tag from test operation
+	TestGetTagFromTestHandler test.GetTagFromTestHandler
 	// TagGetTagsHandler sets the operation handler for the get tags operation
 	TagGetTagsHandler tag.GetTagsHandler
 	// PublishedTestGetTagsFromPublishedQuestionHandler sets the operation handler for the get tags from published question operation
 	PublishedTestGetTagsFromPublishedQuestionHandler published_test.GetTagsFromPublishedQuestionHandler
 	// QuestionGetTagsFromQuestionHandler sets the operation handler for the get tags from question operation
 	QuestionGetTagsFromQuestionHandler question.GetTagsFromQuestionHandler
+	// TestGetTagsFromTestHandler sets the operation handler for the get tags from test operation
+	TestGetTagsFromTestHandler test.GetTagsFromTestHandler
 	// TeamGetTeamsHandler sets the operation handler for the get teams operation
 	TeamGetTeamsHandler team.GetTeamsHandler
 	// PublishedTestGetTeamsFromPublishedTestHandler sets the operation handler for the get teams from published test operation
@@ -638,6 +656,8 @@ type DevAPI struct {
 	TestRemoveQuestionFromTestHandler test.RemoveQuestionFromTestHandler
 	// QuestionRemoveTagFromQuestionHandler sets the operation handler for the remove tag from question operation
 	QuestionRemoveTagFromQuestionHandler question.RemoveTagFromQuestionHandler
+	// TestRemoveTagFromTestHandler sets the operation handler for the remove tag from test operation
+	TestRemoveTagFromTestHandler test.RemoveTagFromTestHandler
 	// PublishedTestRemoveTeamToPublishedTestHandler sets the operation handler for the remove team to published test operation
 	PublishedTestRemoveTeamToPublishedTestHandler published_test.RemoveTeamToPublishedTestHandler
 	// QuestionRemoveTeamToQuestionHandler sets the operation handler for the remove team to question operation
@@ -765,6 +785,9 @@ func (o *DevAPI) Validate() error {
 	}
 	if o.QuestionAddTagToQuestionHandler == nil {
 		unregistered = append(unregistered, "question.AddTagToQuestionHandler")
+	}
+	if o.TestAddTagToTestHandler == nil {
+		unregistered = append(unregistered, "test.AddTagToTestHandler")
 	}
 	if o.QuestionAddTeamToQuestionHandler == nil {
 		unregistered = append(unregistered, "question.AddTeamToQuestionHandler")
@@ -934,6 +957,9 @@ func (o *DevAPI) Validate() error {
 	if o.QuestionGetTagFromQuestionHandler == nil {
 		unregistered = append(unregistered, "question.GetTagFromQuestionHandler")
 	}
+	if o.TestGetTagFromTestHandler == nil {
+		unregistered = append(unregistered, "test.GetTagFromTestHandler")
+	}
 	if o.TagGetTagsHandler == nil {
 		unregistered = append(unregistered, "tag.GetTagsHandler")
 	}
@@ -942,6 +968,9 @@ func (o *DevAPI) Validate() error {
 	}
 	if o.QuestionGetTagsFromQuestionHandler == nil {
 		unregistered = append(unregistered, "question.GetTagsFromQuestionHandler")
+	}
+	if o.TestGetTagsFromTestHandler == nil {
+		unregistered = append(unregistered, "test.GetTagsFromTestHandler")
 	}
 	if o.TeamGetTeamsHandler == nil {
 		unregistered = append(unregistered, "team.GetTeamsHandler")
@@ -1041,6 +1070,9 @@ func (o *DevAPI) Validate() error {
 	}
 	if o.QuestionRemoveTagFromQuestionHandler == nil {
 		unregistered = append(unregistered, "question.RemoveTagFromQuestionHandler")
+	}
+	if o.TestRemoveTagFromTestHandler == nil {
+		unregistered = append(unregistered, "test.RemoveTagFromTestHandler")
 	}
 	if o.PublishedTestRemoveTeamToPublishedTestHandler == nil {
 		unregistered = append(unregistered, "published_test.RemoveTeamToPublishedTestHandler")
@@ -1211,6 +1243,10 @@ func (o *DevAPI) initHandlerCache() {
 		o.handlers["PUT"] = make(map[string]http.Handler)
 	}
 	o.handlers["PUT"]["/questions/{questionid}/tags/{tag}"] = question.NewAddTagToQuestion(o.context, o.QuestionAddTagToQuestionHandler)
+	if o.handlers["PUT"] == nil {
+		o.handlers["PUT"] = make(map[string]http.Handler)
+	}
+	o.handlers["PUT"]["/tests/{testid}/tags/{tag}"] = test.NewAddTagToTest(o.context, o.TestAddTagToTestHandler)
 	if o.handlers["PUT"] == nil {
 		o.handlers["PUT"] = make(map[string]http.Handler)
 	}
@@ -1438,6 +1474,10 @@ func (o *DevAPI) initHandlerCache() {
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
+	o.handlers["GET"]["/tests/{testid}/tags/{tag}"] = test.NewGetTagFromTest(o.context, o.TestGetTagFromTestHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
 	o.handlers["GET"]["/tags"] = tag.NewGetTags(o.context, o.TagGetTagsHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
@@ -1447,6 +1487,10 @@ func (o *DevAPI) initHandlerCache() {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
 	o.handlers["GET"]["/questions/{questionid}/tags"] = question.NewGetTagsFromQuestion(o.context, o.QuestionGetTagsFromQuestionHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/tests/{testid}/tags"] = test.NewGetTagsFromTest(o.context, o.TestGetTagsFromTestHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
@@ -1579,6 +1623,10 @@ func (o *DevAPI) initHandlerCache() {
 		o.handlers["DELETE"] = make(map[string]http.Handler)
 	}
 	o.handlers["DELETE"]["/questions/{questionid}/tags/{tag}"] = question.NewRemoveTagFromQuestion(o.context, o.QuestionRemoveTagFromQuestionHandler)
+	if o.handlers["DELETE"] == nil {
+		o.handlers["DELETE"] = make(map[string]http.Handler)
+	}
+	o.handlers["DELETE"]["/tests/{testid}/tags/{tag}"] = test.NewRemoveTagFromTest(o.context, o.TestRemoveTagFromTestHandler)
 	if o.handlers["DELETE"] == nil {
 		o.handlers["DELETE"] = make(map[string]http.Handler)
 	}

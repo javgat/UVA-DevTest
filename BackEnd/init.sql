@@ -4,6 +4,7 @@ USE uva_devtest;
 DROP TABLE IF EXISTS OpcionRespuesta;
 DROP TABLE IF EXISTS RespuestaPregunta;
 DROP TABLE IF EXISTS RespuestaExamen;
+DROP TABLE IF EXISTS TestEtiqueta;
 DROP TABLE IF EXISTS PreguntaEtiqueta;
 DROP TABLE IF EXISTS Etiqueta;
 DROP TABLE IF EXISTS Opcion;
@@ -133,6 +134,15 @@ CREATE TABLE PreguntaEtiqueta(
   FOREIGN KEY(preguntaid) REFERENCES Pregunta(id) ON DELETE CASCADE,
   FOREIGN KEY(etiquetanombre) REFERENCES Etiqueta(nombre) ON DELETE CASCADE,
   CONSTRAINT PRIMARY KEY(preguntaid, etiquetanombre)
+);
+
+
+CREATE TABLE TestEtiqueta(
+  testid int(11) NOT NULL,
+  etiquetanombre varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  FOREIGN KEY(testid) REFERENCES Test(id) ON DELETE CASCADE,
+  FOREIGN KEY(etiquetanombre) REFERENCES Etiqueta(nombre) ON DELETE CASCADE,
+  CONSTRAINT PRIMARY KEY(testid, etiquetanombre)
 );
 
 CREATE TABLE RespuestaExamen(

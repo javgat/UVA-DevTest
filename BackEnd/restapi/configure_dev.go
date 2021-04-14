@@ -178,6 +178,11 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 	api.TestPutTestHandler = test.PutTestHandlerFunc(handlers.PutTest)          // PUT /tests/{testid}
 	api.TestDeleteTestHandler = test.DeleteTestHandlerFunc(handlers.DeleteTest) // DELETE /tests/{testid}
 
+	api.TestGetTagsFromTestHandler = test.GetTagsFromTestHandlerFunc(handlers.GetTagsFromTest)       // GET /tests/{testid}/tags
+	api.TestGetTagFromTestHandler = test.GetTagFromTestHandlerFunc(handlers.GetTagFromTest)          // GET /tests/{testid}/tags/{tag}
+	api.TestAddTagToTestHandler = test.AddTagToTestHandlerFunc(handlers.AddTagToTest)                // PUT /tests/{testid}/tags/{tag}
+	api.TestRemoveTagFromTestHandler = test.RemoveTagFromTestHandlerFunc(handlers.RemoveTagFromTest) // DELETE /tests/{testid}/tags/{tag}
+
 	api.TestGetTeamsFromTestHandler = test.GetTeamsFromTestHandlerFunc(handlers.GetTeamsFromTest) // GET /tests/{testid}/teams
 	api.TestAddTeamToTestHandler = test.AddTeamToTestHandlerFunc(handlers.AddTeamToTest)          // PUT /tests/{testid}/teams/{teamname}
 	api.TestRemoveTeamToTestHandler = test.RemoveTeamToTestHandlerFunc(handlers.RemoveTeamTest)   // DELETE /tests/{testid}/teams/{teamname}

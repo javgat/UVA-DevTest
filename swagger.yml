@@ -2591,6 +2591,135 @@ paths:
         500:
           $ref: '#/responses/InternalServerError'
 
+  /tests/{testid}/tags:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - test
+      summary: Returns all tags from a test.
+      operationId: GetTagsFromTest
+      description: Returns all tags from a test.
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: testid
+        description: Id of the tset to find its tags
+        required: true
+        type: integer
+      responses:
+        200:
+          description: tags found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Tag'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
+  /tests/{testid}/tags/{tag}:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - test
+      summary: Returns a tag from a test.
+      operationId: GetTagFromTest
+      description: Returns a tag from a test.
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: testid
+        description: Id of the test to find its tags
+        required: true
+        type: integer
+      - in: path
+        name: tag
+        description: Tag to find
+        required: true
+        type: string
+      responses:
+        200:
+          description: tag found
+          schema:
+            $ref: '#/definitions/Tag'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+    put:
+      security:
+        - BearerCookie: []
+      tags:
+      - test
+      summary: Adds a tag to a test
+      operationId: AddTagToTest
+      description: Adds a tag to a test
+      parameters:
+      - in: path
+        name: testid
+        description: Id of the test to add a tag
+        required: true
+        type: integer
+      - in: path
+        name: tag
+        description: Tag to add
+        required: true
+        type: string
+      responses:
+        200:
+          description: tag added
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+    delete:
+      security:
+        - BearerCookie: []
+      tags:
+      - test
+      summary: Removes a tag from a test
+      operationId: RemoveTagFromTest
+      description: Removes a tag from a test
+      parameters:
+      - in: path
+        name: testid
+        description: Id of the test to remove a tag
+        required: true
+        type: integer
+      - in: path
+        name: tag
+        description: Tag to remove
+        required: true
+        type: string
+      responses:
+        200:
+          description: tag removed
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
   /tests/{testid}/teams:
     get:
       security:

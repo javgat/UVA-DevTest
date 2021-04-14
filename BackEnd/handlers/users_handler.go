@@ -447,7 +447,7 @@ func GetSharedTest(params user.GetSharedTestFromUserParams, u *models.User) midd
 				if mt != nil && err == nil {
 					return user.NewGetSharedTestFromUserOK().WithPayload(mt)
 				}
-				user.NewGetSharedTestFromUserInternalServerError()
+				return user.NewGetSharedTestFromUserInternalServerError()
 			}
 			return user.NewGetSharedTestFromUserGone()
 		}

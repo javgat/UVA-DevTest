@@ -384,5 +384,78 @@ func RemoveQuestionTest(params test.RemoveQuestionFromTestParams, u *models.User
 			return test.NewRemoveQuestionFromTestGone()
 		}
 	}
-	return test.NewRemoveQuestionFromTestInternalServerError()
+	return test.NewRemoveQuestionFromTestForbidden()
+}
+
+// GetTagsFromTests GET /tests/{testid}/tags
+// Auth: Teacher or Admin
+func GetTagsFromTest(params test.GetTagsFromTestParams, u *models.User) middleware.Responder {
+	if isTeacherOrAdmin(u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			var dts []*dao.Tag
+			dts, err = dao.GetTestTags(db, params.Testid)
+			if err == nil {
+				ts := dao.ToModelTags(dts)
+				return test.NewGetTagsFromTestOK().WithPayload(ts)
+			}
+		}
+		return test.NewGetTagsFromTestInternalServerError()
+	}
+	return test.NewGetTagsFromTestForbidden()
+}
+
+// GetTagFromTest GET /tests/{testid}/tags/{tag}
+// Auth: Teacher or Admin
+func GetTagFromTest(params test.GetTagFromTestParams, u *models.User) middleware.Responder {
+	if isTeacherOrAdmin(u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			var dt *dao.Tag
+			dt, err = dao.GetTestTag(db, params.Testid, params.Tag)
+			if err == nil {
+				if dt != nil {
+					t := dao.ToModelTag(dt)
+					return test.NewGetTagFromTestOK().WithPayload(t)
+				}
+				return test.NewGetTagFromTestGone()
+			}
+		}
+		return test.NewGetTagFromTestInternalServerError()
+	}
+	return test.NewGetTagFromTestForbidden()
+}
+
+// AddTagToTest PUT /tests/{testid}/tags/{tag}
+// Auth: TestAdmin or Admin
+// Req: Test.editable
+func AddTagToTest(params test.AddTagToTestParams, u *models.User) middleware.Responder {
+	if testEditable(params.Testid) && (isAdmin(u) || isTestAdmin(u, params.Testid)) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			err = dao.AddTestTag(db, params.Testid, params.Tag)
+			if err == nil {
+				return test.NewAddTagToTestOK()
+			}
+		}
+		return test.NewAddTagToTestInternalServerError()
+	}
+	return test.NewAddTagToTestForbidden()
+}
+
+// RemoveTagFromTest DELETE /tests/{testid}/tags/{tag}
+// Auth: TestAdmin or Admin
+// Req: Test.editable
+func RemoveTagFromTest(params test.RemoveTagFromTestParams, u *models.User) middleware.Responder {
+	if testEditable(params.Testid) && (isAdmin(u) || isTestAdmin(u, params.Testid)) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			err = dao.RemoveTestTag(db, params.Testid, params.Tag)
+			if err == nil {
+				return test.NewRemoveTagFromTestOK()
+			}
+		}
+		return test.NewRemoveTagFromTestInternalServerError()
+	}
+	return test.NewRemoveTagFromTestForbidden()
 }

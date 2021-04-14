@@ -135,13 +135,13 @@ func PutTest(db *sql.DB, testid int64, t *models.Test) error {
 	if err != nil || u == nil {
 		return errors.New(errorResourceNotFound)
 	}
-	query, err := db.Prepare("UPDATE Test SET title=?, description=?, maxSeconds=?, accesoPublico=?, editable=?, usuarioid=? WHERE editable=? AND id=?")
+	query, err := db.Prepare("UPDATE Test SET title=?, description=?, maxSeconds=?, accesoPublico=?, usuarioid=? WHERE editable=? AND id=?")
 
 	if err != nil {
 		return err
 	}
 	defer query.Close()
-	_, err = query.Exec(t.Title, t.Description, t.MaxSeconds, t.AccesoPublico, t.Editable, u.ID, true, testid)
+	_, err = query.Exec(t.Title, t.Description, t.MaxSeconds, *t.AccesoPublico, u.ID, 1, testid)
 	return err
 }
 
@@ -283,10 +283,11 @@ func GetSharedTestFromUser(db *sql.DB, username string, testid int64) (*Test, er
 		return nil, errors.New(errorDBNil)
 	}
 	var t *Test
-	query, err := db.Prepare("SELECT DISTINCT T.* FROM Test T JOIN GestionTestEquipo G ON T.id=G.testid JOIN EquipoUsuario E ON G.equipoid=E.equipoid JOIN Usuario U ON U.id=E.usuarioid WHERE U.username=? AND T.testid=?")
+	query, err := db.Prepare("SELECT DISTINCT T.* FROM Test T JOIN GestionTestEquipo G ON T.id=G.testid JOIN EquipoUsuario E ON G.equipoid=E.equipoid JOIN Usuario U ON U.id=E.usuarioid WHERE U.username=? AND T.id=?")
 	if err == nil {
 		defer query.Close()
-		rows, err := query.Query(username, testid)
+		var rows *sql.Rows
+		rows, err = query.Query(username, testid)
 		if err == nil {
 			t, err = rowsToTest(rows)
 			return t, err

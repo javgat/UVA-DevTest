@@ -19,6 +19,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { Question } from '../model/question';
+import { Tag } from '../model/tag';
 import { Team } from '../model/team';
 import { Test } from '../model/test';
 import { ValorFinal } from '../model/valorFinal';
@@ -110,6 +111,57 @@ export class TestService {
 
         return this.httpClient.put<any>(`${this.basePath}/tests/${encodeURIComponent(String(testid))}/questions/${encodeURIComponent(String(questionid))}`,
             valorFinal,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Adds a tag to a test
+     * Adds a tag to a test
+     * @param testid Id of the test to add a tag
+     * @param tag Tag to add
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public addTagToTest(testid: number, tag: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public addTagToTest(testid: number, tag: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public addTagToTest(testid: number, tag: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public addTagToTest(testid: number, tag: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (testid === null || testid === undefined) {
+            throw new Error('Required parameter testid was null or undefined when calling addTagToTest.');
+        }
+
+        if (tag === null || tag === undefined) {
+            throw new Error('Required parameter tag was null or undefined when calling addTagToTest.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.put<any>(`${this.basePath}/tests/${encodeURIComponent(String(testid))}/tags/${encodeURIComponent(String(tag))}`,
+            null,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -345,6 +397,103 @@ export class TestService {
         ];
 
         return this.httpClient.get<Array<Question>>(`${this.basePath}/tests/${encodeURIComponent(String(testid))}/questions`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns a tag from a test.
+     * Returns a tag from a test.
+     * @param testid Id of the test to find its tags
+     * @param tag Tag to find
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getTagFromTest(testid: number, tag: string, observe?: 'body', reportProgress?: boolean): Observable<Tag>;
+    public getTagFromTest(testid: number, tag: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Tag>>;
+    public getTagFromTest(testid: number, tag: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Tag>>;
+    public getTagFromTest(testid: number, tag: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (testid === null || testid === undefined) {
+            throw new Error('Required parameter testid was null or undefined when calling getTagFromTest.');
+        }
+
+        if (tag === null || tag === undefined) {
+            throw new Error('Required parameter tag was null or undefined when calling getTagFromTest.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Tag>(`${this.basePath}/tests/${encodeURIComponent(String(testid))}/tags/${encodeURIComponent(String(tag))}`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns all tags from a test.
+     * Returns all tags from a test.
+     * @param testid Id of the tset to find its tags
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getTagsFromTest(testid: number, observe?: 'body', reportProgress?: boolean): Observable<Array<Tag>>;
+    public getTagsFromTest(testid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Tag>>>;
+    public getTagsFromTest(testid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Tag>>>;
+    public getTagsFromTest(testid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (testid === null || testid === undefined) {
+            throw new Error('Required parameter testid was null or undefined when calling getTagsFromTest.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Array<Tag>>(`${this.basePath}/tests/${encodeURIComponent(String(testid))}/tags`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -688,6 +837,56 @@ export class TestService {
         ];
 
         return this.httpClient.delete<any>(`${this.basePath}/tests/${encodeURIComponent(String(testid))}/questions/${encodeURIComponent(String(questionid))}`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Removes a tag from a test
+     * Removes a tag from a test
+     * @param testid Id of the test to remove a tag
+     * @param tag Tag to remove
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public removeTagFromTest(testid: number, tag: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public removeTagFromTest(testid: number, tag: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public removeTagFromTest(testid: number, tag: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public removeTagFromTest(testid: number, tag: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (testid === null || testid === undefined) {
+            throw new Error('Required parameter testid was null or undefined when calling removeTagFromTest.');
+        }
+
+        if (tag === null || tag === undefined) {
+            throw new Error('Required parameter tag was null or undefined when calling removeTagFromTest.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.delete<any>(`${this.basePath}/tests/${encodeURIComponent(String(testid))}/tags/${encodeURIComponent(String(tag))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

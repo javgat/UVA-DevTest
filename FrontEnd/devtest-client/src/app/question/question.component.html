@@ -9,10 +9,18 @@
             <p>Autor: <a [routerLink]="['/profile', question.username]">{{question.username}}</a></p>
             <p>Etiquetas:
                 <span *ngFor="let tag of tags">
-                        <span class="bg-warning" role="button" id="{{tag.tag}}" data-bs-toggle="dropdown" aria-expanded="false">{{tag.tag}}</span>;
+                    <span *ngIf="checkPermisosEdicion()">
+                        <span class="bg-warning" role="button" id="{{tag.tag}}" data-bs-toggle="dropdown"
+                            aria-expanded="false">{{tag.tag}}</span>;
                         <ul class="dropdown-menu" attr.aria-labelledby="{{tag.tag}}">
-                            <li><a class="dropdown-item" role="button" (click)="deleteTagClick(tag.tag)">Eliminar</a></li>
+                            <li><a class="dropdown-item" role="button" (click)="deleteTagClick(tag.tag)">Eliminar</a>
+                            </li>
                         </ul>
+                    </span>
+
+                    <span *ngIf="!checkPermisosEdicion()">
+                        <span class="bg-warning">{{tag.tag}}</span>;
+                    </span>
                 </span>
             </p>
             <form *ngIf="checkPermisosEdicion()" (ngSubmit)='addTagSubmit()' ngNativeValidate>
@@ -31,7 +39,7 @@
             <p><button *ngIf="checkPermisosEdicion()" type="button" class="btn btn-primary" data-bs-toggle="modal"
                     data-bs-target="#editQuestionModal">Editar pregunta</button></p>
             <hr />
-            <p>{{question.question}}</p>
+            <p><span style="white-space: pre-line">{{question.question}}</span></p>
         </div>
     </div>
     <div class="my-3">

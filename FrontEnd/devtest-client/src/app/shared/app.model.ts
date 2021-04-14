@@ -171,8 +171,8 @@ export class Examen implements Test{
         this.title=title || ""
         this.description=description || ""
         this.maxSeconds=maxSeconds || 0
-        this.accesoPublico=accesoPublico || true
-        this.editable=editable || true
+        this.accesoPublico=accesoPublico || false
+        this.editable=editable || false
         this.username=username || ""
         this.id=id || 0
     }

@@ -1,36 +1,130 @@
 <app-nav-bar></app-nav-bar>
 <div class="mt-5">
     <div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message" role="alert">
-    {{getMensaje().texto}}</div>
-    <div class="card">
-        <div class="card-body">
-            <h4>Test #{{test.id}}</h4>
-            <h2>{{test.title}}</h2>
-            <p>Autor: <a [routerLink]="['/profile', test.username]">{{test.username}}</a></p>
-            <!--<p>Etiquetas:
-                <span *ngFor="let tag of tags">
-                        <span class="bg-warning" role="button" id="{{tag.tag}}" data-bs-toggle="dropdown" aria-expanded="false">{{tag.tag}}</span>;
-                        <ul class="dropdown-menu" attr.aria-labelledby="{{tag.tag}}">
-                            <li><a class="dropdown-item" role="button" (click)="deleteTagClick(tag.tag)">Eliminar</a></li>
-                        </ul>
+        {{getMensaje().texto}}</div>
+    <div class="my-3">
+        <h4>Test #{{test.id}}</h4>
+        <h2>{{test.title}}</h2>
+        <p>Autor: <a [routerLink]="['/profile', test.username]">{{test.username}}</a></p>
+        <p>Etiquetas:
+            <span *ngFor="let tag of tags">
+                <span *ngIf="checkPermisosEdicion()">
+                    <span class="bg-warning" role="button" id="{{tag.tag}}" data-bs-toggle="dropdown"
+                        aria-expanded="false">{{tag.tag}}</span>;
+                    <ul class="dropdown-menu" attr.aria-labelledby="{{tag.tag}}">
+                        <li><a class="dropdown-item" role="button" (click)="deleteTagClick(tag.tag)">Eliminar</a></li>
+                    </ul>
                 </span>
-            </p>
-            <form *ngIf="checkPermisosEdicion()" (ngSubmit)='addTagSubmit()' ngNativeValidate>
-                <div class="input-group my-3">
-                    <input class="button btn btn-primary" type="submit" value="Añadir etiqueta" />
-                    <input type="text" class="form-control" name="inputAddTag" [(ngModel)]="newTag.tag"
-                        placeholder="Etiqueta" required pattern=".+" />
-                </div>
-            </form>-->
-            <p>Descripción: {{test.description}}</p>
-            <p>Tiempo disponible: {{test.maxSeconds}} segundos</p>
-            <p>Acceso público: <span *ngIf="test.accesoPublico">Sí</span><span
-                    *ngIf="!test.accesoPublico">No</span></p>
-            <p><button class="btn btn-primary" type="button" [routerLink]="['/et', test.id, 'teams']">Ver equipos
-                    administradores</button></p>
-            <p><button *ngIf="checkPermisosEdicion()" type="button" class="btn btn-primary" data-bs-toggle="modal"
-                    data-bs-target="#editTestModal">Editar pregunta</button></p>
-            <hr />
+                <span *ngIf="!checkPermisosEdicion()">
+                    <span class="bg-warning">{{tag.tag}}</span>;
+                </span>
+            </span>
+        </p>
+        <form *ngIf="checkPermisosEdicion()" (ngSubmit)='addTagSubmit()' ngNativeValidate>
+            <div class="input-group my-3">
+                <input class="button btn btn-primary" type="submit" value="Añadir etiqueta" />
+                <input type="text" class="form-control" name="inputAddTag" [(ngModel)]="newTag" placeholder="Etiqueta"
+                    required pattern=".+" />
+            </div>
+        </form>
+        <p><b>Descripción:</b>
+        <p>
+        <div class="mb-4">
+            <span style="white-space: pre-line">{{test.description}}</span>
+        </div>
+        <p><b>Tiempo disponible:</b> {{test.maxSeconds}} segundos</p>
+        <p><b>Acceso público: </b> <span *ngIf="test.accesoPublico">Sí</span><span *ngIf="!test.accesoPublico">No</span>
+        </p>
+        <p><button class="btn btn-primary" type="button" [routerLink]="['/et', test.id, 'teams']">Ver equipos
+                administradores</button></p>
+        <p><button *ngIf="checkPermisosEdicion()" type="button" class="btn btn-primary" data-bs-toggle="modal"
+                data-bs-target="#editTestModal">Editar Test</button></p>
+        <hr />
+        <h4>Preguntas:</h4>
+        <form *ngIf="checkPermisosEdicion()" (ngSubmit)='addQuestionSubmit()' ngNativeValidate>
+            <div class="input-group my-3">
+                <input class="button btn btn-primary" type="submit" value="Añadir pregunta" />
+                <input type="number" class="form-control" name="inputAddQuestion" [(ngModel)]="addQuestionId"
+                    placeholder="Id de la pregunta" required min=1 />
+            </div>
+        </form>
+        <table class="table table-striped table-hover table-primary my-3">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Título</th>
+                    <th>Autor</th>
+                    <th>Tiempo Estimado</th>
+                    <th>Tipo</th>
+                    <th>Valor en test</th>
+                </tr>
+            </thead>
+            <tbody *ngFor="let pregunta of preguntas">
+                <tr>
+                    <td [routerLink]="['/q', pregunta.id]" role="button">{{pregunta.id}}</td>
+                    <td [routerLink]="['/q', pregunta.id]" role="button">{{pregunta.title}}</td>
+                    <td [routerLink]="['/q', pregunta.id]" role="button">{{pregunta.username}}</td>
+                    <td [routerLink]="['/q', pregunta.id]" role="button">{{pregunta.estimatedTime}} segundos</td>
+                    <td [routerLink]="['/q', pregunta.id]" role="button">{{tipoPrint(pregunta.tipoPregunta,
+                        pregunta.eleccionUnica)}}</td>
+                    <td *ngIf="checkPermisosEdicion()">
+                        <form ngNativeValidate>
+                            <div class="row">
+                                <div class="col-auto">
+                                    <input type="number" class="form-control" name="inputChangeValorFinal"
+                                        [(ngModel)]="pregunta.valorFinal" required min=1 />
+                                </div>
+                                <div class="col-auto">
+                                    <input class="button btn btn-primary" type="submit" value="Guardar valor"
+                                        (click)="changeValueSubmit(pregunta)" />
+                                </div>
+                            </div>
+                        </form>
+                    </td>
+                    <td *ngIf="!checkPermisosEdicion()">{{pregunta.valorFinal}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="modal fade" id="editTestModal" *ngIf="checkPermisosEdicion()" tabindex="-1"
+        aria-labelledby="editTestModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form ngNativeValidate>
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editQuestionModalLabel">Modificar Test</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="inputTitle" class="form-label">Título del test</label>
+                            <input type="text" class="form-control" name="inputTitle" [(ngModel)]="testEdit.title"
+                                required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="inputDescription" class="form-label">Descripción</label>
+                            <textarea type="text" class="form-control" name="inputDescription"
+                                [(ngModel)]="testEdit.description" required rows=3></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="inputTime" class="form-label">Tiempo disponible (segundos)</label>
+                            <input type="number" class="form-control" name="inputTime" [(ngModel)]="testEdit.maxSeconds"
+                                required min=0 />
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault"
+                                [checked]="testEdit.accesoPublico"
+                                (change)="testEdit.accesoPublico = !testEdit.accesoPublico">
+                            <label class="form-check-label" for="flexSwitchCheckDefault">Acceso público</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <input type="submit" value="Guardar" data-bs-dismiss="modal" class="btn btn-primary"
+                            (click)='putTestSubmit()' id="buttonSubmitTest" />
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
