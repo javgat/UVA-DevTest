@@ -130,6 +130,9 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		TestGetEditTestsHandler: test.GetEditTestsHandlerFunc(func(params test.GetEditTestsParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation test.GetEditTests has not yet been implemented")
 		}),
+		TagGetEditTestsFromTagHandler: tag.GetEditTestsFromTagHandlerFunc(func(params tag.GetEditTestsFromTagParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation tag.GetEditTestsFromTag has not yet been implemented")
+		}),
 		UserGetInvitedTestFromUserHandler: user.GetInvitedTestFromUserHandlerFunc(func(params user.GetInvitedTestFromUserParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation user.GetInvitedTestFromUser has not yet been implemented")
 		}),
@@ -276,6 +279,9 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		}),
 		TestGetTestsHandler: test.GetTestsHandlerFunc(func(params test.GetTestsParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation test.GetTests has not yet been implemented")
+		}),
+		TagGetTestsFromTagHandler: tag.GetTestsFromTagHandlerFunc(func(params tag.GetTestsFromTagParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation tag.GetTestsFromTag has not yet been implemented")
 		}),
 		TeamGetTestsFromTeamHandler: team.GetTestsFromTeamHandlerFunc(func(params team.GetTestsFromTeamParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation team.GetTestsFromTeam has not yet been implemented")
@@ -510,6 +516,8 @@ type DevAPI struct {
 	UserGetEditQuestionsOfUserHandler user.GetEditQuestionsOfUserHandler
 	// TestGetEditTestsHandler sets the operation handler for the get edit tests operation
 	TestGetEditTestsHandler test.GetEditTestsHandler
+	// TagGetEditTestsFromTagHandler sets the operation handler for the get edit tests from tag operation
+	TagGetEditTestsFromTagHandler tag.GetEditTestsFromTagHandler
 	// UserGetInvitedTestFromUserHandler sets the operation handler for the get invited test from user operation
 	UserGetInvitedTestFromUserHandler user.GetInvitedTestFromUserHandler
 	// UserGetInvitedTestsFromUserHandler sets the operation handler for the get invited tests from user operation
@@ -608,6 +616,8 @@ type DevAPI struct {
 	UserGetTestFromUserHandler user.GetTestFromUserHandler
 	// TestGetTestsHandler sets the operation handler for the get tests operation
 	TestGetTestsHandler test.GetTestsHandler
+	// TagGetTestsFromTagHandler sets the operation handler for the get tests from tag operation
+	TagGetTestsFromTagHandler tag.GetTestsFromTagHandler
 	// TeamGetTestsFromTeamHandler sets the operation handler for the get tests from team operation
 	TeamGetTestsFromTeamHandler team.GetTestsFromTeamHandler
 	// UserGetTestsFromUserHandler sets the operation handler for the get tests from user operation
@@ -852,6 +862,9 @@ func (o *DevAPI) Validate() error {
 	if o.TestGetEditTestsHandler == nil {
 		unregistered = append(unregistered, "test.GetEditTestsHandler")
 	}
+	if o.TagGetEditTestsFromTagHandler == nil {
+		unregistered = append(unregistered, "tag.GetEditTestsFromTagHandler")
+	}
 	if o.UserGetInvitedTestFromUserHandler == nil {
 		unregistered = append(unregistered, "user.GetInvitedTestFromUserHandler")
 	}
@@ -998,6 +1011,9 @@ func (o *DevAPI) Validate() error {
 	}
 	if o.TestGetTestsHandler == nil {
 		unregistered = append(unregistered, "test.GetTestsHandler")
+	}
+	if o.TagGetTestsFromTagHandler == nil {
+		unregistered = append(unregistered, "tag.GetTestsFromTagHandler")
 	}
 	if o.TeamGetTestsFromTeamHandler == nil {
 		unregistered = append(unregistered, "team.GetTestsFromTeamHandler")
@@ -1334,6 +1350,10 @@ func (o *DevAPI) initHandlerCache() {
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
+	o.handlers["GET"]["/tags/{tag}/editTests"] = tag.NewGetEditTestsFromTag(o.context, o.TagGetEditTestsFromTagHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
 	o.handlers["GET"]["/users/{username}/invitedTests/{testid}"] = user.NewGetInvitedTestFromUser(o.context, o.UserGetInvitedTestFromUserHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
@@ -1527,6 +1547,10 @@ func (o *DevAPI) initHandlerCache() {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
 	o.handlers["GET"]["/tests"] = test.NewGetTests(o.context, o.TestGetTestsHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/tags/{tag}/tests"] = tag.NewGetTestsFromTag(o.context, o.TagGetTestsFromTagHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}

@@ -1925,6 +1925,71 @@ paths:
         500:
           $ref: '#/responses/InternalServerError'
 
+  /tags/{tag}/tests:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - tag
+      summary: Returns all tests from a tag.
+      operationId: GetTestsFromTag
+      description: Returns all tests from a tag.
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: tag
+        description: Tag to find its tests
+        required: true
+        type: string
+      responses:
+        200:
+          description: tests found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Test'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  /tags/{tag}/editTests:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - tag
+      summary: Returns all non published tests from a tag.
+      operationId: GetEditTestsFromTag
+      description: Returns all non published tests from a tag.
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: tag
+        description: Tag to find its non published tests
+        required: true
+        type: string
+      responses:
+        200:
+          description: tests found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Test'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
   /editQuestions:
     get:
       security:

@@ -15,18 +15,18 @@ import { SessionService } from '../shared/session.service';
 export class QuestionTeamsComponent extends LoggedInTeacherController implements OnInit {
 
   teams : Team[]
-  userTeams: Team[]
   question: Question
   routeSub: Subscription
   id: number
   addTeamTeamname: string
   kickingTeamname: string
+  isInAdminTeam: boolean
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private qS: QuestionService, private route: ActivatedRoute) {
     super(session, router, data, userS)
     this.question = new Pregunta(undefined, "", "", 0, false, true, "", undefined, undefined, Question.TipoPreguntaEnum.String, undefined)
     this.teams = []
-    this.userTeams = []
     this.id = 0
+    this.isInAdminTeam = false
     this.addTeamTeamname = ""
     this.kickingTeamname = ""
     this.routeSub = this.route.params.subscribe(params => {
@@ -45,17 +45,9 @@ export class QuestionTeamsComponent extends LoggedInTeacherController implements
     this.routeSub.unsubscribe()
   }
 
-  doHasUserAction(){
-    this.getUserTeams(true)
-  }
-
-  getUserTeams(primera: boolean){
-    this.userS.getTeamsOfUser(this.getSessionUser().getUsername()).subscribe(
-      resp =>{
-        this.userTeams = resp
-      },
-      err => this.handleErrRelog(err, "obtener equipos de usuario", primera, this.getUserTeams, this)
-    )
+  doHasUserAction() {
+    if (this.id!=undefined && this.id != 0)
+      this.getIsInAdminTeam(true)
   }
 
   getPregunta(primera: boolean) {
@@ -65,6 +57,8 @@ export class QuestionTeamsComponent extends LoggedInTeacherController implements
           resp.autoCorrect, resp.editable, resp.username, resp.eleccionUnica, resp.solucion,
           resp.tipoPregunta, resp.valorFinal)
         this.getTeamsPregunta(true)
+        if (!this.getSessionUser().isEmpty())
+          this.getIsInAdminTeam(true)
       },
       err => this.handleErrRelog(err, "obtener pregunta", primera, this.getPregunta, this)
     )
@@ -79,18 +73,18 @@ export class QuestionTeamsComponent extends LoggedInTeacherController implements
     )
   }
 
-  isInAdminTeam() : boolean{
-    for(var i: number = 0; i < this.teams.length; i++){
-      for(var j: number = 0; j < this.userTeams.length; j++){
-        if(this.teams[i].teamname == this.userTeams[j].teamname)
-          return true
+  getIsInAdminTeam(primera: boolean) {
+    this.userS.getSharedQuestionFromUser(this.getSessionUser().getUsername(), this.id).subscribe(
+      resp => this.isInAdminTeam = true,
+      err => {
+        if(err.status!=410)
+          this.handleErrRelog(err, "saber si el usuario administra la pregunta", primera, this.getIsInAdminTeam, this)
       }
-    }
-    return false
+    )
   }
 
   isPermisosAdministracion() : boolean{
-    return (this.getSessionUser().getUsername() == this.question.username) || this.isInAdminTeam()
+    return (this.getSessionUser().getUsername() == this.question.username) || this.isInAdminTeam
   }
 
   checkPermisosAdministracion(): boolean {

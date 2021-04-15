@@ -8,7 +8,7 @@
             <label for="inputTeamname" class="form-label">Nombre del equipo</label>
             <input type="text" class="form-control" name="inputTeamname" aria-describedby="teamnameHelp"
                 [(ngModel)]="team.teamname" required />
-            <div id="teamnameHelp" class="form-text text-muted">El nombre único del equipo</div>
+            <div id="teamnameHelp" class="form-text text-muted">El nombre único del equipo. No introducir el caracter @ ni espacios en blanco</div>
         </div>
         <div class="mb-3">
             <label for="inputDescription" class="form-label">Descripción</label>

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Question, QuestionService, TagService, UserService } from '@javgat/devtest-api';
-import { Subscription } from 'rxjs';
 import { LoggedInTeacherController } from '../shared/app.controller';
 import { tipoPrint } from '../shared/app.model';
 import { DataService } from '../shared/data.service';

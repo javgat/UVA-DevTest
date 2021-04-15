@@ -16,7 +16,12 @@
         <div class="form-check form-switch">
             <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" [checked]="test.accesoPublico"
                 (change)="test.accesoPublico = !test.accesoPublico">
-            <label class="form-check-label" for="flexSwitchCheckDefault">Acceso público</label>
+            <label class="form-check-label" for="flexSwitchCheckDefault" aria-describedby="accesoPublicoHelp">Acceso
+                público</label>
+            <div id="accesoPublicoHelp" class="form-text">
+                El acceso público marca si al publicar el test, este podrá ser realizado por cualquier estudiante o sólo
+                los invitados. Lo puedes editar más adelante.
+            </div>
         </div>
         <div class="d-grid gap-2">
             <input type="submit" value="Crear" class="btn btn-primary" id="buttonSendQuestion" />

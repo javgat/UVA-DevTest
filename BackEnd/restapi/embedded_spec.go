@@ -2403,6 +2403,56 @@ func init() {
         }
       }
     },
+    "/tags/{tag}/editTests": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all non published tests from a tag.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "tag"
+        ],
+        "summary": "Returns all non published tests from a tag.",
+        "operationId": "GetEditTestsFromTag",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Tag to find its non published tests",
+            "name": "tag",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "tests found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Test"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
     "/tags/{tag}/questions": {
       "get": {
         "security": [
@@ -2435,6 +2485,56 @@ func init() {
               "type": "array",
               "items": {
                 "$ref": "#/definitions/Question"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/tags/{tag}/tests": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all tests from a tag.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "tag"
+        ],
+        "summary": "Returns all tests from a tag.",
+        "operationId": "GetTestsFromTag",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Tag to find its tests",
+            "name": "tag",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "tests found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Test"
               }
             }
           },
@@ -9070,6 +9170,65 @@ func init() {
         }
       }
     },
+    "/tags/{tag}/editTests": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all non published tests from a tag.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "tag"
+        ],
+        "summary": "Returns all non published tests from a tag.",
+        "operationId": "GetEditTestsFromTag",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Tag to find its non published tests",
+            "name": "tag",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "tests found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Test"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
     "/tags/{tag}/questions": {
       "get": {
         "security": [
@@ -9102,6 +9261,65 @@ func init() {
               "type": "array",
               "items": {
                 "$ref": "#/definitions/Question"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/tags/{tag}/tests": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all tests from a tag.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "tag"
+        ],
+        "summary": "Returns all tests from a tag.",
+        "operationId": "GetTestsFromTag",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Tag to find its tests",
+            "name": "tag",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "tests found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Test"
               }
             }
           },

@@ -295,3 +295,39 @@ func GetSharedTestFromUser(db *sql.DB, username string, testid int64) (*Test, er
 	}
 	return nil, err
 }
+
+func GetTestsFromTag(db *sql.DB, nombre string) ([]*Test, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var t []*Test
+	query, err := db.Prepare("SELECT T.* FROM Test T JOIN TestEtiqueta E ON T.id=E.testid WHERE E.etiquetanombre=?")
+	if err == nil {
+		defer query.Close()
+		var rows *sql.Rows
+		rows, err = query.Query(nombre)
+		if err == nil {
+			t, err = rowsToTests(rows)
+			return t, err
+		}
+	}
+	return nil, err
+}
+
+func GetEditTestsFromTag(db *sql.DB, nombre string) ([]*Test, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var t []*Test
+	query, err := db.Prepare("SELECT T.* FROM Test T JOIN TestEtiqueta E ON T.id=E.testid WHERE E.etiquetanombre=? AND T.editable=1")
+	if err == nil {
+		defer query.Close()
+		var rows *sql.Rows
+		rows, err = query.Query(nombre)
+		if err == nil {
+			t, err = rowsToTests(rows)
+			return t, err
+		}
+	}
+	return nil, err
+}

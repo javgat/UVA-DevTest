@@ -242,6 +242,8 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 	api.TagGetTagHandler = tag.GetTagHandlerFunc(handlers.GetTag)                                                    // GET /tags/{tag}
 	api.TagGetQuestionsFromTagHandler = tag.GetQuestionsFromTagHandlerFunc(handlers.GetQuestionsFromTag)             // GET /tags/{tag}/questions
 	api.TagGetEditQuestionsFromTagHandler = tag.GetEditQuestionsFromTagHandlerFunc(handlers.GetEditQuestionsFromTag) // GET /tags/{tag}/editQuestions
+	api.TagGetTestsFromTagHandler = tag.GetTestsFromTagHandlerFunc(handlers.GetTestsFromTag)                         // GET /tags/{tag}/tests
+	api.TagGetEditTestsFromTagHandler = tag.GetEditTestsFromTagHandlerFunc(handlers.GetEditTestsFromTag)             // GET /tags/{tag}/editTests
 
 	api.PreServerShutdown = func() {}
 

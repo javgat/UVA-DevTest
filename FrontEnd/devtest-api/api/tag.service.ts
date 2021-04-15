@@ -20,6 +20,7 @@ import { Observable }                                        from 'rxjs';
 
 import { Question } from '../model/question';
 import { Tag } from '../model/tag';
+import { Test } from '../model/test';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -94,6 +95,52 @@ export class TagService {
         ];
 
         return this.httpClient.get<Array<Question>>(`${this.basePath}/tags/${encodeURIComponent(String(tag))}/editQuestions`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns all non published tests from a tag.
+     * Returns all non published tests from a tag.
+     * @param tag Tag to find its non published tests
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getEditTestsFromTag(tag: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
+    public getEditTestsFromTag(tag: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
+    public getEditTestsFromTag(tag: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
+    public getEditTestsFromTag(tag: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (tag === null || tag === undefined) {
+            throw new Error('Required parameter tag was null or undefined when calling getEditTestsFromTag.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Array<Test>>(`${this.basePath}/tags/${encodeURIComponent(String(tag))}/editTests`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -227,6 +274,52 @@ export class TagService {
         ];
 
         return this.httpClient.get<Array<Tag>>(`${this.basePath}/tags`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns all tests from a tag.
+     * Returns all tests from a tag.
+     * @param tag Tag to find its tests
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getTestsFromTag(tag: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
+    public getTestsFromTag(tag: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
+    public getTestsFromTag(tag: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
+    public getTestsFromTag(tag: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (tag === null || tag === undefined) {
+            throw new Error('Required parameter tag was null or undefined when calling getTestsFromTag.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Array<Test>>(`${this.basePath}/tags/${encodeURIComponent(String(tag))}/tests`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
