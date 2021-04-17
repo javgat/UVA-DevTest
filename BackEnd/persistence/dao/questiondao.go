@@ -7,6 +7,7 @@ package dao
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"log"
 	"uva-devtest/models"
 	"uva-devtest/persistence/dbconnection"
@@ -122,6 +123,89 @@ func GetQuestions(db *sql.DB) ([]*Question, error) {
 	if err == nil {
 		defer query.Close()
 		rows, err := query.Query()
+		if err == nil {
+			qs, err = rowsToQuestions(rows)
+			return qs, err
+		}
+	}
+	return nil, err
+}
+
+func prepareQueryTags(initQuery string, tags [][]string, idNombreConsulta string, idNombreSubconsulta string, tablaRelacionNombre string) string {
+	query := initQuery
+	primerOr := true
+	for _, arr_ands := range tags {
+		if !primerOr {
+			query = query + "OR "
+		} else {
+			primerOr = false
+		}
+		primerAnd := true
+		query = query + idNombreConsulta + " IN ( SELECT " + idNombreSubconsulta + " FROM " + tablaRelacionNombre +
+			" WHERE etiquetanombre IN ( "
+		for range arr_ands {
+			if !primerAnd {
+				query = query + ", "
+			} else {
+				primerAnd = false
+			}
+			query = query + "? "
+		}
+		query = query + ") GROUP BY " + idNombreSubconsulta + " HAVING COUNT(DISTINCT etiquetanombre) = " + fmt.Sprint(len(arr_ands)) + ") "
+	}
+	return query
+}
+
+func tagsSlicesToSlice(tags [][]string) []string {
+	var retTags []string
+	for _, arr := range tags {
+		retTags = append(retTags, arr...)
+	}
+	return retTags
+
+}
+
+func TagSlicesToInterfaceArr(tags [][]string) []interface{} {
+	arrTags := tagsSlicesToSlice(tags)
+	interfaceTags := make([]interface{}, len(arrTags))
+	for i := range arrTags {
+		interfaceTags[i] = arrTags[i]
+	}
+	return interfaceTags
+}
+
+func GetEditQuestionsTags(db *sql.DB, tags [][]string) ([]*Question, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var qs []*Question
+	initQuery := "SELECT * FROM Pregunta WHERE editable=1 AND "
+	stringPrepare := prepareQueryTags(initQuery, tags, "id", "preguntaid", "PreguntaEtiqueta")
+	query, err := db.Prepare(stringPrepare)
+	if err == nil {
+		defer query.Close()
+		interfaceTags := TagSlicesToInterfaceArr(tags)
+		rows, err := query.Query(interfaceTags...)
+		if err == nil {
+			qs, err = rowsToQuestions(rows)
+			return qs, err
+		}
+	}
+	return nil, err
+}
+
+func GetQuestionsTags(db *sql.DB, tags [][]string) ([]*Question, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var qs []*Question
+	initQuery := "SELECT * FROM Pregunta WHERE "
+	stringPrepare := prepareQueryTags(initQuery, tags, "id", "preguntaid", "PreguntaEtiqueta")
+	query, err := db.Prepare(stringPrepare)
+	if err == nil {
+		defer query.Close()
+		interfaceTags := TagSlicesToInterfaceArr(tags)
+		rows, err := query.Query(interfaceTags...)
 		if err == nil {
 			qs, err = rowsToQuestions(rows)
 			return qs, err

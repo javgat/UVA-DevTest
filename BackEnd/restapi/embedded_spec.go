@@ -558,6 +558,21 @@ func init() {
         ],
         "summary": "Returns all non-published questions",
         "operationId": "GetEditQuestions",
+        "parameters": [
+          {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "collectionFormat": "csv"
+            },
+            "collectionFormat": "pipes",
+            "name": "tags",
+            "in": "query"
+          }
+        ],
         "responses": {
           "200": {
             "description": "questions found",
@@ -1464,6 +1479,21 @@ func init() {
         ],
         "summary": "Returns all questions",
         "operationId": "GetQuestions",
+        "parameters": [
+          {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "collectionFormat": "csv"
+            },
+            "collectionFormat": "pipes",
+            "name": "tags",
+            "in": "query"
+          }
+        ],
         "responses": {
           "200": {
             "description": "questions found",
@@ -7001,6 +7031,21 @@ func init() {
         ],
         "summary": "Returns all non-published questions",
         "operationId": "GetEditQuestions",
+        "parameters": [
+          {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "collectionFormat": "csv"
+            },
+            "collectionFormat": "pipes",
+            "name": "tags",
+            "in": "query"
+          }
+        ],
         "responses": {
           "200": {
             "description": "questions found",
@@ -8066,6 +8111,21 @@ func init() {
         ],
         "summary": "Returns all questions",
         "operationId": "GetQuestions",
+        "parameters": [
+          {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "collectionFormat": "csv"
+            },
+            "collectionFormat": "pipes",
+            "name": "tags",
+            "in": "query"
+          }
+        ],
         "responses": {
           "200": {
             "description": "questions found",

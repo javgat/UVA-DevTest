@@ -21,7 +21,11 @@ func GetEditQuestions(params question.GetEditQuestionsParams, u *models.User) mi
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var qs []*dao.Question
-			qs, err = dao.GetEditQuestions(db)
+			if len(params.Tags) == 0 {
+				qs, err = dao.GetEditQuestions(db)
+			} else {
+				qs, err = dao.GetEditQuestionsTags(db, params.Tags)
+			}
 			if err == nil {
 				var mqs []*models.Question
 				mqs, err = dao.ToModelQuestions(qs)
@@ -43,7 +47,11 @@ func GetQuestions(params question.GetQuestionsParams, u *models.User) middleware
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var qs []*dao.Question
-			qs, err = dao.GetQuestions(db)
+			if len(params.Tags) == 0 {
+				qs, err = dao.GetQuestions(db)
+			} else {
+				qs, err = dao.GetQuestionsTags(db, params.Tags)
+			}
 			if err == nil {
 				var mqs []*models.Question
 				mqs, err = dao.ToModelQuestions(qs)

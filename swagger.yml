@@ -2001,6 +2001,16 @@ paths:
       description: Returns all non-published questions
       produces:
       - application/json
+      parameters:
+      - in: query
+        name: tags
+        type: array
+        collectionFormat: pipes
+        items:
+          type: array
+          collectionFormat: csv
+          items:
+            type: string
       responses:
         200:
           description: questions found
@@ -2025,6 +2035,16 @@ paths:
       description: Returns all questions
       produces:
       - application/json
+      parameters:
+      - in: query
+        name: tags
+        type: array
+        collectionFormat: pipes
+        items:
+          type: array
+          collectionFormat: csv
+          items:
+            type: string
       responses:
         200:
           description: questions found
