@@ -132,7 +132,7 @@ func GetQuestions(db *sql.DB) ([]*Question, error) {
 }
 
 func prepareQueryTags(initQuery string, tags [][]string, idNombreConsulta string, idNombreSubconsulta string, tablaRelacionNombre string) string {
-	query := initQuery
+	query := initQuery + " ( "
 	primerOr := true
 	for _, arr_ands := range tags {
 		if !primerOr {
@@ -153,6 +153,7 @@ func prepareQueryTags(initQuery string, tags [][]string, idNombreConsulta string
 		}
 		query = query + ") GROUP BY " + idNombreSubconsulta + " HAVING COUNT(DISTINCT etiquetanombre) = " + fmt.Sprint(len(arr_ands)) + ") "
 	}
+	query = query + " ) "
 	return query
 }
 
@@ -299,6 +300,58 @@ func GetEditQuestionsOfUser(db *sql.DB, username string) ([]*Question, error) {
 		if err == nil {
 			defer query.Close()
 			rows, err := query.Query(u.ID)
+			if err == nil {
+				qs, err = rowsToQuestions(rows)
+				return qs, err
+			}
+		}
+	}
+	return nil, err
+}
+
+func GetQuestionsOfUserTags(db *sql.DB, username string, tags [][]string) ([]*Question, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	u, err := GetUserUsername(db, username)
+	if err == nil {
+		var qs []*Question
+		initQuery := "SELECT * FROM Pregunta WHERE usuarioid=? AND "
+		stringPrepare := prepareQueryTags(initQuery, tags, "id", "preguntaid", "PreguntaEtiqueta")
+		query, err := db.Prepare(stringPrepare)
+		if err == nil {
+			defer query.Close()
+			interfaceTags := TagSlicesToInterfaceArr(tags)
+			var paramsSlice []interface{}
+			paramsSlice = append(paramsSlice, u.ID)
+			interfaceTags = append(paramsSlice, interfaceTags...)
+			rows, err := query.Query(interfaceTags...)
+			if err == nil {
+				qs, err = rowsToQuestions(rows)
+				return qs, err
+			}
+		}
+	}
+	return nil, err
+}
+
+func GetEditQuestionsOfUserTags(db *sql.DB, username string, tags [][]string) ([]*Question, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	u, err := GetUserUsername(db, username)
+	if err == nil {
+		var qs []*Question
+		initQuery := "SELECT * FROM Pregunta WHERE usuarioid=? AND editable=1 AND "
+		stringPrepare := prepareQueryTags(initQuery, tags, "id", "preguntaid", "PreguntaEtiqueta")
+		query, err := db.Prepare(stringPrepare)
+		if err == nil {
+			defer query.Close()
+			interfaceTags := TagSlicesToInterfaceArr(tags)
+			var paramsSlice []interface{}
+			paramsSlice = append(paramsSlice, u.ID)
+			interfaceTags = append(paramsSlice, interfaceTags...)
+			rows, err := query.Query(interfaceTags...)
 			if err == nil {
 				qs, err = rowsToQuestions(rows)
 				return qs, err
@@ -619,6 +672,31 @@ func GetSharedQuestionsOfUser(db *sql.DB, username string) ([]*Question, error) 
 	if err == nil {
 		defer query.Close()
 		rows, err := query.Query(username)
+		if err == nil {
+			qs, err = rowsToQuestions(rows)
+			return qs, err
+		}
+	} else {
+		log.Print(err)
+	}
+	return nil, err
+}
+
+func GetSharedQuestionsOfUserTags(db *sql.DB, username string, tags [][]string) ([]*Question, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var qs []*Question
+	initQuery := "SELECT DISTINCT P.* FROM Pregunta P JOIN PreguntaEquipo E ON P.id=E.preguntaid JOIN EquipoUsuario U ON U.equipoid=E.equipoid JOIN Usuario V ON V.id=U.usuarioid WHERE V.username=? AND "
+	stringPrepare := prepareQueryTags(initQuery, tags, "P.id", "preguntaid", "PreguntaEtiqueta")
+	query, err := db.Prepare(stringPrepare)
+	if err == nil {
+		defer query.Close()
+		interfaceTags := TagSlicesToInterfaceArr(tags)
+		var paramsSlice []interface{}
+		paramsSlice = append(paramsSlice, username)
+		interfaceTags = append(paramsSlice, interfaceTags...)
+		rows, err := query.Query(interfaceTags...)
 		if err == nil {
 			qs, err = rowsToQuestions(rows)
 			return qs, err

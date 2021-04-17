@@ -298,7 +298,12 @@ func GetTeamFromUser(params user.GetTeamFromUserParams, u *models.User) middlewa
 func GetSharedQuestions(params user.GetSharedQuestionsOfUserParams, u *models.User) middleware.Responder {
 	db, err := dbconnection.ConnectDb()
 	if err == nil {
-		q, err := dao.GetSharedQuestionsOfUser(db, params.Username)
+		var q []*dao.Question
+		if len(params.Tags) == 0 {
+			q, err = dao.GetSharedQuestionsOfUser(db, params.Username)
+		} else {
+			q, err = dao.GetSharedQuestionsOfUserTags(db, params.Username, params.Tags)
+		}
 		if err == nil {
 			if q != nil {
 				mq, err := dao.ToModelQuestions(q)
@@ -338,7 +343,12 @@ func GetEditQuestionsOfUser(params user.GetEditQuestionsOfUserParams, u *models.
 	if userOrAdmin(params.Username, u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			q, err := dao.GetEditQuestionsOfUser(db, params.Username)
+			var q []*dao.Question
+			if len(params.Tags) == 0 {
+				q, err = dao.GetEditQuestionsOfUser(db, params.Username)
+			} else {
+				q, err = dao.GetEditQuestionsOfUserTags(db, params.Username, params.Tags)
+			}
 			if err == nil {
 				if q != nil {
 					mq, err := dao.ToModelQuestions(q)
@@ -361,7 +371,12 @@ func GetQuestionsOfUser(params user.GetQuestionsOfUserParams, u *models.User) mi
 	if userOrAdmin(params.Username, u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			q, err := dao.GetQuestionsOfUser(db, params.Username)
+			var q []*dao.Question
+			if len(params.Tags) == 0 {
+				q, err = dao.GetQuestionsOfUser(db, params.Username)
+			} else {
+				q, err = dao.GetQuestionsOfUserTags(db, params.Username, params.Tags)
+			}
 			if err == nil {
 				if q != nil {
 					mq, err := dao.ToModelQuestions(q)

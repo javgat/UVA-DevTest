@@ -4818,6 +4818,19 @@ func init() {
             "name": "username",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "collectionFormat": "csv"
+            },
+            "collectionFormat": "pipes",
+            "name": "tags",
+            "in": "query"
           }
         ],
         "responses": {
@@ -5185,6 +5198,19 @@ func init() {
             "name": "username",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "collectionFormat": "csv"
+            },
+            "collectionFormat": "pipes",
+            "name": "tags",
+            "in": "query"
           }
         ],
         "responses": {
@@ -5400,6 +5426,19 @@ func init() {
             "name": "username",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "collectionFormat": "csv"
+            },
+            "collectionFormat": "pipes",
+            "name": "tags",
+            "in": "query"
           }
         ],
         "responses": {
@@ -12044,6 +12083,19 @@ func init() {
             "name": "username",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "collectionFormat": "csv"
+            },
+            "collectionFormat": "pipes",
+            "name": "tags",
+            "in": "query"
           }
         ],
         "responses": {
@@ -12474,6 +12526,19 @@ func init() {
             "name": "username",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "collectionFormat": "csv"
+            },
+            "collectionFormat": "pipes",
+            "name": "tags",
+            "in": "query"
           }
         ],
         "responses": {
@@ -12725,6 +12790,19 @@ func init() {
             "name": "username",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "collectionFormat": "csv"
+            },
+            "collectionFormat": "pipes",
+            "name": "tags",
+            "in": "query"
           }
         ],
         "responses": {
