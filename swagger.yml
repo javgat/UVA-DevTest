@@ -1646,6 +1646,15 @@ paths:
         description: Teamname of the team to get its questions
         required: true
         type: string
+      - in: query
+        name: tags
+        type: array
+        collectionFormat: pipes
+        items:
+          type: array
+          collectionFormat: csv
+          items:
+            type: string
       responses:
         200:
           description: questions found

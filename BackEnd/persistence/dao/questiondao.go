@@ -274,7 +274,7 @@ func GetQuestionsOfUser(db *sql.DB, username string) ([]*Question, error) {
 		return nil, errors.New(errorDBNil)
 	}
 	u, err := GetUserUsername(db, username)
-	if err == nil {
+	if err == nil && u != nil {
 		var qs []*Question
 		query, err := db.Prepare("SELECT * FROM Pregunta WHERE usuarioid=?")
 		if err == nil {
@@ -294,7 +294,7 @@ func GetEditQuestionsOfUser(db *sql.DB, username string) ([]*Question, error) {
 		return nil, errors.New(errorDBNil)
 	}
 	u, err := GetUserUsername(db, username)
-	if err == nil {
+	if err == nil && u != nil {
 		var qs []*Question
 		query, err := db.Prepare("SELECT * FROM Pregunta WHERE usuarioid=? AND editable=1")
 		if err == nil {
@@ -314,7 +314,7 @@ func GetQuestionsOfUserTags(db *sql.DB, username string, tags [][]string) ([]*Qu
 		return nil, errors.New(errorDBNil)
 	}
 	u, err := GetUserUsername(db, username)
-	if err == nil {
+	if err == nil && u != nil {
 		var qs []*Question
 		initQuery := "SELECT * FROM Pregunta WHERE usuarioid=? AND "
 		stringPrepare := prepareQueryTags(initQuery, tags, "id", "preguntaid", "PreguntaEtiqueta")
@@ -340,7 +340,7 @@ func GetEditQuestionsOfUserTags(db *sql.DB, username string, tags [][]string) ([
 		return nil, errors.New(errorDBNil)
 	}
 	u, err := GetUserUsername(db, username)
-	if err == nil {
+	if err == nil && u != nil {
 		var qs []*Question
 		initQuery := "SELECT * FROM Pregunta WHERE usuarioid=? AND editable=1 AND "
 		stringPrepare := prepareQueryTags(initQuery, tags, "id", "preguntaid", "PreguntaEtiqueta")
@@ -417,12 +417,38 @@ func GetQuestionsFromTeam(db *sql.DB, teamname string) ([]*Question, error) {
 		return nil, errors.New(errorDBNil)
 	}
 	u, err := GetTeam(db, teamname)
-	if err == nil {
+	if err == nil && u != nil {
 		var qs []*Question
 		query, err := db.Prepare("SELECT P.* FROM Pregunta P JOIN PreguntaEquipo E ON P.id=E.preguntaid WHERE E.equipoid=?")
 		if err == nil {
 			defer query.Close()
 			rows, err := query.Query(u.ID)
+			if err == nil {
+				qs, err = rowsToQuestions(rows)
+				return qs, err
+			}
+		}
+	}
+	return nil, err
+}
+
+func GetQuestionsFromTeamTags(db *sql.DB, teamname string, tags [][]string) ([]*Question, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	u, err := GetTeam(db, teamname)
+	if err == nil && u != nil {
+		var qs []*Question
+		initQuery := "SELECT P.* FROM Pregunta P JOIN PreguntaEquipo E ON P.id=E.preguntaid WHERE E.equipoid=? AND "
+		stringPrepare := prepareQueryTags(initQuery, tags, "P.id", "preguntaid", "PreguntaEtiqueta")
+		query, err := db.Prepare(stringPrepare)
+		if err == nil {
+			defer query.Close()
+			interfaceTags := TagSlicesToInterfaceArr(tags)
+			var paramsSlice []interface{}
+			paramsSlice = append(paramsSlice, u.ID)
+			interfaceTags = append(paramsSlice, interfaceTags...)
+			rows, err := query.Query(interfaceTags...)
 			if err == nil {
 				qs, err = rowsToQuestions(rows)
 				return qs, err

@@ -331,7 +331,12 @@ func GetQuestionsFromTeam(params team.GetQuestionsFromTeamParams, u *models.User
 	if isTeamMember(params.Teamname, u) || isAdmin(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			questions, err := dao.GetQuestionsFromTeam(db, params.Teamname)
+			var questions []*dao.Question
+			if len(params.Tags) == 0 {
+				questions, err = dao.GetQuestionsFromTeam(db, params.Teamname)
+			} else {
+				questions, err = dao.GetQuestionsFromTeamTags(db, params.Teamname, params.Tags)
+			}
 			if err == nil {
 				mq, err := dao.ToModelQuestions(questions)
 				if err == nil && mq != nil {

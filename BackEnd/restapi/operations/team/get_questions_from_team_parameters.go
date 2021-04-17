@@ -9,8 +9,10 @@ import (
 	"net/http"
 
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag"
 )
 
 // NewGetQuestionsFromTeamParams creates a new GetQuestionsFromTeamParams object
@@ -30,6 +32,11 @@ type GetQuestionsFromTeamParams struct {
 	// HTTP Request Object
 	HTTPRequest *http.Request `json:"-"`
 
+	/*
+	  In: query
+	  Collection Format: pipes
+	*/
+	Tags [][]string
 	/*Teamname of the team to get its questions
 	  Required: true
 	  In: path
@@ -46,6 +53,13 @@ func (o *GetQuestionsFromTeamParams) BindRequest(r *http.Request, route *middlew
 
 	o.HTTPRequest = r
 
+	qs := runtime.Values(r.URL.Query())
+
+	qTags, qhkTags, _ := qs.GetOK("tags")
+	if err := o.bindTags(qTags, qhkTags, route.Formats); err != nil {
+		res = append(res, err)
+	}
+
 	rTeamname, rhkTeamname, _ := route.Params.GetOK("teamname")
 	if err := o.bindTeamname(rTeamname, rhkTeamname, route.Formats); err != nil {
 		res = append(res, err)
@@ -53,6 +67,43 @@ func (o *GetQuestionsFromTeamParams) BindRequest(r *http.Request, route *middlew
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// bindTags binds and validates array parameter Tags from query.
+//
+// Arrays are parsed according to CollectionFormat: "pipes" (defaults to "csv" when empty).
+func (o *GetQuestionsFromTeamParams) bindTags(rawData []string, hasKey bool, formats strfmt.Registry) error {
+	var qvTags string
+	if len(rawData) > 0 {
+		qvTags = rawData[len(rawData)-1]
+	}
+
+	// CollectionFormat: pipes
+	tagsIC := swag.SplitByFormat(qvTags, "pipes")
+	if len(tagsIC) == 0 {
+		return nil
+	}
+
+	var tagsIR [][]string
+	for _, tagsIV := range tagsIC {
+		// items.CollectionFormat: csv
+		tagsIIC := swag.SplitByFormat(tagsIV, "csv")
+		if len(tagsIIC) > 0 {
+
+			var tagsIIR []string
+			for _, tagsIIV := range tagsIIC {
+				tagsII := tagsIIV
+
+				tagsIIR = append(tagsIIR, tagsII)
+			}
+
+			tagsIR = append(tagsIR, tagsIIR)
+		}
+	}
+
+	o.Tags = tagsIR
+
 	return nil
 }
 
