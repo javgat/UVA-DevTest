@@ -23,7 +23,8 @@ export class QuestionCreateComponent extends LoggedInTeacherController implement
       autoCorrect: false,
       editable: true,
       username: "",
-      tipoPregunta: Question.TipoPreguntaEnum.String
+      tipoPregunta: Question.TipoPreguntaEnum.String,
+      accesoPublicoNoPublicada: true
     }
   }
 

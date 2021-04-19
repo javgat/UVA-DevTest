@@ -23,7 +23,7 @@ export class QuestionTeamsComponent extends LoggedInTeacherController implements
   isInAdminTeam: boolean
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private qS: QuestionService, private route: ActivatedRoute) {
     super(session, router, data, userS)
-    this.question = new Pregunta(undefined, "", "", 0, false, true, "", undefined, undefined, Question.TipoPreguntaEnum.String, undefined)
+    this.question = new Pregunta(undefined, "", "", 0, false, true, "", true, undefined, undefined, Question.TipoPreguntaEnum.String, undefined)
     this.teams = []
     this.id = 0
     this.isInAdminTeam = false
@@ -54,7 +54,7 @@ export class QuestionTeamsComponent extends LoggedInTeacherController implements
     this.qS.getQuestion(this.id).subscribe(
       resp => {
         this.question = new Pregunta(resp.id, resp.title, resp.question, resp.estimatedTime,
-          resp.autoCorrect, resp.editable, resp.username, resp.eleccionUnica, resp.solucion,
+          resp.autoCorrect, resp.editable, resp.username, resp.accesoPublicoNoPublicada, resp.eleccionUnica, resp.solucion,
           resp.tipoPregunta, resp.valorFinal)
         this.getTeamsPregunta(true)
         if (!this.getSessionUser().isEmpty())

@@ -23,6 +23,13 @@
                 (change)="question.autoCorrect = !question.autoCorrect">
             <label class="form-check-label" for="flexSwitchCheckDefault">Corrección automática</label>
         </div>
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="flexSwitchAccesoPublicoNoPublicada"
+                [checked]="question.accesoPublicoNoPublicada"
+                (change)="question.accesoPublicoNoPublicada = !question.accesoPublicoNoPublicada">
+            <label class="form-check-label" for="flexSwitchAccesoPublicoNoPublicada">Acceso público para
+                profesores</label>
+        </div>
         <div class="my-3">
             <label class="form-label">Tipo de pregunta:</label>
             <div id="tipoHelp" class="form-text text-muted">Una vez crees la pregunta, se te redirigirá a el panel de

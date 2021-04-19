@@ -141,9 +141,10 @@ export class Pregunta implements Question {
     solucion: string | undefined;
     tipoPregunta: Question.TipoPreguntaEnum;
     valorFinal: number | undefined;
+    accesoPublicoNoPublicada: boolean;
 
     constructor(id: number | undefined, title: string, question: string, estT: number, autoC: boolean,
-        edit: boolean, username: string, eleUni: boolean | undefined, solu: string | undefined,
+        edit: boolean, username: string, accesoPublicoNoPublicada: boolean, eleUni: boolean | undefined, solu: string | undefined,
         tipo: Question.TipoPreguntaEnum, valor: number | undefined) {
         this.id = id
         this.title = title
@@ -156,6 +157,7 @@ export class Pregunta implements Question {
         this.solucion = solu
         this.tipoPregunta = tipo
         this.valorFinal = valor
+        this.accesoPublicoNoPublicada = accesoPublicoNoPublicada
     }
 }
 

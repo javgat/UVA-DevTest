@@ -315,7 +315,7 @@ func PutQuestion(db *sql.DB, questionid int64, q *models.Question) error {
 	if err != nil || u == nil {
 		return errors.New(errorResourceNotFound)
 	}
-	query, err := db.Prepare("UPDATE Pregunta SET title=?, question=?, estimatedTime=?, autoCorrect=?, editable=?, usuarioid=?, eleccionUnica=?, solucion=? WHERE id=? ")
+	query, err := db.Prepare("UPDATE Pregunta SET title=?, question=?, estimatedTime=?, autoCorrect=?, editable=?, usuarioid=?, eleccionUnica=?, solucion=?, accesoPublicoNoPublicada=? WHERE id=? ")
 	if err != nil {
 		return err
 	}
@@ -327,7 +327,7 @@ func PutQuestion(db *sql.DB, questionid int64, q *models.Question) error {
 		solucion = &q.Solucion
 	}
 	defer query.Close()
-	_, err = query.Exec(q.Title, q.Question, q.EstimatedTime, q.AutoCorrect, q.Editable, u.ID, eleUni, solucion, questionid)
+	_, err = query.Exec(q.Title, q.Question, q.EstimatedTime, q.AutoCorrect, q.Editable, u.ID, eleUni, solucion, q.AccesoPublicoNoPublicada, questionid)
 	return err
 }
 
@@ -510,8 +510,8 @@ func PostQuestion(db *sql.DB, q *models.Question, username string) (*models.Ques
 	if err != nil || u == nil {
 		return nil, errors.New(errorResourceNotFound)
 	}
-	query, err := db.Prepare("INSERT INTO Pregunta(title, question, estimatedTime, autoCorrect, editable, usuarioid, eleccionUnica, solucion) " +
-		"VALUES (?,?,?,?,?,?,?,?)")
+	query, err := db.Prepare("INSERT INTO Pregunta(title, question, estimatedTime, autoCorrect, editable, usuarioid, eleccionUnica, solucion, accesoPublicoNoPublicada) " +
+		"VALUES (?,?,?,?,?,?,?,?,?)")
 
 	if err != nil {
 		return nil, err
@@ -524,7 +524,7 @@ func PostQuestion(db *sql.DB, q *models.Question, username string) (*models.Ques
 		solucion = &q.Solucion
 	}
 	defer query.Close()
-	sol, err := query.Exec(q.Title, q.Question, q.EstimatedTime, q.AutoCorrect, q.Editable, u.ID, eleUni, solucion)
+	sol, err := query.Exec(q.Title, q.Question, q.EstimatedTime, q.AutoCorrect, q.Editable, u.ID, eleUni, solucion, q.AccesoPublicoNoPublicada)
 	if err == nil {
 		qs := q
 		qs.ID, err = sol.LastInsertId()

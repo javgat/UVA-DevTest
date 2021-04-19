@@ -38,8 +38,8 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
     this.tags = []
     this.deleteIndex = -1
     this.deletingTag = ""
-    this.question = new Pregunta(undefined, "", "", 0, false, true, "", undefined, undefined, Question.TipoPreguntaEnum.String, undefined)
-    this.questionEdit = new Pregunta(undefined, "", "", 0, false, true, "", undefined, undefined, Question.TipoPreguntaEnum.String, undefined)
+    this.question = new Pregunta(undefined, "", "", 0, false, true, "", true, undefined, undefined, Question.TipoPreguntaEnum.String, undefined)
+    this.questionEdit = new Pregunta(undefined, "", "", 0, false, true, "", true, undefined, undefined, Question.TipoPreguntaEnum.String, undefined)
     this.nuevaOpcion = {
       correcta: false,
       texto: ""
@@ -95,10 +95,10 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
     this.qS.getQuestion(this.id).subscribe(
       resp => {
         this.question = new Pregunta(resp.id, resp.title, resp.question, resp.estimatedTime,
-          resp.autoCorrect, resp.editable, resp.username, resp.eleccionUnica, resp.solucion,
+          resp.autoCorrect, resp.editable, resp.username, resp.accesoPublicoNoPublicada, resp.eleccionUnica, resp.solucion,
           resp.tipoPregunta, resp.valorFinal)
         this.questionEdit = new Pregunta(resp.id, resp.title, resp.question, resp.estimatedTime,
-          resp.autoCorrect, resp.editable, resp.username, resp.eleccionUnica, resp.solucion,
+          resp.autoCorrect, resp.editable, resp.username, resp.accesoPublicoNoPublicada, resp.eleccionUnica, resp.solucion,
           resp.tipoPregunta, resp.valorFinal)
         this.setTipoPrint()
         if (this.question.tipoPregunta == Question.TipoPreguntaEnum.Opciones) {

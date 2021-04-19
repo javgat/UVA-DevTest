@@ -6583,7 +6583,7 @@ func init() {
       }
     },
     "GoneError": {
-      "description": "That user (password and name) does not exist",
+      "description": "That resource does not exist",
       "schema": {
         "$ref": "#/definitions/Error"
       }
@@ -6696,7 +6696,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -6758,7 +6758,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -6976,7 +6976,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -7024,7 +7024,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -7083,7 +7083,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -7149,7 +7149,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -7212,7 +7212,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -7282,7 +7282,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -7351,7 +7351,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -7498,7 +7498,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -7598,7 +7598,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -7698,7 +7698,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -7757,7 +7757,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -7816,7 +7816,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -7879,7 +7879,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -7945,7 +7945,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -8011,7 +8011,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -8077,7 +8077,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -8136,7 +8136,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -8196,7 +8196,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -8254,7 +8254,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -8313,7 +8313,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -8373,7 +8373,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -8431,7 +8431,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -8546,7 +8546,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -8701,7 +8701,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -8767,7 +8767,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -8830,7 +8830,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -8897,7 +8897,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -8955,7 +8955,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -9014,7 +9014,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -9077,7 +9077,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -9132,7 +9132,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -9187,7 +9187,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -9246,7 +9246,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -9306,7 +9306,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -9364,7 +9364,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -9413,7 +9413,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -9513,7 +9513,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -9572,7 +9572,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -9631,7 +9631,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -9690,7 +9690,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -9749,7 +9749,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -9849,7 +9849,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -9915,7 +9915,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -9963,7 +9963,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -10022,7 +10022,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -10085,7 +10085,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -10149,7 +10149,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -10208,7 +10208,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -10271,7 +10271,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -10335,7 +10335,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -10394,7 +10394,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -10457,7 +10457,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -10529,7 +10529,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -10592,7 +10592,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -10651,7 +10651,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -10714,7 +10714,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -10773,7 +10773,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -10836,7 +10836,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -10894,7 +10894,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -10994,7 +10994,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -11096,7 +11096,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -11153,7 +11153,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -11212,7 +11212,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -11275,7 +11275,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -11339,7 +11339,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -11394,7 +11394,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -11453,7 +11453,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -11516,7 +11516,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -11571,7 +11571,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -11626,7 +11626,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -11685,7 +11685,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -11745,7 +11745,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -11803,7 +11803,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -11952,7 +11952,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -12018,7 +12018,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -12066,7 +12066,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -12125,7 +12125,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -12188,7 +12188,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -12254,7 +12254,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -12313,7 +12313,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -12376,7 +12376,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -12448,7 +12448,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -12507,7 +12507,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -12570,7 +12570,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -12633,7 +12633,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -12705,7 +12705,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -12764,7 +12764,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -12827,7 +12827,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -12891,7 +12891,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -12963,7 +12963,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -13030,7 +13030,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -13093,7 +13093,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -13155,7 +13155,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -13227,7 +13227,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -13290,7 +13290,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -13349,7 +13349,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -13412,7 +13412,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -13595,7 +13595,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -13654,7 +13654,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -13721,7 +13721,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -13784,7 +13784,7 @@ func init() {
             }
           },
           "410": {
-            "description": "That user (password and name) does not exist",
+            "description": "That resource does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -14250,7 +14250,7 @@ func init() {
       }
     },
     "GoneError": {
-      "description": "That user (password and name) does not exist",
+      "description": "That resource does not exist",
       "schema": {
         "$ref": "#/definitions/Error"
       }

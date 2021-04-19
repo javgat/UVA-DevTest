@@ -349,17 +349,36 @@ func testEditable(testid int64) bool {
 }
 
 // AddQuestionToTest PUT /tests/{testid}/questions/{questionid}. Add question to test
-// Auth: TestAdmin or Admin
+// Auth: TestAdmin or Admin. Si question no publica => además questionAdmin or Admin, o que ya esté en el test
 // Req: Test.editable
 func AddQuestionToTest(params test.AddQuestionToTestParams, u *models.User) middleware.Responder {
 	if testEditable(params.Testid) && (isAdmin(u) || isTestAdmin(u, params.Testid)) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			err = dao.RemoveQuestionTest(db, params.Questionid, params.Testid)
-			if err == nil {
-				err = dao.AddQuestionTest(db, params.Questionid, params.Testid, *params.ValorFinal.ValorFinal)
-				if err == nil {
-					return test.NewAddQuestionToTestOK()
+			var q *dao.Question
+			q, err = dao.GetQuestion(db, params.Questionid)
+			if q != nil && err == nil {
+				puedeHacerse := false
+				if *q.AccesoPublicoNoPublicada {
+					puedeHacerse = true
+				} else if isAdmin(u) || isQuestionAdmin(u, params.Questionid) {
+					puedeHacerse = true
+				} else {
+					q, err = dao.GetQuestionFromTest(db, params.Questionid, params.Testid)
+					if q != nil && err == nil {
+						puedeHacerse = true
+					}
+				}
+				if puedeHacerse {
+					err = dao.RemoveQuestionTest(db, params.Questionid, params.Testid)
+					if err == nil {
+						err = dao.AddQuestionTest(db, params.Questionid, params.Testid, *params.ValorFinal.ValorFinal)
+						if err == nil {
+							return test.NewAddQuestionToTestOK()
+						}
+					}
+				} else {
+					return test.NewAddQuestionToTestForbidden()
 				}
 			}
 			log.Println("Error en users_handler AddQuestionToTest(): ", err)
