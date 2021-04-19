@@ -459,6 +459,48 @@ paths:
         500:
           $ref: '#/responses/InternalServerError'
 
+  /users/{username}/publicEditQuestions:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - user
+      summary: Returns all public non-published questions owned by the user
+      operationId: GetPublicEditQuestionsOfUser
+      description: Returns all public non-published questions owned by the user
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the user who owns the questions
+        required: true
+        type: string
+      - in: query
+        name: tags
+        type: array
+        collectionFormat: pipes
+        items:
+          type: array
+          collectionFormat: csv
+          items:
+            type: string
+      responses:
+        200:
+          description: questions found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Question'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
   /users/{username}/editQuestions:
    get:
       security:
@@ -2026,15 +2068,86 @@ paths:
         500:
           $ref: '#/responses/InternalServerError'
 
-  /editQuestions:
+
+  /allQuestions:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - question
+      summary: Returns all questions
+      operationId: GetAllQuestions
+      description: Returns all questions
+      produces:
+      - application/json
+      parameters:
+      - in: query
+        name: tags
+        type: array
+        collectionFormat: pipes
+        items:
+          type: array
+          collectionFormat: csv
+          items:
+            type: string
+      responses:
+        200:
+          description: questions found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Question'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
+  /allEditQuestions:
     get:
       security:
         - BearerCookie: []
       tags:
       - question
       summary: Returns all non-published questions
-      operationId: GetEditQuestions
+      operationId: GetAllEditQuestions
       description: Returns all non-published questions
+      produces:
+      - application/json
+      parameters:
+      - in: query
+        name: tags
+        type: array
+        collectionFormat: pipes
+        items:
+          type: array
+          collectionFormat: csv
+          items:
+            type: string
+      responses:
+        200:
+          description: questions found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Question'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
+  /editQuestions:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - question
+      summary: Returns all public non-published questions
+      operationId: GetEditQuestions
+      description: Returns all public non-published questions
       produces:
       - application/json
       parameters:
@@ -2066,9 +2179,9 @@ paths:
         - BearerCookie: []
       tags:
       - question
-      summary: Returns all questions
+      summary: Returns all public questions
       operationId: GetQuestions
-      description: Returns all questions
+      description: Returns all public questions
       produces:
       - application/json
       parameters:
@@ -2120,6 +2233,8 @@ paths:
           $ref: '#/responses/BadRequestError'
         403:
           $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
         500:
           $ref: '#/responses/InternalServerError'
     put:
@@ -4055,6 +4170,7 @@ definitions:
     - editable
     - username
     - tipoPregunta
+    - accesoPublicoNoPublicada
     properties:
       id:
         type: integer
@@ -4089,6 +4205,9 @@ definitions:
       valorFinal:
         type: integer
         minimum: 0
+      accesoPublicoNoPublicada:
+        type: boolean
+        example: false
   Test:
     type: object
     required:

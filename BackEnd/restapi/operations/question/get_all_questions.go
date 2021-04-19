@@ -13,42 +13,42 @@ import (
 	"uva-devtest/models"
 )
 
-// GetQuestionsHandlerFunc turns a function with the right signature into a get questions handler
-type GetQuestionsHandlerFunc func(GetQuestionsParams, *models.User) middleware.Responder
+// GetAllQuestionsHandlerFunc turns a function with the right signature into a get all questions handler
+type GetAllQuestionsHandlerFunc func(GetAllQuestionsParams, *models.User) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn GetQuestionsHandlerFunc) Handle(params GetQuestionsParams, principal *models.User) middleware.Responder {
+func (fn GetAllQuestionsHandlerFunc) Handle(params GetAllQuestionsParams, principal *models.User) middleware.Responder {
 	return fn(params, principal)
 }
 
-// GetQuestionsHandler interface for that can handle valid get questions params
-type GetQuestionsHandler interface {
-	Handle(GetQuestionsParams, *models.User) middleware.Responder
+// GetAllQuestionsHandler interface for that can handle valid get all questions params
+type GetAllQuestionsHandler interface {
+	Handle(GetAllQuestionsParams, *models.User) middleware.Responder
 }
 
-// NewGetQuestions creates a new http.Handler for the get questions operation
-func NewGetQuestions(ctx *middleware.Context, handler GetQuestionsHandler) *GetQuestions {
-	return &GetQuestions{Context: ctx, Handler: handler}
+// NewGetAllQuestions creates a new http.Handler for the get all questions operation
+func NewGetAllQuestions(ctx *middleware.Context, handler GetAllQuestionsHandler) *GetAllQuestions {
+	return &GetAllQuestions{Context: ctx, Handler: handler}
 }
 
-/* GetQuestions swagger:route GET /questions question getQuestions
+/* GetAllQuestions swagger:route GET /allQuestions question getAllQuestions
 
-Returns all public questions
+Returns all questions
 
-Returns all public questions
+Returns all questions
 
 */
-type GetQuestions struct {
+type GetAllQuestions struct {
 	Context *middleware.Context
-	Handler GetQuestionsHandler
+	Handler GetAllQuestionsHandler
 }
 
-func (o *GetQuestions) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
+func (o *GetAllQuestions) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	route, rCtx, _ := o.Context.RouteInfo(r)
 	if rCtx != nil {
 		*r = *rCtx
 	}
-	var Params = NewGetQuestionsParams()
+	var Params = NewGetAllQuestionsParams()
 	uprinc, aCtx, err := o.Context.Authorize(r, route)
 	if err != nil {
 		o.Context.Respond(rw, r, route.Produces, route, err)

@@ -87,7 +87,8 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 	api.UserGetSharedQuestionsOfUserHandler = user.GetSharedQuestionsOfUserHandlerFunc(handlers.GetSharedQuestions)  // GET /users/{username}/sharedQuestions
 	api.UserGetSharedQuestionFromUserHandler = user.GetSharedQuestionFromUserHandlerFunc(handlers.GetSharedQuestion) // GET /users/{username}/sharedQuestions/{testid}
 
-	api.UserGetEditQuestionsOfUserHandler = user.GetEditQuestionsOfUserHandlerFunc(handlers.GetEditQuestionsOfUser) // GET /users/{username}/editQuestions
+	api.UserGetEditQuestionsOfUserHandler = user.GetEditQuestionsOfUserHandlerFunc(handlers.GetEditQuestionsOfUser)                   // GET /users/{username}/editQuestions
+	api.UserGetPublicEditQuestionsOfUserHandler = user.GetPublicEditQuestionsOfUserHandlerFunc(handlers.GetPublicEditQuestionsOfUser) // GET /users/{username}/publicEditQuestions
 
 	api.UserGetQuestionsOfUserHandler = user.GetQuestionsOfUserHandlerFunc(handlers.GetQuestionsOfUser)  // GET /users/{username}/questions
 	api.UserPostQuestionHandler = user.PostQuestionHandlerFunc(handlers.PostQuestionOfUser)              // POST /users/{username}/questions
@@ -146,7 +147,9 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 
 	// /questions
 
-	api.QuestionGetEditQuestionsHandler = question.GetEditQuestionsHandlerFunc(handlers.GetEditQuestions) // GET /editQuestions
+	api.QuestionGetAllEditQuestionsHandler = question.GetAllEditQuestionsHandlerFunc(handlers.GetAllEditQuestions) // GET /allEditQuestions
+	api.QuestionGetAllQuestionsHandler = question.GetAllQuestionsHandlerFunc(handlers.GetAllQuestions)             // GET /allQuestions
+	api.QuestionGetEditQuestionsHandler = question.GetEditQuestionsHandlerFunc(handlers.GetEditQuestions)          // GET /editQuestions
 
 	api.QuestionGetQuestionsHandler = question.GetQuestionsHandlerFunc(handlers.GetQuestions)       // GET /questions
 	api.QuestionGetQuestionHandler = question.GetQuestionHandlerFunc(handlers.GetQuestion)          // GET /questions/{questionid}

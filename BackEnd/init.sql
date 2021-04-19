@@ -93,6 +93,7 @@ CREATE TABLE Pregunta(
   usuarioid int(11) NOT NULL,
   eleccionUnica boolean,
   solucion varchar(100) COLLATE utf8_unicode_ci,
+  accesoPublicoNoPublicada boolean NOT NULL,
   FOREIGN KEY(usuarioid) REFERENCES Usuario(id) ON DELETE CASCADE,
   PRIMARY KEY(id)
 );

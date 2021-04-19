@@ -358,16 +358,23 @@ export class UserService {
      * Returns all non-published questions owned by the user
      * Returns all non-published questions owned by the user
      * @param username Username of the user who owns the questions
+     * @param tags 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getEditQuestionsOfUser(username: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Question>>;
-    public getEditQuestionsOfUser(username: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Question>>>;
-    public getEditQuestionsOfUser(username: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Question>>>;
-    public getEditQuestionsOfUser(username: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getEditQuestionsOfUser(username: string, tags?: Array<Array<string>>, observe?: 'body', reportProgress?: boolean): Observable<Array<Question>>;
+    public getEditQuestionsOfUser(username: string, tags?: Array<Array<string>>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Question>>>;
+    public getEditQuestionsOfUser(username: string, tags?: Array<Array<string>>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Question>>>;
+    public getEditQuestionsOfUser(username: string, tags?: Array<Array<string>>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (username === null || username === undefined) {
             throw new Error('Required parameter username was null or undefined when calling getEditQuestionsOfUser.');
+        }
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (tags) {
+            queryParameters = queryParameters.set('tags', tags.join(COLLECTION_FORMATS['pipes']));
         }
 
         let headers = this.defaultHeaders;
@@ -392,6 +399,7 @@ export class UserService {
 
         return this.httpClient.get<Array<Question>>(`${this.basePath}/users/${encodeURIComponent(String(username))}/editQuestions`,
             {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -489,6 +497,60 @@ export class UserService {
 
         return this.httpClient.get<Array<Test>>(`${this.basePath}/users/${encodeURIComponent(String(username))}/invitedTests`,
             {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns all public non-published questions owned by the user
+     * Returns all public non-published questions owned by the user
+     * @param username Username of the user who owns the questions
+     * @param tags 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getPublicEditQuestionsOfUser(username: string, tags?: Array<Array<string>>, observe?: 'body', reportProgress?: boolean): Observable<Array<Question>>;
+    public getPublicEditQuestionsOfUser(username: string, tags?: Array<Array<string>>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Question>>>;
+    public getPublicEditQuestionsOfUser(username: string, tags?: Array<Array<string>>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Question>>>;
+    public getPublicEditQuestionsOfUser(username: string, tags?: Array<Array<string>>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (username === null || username === undefined) {
+            throw new Error('Required parameter username was null or undefined when calling getPublicEditQuestionsOfUser.');
+        }
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (tags) {
+            queryParameters = queryParameters.set('tags', tags.join(COLLECTION_FORMATS['pipes']));
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Array<Question>>(`${this.basePath}/users/${encodeURIComponent(String(username))}/publicEditQuestions`,
+            {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -649,16 +711,23 @@ export class UserService {
      * Returns all questions owned by the user
      * Returns all questions owned by the user
      * @param username Username of the user who owns the questions
+     * @param tags 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getQuestionsOfUser(username: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Question>>;
-    public getQuestionsOfUser(username: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Question>>>;
-    public getQuestionsOfUser(username: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Question>>>;
-    public getQuestionsOfUser(username: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getQuestionsOfUser(username: string, tags?: Array<Array<string>>, observe?: 'body', reportProgress?: boolean): Observable<Array<Question>>;
+    public getQuestionsOfUser(username: string, tags?: Array<Array<string>>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Question>>>;
+    public getQuestionsOfUser(username: string, tags?: Array<Array<string>>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Question>>>;
+    public getQuestionsOfUser(username: string, tags?: Array<Array<string>>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (username === null || username === undefined) {
             throw new Error('Required parameter username was null or undefined when calling getQuestionsOfUser.');
+        }
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (tags) {
+            queryParameters = queryParameters.set('tags', tags.join(COLLECTION_FORMATS['pipes']));
         }
 
         let headers = this.defaultHeaders;
@@ -683,6 +752,7 @@ export class UserService {
 
         return this.httpClient.get<Array<Question>>(`${this.basePath}/users/${encodeURIComponent(String(username))}/questions`,
             {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -746,16 +816,23 @@ export class UserService {
      * Returns all questions is shared to the user
      * Returns all questions is shared to the user
      * @param username Username of the user who is shared the questions
+     * @param tags 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getSharedQuestionsOfUser(username: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Question>>;
-    public getSharedQuestionsOfUser(username: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Question>>>;
-    public getSharedQuestionsOfUser(username: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Question>>>;
-    public getSharedQuestionsOfUser(username: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getSharedQuestionsOfUser(username: string, tags?: Array<Array<string>>, observe?: 'body', reportProgress?: boolean): Observable<Array<Question>>;
+    public getSharedQuestionsOfUser(username: string, tags?: Array<Array<string>>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Question>>>;
+    public getSharedQuestionsOfUser(username: string, tags?: Array<Array<string>>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Question>>>;
+    public getSharedQuestionsOfUser(username: string, tags?: Array<Array<string>>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (username === null || username === undefined) {
             throw new Error('Required parameter username was null or undefined when calling getSharedQuestionsOfUser.');
+        }
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (tags) {
+            queryParameters = queryParameters.set('tags', tags.join(COLLECTION_FORMATS['pipes']));
         }
 
         let headers = this.defaultHeaders;
@@ -780,6 +857,7 @@ export class UserService {
 
         return this.httpClient.get<Array<Question>>(`${this.basePath}/users/${encodeURIComponent(String(username))}/sharedQuestions`,
             {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

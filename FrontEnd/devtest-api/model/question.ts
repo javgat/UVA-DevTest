@@ -23,6 +23,7 @@ export interface Question {
     solucion?: string;
     tipoPregunta: Question.TipoPreguntaEnum;
     valorFinal?: number;
+    accesoPublicoNoPublicada: boolean;
 }
 export namespace Question {
     export type TipoPreguntaEnum = 'opciones' | 'string' | 'codigo';

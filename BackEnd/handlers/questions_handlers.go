@@ -14,7 +14,59 @@ import (
 	"github.com/go-openapi/runtime/middleware"
 )
 
-// GetEditQuestions GET /editQuestions. Returns all non-published questions.
+// GetAllEditQuestions GET /allEditQuestions. Returns all non-published questions
+// Auth: Admin
+func GetAllEditQuestions(params question.GetAllEditQuestionsParams, u *models.User) middleware.Responder {
+	if isAdmin(u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			var qs []*dao.Question
+			if len(params.Tags) == 0 {
+				qs, err = dao.GetAllEditQuestions(db)
+			} else {
+				qs, err = dao.GetAllEditQuestionsTags(db, params.Tags)
+			}
+			if err == nil {
+				var mqs []*models.Question
+				mqs, err = dao.ToModelQuestions(qs)
+				if err == nil {
+					return question.NewGetAllEditQuestionsOK().WithPayload(mqs)
+				}
+			}
+		}
+		log.Println("Error en questions_handler GetAllEditQuestions(): ", err)
+		return question.NewGetAllEditQuestionsInternalServerError()
+	}
+	return question.NewGetAllEditQuestionsForbidden()
+}
+
+// GetAllEditQuestions GET /allQuestions. Returns all questions
+// Auth: Admin
+func GetAllQuestions(params question.GetAllQuestionsParams, u *models.User) middleware.Responder {
+	if isAdmin(u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			var qs []*dao.Question
+			if len(params.Tags) == 0 {
+				qs, err = dao.GetAllQuestions(db)
+			} else {
+				qs, err = dao.GetAllQuestionsTags(db, params.Tags)
+			}
+			if err == nil {
+				var mqs []*models.Question
+				mqs, err = dao.ToModelQuestions(qs)
+				if err == nil {
+					return question.NewGetAllQuestionsOK().WithPayload(mqs)
+				}
+			}
+		}
+		log.Println("Error en questions_handler GetAllQuestions(): ", err)
+		return question.NewGetAllQuestionsInternalServerError()
+	}
+	return question.NewGetAllQuestionsForbidden()
+}
+
+// GetEditQuestions GET /editQuestions. Returns all public non-published questions.
 // Auth: Teacher or Admin
 func GetEditQuestions(params question.GetEditQuestionsParams, u *models.User) middleware.Responder {
 	if isTeacherOrAdmin(u) {
@@ -40,7 +92,7 @@ func GetEditQuestions(params question.GetEditQuestionsParams, u *models.User) mi
 	return question.NewGetEditQuestionsForbidden()
 }
 
-// GetQuestions GET /questions. Returns all questions.
+// GetQuestions GET /questions. Returns all public questions.
 // Auth: Teacher or Admin
 func GetQuestions(params question.GetQuestionsParams, u *models.User) middleware.Responder {
 	if isTeacherOrAdmin(u) {
@@ -66,23 +118,32 @@ func GetQuestions(params question.GetQuestionsParams, u *models.User) middleware
 	return question.NewGetQuestionsForbidden()
 }
 
-// GetQuestion GET /questions/{questionid}. Returns a question.
-// Auth: All
+// GetQuestion GET /questions/{questionid}. Returns a public question.
+// Auth: Teacher or Admin si accesoPublicoNoPublicada=true, admin o questionAdmin si false
 func GetQuestion(params question.GetQuestionParams, u *models.User) middleware.Responder {
-	db, err := dbconnection.ConnectDb()
-	if err == nil {
-		var qs *dao.Question
-		qs, err = dao.GetQuestion(db, params.Questionid)
-		if err == nil && qs != nil {
-			var mqs *models.Question
-			mqs, err = dao.ToModelQuestion(qs)
-			if err == nil {
-				return question.NewGetQuestionOK().WithPayload(mqs)
+	if isTeacherOrAdmin(u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			var qs *dao.Question
+			qs, err = dao.GetQuestion(db, params.Questionid)
+			if err == nil && qs != nil {
+				if !*qs.AccesoPublicoNoPublicada {
+					if !(isAdmin(u) || isQuestionAdmin(u, params.Questionid)) {
+						return question.NewGetQuestionForbidden()
+					}
+				}
+				var mqs *models.Question
+				mqs, err = dao.ToModelQuestion(qs)
+				if err == nil {
+					return question.NewGetQuestionOK().WithPayload(mqs)
+				}
 			}
+			return question.NewGetQuestionGone()
 		}
+		log.Println("Error en users_handler GetQuestions(): ", err)
+		return question.NewGetQuestionInternalServerError()
 	}
-	log.Println("Error en users_handler GetQuestions(): ", err)
-	return question.NewGetQuestionInternalServerError()
+	return question.NewGetQuestionForbidden()
 }
 
 // Owner o miembro de team que admin question
@@ -94,15 +155,9 @@ func isQuestionAdmin(u *models.User, questionid int64) bool {
 		if q != nil && err == nil {
 			return true
 		}
-		var ts []*dao.Team
-		ts, err = dao.GetTeamsUsername(db, *u.Username)
-		if err == nil {
-			for _, itemCopy := range ts {
-				q, err = dao.GetQuestionFromTeam(db, *itemCopy.Teamname, questionid)
-				if q != nil && err == nil {
-					return true
-				}
-			}
+		q, err = dao.GetSharedQuestionFromUser(db, *u.Username, questionid)
+		if q != nil && err == nil {
+			return true
 		}
 	}
 	return false

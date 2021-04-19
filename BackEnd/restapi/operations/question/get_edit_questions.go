@@ -33,9 +33,9 @@ func NewGetEditQuestions(ctx *middleware.Context, handler GetEditQuestionsHandle
 
 /* GetEditQuestions swagger:route GET /editQuestions question getEditQuestions
 
-Returns all non-published questions
+Returns all public non-published questions
 
-Returns all non-published questions
+Returns all public non-published questions
 
 */
 type GetEditQuestions struct {

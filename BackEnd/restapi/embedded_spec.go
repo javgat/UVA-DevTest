@@ -136,6 +136,112 @@ func init() {
         }
       }
     },
+    "/allEditQuestions": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all non-published questions",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "question"
+        ],
+        "summary": "Returns all non-published questions",
+        "operationId": "GetAllEditQuestions",
+        "parameters": [
+          {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "collectionFormat": "csv"
+            },
+            "collectionFormat": "pipes",
+            "name": "tags",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "questions found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Question"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/allQuestions": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all questions",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "question"
+        ],
+        "summary": "Returns all questions",
+        "operationId": "GetAllQuestions",
+        "parameters": [
+          {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "collectionFormat": "csv"
+            },
+            "collectionFormat": "pipes",
+            "name": "tags",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "questions found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Question"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
     "/answers": {
       "get": {
         "security": [
@@ -549,14 +655,14 @@ func init() {
             "BearerCookie": []
           }
         ],
-        "description": "Returns all non-published questions",
+        "description": "Returns all public non-published questions",
         "produces": [
           "application/json"
         ],
         "tags": [
           "question"
         ],
-        "summary": "Returns all non-published questions",
+        "summary": "Returns all public non-published questions",
         "operationId": "GetEditQuestions",
         "parameters": [
           {
@@ -1470,14 +1576,14 @@ func init() {
             "BearerCookie": []
           }
         ],
-        "description": "Returns all questions",
+        "description": "Returns all public questions",
         "produces": [
           "application/json"
         ],
         "tags": [
           "question"
         ],
-        "summary": "Returns all questions",
+        "summary": "Returns all public questions",
         "operationId": "GetQuestions",
         "parameters": [
           {
@@ -1553,6 +1659,9 @@ func init() {
           },
           "403": {
             "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
           },
           "500": {
             "$ref": "#/responses/InternalServerError"
@@ -5029,6 +5138,69 @@ func init() {
         }
       }
     },
+    "/users/{username}/publicEditQuestions": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all public non-published questions owned by the user",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns all public non-published questions owned by the user",
+        "operationId": "GetPublicEditQuestionsOfUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who owns the questions",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "collectionFormat": "csv"
+            },
+            "collectionFormat": "pipes",
+            "name": "tags",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "questions found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Question"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
     "/users/{username}/publishedTests": {
       "get": {
         "security": [
@@ -6088,9 +6260,14 @@ func init() {
         "autoCorrect",
         "editable",
         "username",
-        "tipoPregunta"
+        "tipoPregunta",
+        "accesoPublicoNoPublicada"
       ],
       "properties": {
+        "accesoPublicoNoPublicada": {
+          "type": "boolean",
+          "example": false
+        },
         "autoCorrect": {
           "type": "boolean",
           "example": true
@@ -6592,6 +6769,124 @@ func init() {
         }
       }
     },
+    "/allEditQuestions": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all non-published questions",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "question"
+        ],
+        "summary": "Returns all non-published questions",
+        "operationId": "GetAllEditQuestions",
+        "parameters": [
+          {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "collectionFormat": "csv"
+            },
+            "collectionFormat": "pipes",
+            "name": "tags",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "questions found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Question"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/allQuestions": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all questions",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "question"
+        ],
+        "summary": "Returns all questions",
+        "operationId": "GetAllQuestions",
+        "parameters": [
+          {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "collectionFormat": "csv"
+            },
+            "collectionFormat": "pipes",
+            "name": "tags",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "questions found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Question"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
     "/answers": {
       "get": {
         "security": [
@@ -7074,14 +7369,14 @@ func init() {
             "BearerCookie": []
           }
         ],
-        "description": "Returns all non-published questions",
+        "description": "Returns all public non-published questions",
         "produces": [
           "application/json"
         ],
         "tags": [
           "question"
         ],
-        "summary": "Returns all non-published questions",
+        "summary": "Returns all public non-published questions",
         "operationId": "GetEditQuestions",
         "parameters": [
           {
@@ -8154,14 +8449,14 @@ func init() {
             "BearerCookie": []
           }
         ],
-        "description": "Returns all questions",
+        "description": "Returns all public questions",
         "produces": [
           "application/json"
         ],
         "tags": [
           "question"
         ],
-        "summary": "Returns all questions",
+        "summary": "Returns all public questions",
         "operationId": "GetQuestions",
         "parameters": [
           {
@@ -8246,6 +8541,12 @@ func init() {
           },
           "403": {
             "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -12343,6 +12644,78 @@ func init() {
         }
       }
     },
+    "/users/{username}/publicEditQuestions": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all public non-published questions owned by the user",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns all public non-published questions owned by the user",
+        "operationId": "GetPublicEditQuestionsOfUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who owns the questions",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "collectionFormat": "csv"
+            },
+            "collectionFormat": "pipes",
+            "name": "tags",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "questions found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Question"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That user (password and name) does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
     "/users/{username}/publishedTests": {
       "get": {
         "security": [
@@ -13552,9 +13925,14 @@ func init() {
         "autoCorrect",
         "editable",
         "username",
-        "tipoPregunta"
+        "tipoPregunta",
+        "accesoPublicoNoPublicada"
       ],
       "properties": {
+        "accesoPublicoNoPublicada": {
+          "type": "boolean",
+          "example": false
+        },
         "autoCorrect": {
           "type": "boolean",
           "example": true

@@ -76,6 +76,11 @@ type Team struct {
 // swagger:model Question
 type Question struct {
 
+	// acceso publico no publicada
+	// Example: false
+	// Required: true
+	AccesoPublicoNoPublicada *bool `json:"accesoPublicoNoPublicada"`
+
 	// auto correct
 	// Example: true
 	// Required: true

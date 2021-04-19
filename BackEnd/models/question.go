@@ -20,6 +20,11 @@ import (
 // swagger:model Question
 type Question struct {
 
+	// acceso publico no publicada
+	// Example: false
+	// Required: true
+	AccesoPublicoNoPublicada *bool `json:"accesoPublicoNoPublicada"`
+
 	// auto correct
 	// Example: true
 	// Required: true
@@ -76,6 +81,10 @@ type Question struct {
 func (m *Question) Validate(formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.validateAccesoPublicoNoPublicada(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateAutoCorrect(formats); err != nil {
 		res = append(res, err)
 	}
@@ -111,6 +120,15 @@ func (m *Question) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *Question) validateAccesoPublicoNoPublicada(formats strfmt.Registry) error {
+
+	if err := validate.Required("accesoPublicoNoPublicada", "body", m.AccesoPublicoNoPublicada); err != nil {
+		return err
+	}
+
 	return nil
 }
 

@@ -145,6 +145,50 @@ func (o *GetQuestionForbidden) WriteResponse(rw http.ResponseWriter, producer ru
 	}
 }
 
+// GetQuestionGoneCode is the HTTP code returned for type GetQuestionGone
+const GetQuestionGoneCode int = 410
+
+/*GetQuestionGone That user (password and name) does not exist
+
+swagger:response getQuestionGone
+*/
+type GetQuestionGone struct {
+
+	/*
+	  In: Body
+	*/
+	Payload *models.Error `json:"body,omitempty"`
+}
+
+// NewGetQuestionGone creates GetQuestionGone with default headers values
+func NewGetQuestionGone() *GetQuestionGone {
+
+	return &GetQuestionGone{}
+}
+
+// WithPayload adds the payload to the get question gone response
+func (o *GetQuestionGone) WithPayload(payload *models.Error) *GetQuestionGone {
+	o.Payload = payload
+	return o
+}
+
+// SetPayload sets the payload to the get question gone response
+func (o *GetQuestionGone) SetPayload(payload *models.Error) {
+	o.Payload = payload
+}
+
+// WriteResponse to the client
+func (o *GetQuestionGone) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	rw.WriteHeader(410)
+	if o.Payload != nil {
+		payload := o.Payload
+		if err := producer.Produce(rw, payload); err != nil {
+			panic(err) // let the recovery middleware deal with this
+		}
+	}
+}
+
 // GetQuestionInternalServerErrorCode is the HTTP code returned for type GetQuestionInternalServerError
 const GetQuestionInternalServerErrorCode int = 500
 

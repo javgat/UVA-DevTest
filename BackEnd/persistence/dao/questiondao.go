@@ -23,17 +23,18 @@ func ToModelQuestion(q *Question) (*models.Question, error) {
 		u, err := GetUserByID(db, q.Usuarioid)
 		if err == nil {
 			mq := &models.Question{
-				AutoCorrect:   q.AutoCorrect,
-				Editable:      q.Editable,
-				EstimatedTime: q.EstimatedTime,
-				ID:            q.ID,
-				Question:      q.Question,
-				Title:         q.Title,
-				Username:      u.Username,
-				EleccionUnica: q.EleccionUnica, //Puede ser nil
-				Solucion:      q.Solucion,      //Puede ser nil
-				TipoPregunta:  q.TipoPregunta,
-				ValorFinal:    q.ValorFinal,
+				AutoCorrect:              q.AutoCorrect,
+				Editable:                 q.Editable,
+				EstimatedTime:            q.EstimatedTime,
+				ID:                       q.ID,
+				Question:                 q.Question,
+				Title:                    q.Title,
+				Username:                 u.Username,
+				EleccionUnica:            q.EleccionUnica, //Puede ser nil
+				Solucion:                 q.Solucion,      //Puede ser nil
+				TipoPregunta:             q.TipoPregunta,
+				ValorFinal:               q.ValorFinal,
+				AccesoPublicoNoPublicada: q.AccesoPublicoNoPublicada,
 			}
 			return mq, nil
 		}
@@ -63,7 +64,7 @@ func rowsToQuestions(rows *sql.Rows) ([]*Question, error) {
 		var q Question
 		var eleUni sql.NullBool
 		var solu sql.NullString
-		err := rows.Scan(&q.ID, &q.Title, &q.Question, &q.EstimatedTime, &q.AutoCorrect, &q.Editable, &q.Usuarioid, &eleUni, &solu)
+		err := rows.Scan(&q.ID, &q.Title, &q.Question, &q.EstimatedTime, &q.AutoCorrect, &q.Editable, &q.Usuarioid, &eleUni, &solu, &q.AccesoPublicoNoPublicada)
 		var tipo string
 		if eleUni.Valid {
 			q.EleccionUnica = eleUni.Bool
@@ -97,7 +98,7 @@ func rowsToQuestion(rows *sql.Rows) (*Question, error) {
 	return question, err
 }
 
-func GetEditQuestions(db *sql.DB) ([]*Question, error) {
+func GetAllEditQuestions(db *sql.DB) ([]*Question, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
@@ -114,12 +115,46 @@ func GetEditQuestions(db *sql.DB) ([]*Question, error) {
 	return nil, err
 }
 
-func GetQuestions(db *sql.DB) ([]*Question, error) {
+func GetEditQuestions(db *sql.DB) ([]*Question, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var qs []*Question
+	query, err := db.Prepare("SELECT * FROM Pregunta WHERE editable=1 AND accesoPublicoNoPublicada=1")
+	if err == nil {
+		defer query.Close()
+		rows, err := query.Query()
+		if err == nil {
+			qs, err = rowsToQuestions(rows)
+			return qs, err
+		}
+	}
+	return nil, err
+}
+
+func GetAllQuestions(db *sql.DB) ([]*Question, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
 	var qs []*Question
 	query, err := db.Prepare("SELECT * FROM Pregunta")
+	if err == nil {
+		defer query.Close()
+		rows, err := query.Query()
+		if err == nil {
+			qs, err = rowsToQuestions(rows)
+			return qs, err
+		}
+	}
+	return nil, err
+}
+
+func GetQuestions(db *sql.DB) ([]*Question, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var qs []*Question
+	query, err := db.Prepare("SELECT * FROM Pregunta WHERE accesoPublicoNoPublicada=1")
 	if err == nil {
 		defer query.Close()
 		rows, err := query.Query()
@@ -175,7 +210,7 @@ func TagSlicesToInterfaceArr(tags [][]string) []interface{} {
 	return interfaceTags
 }
 
-func GetEditQuestionsTags(db *sql.DB, tags [][]string) ([]*Question, error) {
+func GetAllEditQuestionsTags(db *sql.DB, tags [][]string) ([]*Question, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
@@ -195,12 +230,52 @@ func GetEditQuestionsTags(db *sql.DB, tags [][]string) ([]*Question, error) {
 	return nil, err
 }
 
-func GetQuestionsTags(db *sql.DB, tags [][]string) ([]*Question, error) {
+func GetEditQuestionsTags(db *sql.DB, tags [][]string) ([]*Question, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var qs []*Question
+	initQuery := "SELECT * FROM Pregunta WHERE editable=1 AND accesoPublicoNoPublicada=1 AND "
+	stringPrepare := prepareQueryTags(initQuery, tags, "id", "preguntaid", "PreguntaEtiqueta")
+	query, err := db.Prepare(stringPrepare)
+	if err == nil {
+		defer query.Close()
+		interfaceTags := TagSlicesToInterfaceArr(tags)
+		rows, err := query.Query(interfaceTags...)
+		if err == nil {
+			qs, err = rowsToQuestions(rows)
+			return qs, err
+		}
+	}
+	return nil, err
+}
+
+func GetAllQuestionsTags(db *sql.DB, tags [][]string) ([]*Question, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
 	var qs []*Question
 	initQuery := "SELECT * FROM Pregunta WHERE "
+	stringPrepare := prepareQueryTags(initQuery, tags, "id", "preguntaid", "PreguntaEtiqueta")
+	query, err := db.Prepare(stringPrepare)
+	if err == nil {
+		defer query.Close()
+		interfaceTags := TagSlicesToInterfaceArr(tags)
+		rows, err := query.Query(interfaceTags...)
+		if err == nil {
+			qs, err = rowsToQuestions(rows)
+			return qs, err
+		}
+	}
+	return nil, err
+}
+
+func GetQuestionsTags(db *sql.DB, tags [][]string) ([]*Question, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var qs []*Question
+	initQuery := "SELECT * FROM Pregunta WHERE accesoPublicoNoPublicada=1 AND "
 	stringPrepare := prepareQueryTags(initQuery, tags, "id", "preguntaid", "PreguntaEtiqueta")
 	query, err := db.Prepare(stringPrepare)
 	if err == nil {
@@ -289,6 +364,26 @@ func GetQuestionsOfUser(db *sql.DB, username string) ([]*Question, error) {
 	return nil, err
 }
 
+func GetPublicEditQuestionsOfUser(db *sql.DB, username string) ([]*Question, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	u, err := GetUserUsername(db, username)
+	if err == nil && u != nil {
+		var qs []*Question
+		query, err := db.Prepare("SELECT * FROM Pregunta WHERE usuarioid=? AND editable=1 AND accesoPublicoNoPublicada=1")
+		if err == nil {
+			defer query.Close()
+			rows, err := query.Query(u.ID)
+			if err == nil {
+				qs, err = rowsToQuestions(rows)
+				return qs, err
+			}
+		}
+	}
+	return nil, err
+}
+
 func GetEditQuestionsOfUser(db *sql.DB, username string) ([]*Question, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
@@ -317,6 +412,32 @@ func GetQuestionsOfUserTags(db *sql.DB, username string, tags [][]string) ([]*Qu
 	if err == nil && u != nil {
 		var qs []*Question
 		initQuery := "SELECT * FROM Pregunta WHERE usuarioid=? AND "
+		stringPrepare := prepareQueryTags(initQuery, tags, "id", "preguntaid", "PreguntaEtiqueta")
+		query, err := db.Prepare(stringPrepare)
+		if err == nil {
+			defer query.Close()
+			interfaceTags := TagSlicesToInterfaceArr(tags)
+			var paramsSlice []interface{}
+			paramsSlice = append(paramsSlice, u.ID)
+			interfaceTags = append(paramsSlice, interfaceTags...)
+			rows, err := query.Query(interfaceTags...)
+			if err == nil {
+				qs, err = rowsToQuestions(rows)
+				return qs, err
+			}
+		}
+	}
+	return nil, err
+}
+
+func GetPublicEditQuestionsOfUserTags(db *sql.DB, username string, tags [][]string) ([]*Question, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	u, err := GetUserUsername(db, username)
+	if err == nil && u != nil {
+		var qs []*Question
+		initQuery := "SELECT * FROM Pregunta WHERE usuarioid=? AND editable=1 AND accesoPublicoNoPublicada=1 AND "
 		stringPrepare := prepareQueryTags(initQuery, tags, "id", "preguntaid", "PreguntaEtiqueta")
 		query, err := db.Prepare(stringPrepare)
 		if err == nil {
