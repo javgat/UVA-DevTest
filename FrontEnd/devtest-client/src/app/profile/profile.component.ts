@@ -16,7 +16,7 @@ export class ProfileComponent extends LoggedInController implements OnInit {
 
   profileUser: Usuario
   private routeSub: Subscription
-  id: string | undefined
+  id: string
   pUpdate: PasswordUpdate = {
     oldpass: "",
     newpass: "",
@@ -35,11 +35,16 @@ export class ProfileComponent extends LoggedInController implements OnInit {
     userS: UserService, data: DataService, private authService: AuthService) {
     super(session, router, data, userS)
     this.profileUser = new SessionUser()
+    this.id=""
     this.routeSub = this.route.params.subscribe(params => {
       this.id = params['id']
       this.borrarMensaje()
-      this.getProfile(true)
+      this.doProfileAction()
     });
+  }
+
+  doProfileAction(): void{
+    this.getProfile(true)
   }
 
   ngOnInit(): void {
@@ -52,7 +57,7 @@ export class ProfileComponent extends LoggedInController implements OnInit {
   }
 
   getProfile(primera: boolean){
-    if (this.id != "" && this.id != undefined) {
+    if (this.id != "") {
       this.getProfileUser(this.id, primera)
     } else{
       let msg = "No se pudo obtener el id del usuario"
@@ -80,7 +85,7 @@ export class ProfileComponent extends LoggedInController implements OnInit {
   }
 
   changePass(primera: boolean){
-    if (this.id == undefined) return
+    if (this.id == "") return
     this.userS.putPassword(this.id, this.pUpdate).subscribe(
       resp => {
         console.log("Contraseña cambiada")
@@ -117,7 +122,7 @@ export class ProfileComponent extends LoggedInController implements OnInit {
   }
 
   updateUser(primera: boolean){
-    if (this.id == undefined) return
+    if (this.id == "") return
     this.userS.putUser(this.id, this.editUser).subscribe(
       resp =>{
         this.id = this.editUser.username
@@ -159,7 +164,7 @@ export class ProfileComponent extends LoggedInController implements OnInit {
   }
   
   changeRol(primera: boolean){
-    if (this.id == undefined) return
+    if (this.id == "") return
     this.userS.putRole(this.id, this.editRol).subscribe(
       resp=>{
         this.cambiarMensaje(new Mensaje("Rol actualizado con éxito", Tipo.SUCCESS, true))
@@ -167,6 +172,10 @@ export class ProfileComponent extends LoggedInController implements OnInit {
       },
       err => this.handleErrRelog(err, "cambiar rol de un usuario", primera, this.changeRol, this)
     )
+  }
+
+  checkTeacherOrAdmin(): boolean{
+    return this.getSessionUser().isTeacherOrAdmin()
   }
 
 }

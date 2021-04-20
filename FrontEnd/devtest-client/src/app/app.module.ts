@@ -34,6 +34,9 @@ import { TestTeamsComponent } from './test-teams/test-teams.component';
 import { TestsUserComponent } from './tests-user/tests-user.component';
 import { TestsSharedUserComponent } from './tests-shared-user/tests-shared-user.component';
 import { CustomHttpInterceptorService } from './shared/interceptor.service';
+import { ProfileTeamsComponent } from './profile/profile-teams/profile-teams.component';
+import { ProfilePublicQuestionsComponent } from './profile/profile-public-questions/profile-public-questions.component';
+import { ProfilePublicTestsComponent } from './profile/profile-public-tests/profile-public-tests.component';
 
 export function apiConfigFactory (): Configuration {
   const params: ConfigurationParameters = {
@@ -70,7 +73,10 @@ export function apiConfigFactory (): Configuration {
     TestCreateComponent,
     TestTeamsComponent,
     TestsUserComponent,
-    TestsSharedUserComponent
+    TestsSharedUserComponent,
+    ProfileTeamsComponent,
+    ProfilePublicQuestionsComponent,
+    ProfilePublicTestsComponent
   ],
   imports: [
     BrowserModule,

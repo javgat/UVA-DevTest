@@ -3,30 +3,69 @@
     <div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message" role="alert">
         {{getMensaje().texto}}</div>
     <h2>Usuario: {{profileUser.getUsername()}}</h2>
-    <hr/>
-    <ul>
-        <li>Nombre de usuario: {{profileUser.getUsername()}}</li>
-        <li>Correo electrónico: {{profileUser.getEmail()}}</li>
-        <li>Nombre completo: {{profileUser.getFullname()}}</li>
-        <li>Rol: {{profileUser.getRol()}}</li>
-    </ul>
-    <div *ngIf="checkAdmin()">
-        <p><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editRolModal">
-            Modificar Rol
-        </button></p>
-    </div>
-    <div *ngIf="checkPermisosEditarUser()">
-        <p><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editUserModal">
-            Editar datos
-        </button></p>
-        <p><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editPassModal">
-            Cambiar contraseña
-        </button></p>
+    <hr />
+    <div class="row">
+        <div class="col-sm">
+            <ul>
+                <li>Nombre de usuario: {{profileUser.getUsername()}}</li>
+                <li>Correo electrónico: {{profileUser.getEmail()}}</li>
+                <li>Nombre completo: {{profileUser.getFullname()}}</li>
+                <li>Rol: {{profileUser.getRol()}}</li>
+            </ul>
+            <div class="d-grid gap-2">
+                <div *ngIf="checkPermisosEditarUser()" class="d-grid gap-2">
+                    <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal"
+                        data-bs-target="#editUserModal">
+                        Editar datos
+                    </button>
+                    <button type="button" class="btn btn-warning btn-lg" data-bs-toggle="modal"
+                        data-bs-target="#editPassModal">
+                        Cambiar contraseña
+                    </button>
+                </div>
+                <div *ngIf="checkAdmin()" class="d-grid gap-2">
+                    <button type="button" class="btn btn-warning btn-lg" data-bs-toggle="modal"
+                        data-bs-target="#editRolModal">
+                        Modificar Rol
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm d-grid gap-2">
+            <div class="d-grid gap-2">
+                <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/profile', id, 'teams']">
+                    Equipos
+                </button>
+            </div>
+            <div *ngIf="checkTeacherOrAdmin()" class="d-grid gap-2">
+                <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/profile', id, 'et']">
+                    Tests Editables
+                </button>
+                <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/profile', id, 'q']">
+                    Preguntas
+                </button>
+            </div>
+            <div *ngIf="checkPermisosEditarUser()" class="d-grid gap-2">
+                <hr/>
+                <h3 class="text-center">Privado</h3>
+                <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/u', id, 'et']">
+                    Tests editables
+                </button>
+                <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/u', id, 'set']">
+                    Tests editables compartidos
+                </button>
+                <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/u', id, 'q']">
+                    Preguntas
+                </button>
+                <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/u', id, 'sq']">
+                    Preguntas compartidas
+                </button>
+            </div>
+        </div>
     </div>
     <div *ngIf="checkAdmin()">
         <!-- Modal edit rol-->
-        <div class="modal fade" id="editRolModal" tabindex="-1" aria-labelledby="editRolModalLabel"
-            aria-hidden="true">
+        <div class="modal fade" id="editRolModal" tabindex="-1" aria-labelledby="editRolModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <form ngNativeValidate>
@@ -36,15 +75,15 @@
                         </div>
                         <div class="modal-body">
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="inputRol" id="inputRolAdmin"
-                                    required (change)="onSelectRol('administrador')"/>
+                                <input class="form-check-input" type="radio" name="inputRol" id="inputRolAdmin" required
+                                    (change)="onSelectRol('administrador')" />
                                 <label class="form-check-label" for="inputRolAdmin">
                                     Administrador
                                 </label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="inputRol" id="inputRolProfesor"
-                                    required (change)="onSelectRol('profesor')"/>
+                                    required (change)="onSelectRol('profesor')" />
                                 <label class="form-check-label" for="inputRolProfesor">
                                     Profesor
                                 </label>
@@ -59,7 +98,8 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <input type="submit" value="Guardar" (click)='changeRolSubmit()' data-bs-dismiss="modal" class="btn btn-primary" id="buttonChangeRol"/>
+                            <input type="submit" value="Guardar" (click)='changeRolSubmit()' data-bs-dismiss="modal"
+                                class="btn btn-primary" id="buttonChangeRol" />
                         </div>
                     </form>
                 </div>
@@ -101,7 +141,8 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <input type="submit" (click)='editUserSubmit()' value="Guardar" data-bs-dismiss="modal" class="btn btn-primary" id="buttonChangeUser" />
+                            <input type="submit" (click)='editUserSubmit()' value="Guardar" data-bs-dismiss="modal"
+                                class="btn btn-primary" id="buttonChangeUser" />
                         </div>
                     </form>
                 </div>
@@ -132,7 +173,8 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <input type="submit" value="Guardar" (click)='changePassSubmit()' data-bs-dismiss="modal" class="btn btn-primary" id="buttonChangePass" />
+                            <input type="submit" value="Guardar" (click)='changePassSubmit()' data-bs-dismiss="modal"
+                                class="btn btn-primary" id="buttonChangePass" />
                         </div>
                     </form>
                 </div>

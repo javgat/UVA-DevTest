@@ -61,11 +61,8 @@ func isTeamMember(teamname string, u *models.User) bool {
 }
 
 // GetUsers GET /users. Returns all users.
-// Auth: Teacher or Admin
+// Auth: All
 func GetUsers(params user.GetUsersParams, u *models.User) middleware.Responder {
-	if !isTeacherOrAdmin(u) {
-		return user.NewGetUsersForbidden()
-	}
 	db, err := dbconnection.ConnectDb()
 	if err != nil {
 		log.Println("Error en users_handler GetUsers(): ", err)
@@ -81,32 +78,28 @@ func GetUsers(params user.GetUsersParams, u *models.User) middleware.Responder {
 }
 
 // GetUser GET /users/{username}
-// Auth: Current User or Admin
+// Auth: All
 func GetUser(params user.GetUserParams, u *models.User) middleware.Responder {
-	if userOrAdmin(params.Username, u) {
-		if *u.Username == params.Username {
-			return user.NewGetUserOK().WithPayload(u)
-		}
-		db, err := dbconnection.ConnectDb()
-		if err != nil {
-			log.Println("Error en users_handler GetUser(): ", err)
-			return user.NewGetUserInternalServerError()
-		}
-		us, err := dao.GetUserUsername(db, params.Username)
-		if err != nil {
-			log.Println("Error en users_handler GetUser(): ", err)
-			return user.NewGetUserInternalServerError()
-		} else if us == nil {
-			us, err = dao.GetUserEmail(db, params.Username)
-			if err != nil || us == nil {
-				log.Println("No existe user en users_handler GetUser(): ", err)
-				return user.NewGetUserGone() //410
-			}
-		}
-		return user.NewGetUserOK().WithPayload(dao.ToModelUser(us))
-
+	if *u.Username == params.Username {
+		return user.NewGetUserOK().WithPayload(u)
 	}
-	return user.NewGetUserForbidden()
+	db, err := dbconnection.ConnectDb()
+	if err != nil {
+		log.Println("Error en users_handler GetUser(): ", err)
+		return user.NewGetUserInternalServerError()
+	}
+	us, err := dao.GetUserUsername(db, params.Username)
+	if err != nil {
+		log.Println("Error en users_handler GetUser(): ", err)
+		return user.NewGetUserInternalServerError()
+	} else if us == nil {
+		us, err = dao.GetUserEmail(db, params.Username)
+		if err != nil || us == nil {
+			log.Println("No existe user en users_handler GetUser(): ", err)
+			return user.NewGetUserGone() //410
+		}
+	}
+	return user.NewGetUserOK().WithPayload(dao.ToModelUser(us))
 }
 
 func userUpdateToUser(uu *models.UserUpdate) *models.User {
@@ -258,41 +251,35 @@ func PutRole(params user.PutRoleParams, u *models.User) middleware.Responder {
 }
 
 // GetTeamsOfUser GET /users/{username}/teams
-// Auth: Current User or Admin
+// Auth: All
 func GetTeamsOfUser(params user.GetTeamsOfUserParams, u *models.User) middleware.Responder {
 	var teams []*dao.Team
-	if userOrAdmin(params.Username, u) {
-		db, err := dbconnection.ConnectDb()
-		if err == nil {
-			teams, err = dao.GetTeamsUsername(db, params.Username)
-			if err == nil && teams != nil {
-				return user.NewGetTeamsOfUserOK().WithPayload(dao.ToModelsTeams(teams))
-			}
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		teams, err = dao.GetTeamsUsername(db, params.Username)
+		if err == nil && teams != nil {
+			return user.NewGetTeamsOfUserOK().WithPayload(dao.ToModelsTeams(teams))
 		}
-		log.Println("Error en users_handler GetTeamsOfUser(): ", err)
-		return user.NewGetTeamsOfUserInternalServerError()
 	}
-	return user.NewGetTeamsOfUserForbidden()
+	log.Println("Error en users_handler GetTeamsOfUser(): ", err)
+	return user.NewGetTeamsOfUserInternalServerError()
 }
 
 // GET /users/{username}/teams/{teamname}
-// Auth: Current User or Admin
+// Auth: All
 func GetTeamFromUser(params user.GetTeamFromUserParams, u *models.User) middleware.Responder {
-	if userOrAdmin(params.Username, u) {
-		db, err := dbconnection.ConnectDb()
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		t, err := dao.GetTeamFromUser(db, params.Teamname, params.Username)
 		if err == nil {
-			t, err := dao.GetTeamFromUser(db, params.Teamname, params.Username)
-			if err == nil {
-				if t != nil {
-					return user.NewGetTeamFromUserOK().WithPayload(dao.ToModelTeam(t))
-				}
-				return user.NewGetTeamFromUserGone()
+			if t != nil {
+				return user.NewGetTeamFromUserOK().WithPayload(dao.ToModelTeam(t))
 			}
 			return user.NewGetTeamFromUserGone()
 		}
-		return user.NewGetTeamFromUserInternalServerError()
+		return user.NewGetTeamFromUserGone()
 	}
-	return user.NewGetTeamFromUserForbidden()
+	return user.NewGetTeamFromUserInternalServerError()
 }
 
 // GET /users/{username}/sharedQuestions

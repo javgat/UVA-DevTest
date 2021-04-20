@@ -6,6 +6,9 @@ import { AdminComponent } from './admin/admin.component';
 import { CreateTeamComponent } from './create-team/create-team.component';
 import { LoginComponent } from './login/login.component';
 import { MainComponent } from './main/main.component';
+import { ProfilePublicQuestionsComponent } from './profile/profile-public-questions/profile-public-questions.component';
+import { ProfilePublicTestsComponent } from './profile/profile-public-tests/profile-public-tests.component';
+import { ProfileTeamsComponent } from './profile/profile-teams/profile-teams.component';
 import { ProfileComponent } from './profile/profile.component';
 import { QuestionCreateComponent } from './question-create/question-create.component';
 import { QuestionTeamsComponent } from './question-teams/question-teams.component';
@@ -26,7 +29,14 @@ import { TestsComponent } from './tests/tests.component';
 const routes: Routes = [
   {path: 'signin', component: SigninComponent},
   {path: 'login', component: LoginComponent},
-  {path: 'profile/:id', component: ProfileComponent},
+  {path: 'profile/:id', component: ProfileComponent}, //Profile: Lo ven todos
+  {path: 'profile/:id/teams', component: ProfileTeamsComponent},
+  {path: 'profile/:id/et', component: ProfilePublicTestsComponent},
+  {path: 'profile/:id/q', component: ProfilePublicQuestionsComponent},
+  {path: 'u/:username/q', component: QuestionsUserComponent}, // U (User): Lo ven el usuario y el admin
+  {path: 'u/:username/sq', component: QuestionsSharedUserComponent},
+  {path: 'u/:username/et', component: TestsUserComponent},
+  {path: 'u/:username/set', component: TestsSharedUserComponent},
   {path: 'admin', component: AdminComponent},
   {path: 'admin/users', component: AdminUsersComponent},
   {path: 'admin/teams', component: AdminTeamsComponent},
@@ -38,14 +48,10 @@ const routes: Routes = [
   {path: 'q/:id', component: QuestionComponent},
   {path: 'q/:id/teams', component: QuestionTeamsComponent},
   {path: 'qCreate', component: QuestionCreateComponent},
-  {path: 'u/:username/q', component: QuestionsUserComponent},
-  {path: 'u/:username/sq', component: QuestionsSharedUserComponent},
   {path: 'et', component: TestsComponent},
   {path: 'et/:testid', component: TestComponent},
   {path: 'etCreate', component: TestCreateComponent},
   {path: 'et/:testid/teams', component: TestTeamsComponent},
-  {path: 'u/:username/et', component: TestsUserComponent},
-  {path: 'u/:username/set', component: TestsSharedUserComponent},
   {path: '**', component: MainComponent, pathMatch:'full'}
 ];
 

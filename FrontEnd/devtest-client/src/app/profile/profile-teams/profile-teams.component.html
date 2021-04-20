@@ -1,0 +1,29 @@
+<app-nav-bar></app-nav-bar>
+<button class="button btn btn-outline-primary m-3" [routerLink]="['/profile', id]">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-double-left"
+        viewBox="0 0 16 16">
+        <path fill-rule="evenodd"
+            d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+        <path fill-rule="evenodd"
+            d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+    </svg>
+    Volver
+</button>
+<div class="mt-5">
+    <h2>Equipos a los que pertenece: {{id}}</h2>
+    <table class="table table-striped table-hover table-primary my-3">
+        <thead>
+            <tr>
+                <th>Nombre de equipo</th>
+                <th>Tipo</th>
+            </tr>
+        </thead>
+        <tbody *ngFor="let team of teams">
+            <tr role="button" [routerLink]="['/teams', team.teamname]">
+                <td>{{team.teamname}}</td>
+                <td *ngIf="team.soloProfesores">Profesores</td>
+                <td *ngIf="!team.soloProfesores">Estudiantes</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
