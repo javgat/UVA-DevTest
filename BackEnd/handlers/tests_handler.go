@@ -98,7 +98,7 @@ func GetPublicEditTests(params test.GetPublicEditTestsParams, u *models.User) mi
 				}
 			}
 		}
-		log.Println("Error en users_handler GetEditTests(): ", err)
+		log.Println("Error en users_handler GetPublicEditTests(): ", err)
 		return test.NewGetPublicEditTestsInternalServerError()
 	}
 	return test.NewGetPublicEditTestsForbidden()

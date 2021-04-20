@@ -35,12 +35,12 @@ export class TestsComponent extends LoggedInTeacherController implements OnInit 
 
   getTests(primera: boolean) {
     if (this.includeNonEdit) {
-      this.tS.getTests().subscribe(
+      this.tS.getPublicTests().subscribe(
         resp => this.tests = resp,
         err => this.handleErrRelog(err, "obtener tests", primera, this.getTests, this)
       )
     } else {
-      this.tS.getEditTests().subscribe(
+      this.tS.getPublicEditTests().subscribe(
         resp => this.tests = resp,
         err => this.handleErrRelog(err, "obtener tests editables", primera, this.getTests, this)
       )

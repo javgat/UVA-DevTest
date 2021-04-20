@@ -479,19 +479,17 @@ func GetSharedTests(params user.GetSharedTestsFromUserParams, u *models.User) mi
 	if userOrAdmin(params.Username, u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			t, err := dao.GetSharedTestsFromUser(db, params.Username)
+			var t []*dao.Test
+			t, err = dao.GetSharedTestsFromUser(db, params.Username)
 			if err == nil {
-				if t != nil {
-					mt, err := dao.ToModelTests(t)
-					if mt != nil && err == nil {
-						return user.NewGetSharedTestsFromUserOK().WithPayload(mt)
-					}
-					user.NewGetSharedTestsFromUserInternalServerError()
+				var mt []*models.Test
+				mt, err = dao.ToModelTests(t)
+				if err == nil {
+					return user.NewGetSharedTestsFromUserOK().WithPayload(mt)
 				}
-				mt := []*models.Test{}
-				return user.NewGetSharedTestsFromUserOK().WithPayload(mt)
 			}
 		}
+		log.Println("Error en GetSharedTests: ", err)
 		return user.NewGetSharedTestsFromUserInternalServerError()
 	}
 	return user.NewGetSharedTestsFromUserForbidden()

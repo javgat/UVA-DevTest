@@ -53,7 +53,7 @@ export class TestTeamsComponent extends LoggedInTeacherController implements OnI
   getTest(primera: boolean) {
     this.tS.getTest(this.id).subscribe(
       resp => {
-        this.test = new Examen(resp.title, resp.description, resp.accesoPublico, resp.editable, resp.maxSeconds, resp.username, resp.id)
+        this.test = new Examen(resp.title, resp.description, resp.accesoPublico, resp.editable, resp.maxSeconds, resp.username, resp.id, resp.accesoPublicoNoPublicado)
         this.getTeamsTest(true)
         if (!this.getSessionUser().isEmpty())
           this.getIsInAdminTeam(true)
@@ -63,7 +63,7 @@ export class TestTeamsComponent extends LoggedInTeacherController implements OnI
   }
 
   getTeamsTest(primera: boolean){
-    this.tS.getTeamsFromTest(this.id).subscribe(
+    this.tS.getAdminTeamsFromTest(this.id).subscribe(
       resp =>{
         this.teams = resp
       },
@@ -94,7 +94,7 @@ export class TestTeamsComponent extends LoggedInTeacherController implements OnI
   }
 
   addTeam(primera: boolean){
-    this.tS.addTeamToTest(this.addTeamTeamname, this.id).subscribe(
+    this.tS.addAdminTeamToTest(this.addTeamTeamname, this.id).subscribe(
       resp => this.getTeamsTest(true),
       err => this.handleErrRelog(err, "añadir equipo a un test", primera, this.addTeam, this)
     )
@@ -106,7 +106,7 @@ export class TestTeamsComponent extends LoggedInTeacherController implements OnI
   }
 
   kickT(primera: boolean){
-    this.tS.removeTeamToTest(this.kickingTeamname, this.id).subscribe(
+    this.tS.removeAdminTeamToTest(this.kickingTeamname, this.id).subscribe(
       resp => this.getTeamsTest(true),
       err => this.handleErrRelog(err, "eliminar equipo de un test", primera, this.kickT, this)
     )

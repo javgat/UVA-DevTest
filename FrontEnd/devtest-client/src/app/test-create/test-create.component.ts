@@ -21,7 +21,8 @@ export class TestCreateComponent extends LoggedInTeacherController implements On
       accesoPublico: false,
       editable: true,
       username: "",
-      maxSeconds: 0
+      maxSeconds: 0,
+      accesoPublicoNoPublicado: true
     }
   }
 

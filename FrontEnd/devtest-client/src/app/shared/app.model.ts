@@ -169,7 +169,8 @@ export class Examen implements Test{
     accesoPublico: boolean;
     editable: boolean;
     username: string;
-    constructor(title?: string, description?: string, accesoPublico?: boolean, editable?: boolean, maxSeconds?: number, username?: string, id?: number){
+    accesoPublicoNoPublicado: boolean;
+    constructor(title?: string, description?: string, accesoPublico?: boolean, editable?: boolean, maxSeconds?: number, username?: string, id?: number, accesoPublicoNoPublicado?: boolean){
         this.title=title || ""
         this.description=description || ""
         this.maxSeconds=maxSeconds || 0
@@ -177,6 +178,7 @@ export class Examen implements Test{
         this.editable=editable || false
         this.username=username || ""
         this.id=id || 0
+        this.accesoPublicoNoPublicado=accesoPublicoNoPublicado || false
     }
 }
 

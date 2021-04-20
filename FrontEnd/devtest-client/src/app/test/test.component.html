@@ -33,7 +33,8 @@
             <span style="white-space: pre-line">{{test.description}}</span>
         </div>
         <p><b>Tiempo disponible:</b> {{test.maxSeconds}} segundos</p>
-        <p><b>Acceso público: </b> <span *ngIf="test.accesoPublico">Sí</span><span *ngIf="!test.accesoPublico">No</span>
+        <p><b>Acceso público a realización: </b> <span *ngIf="test.accesoPublico">Sí</span><span *ngIf="!test.accesoPublico">No</span>
+        <p><b>Visionado público para profesores: </b> <span *ngIf="test.accesoPublicoNoPublicado">Sí</span><span *ngIf="!test.accesoPublicoNoPublicado">No</span>
         </p>
         <p><button class="btn btn-primary" type="button" [routerLink]="['/et', test.id, 'teams']">Ver equipos
                 administradores</button></p>
@@ -115,7 +116,13 @@
                             <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault"
                                 [checked]="testEdit.accesoPublico"
                                 (change)="testEdit.accesoPublico = !testEdit.accesoPublico">
-                            <label class="form-check-label" for="flexSwitchCheckDefault">Acceso público</label>
+                            <label class="form-check-label" for="flexSwitchCheckDefault">Acceso público a realización</label>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckLectura"
+                                [checked]="testEdit.accesoPublicoNoPublicado"
+                                (change)="testEdit.accesoPublicoNoPublicado = !testEdit.accesoPublicoNoPublicado">
+                            <label class="form-check-label" for="flexSwitchCheckLectura">Visionado público para profesores</label>
                         </div>
                     </div>
                     <div class="modal-footer">
