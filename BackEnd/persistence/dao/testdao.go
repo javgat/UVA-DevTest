@@ -20,13 +20,14 @@ func ToModelTest(t *Test) (*models.Test, error) {
 		u, err := GetUserByID(db, t.Usuarioid)
 		if err == nil {
 			mt := &models.Test{
-				AccesoPublico: t.AccesoPublico,
-				Editable:      t.Editable,
-				Description:   t.Description,
-				ID:            t.ID,
-				MaxSeconds:    t.MaxSeconds,
-				Title:         t.Title,
-				Username:      u.Username,
+				AccesoPublico:            t.AccesoPublico,
+				AccesoPublicoNoPublicado: t.AccesoPublicoNoPublicado,
+				Editable:                 t.Editable,
+				Description:              t.Description,
+				ID:                       t.ID,
+				MaxSeconds:               t.MaxSeconds,
+				Title:                    t.Title,
+				Username:                 u.Username,
 			}
 			return mt, nil
 		}
@@ -54,7 +55,7 @@ func rowsToTests(rows *sql.Rows) ([]*Test, error) {
 	var tests []*Test
 	for rows.Next() {
 		var t Test
-		err := rows.Scan(&t.ID, &t.Title, &t.Description, &t.MaxSeconds, &t.AccesoPublico, &t.Editable, &t.Usuarioid)
+		err := rows.Scan(&t.ID, &t.Title, &t.Description, &t.MaxSeconds, &t.AccesoPublico, &t.Editable, &t.Usuarioid, &t.AccesoPublicoNoPublicado)
 		if err != nil {
 			return tests, err
 		}
@@ -76,7 +77,7 @@ func rowsToTest(rows *sql.Rows) (*Test, error) {
 	return test, err
 }
 
-func GetTests(db *sql.DB) ([]*Test, error) {
+func GetAllTests(db *sql.DB) ([]*Test, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
@@ -93,12 +94,46 @@ func GetTests(db *sql.DB) ([]*Test, error) {
 	return nil, err
 }
 
-func GetEditTests(db *sql.DB) ([]*Test, error) {
+func GetAllEditTests(db *sql.DB) ([]*Test, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
 	var ts []*Test
 	query, err := db.Prepare("SELECT * FROM Test WHERE editable=1")
+	if err == nil {
+		defer query.Close()
+		rows, err := query.Query()
+		if err == nil {
+			ts, err = rowsToTests(rows)
+			return ts, err
+		}
+	}
+	return nil, err
+}
+
+func GetTests(db *sql.DB) ([]*Test, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var ts []*Test
+	query, err := db.Prepare("SELECT * FROM Test WHERE accesoPublicoNoPublicado=1")
+	if err == nil {
+		defer query.Close()
+		rows, err := query.Query()
+		if err == nil {
+			ts, err = rowsToTests(rows)
+			return ts, err
+		}
+	}
+	return nil, err
+}
+
+func GetEditTests(db *sql.DB) ([]*Test, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var ts []*Test
+	query, err := db.Prepare("SELECT * FROM Test WHERE editable=1 AND accesoPublicoNoPublicado=1")
 	if err == nil {
 		defer query.Close()
 		rows, err := query.Query()
@@ -155,6 +190,26 @@ func DeleteTest(db *sql.DB, testid int64) error {
 		_, err = query.Exec(testid)
 	}
 	return err
+}
+
+func GetPublicEditTestsFromUser(db *sql.DB, username string) ([]*Test, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	u, err := GetUserUsername(db, username)
+	if err == nil {
+		var ts []*Test
+		query, err := db.Prepare("SELECT * FROM Test WHERE usuarioid=? AND accesoPublicoNoPublicado=1")
+		if err == nil {
+			defer query.Close()
+			rows, err := query.Query(u.ID)
+			if err == nil {
+				ts, err = rowsToTests(rows)
+				return ts, err
+			}
+		}
+	}
+	return nil, err
 }
 
 func GetTestsFromUser(db *sql.DB, username string) ([]*Test, error) {

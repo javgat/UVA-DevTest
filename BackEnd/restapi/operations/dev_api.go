@@ -97,8 +97,14 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		QuestionGetAllEditQuestionsHandler: question.GetAllEditQuestionsHandlerFunc(func(params question.GetAllEditQuestionsParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation question.GetAllEditQuestions has not yet been implemented")
 		}),
+		TestGetAllEditTestsHandler: test.GetAllEditTestsHandlerFunc(func(params test.GetAllEditTestsParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation test.GetAllEditTests has not yet been implemented")
+		}),
 		QuestionGetAllQuestionsHandler: question.GetAllQuestionsHandlerFunc(func(params question.GetAllQuestionsParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation question.GetAllQuestions has not yet been implemented")
+		}),
+		TestGetAllTestsHandler: test.GetAllTestsHandlerFunc(func(params test.GetAllTestsParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation test.GetAllTests has not yet been implemented")
 		}),
 		AnswerGetAnswerHandler: answer.GetAnswerHandlerFunc(func(params answer.GetAnswerParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation answer.GetAnswer has not yet been implemented")
@@ -160,8 +166,17 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		QuestionGetOptionsFromQuestionHandler: question.GetOptionsFromQuestionHandlerFunc(func(params question.GetOptionsFromQuestionParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation question.GetOptionsFromQuestion has not yet been implemented")
 		}),
+		UserGetOwnedPTestsFromUserHandler: user.GetOwnedPTestsFromUserHandlerFunc(func(params user.GetOwnedPTestsFromUserParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation user.GetOwnedPTestsFromUser has not yet been implemented")
+		}),
 		UserGetPublicEditQuestionsOfUserHandler: user.GetPublicEditQuestionsOfUserHandlerFunc(func(params user.GetPublicEditQuestionsOfUserParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation user.GetPublicEditQuestionsOfUser has not yet been implemented")
+		}),
+		UserGetPublicEditTestsFromUserHandler: user.GetPublicEditTestsFromUserHandlerFunc(func(params user.GetPublicEditTestsFromUserParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation user.GetPublicEditTestsFromUser has not yet been implemented")
+		}),
+		UserGetPublicOwnedPTestsFromUserHandler: user.GetPublicOwnedPTestsFromUserHandlerFunc(func(params user.GetPublicOwnedPTestsFromUserParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation user.GetPublicOwnedPTestsFromUser has not yet been implemented")
 		}),
 		PublishedTestGetPublicPublishedTestHandler: published_test.GetPublicPublishedTestHandlerFunc(func(params published_test.GetPublicPublishedTestParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation published_test.GetPublicPublishedTest has not yet been implemented")
@@ -503,8 +518,12 @@ type DevAPI struct {
 	TeamGetAdminsHandler team.GetAdminsHandler
 	// QuestionGetAllEditQuestionsHandler sets the operation handler for the get all edit questions operation
 	QuestionGetAllEditQuestionsHandler question.GetAllEditQuestionsHandler
+	// TestGetAllEditTestsHandler sets the operation handler for the get all edit tests operation
+	TestGetAllEditTestsHandler test.GetAllEditTestsHandler
 	// QuestionGetAllQuestionsHandler sets the operation handler for the get all questions operation
 	QuestionGetAllQuestionsHandler question.GetAllQuestionsHandler
+	// TestGetAllTestsHandler sets the operation handler for the get all tests operation
+	TestGetAllTestsHandler test.GetAllTestsHandler
 	// AnswerGetAnswerHandler sets the operation handler for the get answer operation
 	AnswerGetAnswerHandler answer.GetAnswerHandler
 	// UserGetAnswerFromUserHandler sets the operation handler for the get answer from user operation
@@ -545,8 +564,14 @@ type DevAPI struct {
 	PublishedTestGetOptionsFromPublishedQuestionHandler published_test.GetOptionsFromPublishedQuestionHandler
 	// QuestionGetOptionsFromQuestionHandler sets the operation handler for the get options from question operation
 	QuestionGetOptionsFromQuestionHandler question.GetOptionsFromQuestionHandler
+	// UserGetOwnedPTestsFromUserHandler sets the operation handler for the get owned p tests from user operation
+	UserGetOwnedPTestsFromUserHandler user.GetOwnedPTestsFromUserHandler
 	// UserGetPublicEditQuestionsOfUserHandler sets the operation handler for the get public edit questions of user operation
 	UserGetPublicEditQuestionsOfUserHandler user.GetPublicEditQuestionsOfUserHandler
+	// UserGetPublicEditTestsFromUserHandler sets the operation handler for the get public edit tests from user operation
+	UserGetPublicEditTestsFromUserHandler user.GetPublicEditTestsFromUserHandler
+	// UserGetPublicOwnedPTestsFromUserHandler sets the operation handler for the get public owned p tests from user operation
+	UserGetPublicOwnedPTestsFromUserHandler user.GetPublicOwnedPTestsFromUserHandler
 	// PublishedTestGetPublicPublishedTestHandler sets the operation handler for the get public published test operation
 	PublishedTestGetPublicPublishedTestHandler published_test.GetPublicPublishedTestHandler
 	// PublishedTestGetPublicPublishedTestsHandler sets the operation handler for the get public published tests operation
@@ -844,8 +869,14 @@ func (o *DevAPI) Validate() error {
 	if o.QuestionGetAllEditQuestionsHandler == nil {
 		unregistered = append(unregistered, "question.GetAllEditQuestionsHandler")
 	}
+	if o.TestGetAllEditTestsHandler == nil {
+		unregistered = append(unregistered, "test.GetAllEditTestsHandler")
+	}
 	if o.QuestionGetAllQuestionsHandler == nil {
 		unregistered = append(unregistered, "question.GetAllQuestionsHandler")
+	}
+	if o.TestGetAllTestsHandler == nil {
+		unregistered = append(unregistered, "test.GetAllTestsHandler")
 	}
 	if o.AnswerGetAnswerHandler == nil {
 		unregistered = append(unregistered, "answer.GetAnswerHandler")
@@ -907,8 +938,17 @@ func (o *DevAPI) Validate() error {
 	if o.QuestionGetOptionsFromQuestionHandler == nil {
 		unregistered = append(unregistered, "question.GetOptionsFromQuestionHandler")
 	}
+	if o.UserGetOwnedPTestsFromUserHandler == nil {
+		unregistered = append(unregistered, "user.GetOwnedPTestsFromUserHandler")
+	}
 	if o.UserGetPublicEditQuestionsOfUserHandler == nil {
 		unregistered = append(unregistered, "user.GetPublicEditQuestionsOfUserHandler")
+	}
+	if o.UserGetPublicEditTestsFromUserHandler == nil {
+		unregistered = append(unregistered, "user.GetPublicEditTestsFromUserHandler")
+	}
+	if o.UserGetPublicOwnedPTestsFromUserHandler == nil {
+		unregistered = append(unregistered, "user.GetPublicOwnedPTestsFromUserHandler")
 	}
 	if o.PublishedTestGetPublicPublishedTestHandler == nil {
 		unregistered = append(unregistered, "published_test.GetPublicPublishedTestHandler")
@@ -1330,7 +1370,15 @@ func (o *DevAPI) initHandlerCache() {
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
+	o.handlers["GET"]["/allEditTests"] = test.NewGetAllEditTests(o.context, o.TestGetAllEditTestsHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
 	o.handlers["GET"]["/allQuestions"] = question.NewGetAllQuestions(o.context, o.QuestionGetAllQuestionsHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/allTests"] = test.NewGetAllTests(o.context, o.TestGetAllTestsHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
@@ -1414,7 +1462,19 @@ func (o *DevAPI) initHandlerCache() {
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
+	o.handlers["GET"]["/users/{username}/ownedPTests"] = user.NewGetOwnedPTestsFromUser(o.context, o.UserGetOwnedPTestsFromUserHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
 	o.handlers["GET"]["/users/{username}/publicEditQuestions"] = user.NewGetPublicEditQuestionsOfUser(o.context, o.UserGetPublicEditQuestionsOfUserHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/users/{username}/publicEditTests"] = user.NewGetPublicEditTestsFromUser(o.context, o.UserGetPublicEditTestsFromUserHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/users/{username}/publicOwnedPTests"] = user.NewGetPublicOwnedPTestsFromUser(o.context, o.UserGetPublicOwnedPTestsFromUserHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}

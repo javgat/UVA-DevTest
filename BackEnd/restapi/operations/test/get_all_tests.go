@@ -13,42 +13,42 @@ import (
 	"uva-devtest/models"
 )
 
-// GetTestsHandlerFunc turns a function with the right signature into a get tests handler
-type GetTestsHandlerFunc func(GetTestsParams, *models.User) middleware.Responder
+// GetAllTestsHandlerFunc turns a function with the right signature into a get all tests handler
+type GetAllTestsHandlerFunc func(GetAllTestsParams, *models.User) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn GetTestsHandlerFunc) Handle(params GetTestsParams, principal *models.User) middleware.Responder {
+func (fn GetAllTestsHandlerFunc) Handle(params GetAllTestsParams, principal *models.User) middleware.Responder {
 	return fn(params, principal)
 }
 
-// GetTestsHandler interface for that can handle valid get tests params
-type GetTestsHandler interface {
-	Handle(GetTestsParams, *models.User) middleware.Responder
+// GetAllTestsHandler interface for that can handle valid get all tests params
+type GetAllTestsHandler interface {
+	Handle(GetAllTestsParams, *models.User) middleware.Responder
 }
 
-// NewGetTests creates a new http.Handler for the get tests operation
-func NewGetTests(ctx *middleware.Context, handler GetTestsHandler) *GetTests {
-	return &GetTests{Context: ctx, Handler: handler}
+// NewGetAllTests creates a new http.Handler for the get all tests operation
+func NewGetAllTests(ctx *middleware.Context, handler GetAllTestsHandler) *GetAllTests {
+	return &GetAllTests{Context: ctx, Handler: handler}
 }
 
-/* GetTests swagger:route GET /tests test getTests
+/* GetAllTests swagger:route GET /allTests test getAllTests
 
-Returns all public tests
+Returns all tests
 
 Returns all tests
 
 */
-type GetTests struct {
+type GetAllTests struct {
 	Context *middleware.Context
-	Handler GetTestsHandler
+	Handler GetAllTestsHandler
 }
 
-func (o *GetTests) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
+func (o *GetAllTests) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	route, rCtx, _ := o.Context.RouteInfo(r)
 	if rCtx != nil {
 		*r = *rCtx
 	}
-	var Params = NewGetTestsParams()
+	var Params = NewGetAllTestsParams()
 	uprinc, aCtx, err := o.Context.Authorize(r, route)
 	if err != nil {
 		o.Context.Respond(rw, r, route.Produces, route, err)

@@ -144,6 +144,11 @@ type Test struct {
 	// Required: true
 	AccesoPublico *bool `json:"accesoPublico"`
 
+	// acceso publico no publicado
+	// Example: true
+	// Required: true
+	AccesoPublicoNoPublicado *bool `json:"accesoPublicoNoPublicado"`
+
 	// description
 	// Example: En este test se evaluaran los conocimientos respecto al lenguaje de programación Java
 	// Required: true

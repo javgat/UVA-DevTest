@@ -520,16 +520,34 @@ func GetSharedTest(params user.GetSharedTestFromUserParams, u *models.User) midd
 	return user.NewGetSharedTestFromUserForbidden()
 }
 
-// GET /users/{username}/tests
+// GET /users/{username}/publicEditTests
 // Auth: Teacher or Admin
-func GetTestsFromUser(params user.GetTestsFromUserParams, u *models.User) middleware.Responder {
+func GetPublicETestsFromUser(params user.GetPublicEditTestsFromUserParams, u *models.User) middleware.Responder {
 	if isTeacherOrAdmin(u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			t, err := dao.GetPublicEditTestsFromUser(db, params.Username)
+			if err == nil {
+				mt, err := dao.ToModelTests(t)
+				if mt != nil && err == nil {
+					return user.NewGetPublicEditTestsFromUserOK().WithPayload(mt)
+				}
+				return user.NewGetPublicEditTestsFromUserGone()
+			}
+		}
+		return user.NewGetPublicEditTestsFromUserInternalServerError()
+	}
+	return user.NewGetPublicEditTestsFromUserForbidden()
+}
+
+// GET /users/{username}/tests
+// Auth: Current User or Admin
+func GetTestsFromUser(params user.GetTestsFromUserParams, u *models.User) middleware.Responder {
+	if userOrAdmin(params.Username, u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			t, err := dao.GetTestsFromUser(db, params.Username)
 			if err == nil {
-				log.Print(t)
-				log.Print(err)
 				mt, err := dao.ToModelTests(t)
 				if mt != nil && err == nil {
 					return user.NewGetTestsFromUserOK().WithPayload(mt)
@@ -618,6 +636,43 @@ func GetInvitedTest(params user.GetInvitedTestFromUserParams, u *models.User) mi
 		return user.NewGetInvitedTestFromUserInternalServerError()
 	}
 	return user.NewGetInvitedTestFromUserForbidden()
+}
+
+// GET /users/{username}/publishedTests
+// Auth: Current User or Admin
+func GetOwnedPTestsFromUser(params user.GetOwnedPTestsFromUserParams, u *models.User) middleware.Responder {
+	if userOrAdmin(params.Username, u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			t, err := dao.GetOwnedPTestsFromUser(db, params.Username)
+			if err == nil {
+				mt, err := dao.ToModelTests(t)
+				if mt != nil && err == nil {
+					return user.NewGetOwnedPTestsFromUserOK().WithPayload(mt)
+				}
+				return user.NewGetOwnedPTestsFromUserGone()
+			}
+		}
+		return user.NewGetOwnedPTestsFromUserInternalServerError()
+	}
+	return user.NewGetOwnedPTestsFromUserForbidden()
+}
+
+// GET /users/{username}/publishedTests
+// Auth: All
+func GetPublicOwnedPTestsFromUser(params user.GetPublicOwnedPTestsFromUserParams, u *models.User) middleware.Responder {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		t, err := dao.GetPublicOwnedPTestsFromUser(db, params.Username)
+		if err == nil {
+			mt, err := dao.ToModelTests(t)
+			if mt != nil && err == nil {
+				return user.NewGetPublicOwnedPTestsFromUserOK().WithPayload(mt)
+			}
+			return user.NewGetPublicOwnedPTestsFromUserGone()
+		}
+	}
+	return user.NewGetPublicOwnedPTestsFromUserInternalServerError()
 }
 
 // GET /users/{username}/publishedTests

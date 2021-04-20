@@ -24,6 +24,11 @@ type Test struct {
 	// Required: true
 	AccesoPublico *bool `json:"accesoPublico"`
 
+	// acceso publico no publicado
+	// Example: true
+	// Required: true
+	AccesoPublicoNoPublicado *bool `json:"accesoPublicoNoPublicado"`
+
 	// description
 	// Example: En este test se evaluaran los conocimientos respecto al lenguaje de programación Java
 	// Required: true
@@ -62,6 +67,10 @@ func (m *Test) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateAccesoPublicoNoPublicado(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateDescription(formats); err != nil {
 		res = append(res, err)
 	}
@@ -91,6 +100,15 @@ func (m *Test) Validate(formats strfmt.Registry) error {
 func (m *Test) validateAccesoPublico(formats strfmt.Registry) error {
 
 	if err := validate.Required("accesoPublico", "body", m.AccesoPublico); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Test) validateAccesoPublicoNoPublicado(formats strfmt.Registry) error {
+
+	if err := validate.Required("accesoPublicoNoPublicado", "body", m.AccesoPublicoNoPublicado); err != nil {
 		return err
 	}
 

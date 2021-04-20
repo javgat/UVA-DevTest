@@ -28,9 +28,9 @@ fontfamily=Monospaced
     <id>UMLClass</id>
     <coordinates>
       <x>950</x>
-      <y>390</y>
-      <w>220</w>
-      <h>120</h>
+      <y>380</y>
+      <w>240</w>
+      <h>130</h>
     </coordinates>
     <panel_attributes>*Test*
 --
@@ -40,6 +40,7 @@ fontfamily=Monospaced
 - maxSeconds: int
 - accesoPublico: bool
 - editable: bool
+- accesoPublicoNoPublicado: bool
 bg=yellow</panel_attributes>
     <additional_attributes/>
   </element>
@@ -119,15 +120,15 @@ m2=0..*</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1160</x>
+      <x>1180</x>
       <y>450</y>
-      <w>290</w>
+      <w>270</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=0..*
 m2=1</panel_attributes>
-    <additional_attributes>270.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>250.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -174,12 +175,12 @@ m2=1</panel_attributes>
       <x>610</x>
       <y>240</y>
       <w>530</w>
-      <h>170</h>
+      <h>160</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=0..*
 m2=0..*</panel_attributes>
-    <additional_attributes>480.0;150.0;480.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>480.0;140.0;480.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
@@ -249,12 +250,12 @@ m2=0..*</panel_attributes>
       <x>610</x>
       <y>170</y>
       <w>580</w>
-      <h>240</h>
+      <h>230</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=0..*
 m2=0..*</panel_attributes>
-    <additional_attributes>530.0;220.0;530.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>530.0;210.0;530.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -267,7 +268,7 @@ m2=0..*</panel_attributes>
     <panel_attributes>lt=-
 m1=0..*
 m2=0..*</panel_attributes>
-    <additional_attributes>790.0;290.0;860.0;290.0;860.0;10.0;10.0;10.0;10.0;290.0</additional_attributes>
+    <additional_attributes>810.0;290.0;860.0;290.0;860.0;10.0;10.0;10.0;10.0;290.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
@@ -687,13 +688,13 @@ fontsize=11</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1160</x>
+      <x>1180</x>
       <y>290</y>
-      <w>420</w>
+      <w>400</w>
       <h>170</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;150.0;400.0;10.0</additional_attributes>
+    <additional_attributes>10.0;150.0;380.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>

@@ -97,12 +97,17 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 	api.UserGetSharedTestsFromUserHandler = user.GetSharedTestsFromUserHandlerFunc(handlers.GetSharedTests) // GET /users/{username}/sharedTests
 	api.UserGetSharedTestFromUserHandler = user.GetSharedTestFromUserHandlerFunc(handlers.GetSharedTest)    // GET /users/{username}/sharedTests/{testid}
 
+	api.UserGetPublicEditTestsFromUserHandler = user.GetPublicEditTestsFromUserHandlerFunc(handlers.GetPublicETestsFromUser) // GET /users/{username}/publicEditTests
+
 	api.UserGetTestsFromUserHandler = user.GetTestsFromUserHandlerFunc(handlers.GetTestsFromUser) // GET /users/{username}/tests
 	api.UserPostTestHandler = user.PostTestHandlerFunc(handlers.PostTest)                         // POST /users/{username}/tests
 	api.UserGetTestFromUserHandler = user.GetTestFromUserHandlerFunc(handlers.GetTestFromUser)    // GET /users/{username}/tests/{testid}
 
 	api.UserGetInvitedTestsFromUserHandler = user.GetInvitedTestsFromUserHandlerFunc(handlers.GetInvitedTests) // GET /users/{username}/invitedTests
 	api.UserGetInvitedTestFromUserHandler = user.GetInvitedTestFromUserHandlerFunc(handlers.GetInvitedTest)    // GET /users/{username}/invitedTests/{testid}
+
+	api.UserGetOwnedPTestsFromUserHandler = user.GetOwnedPTestsFromUserHandlerFunc(handlers.GetOwnedPTestsFromUser)                   // GET /users/{username}/ownedPTests
+	api.UserGetPublicOwnedPTestsFromUserHandler = user.GetPublicOwnedPTestsFromUserHandlerFunc(handlers.GetPublicOwnedPTestsFromUser) // GET /users/{username}/publicOwnedPTests
 
 	api.UserGetPublishedTestsFromUserHandler = user.GetPublishedTestsFromUserHandlerFunc(handlers.GetPTestsFromUser) // GET /users/{username}/publishedTests
 	api.UserGetPublishedTestFromUserHandler = user.GetPublishedTestFromUserHandlerFunc(handlers.GetPTestFromUser)    // GET /users/{username}/publishedTests/{testid}
@@ -173,6 +178,9 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 	api.QuestionRemoveTeamToQuestionHandler = question.RemoveTeamToQuestionHandlerFunc(handlers.RemoveQuestionTeam)   // DELETE /questions/{questionid}/teams/{teamname}
 
 	// /tests
+
+	api.TestGetAllTestsHandler = test.GetAllTestsHandlerFunc(handlers.GetAllTests)             // GET /allTests
+	api.TestGetAllEditTestsHandler = test.GetAllEditTestsHandlerFunc(handlers.GetAllEditTests) // GET /allEditTests
 
 	api.TestGetEditTestsHandler = test.GetEditTestsHandlerFunc(handlers.GetEditTests) // GET /editTests
 

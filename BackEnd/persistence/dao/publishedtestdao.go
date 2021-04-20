@@ -282,6 +282,42 @@ func GetInvitedPTestFromUser(db *sql.DB, username string, testid int64) (*Test, 
 
 // PublishedTests
 
+func GetOwnedPTestsFromUser(db *sql.DB, username string) ([]*Test, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var ts []*Test
+	query, err := db.Prepare("SELECT T.* FROM Test T JOIN Usuario U ON T.usuarioid=U.id WHERE U.username=? AND T.editable=0")
+
+	if err == nil {
+		defer query.Close()
+		rows, err := query.Query(username)
+		if err == nil {
+			ts, err = rowsToTests(rows)
+			return ts, err
+		}
+	}
+	return nil, err
+}
+
+func GetPublicOwnedPTestsFromUser(db *sql.DB, username string) ([]*Test, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var ts []*Test
+	query, err := db.Prepare("SELECT T.* FROM Test T JOIN Usuario U ON T.usuarioid=U.id WHERE U.username=? AND T.editable=0 AND T.accesoPublico=1")
+
+	if err == nil {
+		defer query.Close()
+		rows, err := query.Query(username)
+		if err == nil {
+			ts, err = rowsToTests(rows)
+			return ts, err
+		}
+	}
+	return nil, err
+}
+
 func GetPTestsFromUser(db *sql.DB, username string) ([]*Test, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)

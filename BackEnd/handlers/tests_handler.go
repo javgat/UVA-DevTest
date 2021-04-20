@@ -16,7 +16,51 @@ import (
 	"github.com/go-openapi/runtime/middleware"
 )
 
-// GetTests GET /tests. Returns all tests.
+// GetAllTests GET /allTests. Returns all tests.
+// Auth: Admin
+func GetAllTests(params test.GetAllTestsParams, u *models.User) middleware.Responder {
+	if isTeacherOrAdmin(u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			var ts []*dao.Test
+			ts, err = dao.GetAllTests(db)
+			if err == nil {
+				var mts []*models.Test
+				mts, err = dao.ToModelTests(ts)
+				if err == nil {
+					return test.NewGetAllTestsOK().WithPayload(mts)
+				}
+			}
+		}
+		log.Println("Error en users_handler GetAllTests(): ", err)
+		return test.NewGetAllTestsInternalServerError()
+	}
+	return test.NewGetAllTestsForbidden()
+}
+
+// GetAllEditTests GET /allTests. Returns all non-published tests.
+// Auth: Admin
+func GetAllEditTests(params test.GetAllEditTestsParams, u *models.User) middleware.Responder {
+	if isTeacherOrAdmin(u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			var ts []*dao.Test
+			ts, err = dao.GetAllEditTests(db)
+			if err == nil {
+				var mts []*models.Test
+				mts, err = dao.ToModelTests(ts)
+				if err == nil {
+					return test.NewGetAllEditTestsOK().WithPayload(mts)
+				}
+			}
+		}
+		log.Println("Error en users_handler GetAllEditTests(): ", err)
+		return test.NewGetAllEditTestsInternalServerError()
+	}
+	return test.NewGetAllEditTestsForbidden()
+}
+
+// GetTests GET /tests. Returns all public tests.
 // Auth: Teacher or Admin
 func GetTests(params test.GetTestsParams, u *models.User) middleware.Responder {
 	if isTeacherOrAdmin(u) {
@@ -38,7 +82,7 @@ func GetTests(params test.GetTestsParams, u *models.User) middleware.Responder {
 	return test.NewGetTestsForbidden()
 }
 
-// GetTests GET /editTests. Returns all non-published tests.
+// GetTests GET /editTests. Returns all public non-published tests.
 // Auth: Teacher or Admin
 func GetEditTests(params test.GetEditTestsParams, u *models.User) middleware.Responder {
 	if isTeacherOrAdmin(u) {
@@ -61,7 +105,7 @@ func GetEditTests(params test.GetEditTestsParams, u *models.User) middleware.Res
 }
 
 // GetTest GET /tests/{testid}. Returns a test.
-// Auth: Teacher or Admin
+// Auth: Teacher or Admin si accesoPublicoNoPublicada=true, admin o testAdmin si false
 func GetTest(params test.GetTestParams, u *models.User) middleware.Responder {
 	if isTeacherOrAdmin(u) {
 		db, err := dbconnection.ConnectDb()
@@ -69,6 +113,12 @@ func GetTest(params test.GetTestParams, u *models.User) middleware.Responder {
 			var ts *dao.Test
 			ts, err = dao.GetTest(db, params.Testid)
 			if err == nil && ts != nil {
+				if !*ts.AccesoPublicoNoPublicado {
+					if !(isAdmin(u) || isTestAdmin(u, params.Testid)) {
+						return test.NewGetTestForbidden()
+					}
+				}
+
 				var mts *models.Test
 				mts, err = dao.ToModelTest(ts)
 				if err == nil {

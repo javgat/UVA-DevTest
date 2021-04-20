@@ -189,6 +189,44 @@ func init() {
         }
       }
     },
+    "/allEditTests": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all non-published tests",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "test"
+        ],
+        "summary": "Returns all non-published tests",
+        "operationId": "GetAllEditTests",
+        "responses": {
+          "200": {
+            "description": "tests found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Test"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
     "/allQuestions": {
       "get": {
         "security": [
@@ -227,6 +265,44 @@ func init() {
               "type": "array",
               "items": {
                 "$ref": "#/definitions/Question"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/allTests": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all tests",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "test"
+        ],
+        "summary": "Returns all tests",
+        "operationId": "GetAllTests",
+        "responses": {
+          "200": {
+            "description": "tests found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Test"
               }
             }
           },
@@ -3674,7 +3750,7 @@ func init() {
         "tags": [
           "test"
         ],
-        "summary": "Returns all tests",
+        "summary": "Returns all public tests",
         "operationId": "GetTests",
         "responses": {
           "200": {
@@ -5084,6 +5160,56 @@ func init() {
         }
       }
     },
+    "/users/{username}/ownedPTests": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all publishedTests that the user owns",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns all publishedTests that the user owns.",
+        "operationId": "GetOwnedPTestsFromUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who owns the publishedTests",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "publishedTests found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Test"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
     "/users/{username}/password": {
       "put": {
         "security": [
@@ -5183,6 +5309,106 @@ func init() {
               "type": "array",
               "items": {
                 "$ref": "#/definitions/Question"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/users/{username}/publicEditTests": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all public non-published tests owned by a user (teacher).",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns all public non-published tests owned by a user (teacher).",
+        "operationId": "GetPublicEditTestsFromUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the teacher who owns the tests",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "tests found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Test"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/users/{username}/publicOwnedPTests": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all public publishedTests that the user owns",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns all public publishedTests that the user owns.",
+        "operationId": "GetPublicOwnedPTestsFromUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who owns the publishedTests",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "publishedTests found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Test"
               }
             }
           },
@@ -6451,10 +6677,15 @@ func init() {
         "maxSeconds",
         "accesoPublico",
         "editable",
-        "username"
+        "username",
+        "accesoPublicoNoPublicado"
       ],
       "properties": {
         "accesoPublico": {
+          "type": "boolean",
+          "example": true
+        },
+        "accesoPublicoNoPublicado": {
           "type": "boolean",
           "example": true
         },
@@ -6828,6 +7059,50 @@ func init() {
         }
       }
     },
+    "/allEditTests": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all non-published tests",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "test"
+        ],
+        "summary": "Returns all non-published tests",
+        "operationId": "GetAllEditTests",
+        "responses": {
+          "200": {
+            "description": "tests found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Test"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
     "/allQuestions": {
       "get": {
         "security": [
@@ -6866,6 +7141,50 @@ func init() {
               "type": "array",
               "items": {
                 "$ref": "#/definitions/Question"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/allTests": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all tests",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "test"
+        ],
+        "summary": "Returns all tests",
+        "operationId": "GetAllTests",
+        "responses": {
+          "200": {
+            "description": "tests found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Test"
               }
             }
           },
@@ -10919,7 +11238,7 @@ func init() {
         "tags": [
           "test"
         ],
-        "summary": "Returns all tests",
+        "summary": "Returns all public tests",
         "operationId": "GetTests",
         "responses": {
           "200": {
@@ -12581,6 +12900,65 @@ func init() {
         }
       }
     },
+    "/users/{username}/ownedPTests": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all publishedTests that the user owns",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns all publishedTests that the user owns.",
+        "operationId": "GetOwnedPTestsFromUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who owns the publishedTests",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "publishedTests found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Test"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
     "/users/{username}/password": {
       "put": {
         "security": [
@@ -12689,6 +13067,124 @@ func init() {
               "type": "array",
               "items": {
                 "$ref": "#/definitions/Question"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/users/{username}/publicEditTests": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all public non-published tests owned by a user (teacher).",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns all public non-published tests owned by a user (teacher).",
+        "operationId": "GetPublicEditTestsFromUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the teacher who owns the tests",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "tests found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Test"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/users/{username}/publicOwnedPTests": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all public publishedTests that the user owns",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns all public publishedTests that the user owns.",
+        "operationId": "GetPublicOwnedPTestsFromUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who owns the publishedTests",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "publishedTests found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Test"
               }
             }
           },
@@ -14117,10 +14613,15 @@ func init() {
         "maxSeconds",
         "accesoPublico",
         "editable",
-        "username"
+        "username",
+        "accesoPublicoNoPublicado"
       ],
       "properties": {
         "accesoPublico": {
+          "type": "boolean",
+          "example": true
+        },
+        "accesoPublicoNoPublicado": {
           "type": "boolean",
           "example": true
         },

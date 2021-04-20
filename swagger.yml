@@ -803,6 +803,39 @@ paths:
         500:
           $ref: '#/responses/InternalServerError'
 
+  /users/{username}/publicEditTests:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - user
+      summary: Returns all public non-published tests owned by a user (teacher).
+      operationId: GetPublicEditTestsFromUser
+      description: Returns all public non-published tests owned by a user (teacher).
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the teacher who owns the tests
+        required: true
+        type: string
+      responses:
+        200:
+          description: tests found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Test'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
   /users/{username}/tests:
     get:
       security:
@@ -968,6 +1001,72 @@ paths:
           description: publishedTest found
           schema:
             $ref: '#/definitions/Test'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
+  /users/{username}/ownedPTests:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - user
+      summary: Returns all publishedTests that the user owns.
+      operationId: GetOwnedPTestsFromUser
+      description: Returns all publishedTests that the user owns
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the user who owns the publishedTests
+        required: true
+        type: string
+      responses:
+        200:
+          description: publishedTests found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Test'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
+  /users/{username}/publicOwnedPTests:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - user
+      summary: Returns all public publishedTests that the user owns.
+      operationId: GetPublicOwnedPTestsFromUser
+      description: Returns all public publishedTests that the user owns
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the user who owns the publishedTests
+        required: true
+        type: string
+      responses:
+        200:
+          description: publishedTests found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Test'
         400:
           $ref: '#/responses/BadRequestError'
         403:
@@ -2716,13 +2815,62 @@ paths:
           $ref: '#/responses/ForbiddenError'
         500:
           $ref: '#/responses/InternalServerError'
-  /tests:
+
+  /allTests:
     get:
       security:
         - BearerCookie: []
       tags:
       - test
       summary: Returns all tests
+      operationId: GetAllTests
+      description: Returns all tests
+      produces:
+      - application/json
+      responses:
+        200:
+          description: tests found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Test'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  /allEditTests:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - test
+      summary: Returns all non-published tests
+      operationId: GetAllEditTests
+      description: Returns all non-published tests
+      produces:
+      - application/json
+      responses:
+        200:
+          description: tests found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Test'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  /tests:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - test
+      summary: Returns all public tests
       operationId: GetTests
       description: Returns all tests
       produces:
@@ -4217,6 +4365,7 @@ definitions:
     - accesoPublico
     - editable
     - username
+    - accesoPublicoNoPublicado
     properties:
       id:
         type: integer
@@ -4239,6 +4388,9 @@ definitions:
       username:
         type: string
         example: javgat
+      accesoPublicoNoPublicado:
+        type: boolean
+        example: true
   Answer:
     type: object
     required:

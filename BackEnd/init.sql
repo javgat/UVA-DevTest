@@ -58,6 +58,7 @@ CREATE TABLE Test(
   accesoPublico boolean NOT NULL,
   editable boolean NOT NULL,
   usuarioid int(11) NOT NULL,
+  accesoPublicoNoPublicado boolean NOT NULL,
   FOREIGN KEY(usuarioid) REFERENCES Usuario(id),
   PRIMARY KEY(id)
 );
