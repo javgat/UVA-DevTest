@@ -204,25 +204,10 @@ func isTestInvited(u *models.User, testid int64) bool {
 	db, err := dbconnection.ConnectDb()
 	if err == nil {
 		var t *dao.Test
-		t, err = dao.GetPTestFromUser(db, *u.Username, testid)
+		t, err = dao.GetSolvableTestFromUser(db, *u.Username, testid)
 		if err == nil {
 			if t != nil {
 				return true
-			}
-			var tms []*dao.Team
-			tms, err = dao.GetTeamsUsername(db, *u.Username)
-			if err == nil {
-				for _, tm := range tms {
-					t, err = dao.GetPTestFromTeam(db, *tm.Teamname, testid)
-					if err != nil {
-						log.Print("Error en isTestInvited: ", err)
-						return false
-					}
-					if t != nil {
-						return true
-					}
-				}
-				return false
 			}
 		}
 	}

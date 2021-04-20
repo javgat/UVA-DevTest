@@ -31,7 +31,7 @@ func NewStartAnswer(ctx *middleware.Context, handler StartAnswerHandler) *StartA
 	return &StartAnswer{Context: ctx, Handler: handler}
 }
 
-/* StartAnswer swagger:route POST /users/{username}/publishedTests/{testid}/answers user answer startAnswer
+/* StartAnswer swagger:route POST /users/{username}/solvableTests/{testid}/answers user answer startAnswer
 
 Starts a new answer
 

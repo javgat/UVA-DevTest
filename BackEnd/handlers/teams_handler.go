@@ -426,28 +426,68 @@ func GetPTestsFromTeam(params team.GetPublishedTestsFromTeamParams, u *models.Us
 				return team.NewGetPublishedTestsFromTeamGone()
 			}
 		}
-		log.Println("Error en teams_handler GetUsersFromTeam(): ", err)
+		log.Println("Error en teams_handler GetPTestsFromTeam(): ", err)
 		return team.NewGetPublishedTestsFromTeamInternalServerError()
 	}
 	return team.NewGetPublishedTestsFromTeamForbidden()
 }
 
-// /teams/{teamname}/publishedTests/{publishedTestsid}
+// /teams/{teamname}/publishedTests/{testid}
 func GetPTestFromTeam(params team.GetPublishedTestFromTeamParams, u *models.User) middleware.Responder {
 	if isTeamMember(params.Teamname, u) || isAdmin(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			tests, err := dao.GetPTestFromTeam(db, params.Teamname, params.Testid)
-			if err == nil && tests != nil {
-				mt, err := dao.ToModelTest(tests)
+			test, err := dao.GetPTestFromTeam(db, params.Teamname, params.Testid)
+			if err == nil && test != nil {
+				mt, err := dao.ToModelTest(test)
 				if err == nil && mt != nil {
 					return team.NewGetPublishedTestFromTeamOK().WithPayload(mt)
 				}
 			}
 			return team.NewGetPublishedTestFromTeamGone()
 		}
-		log.Println("Error en teams_handler GetUsersFromTeam(): ", err)
+		log.Println("Error en teams_handler GetPTestFromTeam(): ", err)
 		return team.NewGetPublishedTestFromTeamInternalServerError()
 	}
 	return team.NewGetPublishedTestFromTeamForbidden()
+}
+
+// /teams/{teamname}/invitedTests
+func GetInvitedTestsFromTeam(params team.GetInvitedTestsFromTeamParams, u *models.User) middleware.Responder {
+	if isTeamMember(params.Teamname, u) || isAdmin(u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			tests, err := dao.GetInvitedTestsFromTeam(db, params.Teamname)
+			if err == nil {
+				mt, err := dao.ToModelTests(tests)
+				if err == nil && mt != nil {
+					return team.NewGetInvitedTestsFromTeamOK().WithPayload(mt)
+				}
+				return team.NewGetInvitedTestsFromTeamGone()
+			}
+		}
+		log.Println("Error en teams_handler GetInvitedTestsFromTeam(): ", err)
+		return team.NewGetInvitedTestsFromTeamInternalServerError()
+	}
+	return team.NewGetInvitedTestsFromTeamForbidden()
+}
+
+// /teams/{teamname}/invitedTests/{publishedTestsid}
+func GetInvitedTestFromTeam(params team.GetInvitedTestFromTeamParams, u *models.User) middleware.Responder {
+	if isTeamMember(params.Teamname, u) || isAdmin(u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			tests, err := dao.GetInvitedTestFromTeam(db, params.Teamname, params.Testid)
+			if err == nil && tests != nil {
+				mt, err := dao.ToModelTest(tests)
+				if err == nil && mt != nil {
+					return team.NewGetInvitedTestFromTeamOK().WithPayload(mt)
+				}
+			}
+			return team.NewGetInvitedTestFromTeamGone()
+		}
+		log.Println("Error en teams_handler GetUsersFromTeam(): ", err)
+		return team.NewGetInvitedTestFromTeamInternalServerError()
+	}
+	return team.NewGetInvitedTestFromTeamForbidden()
 }

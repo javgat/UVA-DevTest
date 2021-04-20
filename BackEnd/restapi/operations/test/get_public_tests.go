@@ -13,42 +13,42 @@ import (
 	"uva-devtest/models"
 )
 
-// GetAllEditTestsHandlerFunc turns a function with the right signature into a get all edit tests handler
-type GetAllEditTestsHandlerFunc func(GetAllEditTestsParams, *models.User) middleware.Responder
+// GetPublicTestsHandlerFunc turns a function with the right signature into a get public tests handler
+type GetPublicTestsHandlerFunc func(GetPublicTestsParams, *models.User) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn GetAllEditTestsHandlerFunc) Handle(params GetAllEditTestsParams, principal *models.User) middleware.Responder {
+func (fn GetPublicTestsHandlerFunc) Handle(params GetPublicTestsParams, principal *models.User) middleware.Responder {
 	return fn(params, principal)
 }
 
-// GetAllEditTestsHandler interface for that can handle valid get all edit tests params
-type GetAllEditTestsHandler interface {
-	Handle(GetAllEditTestsParams, *models.User) middleware.Responder
+// GetPublicTestsHandler interface for that can handle valid get public tests params
+type GetPublicTestsHandler interface {
+	Handle(GetPublicTestsParams, *models.User) middleware.Responder
 }
 
-// NewGetAllEditTests creates a new http.Handler for the get all edit tests operation
-func NewGetAllEditTests(ctx *middleware.Context, handler GetAllEditTestsHandler) *GetAllEditTests {
-	return &GetAllEditTests{Context: ctx, Handler: handler}
+// NewGetPublicTests creates a new http.Handler for the get public tests operation
+func NewGetPublicTests(ctx *middleware.Context, handler GetPublicTestsHandler) *GetPublicTests {
+	return &GetPublicTests{Context: ctx, Handler: handler}
 }
 
-/* GetAllEditTests swagger:route GET /editTests test getAllEditTests
+/* GetPublicTests swagger:route GET /publicTests test getPublicTests
 
-Returns all non-published tests
+Returns all public tests
 
-Returns all non-published tests
+Returns all tests
 
 */
-type GetAllEditTests struct {
+type GetPublicTests struct {
 	Context *middleware.Context
-	Handler GetAllEditTestsHandler
+	Handler GetPublicTestsHandler
 }
 
-func (o *GetAllEditTests) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
+func (o *GetPublicTests) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	route, rCtx, _ := o.Context.RouteInfo(r)
 	if rCtx != nil {
 		*r = *rCtx
 	}
-	var Params = NewGetAllEditTestsParams()
+	var Params = NewGetPublicTestsParams()
 	uprinc, aCtx, err := o.Context.Authorize(r, route)
 	if err != nil {
 		o.Context.Respond(rw, r, route.Produces, route, err)

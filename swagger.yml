@@ -1010,14 +1010,14 @@ paths:
         500:
           $ref: '#/responses/InternalServerError'
 
-  /users/{username}/ownedPTests:
+  /users/{username}/publishedTests:
     get:
       security:
         - BearerCookie: []
       tags:
       - user
       summary: Returns all publishedTests that the user owns.
-      operationId: GetOwnedPTestsFromUser
+      operationId: GetPublishedTestsFromUser
       description: Returns all publishedTests that the user owns
       produces:
       - application/json
@@ -1043,14 +1043,14 @@ paths:
         500:
           $ref: '#/responses/InternalServerError'
 
-  /users/{username}/publicOwnedPTests:
+  /users/{username}/publicPublishedPTests:
     get:
       security:
         - BearerCookie: []
       tags:
       - user
       summary: Returns all public publishedTests that the user owns.
-      operationId: GetPublicOwnedPTestsFromUser
+      operationId: GetPublicPublishedTestsFromUser
       description: Returns all public publishedTests that the user owns
       produces:
       - application/json
@@ -1076,14 +1076,14 @@ paths:
         500:
           $ref: '#/responses/InternalServerError'
 
-  /users/{username}/publishedTests:
+  /users/{username}/solvableTests:
     get:
       security:
         - BearerCookie: []
       tags:
       - user
       summary: Returns all publishedTests that the user can answer, including public ones and team ones.
-      operationId: GetPublishedTestsFromUser
+      operationId: GetSolvableTestsFromUser
       description: Returns all publishedTests that the user can answer, including public ones and team ones.
       produces:
       - application/json
@@ -1108,14 +1108,14 @@ paths:
           $ref: '#/responses/GoneError'
         500:
           $ref: '#/responses/InternalServerError'
-  /users/{username}/publishedTests/{testid}:
+  /users/{username}/solvableTests/{testid}:
     get:
       security:
         - BearerCookie: []
       tags:
       - user
       summary: Returns a publishedTest that the user can answer, including public ones and team ones.
-      operationId: GetPublishedTestFromUser
+      operationId: GetSolvableTestFromUser
       description: Returns a publishedTest that the user can answer, including public ones and team ones.
       produces:
       - application/json
@@ -1143,7 +1143,7 @@ paths:
           $ref: '#/responses/GoneError'
         500:
           $ref: '#/responses/InternalServerError'
-  /users/{username}/publishedTests/{testid}/answers:
+  /users/{username}/solvableTests/{testid}/answers:
     post:
       security:
         - BearerCookie: []
@@ -1982,6 +1982,75 @@ paths:
         500:
           $ref: '#/responses/InternalServerError'
 
+  /teams/{teamname}/invitedTests:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - team
+      summary: Returns all publishedTests that the team is invited to
+      operationId: GetInvitedTestsFromTeam
+      description: Returns all publishedTests that the team is invited to
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: teamname
+        description: Teamname of the team to get its publishedTests is invited to
+        required: true
+        type: string
+      responses:
+        200:
+          description: publishedTests found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Test'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  /teams/{teamname}/invitedTests/{testid}:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - team
+      summary: Returns a publishedTest that the team is invited to
+      operationId: GetInvitedTestFromTeam
+      description: Returns a publishedTest that the team is invited to
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: teamname
+        description: Teamname of the team to get its publishedTest is invited to
+        required: true
+        type: string
+      - in: path
+        name: testid
+        description: Id of the publishedTest to find
+        required: true
+        type: integer
+      responses:
+        200:
+          description: publishedTest found
+          schema:
+            $ref: '#/definitions/Test'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
+
   /tags:
     get:
       security:
@@ -2791,15 +2860,15 @@ paths:
         500:
           $ref: '#/responses/InternalServerError'
 
-  /editTests:
+  /publicEditTests:
     get:
       security:
         - BearerCookie: []
       tags:
       - test
-      summary: Returns all non-published tests
-      operationId: GetEditTests
-      description: Returns all non-published tests
+      summary: Returns all public non-published tests
+      operationId: GetPublicEditTests
+      description: Returns all public non-published tests
       produces:
       - application/json
       responses:
@@ -2816,7 +2885,7 @@ paths:
         500:
           $ref: '#/responses/InternalServerError'
 
-  /allTests:
+  /tests:
     get:
       security:
         - BearerCookie: []
@@ -2840,7 +2909,7 @@ paths:
           $ref: '#/responses/ForbiddenError'
         500:
           $ref: '#/responses/InternalServerError'
-  /allEditTests:
+  /editTests:
     get:
       security:
         - BearerCookie: []
@@ -2864,14 +2933,14 @@ paths:
           $ref: '#/responses/ForbiddenError'
         500:
           $ref: '#/responses/InternalServerError'
-  /tests:
+  /publicTests:
     get:
       security:
         - BearerCookie: []
       tags:
       - test
       summary: Returns all public tests
-      operationId: GetTests
+      operationId: GetPublicTests
       description: Returns all tests
       produces:
       - application/json
@@ -3104,14 +3173,14 @@ paths:
         500:
           $ref: '#/responses/InternalServerError'
 
-  /tests/{testid}/teams:
+  /tests/{testid}/adminTeams:
     get:
       security:
         - BearerCookie: []
       tags:
       - test
       summary: Returns all teams from a test.
-      operationId: GetTeamsFromTest
+      operationId: GetAdminTeamsFromTest
       description: Returns all teams from a test.
       produces:
       - application/json
@@ -3136,14 +3205,14 @@ paths:
           $ref: '#/responses/GoneError'
         500:
           $ref: '#/responses/InternalServerError'
-  /tests/{testid}/teams/{teamname}:
+  /tests/{testid}/adminTeams/{teamname}:
     put:
       security:
         - BearerCookie: []
       tags:
       - test
       summary: Adds a team to administer a test
-      operationId: AddTeamToTest
+      operationId: AddAdminTeamToTest
       description: Adds a team to administer a test
       produces:
       - application/json
@@ -3175,7 +3244,7 @@ paths:
       tags:
       - test
       summary: Removes a team to administer a test
-      operationId: RemoveTeamToTest
+      operationId: RemoveAdminTeamToTest
       description: Removes a team to administer a test
       produces:
       - application/json

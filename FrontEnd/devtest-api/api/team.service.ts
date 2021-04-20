@@ -357,6 +357,103 @@ export class TeamService {
     }
 
     /**
+     * Returns a publishedTest that the team is invited to
+     * Returns a publishedTest that the team is invited to
+     * @param teamname Teamname of the team to get its publishedTest is invited to
+     * @param testid Id of the publishedTest to find
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getInvitedTestFromTeam(teamname: string, testid: number, observe?: 'body', reportProgress?: boolean): Observable<Test>;
+    public getInvitedTestFromTeam(teamname: string, testid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Test>>;
+    public getInvitedTestFromTeam(teamname: string, testid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Test>>;
+    public getInvitedTestFromTeam(teamname: string, testid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (teamname === null || teamname === undefined) {
+            throw new Error('Required parameter teamname was null or undefined when calling getInvitedTestFromTeam.');
+        }
+
+        if (testid === null || testid === undefined) {
+            throw new Error('Required parameter testid was null or undefined when calling getInvitedTestFromTeam.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Test>(`${this.basePath}/teams/${encodeURIComponent(String(teamname))}/invitedTests/${encodeURIComponent(String(testid))}`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns all publishedTests that the team is invited to
+     * Returns all publishedTests that the team is invited to
+     * @param teamname Teamname of the team to get its publishedTests is invited to
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getInvitedTestsFromTeam(teamname: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
+    public getInvitedTestsFromTeam(teamname: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
+    public getInvitedTestsFromTeam(teamname: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
+    public getInvitedTestsFromTeam(teamname: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (teamname === null || teamname === undefined) {
+            throw new Error('Required parameter teamname was null or undefined when calling getInvitedTestsFromTeam.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Array<Test>>(`${this.basePath}/teams/${encodeURIComponent(String(teamname))}/invitedTests`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Returns a user that have the role member in a team
      * Returns a user that have the role member in a team
      * @param teamname Teamname of the team to get its member

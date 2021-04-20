@@ -31,7 +31,7 @@ func NewGetPublicOwnedPTestsFromUser(ctx *middleware.Context, handler GetPublicO
 	return &GetPublicOwnedPTestsFromUser{Context: ctx, Handler: handler}
 }
 
-/* GetPublicOwnedPTestsFromUser swagger:route GET /users/{username}/publicOwnedPTests user getPublicOwnedPTestsFromUser
+/* GetPublicOwnedPTestsFromUser swagger:route GET /users/{username}/publicedPTests user getPublicOwnedPTestsFromUser
 
 Returns all public publishedTests that the user owns.
 

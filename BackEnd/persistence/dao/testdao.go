@@ -111,12 +111,12 @@ func GetAllEditTests(db *sql.DB) ([]*Test, error) {
 	return nil, err
 }
 
-func GetTests(db *sql.DB) ([]*Test, error) {
+func GetPublicTests(db *sql.DB) ([]*Test, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
 	var ts []*Test
-	query, err := db.Prepare("SELECT * FROM Test WHERE accesoPublicoNoPublicado=1")
+	query, err := db.Prepare("SELECT * FROM Test WHERE (editable=1 AND accesoPublicoNoPublicado=1) OR (editable=0 AND accesoPublico=1)")
 	if err == nil {
 		defer query.Close()
 		rows, err := query.Query()
@@ -128,7 +128,7 @@ func GetTests(db *sql.DB) ([]*Test, error) {
 	return nil, err
 }
 
-func GetEditTests(db *sql.DB) ([]*Test, error) {
+func GetPublicEditTests(db *sql.DB) ([]*Test, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
@@ -304,6 +304,46 @@ func GetTestFromTeam(db *sql.DB, teamname string, testid int64) (*Test, error) {
 	if err == nil {
 		var t *Test
 		query, err := db.Prepare("SELECT T.* FROM Test T JOIN GestionTestEquipo G ON T.id=G.testid WHERE G.equipoid=? AND T.id=?")
+		if err == nil {
+			defer query.Close()
+			rows, err := query.Query(u.ID, testid)
+			if err == nil {
+				t, err = rowsToTest(rows)
+				return t, err
+			}
+		}
+	}
+	return nil, err
+}
+
+func GetPTestsFromTeam(db *sql.DB, teamname string) ([]*Test, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	u, err := GetTeam(db, teamname)
+	if err == nil {
+		var t []*Test
+		query, err := db.Prepare("SELECT T.* FROM Test T JOIN GestionTestEquipo G ON T.id=G.testid WHERE G.equipoid=? AND T.editable=0")
+		if err == nil {
+			defer query.Close()
+			rows, err := query.Query(u.ID)
+			if err == nil {
+				t, err = rowsToTests(rows)
+				return t, err
+			}
+		}
+	}
+	return nil, err
+}
+
+func GetPTestFromTeam(db *sql.DB, teamname string, testid int64) (*Test, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	u, err := GetTeam(db, teamname)
+	if err == nil {
+		var t *Test
+		query, err := db.Prepare("SELECT T.* FROM Test T JOIN GestionTestEquipo G ON T.id=G.testid WHERE G.equipoid=? AND T.id=? AND T.editable=0")
 		if err == nil {
 			defer query.Close()
 			rows, err := query.Query(u.ID, testid)

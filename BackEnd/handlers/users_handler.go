@@ -638,50 +638,13 @@ func GetInvitedTest(params user.GetInvitedTestFromUserParams, u *models.User) mi
 	return user.NewGetInvitedTestFromUserForbidden()
 }
 
-// GET /users/{username}/publishedTests
+// GET /users/{username}/solvableTests
 // Auth: Current User or Admin
-func GetOwnedPTestsFromUser(params user.GetOwnedPTestsFromUserParams, u *models.User) middleware.Responder {
+func GetPublishedTestsFromUser(params user.GetPublishedTestsFromUserParams, u *models.User) middleware.Responder {
 	if userOrAdmin(params.Username, u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			t, err := dao.GetOwnedPTestsFromUser(db, params.Username)
-			if err == nil {
-				mt, err := dao.ToModelTests(t)
-				if mt != nil && err == nil {
-					return user.NewGetOwnedPTestsFromUserOK().WithPayload(mt)
-				}
-				return user.NewGetOwnedPTestsFromUserGone()
-			}
-		}
-		return user.NewGetOwnedPTestsFromUserInternalServerError()
-	}
-	return user.NewGetOwnedPTestsFromUserForbidden()
-}
-
-// GET /users/{username}/publishedTests
-// Auth: All
-func GetPublicOwnedPTestsFromUser(params user.GetPublicOwnedPTestsFromUserParams, u *models.User) middleware.Responder {
-	db, err := dbconnection.ConnectDb()
-	if err == nil {
-		t, err := dao.GetPublicOwnedPTestsFromUser(db, params.Username)
-		if err == nil {
-			mt, err := dao.ToModelTests(t)
-			if mt != nil && err == nil {
-				return user.NewGetPublicOwnedPTestsFromUserOK().WithPayload(mt)
-			}
-			return user.NewGetPublicOwnedPTestsFromUserGone()
-		}
-	}
-	return user.NewGetPublicOwnedPTestsFromUserInternalServerError()
-}
-
-// GET /users/{username}/publishedTests
-// Auth: Current User or Admin
-func GetPTestsFromUser(params user.GetPublishedTestsFromUserParams, u *models.User) middleware.Responder {
-	if userOrAdmin(params.Username, u) {
-		db, err := dbconnection.ConnectDb()
-		if err == nil {
-			t, err := dao.GetPTestsFromUser(db, params.Username)
+			t, err := dao.GetPublishedTestsFromUser(db, params.Username)
 			if err == nil {
 				mt, err := dao.ToModelTests(t)
 				if mt != nil && err == nil {
@@ -695,33 +658,70 @@ func GetPTestsFromUser(params user.GetPublishedTestsFromUserParams, u *models.Us
 	return user.NewGetPublishedTestsFromUserForbidden()
 }
 
-// GET /users/{username}/publishedTests/{testid}
+// GET /users/{username}/publicPublishedTests
+// Auth: All
+func GetPublicPublishedTestsFromUser(params user.GetPublicPublishedTestsFromUserParams, u *models.User) middleware.Responder {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		t, err := dao.GetPublicPublishedTestsFromUser(db, params.Username)
+		if err == nil {
+			mt, err := dao.ToModelTests(t)
+			if mt != nil && err == nil {
+				return user.NewGetPublicPublishedTestsFromUserOK().WithPayload(mt)
+			}
+			return user.NewGetPublicPublishedTestsFromUserGone()
+		}
+	}
+	return user.NewGetPublicPublishedTestsFromUserInternalServerError()
+}
+
+// GET /users/{username}/publishedTests
 // Auth: Current User or Admin
-func GetPTestFromUser(params user.GetPublishedTestFromUserParams, u *models.User) middleware.Responder {
+func GetSolvableTestsFromUser(params user.GetSolvableTestsFromUserParams, u *models.User) middleware.Responder {
 	if userOrAdmin(params.Username, u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			t, err := dao.GetPTestFromUser(db, params.Username, params.Testid)
+			t, err := dao.GetSolvableTestsFromUser(db, params.Username)
+			if err == nil {
+				mt, err := dao.ToModelTests(t)
+				if mt != nil && err == nil {
+					return user.NewGetSolvableTestsFromUserOK().WithPayload(mt)
+				}
+				return user.NewGetSolvableTestsFromUserGone()
+			}
+		}
+		return user.NewGetSolvableTestsFromUserInternalServerError()
+	}
+	return user.NewGetSolvableTestsFromUserForbidden()
+}
+
+// GET /users/{username}/solvableTests/{testid}
+// Auth: Current User or Admin
+func GetSolvableTestFromUser(params user.GetSolvableTestFromUserParams, u *models.User) middleware.Responder {
+	if userOrAdmin(params.Username, u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			t, err := dao.GetSolvableTestFromUser(db, params.Username, params.Testid)
 			if err == nil && t != nil {
 				mt, err := dao.ToModelTest(t)
 				if mt != nil && err == nil {
-					return user.NewGetPublishedTestFromUserOK().WithPayload(mt)
+					return user.NewGetSolvableTestFromUserOK().WithPayload(mt)
 				}
 			}
-			return user.NewGetPublishedTestFromUserGone()
+			return user.NewGetSolvableTestFromUserGone()
 		}
-		return user.NewGetPublishedTestFromUserInternalServerError()
+		return user.NewGetSolvableTestFromUserInternalServerError()
 	}
-	return user.NewGetPublishedTestFromUserForbidden()
+	return user.NewGetSolvableTestFromUserForbidden()
 }
 
-// POST /users/{username}/publishedTests/{testid}/answers
+// POST /users/{username}/solvableTests/{testid}/answers
 // Auth: Current User or Admin
 func StartAnswer(params user.StartAnswerParams, u *models.User) middleware.Responder {
 	if userOrAdmin(params.Username, u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			t, err := dao.GetPTestFromUser(db, params.Username, params.Testid)
+			t, err := dao.GetSolvableTestFromUser(db, params.Username, params.Testid)
 			if t == nil && err == nil && isAdmin(u) {
 				t, err = dao.GetPublishedTest(db, params.Testid)
 			}

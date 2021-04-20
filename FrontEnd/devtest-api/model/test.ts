@@ -19,4 +19,5 @@ export interface Test {
     accesoPublico: boolean;
     editable: boolean;
     username: string;
+    accesoPublicoNoPublicado: boolean;
 }

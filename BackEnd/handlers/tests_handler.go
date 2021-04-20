@@ -16,7 +16,7 @@ import (
 	"github.com/go-openapi/runtime/middleware"
 )
 
-// GetAllTests GET /allTests. Returns all tests.
+// GetAllTests GET /tests. Returns all tests.
 // Auth: Admin
 func GetAllTests(params test.GetAllTestsParams, u *models.User) middleware.Responder {
 	if isTeacherOrAdmin(u) {
@@ -38,7 +38,7 @@ func GetAllTests(params test.GetAllTestsParams, u *models.User) middleware.Respo
 	return test.NewGetAllTestsForbidden()
 }
 
-// GetAllEditTests GET /allTests. Returns all non-published tests.
+// GetAllEditTests GET /editTests. Returns all non-published tests.
 // Auth: Admin
 func GetAllEditTests(params test.GetAllEditTestsParams, u *models.User) middleware.Responder {
 	if isTeacherOrAdmin(u) {
@@ -60,48 +60,48 @@ func GetAllEditTests(params test.GetAllEditTestsParams, u *models.User) middlewa
 	return test.NewGetAllEditTestsForbidden()
 }
 
-// GetTests GET /tests. Returns all public tests.
+// GetPublicTests GET /publicTests. Returns all public tests.
 // Auth: Teacher or Admin
-func GetTests(params test.GetTestsParams, u *models.User) middleware.Responder {
+func GetPublicTests(params test.GetPublicTestsParams, u *models.User) middleware.Responder {
 	if isTeacherOrAdmin(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var ts []*dao.Test
-			ts, err = dao.GetTests(db)
+			ts, err = dao.GetPublicTests(db)
 			if err == nil {
 				var mts []*models.Test
 				mts, err = dao.ToModelTests(ts)
 				if err == nil {
-					return test.NewGetTestsOK().WithPayload(mts)
+					return test.NewGetPublicTestsOK().WithPayload(mts)
 				}
 			}
 		}
 		log.Println("Error en users_handler GetTests(): ", err)
-		return test.NewGetTestsInternalServerError()
+		return test.NewGetPublicTestsInternalServerError()
 	}
-	return test.NewGetTestsForbidden()
+	return test.NewGetPublicTestsForbidden()
 }
 
-// GetTests GET /editTests. Returns all public non-published tests.
+// GetPublicEditTests GET /publicEditTests. Returns all public non-published tests.
 // Auth: Teacher or Admin
-func GetEditTests(params test.GetEditTestsParams, u *models.User) middleware.Responder {
+func GetPublicEditTests(params test.GetPublicEditTestsParams, u *models.User) middleware.Responder {
 	if isTeacherOrAdmin(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var ts []*dao.Test
-			ts, err = dao.GetEditTests(db)
+			ts, err = dao.GetPublicEditTests(db)
 			if err == nil {
 				var mts []*models.Test
 				mts, err = dao.ToModelTests(ts)
 				if err == nil {
-					return test.NewGetEditTestsOK().WithPayload(mts)
+					return test.NewGetPublicEditTestsOK().WithPayload(mts)
 				}
 			}
 		}
 		log.Println("Error en users_handler GetEditTests(): ", err)
-		return test.NewGetEditTestsInternalServerError()
+		return test.NewGetPublicEditTestsInternalServerError()
 	}
-	return test.NewGetEditTestsForbidden()
+	return test.NewGetPublicEditTestsForbidden()
 }
 
 // GetTest GET /tests/{testid}. Returns a test.
@@ -190,58 +190,58 @@ func DeleteTest(params test.DeleteTestParams, u *models.User) middleware.Respond
 	return test.NewDeleteTestForbidden()
 }
 
-// GetTeamsFromTest GET /tests/{testid}/teams. Get teams that admin a test
+// GetAdminTeamsFromTest GET /tests/{testid}/adminTeams. Get teams that admin a test
 // Auth: Teacher or Admin
-func GetTeamsFromTest(params test.GetTeamsFromTestParams, u *models.User) middleware.Responder {
+func GetAdminTeamsFromTest(params test.GetAdminTeamsFromTestParams, u *models.User) middleware.Responder {
 	if isTeacherOrAdmin(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var ts []*dao.Team
-			ts, err = dao.GetTeamsFromTest(db, params.Testid)
+			ts, err = dao.GetAdminTeamsFromTest(db, params.Testid)
 			var mts []*models.Team
 			if err == nil {
 				mts = dao.ToModelsTeams(ts)
-				return test.NewGetTeamsFromTestOK().WithPayload(mts)
+				return test.NewGetAdminTeamsFromTestOK().WithPayload(mts)
 			}
 		}
-		log.Println("Error en users_handler GetTeamsFromTest(): ", err)
-		return test.NewGetTeamsFromTestInternalServerError()
+		log.Println("Error en users_handler GetAdminTeamsFromTest(): ", err)
+		return test.NewGetAdminTeamsFromTestInternalServerError()
 	}
-	return test.NewGetTeamsFromTestForbidden()
+	return test.NewGetAdminTeamsFromTestForbidden()
 }
 
-// AddTeamToTest PUT /tests/{testid}/teams/{teamname}. Adds team to admin a test
+// AddAdminTeamToTest PUT /tests/{testid}/adminTeams/{teamname}. Adds team to admin a test
 // Auth: TestAdmin or Admin
-func AddTeamToTest(params test.AddTeamToTestParams, u *models.User) middleware.Responder {
+func AddAdminTeamToTest(params test.AddAdminTeamToTestParams, u *models.User) middleware.Responder {
 	if isAdmin(u) || isTestAdmin(u, params.Testid) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			err = dao.AddTeamToTest(db, params.Testid, params.Teamname)
+			err = dao.AddAdminTeamToTest(db, params.Testid, params.Teamname)
 			if err == nil {
-				return test.NewAddTeamToTestOK()
+				return test.NewAddAdminTeamToTestOK()
 			}
 		}
-		log.Println("Error en users_handler AddTeamToTest(): ", err)
-		return test.NewAddTeamToTestInternalServerError()
+		log.Println("Error en users_handler AddAdminTeamToTest(): ", err)
+		return test.NewAddAdminTeamToTestInternalServerError()
 	}
-	return test.NewAddTeamToTestForbidden()
+	return test.NewAddAdminTeamToTestForbidden()
 }
 
-// RemoveTeamTest DELETE /tests/{testid}/teams/{teamname}. Removes team from admin a test
+// RemoveAdminTeamTest DELETE /tests/{testid}/adminTeams/{teamname}. Removes team from admin a test
 // Auth: TestAdmin or Admin
-func RemoveTeamTest(params test.RemoveTeamToTestParams, u *models.User) middleware.Responder {
+func RemoveAdminTeamTest(params test.RemoveAdminTeamToTestParams, u *models.User) middleware.Responder {
 	if isAdmin(u) || isTestAdmin(u, params.Testid) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			err = dao.RemoveTeamFromTest(db, params.Testid, params.Teamname)
+			err = dao.RemoveAdminTeamFromTest(db, params.Testid, params.Teamname)
 			if err == nil {
-				return test.NewRemoveTeamToTestOK()
+				return test.NewRemoveAdminTeamToTestOK()
 			}
 		}
 		log.Println("Error en users_handler RemoveTeamTest(): ", err)
-		return test.NewRemoveTeamToTestInternalServerError()
+		return test.NewRemoveAdminTeamToTestInternalServerError()
 	}
-	return test.NewRemoveTeamToTestForbidden()
+	return test.NewRemoveAdminTeamToTestForbidden()
 }
 
 func cloneQuestions(db *sql.DB, mqs []*models.Question, newMTest *models.Test, oldDTest *dao.Test) error {
@@ -317,11 +317,11 @@ func PublishTest(params test.PostPublishedTestParams, u *models.User) middleware
 							if err == nil {
 								err = cloneQuestions(db, mqs, newModelTest, oldDaoTest)
 								if err == nil {
-									teams, err := dao.GetTeamsFromTest(db, params.Testid)
+									teams, err := dao.GetAdminTeamsFromTest(db, params.Testid)
 									if err == nil {
 										for _, team := range teams {
 											if err == nil {
-												err = dao.AddTeamToTest(db, newModelTest.ID, *team.Teamname)
+												err = dao.AddAdminTeamToTest(db, newModelTest.ID, *team.Teamname)
 											}
 											if err != nil {
 												log.Println("Error en users_handler PublishTest(): ", err)

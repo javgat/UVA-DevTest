@@ -197,7 +197,7 @@ func GetAnswersFromPTest(db *sql.DB, testid int64) ([]*Answer, error) {
 	return nil, err
 }
 
-func GetPTestsFromTeam(db *sql.DB, teamname string) ([]*Test, error) {
+func GetInvitedTestsFromTeam(db *sql.DB, teamname string) ([]*Test, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
@@ -217,7 +217,7 @@ func GetPTestsFromTeam(db *sql.DB, teamname string) ([]*Test, error) {
 	return nil, err
 }
 
-func GetPTestFromTeam(db *sql.DB, teamname string, testid int64) (*Test, error) {
+func GetInvitedTestFromTeam(db *sql.DB, teamname string, testid int64) (*Test, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
@@ -282,7 +282,7 @@ func GetInvitedPTestFromUser(db *sql.DB, username string, testid int64) (*Test, 
 
 // PublishedTests
 
-func GetOwnedPTestsFromUser(db *sql.DB, username string) ([]*Test, error) {
+func GetPublishedTestsFromUser(db *sql.DB, username string) ([]*Test, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
@@ -300,7 +300,7 @@ func GetOwnedPTestsFromUser(db *sql.DB, username string) ([]*Test, error) {
 	return nil, err
 }
 
-func GetPublicOwnedPTestsFromUser(db *sql.DB, username string) ([]*Test, error) {
+func GetPublicPublishedTestsFromUser(db *sql.DB, username string) ([]*Test, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
@@ -318,7 +318,7 @@ func GetPublicOwnedPTestsFromUser(db *sql.DB, username string) ([]*Test, error) 
 	return nil, err
 }
 
-func GetPTestsFromUser(db *sql.DB, username string) ([]*Test, error) {
+func GetSolvableTestsFromUser(db *sql.DB, username string) ([]*Test, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
@@ -341,7 +341,7 @@ func GetPTestsFromUser(db *sql.DB, username string) ([]*Test, error) {
 	return nil, err
 }
 
-func GetPTestFromUser(db *sql.DB, username string, testid int64) (*Test, error) {
+func GetSolvableTestFromUser(db *sql.DB, username string, testid int64) (*Test, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}

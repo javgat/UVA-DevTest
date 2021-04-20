@@ -61,6 +61,58 @@ export class TestService {
 
 
     /**
+     * Adds a team to administer a test
+     * Adds a team to administer a test
+     * @param teamname Teamname of the team to let administrate
+     * @param testid Id of the test to find
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public addAdminTeamToTest(teamname: string, testid: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public addAdminTeamToTest(teamname: string, testid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public addAdminTeamToTest(teamname: string, testid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public addAdminTeamToTest(teamname: string, testid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (teamname === null || teamname === undefined) {
+            throw new Error('Required parameter teamname was null or undefined when calling addAdminTeamToTest.');
+        }
+
+        if (testid === null || testid === undefined) {
+            throw new Error('Required parameter testid was null or undefined when calling addAdminTeamToTest.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.put<any>(`${this.basePath}/tests/${encodeURIComponent(String(testid))}/adminTeams/${encodeURIComponent(String(teamname))}`,
+            null,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Adds an existing question to a test
      * Adds an existing question to a test
      * @param testid Id of the test to add a question to
@@ -172,58 +224,6 @@ export class TestService {
     }
 
     /**
-     * Adds a team to administer a test
-     * Adds a team to administer a test
-     * @param teamname Teamname of the team to let administrate
-     * @param testid Id of the test to find
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public addTeamToTest(teamname: string, testid: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public addTeamToTest(teamname: string, testid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public addTeamToTest(teamname: string, testid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public addTeamToTest(teamname: string, testid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (teamname === null || teamname === undefined) {
-            throw new Error('Required parameter teamname was null or undefined when calling addTeamToTest.');
-        }
-
-        if (testid === null || testid === undefined) {
-            throw new Error('Required parameter testid was null or undefined when calling addTeamToTest.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // authentication (BearerCookie) required
-        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
-            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
-        }
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.put<any>(`${this.basePath}/tests/${encodeURIComponent(String(testid))}/teams/${encodeURIComponent(String(teamname))}`,
-            null,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
      * Deletes a test
      * Deletes a test
      * @param testid Id of the test to delete
@@ -269,15 +269,61 @@ export class TestService {
     }
 
     /**
+     * Returns all teams from a test.
+     * Returns all teams from a test.
+     * @param testid Id of the test to find its teams
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getAdminTeamsFromTest(testid: number, observe?: 'body', reportProgress?: boolean): Observable<Array<Team>>;
+    public getAdminTeamsFromTest(testid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Team>>>;
+    public getAdminTeamsFromTest(testid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Team>>>;
+    public getAdminTeamsFromTest(testid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (testid === null || testid === undefined) {
+            throw new Error('Required parameter testid was null or undefined when calling getAdminTeamsFromTest.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Array<Team>>(`${this.basePath}/tests/${encodeURIComponent(String(testid))}/adminTeams`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Returns all non-published tests
      * Returns all non-published tests
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getEditTests(observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
-    public getEditTests(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
-    public getEditTests(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
-    public getEditTests(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getAllEditTests(observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
+    public getAllEditTests(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
+    public getAllEditTests(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
+    public getAllEditTests(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -300,6 +346,129 @@ export class TestService {
         ];
 
         return this.httpClient.get<Array<Test>>(`${this.basePath}/editTests`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns all tests
+     * Returns all tests
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getAllTests(observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
+    public getAllTests(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
+    public getAllTests(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
+    public getAllTests(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Array<Test>>(`${this.basePath}/tests`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns all public non-published tests
+     * Returns all public non-published tests
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getPublicEditTests(observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
+    public getPublicEditTests(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
+    public getPublicEditTests(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
+    public getPublicEditTests(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Array<Test>>(`${this.basePath}/publicEditTests`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns all public tests
+     * Returns all tests
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getPublicTests(observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
+    public getPublicTests(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
+    public getPublicTests(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
+    public getPublicTests(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Array<Test>>(`${this.basePath}/publicTests`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -504,52 +673,6 @@ export class TestService {
     }
 
     /**
-     * Returns all teams from a test.
-     * Returns all teams from a test.
-     * @param testid Id of the test to find its teams
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getTeamsFromTest(testid: number, observe?: 'body', reportProgress?: boolean): Observable<Array<Team>>;
-    public getTeamsFromTest(testid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Team>>>;
-    public getTeamsFromTest(testid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Team>>>;
-    public getTeamsFromTest(testid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (testid === null || testid === undefined) {
-            throw new Error('Required parameter testid was null or undefined when calling getTeamsFromTest.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // authentication (BearerCookie) required
-        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
-            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
-        }
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.get<Array<Team>>(`${this.basePath}/tests/${encodeURIComponent(String(testid))}/teams`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
      * Returns a test
      * Returns a test
      * @param testid Id of the test to find
@@ -586,47 +709,6 @@ export class TestService {
         ];
 
         return this.httpClient.get<Test>(`${this.basePath}/tests/${encodeURIComponent(String(testid))}`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Returns all tests
-     * Returns all tests
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getTests(observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
-    public getTests(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
-    public getTests(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
-    public getTests(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        let headers = this.defaultHeaders;
-
-        // authentication (BearerCookie) required
-        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
-            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
-        }
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.get<Array<Test>>(`${this.basePath}/tests`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -797,6 +879,57 @@ export class TestService {
     }
 
     /**
+     * Removes a team to administer a test
+     * Removes a team to administer a test
+     * @param teamname Teamname of the team to remove
+     * @param testid Id of the test to find
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public removeAdminTeamToTest(teamname: string, testid: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public removeAdminTeamToTest(teamname: string, testid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public removeAdminTeamToTest(teamname: string, testid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public removeAdminTeamToTest(teamname: string, testid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (teamname === null || teamname === undefined) {
+            throw new Error('Required parameter teamname was null or undefined when calling removeAdminTeamToTest.');
+        }
+
+        if (testid === null || testid === undefined) {
+            throw new Error('Required parameter testid was null or undefined when calling removeAdminTeamToTest.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.delete<any>(`${this.basePath}/tests/${encodeURIComponent(String(testid))}/adminTeams/${encodeURIComponent(String(teamname))}`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Removes an existing question from a test
      * Removes an existing question from a test
      * @param testid Id of the test to remove a question from
@@ -887,57 +1020,6 @@ export class TestService {
         ];
 
         return this.httpClient.delete<any>(`${this.basePath}/tests/${encodeURIComponent(String(testid))}/tags/${encodeURIComponent(String(tag))}`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Removes a team to administer a test
-     * Removes a team to administer a test
-     * @param teamname Teamname of the team to remove
-     * @param testid Id of the test to find
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public removeTeamToTest(teamname: string, testid: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public removeTeamToTest(teamname: string, testid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public removeTeamToTest(teamname: string, testid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public removeTeamToTest(teamname: string, testid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (teamname === null || teamname === undefined) {
-            throw new Error('Required parameter teamname was null or undefined when calling removeTeamToTest.');
-        }
-
-        if (testid === null || testid === undefined) {
-            throw new Error('Required parameter testid was null or undefined when calling removeTeamToTest.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // authentication (BearerCookie) required
-        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
-            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
-        }
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.delete<any>(`${this.basePath}/tests/${encodeURIComponent(String(testid))}/teams/${encodeURIComponent(String(teamname))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

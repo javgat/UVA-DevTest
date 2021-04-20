@@ -259,7 +259,7 @@ func GetTeamsQuestion(db *sql.DB, questionid int64) ([]*Team, error) {
 	return nil, err
 }
 
-func GetTeamsFromTest(db *sql.DB, testid int64) ([]*Team, error) {
+func GetAdminTeamsFromTest(db *sql.DB, testid int64) ([]*Team, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
@@ -276,7 +276,7 @@ func GetTeamsFromTest(db *sql.DB, testid int64) ([]*Team, error) {
 	return nil, err
 }
 
-func AddTeamToTest(db *sql.DB, testid int64, teamname string) error {
+func AddAdminTeamToTest(db *sql.DB, testid int64, teamname string) error {
 	if db == nil {
 		return errors.New(errorDBNil)
 	}
@@ -292,7 +292,7 @@ func AddTeamToTest(db *sql.DB, testid int64, teamname string) error {
 	return err
 }
 
-func RemoveTeamFromTest(db *sql.DB, testid int64, teamname string) error {
+func RemoveAdminTeamFromTest(db *sql.DB, testid int64, teamname string) error {
 	if db == nil {
 		return errors.New(errorDBNil)
 	}

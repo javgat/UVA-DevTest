@@ -31,7 +31,7 @@ func NewGetAllTests(ctx *middleware.Context, handler GetAllTestsHandler) *GetAll
 	return &GetAllTests{Context: ctx, Handler: handler}
 }
 
-/* GetAllTests swagger:route GET /allTests test getAllTests
+/* GetAllTests swagger:route GET /tests test getAllTests
 
 Returns all tests
 

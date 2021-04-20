@@ -509,7 +509,7 @@ export class AnswerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.post<Answer>(`${this.basePath}/users/${encodeURIComponent(String(username))}/publishedTests/${encodeURIComponent(String(testid))}/answers`,
+        return this.httpClient.post<Answer>(`${this.basePath}/users/${encodeURIComponent(String(username))}/solvableTests/${encodeURIComponent(String(testid))}/answers`,
             null,
             {
                 withCredentials: this.configuration.withCredentials,

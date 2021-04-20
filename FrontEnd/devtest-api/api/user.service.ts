@@ -560,24 +560,19 @@ export class UserService {
     }
 
     /**
-     * Returns a publishedTest that the user can answer, including public ones and team ones.
-     * Returns a publishedTest that the user can answer, including public ones and team ones.
-     * @param username Username of the user who can answer the publishedTest
-     * @param testid Id of the test
+     * Returns all public non-published tests owned by a user (teacher).
+     * Returns all public non-published tests owned by a user (teacher).
+     * @param username Username of the teacher who owns the tests
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getPublishedTestFromUser(username: string, testid: number, observe?: 'body', reportProgress?: boolean): Observable<Test>;
-    public getPublishedTestFromUser(username: string, testid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Test>>;
-    public getPublishedTestFromUser(username: string, testid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Test>>;
-    public getPublishedTestFromUser(username: string, testid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getPublicEditTestsFromUser(username: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
+    public getPublicEditTestsFromUser(username: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
+    public getPublicEditTestsFromUser(username: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
+    public getPublicEditTestsFromUser(username: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (username === null || username === undefined) {
-            throw new Error('Required parameter username was null or undefined when calling getPublishedTestFromUser.');
-        }
-
-        if (testid === null || testid === undefined) {
-            throw new Error('Required parameter testid was null or undefined when calling getPublishedTestFromUser.');
+            throw new Error('Required parameter username was null or undefined when calling getPublicEditTestsFromUser.');
         }
 
         let headers = this.defaultHeaders;
@@ -600,7 +595,7 @@ export class UserService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<Test>(`${this.basePath}/users/${encodeURIComponent(String(username))}/publishedTests/${encodeURIComponent(String(testid))}`,
+        return this.httpClient.get<Array<Test>>(`${this.basePath}/users/${encodeURIComponent(String(username))}/publicEditTests`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -611,9 +606,55 @@ export class UserService {
     }
 
     /**
-     * Returns all publishedTests that the user can answer, including public ones and team ones.
-     * Returns all publishedTests that the user can answer, including public ones and team ones.
-     * @param username Username of the user who can answer the publishedTests
+     * Returns all public publishedTests that the user owns.
+     * Returns all public publishedTests that the user owns
+     * @param username Username of the user who owns the publishedTests
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getPublicPublishedTestsFromUser(username: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
+    public getPublicPublishedTestsFromUser(username: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
+    public getPublicPublishedTestsFromUser(username: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
+    public getPublicPublishedTestsFromUser(username: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (username === null || username === undefined) {
+            throw new Error('Required parameter username was null or undefined when calling getPublicPublishedTestsFromUser.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Array<Test>>(`${this.basePath}/users/${encodeURIComponent(String(username))}/publicPublishedPTests`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns all publishedTests that the user owns.
+     * Returns all publishedTests that the user owns
+     * @param username Username of the user who owns the publishedTests
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -954,6 +995,103 @@ export class UserService {
         ];
 
         return this.httpClient.get<Array<Test>>(`${this.basePath}/users/${encodeURIComponent(String(username))}/sharedTests`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns a publishedTest that the user can answer, including public ones and team ones.
+     * Returns a publishedTest that the user can answer, including public ones and team ones.
+     * @param username Username of the user who can answer the publishedTest
+     * @param testid Id of the test
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getSolvableTestFromUser(username: string, testid: number, observe?: 'body', reportProgress?: boolean): Observable<Test>;
+    public getSolvableTestFromUser(username: string, testid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Test>>;
+    public getSolvableTestFromUser(username: string, testid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Test>>;
+    public getSolvableTestFromUser(username: string, testid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (username === null || username === undefined) {
+            throw new Error('Required parameter username was null or undefined when calling getSolvableTestFromUser.');
+        }
+
+        if (testid === null || testid === undefined) {
+            throw new Error('Required parameter testid was null or undefined when calling getSolvableTestFromUser.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Test>(`${this.basePath}/users/${encodeURIComponent(String(username))}/solvableTests/${encodeURIComponent(String(testid))}`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns all publishedTests that the user can answer, including public ones and team ones.
+     * Returns all publishedTests that the user can answer, including public ones and team ones.
+     * @param username Username of the user who can answer the publishedTests
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getSolvableTestsFromUser(username: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
+    public getSolvableTestsFromUser(username: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
+    public getSolvableTestsFromUser(username: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
+    public getSolvableTestsFromUser(username: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (username === null || username === undefined) {
+            throw new Error('Required parameter username was null or undefined when calling getSolvableTestsFromUser.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Array<Test>>(`${this.basePath}/users/${encodeURIComponent(String(username))}/solvableTests`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -1671,7 +1809,7 @@ export class UserService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.post<Answer>(`${this.basePath}/users/${encodeURIComponent(String(username))}/publishedTests/${encodeURIComponent(String(testid))}/answers`,
+        return this.httpClient.post<Answer>(`${this.basePath}/users/${encodeURIComponent(String(username))}/solvableTests/${encodeURIComponent(String(testid))}/answers`,
             null,
             {
                 withCredentials: this.configuration.withCredentials,
