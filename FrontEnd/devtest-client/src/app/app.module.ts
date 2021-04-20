@@ -33,6 +33,7 @@ import { TestCreateComponent } from './test-create/test-create.component';
 import { TestTeamsComponent } from './test-teams/test-teams.component';
 import { TestsUserComponent } from './tests-user/tests-user.component';
 import { TestsSharedUserComponent } from './tests-shared-user/tests-shared-user.component';
+import { CustomHttpInterceptorService } from './shared/interceptor.service';
 
 export function apiConfigFactory (): Configuration {
   const params: ConfigurationParameters = {
@@ -78,7 +79,10 @@ export function apiConfigFactory (): Configuration {
     ApiModule.forRoot(apiConfigFactory),
     FormsModule,
   ],
-  providers: [{provide: BASE_PATH, useValue: environment.API_BASE_PATH },],
+  providers: [
+    { provide: BASE_PATH, useValue: environment.API_BASE_PATH },
+    { provide: HTTP_INTERCEPTORS, useClass: CustomHttpInterceptorService, multi: true },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -293,7 +293,7 @@ func setupGlobalMiddleware(handler http.Handler) http.Handler {
 		AllowCredentials: true,
 		AllowedMethods:   []string{"POST", "PUT", "GET", "DELETE", "OPTIONS"},
 		AllowedHeaders: []string{"Accept", "Accept-Encoding", "Authorization", "Content-Type",
-			"cache-control", "Origin"},
+			"cache-control", "Origin", "Cache-Control", "Pragma", "Expires", "If-Modified-Since"},
 		MaxAge: 300,
 		Debug:  true,
 	})
