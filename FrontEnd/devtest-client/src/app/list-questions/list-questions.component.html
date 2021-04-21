@@ -11,6 +11,13 @@
             </span>
         </span>
     </p>
+    <form *ngIf="searchTags.length>0">
+        <input type="radio" class="btn-check" name="options" id="option1" autocomplete="off" [checked]="orOperation" (click)="swapOrAndTags()">
+        <label class="btn btn-outline-secondary" for="option1">Alguna de las etiquetas</label>
+
+        <input type="radio" class="btn-check" name="options" id="option2" autocomplete="off" [checked]="!orOperation" (click)="swapOrAndTags()">
+        <label class="btn btn-outline-secondary mx-2" for="option2">Todas las etiquetas</label>
+    </form>
     <form (ngSubmit)='addSearchTagSubmit()' ngNativeValidate>
         <div class="input-group my-3">
             <input class="button btn btn-primary" type="submit" value="Añadir etiqueta" />
@@ -44,4 +51,4 @@
             </tr>
         </tbody>
     </table>
-</div>  
+</div>

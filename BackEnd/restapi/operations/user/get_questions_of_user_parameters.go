@@ -34,6 +34,10 @@ type GetQuestionsOfUserParams struct {
 
 	/*
 	  In: query
+	*/
+	LikeTitle *string
+	/*
+	  In: query
 	  Collection Format: pipes
 	*/
 	Tags [][]string
@@ -55,6 +59,11 @@ func (o *GetQuestionsOfUserParams) BindRequest(r *http.Request, route *middlewar
 
 	qs := runtime.Values(r.URL.Query())
 
+	qLikeTitle, qhkLikeTitle, _ := qs.GetOK("likeTitle")
+	if err := o.bindLikeTitle(qLikeTitle, qhkLikeTitle, route.Formats); err != nil {
+		res = append(res, err)
+	}
+
 	qTags, qhkTags, _ := qs.GetOK("tags")
 	if err := o.bindTags(qTags, qhkTags, route.Formats); err != nil {
 		res = append(res, err)
@@ -67,6 +76,24 @@ func (o *GetQuestionsOfUserParams) BindRequest(r *http.Request, route *middlewar
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// bindLikeTitle binds and validates parameter LikeTitle from query.
+func (o *GetQuestionsOfUserParams) bindLikeTitle(rawData []string, hasKey bool, formats strfmt.Registry) error {
+	var raw string
+	if len(rawData) > 0 {
+		raw = rawData[len(rawData)-1]
+	}
+
+	// Required: false
+	// AllowEmptyValue: false
+
+	if raw == "" { // empty values pass all other validations
+		return nil
+	}
+	o.LikeTitle = &raw
+
 	return nil
 }
 

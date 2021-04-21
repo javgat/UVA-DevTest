@@ -72,27 +72,68 @@ export class ListQuestionsComponent extends LoggedInController implements OnInit
     this.newSearchTag = ""
   }
 
+  addSearchTagAnd() {
+    if(this.searchTags.length==0) this.searchTags.push([])
+    this.searchTags[0].push(this.newSearchTag)
+    this.newSearchTag = ""
+  }
+
   addSearchTagSubmit() {
     if (this.orOperation) {
       this.addSearchTagOr()
+    } else {
+      this.addSearchTagAnd()
     }
     this.getQuestionsFilters()
   }
 
-  deleteSearchTagOr(deleteTag: string){
-    this.searchTags.forEach(element => {
+  deleteSearchTag(deleteTag: string) {
+    this.searchTags.forEach((element, arrIndex) => {
       element.forEach((subElement, index) => {
         if (subElement == deleteTag) element.splice(index, 1)
       })
+      if(element.length==0) this.searchTags.splice(arrIndex, 1)
     });
   }
 
   deleteSearchTagClick(deleteTag: string) {
-    if(this.orOperation){
-      this.deleteSearchTagOr(deleteTag)
-    }
+    this.deleteSearchTag(deleteTag)
     this.getQuestionsFilters()
   }
 
+  changeToAndTags() {
+    if(this.orOperation){
+      this.orOperation = false
+      var andTags: string[] = []
+      this.searchTags.forEach(element => {
+        element.forEach(subElem => {
+          andTags.push(subElem)
+        })
+      })
+      this.searchTags = [andTags]
+    }
+  }
+
+  changeToOrTags() {
+    if(!this.orOperation){
+      this.orOperation = true
+      var orTags: string[][] = []
+      this.searchTags.forEach(element => {
+        element.forEach(subElem => {
+          orTags.push([subElem])
+        })
+      })
+      this.searchTags = orTags
+    }
+  }
+
+  swapOrAndTags(){
+    if(this.orOperation){
+      this.changeToAndTags()
+    }else{
+      this.changeToOrTags()
+    }
+    this.getQuestionsFilters()
+  }
 
 }

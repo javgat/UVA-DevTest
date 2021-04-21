@@ -485,6 +485,9 @@ paths:
           collectionFormat: csv
           items:
             type: string
+      - in: query
+        name: likeTitle
+        type: string
       responses:
         200:
           description: questions found
@@ -527,6 +530,9 @@ paths:
           collectionFormat: csv
           items:
             type: string
+      - in: query
+        name: likeTitle
+        type: string
       responses:
         200:
           description: questions found
@@ -569,6 +575,9 @@ paths:
           collectionFormat: csv
           items:
             type: string
+      - in: query
+        name: likeTitle
+        type: string
       responses:
         200:
           description: questions found
@@ -646,6 +655,9 @@ paths:
           collectionFormat: csv
           items:
             type: string
+      - in: query
+        name: likeTitle
+        type: string
       responses:
         200:
           description: questions found
@@ -1870,6 +1882,9 @@ paths:
           collectionFormat: csv
           items:
             type: string
+      - in: query
+        name: likeTitle
+        type: string
       responses:
         200:
           description: questions found
@@ -2332,6 +2347,9 @@ paths:
           collectionFormat: csv
           items:
             type: string
+      - in: query
+        name: likeTitle
+        type: string
       responses:
         200:
           description: questions found
@@ -2367,6 +2385,9 @@ paths:
           collectionFormat: csv
           items:
             type: string
+      - in: query
+        name: likeTitle
+        type: string
       responses:
         200:
           description: questions found
@@ -2402,6 +2423,9 @@ paths:
           collectionFormat: csv
           items:
             type: string
+      - in: query
+        name: likeTitle
+        type: string
       responses:
         200:
           description: questions found
@@ -2436,6 +2460,9 @@ paths:
           collectionFormat: csv
           items:
             type: string
+      - in: query
+        name: likeTitle
+        type: string
       responses:
         200:
           description: questions found

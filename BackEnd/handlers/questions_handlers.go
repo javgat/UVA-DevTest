@@ -21,11 +21,7 @@ func GetAllEditQuestions(params question.GetAllEditQuestionsParams, u *models.Us
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var qs []*dao.Question
-			if len(params.Tags) == 0 {
-				qs, err = dao.GetAllEditQuestions(db)
-			} else {
-				qs, err = dao.GetAllEditQuestionsTags(db, params.Tags)
-			}
+			qs, err = dao.GetAllEditQuestions(db, params.Tags, params.LikeTitle)
 			if err == nil {
 				var mqs []*models.Question
 				mqs, err = dao.ToModelQuestions(qs)
@@ -47,11 +43,7 @@ func GetAllQuestions(params question.GetAllQuestionsParams, u *models.User) midd
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var qs []*dao.Question
-			if len(params.Tags) == 0 {
-				qs, err = dao.GetAllQuestions(db)
-			} else {
-				qs, err = dao.GetAllQuestionsTags(db, params.Tags)
-			}
+			qs, err = dao.GetAllQuestions(db, params.Tags, params.LikeTitle)
 			if err == nil {
 				var mqs []*models.Question
 				mqs, err = dao.ToModelQuestions(qs)
@@ -73,11 +65,7 @@ func GetEditQuestions(params question.GetEditQuestionsParams, u *models.User) mi
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var qs []*dao.Question
-			if len(params.Tags) == 0 {
-				qs, err = dao.GetEditQuestions(db)
-			} else {
-				qs, err = dao.GetEditQuestionsTags(db, params.Tags)
-			}
+			qs, err = dao.GetEditQuestions(db, params.Tags, params.LikeTitle)
 			if err == nil {
 				var mqs []*models.Question
 				mqs, err = dao.ToModelQuestions(qs)
@@ -99,11 +87,7 @@ func GetQuestions(params question.GetQuestionsParams, u *models.User) middleware
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var qs []*dao.Question
-			if len(params.Tags) == 0 {
-				qs, err = dao.GetQuestions(db)
-			} else {
-				qs, err = dao.GetQuestionsTags(db, params.Tags)
-			}
+			qs, err = dao.GetQuestions(db, params.Tags, params.LikeTitle)
 			if err == nil {
 				var mqs []*models.Question
 				mqs, err = dao.ToModelQuestions(qs)

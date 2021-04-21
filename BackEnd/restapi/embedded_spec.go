@@ -165,6 +165,11 @@ func init() {
             "collectionFormat": "pipes",
             "name": "tags",
             "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "likeTitle",
+            "in": "query"
           }
         ],
         "responses": {
@@ -217,6 +222,11 @@ func init() {
             },
             "collectionFormat": "pipes",
             "name": "tags",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "likeTitle",
             "in": "query"
           }
         ],
@@ -676,6 +686,11 @@ func init() {
             },
             "collectionFormat": "pipes",
             "name": "tags",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "likeTitle",
             "in": "query"
           }
         ],
@@ -1673,6 +1688,11 @@ func init() {
             },
             "collectionFormat": "pipes",
             "name": "tags",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "likeTitle",
             "in": "query"
           }
         ],
@@ -3502,6 +3522,11 @@ func init() {
             "collectionFormat": "pipes",
             "name": "tags",
             "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "likeTitle",
+            "in": "query"
           }
         ],
         "responses": {
@@ -5133,6 +5158,11 @@ func init() {
             "collectionFormat": "pipes",
             "name": "tags",
             "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "likeTitle",
+            "in": "query"
           }
         ],
         "responses": {
@@ -5354,6 +5384,11 @@ func init() {
             "collectionFormat": "pipes",
             "name": "tags",
             "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "likeTitle",
+            "in": "query"
           }
         ],
         "responses": {
@@ -5566,6 +5601,11 @@ func init() {
             },
             "collectionFormat": "pipes",
             "name": "tags",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "likeTitle",
             "in": "query"
           }
         ],
@@ -5849,6 +5889,11 @@ func init() {
             },
             "collectionFormat": "pipes",
             "name": "tags",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "likeTitle",
             "in": "query"
           }
         ],
@@ -7243,6 +7288,11 @@ func init() {
             "collectionFormat": "pipes",
             "name": "tags",
             "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "likeTitle",
+            "in": "query"
           }
         ],
         "responses": {
@@ -7301,6 +7351,11 @@ func init() {
             },
             "collectionFormat": "pipes",
             "name": "tags",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "likeTitle",
             "in": "query"
           }
         ],
@@ -7835,6 +7890,11 @@ func init() {
             },
             "collectionFormat": "pipes",
             "name": "tags",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "likeTitle",
             "in": "query"
           }
         ],
@@ -9003,6 +9063,11 @@ func init() {
             },
             "collectionFormat": "pipes",
             "name": "tags",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "likeTitle",
             "in": "query"
           }
         ],
@@ -11159,6 +11224,11 @@ func init() {
             "collectionFormat": "pipes",
             "name": "tags",
             "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "likeTitle",
+            "in": "query"
           }
         ],
         "responses": {
@@ -13078,6 +13148,11 @@ func init() {
             "collectionFormat": "pipes",
             "name": "tags",
             "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "likeTitle",
+            "in": "query"
           }
         ],
         "responses": {
@@ -13335,6 +13410,11 @@ func init() {
             "collectionFormat": "pipes",
             "name": "tags",
             "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "likeTitle",
+            "in": "query"
           }
         ],
         "responses": {
@@ -13583,6 +13663,11 @@ func init() {
             },
             "collectionFormat": "pipes",
             "name": "tags",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "likeTitle",
             "in": "query"
           }
         ],
@@ -13911,6 +13996,11 @@ func init() {
             },
             "collectionFormat": "pipes",
             "name": "tags",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "likeTitle",
             "in": "query"
           }
         ],

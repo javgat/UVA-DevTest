@@ -289,11 +289,7 @@ func GetSharedQuestions(params user.GetSharedQuestionsOfUserParams, u *models.Us
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var q []*dao.Question
-			if len(params.Tags) == 0 {
-				q, err = dao.GetSharedQuestionsOfUser(db, params.Username)
-			} else {
-				q, err = dao.GetSharedQuestionsOfUserTags(db, params.Username, params.Tags)
-			}
+			q, err = dao.GetSharedQuestionsOfUser(db, params.Username, params.Tags, params.LikeTitle)
 			if err == nil {
 				if q != nil {
 					mq, err := dao.ToModelQuestions(q)
@@ -341,11 +337,7 @@ func GetPublicEditQuestionsOfUser(params user.GetPublicEditQuestionsOfUserParams
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var q []*dao.Question
-			if len(params.Tags) == 0 {
-				q, err = dao.GetPublicEditQuestionsOfUser(db, params.Username)
-			} else {
-				q, err = dao.GetPublicEditQuestionsOfUserTags(db, params.Username, params.Tags)
-			}
+			q, err = dao.GetPublicEditQuestionsOfUser(db, params.Username, params.Tags, params.LikeTitle)
 			if err == nil {
 				if q != nil {
 					mq, err := dao.ToModelQuestions(q)
@@ -370,11 +362,7 @@ func GetEditQuestionsOfUser(params user.GetEditQuestionsOfUserParams, u *models.
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var q []*dao.Question
-			if len(params.Tags) == 0 {
-				q, err = dao.GetEditQuestionsOfUser(db, params.Username)
-			} else {
-				q, err = dao.GetEditQuestionsOfUserTags(db, params.Username, params.Tags)
-			}
+			q, err = dao.GetEditQuestionsOfUser(db, params.Username, params.Tags, params.LikeTitle)
 			if err == nil {
 				if q != nil {
 					mq, err := dao.ToModelQuestions(q)
@@ -399,11 +387,7 @@ func GetQuestionsOfUser(params user.GetQuestionsOfUserParams, u *models.User) mi
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var q []*dao.Question
-			if len(params.Tags) == 0 {
-				q, err = dao.GetQuestionsOfUser(db, params.Username)
-			} else {
-				q, err = dao.GetQuestionsOfUserTags(db, params.Username, params.Tags)
-			}
+			q, err = dao.GetQuestionsOfUser(db, params.Username, params.Tags, params.LikeTitle)
 			if err == nil {
 				if q != nil {
 					mq, err := dao.ToModelQuestions(q)

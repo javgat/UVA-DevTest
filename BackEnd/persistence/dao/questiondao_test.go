@@ -64,7 +64,7 @@ func TestGetQuestionsOfUserNilDB(t *testing.T) {
 	}
 	defer db.Close()
 	expectGetQuestionsOfUser(mock, username, defaultQuestions())
-	q, err := GetQuestionsOfUser(nil, username)
+	q, err := GetQuestionsOfUser(nil, username, nil, nil)
 	if err == nil {
 		t.Log("error should not be nil", err)
 		t.Fail()
@@ -81,7 +81,7 @@ func TestGetQuestionsOfUserFound(t *testing.T) {
 	}
 	defer db.Close()
 	expectGetQuestionsOfUser(mock, username, defaultQuestions())
-	q, err := GetQuestionsOfUser(nil, username)
+	q, err := GetQuestionsOfUser(nil, username, nil, nil)
 	if err == nil {
 		t.Log("error should not be nil", err)
 		t.Fail()
