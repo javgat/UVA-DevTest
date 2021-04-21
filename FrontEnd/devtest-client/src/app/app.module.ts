@@ -37,6 +37,7 @@ import { CustomHttpInterceptorService } from './shared/interceptor.service';
 import { ProfileTeamsComponent } from './profile/profile-teams/profile-teams.component';
 import { ProfilePublicQuestionsComponent } from './profile/profile-public-questions/profile-public-questions.component';
 import { ProfilePublicTestsComponent } from './profile/profile-public-tests/profile-public-tests.component';
+import { ListQuestionsComponent } from './list-questions/list-questions.component';
 
 export function apiConfigFactory (): Configuration {
   const params: ConfigurationParameters = {
@@ -76,7 +77,8 @@ export function apiConfigFactory (): Configuration {
     TestsSharedUserComponent,
     ProfileTeamsComponent,
     ProfilePublicQuestionsComponent,
-    ProfilePublicTestsComponent
+    ProfilePublicTestsComponent,
+    ListQuestionsComponent
   ],
   imports: [
     BrowserModule,

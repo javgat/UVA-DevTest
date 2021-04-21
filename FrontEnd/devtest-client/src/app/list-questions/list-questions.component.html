@@ -1,0 +1,47 @@
+<div class="my-3">
+    <p>Etiquetas filtradas:
+        <span *ngFor="let tags of searchTags">
+            <span *ngFor="let tag of tags">
+                <span class="bg-warning" role="button" id="{{tag}}" data-bs-toggle="dropdown"
+                    aria-expanded="false">{{tag}}</span>;
+                <ul class="dropdown-menu" attr.aria-labelledby="{{tag}}">
+                    <li><a class="dropdown-item" role="button" (click)="deleteSearchTagClick(tag)">Eliminar</a>
+                    </li>
+                </ul>
+            </span>
+        </span>
+    </p>
+    <form (ngSubmit)='addSearchTagSubmit()' ngNativeValidate>
+        <div class="input-group my-3">
+            <input class="button btn btn-primary" type="submit" value="Añadir etiqueta" />
+            <input type="text" class="form-control" name="inputAddTag" [(ngModel)]="newSearchTag" placeholder="Etiqueta"
+                required pattern=".+" />
+        </div>
+    </form>
+    <div class="form-check form-switch my-2">
+        <input class="form-check-input" type="checkbox" id="flexSwitchIncludeNonEdit" [checked]="includeNonEdit"
+            (change)="changeFlexInclude()">
+        <label class="form-check-label" for="flexSwitchIncludeNonEdit">Incluir copias de preguntas de tests
+            publicados</label>
+    </div>
+    <table class="table table-striped table-hover table-primary my-3">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Título</th>
+                <th>Autor</th>
+                <th>Tiempo Estimado</th>
+                <th>Tipo</th>
+            </tr>
+        </thead>
+        <tbody *ngFor="let question of questions">
+            <tr role="button" [routerLink]="['/q', question.id]">
+                <td>{{question.id}}</td>
+                <td>{{question.title}}</td>
+                <td>{{question.username}}</td>
+                <td>{{question.estimatedTime}} segundos</td>
+                <td>{{tipoPrint(question.tipoPregunta, question.eleccionUnica)}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>  
