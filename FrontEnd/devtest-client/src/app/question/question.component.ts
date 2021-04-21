@@ -28,6 +28,7 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
   tags: Tag[]
   isInAdminTeam: boolean
   deletingTag: string
+  mantenerMensaje: boolean
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private qS: QuestionService, private route: ActivatedRoute) {
     super(session, router, data, userS)
     this.isInAdminTeam = false
@@ -38,6 +39,7 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
     this.tags = []
     this.deleteIndex = -1
     this.deletingTag = ""
+    this.mantenerMensaje = false
     this.question = new Pregunta(undefined, "", "", 0, false, true, "", true, undefined, undefined, Question.TipoPreguntaEnum.String, undefined)
     this.questionEdit = new Pregunta(undefined, "", "", 0, false, true, "", true, undefined, undefined, Question.TipoPreguntaEnum.String, undefined)
     this.nuevaOpcion = {
@@ -49,7 +51,9 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
     this.id = 0
     this.routeSub = this.route.params.subscribe(params => {
       this.id = params['id']
-      this.borrarMensaje()
+      if (!this.mantenerMensaje) {
+        this.borrarMensaje()
+      }
       this.getPregunta(true)
     });
   }
@@ -59,12 +63,14 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
 
   ngOnDestroy(): void {
     this.routeSub.unsubscribe()
-    this.borrarMensaje()
+    if (!this.mantenerMensaje) {
+      this.borrarMensaje()
+    }
     super.onDestroy()
   }
 
   doHasUserAction() {
-    if (this.id!=undefined && this.id != 0)
+    if (this.id != undefined && this.id != 0)
       this.getIsInAdminTeam(true)
   }
 
@@ -87,7 +93,7 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
     }
   }
 
-  tipPrint(tipo: string, eleUni: boolean| undefined): string{
+  tipPrint(tipo: string, eleUni: boolean | undefined): string {
     return tipoPrint(tipo, eleUni)
   }
 
@@ -116,7 +122,7 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
     this.userS.getSharedQuestionFromUser(this.getSessionUser().getUsername(), this.id).subscribe(
       resp => this.isInAdminTeam = true,
       err => {
-        if(err.status!=410)
+        if (err.status != 410)
           this.handleErrRelog(err, "saber si el usuario administra la pregunta", primera, this.getIsInAdminTeam, this)
       }
     )
@@ -132,11 +138,11 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
   }
 
   isPermisosAdministracion(): boolean {
-    return (this.getSessionUser().getUsername() == this.question.username) || this.isInAdminTeam
+    return this.getSessionUser().isAdmin() || (this.getSessionUser().getUsername() == this.question.username) || this.isInAdminTeam
   }
 
   checkPermisosEdicion(): boolean {
-    return this.question.editable && (this.getSessionUser().isAdmin() || this.isPermisosAdministracion())
+    return this.question.editable && this.isPermisosAdministracion()
   }
 
   changeCorrectaOpc(op: Option) {
@@ -239,15 +245,39 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
     )
   }
 
-  deleteTagClick(tag: string){
+  deleteTagClick(tag: string) {
     this.deletingTag = tag
     this.deleteTag(true)
   }
 
-  deleteTag(primera: boolean){
+  deleteTag(primera: boolean) {
     this.qS.removeTagFromQuestion(this.id, this.deletingTag).subscribe(
-      resp=> this.getTags(true),
-      err=> this.handleErrRelog(err, "eliminar etiqueta de una pregunta", primera, this.deleteTag, this)
+      resp => this.getTags(true),
+      err => this.handleErrRelog(err, "eliminar etiqueta de una pregunta", primera, this.deleteTag, this)
+    )
+  }
+
+  checkCloneQuestion(): boolean {
+    if (this.question.accesoPublicoNoPublicada) {
+      return this.getSessionUser().isTeacherOrAdmin()
+    } else {
+      return this.isPermisosAdministracion()
+    }
+  }
+
+  cloneQuestionClick() {
+    this.cloneQuestion(true)
+  }
+
+  cloneQuestion(primera: boolean) {
+    if (this.question.id == undefined) return
+    this.userS.copyQuestion(this.getSessionUser().getUsername(), this.question.id).subscribe(
+      resp => {
+        this.cambiarMensaje(new Mensaje("Pregunta clonada con éxito", Tipo.SUCCESS, true))
+        this.mantenerMensaje = true
+        this.router.navigate(['/q', resp.id])
+      },
+      err => this.handleErrRelog(err, "clonar pregunta", primera, this.cloneQuestion, this)
     )
   }
 }

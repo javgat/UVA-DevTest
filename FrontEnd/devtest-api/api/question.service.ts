@@ -163,6 +163,58 @@ export class QuestionService {
     }
 
     /**
+     * Creates a question copied from another
+     * Creates a question copied from another
+     * @param username Username of the user who will own the question
+     * @param questionid id of the question to copy
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public copyQuestion(username: string, questionid: number, observe?: 'body', reportProgress?: boolean): Observable<Question>;
+    public copyQuestion(username: string, questionid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Question>>;
+    public copyQuestion(username: string, questionid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Question>>;
+    public copyQuestion(username: string, questionid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (username === null || username === undefined) {
+            throw new Error('Required parameter username was null or undefined when calling copyQuestion.');
+        }
+
+        if (questionid === null || questionid === undefined) {
+            throw new Error('Required parameter questionid was null or undefined when calling copyQuestion.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.post<Question>(`${this.basePath}/users/${encodeURIComponent(String(username))}/questions/${encodeURIComponent(String(questionid))}/copiedQuestions`,
+            null,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Deletes an option to a question.
      * Deletes an option to a question.
      * @param questionid Id of the question to find its option

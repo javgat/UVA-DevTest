@@ -5706,6 +5706,61 @@ func init() {
         }
       }
     },
+    "/users/{username}/questions/{questionid}/copiedQuestions": {
+      "post": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Creates a question copied from another",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user",
+          "question"
+        ],
+        "summary": "Creates a question copied from another",
+        "operationId": "CopyQuestion",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who will own the question",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "id of the question to copy",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "question created",
+            "schema": {
+              "$ref": "#/definitions/Question"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
     "/users/{username}/role": {
       "put": {
         "security": [
@@ -6441,6 +6496,61 @@ func init() {
         "responses": {
           "200": {
             "description": "test found",
+            "schema": {
+              "$ref": "#/definitions/Test"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/users/{username}/tests/{testid}/copiedTests": {
+      "post": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Creates a new test, copying from another test",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user",
+          "test"
+        ],
+        "summary": "Creates a new test, copying from another test",
+        "operationId": "CopyTest",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the teacher who will own the test",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the test",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "test created",
             "schema": {
               "$ref": "#/definitions/Test"
             }
@@ -13640,6 +13750,70 @@ func init() {
         }
       }
     },
+    "/users/{username}/questions/{questionid}/copiedQuestions": {
+      "post": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Creates a question copied from another",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user",
+          "question"
+        ],
+        "summary": "Creates a question copied from another",
+        "operationId": "CopyQuestion",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who will own the question",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "id of the question to copy",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "question created",
+            "schema": {
+              "$ref": "#/definitions/Question"
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
     "/users/{username}/role": {
       "put": {
         "security": [
@@ -14489,6 +14663,70 @@ func init() {
         "responses": {
           "200": {
             "description": "test found",
+            "schema": {
+              "$ref": "#/definitions/Test"
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/users/{username}/tests/{testid}/copiedTests": {
+      "post": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Creates a new test, copying from another test",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user",
+          "test"
+        ],
+        "summary": "Creates a new test, copying from another test",
+        "operationId": "CopyTest",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the teacher who will own the test",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the test",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "test created",
             "schema": {
               "$ref": "#/definitions/Test"
             }

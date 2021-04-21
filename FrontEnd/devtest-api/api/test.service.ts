@@ -224,6 +224,58 @@ export class TestService {
     }
 
     /**
+     * Creates a new test, copying from another test
+     * Creates a new test, copying from another test
+     * @param username Username of the teacher who will own the test
+     * @param testid Id of the test
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public copyTest(username: string, testid: number, observe?: 'body', reportProgress?: boolean): Observable<Test>;
+    public copyTest(username: string, testid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Test>>;
+    public copyTest(username: string, testid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Test>>;
+    public copyTest(username: string, testid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (username === null || username === undefined) {
+            throw new Error('Required parameter username was null or undefined when calling copyTest.');
+        }
+
+        if (testid === null || testid === undefined) {
+            throw new Error('Required parameter testid was null or undefined when calling copyTest.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.post<Test>(`${this.basePath}/users/${encodeURIComponent(String(username))}/tests/${encodeURIComponent(String(testid))}/copiedTests`,
+            null,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Deletes a test
      * Deletes a test
      * @param testid Id of the test to delete

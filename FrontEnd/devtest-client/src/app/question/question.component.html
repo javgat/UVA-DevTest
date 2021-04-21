@@ -7,6 +7,10 @@
             <h4>Pregunta #{{question.id}}</h4>
             <h2>{{question.title}}</h2>
             <p>Autor: <a [routerLink]="['/profile', question.username]">{{question.username}}</a></p>
+            <div *ngIf="checkCloneQuestion()">
+                <p><button type="button" class="btn btn-outline-primary" (click)="cloneQuestionClick()">Clonar</button>
+                </p>
+            </div>
             <p>Etiquetas:
                 <span *ngFor="let tag of tags">
                     <span *ngIf="checkPermisosEdicion()">
@@ -48,12 +52,17 @@
         <h3>Solución:</h3>
         <div class="m-3" *ngIf="question.tipoPregunta=='string'">
             <p>Respuesta esperada:</p>
-            <form (ngSubmit)='putQuestionSubmit()' ngNativeValidate>
-                <div *ngIf="checkPermisosEdicion()" class="input-group my-3">
-                    <input type="text" class="form-control" name="inputAddOption" [(ngModel)]="questionEdit.solucion"
-                        required pattern=".+" />
+            <p>{{question.solucion}}</p>
+            <form class="my-4" (ngSubmit)='putQuestionSubmit()' ngNativeValidate>
+                <div *ngIf="checkPermisosEdicion()">
+                    <h5>Modificar respuesta esperada:</h5>
+                    <div class="input-group my-3">
+                        <input type="text" class="form-control" name="inputAddOption"
+                            [(ngModel)]="questionEdit.solucion" required pattern=".+" />
+                    </div>
+                    <input class="button btn btn-primary" type="submit"
+                        value="Guardar modificación de respuesta esperada" />
                 </div>
-                <input class="button btn btn-primary" type="submit" value="Guardar respuesta esperada" />
             </form>
         </div>
         <div class="m-3" *ngIf="question.tipoPregunta=='opciones'">

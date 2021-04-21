@@ -6,6 +6,9 @@
         <h4>Test #{{test.id}}</h4>
         <h2>{{test.title}}</h2>
         <p>Autor: <a [routerLink]="['/profile', test.username]">{{test.username}}</a></p>
+        <div *ngIf="checkCloneTest()">
+            <p><button type="button" class="btn btn-outline-primary" (click)="cloneTestClick()">Clonar</button></p>
+        </div>
         <p>Etiquetas:
             <span *ngFor="let tag of tags">
                 <span *ngIf="checkPermisosEdicion()">

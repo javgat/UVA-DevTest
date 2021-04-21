@@ -94,6 +94,8 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 	api.UserPostQuestionHandler = user.PostQuestionHandlerFunc(handlers.PostQuestionOfUser)              // POST /users/{username}/questions
 	api.UserGetQuestionFromUserHandler = user.GetQuestionFromUserHandlerFunc(handlers.GetQuestionOfUser) // GET /users/{username}/questions/{questionid}
 
+	api.UserCopyQuestionHandler = user.CopyQuestionHandlerFunc(handlers.CopyQuestion) // POST /users/{username}/questions/{questionid}/copiedQuestions
+
 	api.UserGetSharedTestsFromUserHandler = user.GetSharedTestsFromUserHandlerFunc(handlers.GetSharedTests) // GET /users/{username}/sharedTests
 	api.UserGetSharedTestFromUserHandler = user.GetSharedTestFromUserHandlerFunc(handlers.GetSharedTest)    // GET /users/{username}/sharedTests/{testid}
 
@@ -102,6 +104,8 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 	api.UserGetTestsFromUserHandler = user.GetTestsFromUserHandlerFunc(handlers.GetTestsFromUser) // GET /users/{username}/tests
 	api.UserPostTestHandler = user.PostTestHandlerFunc(handlers.PostTest)                         // POST /users/{username}/tests
 	api.UserGetTestFromUserHandler = user.GetTestFromUserHandlerFunc(handlers.GetTestFromUser)    // GET /users/{username}/tests/{testid}
+
+	api.UserCopyTestHandler = user.CopyTestHandlerFunc(handlers.CopyTest) // POST /users/{username}/tests/{testid}/copiedTests
 
 	api.UserGetInvitedTestsFromUserHandler = user.GetInvitedTestsFromUserHandlerFunc(handlers.GetInvitedTests) // GET /users/{username}/invitedTests
 	api.UserGetInvitedTestFromUserHandler = user.GetInvitedTestFromUserHandlerFunc(handlers.GetInvitedTest)    // GET /users/{username}/invitedTests/{testid}

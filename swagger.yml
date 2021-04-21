@@ -735,6 +735,43 @@ paths:
         500:
           $ref: '#/responses/InternalServerError'
 
+  /users/{username}/questions/{questionid}/copiedQuestions:
+    post:
+      security:
+        - BearerCookie: []
+      tags:
+      - user
+      - question
+      summary: Creates a question copied from another
+      operationId: CopyQuestion
+      description: Creates a question copied from another
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the user who will own the question
+        required: true
+        type: string
+      - in: path
+        name: questionid
+        description: id of the question to copy
+        required: true
+        type: integer
+      responses:
+        201:
+          description: question created
+          schema:
+            $ref: '#/definitions/Question'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
   /users/{username}/sharedTests:
     get:
       security:
@@ -931,6 +968,43 @@ paths:
       responses:
         200:
           description: test found
+          schema:
+            $ref: '#/definitions/Test'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
+  /users/{username}/tests/{testid}/copiedTests:
+    post:
+      security:
+        - BearerCookie: []
+      tags:
+      - user
+      - test
+      summary: Creates a new test, copying from another test
+      operationId: CopyTest
+      description: Creates a new test, copying from another test
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the teacher who will own the test
+        required: true
+        type: string
+      - in: path
+        name: testid
+        description: Id of the test
+        required: true
+        type: integer
+      responses:
+        201:
+          description: test created
           schema:
             $ref: '#/definitions/Test'
         400:

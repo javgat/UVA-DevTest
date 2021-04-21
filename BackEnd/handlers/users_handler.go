@@ -460,6 +460,123 @@ func GetQuestionOfUser(params user.GetQuestionFromUserParams, u *models.User) mi
 	return user.NewGetQuestionFromUserForbidden()
 }
 
+func copyOption(opt *dao.Option, targetQID int64) (*models.Option, error) {
+	opt.Preguntaid = targetQID
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		mo := dao.ToModelOption(opt)
+		var o *dao.Option
+		o, err = dao.PostOption(db, targetQID, mo)
+		if err == nil && o != nil {
+			mo = dao.ToModelOption(o)
+			return mo, nil
+		}
+	}
+	return nil, err
+}
+
+func copyOptions(sourceQID int64, targetQID int64) error {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		var opts []*dao.Option
+		opts, err = dao.GetOptionsQuestion(db, sourceQID)
+		if err == nil {
+			for _, opt := range opts {
+				_, err = copyOption(opt, targetQID)
+				if err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}
+	return err
+}
+
+func copyAddTagQuestion(tag *dao.Tag, targetQID int64) error {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		err = dao.AddQuestionTag(db, targetQID, *tag.Tag)
+	}
+	return err
+}
+
+func copyTagsQuestion(sourceQID int64, targetQID int64) error {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		var tags []*dao.Tag
+		tags, err = dao.GetQuestionTags(db, sourceQID)
+		if err == nil {
+			for _, tag := range tags {
+				err = copyAddTagQuestion(tag, targetQID)
+				if err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}
+	return err
+}
+
+func copyQuestion(q *dao.Question, username string, userID int64) (*models.Question, error) {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		q.Usuarioid = userID
+		var mq *models.Question
+		mq, err = dao.ToModelQuestion(q)
+		if err == nil {
+			btrue := true
+			mq.Editable = &btrue
+			mq, err = dao.PostQuestion(db, mq, username)
+			if err == nil {
+				err = copyOptions(q.ID, mq.ID)
+				if err == nil {
+					err = copyTagsQuestion(q.ID, mq.ID)
+					if err == nil {
+						return mq, nil
+					}
+				}
+			}
+		}
+	}
+	return nil, err
+}
+
+// POST /users/{username}/questions/{questionid}/copiedQuestions
+// Auth: Teacher or Admin if accesoPublicoNoPublicada=true, else QuestionAdmin or Admin. Admin o Current User
+func CopyQuestion(params user.CopyQuestionParams, u *models.User) middleware.Responder {
+	if isTeacherOrAdmin(u) && userOrAdmin(params.Username, u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			var q *dao.Question
+			q, err = dao.GetQuestion(db, params.Questionid)
+			if err == nil {
+				if q == nil {
+					return user.NewCopyQuestionGone()
+				}
+				if !*q.AccesoPublicoNoPublicada {
+					if !(isQuestionAdmin(u, params.Questionid) || isAdmin(u)) {
+						return user.NewCopyQuestionForbidden()
+					}
+				}
+				var us *dao.User
+				us, err = dao.GetUserUsername(db, params.Username)
+				if err == nil || us != nil {
+					var mq *models.Question
+					mq, err = copyQuestion(q, params.Username, us.ID)
+					if err == nil && mq != nil {
+						return user.NewCopyQuestionCreated().WithPayload(mq)
+					}
+				}
+			}
+		}
+		log.Println("Error en CopyQuestion(): ", err)
+		return user.NewCopyQuestionInternalServerError()
+	}
+	return user.NewCopyQuestionForbidden()
+}
+
 // GET /users/{username}/sharedTests
 // Auth: Current User or Admin
 func GetSharedTests(params user.GetSharedTestsFromUserParams, u *models.User) middleware.Responder {
@@ -581,6 +698,112 @@ func GetTestFromUser(params user.GetTestFromUserParams, u *models.User) middlewa
 		return user.NewGetTestFromUserInternalServerError()
 	}
 	return user.NewGetTestFromUserForbidden()
+}
+
+func copyQuestions(sourceTID int64, targetTID int64, username string, userid int64) error {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		var qs []*dao.Question
+		qs, err = dao.GetQuestionsFromTest(db, sourceTID)
+		if err == nil {
+			for _, q := range qs {
+				var mq *models.Question
+				mq, err = copyQuestion(q, username, userid)
+				if err != nil {
+					return err
+				}
+				err = dao.AddQuestionTest(db, mq.ID, targetTID, *mq.ValorFinal)
+				if err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}
+	return err
+}
+
+func copyAddTagTest(tag *dao.Tag, targetTID int64) error {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		err = dao.AddTestTag(db, targetTID, *tag.Tag)
+	}
+	return err
+}
+
+func copyTagsTest(sourceTID int64, targetTID int64) error {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		var tags []*dao.Tag
+		tags, err = dao.GetTestTags(db, sourceTID)
+		if err == nil {
+			for _, tag := range tags {
+				err = copyAddTagTest(tag, targetTID)
+				if err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}
+	return err
+}
+
+func copyTest(t *dao.Test, username string) (*models.Test, error) {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		var u *dao.User
+		u, err = dao.GetUserUsername(db, username)
+		if err == nil || u != nil {
+			t.Usuarioid = u.ID
+			var mt *models.Test
+			mt, err = dao.ToModelTest(t)
+			if err == nil {
+				btrue := true
+				mt.Editable = &btrue
+				mt, err = dao.PostTest(db, username, mt)
+				if err == nil {
+					err = copyQuestions(t.ID, mt.ID, username, u.ID)
+					if err == nil {
+						err = copyTagsTest(t.ID, mt.ID)
+						if err == nil {
+							return mt, nil
+						}
+					}
+				}
+			}
+		}
+	}
+	return nil, err
+}
+
+// POST /users/{username}/tests/{testid}/copiedTests
+// Auth: Teacher or Admin if accesoPublicoNoPublicada=true, else TestAdmin or Admin. Admin o Current User
+func CopyTest(params user.CopyTestParams, u *models.User) middleware.Responder {
+	if isTeacherOrAdmin(u) && userOrAdmin(params.Username, u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			var t *dao.Test
+			t, err = dao.GetTest(db, params.Testid)
+			if err == nil {
+				if t == nil {
+					return user.NewCopyTestGone()
+				}
+				if !*t.AccesoPublicoNoPublicado {
+					if !(isAdmin(u) || isTestAdmin(u, params.Testid)) {
+						return user.NewCopyTestForbidden()
+					}
+				}
+				var mt *models.Test
+				mt, err = copyTest(t, params.Username)
+				if err == nil && mt != nil {
+					return user.NewCopyTestCreated().WithPayload(mt)
+				}
+			}
+		}
+		return user.NewCopyTestInternalServerError()
+	}
+	return user.NewCopyTestForbidden()
 }
 
 // GET /users/{username}/invitedTests

@@ -340,9 +340,9 @@ bg=yellow
     <id>UMLClass</id>
     <coordinates>
       <x>2488</x>
-      <y>296</y>
+      <y>272</y>
       <w>336</w>
-      <h>64</h>
+      <h>88</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Resource&gt;&gt;
 *Questions*
@@ -350,16 +350,17 @@ bg=yellow
 --
 --
 + &lt;&lt;GET&gt;&gt; getQuestions(tags: String[]): Question[]
-+ &lt;&lt;POST&gt;&gt; postQuestion(q: Question): Question</panel_attributes>
++ &lt;&lt;POST&gt;&gt; postQuestion(q: Question): Question
++ &lt;&lt;POST&gt;&gt; copyQuestion(): Question</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
       <x>3120</x>
-      <y>288</y>
+      <y>272</y>
       <w>264</w>
-      <h>64</h>
+      <h>80</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Resource&gt;&gt;
 *Tests*
@@ -367,7 +368,8 @@ bg=yellow
 --
 --
 + &lt;&lt;GET&gt;&gt; getTests(): Test[]
-+ &lt;&lt;POST&gt;&gt; postTest(t: Test): Test</panel_attributes>
++ &lt;&lt;POST&gt;&gt; postTest(t: Test): Test
++ &lt;&lt;POST&gt;&gt; copyTest(): Test</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -420,12 +422,12 @@ bg=yellow
       <x>2984</x>
       <y>184</y>
       <w>152</w>
-      <h>120</h>
+      <h>104</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
 /publicTests</panel_attributes>
-    <additional_attributes>170.0;130.0;170.0;70.0;90.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>170.0;110.0;170.0;70.0;90.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -472,12 +474,12 @@ bg=yellow
       <x>2320</x>
       <y>184</y>
       <w>200</w>
-      <h>128</h>
+      <h>104</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
 /questions</panel_attributes>
-    <additional_attributes>230.0;140.0;230.0;80.0;70.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>230.0;110.0;230.0;80.0;70.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
@@ -1059,12 +1061,13 @@ bg=yellow
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>2936</x>
-      <y>248</y>
-      <w>128</w>
-      <h>24</h>
+      <x>3080</x>
+      <y>56</y>
+      <w>296</w>
+      <h>40</h>
     </coordinates>
     <panel_attributes>POST /users/x/tests
+POST /users/x/tests/y/copiedTests
 fontsize=12
 bg=cyan</panel_attributes>
     <additional_attributes/>
@@ -1072,12 +1075,13 @@ bg=cyan</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>2272</x>
-      <y>248</y>
-      <w>152</w>
-      <h>24</h>
+      <x>2384</x>
+      <y>48</y>
+      <w>280</w>
+      <h>40</h>
     </coordinates>
     <panel_attributes>POST /users/x/questions
+POST /users/x/questions/y/copiedQuestions
 fontsize=12
 bg=cyan</panel_attributes>
     <additional_attributes/>
@@ -1109,24 +1113,24 @@ bg=cyan</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2416</x>
-      <y>248</y>
-      <w>136</w>
-      <h>64</h>
+      <x>2440</x>
+      <y>80</y>
+      <w>112</w>
+      <h>208</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;150.0;60.0</additional_attributes>
+    <additional_attributes>10.0;10.0;120.0;240.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>3016</x>
-      <y>264</y>
-      <w>120</w>
-      <h>40</h>
+      <x>3144</x>
+      <y>88</y>
+      <w>32</w>
+      <h>200</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;130.0;30.0</additional_attributes>
+    <additional_attributes>10.0;10.0;20.0;230.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
@@ -1763,12 +1767,12 @@ bg=yellow
       <x>3112</x>
       <y>184</y>
       <w>144</w>
-      <h>120</h>
+      <h>104</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
 /publicEditTests</panel_attributes>
-    <additional_attributes>130.0;130.0;130.0;70.0;60.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>130.0;110.0;130.0;70.0;60.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
@@ -1857,12 +1861,12 @@ bg=yellow
       <x>2416</x>
       <y>184</y>
       <w>200</w>
-      <h>128</h>
+      <h>104</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
 /editQuestions</panel_attributes>
-    <additional_attributes>230.0;140.0;230.0;80.0;70.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>230.0;110.0;230.0;80.0;70.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -1982,12 +1986,12 @@ bg=yellow
       <x>2512</x>
       <y>184</y>
       <w>200</w>
-      <h>128</h>
+      <h>104</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
 /allQuestions</panel_attributes>
-    <additional_attributes>230.0;140.0;230.0;80.0;70.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>230.0;110.0;230.0;80.0;70.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -1995,12 +1999,12 @@ bg=yellow
       <x>2624</x>
       <y>184</y>
       <w>200</w>
-      <h>128</h>
+      <h>104</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
 /allEditQuestions</panel_attributes>
-    <additional_attributes>230.0;140.0;230.0;80.0;70.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>230.0;110.0;230.0;80.0;70.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -2021,12 +2025,12 @@ bg=yellow
       <x>3264</x>
       <y>184</y>
       <w>128</w>
-      <h>120</h>
+      <h>104</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
 /tests</panel_attributes>
-    <additional_attributes>140.0;130.0;140.0;70.0;60.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>140.0;110.0;140.0;70.0;60.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -2034,12 +2038,12 @@ bg=yellow
       <x>3208</x>
       <y>184</y>
       <w>120</w>
-      <h>120</h>
+      <h>104</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
 /editTests</panel_attributes>
-    <additional_attributes>130.0;130.0;130.0;70.0;50.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>130.0;110.0;130.0;70.0;50.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -2092,5 +2096,31 @@ bg=yellow
 &lt;&lt;path&gt;&gt;
 /invitedTests</panel_attributes>
     <additional_attributes>90.0;10.0;40.0;130.0;40.0;60.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2776</x>
+      <y>320</y>
+      <w>224</w>
+      <h>184</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/copiedQuestions</panel_attributes>
+    <additional_attributes>60.0;10.0;130.0;10.0;130.0;210.0;10.0;210.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3320</x>
+      <y>328</y>
+      <w>224</w>
+      <h>176</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/copiedTests</panel_attributes>
+    <additional_attributes>80.0;10.0;160.0;10.0;160.0;200.0;10.0;200.0</additional_attributes>
   </element>
 </diagram>

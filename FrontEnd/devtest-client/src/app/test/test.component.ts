@@ -24,6 +24,7 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
   tags: Tag[]
   newTag : string
   deletingTag: string
+  mantenerMensaje: boolean
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private route: ActivatedRoute, private testS: TestService) {
     super(session, router, data, userS)
     this.isInAdminTeam = false
@@ -35,9 +36,12 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
     this.tags = []
     this.newTag = ""
     this.deletingTag = ""
+    this.mantenerMensaje = false
     this.routeSub = this.route.params.subscribe(params => {
       this.id = params['testid']
-      this.borrarMensaje()
+      if(!this.mantenerMensaje){
+        this.borrarMensaje()
+      }
       this.getTest(true)
     });
   }
@@ -49,7 +53,9 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
   ngOnDestroy(): void {
     super.onDestroy()
     this.routeSub.unsubscribe()
-    this.borrarMensaje()
+    if(!this.mantenerMensaje){
+      this.borrarMensaje()
+    }
   }
 
   doHasUserAction() {
@@ -124,11 +130,11 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
   }
 
   isPermisosAdministracion(): boolean{
-    return (this.getSessionUser().getUsername() == this.test.username) || this.isInAdminTeam
+    return this.getSessionUser().isAdmin() || (this.getSessionUser().getUsername() == this.test.username) || this.isInAdminTeam
   }
 
   checkPermisosEdicion(): boolean {
-    return this.test.editable && (this.getSessionUser().isAdmin() || this.isPermisosAdministracion())
+    return this.test.editable && this.isPermisosAdministracion()
   }
 
   addQuestionSubmit(){
@@ -177,6 +183,29 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
     this.testS.putTest(this.id, this.testEdit).subscribe(
       resp => this.getTest(true),
       err => this.handleErrRelog(err, "actualizar datos de test", primera, this.putTest, this)
+    )
+  }
+
+  checkCloneTest(): boolean {
+    if (this.test.accesoPublicoNoPublicado) {
+      return this.getSessionUser().isTeacherOrAdmin()
+    } else {
+      return this.isPermisosAdministracion()
+    }
+  }
+
+  cloneTestClick(){
+    this.cloneTest(true)
+  }
+
+  cloneTest(primera: boolean){
+    this.userS.copyTest(this.getSessionUser().getUsername(), this.id).subscribe(
+      resp=>{
+        this.cambiarMensaje(new Mensaje("Test clonado con éxito", Tipo.SUCCESS, true))
+        this.mantenerMensaje = true
+        this.router.navigate(['/et', resp.id])
+      },
+      err => this.handleErrRelog(err, "clonar test", primera, this.cloneTest, this)
     )
   }
 

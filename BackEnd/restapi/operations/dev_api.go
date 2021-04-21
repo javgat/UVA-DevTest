@@ -73,6 +73,12 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		QuestionAddTeamToQuestionHandler: question.AddTeamToQuestionHandlerFunc(func(params question.AddTeamToQuestionParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation question.AddTeamToQuestion has not yet been implemented")
 		}),
+		UserCopyQuestionHandler: user.CopyQuestionHandlerFunc(func(params user.CopyQuestionParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation user.CopyQuestion has not yet been implemented")
+		}),
+		UserCopyTestHandler: user.CopyTestHandlerFunc(func(params user.CopyTestParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation user.CopyTest has not yet been implemented")
+		}),
 		QuestionDeleteOptionHandler: question.DeleteOptionHandlerFunc(func(params question.DeleteOptionParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation question.DeleteOption has not yet been implemented")
 		}),
@@ -508,6 +514,10 @@ type DevAPI struct {
 	TestAddTagToTestHandler test.AddTagToTestHandler
 	// QuestionAddTeamToQuestionHandler sets the operation handler for the add team to question operation
 	QuestionAddTeamToQuestionHandler question.AddTeamToQuestionHandler
+	// UserCopyQuestionHandler sets the operation handler for the copy question operation
+	UserCopyQuestionHandler user.CopyQuestionHandler
+	// UserCopyTestHandler sets the operation handler for the copy test operation
+	UserCopyTestHandler user.CopyTestHandler
 	// QuestionDeleteOptionHandler sets the operation handler for the delete option operation
 	QuestionDeleteOptionHandler question.DeleteOptionHandler
 	// QuestionDeleteQuestionHandler sets the operation handler for the delete question operation
@@ -854,6 +864,12 @@ func (o *DevAPI) Validate() error {
 	}
 	if o.QuestionAddTeamToQuestionHandler == nil {
 		unregistered = append(unregistered, "question.AddTeamToQuestionHandler")
+	}
+	if o.UserCopyQuestionHandler == nil {
+		unregistered = append(unregistered, "user.CopyQuestionHandler")
+	}
+	if o.UserCopyTestHandler == nil {
+		unregistered = append(unregistered, "user.CopyTestHandler")
 	}
 	if o.QuestionDeleteOptionHandler == nil {
 		unregistered = append(unregistered, "question.DeleteOptionHandler")
@@ -1351,6 +1367,14 @@ func (o *DevAPI) initHandlerCache() {
 		o.handlers["PUT"] = make(map[string]http.Handler)
 	}
 	o.handlers["PUT"]["/questions/{questionid}/teams/{teamname}"] = question.NewAddTeamToQuestion(o.context, o.QuestionAddTeamToQuestionHandler)
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
+	}
+	o.handlers["POST"]["/users/{username}/questions/{questionid}/copiedQuestions"] = user.NewCopyQuestion(o.context, o.UserCopyQuestionHandler)
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
+	}
+	o.handlers["POST"]["/users/{username}/tests/{testid}/copiedTests"] = user.NewCopyTest(o.context, o.UserCopyTestHandler)
 	if o.handlers["DELETE"] == nil {
 		o.handlers["DELETE"] = make(map[string]http.Handler)
 	}
