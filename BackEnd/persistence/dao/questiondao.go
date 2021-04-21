@@ -118,7 +118,7 @@ func FilterParamsSlicesToInterfaceArr(tags [][]string, likeTitle *string) []inte
 		interfaceParams[i] = arrTags[i]
 	}
 	if hayTitle == 1 {
-		interfaceParams[len(arrTags)] = *likeTitle
+		interfaceParams[len(arrTags)] = "%" + *likeTitle + "%"
 	}
 	return interfaceParams
 }
@@ -150,7 +150,7 @@ func prepareQueryTags(initQuery string, tags [][]string, idNombreConsulta string
 }
 
 func prepareQueryLikeTitle(initQuery string, likeTitle *string, titleConsulta string) string {
-	query := initQuery + " ( " + titleConsulta + " LIKE '%?%' )"
+	query := initQuery + " ( " + titleConsulta + " LIKE ? )"
 	return query
 }
 
@@ -174,6 +174,10 @@ func addFiltersToQuery(hayWhere bool, initQuery string, tags [][]string, likeTit
 
 func addFiltersToQueryQuestion(hayWhere bool, initQuery string, tags [][]string, likeTitle *string) string {
 	return addFiltersToQuery(hayWhere, initQuery, tags, likeTitle, "id", "preguntaid", "PreguntaEtiqueta", "title")
+}
+
+func addFiltersToQueryQuestionLongNames(hayWhere bool, initQuery string, tags [][]string, likeTitle *string) string {
+	return addFiltersToQuery(hayWhere, initQuery, tags, likeTitle, "P.id", "preguntaid", "PreguntaEtiqueta", "title")
 }
 
 func GetAllEditQuestions(db *sql.DB, tags [][]string, likeTitle *string) ([]*Question, error) {
@@ -447,7 +451,7 @@ func GetQuestionsFromTeam(db *sql.DB, teamname string, tags [][]string, likeTitl
 	if err == nil && u != nil {
 		var qs []*Question
 		stPrepare := "SELECT P.* FROM Pregunta P JOIN PreguntaEquipo E ON P.id=E.preguntaid WHERE E.equipoid=?"
-		stPrepare = addFiltersToQueryQuestion(true, stPrepare, tags, likeTitle)
+		stPrepare = addFiltersToQueryQuestionLongNames(true, stPrepare, tags, likeTitle)
 		query, err := db.Prepare(stPrepare)
 		if err == nil {
 			defer query.Close()
@@ -702,7 +706,7 @@ func GetSharedQuestionsOfUser(db *sql.DB, username string, tags [][]string, like
 	}
 	var qs []*Question
 	stPrepare := "SELECT DISTINCT P.* FROM Pregunta P JOIN PreguntaEquipo E ON P.id=E.preguntaid JOIN EquipoUsuario U ON U.equipoid=E.equipoid JOIN Usuario V ON V.id=U.usuarioid WHERE V.username=?"
-	stPrepare = addFiltersToQueryQuestion(true, stPrepare, tags, likeTitle)
+	stPrepare = addFiltersToQueryQuestionLongNames(true, stPrepare, tags, likeTitle)
 	query, err := db.Prepare(stPrepare)
 	if err == nil {
 		defer query.Close()

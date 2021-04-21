@@ -18,13 +18,18 @@ export class ListQuestionsComponent extends LoggedInController implements OnInit
   searchTags: string[][]
   includeNonEdit: boolean
   orOperation: boolean
-  constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private qS: QuestionService, private tagS: TagService) {
+  likeTitle: string | undefined
+  editLikeTitle: string
+  hideSwitchInclude: boolean
+  constructor(session: SessionService, router: Router, data: DataService, userS: UserService, protected qS: QuestionService, protected tagS: TagService) {
     super(session, router, data, userS)
     this.includeNonEdit = false
     this.searchTags = []
     this.questions = []
     this.newSearchTag = ""
     this.orOperation = true
+    this.editLikeTitle = ""
+    this.hideSwitchInclude = false
     this.getQuestionsFilters()
   }
 
@@ -35,15 +40,17 @@ export class ListQuestionsComponent extends LoggedInController implements OnInit
     super.onDestroy()
   }
 
+  // esta funcion se tiene que sobreescribir
   getQuestionsInclude(primera: boolean) {
-    this.qS.getQuestions(this.searchTags).subscribe(
+    this.qS.getQuestions(this.searchTags, this.likeTitle).subscribe(
       resp => this.questions = resp,
       err => this.handleErrRelog(err, "obtener preguntas", primera, this.getQuestionsInclude, this)
     )
   }
 
+  // esta funcion se tiene que sobreescribir
   getQuestionsEdit(primera: boolean) {
-    this.qS.getEditQuestions(this.searchTags).subscribe(
+    this.qS.getEditQuestions(this.searchTags, this.likeTitle).subscribe(
       resp => this.questions = resp,
       err => this.handleErrRelog(err, "obtener preguntas no publicadas", primera, this.getQuestionsEdit, this)
     )
@@ -133,6 +140,17 @@ export class ListQuestionsComponent extends LoggedInController implements OnInit
     }else{
       this.changeToOrTags()
     }
+    this.getQuestionsFilters()
+  }
+
+  clickSearchTitle(){
+    this.likeTitle = this.editLikeTitle
+    this.getQuestionsFilters()
+  }
+
+  clickBorrarTitle(){
+    this.likeTitle = undefined
+    this.editLikeTitle = ""
     this.getQuestionsFilters()
   }
 

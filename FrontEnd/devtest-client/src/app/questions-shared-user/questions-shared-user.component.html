@@ -3,24 +3,5 @@
     <div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message" role="alert">
         {{getMensaje().texto}}</div>
     <h2>Preguntas compartidas con <a class="link-dark" [routerLink]="['/profile', username]">{{username}}</a></h2>
-    <table class="table table-striped table-hover table-primary my-3">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Título</th>
-                <th>Autor</th>
-                <th>Tiempo Estimado</th>
-                <th>Tipo</th>
-            </tr>
-        </thead>
-        <tbody *ngFor="let question of questions">
-            <tr role="button" [routerLink]="['/q', question.id]">
-                <td>{{question.id}}</td>
-                <td>{{question.title}}</td>
-                <td>{{question.username}}</td>
-                <td>{{question.estimatedTime}} segundos</td>
-                <td>{{tipoPrint(question.tipoPregunta, question.eleccionUnica)}}</td>
-            </tr>
-        </tbody>
-    </table>
+    <app-lq-shared-user></app-lq-shared-user>
 </div>

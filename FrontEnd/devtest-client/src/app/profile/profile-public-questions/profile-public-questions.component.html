@@ -11,24 +11,5 @@
 </button>
 <div class="mt-5">
     <h2>Preguntas editables públicas de: {{id}}</h2>
-    <table class="table table-striped table-hover table-primary my-3">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Título</th>
-                <th>Autor</th>
-                <th>Tiempo Estimado</th>
-                <th>Tipo</th>
-            </tr>
-        </thead>
-        <tbody *ngFor="let question of questions">
-            <tr role="button" [routerLink]="['/q', question.id]">
-                <td>{{question.id}}</td>
-                <td>{{question.title}}</td>
-                <td>{{question.username}}</td>
-                <td>{{question.estimatedTime}} segundos</td>
-                <td>{{tipoPrint(question.tipoPregunta, question.eleccionUnica)}}</td>
-            </tr>
-        </tbody>
-    </table>
+    <app-lq-profile-public></app-lq-profile-public>
 </div>

@@ -314,18 +314,23 @@ export class QuestionService {
      * Returns all non-published questions
      * Returns all non-published questions
      * @param tags 
+     * @param likeTitle 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAllEditQuestions(tags?: Array<Array<string>>, observe?: 'body', reportProgress?: boolean): Observable<Array<Question>>;
-    public getAllEditQuestions(tags?: Array<Array<string>>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Question>>>;
-    public getAllEditQuestions(tags?: Array<Array<string>>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Question>>>;
-    public getAllEditQuestions(tags?: Array<Array<string>>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getAllEditQuestions(tags?: Array<Array<string>>, likeTitle?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Question>>;
+    public getAllEditQuestions(tags?: Array<Array<string>>, likeTitle?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Question>>>;
+    public getAllEditQuestions(tags?: Array<Array<string>>, likeTitle?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Question>>>;
+    public getAllEditQuestions(tags?: Array<Array<string>>, likeTitle?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
 
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
         if (tags) {
             queryParameters = queryParameters.set('tags', tags.join(COLLECTION_FORMATS['pipes']));
+        }
+        if (likeTitle !== undefined && likeTitle !== null) {
+            queryParameters = queryParameters.set('likeTitle', <any>likeTitle);
         }
 
         let headers = this.defaultHeaders;
@@ -363,18 +368,23 @@ export class QuestionService {
      * Returns all questions
      * Returns all questions
      * @param tags 
+     * @param likeTitle 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAllQuestions(tags?: Array<Array<string>>, observe?: 'body', reportProgress?: boolean): Observable<Array<Question>>;
-    public getAllQuestions(tags?: Array<Array<string>>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Question>>>;
-    public getAllQuestions(tags?: Array<Array<string>>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Question>>>;
-    public getAllQuestions(tags?: Array<Array<string>>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getAllQuestions(tags?: Array<Array<string>>, likeTitle?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Question>>;
+    public getAllQuestions(tags?: Array<Array<string>>, likeTitle?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Question>>>;
+    public getAllQuestions(tags?: Array<Array<string>>, likeTitle?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Question>>>;
+    public getAllQuestions(tags?: Array<Array<string>>, likeTitle?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
 
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
         if (tags) {
             queryParameters = queryParameters.set('tags', tags.join(COLLECTION_FORMATS['pipes']));
+        }
+        if (likeTitle !== undefined && likeTitle !== null) {
+            queryParameters = queryParameters.set('likeTitle', <any>likeTitle);
         }
 
         let headers = this.defaultHeaders;
@@ -412,18 +422,23 @@ export class QuestionService {
      * Returns all public non-published questions
      * Returns all public non-published questions
      * @param tags 
+     * @param likeTitle 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getEditQuestions(tags?: Array<Array<string>>, observe?: 'body', reportProgress?: boolean): Observable<Array<Question>>;
-    public getEditQuestions(tags?: Array<Array<string>>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Question>>>;
-    public getEditQuestions(tags?: Array<Array<string>>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Question>>>;
-    public getEditQuestions(tags?: Array<Array<string>>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getEditQuestions(tags?: Array<Array<string>>, likeTitle?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Question>>;
+    public getEditQuestions(tags?: Array<Array<string>>, likeTitle?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Question>>>;
+    public getEditQuestions(tags?: Array<Array<string>>, likeTitle?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Question>>>;
+    public getEditQuestions(tags?: Array<Array<string>>, likeTitle?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
 
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
         if (tags) {
             queryParameters = queryParameters.set('tags', tags.join(COLLECTION_FORMATS['pipes']));
+        }
+        if (likeTitle !== undefined && likeTitle !== null) {
+            queryParameters = queryParameters.set('likeTitle', <any>likeTitle);
         }
 
         let headers = this.defaultHeaders;
@@ -604,18 +619,23 @@ export class QuestionService {
      * Returns all public questions
      * Returns all public questions
      * @param tags 
+     * @param likeTitle 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getQuestions(tags?: Array<Array<string>>, observe?: 'body', reportProgress?: boolean): Observable<Array<Question>>;
-    public getQuestions(tags?: Array<Array<string>>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Question>>>;
-    public getQuestions(tags?: Array<Array<string>>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Question>>>;
-    public getQuestions(tags?: Array<Array<string>>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getQuestions(tags?: Array<Array<string>>, likeTitle?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Question>>;
+    public getQuestions(tags?: Array<Array<string>>, likeTitle?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Question>>>;
+    public getQuestions(tags?: Array<Array<string>>, likeTitle?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Question>>>;
+    public getQuestions(tags?: Array<Array<string>>, likeTitle?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
 
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
         if (tags) {
             queryParameters = queryParameters.set('tags', tags.join(COLLECTION_FORMATS['pipes']));
+        }
+        if (likeTitle !== undefined && likeTitle !== null) {
+            queryParameters = queryParameters.set('likeTitle', <any>likeTitle);
         }
 
         let headers = this.defaultHeaders;

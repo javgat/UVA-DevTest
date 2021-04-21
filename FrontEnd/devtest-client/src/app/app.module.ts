@@ -38,6 +38,9 @@ import { ProfileTeamsComponent } from './profile/profile-teams/profile-teams.com
 import { ProfilePublicQuestionsComponent } from './profile/profile-public-questions/profile-public-questions.component';
 import { ProfilePublicTestsComponent } from './profile/profile-public-tests/profile-public-tests.component';
 import { ListQuestionsComponent } from './list-questions/list-questions.component';
+import { LqSharedUserComponent } from './list-questions/lq-shared-user/lq-shared-user.component';
+import { LqUserComponent } from './list-questions/lq-user/lq-user.component';
+import { LqProfilePublicComponent } from './list-questions/lq-profile-public/lq-profile-public.component';
 
 export function apiConfigFactory (): Configuration {
   const params: ConfigurationParameters = {
@@ -78,7 +81,10 @@ export function apiConfigFactory (): Configuration {
     ProfileTeamsComponent,
     ProfilePublicQuestionsComponent,
     ProfilePublicTestsComponent,
-    ListQuestionsComponent
+    ListQuestionsComponent,
+    LqSharedUserComponent,
+    LqUserComponent,
+    LqProfilePublicComponent
   ],
   imports: [
     BrowserModule,

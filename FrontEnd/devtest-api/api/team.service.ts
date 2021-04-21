@@ -703,22 +703,27 @@ export class TeamService {
      * Returns all questions that the team administers
      * @param teamname Teamname of the team to get its questions
      * @param tags 
+     * @param likeTitle 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getQuestionsFromTeam(teamname: string, tags?: Array<Array<string>>, observe?: 'body', reportProgress?: boolean): Observable<Array<Question>>;
-    public getQuestionsFromTeam(teamname: string, tags?: Array<Array<string>>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Question>>>;
-    public getQuestionsFromTeam(teamname: string, tags?: Array<Array<string>>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Question>>>;
-    public getQuestionsFromTeam(teamname: string, tags?: Array<Array<string>>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getQuestionsFromTeam(teamname: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Question>>;
+    public getQuestionsFromTeam(teamname: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Question>>>;
+    public getQuestionsFromTeam(teamname: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Question>>>;
+    public getQuestionsFromTeam(teamname: string, tags?: Array<Array<string>>, likeTitle?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (teamname === null || teamname === undefined) {
             throw new Error('Required parameter teamname was null or undefined when calling getQuestionsFromTeam.');
         }
 
 
+
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
         if (tags) {
             queryParameters = queryParameters.set('tags', tags.join(COLLECTION_FORMATS['pipes']));
+        }
+        if (likeTitle !== undefined && likeTitle !== null) {
+            queryParameters = queryParameters.set('likeTitle', <any>likeTitle);
         }
 
         let headers = this.defaultHeaders;
