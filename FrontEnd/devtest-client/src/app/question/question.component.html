@@ -34,7 +34,7 @@
                         placeholder="Etiqueta" required pattern=".+" />
                 </div>
             </form>
-            <p>Tiempo estimado: {{question.estimatedTime}} segundos</p>
+            <p>Tiempo estimado: {{question.estimatedTime}} minutos</p>
             <p>Corrección automática: <span *ngIf="question.autoCorrect">Sí</span><span
                     *ngIf="!question.autoCorrect">No</span></p>
             <p>Acceso público para profesores: <span *ngIf="question.accesoPublicoNoPublicada">Sí</span><span
@@ -130,7 +130,7 @@
                             [(ngModel)]="questionEdit.question" required rows=3></textarea>
                     </div>
                     <div class="mb-3">
-                        <label for="inputTime" class="form-label">Tiempo estimado (segundos)</label>
+                        <label for="inputTime" class="form-label">Tiempo estimado (minutos)</label>
                         <input type="number" class="form-control" name="inputTime"
                             [(ngModel)]="questionEdit.estimatedTime" required min=0 />
                     </div>

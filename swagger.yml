@@ -4615,7 +4615,8 @@ definitions:
         example: ¿Cual es el lenguaje que tiene un nombre más largo de todos?
       estimatedTime:
         type: integer
-        example: 32600
+        example: 60
+        minimum: 0
       autoCorrect:
         type: boolean
         example: true
@@ -4645,7 +4646,7 @@ definitions:
     required:
     - title
     - description
-    - maxSeconds
+    - maxMinutes
     - accesoPublico
     - editable
     - username
@@ -4660,9 +4661,10 @@ definitions:
       description:
         type: string
         example: En este test se evaluaran los conocimientos respecto al lenguaje de programación Java
-      maxSeconds:
+      maxMinutes:
         type: integer
-        example: 32600
+        example: 60
+        minimum: 0
       accesoPublico:
         type: boolean
         example: true

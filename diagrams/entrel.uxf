@@ -37,7 +37,7 @@ fontfamily=Monospaced
 - id: int {id}
 - title: String
 - description: String
-- maxSeconds: int
+- maxMinutes: int
 - accesoPublico: bool
 - editable: bool
 - accesoPublicoNoPublicado: bool

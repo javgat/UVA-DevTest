@@ -43,10 +43,11 @@ type Test struct {
 	// Example: 1
 	ID int64 `json:"id,omitempty"`
 
-	// max seconds
-	// Example: 32600
+	// max minutes
+	// Example: 60
 	// Required: true
-	MaxSeconds *int64 `json:"maxSeconds"`
+	// Minimum: 0
+	MaxMinutes *int64 `json:"maxMinutes"`
 
 	// title
 	// Example: Test de introduccion a Java
@@ -79,7 +80,7 @@ func (m *Test) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
-	if err := m.validateMaxSeconds(formats); err != nil {
+	if err := m.validateMaxMinutes(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -133,9 +134,13 @@ func (m *Test) validateEditable(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *Test) validateMaxSeconds(formats strfmt.Registry) error {
+func (m *Test) validateMaxMinutes(formats strfmt.Registry) error {
 
-	if err := validate.Required("maxSeconds", "body", m.MaxSeconds); err != nil {
+	if err := validate.Required("maxMinutes", "body", m.MaxMinutes); err != nil {
+		return err
+	}
+
+	if err := validate.MinimumInt("maxMinutes", "body", *m.MaxMinutes, 0, false); err != nil {
 		return err
 	}
 

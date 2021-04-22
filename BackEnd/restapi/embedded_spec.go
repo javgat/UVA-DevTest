@@ -7107,7 +7107,7 @@ func init() {
       "required": [
         "title",
         "description",
-        "maxSeconds",
+        "maxMinutes",
         "accesoPublico",
         "editable",
         "username",
@@ -7134,9 +7134,9 @@ func init() {
           "type": "integer",
           "example": 1
         },
-        "maxSeconds": {
+        "maxMinutes": {
           "type": "integer",
-          "example": 32600
+          "example": 60
         },
         "title": {
           "type": "string",
@@ -15363,6 +15363,7 @@ func init() {
         },
         "estimatedTime": {
           "type": "integer",
+          "minimum": 0,
           "example": 32600
         },
         "id": {
@@ -15530,7 +15531,7 @@ func init() {
       "required": [
         "title",
         "description",
-        "maxSeconds",
+        "maxMinutes",
         "accesoPublico",
         "editable",
         "username",
@@ -15557,9 +15558,10 @@ func init() {
           "type": "integer",
           "example": 1
         },
-        "maxSeconds": {
+        "maxMinutes": {
           "type": "integer",
-          "example": 32600
+          "minimum": 0,
+          "example": 60
         },
         "title": {
           "type": "string",

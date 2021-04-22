@@ -98,6 +98,7 @@ type Question struct {
 	// estimated time
 	// Example: 32600
 	// Required: true
+	// Minimum: 0
 	EstimatedTime *int64 `json:"estimatedTime"`
 
 	// id
@@ -163,10 +164,11 @@ type Test struct {
 	// Example: 1
 	ID int64 `json:"id,omitempty"`
 
-	// max seconds
-	// Example: 32600
+	// max minutes
+	// Example: 60
 	// Required: true
-	MaxSeconds *int64 `json:"maxSeconds"`
+	// Minimum: 0
+	MaxMinutes *int64 `json:"maxMinutes"`
 
 	// title
 	// Example: Test de introduccion a Java

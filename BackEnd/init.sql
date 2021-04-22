@@ -54,7 +54,7 @@ CREATE TABLE Test(
   id int(11) NOT NULL AUTO_INCREMENT,
   title varchar(40) COLLATE utf8_unicode_ci NOT NULL,
   description longtext COLLATE utf8_unicode_ci NOT NULL,
-  maxSeconds int(11) NOT NULL,
+  maxMinutes int(11) NOT NULL,
   accesoPublico boolean NOT NULL,
   editable boolean NOT NULL,
   usuarioid int(11) NOT NULL,

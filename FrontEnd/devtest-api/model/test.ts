@@ -15,7 +15,7 @@ export interface Test {
     id?: number;
     title: string;
     description: string;
-    maxSeconds: number;
+    maxMinutes: number;
     accesoPublico: boolean;
     editable: boolean;
     username: string;

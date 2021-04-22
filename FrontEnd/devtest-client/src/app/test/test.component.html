@@ -35,7 +35,7 @@
         <div class="mb-4">
             <span style="white-space: pre-line">{{test.description}}</span>
         </div>
-        <p><b>Tiempo disponible:</b> {{test.maxSeconds}} segundos</p>
+        <p><b>Tiempo disponible:</b> {{test.maxMinutes}} minutos</p>
         <p><b>Acceso público a realización: </b> <span *ngIf="test.accesoPublico">Sí</span><span *ngIf="!test.accesoPublico">No</span>
         <p><b>Visionado público para profesores: </b> <span *ngIf="test.accesoPublicoNoPublicado">Sí</span><span *ngIf="!test.accesoPublicoNoPublicado">No</span>
         </p>
@@ -68,7 +68,7 @@
                     <td [routerLink]="['/q', pregunta.id]" role="button">{{pregunta.id}}</td>
                     <td [routerLink]="['/q', pregunta.id]" role="button">{{pregunta.title}}</td>
                     <td [routerLink]="['/q', pregunta.id]" role="button">{{pregunta.username}}</td>
-                    <td [routerLink]="['/q', pregunta.id]" role="button">{{pregunta.estimatedTime}} segundos</td>
+                    <td [routerLink]="['/q', pregunta.id]" role="button">{{pregunta.estimatedTime}} minutos</td>
                     <td [routerLink]="['/q', pregunta.id]" role="button">{{tipoPrint(pregunta.tipoPregunta,
                         pregunta.eleccionUnica)}}</td>
                     <td *ngIf="checkPermisosEdicion()">
@@ -111,8 +111,8 @@
                                 [(ngModel)]="testEdit.description" required rows=3></textarea>
                         </div>
                         <div class="mb-3">
-                            <label for="inputTime" class="form-label">Tiempo disponible (segundos)</label>
-                            <input type="number" class="form-control" name="inputTime" [(ngModel)]="testEdit.maxSeconds"
+                            <label for="inputTime" class="form-label">Tiempo disponible (minutos)</label>
+                            <input type="number" class="form-control" name="inputTime" [(ngModel)]="testEdit.maxMinutes"
                                 required min=0 />
                         </div>
                         <div class="form-check form-switch">

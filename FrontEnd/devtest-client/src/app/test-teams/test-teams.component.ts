@@ -53,7 +53,7 @@ export class TestTeamsComponent extends LoggedInTeacherController implements OnI
   getTest(primera: boolean) {
     this.tS.getTest(this.id).subscribe(
       resp => {
-        this.test = new Examen(resp.title, resp.description, resp.accesoPublico, resp.editable, resp.maxSeconds, resp.username, resp.id, resp.accesoPublicoNoPublicado)
+        this.test = new Examen(resp.title, resp.description, resp.accesoPublico, resp.editable, resp.maxMinutes, resp.username, resp.id, resp.accesoPublicoNoPublicado)
         this.getTeamsTest(true)
         if (!this.getSessionUser().isEmpty())
           this.getIsInAdminTeam(true)

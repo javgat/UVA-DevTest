@@ -25,7 +25,7 @@ func ToModelTest(t *Test) (*models.Test, error) {
 				Editable:                 t.Editable,
 				Description:              t.Description,
 				ID:                       t.ID,
-				MaxSeconds:               t.MaxSeconds,
+				MaxMinutes:               t.MaxMinutes,
 				Title:                    t.Title,
 				Username:                 u.Username,
 			}
@@ -55,7 +55,7 @@ func rowsToTests(rows *sql.Rows) ([]*Test, error) {
 	var tests []*Test
 	for rows.Next() {
 		var t Test
-		err := rows.Scan(&t.ID, &t.Title, &t.Description, &t.MaxSeconds, &t.AccesoPublico, &t.Editable, &t.Usuarioid, &t.AccesoPublicoNoPublicado)
+		err := rows.Scan(&t.ID, &t.Title, &t.Description, &t.MaxMinutes, &t.AccesoPublico, &t.Editable, &t.Usuarioid, &t.AccesoPublicoNoPublicado)
 		if err != nil {
 			return tests, err
 		}
@@ -181,13 +181,13 @@ func PutTest(db *sql.DB, testid int64, t *models.Test) error {
 	if err != nil || u == nil {
 		return errors.New(errorResourceNotFound)
 	}
-	query, err := db.Prepare("UPDATE Test SET title=?, description=?, maxSeconds=?, accesoPublico=?, usuarioid=?, accesoPublicoNoPublicado=? WHERE editable=1 AND id=?")
+	query, err := db.Prepare("UPDATE Test SET title=?, description=?, maxMinutes=?, accesoPublico=?, usuarioid=?, accesoPublicoNoPublicado=? WHERE editable=1 AND id=?")
 
 	if err != nil {
 		return err
 	}
 	defer query.Close()
-	_, err = query.Exec(t.Title, t.Description, t.MaxSeconds, *t.AccesoPublico, u.ID, *t.AccesoPublicoNoPublicado, testid)
+	_, err = query.Exec(t.Title, t.Description, t.MaxMinutes, *t.AccesoPublico, u.ID, *t.AccesoPublicoNoPublicado, testid)
 	return err
 }
 
@@ -283,14 +283,14 @@ func PostTest(db *sql.DB, username string, t *models.Test) (*models.Test, error)
 	if err != nil || u == nil {
 		return nil, errors.New(errorResourceNotFound)
 	}
-	query, err := db.Prepare("INSERT INTO Test(title, description, maxSeconds, accesoPublico, editable, usuarioid, accesoPublicoNoPublicado) " +
+	query, err := db.Prepare("INSERT INTO Test(title, description, maxMinutes, accesoPublico, editable, usuarioid, accesoPublicoNoPublicado) " +
 		"VALUES (?,?,?,?,?,?,?)")
 
 	if err != nil {
 		return nil, err
 	}
 	defer query.Close()
-	sol, err := query.Exec(t.Title, t.Description, t.MaxSeconds, t.AccesoPublico, t.Editable, u.ID, t.AccesoPublicoNoPublicado)
+	sol, err := query.Exec(t.Title, t.Description, t.MaxMinutes, t.AccesoPublico, t.Editable, u.ID, t.AccesoPublicoNoPublicado)
 	if err == nil {
 		ts := t
 		ts.ID, err = sol.LastInsertId()

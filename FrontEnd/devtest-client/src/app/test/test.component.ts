@@ -66,8 +66,8 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
   getTest(primera: boolean) {
     this.testS.getTest(this.id).subscribe(
       resp => {
-        this.test = new Examen(resp.title, resp.description, resp.accesoPublico, resp.editable, resp.maxSeconds, resp.username, resp.id, resp.accesoPublicoNoPublicado)
-        this.testEdit = new Examen(resp.title, resp.description, resp.accesoPublico, resp.editable, resp.maxSeconds, resp.username, resp.id, resp.accesoPublicoNoPublicado)
+        this.test = new Examen(resp.title, resp.description, resp.accesoPublico, resp.editable, resp.maxMinutes, resp.username, resp.id, resp.accesoPublicoNoPublicado)
+        this.testEdit = new Examen(resp.title, resp.description, resp.accesoPublico, resp.editable, resp.maxMinutes, resp.username, resp.id, resp.accesoPublicoNoPublicado)
         this.getPreguntasTest(true)
         this.getTags(true)
         if (!this.getSessionUser().isEmpty())

@@ -165,15 +165,15 @@ export class Examen implements Test{
     id: number;
     title: string;
     description: string;
-    maxSeconds: number;
+    maxMinutes: number;
     accesoPublico: boolean;
     editable: boolean;
     username: string;
     accesoPublicoNoPublicado: boolean;
-    constructor(title?: string, description?: string, accesoPublico?: boolean, editable?: boolean, maxSeconds?: number, username?: string, id?: number, accesoPublicoNoPublicado?: boolean){
+    constructor(title?: string, description?: string, accesoPublico?: boolean, editable?: boolean, maxMinutes?: number, username?: string, id?: number, accesoPublicoNoPublicado?: boolean){
         this.title=title || ""
         this.description=description || ""
-        this.maxSeconds=maxSeconds || 0
+        this.maxMinutes=maxMinutes || 0
         this.accesoPublico=accesoPublico || false
         this.editable=editable || false
         this.username=username || ""

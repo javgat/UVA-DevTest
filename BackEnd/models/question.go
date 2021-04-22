@@ -42,6 +42,7 @@ type Question struct {
 	// estimated time
 	// Example: 32600
 	// Required: true
+	// Minimum: 0
 	EstimatedTime *int64 `json:"estimatedTime"`
 
 	// id
@@ -153,6 +154,10 @@ func (m *Question) validateEditable(formats strfmt.Registry) error {
 func (m *Question) validateEstimatedTime(formats strfmt.Registry) error {
 
 	if err := validate.Required("estimatedTime", "body", m.EstimatedTime); err != nil {
+		return err
+	}
+
+	if err := validate.MinimumInt("estimatedTime", "body", *m.EstimatedTime, 0, false); err != nil {
 		return err
 	}
 
