@@ -73,8 +73,8 @@
                     <th>Valor en test</th>
                 </tr>
             </thead>
-            <tbody *ngFor="let pregunta of preguntas">
-                <tr>
+            <tbody>
+                <tr *ngFor="let pregunta of preguntas">
                     <td [routerLink]="['/q', pregunta.id]" role="button">{{pregunta.id}}</td>
                     <td [routerLink]="['/q', pregunta.id]" role="button">{{pregunta.title}}</td>
                     <td [routerLink]="['/q', pregunta.id]" role="button">{{pregunta.username}}</td>
@@ -90,6 +90,10 @@
                                 </div>
                                 <div class="col-auto">
                                     <input class="button btn btn-primary" type="submit" value="Guardar valor" />
+                                </div>
+                                <div class="d-grid gap-2 d-md-flex d-inline-flex justify-content-md-end col-sm">
+
+                                    <button type="button" class="btn btn-danger btn-sm mx-4 me-md-2" (click)="quitarPreguntaClick(pregunta.id)">Quitar</button>
                                 </div>
                             </div>
                         </form>
@@ -159,7 +163,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message" role="alert">
+                    <div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message"
+                        role="alert">
                         {{getMensaje().texto}}</div>
                     <p>Pulsa la pregunta que quieras añadir</p>
                     <app-lq-add-question-test (onQuestionPicked)="questionPicked($event)"></app-lq-add-question-test>

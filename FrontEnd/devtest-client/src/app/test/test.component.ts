@@ -26,6 +26,7 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
   deletingTag: string
   mantenerMensaje: boolean
   addQuestionById: boolean
+  preguntaQuitando: number
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private route: ActivatedRoute, private testS: TestService) {
     super(session, router, data, userS)
     this.isInAdminTeam = false
@@ -38,6 +39,7 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
     this.newTag = ""
     this.deletingTag = ""
     this.mantenerMensaje = false
+    this.preguntaQuitando = 0
     this.routeSub = this.route.params.subscribe(params => {
       this.id = params['testid']
       if(!this.mantenerMensaje){
@@ -159,7 +161,7 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
     }
     this.testS.addQuestionToTest(this.id, this.addQuestionId, vF).subscribe(
       resp => {
-        this.getPreguntasTest(true)
+        this.getTest(true)
       },
       err => this.handleErrRelog(err, "añadir pregunta a test", primera, this.addQuestion, this)
     )
@@ -232,5 +234,18 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
   questionPicked(id: number){
     this.addQuestionId=id
     this.addQuestionSubmit()
+  }
+
+  quitarPreguntaClick(id: number | undefined){
+    this.preguntaQuitando=id || this.preguntaQuitando
+    this.quitarPregunta(true)
+  }
+
+  quitarPregunta(primera:boolean){
+    if(this.test.id==undefined) return
+    this.testS.removeQuestionFromTest(this.test.id, this.preguntaQuitando).subscribe(
+      resp=> this.getTest(true),
+      err=> this.handleErrRelog(err, "quitar pregunta de test", primera, this.quitarPregunta, this)
+    )
   }
 }
