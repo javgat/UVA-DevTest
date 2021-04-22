@@ -223,10 +223,14 @@ func AddAdminTeamToTest(params test.AddAdminTeamToTestParams, u *models.User) mi
 				}
 			}
 			s := "El equipo a añadir tiene que ser de profesores"
-			var t *dao.Team
-			t, err = dao.GetTeam(db, params.Teamname)
-			if err != nil || t == nil {
-				s = "El equipo no existe"
+			if err != nil {
+				s = "El equipo ya esta añadido"
+			} else {
+				var t *dao.Team
+				t, err = dao.GetTeam(db, params.Teamname)
+				if err != nil || t == nil {
+					s = "El equipo no existe"
+				}
 			}
 			return test.NewAddAdminTeamToTestBadRequest().WithPayload(&models.Error{Message: &s})
 		}
