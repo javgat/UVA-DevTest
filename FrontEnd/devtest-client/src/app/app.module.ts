@@ -45,6 +45,7 @@ import { ListTestsComponent } from './list-tests/list-tests.component';
 import { LtUserComponent } from './list-tests/lt-user/lt-user.component';
 import { LtSharedUserComponent } from './list-tests/lt-shared-user/lt-shared-user.component';
 import { LtProfilePublicComponent } from './list-tests/lt-profile-public/lt-profile-public.component';
+import { LqAddQuestionTestComponent } from './list-questions/lq-add-question-test/lq-add-question-test.component';
 
 export function apiConfigFactory (): Configuration {
   const params: ConfigurationParameters = {
@@ -92,7 +93,8 @@ export function apiConfigFactory (): Configuration {
     ListTestsComponent,
     LtUserComponent,
     LtSharedUserComponent,
-    LtProfilePublicComponent
+    LtProfilePublicComponent,
+    LqAddQuestionTestComponent
   ],
   imports: [
     BrowserModule,

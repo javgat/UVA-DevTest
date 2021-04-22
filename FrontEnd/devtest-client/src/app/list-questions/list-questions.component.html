@@ -41,23 +41,34 @@
         <label class="form-check-label" for="flexSwitchIncludeNonEdit">Incluir copias de preguntas de tests
             publicados</label>
     </div>
-    <table class="table table-striped table-hover table-primary my-3">
+    <table class="table table-striped table-hover table-primary my-3" [ngClass]="{'scrolly': scrollable}">
         <thead>
             <tr>
                 <th>ID</th>
                 <th>Título</th>
+                <th *ngIf="selectAddQuestion">Abrir</th>
                 <th>Autor</th>
                 <th>Tiempo Estimado</th>
                 <th>Tipo</th>
             </tr>
         </thead>
-        <tbody *ngFor="let question of questions">
-            <tr role="button" [routerLink]="['/q', question.id]">
+        <tbody *ngIf="!selectAddQuestion">
+            <tr *ngFor="let question of questions" role="button" [routerLink]="['/q', question.id]">
                 <td>{{question.id}}</td>
                 <td>{{question.title}}</td>
                 <td>{{question.username}}</td>
                 <td>{{question.estimatedTime}} minutos</td>
                 <td>{{tipoPrint(question.tipoPregunta, question.eleccionUnica)}}</td>
+            </tr>
+        </tbody>
+        <tbody *ngIf="selectAddQuestion">
+            <tr *ngFor="let question of questions">
+                <td role="button" (click)="selectQuestion(question.id)" data-bs-dismiss="modal">{{question.id}}</td>
+                <td role="button" (click)="selectQuestion(question.id)" data-bs-dismiss="modal">{{question.title}}</td>
+                <td><button type="button" class="btn btn-secondary" (click)="newTabQuestion(question.id)">Abrir</button></td>
+                <td role="button" (click)="selectQuestion(question.id)" data-bs-dismiss="modal">{{question.username}}</td>
+                <td role="button" (click)="selectQuestion(question.id)" data-bs-dismiss="modal">{{question.estimatedTime}} minutos</td>
+                <td role="button" (click)="selectQuestion(question.id)" data-bs-dismiss="modal">{{tipoPrint(question.tipoPregunta, question.eleccionUnica)}}</td>
             </tr>
         </tbody>
     </table>

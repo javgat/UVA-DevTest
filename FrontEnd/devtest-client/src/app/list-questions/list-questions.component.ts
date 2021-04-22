@@ -21,6 +21,8 @@ export class ListQuestionsComponent extends LoggedInController implements OnInit
   likeTitle: string | undefined
   editLikeTitle: string
   hideSwitchInclude: boolean
+  scrollable: boolean
+  selectAddQuestion: boolean
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, protected qS: QuestionService, protected tagS: TagService) {
     super(session, router, data, userS)
     this.includeNonEdit = false
@@ -30,6 +32,8 @@ export class ListQuestionsComponent extends LoggedInController implements OnInit
     this.orOperation = true
     this.editLikeTitle = ""
     this.hideSwitchInclude = false
+    this.scrollable = false
+    this.selectAddQuestion = false
     this.getQuestionsFilters()
   }
 
@@ -55,6 +59,8 @@ export class ListQuestionsComponent extends LoggedInController implements OnInit
       err => this.handleErrRelog(err, "obtener preguntas no publicadas", primera, this.getQuestionsEdit, this)
     )
   }
+
+  selectQuestion(id: number | undefined){}
 
   getQuestionsFilters() {
     if (this.includeNonEdit) {
@@ -152,6 +158,14 @@ export class ListQuestionsComponent extends LoggedInController implements OnInit
     this.likeTitle = undefined
     this.editLikeTitle = ""
     this.getQuestionsFilters()
+  }
+
+  newTabQuestion(id: number | undefined){
+    const url = this.router.serializeUrl(
+      this.router.createUrlTree(['/q', id])
+    );
+  
+    window.open(url, '_blank');
   }
 
 }

@@ -36,8 +36,10 @@
             <span style="white-space: pre-line">{{test.description}}</span>
         </div>
         <p><b>Tiempo disponible:</b> {{test.maxMinutes}} minutos</p>
-        <p><b>Acceso público a realización: </b> <span *ngIf="test.accesoPublico">Sí</span><span *ngIf="!test.accesoPublico">No</span>
-        <p><b>Visionado público para profesores: </b> <span *ngIf="test.accesoPublicoNoPublicado">Sí</span><span *ngIf="!test.accesoPublicoNoPublicado">No</span>
+        <p><b>Acceso público a realización: </b> <span *ngIf="test.accesoPublico">Sí</span><span
+                *ngIf="!test.accesoPublico">No</span>
+        <p><b>Visionado público para profesores: </b> <span *ngIf="test.accesoPublicoNoPublicado">Sí</span><span
+                *ngIf="!test.accesoPublicoNoPublicado">No</span>
         </p>
         <p><button class="btn btn-primary" type="button" [routerLink]="['/et', test.id, 'teams']">Ver equipos
                 administradores</button></p>
@@ -46,10 +48,18 @@
         <hr />
         <h4>Preguntas:</h4>
         <form *ngIf="checkPermisosEdicion()" (ngSubmit)='addQuestionSubmit()' ngNativeValidate>
-            <div class="input-group my-3">
-                <input class="button btn btn-primary" type="submit" value="Añadir pregunta" />
-                <input type="number" class="form-control" name="inputAddQuestion" [(ngModel)]="addQuestionId"
-                    placeholder="Id de la pregunta" required min=1 />
+            <div *ngIf="addQuestionById">
+                <div class="input-group my-3">
+                    <input class="button btn btn-primary" type="submit" value="Añadir pregunta por ID" />
+                    <input type="number" class="form-control" name="inputAddQuestion" [(ngModel)]="addQuestionId"
+                        placeholder="Id de la pregunta" required min=1 />
+                </div>
+                <p><a class="link-dark m-3" role="button" (click)="changeNotAddByID()">Añadir con buscador</a></p>
+            </div>
+            <div class="my-3" *ngIf="!addQuestionById">
+                <p><button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal"
+                        data-bs-target="#modalSearchQuestion" (click)="borrarMensaje()">Añadir pregunta</button></p>
+                <p><a class="link-dark mx-3" role="button" (click)="changeAddByID()">Añadir por id</a></p>
             </div>
         </form>
         <table class="table table-striped table-hover table-primary my-3">
@@ -71,16 +81,15 @@
                     <td [routerLink]="['/q', pregunta.id]" role="button">{{pregunta.estimatedTime}} minutos</td>
                     <td [routerLink]="['/q', pregunta.id]" role="button">{{tipoPrint(pregunta.tipoPregunta,
                         pregunta.eleccionUnica)}}</td>
-                    <td *ngIf="checkPermisosEdicion()">
+                    <td *ngIf="checkPermisosEdicion()" (submit)="changeValueSubmit(pregunta)">
                         <form ngNativeValidate>
                             <div class="row">
                                 <div class="col-auto">
                                     <input type="number" class="form-control" name="inputChangeValorFinal"
-                                        [(ngModel)]="pregunta.valorFinal" required min=1 />
+                                        [(ngModel)]="pregunta.valorFinal" required min=0 />
                                 </div>
                                 <div class="col-auto">
-                                    <input class="button btn btn-primary" type="submit" value="Guardar valor"
-                                        (click)="changeValueSubmit(pregunta)" />
+                                    <input class="button btn btn-primary" type="submit" value="Guardar valor" />
                                 </div>
                             </div>
                         </form>
@@ -119,13 +128,15 @@
                             <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault"
                                 [checked]="testEdit.accesoPublico"
                                 (change)="testEdit.accesoPublico = !testEdit.accesoPublico">
-                            <label class="form-check-label" for="flexSwitchCheckDefault">Acceso público a realización</label>
+                            <label class="form-check-label" for="flexSwitchCheckDefault">Acceso público a
+                                realización</label>
                         </div>
                         <div class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" id="flexSwitchCheckLectura"
                                 [checked]="testEdit.accesoPublicoNoPublicado"
                                 (change)="testEdit.accesoPublicoNoPublicado = !testEdit.accesoPublicoNoPublicado">
-                            <label class="form-check-label" for="flexSwitchCheckLectura">Visionado público para profesores</label>
+                            <label class="form-check-label" for="flexSwitchCheckLectura">Visionado público para
+                                profesores</label>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -137,4 +148,27 @@
             </div>
         </div>
     </div>
+
+    <!-- Buscador preguntas-->
+    <div class="modal fade" id="modalSearchQuestion" tabindex="-1" aria-labelledby="modalSearchQuestionLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalSearchQuestionLabel">Buscador de preguntas para añadir</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message" role="alert">
+                        {{getMensaje().texto}}</div>
+                    <p>Pulsa la pregunta que quieras añadir</p>
+                    <app-lq-add-question-test (onQuestionPicked)="questionPicked($event)"></app-lq-add-question-test>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>

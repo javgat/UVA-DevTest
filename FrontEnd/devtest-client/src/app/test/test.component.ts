@@ -25,6 +25,7 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
   newTag : string
   deletingTag: string
   mantenerMensaje: boolean
+  addQuestionById: boolean
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private route: ActivatedRoute, private testS: TestService) {
     super(session, router, data, userS)
     this.isInAdminTeam = false
@@ -44,6 +45,7 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
       }
       this.getTest(true)
     });
+    this.addQuestionById = false
   }
 
   ngOnInit(): void {
@@ -209,4 +211,16 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
     )
   }
 
+  changeAddByID(){
+    this.addQuestionById=true
+  }
+
+  changeNotAddByID(){
+    this.addQuestionById=false
+  }
+
+  questionPicked(id: number){
+    this.addQuestionId=id
+    this.addQuestionSubmit()
+  }
 }
