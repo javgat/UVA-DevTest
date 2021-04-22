@@ -190,7 +190,11 @@ export class TeamComponent extends LoggedInController implements OnInit {
   }
 
   leaveTeamClick(){
-    this.leaveTeam(true)
+    if(this.lastMember()){
+      this.leaveDeleteTeam(true)
+    }else{
+      this.leaveTeam(true)
+    }
   }
 
   leaveTeam(primera: boolean){
@@ -202,8 +206,21 @@ export class TeamComponent extends LoggedInController implements OnInit {
     )
   }
 
+  leaveDeleteTeam(primera: boolean){
+    this.teamService.deleteTeam(this.id).subscribe(
+      resp => {
+        this.router.navigate(['/teams'])
+      },
+      err => this.handleErrRelog(err, "abandonar y eliminar equipo", primera, this.leaveDeleteTeam, this)
+    )
+  }
+
   checkTeamMember(): boolean{
     return (this.isTeamAdmin(this.getSessionUser().getUsername()) || this.isTeamMiembro(this.getSessionUser().getUsername()))
+  }
+
+  lastMember(): boolean{
+    return (this.miembros.length==0 && this.admins.length==1)
   }
 
 }
