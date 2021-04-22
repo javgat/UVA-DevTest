@@ -15,15 +15,12 @@ export class TestsUserComponent extends LoggedInTeacherController implements OnI
 
   routeSub: Subscription
   username: string
-  tests: Test[]
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private route: ActivatedRoute) {
     super(session, router, data, userS)
-    this.tests=[]
     this.username=""
     this.routeSub = this.route.params.subscribe(params => {
       this.username = params['username']
       this.borrarMensaje()
-      this.getTestsUser(true)
     });
   }
 
@@ -35,13 +32,6 @@ export class TestsUserComponent extends LoggedInTeacherController implements OnI
     this.routeSub.unsubscribe()
     super.onDestroy()
     this.borrarMensaje()
-  }
-
-  getTestsUser(primera: boolean){
-    this.userS.getTestsFromUser(this.username).subscribe(
-      resp => this.tests = resp,
-      err => this.handleErrRelog(err, "obtener tests de usuario", primera, this.getTestsUser, this)
-    )
   }
 
 }

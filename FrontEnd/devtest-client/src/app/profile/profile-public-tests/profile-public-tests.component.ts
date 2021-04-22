@@ -12,15 +12,9 @@ import { ProfileComponent } from '../profile.component';
 })
 export class ProfilePublicTestsComponent extends ProfileComponent implements OnInit {
 
-  tests : Test[]
   constructor(session: SessionService, router: Router, route: ActivatedRoute,
     userS: UserService, data: DataService, authService: AuthService) {
       super(session, router, route, userS, data, authService)
-      this.tests = []
-  }
-
-  doProfileAction(): void{
-    this.getPublicTests(true)
   }
 
   doInheritHasUserAction(){
@@ -35,13 +29,6 @@ export class ProfilePublicTestsComponent extends ProfileComponent implements OnI
 
   ngOnDestroy(): void{
     super.ngOnDestroy()
-  }
-
-  getPublicTests(primera: boolean){
-    this.userS.getPublicEditTestsFromUser(this.id).subscribe(
-      resp=> this.tests = resp,
-      err => this.handleErrRelog(err, "obtener tests editables publicos de un usuario", primera, this.getPublicTests, this)
-    )
   }
 
 }

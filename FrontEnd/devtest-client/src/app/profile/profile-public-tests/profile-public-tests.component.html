@@ -11,20 +11,5 @@
 </button>
 <div class="mt-5">
     <h2>Tests editables públicos de: {{id}}</h2>
-    <table class="table table-striped table-hover table-primary my-3">
-        <thead>
-            <tr>
-                <th>Título</th>
-                <th>Autor</th>
-                <th>Tiempo Disponible</th>
-            </tr>
-        </thead>
-        <tbody *ngFor="let test of tests">
-            <tr role="button" [routerLink]="['/et', test.id]">
-                <td>{{test.title}}</td>
-                <td>{{test.username}}</td>
-                <td>{{test.maxSeconds}} segundos</td>
-            </tr>
-        </tbody>
-    </table>
+    <app-lt-profile-public></app-lt-profile-public>
 </div>
