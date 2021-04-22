@@ -74,6 +74,7 @@ export class SessionService {
           },
           err => {
             this.data.handleShowErr(err, "alargar sesión de usuario")
+            this.logout()
           }
         )
       }

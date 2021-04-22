@@ -82,7 +82,7 @@ func GetJWTModelUserCookies(cookieSlice []string, expectedName string, expectedS
 				if err == nil {
 					var u *dao.User
 					u, err = dao.GetUserEmail(db, email)
-					if u != nil || err == nil {
+					if u != nil && err == nil {
 						wrap := CreateJWTWrapper(*u, expectedSeconds)
 						_, err = wrap.ValidateToken(token)
 						if err == nil {
