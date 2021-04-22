@@ -89,7 +89,7 @@ func GetPublicEditTests(params test.GetPublicEditTestsParams, u *models.User) mi
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var ts []*dao.Test
-			ts, err = dao.GetPublicEditTests(db)
+			ts, err = dao.GetPublicEditTests(db, params.Tags, params.LikeTitle)
 			if err == nil {
 				var mts []*models.Test
 				mts, err = dao.ToModelTests(ts)

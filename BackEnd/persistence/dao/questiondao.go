@@ -154,7 +154,7 @@ func prepareQueryLikeTitle(initQuery string, likeTitle *string, titleConsulta st
 	return query
 }
 
-func addFiltersToQuery(hayWhere bool, initQuery string, tags [][]string, likeTitle *string, idNombreConsulta string, idNombreSubconsulta string, tablaRelacionNombre string, titleConsulta string) string {
+func AddFiltersToQuery(hayWhere bool, initQuery string, tags [][]string, likeTitle *string, idNombreConsulta string, idNombreSubconsulta string, tablaRelacionNombre string, titleConsulta string) string {
 	stPrepare := initQuery
 	nexoString := " AND "
 	if !hayWhere {
@@ -173,11 +173,11 @@ func addFiltersToQuery(hayWhere bool, initQuery string, tags [][]string, likeTit
 }
 
 func addFiltersToQueryQuestion(hayWhere bool, initQuery string, tags [][]string, likeTitle *string) string {
-	return addFiltersToQuery(hayWhere, initQuery, tags, likeTitle, "id", "preguntaid", "PreguntaEtiqueta", "title")
+	return AddFiltersToQuery(hayWhere, initQuery, tags, likeTitle, "id", "preguntaid", "PreguntaEtiqueta", "title")
 }
 
 func addFiltersToQueryQuestionLongNames(hayWhere bool, initQuery string, tags [][]string, likeTitle *string) string {
-	return addFiltersToQuery(hayWhere, initQuery, tags, likeTitle, "P.id", "preguntaid", "PreguntaEtiqueta", "title")
+	return AddFiltersToQuery(hayWhere, initQuery, tags, likeTitle, "P.id", "preguntaid", "PreguntaEtiqueta", "title")
 }
 
 func GetAllEditQuestions(db *sql.DB, tags [][]string, likeTitle *string) ([]*Question, error) {

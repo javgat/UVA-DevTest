@@ -96,10 +96,14 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 
 	api.UserCopyQuestionHandler = user.CopyQuestionHandlerFunc(handlers.CopyQuestion) // POST /users/{username}/questions/{questionid}/copiedQuestions
 
+	api.UserGetSharedEditTestsFromUserHandler = user.GetSharedEditTestsFromUserHandlerFunc(handlers.GetSharedEditTests)
+
 	api.UserGetSharedTestsFromUserHandler = user.GetSharedTestsFromUserHandlerFunc(handlers.GetSharedTests) // GET /users/{username}/sharedTests
 	api.UserGetSharedTestFromUserHandler = user.GetSharedTestFromUserHandlerFunc(handlers.GetSharedTest)    // GET /users/{username}/sharedTests/{testid}
 
 	api.UserGetPublicEditTestsFromUserHandler = user.GetPublicEditTestsFromUserHandlerFunc(handlers.GetPublicETestsFromUser) // GET /users/{username}/publicEditTests
+
+	api.UserGetEditTestsFromUserHandler = user.GetEditTestsFromUserHandlerFunc(handlers.GetEditTestsFromUser)
 
 	api.UserGetTestsFromUserHandler = user.GetTestsFromUserHandlerFunc(handlers.GetTestsFromUser) // GET /users/{username}/tests
 	api.UserPostTestHandler = user.PostTestHandlerFunc(handlers.PostTest)                         // POST /users/{username}/tests

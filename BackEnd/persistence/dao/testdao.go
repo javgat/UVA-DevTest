@@ -77,6 +77,14 @@ func rowsToTest(rows *sql.Rows) (*Test, error) {
 	return test, err
 }
 
+func addFiltersToQueryTest(hayWhere bool, initQuery string, tags [][]string, likeTitle *string) string {
+	return AddFiltersToQuery(hayWhere, initQuery, tags, likeTitle, "id", "testid", "TestEtiqueta", "title")
+}
+
+func addFiltersToQueryTestLong(hayWhere bool, initQuery string, tags [][]string, likeTitle *string) string {
+	return AddFiltersToQuery(hayWhere, initQuery, tags, likeTitle, "T.id", "testid", "TestEtiqueta", "title")
+}
+
 func GetAllTests(db *sql.DB) ([]*Test, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
@@ -128,15 +136,18 @@ func GetPublicTests(db *sql.DB) ([]*Test, error) {
 	return nil, err
 }
 
-func GetPublicEditTests(db *sql.DB) ([]*Test, error) {
+func GetPublicEditTests(db *sql.DB, tags [][]string, likeTitle *string) ([]*Test, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
 	var ts []*Test
-	query, err := db.Prepare("SELECT * FROM Test WHERE editable=1 AND accesoPublicoNoPublicado=1")
+	stPrepare := "SELECT * FROM Test WHERE editable=1 AND accesoPublicoNoPublicado=1 "
+	stPrepare = addFiltersToQueryTest(true, stPrepare, tags, likeTitle)
+	query, err := db.Prepare(stPrepare)
 	if err == nil {
 		defer query.Close()
-		rows, err := query.Query()
+		interfaceParams := FilterParamsSlicesToInterfaceArr(tags, likeTitle)
+		rows, err := query.Query(interfaceParams...)
 		if err == nil {
 			ts, err = rowsToTests(rows)
 			return ts, err
@@ -192,17 +203,49 @@ func DeleteTest(db *sql.DB, testid int64) error {
 	return err
 }
 
-func GetPublicEditTestsFromUser(db *sql.DB, username string) ([]*Test, error) {
+func GetPublicEditTestsFromUser(db *sql.DB, username string, tags [][]string, likeTitle *string) ([]*Test, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
 	u, err := GetUserUsername(db, username)
 	if err == nil {
 		var ts []*Test
-		query, err := db.Prepare("SELECT * FROM Test WHERE usuarioid=? AND accesoPublicoNoPublicado=1")
+		stPrepare := "SELECT * FROM Test WHERE usuarioid=? AND accesoPublicoNoPublicado=1"
+		stPrepare = addFiltersToQueryTest(true, stPrepare, tags, likeTitle)
+		query, err := db.Prepare(stPrepare)
 		if err == nil {
 			defer query.Close()
-			rows, err := query.Query(u.ID)
+			interfaceParams := FilterParamsSlicesToInterfaceArr(tags, likeTitle)
+			var paramsSlice []interface{}
+			paramsSlice = append(paramsSlice, u.ID)
+			interfaceParams = append(paramsSlice, interfaceParams...)
+			rows, err := query.Query(interfaceParams...)
+			if err == nil {
+				ts, err = rowsToTests(rows)
+				return ts, err
+			}
+		}
+	}
+	return nil, err
+}
+
+func GetEditTestsFromUser(db *sql.DB, username string, tags [][]string, likeTitle *string) ([]*Test, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	u, err := GetUserUsername(db, username)
+	if err == nil {
+		var ts []*Test
+		stPrepare := "SELECT * FROM Test WHERE usuarioid=? AND editable=1"
+		stPrepare = addFiltersToQueryTest(true, stPrepare, tags, likeTitle)
+		query, err := db.Prepare(stPrepare)
+		if err == nil {
+			defer query.Close()
+			interfaceParams := FilterParamsSlicesToInterfaceArr(tags, likeTitle)
+			var paramsSlice []interface{}
+			paramsSlice = append(paramsSlice, u.ID)
+			interfaceParams = append(paramsSlice, interfaceParams...)
+			rows, err := query.Query(interfaceParams...)
 			if err == nil {
 				ts, err = rowsToTests(rows)
 				return ts, err
@@ -351,6 +394,29 @@ func GetPTestFromTeam(db *sql.DB, teamname string, testid int64) (*Test, error) 
 				t, err = rowsToTest(rows)
 				return t, err
 			}
+		}
+	}
+	return nil, err
+}
+
+func GetSharedEditTestsFromUser(db *sql.DB, username string, tags [][]string, likeTitle *string) ([]*Test, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var t []*Test
+	stPrepare := "SELECT DISTINCT T.* FROM Test T JOIN GestionTestEquipo G ON T.id=G.testid JOIN EquipoUsuario E ON G.equipoid=E.equipoid JOIN Usuario U ON U.id=E.usuarioid WHERE U.username=? AND T.editable=1"
+	stPrepare = addFiltersToQueryTestLong(true, stPrepare, tags, likeTitle)
+	query, err := db.Prepare(stPrepare)
+	if err == nil {
+		defer query.Close()
+		interfaceParams := FilterParamsSlicesToInterfaceArr(tags, likeTitle)
+		var paramsSlice []interface{}
+		paramsSlice = append(paramsSlice, username)
+		interfaceParams = append(paramsSlice, interfaceParams...)
+		rows, err := query.Query(interfaceParams...)
+		if err == nil {
+			t, err = rowsToTests(rows)
+			return t, err
 		}
 	}
 	return nil, err

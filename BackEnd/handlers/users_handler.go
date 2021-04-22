@@ -561,6 +561,28 @@ func CopyQuestion(params user.CopyQuestionParams, u *models.User) middleware.Res
 	return user.NewCopyQuestionForbidden()
 }
 
+// GET /users/{username}/sharedEditTests
+// Auth: Current User or Admin
+func GetSharedEditTests(params user.GetSharedEditTestsFromUserParams, u *models.User) middleware.Responder {
+	if userOrAdmin(params.Username, u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			var t []*dao.Test
+			t, err = dao.GetSharedEditTestsFromUser(db, params.Username, params.Tags, params.LikeTitle)
+			if err == nil {
+				var mt []*models.Test
+				mt, err = dao.ToModelTests(t)
+				if err == nil {
+					return user.NewGetSharedEditTestsFromUserOK().WithPayload(mt)
+				}
+			}
+		}
+		log.Println("Error en GetSharedEditTests: ", err)
+		return user.NewGetSharedEditTestsFromUserInternalServerError()
+	}
+	return user.NewGetSharedEditTestsFromUserForbidden()
+}
+
 // GET /users/{username}/sharedTests
 // Auth: Current User or Admin
 func GetSharedTests(params user.GetSharedTestsFromUserParams, u *models.User) middleware.Responder {
@@ -612,7 +634,7 @@ func GetPublicETestsFromUser(params user.GetPublicEditTestsFromUserParams, u *mo
 	if isTeacherOrAdmin(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			t, err := dao.GetPublicEditTestsFromUser(db, params.Username)
+			t, err := dao.GetPublicEditTestsFromUser(db, params.Username, params.Tags, params.LikeTitle)
 			if err == nil {
 				mt, err := dao.ToModelTests(t)
 				if mt != nil && err == nil {
@@ -624,6 +646,26 @@ func GetPublicETestsFromUser(params user.GetPublicEditTestsFromUserParams, u *mo
 		return user.NewGetPublicEditTestsFromUserInternalServerError()
 	}
 	return user.NewGetPublicEditTestsFromUserForbidden()
+}
+
+// GET /users/{username}/tests
+// Auth: Current User or Admin
+func GetEditTestsFromUser(params user.GetEditTestsFromUserParams, u *models.User) middleware.Responder {
+	if userOrAdmin(params.Username, u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			t, err := dao.GetEditTestsFromUser(db, params.Username, params.Tags, params.LikeTitle)
+			if err == nil {
+				mt, err := dao.ToModelTests(t)
+				if mt != nil && err == nil {
+					return user.NewGetEditTestsFromUserOK().WithPayload(mt)
+				}
+				return user.NewGetEditTestsFromUserGone()
+			}
+		}
+		return user.NewGetEditTestsFromUserInternalServerError()
+	}
+	return user.NewGetEditTestsFromUserForbidden()
 }
 
 // GET /users/{username}/tests

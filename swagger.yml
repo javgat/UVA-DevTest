@@ -783,6 +783,50 @@ paths:
           $ref: '#/responses/GoneError'
         500:
           $ref: '#/responses/InternalServerError'
+  /users/{username}/sharedEditTests:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - user
+      summary: Returns all non-published tests shared to a user (teacher).
+      operationId: GetSharedEditTestsFromUser
+      description: Returns all non-published tests shared to a user (teacher).
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the teacher who is shared the non-published  tests
+        required: true
+        type: string
+      - in: query
+        name: tags
+        type: array
+        collectionFormat: pipes
+        items:
+          type: array
+          collectionFormat: csv
+          items:
+            type: string
+      - in: query
+        name: likeTitle
+        type: string
+      responses:
+        200:
+          description: tests found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Test'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
 
   /users/{username}/sharedTests:
     get:
@@ -868,6 +912,63 @@ paths:
         name: username
         description: Username of the teacher who owns the tests
         required: true
+        type: string
+      - in: query
+        name: tags
+        type: array
+        collectionFormat: pipes
+        items:
+          type: array
+          collectionFormat: csv
+          items:
+            type: string
+      - in: query
+        name: likeTitle
+        type: string
+      responses:
+        200:
+          description: tests found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Test'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
+  /users/{username}/editTests:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - user
+      summary: Returns all non-published tests owned by a user (teacher).
+      operationId: GetEditTestsFromUser
+      description: Returns all non-published tests owned by a user (teacher).
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the teacher who owns the tests
+        required: true
+        type: string
+      - in: query
+        name: tags
+        type: array
+        collectionFormat: pipes
+        items:
+          type: array
+          collectionFormat: csv
+          items:
+            type: string
+      - in: query
+        name: likeTitle
         type: string
       responses:
         200:
@@ -2972,6 +3073,19 @@ paths:
       description: Returns all public non-published tests
       produces:
       - application/json
+      parameters:
+      - in: query
+        name: tags
+        type: array
+        collectionFormat: pipes
+        items:
+          type: array
+          collectionFormat: csv
+          items:
+            type: string
+      - in: query
+        name: likeTitle
+        type: string
       responses:
         200:
           description: tests found
