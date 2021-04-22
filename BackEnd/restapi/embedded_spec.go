@@ -5142,6 +5142,142 @@ func init() {
         }
       }
     },
+    "/users/{username}/availableEditQuestions": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all non-published questions that a teacher can add to a test",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns all non-published questions that a teacher can add to a test",
+        "operationId": "GetAvailableEditQuestionsOfUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who is allowed to use the questions",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "collectionFormat": "csv"
+            },
+            "collectionFormat": "pipes",
+            "name": "tags",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "likeTitle",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "questions found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Question"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/users/{username}/availableQuestions": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all questions that a teacher can add to a test",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns all questions that a teacher can add to a test",
+        "operationId": "GetAvailableQuestionsOfUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who is allowed to use the questions",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "collectionFormat": "csv"
+            },
+            "collectionFormat": "pipes",
+            "name": "tags",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "likeTitle",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "questions found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Question"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
     "/users/{username}/editQuestions": {
       "get": {
         "security": [
@@ -6941,7 +7077,7 @@ func init() {
         },
         "estimatedTime": {
           "type": "integer",
-          "example": 32600
+          "example": 60
         },
         "id": {
           "type": "integer",
@@ -13306,6 +13442,160 @@ func init() {
         }
       }
     },
+    "/users/{username}/availableEditQuestions": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all non-published questions that a teacher can add to a test",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns all non-published questions that a teacher can add to a test",
+        "operationId": "GetAvailableEditQuestionsOfUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who is allowed to use the questions",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "collectionFormat": "csv"
+            },
+            "collectionFormat": "pipes",
+            "name": "tags",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "likeTitle",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "questions found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Question"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/users/{username}/availableQuestions": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all questions that a teacher can add to a test",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns all questions that a teacher can add to a test",
+        "operationId": "GetAvailableQuestionsOfUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who is allowed to use the questions",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "collectionFormat": "csv"
+            },
+            "collectionFormat": "pipes",
+            "name": "tags",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "likeTitle",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "questions found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Question"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
     "/users/{username}/editQuestions": {
       "get": {
         "security": [
@@ -15364,7 +15654,7 @@ func init() {
         "estimatedTime": {
           "type": "integer",
           "minimum": 0,
-          "example": 32600
+          "example": 60
         },
         "id": {
           "type": "integer",

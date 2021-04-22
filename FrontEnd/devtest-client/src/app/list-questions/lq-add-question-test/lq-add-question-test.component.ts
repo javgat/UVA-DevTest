@@ -23,8 +23,30 @@ export class LqAddQuestionTestComponent extends ListQuestionsComponent implement
   ngOnInit(): void {
   }
 
+  doHasUserAction(){
+    this.getQuestionsFilters()
+  }
+
   selectQuestion(id: number | undefined){
     this.onQuestionPicked.emit(id);
+  }
+
+  getQuestionsInclude(primera: boolean) {
+    if(this.getSessionUser().isEmpty()) return
+    var username = this.getSessionUser().getUsername()
+    this.userS.getAvailableQuestionsOfUser(username, this.searchTags, this.likeTitle).subscribe(
+      resp => this.questions = resp,
+      err => this.handleErrRelog(err, "obtener preguntas disponibles para un usuario", primera, this.getQuestionsInclude, this)
+    )
+  }
+
+  getQuestionsEdit(primera: boolean) {
+    if(this.getSessionUser().isEmpty()) return
+    var username = this.getSessionUser().getUsername()
+    this.userS.getAvailableEditQuestionsOfUser(username, this.searchTags, this.likeTitle).subscribe(
+      resp => this.questions = resp,
+      err => this.handleErrRelog(err, "obtener preguntas editables disponibles para un usuario", primera, this.getQuestionsInclude, this)
+    )
   }
 
 }

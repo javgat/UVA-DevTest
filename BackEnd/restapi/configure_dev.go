@@ -84,6 +84,9 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 	api.TeamPostTeamHandler = team.PostTeamHandlerFunc(handlers.PostTeam)                      // POST /users/{username}/teams
 	api.UserGetTeamFromUserHandler = user.GetTeamFromUserHandlerFunc(handlers.GetTeamFromUser) // GET /users/{username}/teams/{teamname}
 
+	api.UserGetAvailableQuestionsOfUserHandler = user.GetAvailableQuestionsOfUserHandlerFunc(handlers.GetAvailableQuestions)             // GET /users/{username}/availableQuestions
+	api.UserGetAvailableEditQuestionsOfUserHandler = user.GetAvailableEditQuestionsOfUserHandlerFunc(handlers.GetAvailableEditQuestions) // GET /users/{username}/availableEditQuestions
+
 	api.UserGetSharedQuestionsOfUserHandler = user.GetSharedQuestionsOfUserHandlerFunc(handlers.GetSharedQuestions)  // GET /users/{username}/sharedQuestions
 	api.UserGetSharedQuestionFromUserHandler = user.GetSharedQuestionFromUserHandlerFunc(handlers.GetSharedQuestion) // GET /users/{username}/sharedQuestions/{testid}
 

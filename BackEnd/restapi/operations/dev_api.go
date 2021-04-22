@@ -139,6 +139,12 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		UserGetAnswersFromUserAnsweredTestHandler: user.GetAnswersFromUserAnsweredTestHandlerFunc(func(params user.GetAnswersFromUserAnsweredTestParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation user.GetAnswersFromUserAnsweredTest has not yet been implemented")
 		}),
+		UserGetAvailableEditQuestionsOfUserHandler: user.GetAvailableEditQuestionsOfUserHandlerFunc(func(params user.GetAvailableEditQuestionsOfUserParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation user.GetAvailableEditQuestionsOfUser has not yet been implemented")
+		}),
+		UserGetAvailableQuestionsOfUserHandler: user.GetAvailableQuestionsOfUserHandlerFunc(func(params user.GetAvailableQuestionsOfUserParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation user.GetAvailableQuestionsOfUser has not yet been implemented")
+		}),
 		QuestionGetEditQuestionsHandler: question.GetEditQuestionsHandlerFunc(func(params question.GetEditQuestionsParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation question.GetEditQuestions has not yet been implemented")
 		}),
@@ -564,6 +570,10 @@ type DevAPI struct {
 	UserGetAnswersFromUserHandler user.GetAnswersFromUserHandler
 	// UserGetAnswersFromUserAnsweredTestHandler sets the operation handler for the get answers from user answered test operation
 	UserGetAnswersFromUserAnsweredTestHandler user.GetAnswersFromUserAnsweredTestHandler
+	// UserGetAvailableEditQuestionsOfUserHandler sets the operation handler for the get available edit questions of user operation
+	UserGetAvailableEditQuestionsOfUserHandler user.GetAvailableEditQuestionsOfUserHandler
+	// UserGetAvailableQuestionsOfUserHandler sets the operation handler for the get available questions of user operation
+	UserGetAvailableQuestionsOfUserHandler user.GetAvailableQuestionsOfUserHandler
 	// QuestionGetEditQuestionsHandler sets the operation handler for the get edit questions operation
 	QuestionGetEditQuestionsHandler question.GetEditQuestionsHandler
 	// TagGetEditQuestionsFromTagHandler sets the operation handler for the get edit questions from tag operation
@@ -940,6 +950,12 @@ func (o *DevAPI) Validate() error {
 	}
 	if o.UserGetAnswersFromUserAnsweredTestHandler == nil {
 		unregistered = append(unregistered, "user.GetAnswersFromUserAnsweredTestHandler")
+	}
+	if o.UserGetAvailableEditQuestionsOfUserHandler == nil {
+		unregistered = append(unregistered, "user.GetAvailableEditQuestionsOfUserHandler")
+	}
+	if o.UserGetAvailableQuestionsOfUserHandler == nil {
+		unregistered = append(unregistered, "user.GetAvailableQuestionsOfUserHandler")
 	}
 	if o.QuestionGetEditQuestionsHandler == nil {
 		unregistered = append(unregistered, "question.GetEditQuestionsHandler")
@@ -1471,6 +1487,14 @@ func (o *DevAPI) initHandlerCache() {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
 	o.handlers["GET"]["/users/{username}/answeredTests/{testid}/answers"] = user.NewGetAnswersFromUserAnsweredTest(o.context, o.UserGetAnswersFromUserAnsweredTestHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/users/{username}/availableEditQuestions"] = user.NewGetAvailableEditQuestionsOfUser(o.context, o.UserGetAvailableEditQuestionsOfUserHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/users/{username}/availableQuestions"] = user.NewGetAvailableQuestionsOfUser(o.context, o.UserGetAvailableQuestionsOfUserHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}

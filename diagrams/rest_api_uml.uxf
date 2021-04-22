@@ -2162,4 +2162,17 @@ bg=yellow
 /availableQuestions</panel_attributes>
     <additional_attributes>240.0;20.0;40.0;20.0;10.0;130.0</additional_attributes>
   </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2860</x>
+      <y>280</y>
+      <w>280</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/availableEditQuestions</panel_attributes>
+    <additional_attributes>260.0;40.0;230.0;20.0;30.0;20.0;10.0;170.0</additional_attributes>
+  </element>
 </diagram>

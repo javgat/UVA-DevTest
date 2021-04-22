@@ -700,6 +700,60 @@ func GetValorFinal(db *sql.DB, questionid int64, testid int64) (*int64, error) {
 	return nil, err
 }
 
+func GetAvailableEditQuestionsOfUser(db *sql.DB, username string, tags [][]string, likeTitle *string) ([]*Question, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var qs []*Question
+	stPrepare := "SELECT DISTINCT P.* FROM Pregunta P LEFT JOIN PreguntaEquipo E ON P.id=E.preguntaid LEFT JOIN EquipoUsuario U ON U.equipoid=E.equipoid " +
+		" LEFT JOIN Usuario V ON V.id=U.usuarioid LEFT JOIN Usuario W ON W.id=P.usuarioid WHERE P.editable=1 AND (V.username=? OR P.accesoPublicoNoPublicada=1 OR W.username=?) "
+	stPrepare = addFiltersToQueryQuestionLongNames(true, stPrepare, tags, likeTitle)
+	query, err := db.Prepare(stPrepare)
+	if err == nil {
+		defer query.Close()
+		interfaceParams := FilterParamsSlicesToInterfaceArr(tags, likeTitle)
+		var paramsSlice []interface{}
+		paramsSlice = append(paramsSlice, username)
+		paramsSlice = append(paramsSlice, username)
+		interfaceParams = append(paramsSlice, interfaceParams...)
+		rows, err := query.Query(interfaceParams...)
+		if err == nil {
+			qs, err = rowsToQuestions(rows)
+			return qs, err
+		}
+	} else {
+		log.Print(err)
+	}
+	return nil, err
+}
+
+func GetAvailableQuestionsOfUser(db *sql.DB, username string, tags [][]string, likeTitle *string) ([]*Question, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var qs []*Question
+	stPrepare := "SELECT DISTINCT P.* FROM Pregunta P LEFT JOIN PreguntaEquipo E ON P.id=E.preguntaid LEFT JOIN EquipoUsuario U ON U.equipoid=E.equipoid " +
+		" LEFT JOIN Usuario V ON V.id=U.usuarioid LEFT JOIN Usuario W ON W.id=P.usuarioid WHERE (V.username=? OR P.accesoPublicoNoPublicada=1 OR W.username=?) "
+	stPrepare = addFiltersToQueryQuestionLongNames(true, stPrepare, tags, likeTitle)
+	query, err := db.Prepare(stPrepare)
+	if err == nil {
+		defer query.Close()
+		interfaceParams := FilterParamsSlicesToInterfaceArr(tags, likeTitle)
+		var paramsSlice []interface{}
+		paramsSlice = append(paramsSlice, username)
+		paramsSlice = append(paramsSlice, username)
+		interfaceParams = append(paramsSlice, interfaceParams...)
+		rows, err := query.Query(interfaceParams...)
+		if err == nil {
+			qs, err = rowsToQuestions(rows)
+			return qs, err
+		}
+	} else {
+		log.Print(err)
+	}
+	return nil, err
+}
+
 func GetSharedQuestionsOfUser(db *sql.DB, username string, tags [][]string, likeTitle *string) ([]*Question, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)

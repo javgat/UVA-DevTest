@@ -40,7 +40,7 @@ type Question struct {
 	EleccionUnica bool `json:"eleccionUnica,omitempty"`
 
 	// estimated time
-	// Example: 32600
+	// Example: 60
 	// Required: true
 	// Minimum: 0
 	EstimatedTime *int64 `json:"estimatedTime"`

@@ -282,6 +282,56 @@ func GetTeamFromUser(params user.GetTeamFromUserParams, u *models.User) middlewa
 	return user.NewGetTeamFromUserInternalServerError()
 }
 
+// GET /users/{username}/availableEditQuestions
+// Auth: Current User or Admin
+func GetAvailableEditQuestions(params user.GetAvailableEditQuestionsOfUserParams, u *models.User) middleware.Responder {
+	if userOrAdmin(params.Username, u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			var q []*dao.Question
+			q, err = dao.GetAvailableEditQuestionsOfUser(db, params.Username, params.Tags, params.LikeTitle)
+			if err == nil {
+				if q != nil {
+					mq, err := dao.ToModelQuestions(q)
+					if mq != nil && err == nil {
+						return user.NewGetAvailableEditQuestionsOfUserOK().WithPayload(mq)
+					}
+					user.NewGetAvailableEditQuestionsOfUserInternalServerError()
+				}
+				mq := []*models.Question{}
+				return user.NewGetAvailableEditQuestionsOfUserOK().WithPayload(mq)
+			}
+		}
+		return user.NewGetAvailableEditQuestionsOfUserInternalServerError()
+	}
+	return user.NewGetAvailableEditQuestionsOfUserForbidden()
+}
+
+// GET /users/{username}/availableQuestions
+// Auth: Current User or Admin
+func GetAvailableQuestions(params user.GetAvailableQuestionsOfUserParams, u *models.User) middleware.Responder {
+	if userOrAdmin(params.Username, u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			var q []*dao.Question
+			q, err = dao.GetAvailableQuestionsOfUser(db, params.Username, params.Tags, params.LikeTitle)
+			if err == nil {
+				if q != nil {
+					mq, err := dao.ToModelQuestions(q)
+					if mq != nil && err == nil {
+						return user.NewGetAvailableQuestionsOfUserOK().WithPayload(mq)
+					}
+					user.NewGetAvailableQuestionsOfUserInternalServerError()
+				}
+				mq := []*models.Question{}
+				return user.NewGetAvailableQuestionsOfUserOK().WithPayload(mq)
+			}
+		}
+		return user.NewGetAvailableQuestionsOfUserInternalServerError()
+	}
+	return user.NewGetAvailableQuestionsOfUserForbidden()
+}
+
 // GET /users/{username}/sharedQuestions
 // Auth: Current User or Admin
 func GetSharedQuestions(params user.GetSharedQuestionsOfUserParams, u *models.User) middleware.Responder {
