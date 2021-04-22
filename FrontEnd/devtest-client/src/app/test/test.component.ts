@@ -143,7 +143,17 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
     this.addQuestion(true)
   }
 
+  isQuestionInTest(idQ: number): boolean{
+    return !this.preguntas.every(element =>{
+      return idQ != element.id
+    })
+  }
+
   addQuestion(primera: boolean){
+    if(this.isQuestionInTest(this.addQuestionId)){
+      this.cambiarMensaje(new Mensaje("La pregunta ya está en el test", Tipo.ERROR, true))
+      return
+    }
     let vF : ValorFinal = {
       valorFinal: 1
     }
