@@ -292,9 +292,9 @@ func RemoveQuestionTag(params question.RemoveTagFromQuestionParams, u *models.Us
 // Req: Question.Editable
 func AddQuestionTeam(params question.AddTeamToQuestionParams, u *models.User) middleware.Responder {
 	if isQuestionEditable(params.Questionid) && (isAdmin(u) || isQuestionAdmin(u, params.Questionid)) {
-		if isTeamSoloProfesores(params.Teamname) {
-			db, err := dbconnection.ConnectDb()
-			if err == nil {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			if isTeamSoloProfesores(params.Teamname) {
 				err = dao.AddQuestionTeam(db, params.Questionid, params.Teamname)
 				if err == nil {
 					if err == nil {
@@ -304,9 +304,15 @@ func AddQuestionTeam(params question.AddTeamToQuestionParams, u *models.User) mi
 				log.Println("Error en users_handler AddQuestionTeam(): ", err)
 				return question.NewAddTagToQuestionGone()
 			}
+			s := "El equipo a añadir tiene que ser de profesores"
+			var t *dao.Team
+			t, err = dao.GetTeam(db, params.Teamname)
+			if err != nil || t == nil {
+				s = "El equipo no existe"
+			}
+			return question.NewAddTeamToQuestionBadRequest().WithPayload(&models.Error{Message: &s})
 		}
-		s := "El equipo a añadir tiene que ser de profesores"
-		return question.NewAddTeamToQuestionBadRequest().WithPayload(&models.Error{Message: &s})
+		return question.NewAddTeamToQuestionInternalServerError()
 	}
 	return question.NewAddTeamToQuestionForbidden()
 }

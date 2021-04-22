@@ -216,10 +216,19 @@ func AddAdminTeamToTest(params test.AddAdminTeamToTestParams, u *models.User) mi
 	if isAdmin(u) || isTestAdmin(u, params.Testid) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			err = dao.AddAdminTeamToTest(db, params.Testid, params.Teamname)
-			if err == nil {
-				return test.NewAddAdminTeamToTestOK()
+			if isTeamSoloProfesores(params.Teamname) {
+				err = dao.AddAdminTeamToTest(db, params.Testid, params.Teamname)
+				if err == nil {
+					return test.NewAddAdminTeamToTestOK()
+				}
 			}
+			s := "El equipo a añadir tiene que ser de profesores"
+			var t *dao.Team
+			t, err = dao.GetTeam(db, params.Teamname)
+			if err != nil || t == nil {
+				s = "El equipo no existe"
+			}
+			return test.NewAddAdminTeamToTestBadRequest().WithPayload(&models.Error{Message: &s})
 		}
 		log.Println("Error en users_handler AddAdminTeamToTest(): ", err)
 		return test.NewAddAdminTeamToTestInternalServerError()
