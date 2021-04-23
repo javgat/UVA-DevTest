@@ -46,6 +46,10 @@ import { LtUserComponent } from './list-tests/lt-user/lt-user.component';
 import { LtSharedUserComponent } from './list-tests/lt-shared-user/lt-shared-user.component';
 import { LtProfilePublicComponent } from './list-tests/lt-profile-public/lt-profile-public.component';
 import { LqAddQuestionTestComponent } from './list-questions/lq-add-question-test/lq-add-question-test.component';
+import { LqFavsUserComponent } from './list-questions/lq-favs-user/lq-favs-user.component';
+import { LtFavsUserComponent } from './list-tests/lt-favs-user/lt-favs-user.component';
+import { TestsFavUserComponent } from './tests-fav-user/tests-fav-user.component';
+import { QuestionsFavUserComponent } from './questions-fav-user/questions-fav-user.component';
 
 export function apiConfigFactory (): Configuration {
   const params: ConfigurationParameters = {
@@ -94,7 +98,11 @@ export function apiConfigFactory (): Configuration {
     LtUserComponent,
     LtSharedUserComponent,
     LtProfilePublicComponent,
-    LqAddQuestionTestComponent
+    LqAddQuestionTestComponent,
+    LqFavsUserComponent,
+    LtFavsUserComponent,
+    TestsFavUserComponent,
+    QuestionsFavUserComponent
   ],
   imports: [
     BrowserModule,

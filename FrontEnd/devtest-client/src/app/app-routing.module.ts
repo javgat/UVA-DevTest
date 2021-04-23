@@ -13,6 +13,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { QuestionCreateComponent } from './question-create/question-create.component';
 import { QuestionTeamsComponent } from './question-teams/question-teams.component';
 import { QuestionComponent } from './question/question.component';
+import { QuestionsFavUserComponent } from './questions-fav-user/questions-fav-user.component';
 import { QuestionsSharedUserComponent } from './questions-shared-user/questions-shared-user.component';
 import { QuestionsUserComponent } from './questions-user/questions-user.component';
 import { QuestionsComponent } from './questions/questions.component';
@@ -22,6 +23,7 @@ import { TeamsComponent } from './teams/teams.component';
 import { TestCreateComponent } from './test-create/test-create.component';
 import { TestTeamsComponent } from './test-teams/test-teams.component';
 import { TestComponent } from './test/test.component';
+import { TestsFavUserComponent } from './tests-fav-user/tests-fav-user.component';
 import { TestsSharedUserComponent } from './tests-shared-user/tests-shared-user.component';
 import { TestsUserComponent } from './tests-user/tests-user.component';
 import { TestsComponent } from './tests/tests.component';
@@ -35,8 +37,10 @@ const routes: Routes = [
   {path: 'profile/:id/q', component: ProfilePublicQuestionsComponent},
   {path: 'u/:username/q', component: QuestionsUserComponent}, // U (User): Lo ven el usuario y el admin
   {path: 'u/:username/sq', component: QuestionsSharedUserComponent},
+  {path: 'u/:username/fq', component: QuestionsFavUserComponent},
   {path: 'u/:username/et', component: TestsUserComponent},
   {path: 'u/:username/set', component: TestsSharedUserComponent},
+  {path: 'u/:username/fet', component: TestsFavUserComponent},
   {path: 'admin', component: AdminComponent},
   {path: 'admin/users', component: AdminUsersComponent},
   {path: 'admin/teams', component: AdminTeamsComponent},
