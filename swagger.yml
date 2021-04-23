@@ -459,6 +459,196 @@ paths:
         500:
           $ref: '#/responses/InternalServerError'
 
+  /users/{username}/favoriteEditQuestions:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - user
+      summary: Returns all non-published questions available for the user marked as its favorites
+      operationId: GetFavoriteEditQuestions
+      description: Returns all non-published questions available for the user marked as its favorites
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the user who favorited the questions
+        required: true
+        type: string
+      - in: query
+        name: tags
+        type: array
+        collectionFormat: pipes
+        items:
+          type: array
+          collectionFormat: csv
+          items:
+            type: string
+      - in: query
+        name: likeTitle
+        type: string
+      responses:
+        200:
+          description: questions found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Question'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
+  /users/{username}/favoriteQuestions:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - user
+      summary: Returns all questions available for the user marked as its favorites
+      operationId: GetFavoriteQuestions
+      description: Returns all questions available for the user marked as its favorites
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the user who favorited the questions
+        required: true
+        type: string
+      - in: query
+        name: tags
+        type: array
+        collectionFormat: pipes
+        items:
+          type: array
+          collectionFormat: csv
+          items:
+            type: string
+      - in: query
+        name: likeTitle
+        type: string
+      responses:
+        200:
+          description: questions found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Question'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  /users/{username}/favoriteQuestions/{questionid}:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - user
+      summary: Returns a questions available for the user marked as its favorite
+      operationId: GetFavoriteQuestion
+      description: Returns a questions available for the user marked as its favorite
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the user who is favorited the question
+        required: true
+        type: string
+      - in: path
+        name: questionid
+        description: id of the question to find
+        required: true
+        type: integer
+      responses:
+        200:
+          description: question found
+          schema:
+            $ref: '#/definitions/Question'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+    put:
+      security:
+        - BearerCookie: []
+      tags:
+      - user
+      summary: Marks question as favorite for the user
+      operationId: AddQuestionFavorite
+      description: Marks question as favorite for the user
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the user who has marked as favorite the question
+        required: true
+        type: string
+      - in: path
+        name: questionid
+        description: id of the question to mark
+        required: true
+        type: integer
+      responses:
+        200:
+          description: question marked
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+    delete:
+      security:
+        - BearerCookie: []
+      tags:
+      - user
+      summary: Marks question as non-favorite for the user
+      operationId: RemoveQuestionFavorite
+      description: Marks question as non-favorite for the user
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the user who has unmarked as favorite the question
+        required: true
+        type: string
+      - in: path
+        name: questionid
+        description: id of the question to unmark
+        required: true
+        type: integer
+      responses:
+        200:
+          description: question unmarked
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+    
+
   /users/{username}/publicEditQuestions:
     get:
       security:
@@ -865,6 +1055,196 @@ paths:
           description: question created
           schema:
             $ref: '#/definitions/Question'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
+
+  /users/{username}/favoriteEditTests:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - user
+      summary: Returns all non-published tests available for the user marked as its favorites
+      operationId: GetFavoriteEditTests
+      description: Returns all non-published tests available for the user marked as its favorites
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the user who favorited the tests
+        required: true
+        type: string
+      - in: query
+        name: tags
+        type: array
+        collectionFormat: pipes
+        items:
+          type: array
+          collectionFormat: csv
+          items:
+            type: string
+      - in: query
+        name: likeTitle
+        type: string
+      responses:
+        200:
+          description: tests found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Test'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
+  /users/{username}/favoriteTests:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - user
+      summary: Returns all tsets available for the user marked as its favorites
+      operationId: GetFavoriteTests
+      description: Returns all tests available for the user marked as its favorites
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the user who favorited the tests
+        required: true
+        type: string
+      - in: query
+        name: tags
+        type: array
+        collectionFormat: pipes
+        items:
+          type: array
+          collectionFormat: csv
+          items:
+            type: string
+      - in: query
+        name: likeTitle
+        type: string
+      responses:
+        200:
+          description: tests found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Test'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  /users/{username}/favoriteTests/{testid}:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - user
+      summary: Returns a test available for the user marked as its favorite
+      operationId: GetFavoriteTest
+      description: Returns a test available for the user marked as its favorite
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the user who is favorited the test
+        required: true
+        type: string
+      - in: path
+        name: testid
+        description: id of the test to find
+        required: true
+        type: integer
+      responses:
+        200:
+          description: test found
+          schema:
+            $ref: '#/definitions/Test'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+    put:
+      security:
+        - BearerCookie: []
+      tags:
+      - user
+      summary: Marks test as favorite for the user
+      operationId: AddTestFavorite
+      description: Marks test as favorite for the user
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the user who is favorited the test
+        required: true
+        type: string
+      - in: path
+        name: testid
+        description: id of the test to find
+        required: true
+        type: integer
+      responses:
+        200:
+          description: test marked
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+    delete:
+      security:
+        - BearerCookie: []
+      tags:
+      - user
+      summary: Marks test as non-favorite for the user
+      operationId: RemoveTestFavorite
+      description: Marks test as non-favorite for the user
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the user who is favorited the test
+        required: true
+        type: string
+      - in: path
+        name: testid
+        description: id of the test to find
+        required: true
+        type: integer
+      responses:
+        200:
+          description: test unmarked
         400:
           $ref: '#/responses/BadRequestError'
         403:

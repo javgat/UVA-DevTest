@@ -65,6 +65,110 @@ export class UserService {
 
 
     /**
+     * Marks question as favorite for the user
+     * Marks question as favorite for the user
+     * @param username Username of the user who has marked as favorite the question
+     * @param questionid id of the question to mark
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public addQuestionFavorite(username: string, questionid: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public addQuestionFavorite(username: string, questionid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public addQuestionFavorite(username: string, questionid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public addQuestionFavorite(username: string, questionid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (username === null || username === undefined) {
+            throw new Error('Required parameter username was null or undefined when calling addQuestionFavorite.');
+        }
+
+        if (questionid === null || questionid === undefined) {
+            throw new Error('Required parameter questionid was null or undefined when calling addQuestionFavorite.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.put<any>(`${this.basePath}/users/${encodeURIComponent(String(username))}/favoriteQuestions/${encodeURIComponent(String(questionid))}`,
+            null,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Marks test as favorite for the user
+     * Marks test as favorite for the user
+     * @param username Username of the user who is favorited the test
+     * @param testid id of the test to find
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public addTestFavorite(username: string, testid: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public addTestFavorite(username: string, testid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public addTestFavorite(username: string, testid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public addTestFavorite(username: string, testid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (username === null || username === undefined) {
+            throw new Error('Required parameter username was null or undefined when calling addTestFavorite.');
+        }
+
+        if (testid === null || testid === undefined) {
+            throw new Error('Required parameter testid was null or undefined when calling addTestFavorite.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.put<any>(`${this.basePath}/users/${encodeURIComponent(String(username))}/favoriteTests/${encodeURIComponent(String(testid))}`,
+            null,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Creates a question copied from another
      * Creates a question copied from another
      * @param username Username of the user who will own the question
@@ -684,6 +788,344 @@ export class UserService {
         ];
 
         return this.httpClient.get<Array<Test>>(`${this.basePath}/users/${encodeURIComponent(String(username))}/editTests`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns all non-published questions available for the user marked as its favorites
+     * Returns all non-published questions available for the user marked as its favorites
+     * @param username Username of the user who favorited the questions
+     * @param tags 
+     * @param likeTitle 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getFavoriteEditQuestions(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Question>>;
+    public getFavoriteEditQuestions(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Question>>>;
+    public getFavoriteEditQuestions(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Question>>>;
+    public getFavoriteEditQuestions(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (username === null || username === undefined) {
+            throw new Error('Required parameter username was null or undefined when calling getFavoriteEditQuestions.');
+        }
+
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (tags) {
+            queryParameters = queryParameters.set('tags', tags.join(COLLECTION_FORMATS['pipes']));
+        }
+        if (likeTitle !== undefined && likeTitle !== null) {
+            queryParameters = queryParameters.set('likeTitle', <any>likeTitle);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Array<Question>>(`${this.basePath}/users/${encodeURIComponent(String(username))}/favoriteEditQuestions`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns all non-published tests available for the user marked as its favorites
+     * Returns all non-published tests available for the user marked as its favorites
+     * @param username Username of the user who favorited the tests
+     * @param tags 
+     * @param likeTitle 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getFavoriteEditTests(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
+    public getFavoriteEditTests(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
+    public getFavoriteEditTests(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
+    public getFavoriteEditTests(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (username === null || username === undefined) {
+            throw new Error('Required parameter username was null or undefined when calling getFavoriteEditTests.');
+        }
+
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (tags) {
+            queryParameters = queryParameters.set('tags', tags.join(COLLECTION_FORMATS['pipes']));
+        }
+        if (likeTitle !== undefined && likeTitle !== null) {
+            queryParameters = queryParameters.set('likeTitle', <any>likeTitle);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Array<Test>>(`${this.basePath}/users/${encodeURIComponent(String(username))}/favoriteEditTests`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns a questions available for the user marked as its favorite
+     * Returns a questions available for the user marked as its favorite
+     * @param username Username of the user who is favorited the question
+     * @param questionid id of the question to find
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getFavoriteQuestion(username: string, questionid: number, observe?: 'body', reportProgress?: boolean): Observable<Question>;
+    public getFavoriteQuestion(username: string, questionid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Question>>;
+    public getFavoriteQuestion(username: string, questionid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Question>>;
+    public getFavoriteQuestion(username: string, questionid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (username === null || username === undefined) {
+            throw new Error('Required parameter username was null or undefined when calling getFavoriteQuestion.');
+        }
+
+        if (questionid === null || questionid === undefined) {
+            throw new Error('Required parameter questionid was null or undefined when calling getFavoriteQuestion.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Question>(`${this.basePath}/users/${encodeURIComponent(String(username))}/favoriteQuestions/${encodeURIComponent(String(questionid))}`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns all questions available for the user marked as its favorites
+     * Returns all questions available for the user marked as its favorites
+     * @param username Username of the user who favorited the questions
+     * @param tags 
+     * @param likeTitle 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getFavoriteQuestions(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Question>>;
+    public getFavoriteQuestions(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Question>>>;
+    public getFavoriteQuestions(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Question>>>;
+    public getFavoriteQuestions(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (username === null || username === undefined) {
+            throw new Error('Required parameter username was null or undefined when calling getFavoriteQuestions.');
+        }
+
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (tags) {
+            queryParameters = queryParameters.set('tags', tags.join(COLLECTION_FORMATS['pipes']));
+        }
+        if (likeTitle !== undefined && likeTitle !== null) {
+            queryParameters = queryParameters.set('likeTitle', <any>likeTitle);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Array<Question>>(`${this.basePath}/users/${encodeURIComponent(String(username))}/favoriteQuestions`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns a test available for the user marked as its favorite
+     * Returns a test available for the user marked as its favorite
+     * @param username Username of the user who is favorited the test
+     * @param testid id of the test to find
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getFavoriteTest(username: string, testid: number, observe?: 'body', reportProgress?: boolean): Observable<Test>;
+    public getFavoriteTest(username: string, testid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Test>>;
+    public getFavoriteTest(username: string, testid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Test>>;
+    public getFavoriteTest(username: string, testid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (username === null || username === undefined) {
+            throw new Error('Required parameter username was null or undefined when calling getFavoriteTest.');
+        }
+
+        if (testid === null || testid === undefined) {
+            throw new Error('Required parameter testid was null or undefined when calling getFavoriteTest.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Test>(`${this.basePath}/users/${encodeURIComponent(String(username))}/favoriteTests/${encodeURIComponent(String(testid))}`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns all tsets available for the user marked as its favorites
+     * Returns all tests available for the user marked as its favorites
+     * @param username Username of the user who favorited the tests
+     * @param tags 
+     * @param likeTitle 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getFavoriteTests(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
+    public getFavoriteTests(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
+    public getFavoriteTests(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
+    public getFavoriteTests(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (username === null || username === undefined) {
+            throw new Error('Required parameter username was null or undefined when calling getFavoriteTests.');
+        }
+
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (tags) {
+            queryParameters = queryParameters.set('tags', tags.join(COLLECTION_FORMATS['pipes']));
+        }
+        if (likeTitle !== undefined && likeTitle !== null) {
+            queryParameters = queryParameters.set('likeTitle', <any>likeTitle);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Array<Test>>(`${this.basePath}/users/${encodeURIComponent(String(username))}/favoriteTests`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -2132,6 +2574,108 @@ export class UserService {
 
         return this.httpClient.post<User>(`${this.basePath}/users`,
             signinUser,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Marks question as non-favorite for the user
+     * Marks question as non-favorite for the user
+     * @param username Username of the user who has unmarked as favorite the question
+     * @param questionid id of the question to unmark
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public removeQuestionFavorite(username: string, questionid: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public removeQuestionFavorite(username: string, questionid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public removeQuestionFavorite(username: string, questionid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public removeQuestionFavorite(username: string, questionid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (username === null || username === undefined) {
+            throw new Error('Required parameter username was null or undefined when calling removeQuestionFavorite.');
+        }
+
+        if (questionid === null || questionid === undefined) {
+            throw new Error('Required parameter questionid was null or undefined when calling removeQuestionFavorite.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.delete<any>(`${this.basePath}/users/${encodeURIComponent(String(username))}/favoriteQuestions/${encodeURIComponent(String(questionid))}`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Marks test as non-favorite for the user
+     * Marks test as non-favorite for the user
+     * @param username Username of the user who is favorited the test
+     * @param testid id of the test to find
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public removeTestFavorite(username: string, testid: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public removeTestFavorite(username: string, testid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public removeTestFavorite(username: string, testid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public removeTestFavorite(username: string, testid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (username === null || username === undefined) {
+            throw new Error('Required parameter username was null or undefined when calling removeTestFavorite.');
+        }
+
+        if (testid === null || testid === undefined) {
+            throw new Error('Required parameter testid was null or undefined when calling removeTestFavorite.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.delete<any>(`${this.basePath}/users/${encodeURIComponent(String(username))}/favoriteTests/${encodeURIComponent(String(testid))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

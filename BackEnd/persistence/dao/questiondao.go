@@ -700,6 +700,133 @@ func GetValorFinal(db *sql.DB, questionid int64, testid int64) (*int64, error) {
 	return nil, err
 }
 
+func GetFavoriteEditQuestions(db *sql.DB, username string, tags [][]string, likeTitle *string) ([]*Question, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var qs []*Question
+	stPrepare := "SELECT DISTINCT P.* FROM Pregunta P LEFT JOIN PreguntaEquipo E ON P.id=E.preguntaid LEFT JOIN EquipoUsuario U ON U.equipoid=E.equipoid " +
+		" LEFT JOIN Usuario V ON V.id=U.usuarioid LEFT JOIN Usuario W ON W.id=P.usuarioid JOIN PreguntaFavorita F ON P.id=F.preguntaid JOIN Usuario Y ON Y.id=F.usuarioid " +
+		" WHERE P.editable=1 AND Y.username=? AND (V.username=? OR P.accesoPublicoNoPublicada=1 OR W.username=?) "
+	stPrepare = addFiltersToQueryQuestionLongNames(true, stPrepare, tags, likeTitle)
+	query, err := db.Prepare(stPrepare)
+	if err == nil {
+		defer query.Close()
+		interfaceParams := FilterParamsSlicesToInterfaceArr(tags, likeTitle)
+		var paramsSlice []interface{}
+		paramsSlice = append(paramsSlice, username)
+		paramsSlice = append(paramsSlice, username)
+		paramsSlice = append(paramsSlice, username)
+		interfaceParams = append(paramsSlice, interfaceParams...)
+		rows, err := query.Query(interfaceParams...)
+		if err == nil {
+			qs, err = rowsToQuestions(rows)
+			return qs, err
+		}
+	} else {
+		log.Print(err)
+	}
+	return nil, err
+}
+
+func GetFavoriteQuestions(db *sql.DB, username string, tags [][]string, likeTitle *string) ([]*Question, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var qs []*Question
+	stPrepare := "SELECT DISTINCT P.* FROM Pregunta P LEFT JOIN PreguntaEquipo E ON P.id=E.preguntaid LEFT JOIN EquipoUsuario U ON U.equipoid=E.equipoid " +
+		" LEFT JOIN Usuario V ON V.id=U.usuarioid LEFT JOIN Usuario W ON W.id=P.usuarioid JOIN PreguntaFavorita F ON P.id=F.preguntaid JOIN Usuario Y ON Y.id=F.usuarioid " +
+		" WHERE Y.username=? AND (V.username=? OR P.accesoPublicoNoPublicada=1 OR W.username=?) "
+	stPrepare = addFiltersToQueryQuestionLongNames(true, stPrepare, tags, likeTitle)
+	query, err := db.Prepare(stPrepare)
+	if err == nil {
+		defer query.Close()
+		interfaceParams := FilterParamsSlicesToInterfaceArr(tags, likeTitle)
+		var paramsSlice []interface{}
+		paramsSlice = append(paramsSlice, username)
+		paramsSlice = append(paramsSlice, username)
+		paramsSlice = append(paramsSlice, username)
+		interfaceParams = append(paramsSlice, interfaceParams...)
+		rows, err := query.Query(interfaceParams...)
+		if err == nil {
+			qs, err = rowsToQuestions(rows)
+			return qs, err
+		}
+	} else {
+		log.Print(err)
+	}
+	return nil, err
+}
+
+func GetFavoriteQuestion(db *sql.DB, username string, questionid int64) (*Question, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var qs *Question
+	stPrepare := "SELECT DISTINCT P.* FROM Pregunta P LEFT JOIN PreguntaEquipo E ON P.id=E.preguntaid LEFT JOIN EquipoUsuario U ON U.equipoid=E.equipoid " +
+		" LEFT JOIN Usuario V ON V.id=U.usuarioid LEFT JOIN Usuario W ON W.id=P.usuarioid JOIN PreguntaFavorita F ON P.id=F.preguntaid JOIN Usuario Y ON Y.id=F.usuarioid " +
+		" WHERE Y.username=? AND (V.username=? OR P.accesoPublicoNoPublicada=1 OR W.username=?) AND P.id=?"
+	query, err := db.Prepare(stPrepare)
+	if err == nil {
+		defer query.Close()
+		rows, err := query.Query(username, username, username, questionid)
+		if err == nil {
+			qs, err = rowsToQuestion(rows)
+			if qs == nil {
+				return nil, nil
+			}
+			return qs, err
+		}
+	} else {
+		log.Print(err)
+	}
+	return nil, err
+}
+
+func AddFavoriteQuestion(db *sql.DB, username string, questionid int64) error {
+	if db == nil {
+		return errors.New(errorDBNil)
+	}
+	u, err := GetUserUsername(db, username)
+	if err == nil && u != nil {
+		stPrepare := "INSERT INTO PreguntaFavorita(usuarioid, preguntaid) VALUES(?,?)"
+		var query *sql.Stmt
+		query, err = db.Prepare(stPrepare)
+		if err == nil {
+			defer query.Close()
+			_, err := query.Exec(u.ID, questionid)
+			return err
+		} else {
+			log.Print(err)
+		}
+	} else if err == nil {
+		err = errors.New(errorResourceNotFound)
+	}
+	return err
+}
+
+func RemoveFavoriteQuestion(db *sql.DB, username string, questionid int64) error {
+	if db == nil {
+		return errors.New(errorDBNil)
+	}
+	u, err := GetUserUsername(db, username)
+	if err == nil && u != nil {
+		stPrepare := "DELETE FROM PreguntaFavorita WHERE usuarioid=? AND preguntaid=?"
+		var query *sql.Stmt
+		query, err = db.Prepare(stPrepare)
+		if err == nil {
+			defer query.Close()
+			_, err := query.Exec(u.ID, questionid)
+			return err
+		} else {
+			log.Print(err)
+		}
+	} else if err == nil {
+		err = errors.New(errorResourceNotFound)
+	}
+	return err
+}
+
 func GetAvailableEditQuestionsOfUser(db *sql.DB, username string, tags [][]string, likeTitle *string) ([]*Question, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)

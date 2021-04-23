@@ -13,19 +13,18 @@ import { SessionService } from '../shared/session.service';
 })
 export class QuestionCreateComponent extends LoggedInTeacherController implements OnInit {
 
-  question: Question
+  question: Question =  {
+    title: "",
+    question: "",
+    estimatedTime: 0,
+    autoCorrect: false,
+    editable: true,
+    username: "",
+    tipoPregunta: Question.TipoPreguntaEnum.String,
+    accesoPublicoNoPublicada: true
+  }
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private qS : QuestionService) {
     super(session, router, data, userS)
-    this.question = {
-      title: "",
-      question: "",
-      estimatedTime: 0,
-      autoCorrect: false,
-      editable: true,
-      username: "",
-      tipoPregunta: Question.TipoPreguntaEnum.String,
-      accesoPublicoNoPublicada: true
-    }
   }
 
   doHasUserAction(){

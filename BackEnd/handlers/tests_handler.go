@@ -12,6 +12,7 @@ import (
 	"uva-devtest/persistence/dao"
 	"uva-devtest/persistence/dbconnection"
 	"uva-devtest/restapi/operations/test"
+	"uva-devtest/restapi/operations/user"
 
 	"github.com/go-openapi/runtime/middleware"
 )
@@ -591,4 +592,105 @@ func RemoveTagFromTest(params test.RemoveTagFromTestParams, u *models.User) midd
 		return test.NewRemoveTagFromTestInternalServerError()
 	}
 	return test.NewRemoveTagFromTestForbidden()
+}
+
+// GET /users/{username}/favoriteEditTests
+// Auth: Current User or Admin
+// Req: Fav+available+editable (SQL)
+func GetFavoriteEditTests(params user.GetFavoriteEditTestsParams, u *models.User) middleware.Responder {
+	if userOrAdmin(params.Username, u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			var qs []*dao.Test
+			qs, err = dao.GetFavoriteEditTests(db, params.Username, params.Tags, params.LikeTitle)
+			if err == nil {
+				var mqs []*models.Test
+				mqs, err = dao.ToModelTests(qs)
+				if err == nil {
+					return user.NewGetFavoriteEditTestsOK().WithPayload(mqs)
+				}
+			}
+		}
+		return user.NewGetFavoriteEditTestsInternalServerError()
+	}
+	return user.NewGetFavoriteEditTestsForbidden()
+}
+
+// GET /users/{username}/favoriteTests
+// Auth: Current User or Admin
+// Req: Fav+available (SQL)
+func GetFavoriteTests(params user.GetFavoriteTestsParams, u *models.User) middleware.Responder {
+	if userOrAdmin(params.Username, u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			var qs []*dao.Test
+			qs, err = dao.GetFavoriteTests(db, params.Username, params.Tags, params.LikeTitle)
+			if err == nil {
+				var mqs []*models.Test
+				mqs, err = dao.ToModelTests(qs)
+				if err == nil {
+					return user.NewGetFavoriteTestsOK().WithPayload(mqs)
+				}
+			}
+		}
+		return user.NewGetFavoriteTestsInternalServerError()
+	}
+	return user.NewGetFavoriteTestsForbidden()
+}
+
+// GET /users/{username}/favoriteTests/{testid}
+// Auth: Current User or Admin
+// Req: Fav+available (SQL)
+func GetFavoriteTest(params user.GetFavoriteTestParams, u *models.User) middleware.Responder {
+	if userOrAdmin(params.Username, u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			var qs *dao.Test
+			qs, err = dao.GetFavoriteTest(db, params.Username, params.Testid)
+			if err == nil {
+				if qs == nil {
+					return user.NewGetFavoriteTestGone()
+				}
+				var mqs *models.Test
+				mqs, err = dao.ToModelTest(qs)
+				if err == nil {
+					return user.NewGetFavoriteTestOK().WithPayload(mqs)
+				}
+			}
+		}
+		return user.NewGetFavoriteTestInternalServerError()
+	}
+	return user.NewGetFavoriteTestForbidden()
+}
+
+// PUT /users/{username}/favoriteTests/{testid}
+// Auth: Current User or Admin
+func AddFavoriteTest(params user.AddTestFavoriteParams, u *models.User) middleware.Responder {
+	if userOrAdmin(params.Username, u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			err = dao.AddFavoriteTest(db, params.Username, params.Testid)
+			if err == nil {
+				return user.NewAddTestFavoriteOK()
+			}
+		}
+		return user.NewAddTestFavoriteInternalServerError()
+	}
+	return user.NewAddTestFavoriteForbidden()
+}
+
+// DELETE /users/{username}/favoriteTests/{testid}
+// Auth: Current User or Admin
+func RemoveFavoriteTest(params user.RemoveTestFavoriteParams, u *models.User) middleware.Responder {
+	if userOrAdmin(params.Username, u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			err = dao.RemoveFavoriteTest(db, params.Username, params.Testid)
+			if err == nil {
+				return user.NewRemoveTestFavoriteOK()
+			}
+		}
+		return user.NewRemoveTestFavoriteInternalServerError()
+	}
+	return user.NewRemoveTestFavoriteForbidden()
 }

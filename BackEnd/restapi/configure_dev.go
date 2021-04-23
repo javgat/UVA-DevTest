@@ -84,6 +84,13 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 	api.TeamPostTeamHandler = team.PostTeamHandlerFunc(handlers.PostTeam)                      // POST /users/{username}/teams
 	api.UserGetTeamFromUserHandler = user.GetTeamFromUserHandlerFunc(handlers.GetTeamFromUser) // GET /users/{username}/teams/{teamname}
 
+	api.UserGetFavoriteEditQuestionsHandler = user.GetFavoriteEditQuestionsHandlerFunc(handlers.GetFavoriteEditQuestions) // GET /users/{username}/favoriteEditQuestions
+
+	api.UserGetFavoriteQuestionsHandler = user.GetFavoriteQuestionsHandlerFunc(handlers.GetFavoriteQuestions)       // GET /users/{username}/favoriteQuestions
+	api.UserGetFavoriteQuestionHandler = user.GetFavoriteQuestionHandlerFunc(handlers.GetFavoriteQuestion)          // GET /users/{username}/favoriteQuestions/{questionid}
+	api.UserAddQuestionFavoriteHandler = user.AddQuestionFavoriteHandlerFunc(handlers.AddFavoriteQuestion)          // PUT /users/{username}/favoriteQuestions/{questionid}
+	api.UserRemoveQuestionFavoriteHandler = user.RemoveQuestionFavoriteHandlerFunc(handlers.RemoveFavoriteQuestion) // DELETE /users/{username}/favoriteQuestions/{questionid}
+
 	api.UserGetAvailableQuestionsOfUserHandler = user.GetAvailableQuestionsOfUserHandlerFunc(handlers.GetAvailableQuestions)             // GET /users/{username}/availableQuestions
 	api.UserGetAvailableEditQuestionsOfUserHandler = user.GetAvailableEditQuestionsOfUserHandlerFunc(handlers.GetAvailableEditQuestions) // GET /users/{username}/availableEditQuestions
 
@@ -99,7 +106,14 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 
 	api.UserCopyQuestionHandler = user.CopyQuestionHandlerFunc(handlers.CopyQuestion) // POST /users/{username}/questions/{questionid}/copiedQuestions
 
-	api.UserGetSharedEditTestsFromUserHandler = user.GetSharedEditTestsFromUserHandlerFunc(handlers.GetSharedEditTests)
+	api.UserGetFavoriteEditTestsHandler = user.GetFavoriteEditTestsHandlerFunc(handlers.GetFavoriteEditTests) // GET /users/{username}/favoriteEditTests
+
+	api.UserGetFavoriteTestsHandler = user.GetFavoriteTestsHandlerFunc(handlers.GetFavoriteTests)       // GET /users/{username}/favoriteTests
+	api.UserGetFavoriteTestHandler = user.GetFavoriteTestHandlerFunc(handlers.GetFavoriteTest)          // GET /users/{username}/favoriteTests/{testid}
+	api.UserAddTestFavoriteHandler = user.AddTestFavoriteHandlerFunc(handlers.AddFavoriteTest)          // PUT /users/{username}/favoriteTests/{testid}
+	api.UserRemoveTestFavoriteHandler = user.RemoveTestFavoriteHandlerFunc(handlers.RemoveFavoriteTest) // DELETE /users/{username}/favoriteTests/{testid}
+
+	api.UserGetSharedEditTestsFromUserHandler = user.GetSharedEditTestsFromUserHandlerFunc(handlers.GetSharedEditTests) // GET /users/{username}/sharedEditTests
 
 	api.UserGetSharedTestsFromUserHandler = user.GetSharedTestsFromUserHandlerFunc(handlers.GetSharedTests) // GET /users/{username}/sharedTests
 	api.UserGetSharedTestFromUserHandler = user.GetSharedTestFromUserHandlerFunc(handlers.GetSharedTest)    // GET /users/{username}/sharedTests/{testid}

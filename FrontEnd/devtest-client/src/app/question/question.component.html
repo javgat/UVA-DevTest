@@ -10,6 +10,12 @@
             <div *ngIf="checkCloneQuestion()">
                 <p><button type="button" class="btn btn-outline-primary" (click)="cloneQuestionClick()">Clonar</button>
                 </p>
+                <p>
+                    <input type="checkbox" class="btn-check" id="btn-check-2" [checked]="isFavorita"
+                        (click)="changeFavorita()">
+                    <label class="btn btn-outline-success" for="btn-check-2"><span *ngIf="!isFavorita">Guardar
+                            Favorita</span><span *ngIf="isFavorita">Guardada Favorita</span></label>
+                </p>
             </div>
             <p>Etiquetas:
                 <span *ngFor="let tag of tags">

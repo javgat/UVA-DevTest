@@ -29,6 +29,7 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
   isInAdminTeam: boolean
   deletingTag: string
   mantenerMensaje: boolean
+  isFavorita: boolean
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private qS: QuestionService, private route: ActivatedRoute) {
     super(session, router, data, userS)
     this.isInAdminTeam = false
@@ -42,6 +43,7 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
     this.mantenerMensaje = false
     this.question = new Pregunta(undefined, "", "", 0, false, true, "", true, undefined, undefined, Question.TipoPreguntaEnum.String, undefined)
     this.questionEdit = new Pregunta(undefined, "", "", 0, false, true, "", true, undefined, undefined, Question.TipoPreguntaEnum.String, undefined)
+    this.isFavorita = false
     this.nuevaOpcion = {
       correcta: false,
       texto: ""
@@ -113,6 +115,7 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
         this.getTags(true)
         if (!this.getSessionUser().isEmpty())
           this.getIsInAdminTeam(true)
+        this.getIsFavorita(true)
       },
       err => this.handleErrRelog(err, "obtener pregunta", primera, this.getPregunta, this)
     )
@@ -278,6 +281,47 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
         this.router.navigate(['/q', resp.id])
       },
       err => this.handleErrRelog(err, "clonar pregunta", primera, this.cloneQuestion, this)
+    )
+  }
+
+  getIsFavorita(primera: boolean){
+    this.userS.getFavoriteQuestion(this.getSessionUser().getUsername(), this.id).subscribe(
+      resp => this.isFavorita = true,
+      err => {
+        if (err.status==410){
+          this.isFavorita = false
+        }else{
+          this.handleErrRelog(err, "ver si la pregunta esta marcada como favorita", primera, this.getIsFavorita, this)
+        }
+      }
+    )
+  }
+
+  changeFavorita(){
+    if(this.isFavorita){
+      this.removeFavorita(true)
+    }else{
+      this.addFavorita(true)
+    }
+  }
+
+  addFavorita(primera: boolean){
+    this.userS.addQuestionFavorite(this.getSessionUser().getUsername(), this.id).subscribe(
+      resp => {
+        this.getIsFavorita(true)
+      },
+      err => {
+        this.handleErrRelog(err, "marcar como favorita una pregunta", primera, this.addFavorita, this)
+      }
+    )
+  }
+
+  removeFavorita(primera: boolean){
+    this.userS.removeQuestionFavorite(this.getSessionUser().getUsername(), this.id).subscribe(
+      resp => this.getIsFavorita(true),
+      err => {
+        this.handleErrRelog(err, "desmarcar como favorita una pregunta", primera, this.removeFavorita, this)
+      }
     )
   }
 }

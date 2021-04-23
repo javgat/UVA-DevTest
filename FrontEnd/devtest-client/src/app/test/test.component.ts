@@ -22,11 +22,12 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
   preguntaChange?: Question
   isInAdminTeam: boolean
   tags: Tag[]
-  newTag : string
+  newTag: string
   deletingTag: string
   mantenerMensaje: boolean
   addQuestionById: boolean
   preguntaQuitando: number
+  isFavorita: boolean
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private route: ActivatedRoute, private testS: TestService) {
     super(session, router, data, userS)
     this.isInAdminTeam = false
@@ -39,10 +40,11 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
     this.newTag = ""
     this.deletingTag = ""
     this.mantenerMensaje = false
+    this.isFavorita = false
     this.preguntaQuitando = 0
     this.routeSub = this.route.params.subscribe(params => {
       this.id = params['testid']
-      if(!this.mantenerMensaje){
+      if (!this.mantenerMensaje) {
         this.borrarMensaje()
       }
       this.getTest(true)
@@ -57,13 +59,13 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
   ngOnDestroy(): void {
     super.onDestroy()
     this.routeSub.unsubscribe()
-    if(!this.mantenerMensaje){
+    if (!this.mantenerMensaje) {
       this.borrarMensaje()
     }
   }
 
   doHasUserAction() {
-    if (this.id!=undefined && this.id != 0)
+    if (this.id != undefined && this.id != 0)
       this.getIsInAdminTeam(true)
   }
 
@@ -76,23 +78,24 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
         this.getTags(true)
         if (!this.getSessionUser().isEmpty())
           this.getIsInAdminTeam(true)
+        this.getIsFavorita(true)
       },
       err => this.handleErrRelog(err, "obtener test", primera, this.getTest, this)
     )
   }
 
-  getTags(primera: boolean){
+  getTags(primera: boolean) {
     this.testS.getTagsFromTest(this.id).subscribe(
       resp => this.tags = resp,
       err => this.handleErrRelog(err, "obtener etiquetas de test", primera, this.getTags, this)
     )
   }
 
-  addTagSubmit(){
+  addTagSubmit() {
     this.addTag(true)
   }
 
-  addTag(primera: boolean){
+  addTag(primera: boolean) {
     this.testS.addTagToTest(this.id, this.newTag).subscribe(
       resp => {
         this.getTags(true)
@@ -102,12 +105,12 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
     )
   }
 
-  deleteTagClick(tag: string){
+  deleteTagClick(tag: string) {
     this.deletingTag = tag
     this.deleteTag(true)
   }
 
-  deleteTag(primera: boolean){
+  deleteTag(primera: boolean) {
     this.testS.removeTagFromTest(this.id, this.deletingTag).subscribe(
       resp => {
         this.getTags(true)
@@ -116,10 +119,10 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
     )
   }
 
-  getPreguntasTest(primera: boolean){
+  getPreguntasTest(primera: boolean) {
     this.testS.getQuestionsFromTest(this.id).subscribe(
       resp => this.preguntas = resp,
-      err => this.handleErrRelog(err, "obtener preguntas de un test", primera, this.getPreguntasTest, this)   
+      err => this.handleErrRelog(err, "obtener preguntas de un test", primera, this.getPreguntasTest, this)
     )
   }
 
@@ -127,13 +130,13 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
     this.userS.getSharedTestFromUser(this.getSessionUser().getUsername(), this.id).subscribe(
       resp => this.isInAdminTeam = true,
       err => {
-        if(err.status!=410)
+        if (err.status != 410)
           this.handleErrRelog(err, "saber si el usuario administra el test", primera, this.getIsInAdminTeam, this)
       }
     )
   }
 
-  isPermisosAdministracion(): boolean{
+  isPermisosAdministracion(): boolean {
     return this.getSessionUser().isAdmin() || (this.getSessionUser().getUsername() == this.test.username) || this.isInAdminTeam
   }
 
@@ -141,22 +144,22 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
     return this.test.editable && this.isPermisosAdministracion()
   }
 
-  addQuestionSubmit(){
+  addQuestionSubmit() {
     this.addQuestion(true)
   }
 
-  isQuestionInTest(idQ: number): boolean{
-    return !this.preguntas.every(element =>{
+  isQuestionInTest(idQ: number): boolean {
+    return !this.preguntas.every(element => {
       return idQ != element.id
     })
   }
 
-  addQuestion(primera: boolean){
-    if(this.isQuestionInTest(this.addQuestionId)){
+  addQuestion(primera: boolean) {
+    if (this.isQuestionInTest(this.addQuestionId)) {
       this.cambiarMensaje(new Mensaje("La pregunta ya está en el test", Tipo.ERROR, true))
       return
     }
-    let vF : ValorFinal = {
+    let vF: ValorFinal = {
       valorFinal: 1
     }
     this.testS.addQuestionToTest(this.id, this.addQuestionId, vF).subscribe(
@@ -167,20 +170,20 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
     )
   }
 
-  tipoPrint(tipo: string, eleUni: boolean | undefined): string{
+  tipoPrint(tipo: string, eleUni: boolean | undefined): string {
     return tipoPrint(tipo, eleUni)
   }
 
-  changeValueSubmit(pregunta : Question){
+  changeValueSubmit(pregunta: Question) {
     this.preguntaChange = pregunta
     this.changeValue(true)
   }
 
-  changeValue(primera: boolean){
-    if(this.preguntaChange == null || this.preguntaChange.id == null || this.preguntaChange.valorFinal == null){
+  changeValue(primera: boolean) {
+    if (this.preguntaChange == null || this.preguntaChange.id == null || this.preguntaChange.valorFinal == null) {
       return
     }
-    let vF : ValorFinal = {
+    let vF: ValorFinal = {
       valorFinal: this.preguntaChange.valorFinal
     }
     this.testS.addQuestionToTest(this.id, this.preguntaChange.id, vF).subscribe(
@@ -189,11 +192,11 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
     )
   }
 
-  putTestSubmit(){
+  putTestSubmit() {
     this.putTest(true)
   }
 
-  putTest(primera: boolean){
+  putTest(primera: boolean) {
     this.testS.putTest(this.id, this.testEdit).subscribe(
       resp => this.getTest(true),
       err => this.handleErrRelog(err, "actualizar datos de test", primera, this.putTest, this)
@@ -208,13 +211,13 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
     }
   }
 
-  cloneTestClick(){
+  cloneTestClick() {
     this.cloneTest(true)
   }
 
-  cloneTest(primera: boolean){
+  cloneTest(primera: boolean) {
     this.userS.copyTest(this.getSessionUser().getUsername(), this.id).subscribe(
-      resp=>{
+      resp => {
         this.cambiarMensaje(new Mensaje("Test clonado con éxito", Tipo.SUCCESS, true))
         this.mantenerMensaje = true
         this.router.navigate(['/et', resp.id])
@@ -223,29 +226,70 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
     )
   }
 
-  changeAddByID(){
-    this.addQuestionById=true
+  changeAddByID() {
+    this.addQuestionById = true
   }
 
-  changeNotAddByID(){
-    this.addQuestionById=false
+  changeNotAddByID() {
+    this.addQuestionById = false
   }
 
-  questionPicked(id: number){
-    this.addQuestionId=id
+  questionPicked(id: number) {
+    this.addQuestionId = id
     this.addQuestionSubmit()
   }
 
-  quitarPreguntaClick(id: number | undefined){
-    this.preguntaQuitando=id || this.preguntaQuitando
+  quitarPreguntaClick(id: number | undefined) {
+    this.preguntaQuitando = id || this.preguntaQuitando
     this.quitarPregunta(true)
   }
 
-  quitarPregunta(primera:boolean){
-    if(this.test.id==undefined) return
+  quitarPregunta(primera: boolean) {
+    if (this.test.id == undefined) return
     this.testS.removeQuestionFromTest(this.test.id, this.preguntaQuitando).subscribe(
-      resp=> this.getTest(true),
-      err=> this.handleErrRelog(err, "quitar pregunta de test", primera, this.quitarPregunta, this)
+      resp => this.getTest(true),
+      err => this.handleErrRelog(err, "quitar pregunta de test", primera, this.quitarPregunta, this)
+    )
+  }
+
+  getIsFavorita(primera: boolean) {
+    this.userS.getFavoriteTest(this.getSessionUser().getUsername(), this.id).subscribe(
+      resp => this.isFavorita = true,
+      err => {
+        if (err.status == 410) {
+          this.isFavorita = false
+        } else {
+          this.handleErrRelog(err, "ver si el Test esta marcado como favorito", primera, this.getIsFavorita, this)
+        }
+      }
+    )
+  }
+
+  changeFavorita() {
+    if (this.isFavorita) {
+      this.removeFavorita(true)
+    } else {
+      this.addFavorita(true)
+    }
+  }
+
+  addFavorita(primera: boolean) {
+    this.userS.addTestFavorite(this.getSessionUser().getUsername(), this.id).subscribe(
+      resp => {
+        this.getIsFavorita(true)
+      },
+      err => {
+        this.handleErrRelog(err, "marcar como favorito un test", primera, this.addFavorita, this)
+      }
+    )
+  }
+
+  removeFavorita(primera: boolean) {
+    this.userS.removeTestFavorite(this.getSessionUser().getUsername(), this.id).subscribe(
+      resp => this.getIsFavorita(true),
+      err => {
+        this.handleErrRelog(err, "desmarcar como favorito un test", primera, this.removeFavorita, this)
+      }
     )
   }
 }

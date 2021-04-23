@@ -61,6 +61,9 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		TeamAddMemberHandler: team.AddMemberHandlerFunc(func(params team.AddMemberParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation team.AddMember has not yet been implemented")
 		}),
+		UserAddQuestionFavoriteHandler: user.AddQuestionFavoriteHandlerFunc(func(params user.AddQuestionFavoriteParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation user.AddQuestionFavorite has not yet been implemented")
+		}),
 		TestAddQuestionToTestHandler: test.AddQuestionToTestHandlerFunc(func(params test.AddQuestionToTestParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation test.AddQuestionToTest has not yet been implemented")
 		}),
@@ -72,6 +75,9 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		}),
 		QuestionAddTeamToQuestionHandler: question.AddTeamToQuestionHandlerFunc(func(params question.AddTeamToQuestionParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation question.AddTeamToQuestion has not yet been implemented")
+		}),
+		UserAddTestFavoriteHandler: user.AddTestFavoriteHandlerFunc(func(params user.AddTestFavoriteParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation user.AddTestFavorite has not yet been implemented")
 		}),
 		UserCopyQuestionHandler: user.CopyQuestionHandlerFunc(func(params user.CopyQuestionParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation user.CopyQuestion has not yet been implemented")
@@ -159,6 +165,24 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		}),
 		UserGetEditTestsFromUserHandler: user.GetEditTestsFromUserHandlerFunc(func(params user.GetEditTestsFromUserParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation user.GetEditTestsFromUser has not yet been implemented")
+		}),
+		UserGetFavoriteEditQuestionsHandler: user.GetFavoriteEditQuestionsHandlerFunc(func(params user.GetFavoriteEditQuestionsParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation user.GetFavoriteEditQuestions has not yet been implemented")
+		}),
+		UserGetFavoriteEditTestsHandler: user.GetFavoriteEditTestsHandlerFunc(func(params user.GetFavoriteEditTestsParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation user.GetFavoriteEditTests has not yet been implemented")
+		}),
+		UserGetFavoriteQuestionHandler: user.GetFavoriteQuestionHandlerFunc(func(params user.GetFavoriteQuestionParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation user.GetFavoriteQuestion has not yet been implemented")
+		}),
+		UserGetFavoriteQuestionsHandler: user.GetFavoriteQuestionsHandlerFunc(func(params user.GetFavoriteQuestionsParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation user.GetFavoriteQuestions has not yet been implemented")
+		}),
+		UserGetFavoriteTestHandler: user.GetFavoriteTestHandlerFunc(func(params user.GetFavoriteTestParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation user.GetFavoriteTest has not yet been implemented")
+		}),
+		UserGetFavoriteTestsHandler: user.GetFavoriteTestsHandlerFunc(func(params user.GetFavoriteTestsParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation user.GetFavoriteTests has not yet been implemented")
 		}),
 		TeamGetInvitedTestFromTeamHandler: team.GetInvitedTestFromTeamHandlerFunc(func(params team.GetInvitedTestFromTeamParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation team.GetInvitedTestFromTeam has not yet been implemented")
@@ -400,6 +424,9 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		TestRemoveAdminTeamToTestHandler: test.RemoveAdminTeamToTestHandlerFunc(func(params test.RemoveAdminTeamToTestParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation test.RemoveAdminTeamToTest has not yet been implemented")
 		}),
+		UserRemoveQuestionFavoriteHandler: user.RemoveQuestionFavoriteHandlerFunc(func(params user.RemoveQuestionFavoriteParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation user.RemoveQuestionFavorite has not yet been implemented")
+		}),
 		TestRemoveQuestionFromTestHandler: test.RemoveQuestionFromTestHandlerFunc(func(params test.RemoveQuestionFromTestParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation test.RemoveQuestionFromTest has not yet been implemented")
 		}),
@@ -414,6 +441,9 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		}),
 		QuestionRemoveTeamToQuestionHandler: question.RemoveTeamToQuestionHandlerFunc(func(params question.RemoveTeamToQuestionParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation question.RemoveTeamToQuestion has not yet been implemented")
+		}),
+		UserRemoveTestFavoriteHandler: user.RemoveTestFavoriteHandlerFunc(func(params user.RemoveTestFavoriteParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation user.RemoveTestFavorite has not yet been implemented")
 		}),
 		PublishedTestRemoveUserToPublishedTestHandler: published_test.RemoveUserToPublishedTestHandlerFunc(func(params published_test.RemoveUserToPublishedTestParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation published_test.RemoveUserToPublishedTest has not yet been implemented")
@@ -518,6 +548,8 @@ type DevAPI struct {
 	TestAddAdminTeamToTestHandler test.AddAdminTeamToTestHandler
 	// TeamAddMemberHandler sets the operation handler for the add member operation
 	TeamAddMemberHandler team.AddMemberHandler
+	// UserAddQuestionFavoriteHandler sets the operation handler for the add question favorite operation
+	UserAddQuestionFavoriteHandler user.AddQuestionFavoriteHandler
 	// TestAddQuestionToTestHandler sets the operation handler for the add question to test operation
 	TestAddQuestionToTestHandler test.AddQuestionToTestHandler
 	// QuestionAddTagToQuestionHandler sets the operation handler for the add tag to question operation
@@ -526,6 +558,8 @@ type DevAPI struct {
 	TestAddTagToTestHandler test.AddTagToTestHandler
 	// QuestionAddTeamToQuestionHandler sets the operation handler for the add team to question operation
 	QuestionAddTeamToQuestionHandler question.AddTeamToQuestionHandler
+	// UserAddTestFavoriteHandler sets the operation handler for the add test favorite operation
+	UserAddTestFavoriteHandler user.AddTestFavoriteHandler
 	// UserCopyQuestionHandler sets the operation handler for the copy question operation
 	UserCopyQuestionHandler user.CopyQuestionHandler
 	// UserCopyTestHandler sets the operation handler for the copy test operation
@@ -584,6 +618,18 @@ type DevAPI struct {
 	TagGetEditTestsFromTagHandler tag.GetEditTestsFromTagHandler
 	// UserGetEditTestsFromUserHandler sets the operation handler for the get edit tests from user operation
 	UserGetEditTestsFromUserHandler user.GetEditTestsFromUserHandler
+	// UserGetFavoriteEditQuestionsHandler sets the operation handler for the get favorite edit questions operation
+	UserGetFavoriteEditQuestionsHandler user.GetFavoriteEditQuestionsHandler
+	// UserGetFavoriteEditTestsHandler sets the operation handler for the get favorite edit tests operation
+	UserGetFavoriteEditTestsHandler user.GetFavoriteEditTestsHandler
+	// UserGetFavoriteQuestionHandler sets the operation handler for the get favorite question operation
+	UserGetFavoriteQuestionHandler user.GetFavoriteQuestionHandler
+	// UserGetFavoriteQuestionsHandler sets the operation handler for the get favorite questions operation
+	UserGetFavoriteQuestionsHandler user.GetFavoriteQuestionsHandler
+	// UserGetFavoriteTestHandler sets the operation handler for the get favorite test operation
+	UserGetFavoriteTestHandler user.GetFavoriteTestHandler
+	// UserGetFavoriteTestsHandler sets the operation handler for the get favorite tests operation
+	UserGetFavoriteTestsHandler user.GetFavoriteTestsHandler
 	// TeamGetInvitedTestFromTeamHandler sets the operation handler for the get invited test from team operation
 	TeamGetInvitedTestFromTeamHandler team.GetInvitedTestFromTeamHandler
 	// UserGetInvitedTestFromUserHandler sets the operation handler for the get invited test from user operation
@@ -744,6 +790,8 @@ type DevAPI struct {
 	UserRegisterUserHandler user.RegisterUserHandler
 	// TestRemoveAdminTeamToTestHandler sets the operation handler for the remove admin team to test operation
 	TestRemoveAdminTeamToTestHandler test.RemoveAdminTeamToTestHandler
+	// UserRemoveQuestionFavoriteHandler sets the operation handler for the remove question favorite operation
+	UserRemoveQuestionFavoriteHandler user.RemoveQuestionFavoriteHandler
 	// TestRemoveQuestionFromTestHandler sets the operation handler for the remove question from test operation
 	TestRemoveQuestionFromTestHandler test.RemoveQuestionFromTestHandler
 	// QuestionRemoveTagFromQuestionHandler sets the operation handler for the remove tag from question operation
@@ -754,6 +802,8 @@ type DevAPI struct {
 	PublishedTestRemoveTeamToPublishedTestHandler published_test.RemoveTeamToPublishedTestHandler
 	// QuestionRemoveTeamToQuestionHandler sets the operation handler for the remove team to question operation
 	QuestionRemoveTeamToQuestionHandler question.RemoveTeamToQuestionHandler
+	// UserRemoveTestFavoriteHandler sets the operation handler for the remove test favorite operation
+	UserRemoveTestFavoriteHandler user.RemoveTestFavoriteHandler
 	// PublishedTestRemoveUserToPublishedTestHandler sets the operation handler for the remove user to published test operation
 	PublishedTestRemoveUserToPublishedTestHandler published_test.RemoveUserToPublishedTestHandler
 	// UserStartAnswerHandler sets the operation handler for the start answer operation
@@ -873,6 +923,9 @@ func (o *DevAPI) Validate() error {
 	if o.TeamAddMemberHandler == nil {
 		unregistered = append(unregistered, "team.AddMemberHandler")
 	}
+	if o.UserAddQuestionFavoriteHandler == nil {
+		unregistered = append(unregistered, "user.AddQuestionFavoriteHandler")
+	}
 	if o.TestAddQuestionToTestHandler == nil {
 		unregistered = append(unregistered, "test.AddQuestionToTestHandler")
 	}
@@ -884,6 +937,9 @@ func (o *DevAPI) Validate() error {
 	}
 	if o.QuestionAddTeamToQuestionHandler == nil {
 		unregistered = append(unregistered, "question.AddTeamToQuestionHandler")
+	}
+	if o.UserAddTestFavoriteHandler == nil {
+		unregistered = append(unregistered, "user.AddTestFavoriteHandler")
 	}
 	if o.UserCopyQuestionHandler == nil {
 		unregistered = append(unregistered, "user.CopyQuestionHandler")
@@ -971,6 +1027,24 @@ func (o *DevAPI) Validate() error {
 	}
 	if o.UserGetEditTestsFromUserHandler == nil {
 		unregistered = append(unregistered, "user.GetEditTestsFromUserHandler")
+	}
+	if o.UserGetFavoriteEditQuestionsHandler == nil {
+		unregistered = append(unregistered, "user.GetFavoriteEditQuestionsHandler")
+	}
+	if o.UserGetFavoriteEditTestsHandler == nil {
+		unregistered = append(unregistered, "user.GetFavoriteEditTestsHandler")
+	}
+	if o.UserGetFavoriteQuestionHandler == nil {
+		unregistered = append(unregistered, "user.GetFavoriteQuestionHandler")
+	}
+	if o.UserGetFavoriteQuestionsHandler == nil {
+		unregistered = append(unregistered, "user.GetFavoriteQuestionsHandler")
+	}
+	if o.UserGetFavoriteTestHandler == nil {
+		unregistered = append(unregistered, "user.GetFavoriteTestHandler")
+	}
+	if o.UserGetFavoriteTestsHandler == nil {
+		unregistered = append(unregistered, "user.GetFavoriteTestsHandler")
 	}
 	if o.TeamGetInvitedTestFromTeamHandler == nil {
 		unregistered = append(unregistered, "team.GetInvitedTestFromTeamHandler")
@@ -1212,6 +1286,9 @@ func (o *DevAPI) Validate() error {
 	if o.TestRemoveAdminTeamToTestHandler == nil {
 		unregistered = append(unregistered, "test.RemoveAdminTeamToTestHandler")
 	}
+	if o.UserRemoveQuestionFavoriteHandler == nil {
+		unregistered = append(unregistered, "user.RemoveQuestionFavoriteHandler")
+	}
 	if o.TestRemoveQuestionFromTestHandler == nil {
 		unregistered = append(unregistered, "test.RemoveQuestionFromTestHandler")
 	}
@@ -1226,6 +1303,9 @@ func (o *DevAPI) Validate() error {
 	}
 	if o.QuestionRemoveTeamToQuestionHandler == nil {
 		unregistered = append(unregistered, "question.RemoveTeamToQuestionHandler")
+	}
+	if o.UserRemoveTestFavoriteHandler == nil {
+		unregistered = append(unregistered, "user.RemoveTestFavoriteHandler")
 	}
 	if o.PublishedTestRemoveUserToPublishedTestHandler == nil {
 		unregistered = append(unregistered, "published_test.RemoveUserToPublishedTestHandler")
@@ -1386,6 +1466,10 @@ func (o *DevAPI) initHandlerCache() {
 	if o.handlers["PUT"] == nil {
 		o.handlers["PUT"] = make(map[string]http.Handler)
 	}
+	o.handlers["PUT"]["/users/{username}/favoriteQuestions/{questionid}"] = user.NewAddQuestionFavorite(o.context, o.UserAddQuestionFavoriteHandler)
+	if o.handlers["PUT"] == nil {
+		o.handlers["PUT"] = make(map[string]http.Handler)
+	}
 	o.handlers["PUT"]["/tests/{testid}/questions/{questionid}"] = test.NewAddQuestionToTest(o.context, o.TestAddQuestionToTestHandler)
 	if o.handlers["PUT"] == nil {
 		o.handlers["PUT"] = make(map[string]http.Handler)
@@ -1399,6 +1483,10 @@ func (o *DevAPI) initHandlerCache() {
 		o.handlers["PUT"] = make(map[string]http.Handler)
 	}
 	o.handlers["PUT"]["/questions/{questionid}/teams/{teamname}"] = question.NewAddTeamToQuestion(o.context, o.QuestionAddTeamToQuestionHandler)
+	if o.handlers["PUT"] == nil {
+		o.handlers["PUT"] = make(map[string]http.Handler)
+	}
+	o.handlers["PUT"]["/users/{username}/favoriteTests/{testid}"] = user.NewAddTestFavorite(o.context, o.UserAddTestFavoriteHandler)
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
@@ -1515,6 +1603,30 @@ func (o *DevAPI) initHandlerCache() {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
 	o.handlers["GET"]["/users/{username}/editTests"] = user.NewGetEditTestsFromUser(o.context, o.UserGetEditTestsFromUserHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/users/{username}/favoriteEditQuestions"] = user.NewGetFavoriteEditQuestions(o.context, o.UserGetFavoriteEditQuestionsHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/users/{username}/favoriteEditTests"] = user.NewGetFavoriteEditTests(o.context, o.UserGetFavoriteEditTestsHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/users/{username}/favoriteQuestions/{questionid}"] = user.NewGetFavoriteQuestion(o.context, o.UserGetFavoriteQuestionHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/users/{username}/favoriteQuestions"] = user.NewGetFavoriteQuestions(o.context, o.UserGetFavoriteQuestionsHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/users/{username}/favoriteTests/{testid}"] = user.NewGetFavoriteTest(o.context, o.UserGetFavoriteTestHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/users/{username}/favoriteTests"] = user.NewGetFavoriteTests(o.context, o.UserGetFavoriteTestsHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
@@ -1838,6 +1950,10 @@ func (o *DevAPI) initHandlerCache() {
 	if o.handlers["DELETE"] == nil {
 		o.handlers["DELETE"] = make(map[string]http.Handler)
 	}
+	o.handlers["DELETE"]["/users/{username}/favoriteQuestions/{questionid}"] = user.NewRemoveQuestionFavorite(o.context, o.UserRemoveQuestionFavoriteHandler)
+	if o.handlers["DELETE"] == nil {
+		o.handlers["DELETE"] = make(map[string]http.Handler)
+	}
 	o.handlers["DELETE"]["/tests/{testid}/questions/{questionid}"] = test.NewRemoveQuestionFromTest(o.context, o.TestRemoveQuestionFromTestHandler)
 	if o.handlers["DELETE"] == nil {
 		o.handlers["DELETE"] = make(map[string]http.Handler)
@@ -1855,6 +1971,10 @@ func (o *DevAPI) initHandlerCache() {
 		o.handlers["DELETE"] = make(map[string]http.Handler)
 	}
 	o.handlers["DELETE"]["/questions/{questionid}/teams/{teamname}"] = question.NewRemoveTeamToQuestion(o.context, o.QuestionRemoveTeamToQuestionHandler)
+	if o.handlers["DELETE"] == nil {
+		o.handlers["DELETE"] = make(map[string]http.Handler)
+	}
+	o.handlers["DELETE"]["/users/{username}/favoriteTests/{testid}"] = user.NewRemoveTestFavorite(o.context, o.UserRemoveTestFavoriteHandler)
 	if o.handlers["DELETE"] == nil {
 		o.handlers["DELETE"] = make(map[string]http.Handler)
 	}

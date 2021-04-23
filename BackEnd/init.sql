@@ -10,7 +10,9 @@ DROP TABLE IF EXISTS Etiqueta;
 DROP TABLE IF EXISTS Opcion;
 DROP TABLE IF EXISTS PreguntaEquipo;
 DROP TABLE IF EXISTS TestPregunta;
+DROP TABLE IF EXISTS PreguntaFavorita;
 DROP TABLE IF EXISTS Pregunta;
+DROP TABLE IF EXISTS TestFavorito;
 DROP TABLE IF EXISTS InvitacionTestUsuario;
 DROP TABLE IF EXISTS InvitacionTestEquipo;
 DROP TABLE IF EXISTS GestionTestEquipo;
@@ -84,6 +86,14 @@ CREATE TABLE InvitacionTestUsuario(
   CONSTRAINT PRIMARY KEY(usuarioid, testid)
 );
 
+CREATE TABLE TestFavorito(
+  usuarioid int(11) NOT NULL,
+  testid int(11) NOT NULL,
+  FOREIGN KEY(usuarioid) REFERENCES Usuario(id) ON DELETE CASCADE,
+  FOREIGN KEY(testid) REFERENCES Test(id) ON DELETE CASCADE,
+  CONSTRAINT PRIMARY KEY(usuarioid, testid)
+);
+
 CREATE TABLE Pregunta(
   id int(11) NOT NULL AUTO_INCREMENT,
   title varchar(100) COLLATE utf8_unicode_ci NOT NULL,
@@ -97,6 +107,13 @@ CREATE TABLE Pregunta(
   accesoPublicoNoPublicada boolean NOT NULL,
   FOREIGN KEY(usuarioid) REFERENCES Usuario(id) ON DELETE CASCADE,
   PRIMARY KEY(id)
+);
+CREATE TABLE PreguntaFavorita(
+  usuarioid int(11) NOT NULL,
+  preguntaid int(11) NOT NULL,
+  FOREIGN KEY(usuarioid) REFERENCES Usuario(id) ON DELETE CASCADE,
+  FOREIGN KEY(preguntaid) REFERENCES Pregunta(id) ON DELETE CASCADE,
+  CONSTRAINT PRIMARY KEY(usuarioid, preguntaid)
 );
 
 CREATE TABLE TestPregunta(

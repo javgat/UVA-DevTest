@@ -7,6 +7,7 @@ package dao
 import (
 	"database/sql"
 	"errors"
+	"log"
 	"uva-devtest/models"
 	"uva-devtest/persistence/dbconnection"
 
@@ -491,4 +492,131 @@ func GetEditTestsFromTag(db *sql.DB, nombre string) ([]*Test, error) {
 		}
 	}
 	return nil, err
+}
+
+func GetFavoriteEditTests(db *sql.DB, username string, tags [][]string, likeTitle *string) ([]*Test, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var qs []*Test
+	stPrepare := "SELECT DISTINCT T.* FROM Test T LEFT JOIN GestionTestEquipo E ON T.id=E.testid LEFT JOIN EquipoUsuario U ON U.equipoid=E.equipoid " +
+		" LEFT JOIN Usuario V ON V.id=U.usuarioid LEFT JOIN Usuario W ON W.id=T.usuarioid JOIN TestFavorito F ON T.id=F.testid JOIN Usuario Y ON Y.id=F.usuarioid " +
+		" WHERE Y.username=? AND T.editable=1 AND (V.username=? OR T.accesoPublicoNoPublicado=1 OR W.username=?) "
+	stPrepare = addFiltersToQueryQuestionLongNames(true, stPrepare, tags, likeTitle)
+	query, err := db.Prepare(stPrepare)
+	if err == nil {
+		defer query.Close()
+		interfaceParams := FilterParamsSlicesToInterfaceArr(tags, likeTitle)
+		var paramsSlice []interface{}
+		paramsSlice = append(paramsSlice, username)
+		paramsSlice = append(paramsSlice, username)
+		paramsSlice = append(paramsSlice, username)
+		interfaceParams = append(paramsSlice, interfaceParams...)
+		rows, err := query.Query(interfaceParams...)
+		if err == nil {
+			qs, err = rowsToTests(rows)
+			return qs, err
+		}
+	} else {
+		log.Print(err)
+	}
+	return nil, err
+}
+
+func GetFavoriteTests(db *sql.DB, username string, tags [][]string, likeTitle *string) ([]*Test, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var qs []*Test
+	stPrepare := "SELECT DISTINCT T.* FROM Test T LEFT JOIN GestionTestEquipo E ON T.id=E.testid LEFT JOIN EquipoUsuario U ON U.equipoid=E.equipoid " +
+		" LEFT JOIN Usuario V ON V.id=U.usuarioid LEFT JOIN Usuario W ON W.id=T.usuarioid JOIN TestFavorito F ON T.id=F.testid JOIN Usuario Y ON Y.id=F.usuarioid " +
+		" WHERE Y.username=? AND (V.username=? OR T.accesoPublicoNoPublicado=1 OR (T.editable=0 AND T.accesoPublico=1) OR W.username=?) "
+	stPrepare = addFiltersToQueryQuestionLongNames(true, stPrepare, tags, likeTitle)
+	query, err := db.Prepare(stPrepare)
+	if err == nil {
+		defer query.Close()
+		interfaceParams := FilterParamsSlicesToInterfaceArr(tags, likeTitle)
+		var paramsSlice []interface{}
+		paramsSlice = append(paramsSlice, username)
+		paramsSlice = append(paramsSlice, username)
+		paramsSlice = append(paramsSlice, username)
+		interfaceParams = append(paramsSlice, interfaceParams...)
+		rows, err := query.Query(interfaceParams...)
+		if err == nil {
+			qs, err = rowsToTests(rows)
+			return qs, err
+		}
+	} else {
+		log.Print(err)
+	}
+	return nil, err
+}
+
+func GetFavoriteTest(db *sql.DB, username string, testid int64) (*Test, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var qs *Test
+	stPrepare := "SELECT DISTINCT T.* FROM Test T LEFT JOIN GestionTestEquipo E ON T.id=E.testid LEFT JOIN EquipoUsuario U ON U.equipoid=E.equipoid " +
+		" LEFT JOIN Usuario V ON V.id=U.usuarioid LEFT JOIN Usuario W ON W.id=T.usuarioid JOIN TestFavorito F ON T.id=F.testid JOIN Usuario Y ON Y.id=F.usuarioid " +
+		" WHERE Y.username=? AND (V.username=? OR T.accesoPublicoNoPublicado=1 OR (T.editable=0 AND T.accesoPublico=1) OR W.username=?) AND T.id=?"
+	query, err := db.Prepare(stPrepare)
+	if err == nil {
+		defer query.Close()
+		rows, err := query.Query(username, username, username, testid)
+		if err == nil {
+			qs, err = rowsToTest(rows)
+			if qs == nil {
+				return nil, nil
+			}
+			return qs, err
+		}
+	} else {
+		log.Print(err)
+	}
+	return nil, err
+}
+
+func AddFavoriteTest(db *sql.DB, username string, testid int64) error {
+	if db == nil {
+		return errors.New(errorDBNil)
+	}
+	u, err := GetUserUsername(db, username)
+	if err == nil && u != nil {
+		stPrepare := "INSERT INTO TestFavorito(usuarioid, testid) VALUES(?,?)"
+		var query *sql.Stmt
+		query, err = db.Prepare(stPrepare)
+		if err == nil {
+			defer query.Close()
+			_, err := query.Exec(u.ID, testid)
+			return err
+		} else {
+			log.Print(err)
+		}
+	} else if err == nil {
+		err = errors.New(errorResourceNotFound)
+	}
+	return err
+}
+
+func RemoveFavoriteTest(db *sql.DB, username string, testid int64) error {
+	if db == nil {
+		return errors.New(errorDBNil)
+	}
+	u, err := GetUserUsername(db, username)
+	if err == nil && u != nil {
+		stPrepare := "DELETE FROM TestFavorito WHERE usuarioid=? AND testid=?"
+		var query *sql.Stmt
+		query, err = db.Prepare(stPrepare)
+		if err == nil {
+			defer query.Close()
+			_, err := query.Exec(u.ID, testid)
+			return err
+		} else {
+			log.Print(err)
+		}
+	} else if err == nil {
+		err = errors.New(errorResourceNotFound)
+	}
+	return err
 }
