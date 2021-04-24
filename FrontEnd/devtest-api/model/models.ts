@@ -3,6 +3,7 @@ export * from './loginUser';
 export * from './modelError';
 export * from './option';
 export * from './password';
+export * from './passwordRecovery';
 export * from './passwordUpdate';
 export * from './question';
 export * from './questionAnswer';

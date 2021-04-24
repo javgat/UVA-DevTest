@@ -17,10 +17,11 @@ import (
 const errorResourceNotFound = "no se encontro el recurso"
 
 type EmailInfo struct {
-	From       string `json:"from"`
-	Password   string `json:"password"`
-	Serverhost string `json:"serverhost"`
-	Serverport string `json:"serverport"`
+	From        string `json:"from"`
+	Password    string `json:"password"`
+	Serverhost  string `json:"serverhost"`
+	Serverport  string `json:"serverport"`
+	FrontEndUrl string `json:"frontendurl"`
 }
 
 // smtpServer data to smtp server
@@ -79,18 +80,21 @@ func getEmailFromUsername(username string) (string, error) {
 	return "", err
 }
 
-func generateEmailBodyRecoveryPassword(username string, token string, email string) []byte {
+func generateEmailBodyRecoveryPassword(username string, token string, email string, frontEnd string) []byte {
 	msg := []byte("To: " + email + "\r\n" +
 		"Subject: Recuperación de contraseña\r\n" +
 		"\r\n" +
-		"Para recuperar tu contraseña asociada a " + username + ", el token a usar es: " + token + "\r\n")
+		"Para recuperar tu contraseña asociada a " + username + ", haz click en: " + frontEnd + "/recoverPassword/" + username + "?token=" + token + "\r\n")
 	return msg
 }
 
 func SendPasswordRecoveryMail(username string, token string) {
 	email, err := getEmailFromUsername(username)
 	if err == nil {
-		emailBody := generateEmailBodyRecoveryPassword(username, token, email)
-		sendEmail(emailBody, email)
+		emailInfo, err := getOwnEmailInfo()
+		if err == nil {
+			emailBody := generateEmailBodyRecoveryPassword(username, token, email, emailInfo.FrontEndUrl)
+			sendEmail(emailBody, email)
+		}
 	}
 }

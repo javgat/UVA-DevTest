@@ -1138,6 +1138,7 @@ func RecoverPassword(params user.RecoverPasswordParams) middleware.Responder {
 		tok, err = dao.GetMailToken(db, params.PasswordRecovery.Mailtoken)
 		if err == nil {
 			if tok == nil {
+				log.Println("Error al recuperar contraseña, el token no existe")
 				return user.NewRecoverPasswordForbidden()
 			}
 			err = dao.DeleteMailToken(db, tok.Mailtoken) // Token gets consumed
@@ -1146,7 +1147,13 @@ func RecoverPassword(params user.RecoverPasswordParams) middleware.Responder {
 				u, err = dao.GetUserUsername(db, params.Username)
 				if err == nil && u != nil {
 					//If caducidad is before (antes de) now OR not his token
-					if tok.Caducidad.Before(time.Now()) || tok.Userid != u.ID {
+					if tok.Caducidad.Before(time.Now()) {
+						log.Println("Error al recuperar contraseña, el token ha caducado")
+						return user.NewRecoverPasswordForbidden()
+					}
+					if tok.Userid != u.ID {
+
+						log.Println("Error al recuperar contraseña, el token no es suyo")
 						return user.NewRecoverPasswordForbidden()
 					}
 					// Correct Token
@@ -1200,9 +1207,17 @@ func PostRecoveryToken(params user.PostRecoveryTokenParams) middleware.Responder
 		var token string
 		token, err = NewUniqueMailToken()
 		if err == nil {
-			err = dao.PostRecoveryToken(db, params.Username, token)
+			var u *dao.User
+			u, err = dao.GetUserUsername(db, params.Username)
+			if u == nil || err != nil {
+				u, err = dao.GetUserEmail(db, params.Username)
+				if u == nil || err != nil {
+					return user.NewPostRecoveryTokenGone()
+				}
+			}
+			err = dao.PostRecoveryToken(db, *u.Username, token)
 			if err == nil {
-				emailHelper.SendPasswordRecoveryMail(params.Username, token)
+				emailHelper.SendPasswordRecoveryMail(*u.Username, token)
 				return user.NewPostRecoveryTokenCreated()
 			}
 		}

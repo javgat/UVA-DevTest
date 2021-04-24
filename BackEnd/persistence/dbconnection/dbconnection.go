@@ -33,7 +33,7 @@ func connectDb(filename string) (*sql.DB, error) {
 	if err != nil {
 		return nil, err
 	}
-	dbSource := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8", dbinfo.Username, dbinfo.Pass, dbinfo.Host, dbinfo.Port, dbinfo.Name)
+	dbSource := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=true", dbinfo.Username, dbinfo.Pass, dbinfo.Host, dbinfo.Port, dbinfo.Name)
 	db, err := sql.Open("mysql", dbSource)
 	return db, err
 }

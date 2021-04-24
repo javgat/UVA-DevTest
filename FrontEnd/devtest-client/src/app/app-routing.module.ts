@@ -4,6 +4,7 @@ import { AdminTeamsComponent } from './admin/admin-teams/admin-teams.component';
 import { AdminUsersComponent } from './admin/admin-users/admin-users.component';
 import { AdminComponent } from './admin/admin.component';
 import { CreateTeamComponent } from './create-team/create-team.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { LoginComponent } from './login/login.component';
 import { MainComponent } from './main/main.component';
 import { ProfilePublicQuestionsComponent } from './profile/profile-public-questions/profile-public-questions.component';
@@ -17,6 +18,7 @@ import { QuestionsFavUserComponent } from './questions-fav-user/questions-fav-us
 import { QuestionsSharedUserComponent } from './questions-shared-user/questions-shared-user.component';
 import { QuestionsUserComponent } from './questions-user/questions-user.component';
 import { QuestionsComponent } from './questions/questions.component';
+import { RecoverPasswordComponent } from './recover-password/recover-password.component';
 import { SigninComponent } from './signin/signin.component';
 import { TeamComponent } from './team/team.component';
 import { TeamsComponent } from './teams/teams.component';
@@ -56,6 +58,8 @@ const routes: Routes = [
   {path: 'et/:testid', component: TestComponent},
   {path: 'etCreate', component: TestCreateComponent},
   {path: 'et/:testid/teams', component: TestTeamsComponent},
+  {path: 'forgotPassword', component: ForgotPasswordComponent},
+  {path: 'recoverPassword/:username', component: RecoverPasswordComponent},
   {path: '**', component: MainComponent, pathMatch:'full'}
 ];
 

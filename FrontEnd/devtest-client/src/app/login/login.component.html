@@ -1,6 +1,6 @@
 <div class="alert alert-{{mensaje.type}}" *ngIf="mensaje.mostrar" id="message" role="alert">{{mensaje.texto}}</div>
 <div class="container my-5">
-    <form (ngSubmit)='loginSubmit()' ngNativeValidate>
+    <form (ngSubmit)='loginSubmit()' class="my-2" ngNativeValidate>
         <div class="mb-3">
             <label for="inputUsername" class="form-label">Nombre de usuario o Correo electrónico</label>
             <input type="text" class="form-control" name="inputUsername" aria-describedby="usernameHelp"
@@ -15,4 +15,5 @@
             <input type="submit" value="Acceder" class="btn btn-primary btn-lg" id="buttonLoginSignin" />
         </div>
     </form>
+    <div><a class="link-dark" [routerLink]="['/forgotPassword']">He olvidado mi contraseña</a></div>
 </div>

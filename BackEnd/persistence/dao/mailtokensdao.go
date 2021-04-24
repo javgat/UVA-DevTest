@@ -20,10 +20,16 @@ func rowsToMailTokens(rows *sql.Rows) ([]*MailToken, error) {
 	var MailTokens []*MailToken
 	for rows.Next() {
 		var t MailToken
-		err := rows.Scan(&t.Userid, &t.Mailtoken, &t.Caducidad)
+		var caduNull sql.NullTime
+		err := rows.Scan(&t.Userid, &t.Mailtoken, &caduNull)
 		if err != nil {
 			return MailTokens, err
 		}
+		if !caduNull.Valid {
+			return MailTokens, errors.New("tiempo SQL no valido")
+		}
+		t.Caducidad = caduNull.Time
+
 		MailTokens = append(MailTokens, &t)
 	}
 	return MailTokens, nil
@@ -55,7 +61,7 @@ func PostRecoveryToken(db *sql.DB, username string, token string) error {
 		query, err = db.Prepare("INSERT INTO TokenCorreo(usuarioid, token, caducidad) VALUES(?,?,?)")
 		caducidad := time.Now()
 		tokenMinutes := 45
-		caducidad.Add(time.Minute * time.Duration(tokenMinutes))
+		caducidad = caducidad.Add(time.Minute * time.Duration(tokenMinutes))
 		if err == nil {
 			defer query.Close()
 			_, err = query.Exec(u.ID, token, caducidad)

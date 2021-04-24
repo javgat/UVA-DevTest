@@ -50,6 +50,8 @@ import { LqFavsUserComponent } from './list-questions/lq-favs-user/lq-favs-user.
 import { LtFavsUserComponent } from './list-tests/lt-favs-user/lt-favs-user.component';
 import { TestsFavUserComponent } from './tests-fav-user/tests-fav-user.component';
 import { QuestionsFavUserComponent } from './questions-fav-user/questions-fav-user.component';
+import { RecoverPasswordComponent } from './recover-password/recover-password.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 
 export function apiConfigFactory (): Configuration {
   const params: ConfigurationParameters = {
@@ -102,7 +104,9 @@ export function apiConfigFactory (): Configuration {
     LqFavsUserComponent,
     LtFavsUserComponent,
     TestsFavUserComponent,
-    QuestionsFavUserComponent
+    QuestionsFavUserComponent,
+    RecoverPasswordComponent,
+    ForgotPasswordComponent
   ],
   imports: [
     BrowserModule,

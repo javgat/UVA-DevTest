@@ -19,6 +19,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { Answer } from '../model/answer';
+import { PasswordRecovery } from '../model/passwordRecovery';
 import { PasswordUpdate } from '../model/passwordUpdate';
 import { Question } from '../model/question';
 import { Role } from '../model/role';
@@ -2255,6 +2256,48 @@ export class UserService {
     }
 
     /**
+     * Creates a new mailToken associated with the user &lt;username&gt;, for recovering the password
+     * Creates a new mailToken associated with the user &lt;username&gt;, for recovering the password
+     * @param username Username of the user to modify its role
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public postRecoveryToken(username: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public postRecoveryToken(username: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public postRecoveryToken(username: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public postRecoveryToken(username: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (username === null || username === undefined) {
+            throw new Error('Required parameter username was null or undefined when calling postRecoveryToken.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+
+        return this.httpClient.post<any>(`${this.basePath}/users/${encodeURIComponent(String(username))}/passRecoveryTokens`,
+            null,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * adds a team
      * Adds a team to the system
      * @param username Username of the user to get their teams
@@ -2527,6 +2570,57 @@ export class UserService {
 
         return this.httpClient.put<any>(`${this.basePath}/users/${encodeURIComponent(String(username))}`,
             userUpdate,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Modifies the password of the user &lt;username&gt;, using a token
+     * Modifies the role of the user &lt;username&gt;, using a token
+     * @param username Username of the user to modify its password
+     * @param passwordRecovery Passwor Recovery information
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public recoverPassword(username: string, passwordRecovery: PasswordRecovery, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public recoverPassword(username: string, passwordRecovery: PasswordRecovery, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public recoverPassword(username: string, passwordRecovery: PasswordRecovery, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public recoverPassword(username: string, passwordRecovery: PasswordRecovery, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (username === null || username === undefined) {
+            throw new Error('Required parameter username was null or undefined when calling recoverPassword.');
+        }
+
+        if (passwordRecovery === null || passwordRecovery === undefined) {
+            throw new Error('Required parameter passwordRecovery was null or undefined when calling recoverPassword.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.put<any>(`${this.basePath}/users/${encodeURIComponent(String(username))}/recoverPassword`,
+            passwordRecovery,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
