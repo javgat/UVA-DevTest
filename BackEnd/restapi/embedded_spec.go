@@ -6094,6 +6094,45 @@ func init() {
         }
       }
     },
+    "/users/{username}/passRecoveryTokens": {
+      "post": {
+        "description": "Creates a new mailToken associated with the user \u003cusername\u003e, for recovering the password",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Creates a new mailToken associated with the user \u003cusername\u003e, for recovering the password",
+        "operationId": "postRecoveryToken",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user to modify its role",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Password Recovery Token Created"
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
     "/users/{username}/password": {
       "put": {
         "security": [
@@ -6603,6 +6642,54 @@ func init() {
             "schema": {
               "$ref": "#/definitions/Question"
             }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/users/{username}/recoverPassword": {
+      "put": {
+        "description": "Modifies the role of the user \u003cusername\u003e, using a token",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Modifies the password of the user \u003cusername\u003e, using a token",
+        "operationId": "recoverPassword",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user to modify its password",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Passwor Recovery information",
+            "name": "passwordRecovery",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PasswordRecovery"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resource password modified correctly"
           },
           "400": {
             "$ref": "#/responses/BadRequestError"
@@ -7594,6 +7681,24 @@ func init() {
       ],
       "properties": {
         "password": {
+          "type": "string",
+          "format": "password",
+          "pattern": "^.{6,}$",
+          "example": "password"
+        }
+      }
+    },
+    "PasswordRecovery": {
+      "type": "object",
+      "required": [
+        "mailtoken",
+        "newpass"
+      ],
+      "properties": {
+        "mailtoken": {
+          "type": "string"
+        },
+        "newpass": {
           "type": "string",
           "format": "password",
           "pattern": "^.{6,}$",
@@ -15114,6 +15219,54 @@ func init() {
         }
       }
     },
+    "/users/{username}/passRecoveryTokens": {
+      "post": {
+        "description": "Creates a new mailToken associated with the user \u003cusername\u003e, for recovering the password",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Creates a new mailToken associated with the user \u003cusername\u003e, for recovering the password",
+        "operationId": "postRecoveryToken",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user to modify its role",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Password Recovery Token Created"
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
     "/users/{username}/password": {
       "put": {
         "security": [
@@ -15695,6 +15848,63 @@ func init() {
             "schema": {
               "$ref": "#/definitions/Question"
             }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/users/{username}/recoverPassword": {
+      "put": {
+        "description": "Modifies the role of the user \u003cusername\u003e, using a token",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Modifies the password of the user \u003cusername\u003e, using a token",
+        "operationId": "recoverPassword",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user to modify its password",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Passwor Recovery information",
+            "name": "passwordRecovery",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PasswordRecovery"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resource password modified correctly"
           },
           "400": {
             "description": "Incorrect Request, or invalida data",
@@ -16836,6 +17046,24 @@ func init() {
       ],
       "properties": {
         "password": {
+          "type": "string",
+          "format": "password",
+          "pattern": "^.{6,}$",
+          "example": "password"
+        }
+      }
+    },
+    "PasswordRecovery": {
+      "type": "object",
+      "required": [
+        "mailtoken",
+        "newpass"
+      ],
+      "properties": {
+        "mailtoken": {
+          "type": "string"
+        },
+        "newpass": {
           "type": "string",
           "format": "password",
           "pattern": "^.{6,}$",

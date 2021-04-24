@@ -6,6 +6,9 @@ package handlers
 
 import (
 	"log"
+	"math/rand"
+	"time"
+	"uva-devtest/emailHelper"
 	"uva-devtest/models"
 	"uva-devtest/persistence/dao"
 	"uva-devtest/persistence/dbconnection"
@@ -1126,4 +1129,84 @@ func GetAnswerFromUser(params user.GetAnswerFromUserParams, u *models.User) midd
 		return user.NewGetAnswerFromUserInternalServerError()
 	}
 	return user.NewGetAnswerFromUserForbidden()
+}
+
+func RecoverPassword(params user.RecoverPasswordParams) middleware.Responder {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		var tok *dao.MailToken
+		tok, err = dao.GetMailToken(db, params.PasswordRecovery.Mailtoken)
+		if err == nil {
+			if tok == nil {
+				return user.NewRecoverPasswordForbidden()
+			}
+			err = dao.DeleteMailToken(db, tok.Mailtoken) // Token gets consumed
+			if err == nil {
+				var u *dao.User
+				u, err = dao.GetUserUsername(db, params.Username)
+				if err == nil && u != nil {
+					//If caducidad is before (antes de) now OR not his token
+					if tok.Caducidad.Before(time.Now()) || tok.Userid != u.ID {
+						return user.NewRecoverPasswordForbidden()
+					}
+					// Correct Token
+					bytes, errBcrypt := bcrypt.GenerateFromPassword([]byte(*params.PasswordRecovery.Newpass), Cost)
+					newpwhash := string(bytes)
+					err = dao.PutPasswordUsername(db, params.Username, newpwhash)
+					if err != nil || errBcrypt != nil {
+						log.Println("Error al modificar la contraseña: ", err, errBcrypt)
+						return user.NewRecoverPasswordInternalServerError()
+					}
+					return user.NewRecoverPasswordOK()
+				}
+			}
+		}
+	}
+	return user.NewRecoverPasswordInternalServerError()
+}
+
+func RandomString(n int) string {
+	var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
+
+	s := make([]rune, n)
+	for i := range s {
+		s[i] = letters[rand.Intn(len(letters))]
+	}
+	return string(s)
+}
+
+func NewUniqueMailToken() (string, error) {
+	db, err := dbconnection.ConnectDb()
+	var tk *dao.MailToken
+	var candidate string
+	if err == nil {
+		for {
+			candidate = RandomString(40)
+			tk, err = dao.GetMailToken(db, &candidate)
+			if err != nil {
+				return "", err
+			}
+			if tk == nil {
+				return candidate, nil
+			}
+		}
+	}
+	return "", err
+}
+
+func PostRecoveryToken(params user.PostRecoveryTokenParams) middleware.Responder {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		var token string
+		token, err = NewUniqueMailToken()
+		if err == nil {
+			err = dao.PostRecoveryToken(db, params.Username, token)
+			if err == nil {
+				emailHelper.SendPasswordRecoveryMail(params.Username, token)
+				return user.NewPostRecoveryTokenCreated()
+			}
+		}
+	}
+	log.Println("error en PostRecoveryToken()", err)
+	return user.NewPostRecoveryTokenInternalServerError()
 }

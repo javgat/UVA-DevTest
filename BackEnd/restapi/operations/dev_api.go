@@ -469,6 +469,9 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		UserGetUserHandler: user.GetUserHandlerFunc(func(params user.GetUserParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation user.GetUser has not yet been implemented")
 		}),
+		UserPostRecoveryTokenHandler: user.PostRecoveryTokenHandlerFunc(func(params user.PostRecoveryTokenParams) middleware.Responder {
+			return middleware.NotImplemented("operation user.PostRecoveryToken has not yet been implemented")
+		}),
 		UserPutPasswordHandler: user.PutPasswordHandlerFunc(func(params user.PutPasswordParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation user.PutPassword has not yet been implemented")
 		}),
@@ -480,6 +483,9 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		}),
 		UserPutUserHandler: user.PutUserHandlerFunc(func(params user.PutUserParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation user.PutUser has not yet been implemented")
+		}),
+		UserRecoverPasswordHandler: user.RecoverPasswordHandlerFunc(func(params user.RecoverPasswordParams) middleware.Responder {
+			return middleware.NotImplemented("operation user.RecoverPassword has not yet been implemented")
 		}),
 		AuthReloginHandler: auth.ReloginHandlerFunc(func(params auth.ReloginParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation auth.Relogin has not yet been implemented")
@@ -820,6 +826,8 @@ type DevAPI struct {
 	UserGetTeamFromUserHandler user.GetTeamFromUserHandler
 	// UserGetUserHandler sets the operation handler for the get user operation
 	UserGetUserHandler user.GetUserHandler
+	// UserPostRecoveryTokenHandler sets the operation handler for the post recovery token operation
+	UserPostRecoveryTokenHandler user.PostRecoveryTokenHandler
 	// UserPutPasswordHandler sets the operation handler for the put password operation
 	UserPutPasswordHandler user.PutPasswordHandler
 	// UserPutRoleHandler sets the operation handler for the put role operation
@@ -828,6 +836,8 @@ type DevAPI struct {
 	TeamPutTeamHandler team.PutTeamHandler
 	// UserPutUserHandler sets the operation handler for the put user operation
 	UserPutUserHandler user.PutUserHandler
+	// UserRecoverPasswordHandler sets the operation handler for the recover password operation
+	UserRecoverPasswordHandler user.RecoverPasswordHandler
 	// AuthReloginHandler sets the operation handler for the relogin operation
 	AuthReloginHandler auth.ReloginHandler
 
@@ -1331,6 +1341,9 @@ func (o *DevAPI) Validate() error {
 	if o.UserGetUserHandler == nil {
 		unregistered = append(unregistered, "user.GetUserHandler")
 	}
+	if o.UserPostRecoveryTokenHandler == nil {
+		unregistered = append(unregistered, "user.PostRecoveryTokenHandler")
+	}
 	if o.UserPutPasswordHandler == nil {
 		unregistered = append(unregistered, "user.PutPasswordHandler")
 	}
@@ -1342,6 +1355,9 @@ func (o *DevAPI) Validate() error {
 	}
 	if o.UserPutUserHandler == nil {
 		unregistered = append(unregistered, "user.PutUserHandler")
+	}
+	if o.UserRecoverPasswordHandler == nil {
+		unregistered = append(unregistered, "user.RecoverPasswordHandler")
 	}
 	if o.AuthReloginHandler == nil {
 		unregistered = append(unregistered, "auth.ReloginHandler")
@@ -2007,6 +2023,10 @@ func (o *DevAPI) initHandlerCache() {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
 	o.handlers["GET"]["/users/{username}"] = user.NewGetUser(o.context, o.UserGetUserHandler)
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
+	}
+	o.handlers["POST"]["/users/{username}/passRecoveryTokens"] = user.NewPostRecoveryToken(o.context, o.UserPostRecoveryTokenHandler)
 	if o.handlers["PUT"] == nil {
 		o.handlers["PUT"] = make(map[string]http.Handler)
 	}
@@ -2023,6 +2043,10 @@ func (o *DevAPI) initHandlerCache() {
 		o.handlers["PUT"] = make(map[string]http.Handler)
 	}
 	o.handlers["PUT"]["/users/{username}"] = user.NewPutUser(o.context, o.UserPutUserHandler)
+	if o.handlers["PUT"] == nil {
+		o.handlers["PUT"] = make(map[string]http.Handler)
+	}
+	o.handlers["PUT"]["/users/{username}/recoverPassword"] = user.NewRecoverPassword(o.context, o.UserRecoverPasswordHandler)
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}

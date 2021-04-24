@@ -1,6 +1,10 @@
 package dao
 
-import "github.com/go-openapi/strfmt"
+import (
+	"time"
+
+	"github.com/go-openapi/strfmt"
+)
 
 const (
 
@@ -285,4 +289,16 @@ type Option struct {
 	// Example: Esta opcion es la buena
 	// Required: true
 	Texto *string `json:"texto"`
+}
+
+// Mail Token Mail tokens
+type MailToken struct {
+
+	// mailtoken
+	// Required: true
+	Mailtoken *string `json:"mailtoken"`
+
+	Userid int64
+
+	Caducidad time.Time
 }

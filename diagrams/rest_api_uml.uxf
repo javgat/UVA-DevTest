@@ -1441,9 +1441,9 @@ bg=yellow
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>992</x>
+      <x>944</x>
       <y>520</y>
-      <w>176</w>
+      <w>224</w>
       <h>56</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Resource&gt;&gt;
@@ -2352,5 +2352,63 @@ bg=yellow
 &lt;&lt;path&gt;&gt;
 /favoriteEditTests</panel_attributes>
     <additional_attributes>10.0;50.0;10.0;10.0;510.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>248</x>
+      <y>520</y>
+      <w>192</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*MailTokens*
+bg=yellow
+--
+--
++ &lt;&lt;POST&gt;&gt; postRecoveryToken(): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>504</x>
+      <y>520</y>
+      <w>400</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*RecoverPassword*
+bg=yellow
+--
+--
++ &lt;&lt;PUT&gt;&gt; recoverPass(r: PasswordRecovery): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>336</x>
+      <y>456</y>
+      <w>344</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/PassRecoveryTokens</panel_attributes>
+    <additional_attributes>10.0;80.0;10.0;10.0;410.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>656</x>
+      <y>456</y>
+      <w>456</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/mailtokens</panel_attributes>
+    <additional_attributes>10.0;80.0;10.0;10.0;550.0;10.0</additional_attributes>
   </element>
 </diagram>

@@ -19,6 +19,7 @@ DROP TABLE IF EXISTS GestionTestEquipo;
 DROP TABLE IF EXISTS Test;
 DROP TABLE IF EXISTS EquipoUsuario;
 DROP TABLE IF EXISTS Equipo;
+DROP TABLE IF EXISTS TokenCorreo;
 DROP TABLE IF EXISTS Usuario;
 
 
@@ -32,6 +33,14 @@ CREATE TABLE Usuario (
   UNIQUE(username),
   UNIQUE(email),
   PRIMARY KEY (id)
+);
+
+CREATE TABLE TokenCorreo(
+  usuarioid int(11) NOT NULL,
+  token varchar(40) COLLATE utf8_unicode_ci NOT NULL,
+  caducidad DateTime NOT NULL,
+  FOREIGN KEY(usuarioid) REFERENCES Usuario(id),
+  PRIMARY KEY(token)
 );
 
 CREATE TABLE Equipo (

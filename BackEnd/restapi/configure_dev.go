@@ -80,6 +80,9 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 	api.UserPutPasswordHandler = user.PutPasswordHandlerFunc(handlers.PutPassword) // PUT /users/{username}/password
 	api.UserPutRoleHandler = user.PutRoleHandlerFunc(handlers.PutRole)             // PUT /users/{username}/role
 
+	api.UserRecoverPasswordHandler = user.RecoverPasswordHandlerFunc(handlers.RecoverPassword)       // PUT /users/{username}/recoverPassword
+	api.UserPostRecoveryTokenHandler = user.PostRecoveryTokenHandlerFunc(handlers.PostRecoveryToken) // POST /users/{username}/passRecoveryTokens
+
 	api.UserGetTeamsOfUserHandler = user.GetTeamsOfUserHandlerFunc(handlers.GetTeamsOfUser)    // GET /users/{username}/teams
 	api.TeamPostTeamHandler = team.PostTeamHandlerFunc(handlers.PostTeam)                      // POST /users/{username}/teams
 	api.UserGetTeamFromUserHandler = user.GetTeamFromUserHandlerFunc(handlers.GetTeamFromUser) // GET /users/{username}/teams/{teamname}

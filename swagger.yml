@@ -355,6 +355,64 @@ paths:
           $ref: '#/responses/GoneError'
         500:
           $ref: '#/responses/InternalServerError'
+  /users/{username}/recoverPassword:
+    put:
+      tags:
+      - user
+      summary: Modifies the password of the user <username>, using a token
+      operationId: recoverPassword
+      description: Modifies the role of the user <username>, using a token
+      consumes:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the user to modify its password
+        required: true
+        type: string
+      - in: body
+        name: passwordRecovery
+        description: Passwor Recovery information
+        required: true
+        schema:
+          $ref: '#/definitions/PasswordRecovery'
+      responses:
+        200:
+          description: Resource password modified correctly
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  /users/{username}/passRecoveryTokens:
+    post:
+      tags:
+      - user
+      summary: Creates a new mailToken associated with the user <username>, for recovering the password
+      operationId: postRecoveryToken
+      description: Creates a new mailToken associated with the user <username>, for recovering the password
+      consumes:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the user to modify its role
+        required: true
+        type: string
+      responses:
+        201:
+          description: Password Recovery Token Created
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
   /users/{username}/teams:
     get:
       security:
@@ -5047,6 +5105,19 @@ definitions:
         example: password
         format: password
         pattern: '^.{6,}$'
+      newpass:
+        type: string
+        example: password
+        format: password
+        pattern: '^.{6,}$'
+  PasswordRecovery:
+    type: object
+    required:
+    - mailtoken
+    - newpass
+    properties:
+      mailtoken:
+        type: string
       newpass:
         type: string
         example: password
