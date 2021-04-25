@@ -342,6 +342,7 @@ func PublishTest(params test.PostPublishedTestParams, u *models.User) middleware
 												return test.NewPostPublishedTestInternalServerError()
 											}
 										}
+										// Añadir tags del test
 									}
 									return test.NewPostPublishedTestCreated().WithPayload(newModelTest)
 								}

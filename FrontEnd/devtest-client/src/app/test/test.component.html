@@ -12,9 +12,11 @@
                 <input type="checkbox" class="btn-check" id="btn-check-2" [checked]="isFavorita"
                     (click)="changeFavorita()">
                 <label class="btn btn-outline-success" for="btn-check-2"><span *ngIf="!isFavorita">Guardar
-                        Favorita</span><span *ngIf="isFavorita">Guardada Favorita</span></label>
+                        Favorito</span><span *ngIf="isFavorita">Guardado Favorito</span></label>
             </p>
         </div>
+        <p *ngIf="checkPermisosEdicion()"><button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
+            data-bs-target="#modalPublishTest">Publicar</button></p>
         <p>Etiquetas:
             <span *ngFor="let tag of tags">
                 <span *ngIf="checkPermisosEdicion()">
@@ -99,7 +101,8 @@
                                 </div>
                                 <div class="d-grid gap-2 d-md-flex d-inline-flex justify-content-md-end col-sm">
 
-                                    <button type="button" class="btn btn-danger btn-sm mx-4 me-md-2" (click)="quitarPreguntaClick(pregunta.id)">Quitar</button>
+                                    <button type="button" class="btn btn-danger btn-sm mx-4 me-md-2"
+                                        (click)="quitarPreguntaClick(pregunta.id)">Quitar</button>
                                 </div>
                             </div>
                         </form>
@@ -176,6 +179,29 @@
                     <app-lq-add-question-test (onQuestionPicked)="questionPicked($event)"></app-lq-add-question-test>
                 </div>
                 <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmacion publicar-->
+    <div class="modal fade" id="modalPublishTest" tabindex="-1" aria-labelledby="modalPublishTestLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalPublishTestLabel">¿Publicar Test?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message"
+                        role="alert">
+                        {{getMensaje().texto}}</div>
+                    <p>Se creará una copia publicada del test</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal" (click)="publishTestClick()">Publicar</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                 </div>
             </div>

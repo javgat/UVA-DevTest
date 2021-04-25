@@ -17,7 +17,7 @@ func GetPublicPublishedTests(db *sql.DB) ([]*Test, error) {
 		return nil, errors.New(errorDBNil)
 	}
 	var ts []*Test
-	query, err := db.Prepare("SELECT * FROM Test WHERE editable=0 AND T.accesoPublico=1")
+	query, err := db.Prepare("SELECT * FROM Test WHERE editable=0 AND accesoPublico=1")
 	if err == nil {
 		defer query.Close()
 		rows, err := query.Query()
@@ -34,7 +34,7 @@ func GetPublicPublishedTest(db *sql.DB, testid int64) (*Test, error) {
 		return nil, errors.New(errorDBNil)
 	}
 	var ts *Test
-	query, err := db.Prepare("SELECT * FROM Test WHERE id=? AND editable=0 AND T.accesoPublico=1")
+	query, err := db.Prepare("SELECT * FROM Test WHERE id=? AND editable=0 AND accesoPublico=1")
 	if err == nil {
 		defer query.Close()
 		rows, err := query.Query(testid)

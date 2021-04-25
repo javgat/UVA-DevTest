@@ -72,6 +72,9 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
   getTest(primera: boolean) {
     this.testS.getTest(this.id).subscribe(
       resp => {
+        if(!resp.editable){
+          this.router.navigate(['/pt', this.id])
+        }
         this.test = new Examen(resp.title, resp.description, resp.accesoPublico, resp.editable, resp.maxMinutes, resp.username, resp.id, resp.accesoPublicoNoPublicado)
         this.testEdit = new Examen(resp.title, resp.description, resp.accesoPublico, resp.editable, resp.maxMinutes, resp.username, resp.id, resp.accesoPublicoNoPublicado)
         this.getPreguntasTest(true)
@@ -290,6 +293,19 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
       err => {
         this.handleErrRelog(err, "desmarcar como favorito un test", primera, this.removeFavorita, this)
       }
+    )
+  }
+
+  publishTestClick(){
+    this.publishTest(true)    
+  }
+
+  publishTest(primera: boolean){
+    this.testS.postPublishedTest(this.id).subscribe(
+      resp => {
+        this.router.navigate(['/pt', resp.id])
+      },
+      err => this.handleErrRelog(err, "publicar test", primera, this.publishTest, this)
     )
   }
 }

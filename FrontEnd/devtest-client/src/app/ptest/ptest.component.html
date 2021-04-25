@@ -1,0 +1,53 @@
+<app-nav-bar></app-nav-bar>
+<div class="mt-5">
+    <div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message" role="alert">
+        {{getMensaje().texto}}</div>
+    <div class="my-3">
+        <h4>Test #{{test.id}}</h4>
+        <h2>{{test.title}}</h2>
+        <p>Autor: <a [routerLink]="['/profile', test.username]">{{test.username}}</a></p>
+        <p>Etiquetas:
+            <span *ngFor="let tag of tags">
+                    <span class="bg-warning">{{tag.tag}}</span>;
+            </span>
+        </p>
+        <p><b>Descripción:</b>
+        <p>
+        <div class="mb-4">
+            <span style="white-space: pre-line">{{test.description}}</span>
+        </div>
+        <p><b>Tiempo disponible:</b> {{test.maxMinutes}} minutos</p>
+        <p><b>Acceso público a realización: </b> <span *ngIf="test.accesoPublico">Sí</span><span
+                *ngIf="!test.accesoPublico">No</span>
+        <p><b>Visionado público para profesores: </b> <span *ngIf="test.accesoPublicoNoPublicado">Sí</span><span
+                *ngIf="!test.accesoPublicoNoPublicado">No</span>
+        </p>
+        <p><button class="btn btn-primary" type="button" [routerLink]="['/et', test.id, 'teams']">Ver equipos
+                administradores</button></p>
+        <hr />
+        <h4>Preguntas:</h4>
+        <table class="table table-striped table-hover table-primary my-3">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Título</th>
+                    <th>Autor</th>
+                    <th>Tiempo Estimado</th>
+                    <th>Tipo</th>
+                    <th>Valor en test</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let pregunta of preguntas">
+                    <td>{{pregunta.id}}</td>
+                    <td>{{pregunta.title}}</td>
+                    <td>{{pregunta.username}}</td>
+                    <td>{{pregunta.estimatedTime}} minutos</td>
+                    <td>{{tipoPrint(pregunta.tipoPregunta,
+                        pregunta.eleccionUnica)}}</td>
+                    <td>{{pregunta.valorFinal}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
