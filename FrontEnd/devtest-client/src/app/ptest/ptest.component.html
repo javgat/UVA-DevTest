@@ -8,7 +8,7 @@
         <p>Autor: <a [routerLink]="['/profile', test.username]">{{test.username}}</a></p>
         <p>Etiquetas:
             <span *ngFor="let tag of tags">
-                    <span class="bg-warning">{{tag.tag}}</span>;
+                <span class="bg-warning">{{tag.tag}}</span>;
             </span>
         </p>
         <p><b>Descripción:</b>
@@ -25,29 +25,31 @@
         <p><button class="btn btn-primary" type="button" [routerLink]="['/et', test.id, 'teams']">Ver equipos
                 administradores</button></p>
         <hr />
-        <h4>Preguntas:</h4>
-        <table class="table table-striped table-hover table-primary my-3">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Título</th>
-                    <th>Autor</th>
-                    <th>Tiempo Estimado</th>
-                    <th>Tipo</th>
-                    <th>Valor en test</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let pregunta of preguntas">
-                    <td>{{pregunta.id}}</td>
-                    <td>{{pregunta.title}}</td>
-                    <td>{{pregunta.username}}</td>
-                    <td>{{pregunta.estimatedTime}} minutos</td>
-                    <td>{{tipoPrint(pregunta.tipoPregunta,
-                        pregunta.eleccionUnica)}}</td>
-                    <td>{{pregunta.valorFinal}}</td>
-                </tr>
-            </tbody>
-        </table>
+        <div *ngIf="isModoTestAdmin()">
+            <h4>Preguntas:</h4>
+            <table class="table table-striped table-hover table-primary my-3">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Título</th>
+                        <th>Autor</th>
+                        <th>Tiempo Estimado</th>
+                        <th>Tipo</th>
+                        <th>Valor en test</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let pregunta of preguntas">
+                        <td>{{pregunta.id}}</td>
+                        <td>{{pregunta.title}}</td>
+                        <td>{{pregunta.username}}</td>
+                        <td>{{pregunta.estimatedTime}} minutos</td>
+                        <td>{{tipoPrint(pregunta.tipoPregunta,
+                            pregunta.eleccionUnica)}}</td>
+                        <td>{{pregunta.valorFinal}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>

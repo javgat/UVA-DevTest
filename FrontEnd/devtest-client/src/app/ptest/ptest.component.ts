@@ -44,10 +44,9 @@ export class PtestComponent extends LoggedInController implements OnInit {
 
   gotTest(){
     this.getPreguntasTest(true)
-    //this.getTags(true)
+    this.getTags(true)
     if (!this.getSessionUser().isEmpty())
       this.getIsInAdminTeam(true)
-    //this.getIsFavorita(true)
   }
 
   getPTest(primera: boolean) {
@@ -79,6 +78,7 @@ export class PtestComponent extends LoggedInController implements OnInit {
   }
 
   getPreguntasTest(primera: boolean){
+    if(!this.isModoTestAdmin()) return
     this.ptestS.getQuestionsFromPublishedTests(this.id).subscribe(
       resp => {
         this.preguntas = resp
@@ -89,9 +89,16 @@ export class PtestComponent extends LoggedInController implements OnInit {
     )
   }
 
+  getTags(primera: boolean){
+    //this.ptestS.getTags
+  }
+
   getIsInAdminTeam(primera: boolean) {
     this.userS.getSharedTestFromUser(this.getSessionUser().getUsername(), this.id).subscribe(
-      resp => this.isInAdminTeam = true,
+      resp => {
+        this.isInAdminTeam = true
+        this.getPreguntasTest(true)
+      },
       err => {
         if (err.status != 410)
           this.handleErrRelog(err, "saber si el usuario administra el test", primera, this.getIsInAdminTeam, this)
@@ -101,6 +108,10 @@ export class PtestComponent extends LoggedInController implements OnInit {
 
   tipoPrint(tipo: string, eleccionUnica: boolean | undefined): string{
     return tipoPrint(tipo, eleccionUnica)
+  }
+
+  isModoTestAdmin() : boolean{
+    return this.isInAdminTeam || this.test.username == this.getSessionUser().getUsername()
   }
 
 }

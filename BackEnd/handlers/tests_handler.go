@@ -307,6 +307,32 @@ func cloneQuestions(db *sql.DB, mqs []*models.Question, newMTest *models.Test, o
 	return nil
 }
 
+func addAdminTeamsToTest(db *sql.DB, teams []*dao.Team, testid int64) error {
+	var err error
+	for _, team := range teams {
+		if err == nil {
+			err = dao.AddAdminTeamToTest(db, testid, *team.Teamname)
+		}
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func addTagsToTest(db *sql.DB, tags []*dao.Tag, testid int64) error {
+	var err error
+	for _, tag := range tags {
+		if err == nil {
+			err = dao.AddTestTag(db, testid, *tag.Tag)
+		}
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 // PublishTest POST /tests/{testid}/publishedTests. Copies test and questions to published version
 // Auth: TestAdmin or Admin
 func PublishTest(params test.PostPublishedTestParams, u *models.User) middleware.Responder {
@@ -331,20 +357,21 @@ func PublishTest(params test.PostPublishedTestParams, u *models.User) middleware
 							if err == nil {
 								err = cloneQuestions(db, mqs, newModelTest, oldDaoTest)
 								if err == nil {
-									teams, err := dao.GetAdminTeamsFromTest(db, params.Testid)
+									var teams []*dao.Team
+									teams, err = dao.GetAdminTeamsFromTest(db, params.Testid)
 									if err == nil {
-										for _, team := range teams {
+										err = addAdminTeamsToTest(db, teams, newModelTest.ID)
+										if err == nil {
+											var tags []*dao.Tag
+											tags, err = dao.GetTestTags(db, params.Testid)
 											if err == nil {
-												err = dao.AddAdminTeamToTest(db, newModelTest.ID, *team.Teamname)
-											}
-											if err != nil {
-												log.Println("Error en users_handler PublishTest(): ", err)
-												return test.NewPostPublishedTestInternalServerError()
+												err = addTagsToTest(db, tags, newModelTest.ID)
+												if err == nil {
+													return test.NewPostPublishedTestCreated().WithPayload(newModelTest)
+												}
 											}
 										}
-										// Añadir tags del test
 									}
-									return test.NewPostPublishedTestCreated().WithPayload(newModelTest)
 								}
 							}
 						}
