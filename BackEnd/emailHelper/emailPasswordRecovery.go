@@ -52,12 +52,13 @@ func getOwnEmailInfo() (*EmailInfo, error) {
 	return getEmailInfo("./config/emailinfo.json")
 }
 
-func sendEmail(emailBody []byte, email string) {
+// sendEmail sends content "emailBody" to the address
+func sendEmail(emailBody []byte, emailAddress string) {
 	emailInfo, err := getOwnEmailInfo()
 	if err == nil {
 		smtpServer := smtpServer{host: emailInfo.Serverhost, port: emailInfo.Serverport}
 		auth := smtp.PlainAuth("", emailInfo.From, emailInfo.Password, smtpServer.host)
-		to := []string{email}
+		to := []string{emailAddress}
 		err = smtp.SendMail(smtpServer.Address(), auth, emailInfo.From, to, emailBody)
 	}
 	if err != nil {
@@ -82,12 +83,13 @@ func getEmailFromUsername(username string) (string, error) {
 
 func generateEmailBodyRecoveryPassword(username string, token string, email string, frontEnd string) []byte {
 	msg := []byte("To: " + email + "\r\n" +
-		"Subject: Recuperación de contraseña\r\n" +
+		"Subject: [NO RESPONDER] Recuperación de contraseña\r\n" +
 		"\r\n" +
 		"Para recuperar tu contraseña asociada a " + username + ", haz click en: " + frontEnd + "/recoverPassword/" + username + "?token=" + token + "\r\n")
 	return msg
 }
 
+// SendPasswordRecoveryMail sends an email to the user username, with a link to recover the password
 func SendPasswordRecoveryMail(username string, token string) {
 	email, err := getEmailFromUsername(username)
 	if err == nil {
