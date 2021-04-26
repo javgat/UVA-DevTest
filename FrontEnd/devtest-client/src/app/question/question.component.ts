@@ -30,6 +30,7 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
   deletingTag: string
   mantenerMensaje: boolean
   isFavorita: boolean
+  testid?: number
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private qS: QuestionService, private route: ActivatedRoute) {
     super(session, router, data, userS)
     this.isInAdminTeam = false
@@ -53,6 +54,7 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
     this.id = 0
     this.routeSub = this.route.params.subscribe(params => {
       this.id = params['id']
+      this.testid = params['testid']
       if (!this.mantenerMensaje) {
         this.borrarMensaje()
       }

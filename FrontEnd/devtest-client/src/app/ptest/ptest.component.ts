@@ -52,7 +52,7 @@ export class PtestComponent extends LoggedInController implements OnInit {
   getPTest(primera: boolean) {
     this.ptestS.getPublicPublishedTest(this.id).subscribe(
       resp => {
-        this.test = new Examen(resp.title, resp.description, resp.accesoPublico, resp.editable, resp.maxMinutes, resp.username, resp.id, resp.accesoPublicoNoPublicado)
+        this.test = resp
         this.gotTest()
       },
       err => {
@@ -68,7 +68,7 @@ export class PtestComponent extends LoggedInController implements OnInit {
   getPrivatePTest(primera: boolean){
     this.ptestS.getPublishedTest(this.id).subscribe(
       resp => {
-        this.test = new Examen(resp.title, resp.description, resp.accesoPublico, resp.editable, resp.maxMinutes, resp.username, resp.id, resp.accesoPublicoNoPublicado)
+        this.test = resp
         this.gotTest()
       },
       err => {
@@ -90,7 +90,10 @@ export class PtestComponent extends LoggedInController implements OnInit {
   }
 
   getTags(primera: boolean){
-    //this.ptestS.getTags
+    this.ptestS.getTagsFromPublishedTest(this.id).subscribe(
+      resp => this.tags = resp,
+      err => this.handleErrRelog(err, "obtener etiquetas de un test publicado", primera, this.getTags, this)
+    )
   }
 
   getIsInAdminTeam(primera: boolean) {

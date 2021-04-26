@@ -1,0 +1,33 @@
+<app-nav-bar></app-nav-bar>
+<div class="mt-5">
+    <div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message" role="alert">
+        {{getMensaje().texto}}</div>
+    <button class="button btn btn-outline-primary m-3" [routerLink]="['/et', test.id]">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+            class="bi bi-chevron-double-left" viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+                d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+            <path fill-rule="evenodd"
+                d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+        </svg>
+        Volver
+    </button>
+    <h2>Publicaciones del test {{test.title}}</h2>
+    <div *ngIf="checkPermisosAdministracion()">
+        
+    </div>
+    <table class="table table-striped table-hover table-primary my-3">
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Fecha de publicación</th>
+            </tr>
+        </thead>
+        <tbody >
+            <tr *ngFor="let ptest of ptests" role="button" [routerLink]="['/pt', ptest.id]">
+                <td>{{ptest.title}}</td>
+                <td>{{ptest.horaCreacion}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

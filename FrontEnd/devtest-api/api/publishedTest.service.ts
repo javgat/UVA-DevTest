@@ -335,6 +335,52 @@ export class PublishedTestService {
     }
 
     /**
+     * Returns all publishedTest originated from the same test
+     * Returns all publishedTest originated from the same test
+     * @param testid Id of the original test
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getPublishedTestsFromTest(testid: number, observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
+    public getPublishedTestsFromTest(testid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
+    public getPublishedTestsFromTest(testid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
+    public getPublishedTestsFromTest(testid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (testid === null || testid === undefined) {
+            throw new Error('Required parameter testid was null or undefined when calling getPublishedTestsFromTest.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Array<Test>>(`${this.basePath}/tests/${encodeURIComponent(String(testid))}/publishedTests`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Returns all questions answers to a question of a published test
      * Returns all questions answers to a question of a published test
      * @param testid Id of the publishedTest
@@ -483,6 +529,57 @@ export class PublishedTestService {
     }
 
     /**
+     * Returns a tag from a published test.
+     * Returns a tag from a published test.
+     * @param testid Id of the published test to find its tags
+     * @param tag Tag to find
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getTagFromPublishedTest(testid: number, tag: string, observe?: 'body', reportProgress?: boolean): Observable<Tag>;
+    public getTagFromPublishedTest(testid: number, tag: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Tag>>;
+    public getTagFromPublishedTest(testid: number, tag: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Tag>>;
+    public getTagFromPublishedTest(testid: number, tag: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (testid === null || testid === undefined) {
+            throw new Error('Required parameter testid was null or undefined when calling getTagFromPublishedTest.');
+        }
+
+        if (tag === null || tag === undefined) {
+            throw new Error('Required parameter tag was null or undefined when calling getTagFromPublishedTest.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Tag>(`${this.basePath}/publishedTests/${encodeURIComponent(String(testid))}/tags/${encodeURIComponent(String(tag))}`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Returns all tags from a question.
      * Returns all tags from a question.
      * @param testid Id of the publishedTest
@@ -524,6 +621,52 @@ export class PublishedTestService {
         ];
 
         return this.httpClient.get<Array<Tag>>(`${this.basePath}/publishedTests/${encodeURIComponent(String(testid))}/questions/${encodeURIComponent(String(questionid))}/tags`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns all tags from a published test.
+     * Returns all tags from a published test.
+     * @param testid Id of the published test to find its tags
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getTagsFromPublishedTest(testid: number, observe?: 'body', reportProgress?: boolean): Observable<Array<Tag>>;
+    public getTagsFromPublishedTest(testid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Tag>>>;
+    public getTagsFromPublishedTest(testid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Tag>>>;
+    public getTagsFromPublishedTest(testid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (testid === null || testid === undefined) {
+            throw new Error('Required parameter testid was null or undefined when calling getTagsFromPublishedTest.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Array<Tag>>(`${this.basePath}/publishedTests/${encodeURIComponent(String(testid))}/tags`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

@@ -24,6 +24,7 @@ import { SigninComponent } from './signin/signin.component';
 import { TeamComponent } from './team/team.component';
 import { TeamsComponent } from './teams/teams.component';
 import { TestCreateComponent } from './test-create/test-create.component';
+import { TestPTestsComponent } from './test-ptests/test-ptests.component';
 import { TestTeamsComponent } from './test-teams/test-teams.component';
 import { TestComponent } from './test/test.component';
 import { TestsFavUserComponent } from './tests-fav-user/tests-fav-user.component';
@@ -59,7 +60,9 @@ const routes: Routes = [
   {path: 'et/:testid', component: TestComponent},
   {path: 'etCreate', component: TestCreateComponent},
   {path: 'et/:testid/teams', component: TestTeamsComponent},
+  {path: 'et/:testid/ptests', component: TestPTestsComponent},
   {path: 'pt/:testid', component: PtestComponent},
+  {path: 'pt/:testid/q/:id', component: QuestionComponent},
   {path: 'forgotPassword', component: ForgotPasswordComponent},
   {path: 'recoverPassword/:username', component: RecoverPasswordComponent},
   {path: '**', component: MainComponent, pathMatch:'full'}

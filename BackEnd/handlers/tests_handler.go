@@ -344,7 +344,7 @@ func PublishTest(params test.PostPublishedTestParams, u *models.User) middleware
 			var newModelTest *models.Test
 			oldDaoTest, err = dao.GetTest(db, params.Testid)
 			if err == nil {
-				if oldDaoTest != nil {
+				if oldDaoTest == nil {
 					return test.NewPostPublishedTestGone()
 				}
 				var qs []*dao.Question

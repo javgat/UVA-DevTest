@@ -20,4 +20,6 @@ export interface Test {
     editable: boolean;
     username: string;
     accesoPublicoNoPublicado: boolean;
+    horaCreacion?: string;
+    originalTestID?: number;
 }

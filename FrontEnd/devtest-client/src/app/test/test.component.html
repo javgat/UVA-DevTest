@@ -17,6 +17,7 @@
         </div>
         <p *ngIf="checkPermisosEdicion()"><button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
             data-bs-target="#modalPublishTest">Publicar</button></p>
+        <p><button type="button" class="btn btn-primary" [routerLink]="['/et', test.id, 'ptests']">Ver Publicaciones</button></p>
         <p>Etiquetas:
             <span *ngFor="let tag of tags">
                 <span *ngIf="checkPermisosEdicion()">

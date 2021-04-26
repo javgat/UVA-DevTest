@@ -53,6 +53,7 @@ import { QuestionsFavUserComponent } from './questions-fav-user/questions-fav-us
 import { RecoverPasswordComponent } from './recover-password/recover-password.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { PtestComponent } from './ptest/ptest.component';
+import { TestPTestsComponent } from './test-ptests/test-ptests.component';
 
 export function apiConfigFactory (): Configuration {
   const params: ConfigurationParameters = {
@@ -108,7 +109,8 @@ export function apiConfigFactory (): Configuration {
     QuestionsFavUserComponent,
     RecoverPasswordComponent,
     ForgotPasswordComponent,
-    PtestComponent
+    PtestComponent,
+    TestPTestsComponent
   ],
   imports: [
     BrowserModule,
