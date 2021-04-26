@@ -11,6 +11,7 @@ import { ProfilePublicQuestionsComponent } from './profile/profile-public-questi
 import { ProfilePublicTestsComponent } from './profile/profile-public-tests/profile-public-tests.component';
 import { ProfileTeamsComponent } from './profile/profile-teams/profile-teams.component';
 import { ProfileComponent } from './profile/profile.component';
+import { PtestInvitesComponent } from './ptest-invites/ptest-invites.component';
 import { PtestComponent } from './ptest/ptest.component';
 import { QuestionCreateComponent } from './question-create/question-create.component';
 import { QuestionTeamsComponent } from './question-teams/question-teams.component';
@@ -62,6 +63,7 @@ const routes: Routes = [
   {path: 'et/:testid/teams', component: TestTeamsComponent},
   {path: 'et/:testid/ptests', component: TestPTestsComponent},
   {path: 'pt/:testid', component: PtestComponent},
+  {path: 'pt/:testid/invite', component: PtestInvitesComponent},
   {path: 'pt/:testid/q/:id', component: QuestionComponent},
   {path: 'forgotPassword', component: ForgotPasswordComponent},
   {path: 'recoverPassword/:username', component: RecoverPasswordComponent},

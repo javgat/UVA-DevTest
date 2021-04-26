@@ -54,6 +54,7 @@ import { RecoverPasswordComponent } from './recover-password/recover-password.co
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { PtestComponent } from './ptest/ptest.component';
 import { TestPTestsComponent } from './test-ptests/test-ptests.component';
+import { PtestInvitesComponent } from './ptest-invites/ptest-invites.component';
 
 export function apiConfigFactory (): Configuration {
   const params: ConfigurationParameters = {
@@ -110,7 +111,8 @@ export function apiConfigFactory (): Configuration {
     RecoverPasswordComponent,
     ForgotPasswordComponent,
     PtestComponent,
-    TestPTestsComponent
+    TestPTestsComponent,
+    PtestInvitesComponent
   ],
   imports: [
     BrowserModule,
