@@ -4486,6 +4486,74 @@ paths:
           $ref: '#/responses/GoneError'
         500:
           $ref: '#/responses/InternalServerError'
+  /publishedTests/{testid}/tags:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - publishedTest
+      summary: Returns all tags from a published test.
+      operationId: GetTagsFromPublishedTest
+      description: Returns all tags from a published test.
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: testid
+        description: Id of the published test to find its tags
+        required: true
+        type: integer
+      responses:
+        200:
+          description: tags found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Tag'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
+  /publishedTests/{testid}/tags/{tag}:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - publishedTest
+      summary: Returns a tag from a published test.
+      operationId: GetTagFromPublishedTest
+      description: Returns a tag from a published test.
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: testid
+        description: Id of the published test to find its tags
+        required: true
+        type: integer
+      - in: path
+        name: tag
+        description: Tag to find
+        required: true
+        type: string
+      responses:
+        200:
+          description: tag found
+          schema:
+            $ref: '#/definitions/Tag'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
 
   /publishedTests/{testid}/questions:
     get:

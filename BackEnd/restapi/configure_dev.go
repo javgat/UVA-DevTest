@@ -253,6 +253,9 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 	api.PublishedTestInviteTeamToPublishedTestHandler = published_test.InviteTeamToPublishedTestHandlerFunc(handlers.InviteTeamPTest)   // PUT /publishedTests/{testid}/teams/{teamname}
 	api.PublishedTestRemoveTeamToPublishedTestHandler = published_test.RemoveTeamToPublishedTestHandlerFunc(handlers.RemoveTeamPTest)   // DELETE /publishedTests/{testid}/teams/{teamname}
 
+	api.PublishedTestGetTagsFromPublishedTestHandler = published_test.GetTagsFromPublishedTestHandlerFunc(handlers.GetTagsFromPTest) // GET /publishedTests/{testid}/tags
+	api.PublishedTestGetTagFromPublishedTestHandler = published_test.GetTagFromPublishedTestHandlerFunc(handlers.GetTagFromPTest)    // GET /publishedTests/{testid}/tags/{tag}
+
 	api.PublishedTestGetQuestionsFromPublishedTestsHandler = published_test.GetQuestionsFromPublishedTestsHandlerFunc(handlers.GetQuestionsPTest) // GET /publishedTests/{testid}/questions
 	api.PublishedTestGetQuestionFromPublishedTestsHandler = published_test.GetQuestionFromPublishedTestsHandlerFunc(handlers.GetQuestionPTest)    // GET /publishedTests/{testid}/questions/{questionid}
 

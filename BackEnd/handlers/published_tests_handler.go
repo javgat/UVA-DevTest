@@ -215,16 +215,36 @@ func isTestInvited(u *models.User, testid int64) bool {
 	return false
 }
 
+func isTestStartedByUser(u *models.User, testid int64) (bool, error) {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		var at *dao.Test
+		at, err = dao.GetATestFromUser(db, *u.Username, testid)
+		if err == nil {
+			return at != nil, nil
+		}
+	}
+	return false, err
+}
+
+func isTestStartedByUserAuth(u *models.User, testid int64) bool {
+	b, e := isTestStartedByUser(u, testid)
+	if e == nil {
+		return b
+	}
+	return false
+}
+
 // GetQuestionsPTest GET /publishedTests/{testid}/questions
-// Auth: ALL if accesoPublico, else: TestInvited, TestAdmin or Admin
+// Auth: (TestAdmin or Admin) OR ((ALL AND accesoPublico OR TestInvited) AND TestStartedByThem)
 func GetQuestionsPTest(params published_test.GetQuestionsFromPublishedTestsParams, u *models.User) middleware.Responder {
 	db, err := dbconnection.ConnectDb()
 	if err == nil {
 		var ts *dao.Test
 		ts, err = dao.GetPublishedTest(db, params.Testid)
 		if err == nil && ts != nil {
-			if !*ts.AccesoPublico {
-				if !(isAdmin(u) || isTestAdmin(u, params.Testid) || isTestInvited(u, params.Testid)) {
+			if !(isAdmin(u) || isTestAdmin(u, params.Testid)) {
+				if !(isTestStartedByUserAuth(u, params.Testid) && (*ts.AccesoPublico || isTestInvited(u, params.Testid))) {
 					return published_test.NewGetQuestionsFromPublishedTestsForbidden()
 				}
 			}
@@ -243,15 +263,15 @@ func GetQuestionsPTest(params published_test.GetQuestionsFromPublishedTestsParam
 }
 
 // GetQuestionsPTest GET /publishedTests/{testid}/questions/{questionid}
-// Auth: ALL if accesoPublico, else: TestInvited, TestAdmin or Admin
+// Auth: (TestAdmin or Admin) OR ((ALL AND accesoPublico OR TestInvited) AND TestStartedByThem)
 func GetQuestionPTest(params published_test.GetQuestionFromPublishedTestsParams, u *models.User) middleware.Responder {
 	db, err := dbconnection.ConnectDb()
 	if err == nil {
 		var ts *dao.Test
 		ts, err = dao.GetPublishedTest(db, params.Testid)
 		if err == nil && ts != nil {
-			if !*ts.AccesoPublico {
-				if !(isAdmin(u) || isTestAdmin(u, params.Testid) || isTestInvited(u, params.Testid)) {
+			if !(isAdmin(u) || isTestAdmin(u, params.Testid)) {
+				if !(isTestStartedByUserAuth(u, params.Testid) && (*ts.AccesoPublico || isTestInvited(u, params.Testid))) {
 					return published_test.NewGetQuestionFromPublishedTestsForbidden()
 				}
 			}
@@ -377,4 +397,54 @@ func GetTagsPQuestion(params published_test.GetTagsFromPublishedQuestionParams, 
 		}
 	}
 	return published_test.NewGetTagsFromPublishedQuestionInternalServerError()
+}
+
+// GET /publishedTests/{testid}/tags
+// Auth: ALL if accesoPublico, else: TestInvited, TestAdmin or Admin
+func GetTagsFromPTest(params published_test.GetTagsFromPublishedTestParams, u *models.User) middleware.Responder {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		var ts *dao.Test
+		ts, err = dao.GetPublishedTest(db, params.Testid)
+		if err == nil && ts != nil {
+			if !*ts.AccesoPublico {
+				if !(isAdmin(u) || isTestAdmin(u, params.Testid) || isTestInvited(u, params.Testid)) {
+					return published_test.NewGetTagsFromPublishedTestForbidden()
+				}
+			}
+			var tags []*dao.Tag
+			tags, err = dao.GetTestTags(db, params.Testid)
+			if err == nil {
+				mts := dao.ToModelTags(tags)
+				return published_test.NewGetTagsFromPublishedTestOK().WithPayload(mts)
+			}
+			return published_test.NewGetTagsFromPublishedTestGone()
+		}
+	}
+	return published_test.NewGetTagsFromPublishedTestInternalServerError()
+}
+
+// GET /publishedTests/{testid}/tags/{tag}
+// Auth: ALL if accesoPublico, else: TestInvited, TestAdmin or Admin
+func GetTagFromPTest(params published_test.GetTagFromPublishedTestParams, u *models.User) middleware.Responder {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		var ts *dao.Test
+		ts, err = dao.GetPublishedTest(db, params.Testid)
+		if err == nil && ts != nil {
+			if !*ts.AccesoPublico {
+				if !(isAdmin(u) || isTestAdmin(u, params.Testid) || isTestInvited(u, params.Testid)) {
+					return published_test.NewGetTagFromPublishedTestForbidden()
+				}
+			}
+			var tag *dao.Tag
+			tag, err = dao.GetTestTag(db, params.Testid, params.Tag)
+			if err == nil {
+				mt := dao.ToModelTag(tag)
+				return published_test.NewGetTagFromPublishedTestOK().WithPayload(mt)
+			}
+			return published_test.NewGetTagFromPublishedTestGone()
+		}
+	}
+	return published_test.NewGetTagFromPublishedTestInternalServerError()
 }
