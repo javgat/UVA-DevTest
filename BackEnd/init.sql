@@ -70,7 +70,10 @@ CREATE TABLE Test(
   editable boolean NOT NULL,
   usuarioid int(11) NOT NULL,
   accesoPublicoNoPublicado boolean NOT NULL,
+  horaCreacion DateTime NOT NULL,
+  origenTestid int(11),
   FOREIGN KEY(usuarioid) REFERENCES Usuario(id),
+  FOREIGN KEY(origenTestid) REFERENCES Test(id),
   PRIMARY KEY(id)
 );
 CREATE TABLE GestionTestEquipo(

@@ -342,7 +342,10 @@ func PublishTest(params test.PostPublishedTestParams, u *models.User) middleware
 			var oldDaoTest *dao.Test
 			var newModelTest *models.Test
 			oldDaoTest, err = dao.GetTest(db, params.Testid)
-			if err == nil && oldDaoTest != nil {
+			if err == nil {
+				if oldDaoTest != nil {
+					return test.NewPostPublishedTestGone()
+				}
 				var qs []*dao.Question
 				qs, err = dao.GetQuestionsFromTest(db, params.Testid)
 				if err == nil {
@@ -353,6 +356,7 @@ func PublishTest(params test.PostPublishedTestParams, u *models.User) middleware
 						if err == nil {
 							bfalse := false
 							newModelTest.Editable = &bfalse
+							newModelTest.OriginalTestID = &params.Testid
 							newModelTest, err = dao.PostTest(db, *newModelTest.Username, newModelTest)
 							if err == nil {
 								err = cloneQuestions(db, mqs, newModelTest, oldDaoTest)

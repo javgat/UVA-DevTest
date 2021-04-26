@@ -8051,6 +8051,10 @@ func init() {
           "type": "boolean",
           "example": false
         },
+        "horaCreacion": {
+          "type": "string",
+          "example": "2021-02-25 14:44:55"
+        },
         "id": {
           "type": "integer",
           "example": 1
@@ -8058,6 +8062,11 @@ func init() {
         "maxMinutes": {
           "type": "integer",
           "example": 60
+        },
+        "originalTestID": {
+          "type": "integer",
+          "default": -1,
+          "example": 15
         },
         "title": {
           "type": "string",
@@ -17540,6 +17549,10 @@ func init() {
           "type": "boolean",
           "example": false
         },
+        "horaCreacion": {
+          "type": "string",
+          "example": "2021-02-25 14:44:55"
+        },
         "id": {
           "type": "integer",
           "example": 1
@@ -17548,6 +17561,11 @@ func init() {
           "type": "integer",
           "minimum": 0,
           "example": 60
+        },
+        "originalTestID": {
+          "type": "integer",
+          "default": -1,
+          "example": 15
         },
         "title": {
           "type": "string",

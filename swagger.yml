@@ -5286,6 +5286,13 @@ definitions:
       accesoPublicoNoPublicado:
         type: boolean
         example: true
+      horaCreacion:
+        type: string
+        example: 2021-02-25 14:44:55
+      originalTestID:
+        type: integer
+        example: 15
+        default: -1
   Answer:
     type: object
     required:

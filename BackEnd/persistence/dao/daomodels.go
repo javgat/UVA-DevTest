@@ -183,6 +183,14 @@ type Test struct {
 	// Example: 3
 	// Required: true
 	Usuarioid int64 `json:"usuarioid"`
+
+	// hora creacion
+	// Example: 2021-02-25 14:44:55
+	HoraCreacion string `json:"horaCreacion,omitempty"`
+
+	// original test ID
+	// Example: 15
+	OriginalTestID *int64 `json:"originalTestID,omitempty"`
 }
 
 // Answer answer

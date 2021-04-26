@@ -39,6 +39,10 @@ type Test struct {
 	// Required: true
 	Editable *bool `json:"editable"`
 
+	// hora creacion
+	// Example: 2021-02-25 14:44:55
+	HoraCreacion string `json:"horaCreacion,omitempty"`
+
 	// id
 	// Example: 1
 	ID int64 `json:"id,omitempty"`
@@ -48,6 +52,10 @@ type Test struct {
 	// Required: true
 	// Minimum: 0
 	MaxMinutes *int64 `json:"maxMinutes"`
+
+	// original test ID
+	// Example: 15
+	OriginalTestID *int64 `json:"originalTestID,omitempty"`
 
 	// title
 	// Example: Test de introduccion a Java

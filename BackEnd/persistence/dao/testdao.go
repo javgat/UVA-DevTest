@@ -8,6 +8,7 @@ import (
 	"database/sql"
 	"errors"
 	"log"
+	"time"
 	"uva-devtest/models"
 	"uva-devtest/persistence/dbconnection"
 
@@ -29,6 +30,8 @@ func ToModelTest(t *Test) (*models.Test, error) {
 				MaxMinutes:               t.MaxMinutes,
 				Title:                    t.Title,
 				Username:                 u.Username,
+				HoraCreacion:             t.HoraCreacion,
+				OriginalTestID:           t.OriginalTestID,
 			}
 			return mt, nil
 		}
@@ -56,10 +59,15 @@ func rowsToTests(rows *sql.Rows) ([]*Test, error) {
 	var tests []*Test
 	for rows.Next() {
 		var t Test
-		err := rows.Scan(&t.ID, &t.Title, &t.Description, &t.MaxMinutes, &t.AccesoPublico, &t.Editable, &t.Usuarioid, &t.AccesoPublicoNoPublicado)
+		var timeNull sql.NullTime
+		err := rows.Scan(&t.ID, &t.Title, &t.Description, &t.MaxMinutes, &t.AccesoPublico, &t.Editable, &t.Usuarioid, &t.AccesoPublicoNoPublicado, &timeNull, &t.OriginalTestID)
 		if err != nil {
 			return tests, err
 		}
+		if !timeNull.Valid {
+			return tests, errors.New("tiempo SQL no valido")
+		}
+		t.HoraCreacion = timeNull.Time.String()
 		tests = append(tests, &t)
 	}
 	return tests, nil
@@ -284,14 +292,19 @@ func PostTest(db *sql.DB, username string, t *models.Test) (*models.Test, error)
 	if err != nil || u == nil {
 		return nil, errors.New(errorResourceNotFound)
 	}
-	query, err := db.Prepare("INSERT INTO Test(title, description, maxMinutes, accesoPublico, editable, usuarioid, accesoPublicoNoPublicado) " +
-		"VALUES (?,?,?,?,?,?,?)")
+	query, err := db.Prepare("INSERT INTO Test(title, description, maxMinutes, accesoPublico, editable, usuarioid, accesoPublicoNoPublicado, horaCreacion, origenTestid) " +
+		"VALUES (?,?,?,?,?,?,?,?,?)")
 
 	if err != nil {
 		return nil, err
 	}
 	defer query.Close()
-	sol, err := query.Exec(t.Title, t.Description, t.MaxMinutes, t.AccesoPublico, t.Editable, u.ID, t.AccesoPublicoNoPublicado)
+	horaCreacion := time.Now()
+	origID := &t.OriginalTestID
+	if *t.OriginalTestID == -1 {
+		origID = nil
+	}
+	sol, err := query.Exec(t.Title, t.Description, t.MaxMinutes, t.AccesoPublico, t.Editable, u.ID, t.AccesoPublicoNoPublicado, horaCreacion, origID)
 	if err == nil {
 		ts := t
 		ts.ID, err = sol.LastInsertId()
