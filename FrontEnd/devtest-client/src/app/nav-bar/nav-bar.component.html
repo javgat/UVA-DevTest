@@ -1,6 +1,11 @@
 <div class="row m-3">
-  <div class="col-sm d-grid gap-2" *ngIf="getSessionUser().isStudent()">
-    <a type="button" [routerLink]="['/ptests']" class="btn btn-primary">Tests</a>
+  <div class="col-sm d-grid gap-2 dropdown" *ngIf="getSessionUser().isStudent()">
+    <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="testsMenuUserLink" data-bs-toggle="dropdown"
+      aria-expanded="false">Tests</a>
+      <ul class="dropdown-menu" aria-labelledby="testsMenuUserLink">
+        <li><a class="dropdown-item" [routerLink]="['/ptests']">Explorar Tests Públicos</a></li>
+        <li><a class="dropdown-item" [routerLink]="['/u', getSessionUser().getUsername(), 'invited']">Tests con Invitación</a></li>
+      </ul>
   </div>
   <div class="col-sm dropdown d-grid gap-2" *ngIf="!getSessionUser().isStudent()">
     <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="testsMenuLink" data-bs-toggle="dropdown"
@@ -13,9 +18,31 @@
           conmigo</a>
       <li><a class="dropdown-item" [routerLink]="['/u', getSessionUser().getUsername(), 'fet' ]">Mis favoritos</a></li>
       <li>
-        <hr class="dropdown-divider">
+        <hr class="dropdown-divider" />
       </li>
-      <li><a class="dropdown-item" [routerLink]="['/ptests']">Resolver tests</a></li>
+
+      <li class="dropdown-submenu dropend">
+        <a class="dropdown-item" [routerLink]="['/ptests']">Tests Publicados</a>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" [routerLink]="['/ptests']">Explorar Tests Publicados</a></li>
+          <li><a class="dropdown-item" [routerLink]="['/u', getSessionUser().getUsername(), 'pt']">Mis Tests
+              Publicados</a>
+          </li>
+          <li><a class="dropdown-item" [routerLink]="['/u', getSessionUser().getUsername(), 'spt']">Compartidos
+              conmigo</a></li>
+        </ul>
+      </li>
+      <li>
+        <hr class="dropdown-divider" />
+      </li>
+      <li class="dropdown-submenu dropend">
+        <a class="dropdown-item" [routerLink]="['/ptests']">Responder Tests Publicados</a>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" [routerLink]="['/ptests']">Tests Públicos</a></li>
+          <li><a class="dropdown-item" [routerLink]="['/u', getSessionUser().getUsername(), 'invited']">Tests Con
+              Invitación</a></li>
+        </ul>
+      </li>
     </ul>
   </div>
   <div class="col-sm dropdown d-grid gap-2" *ngIf="!getSessionUser().isStudent()">

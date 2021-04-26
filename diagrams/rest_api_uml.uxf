@@ -809,14 +809,14 @@ bg=cyan</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>2088</x>
-      <y>272</y>
+      <y>296</y>
       <w>2792</w>
-      <h>168</h>
+      <h>144</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
 /publishedTests</panel_attributes>
-    <additional_attributes>3280.0;10.0;3430.0;30.0;3350.0;170.0;3350.0;90.0;70.0;90.0;10.0;190.0</additional_attributes>
+    <additional_attributes>3460.0;10.0;3350.0;140.0;3350.0;60.0;70.0;60.0;10.0;160.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
@@ -845,7 +845,7 @@ bg=cyan</panel_attributes>
     <coordinates>
       <x>4432</x>
       <y>240</y>
-      <w>280</w>
+      <w>504</w>
       <h>64</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Resource&gt;&gt;
@@ -853,7 +853,7 @@ bg=cyan</panel_attributes>
 bg=yellow
 --
 --
-+ &lt;&lt;GET&gt;&gt; getPublishedTests(): Test[]
++ &lt;&lt;GET&gt;&gt; getPublishedTests(tags: String[][], likeTitle: String): Test[]
 + &lt;&lt;POST&gt;&gt; publishTest(): Test</panel_attributes>
     <additional_attributes/>
   </element>
