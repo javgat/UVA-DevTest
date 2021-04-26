@@ -4312,6 +4312,55 @@ func init() {
       }
     },
     "/tests/{testid}/publishedTests": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all publishedTest originated from the same test",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "test",
+          "publishedTest"
+        ],
+        "summary": "Returns all publishedTest originated from the same test",
+        "operationId": "GetPublishedTestsFromTest",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the original test",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tests Found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Test"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      },
       "post": {
         "security": [
           {
@@ -13256,6 +13305,64 @@ func init() {
       }
     },
     "/tests/{testid}/publishedTests": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all publishedTest originated from the same test",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "test",
+          "publishedTest"
+        ],
+        "summary": "Returns all publishedTest originated from the same test",
+        "operationId": "GetPublishedTestsFromTest",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the original test",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tests Found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Test"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      },
       "post": {
         "security": [
           {

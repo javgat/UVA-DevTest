@@ -229,7 +229,8 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 	api.TestAddAdminTeamToTestHandler = test.AddAdminTeamToTestHandlerFunc(handlers.AddAdminTeamToTest)          // PUT /tests/{testid}/teams/{teamname}
 	api.TestRemoveAdminTeamToTestHandler = test.RemoveAdminTeamToTestHandlerFunc(handlers.RemoveAdminTeamTest)   // DELETE /tests/{testid}/teams/{teamname}
 
-	api.TestPostPublishedTestHandler = test.PostPublishedTestHandlerFunc(handlers.PublishTest) // POST /tests/{testid}/publishedTests
+	api.TestPostPublishedTestHandler = test.PostPublishedTestHandlerFunc(handlers.PublishTest)                       // POST /tests/{testid}/publishedTests
+	api.TestGetPublishedTestsFromTestHandler = test.GetPublishedTestsFromTestHandlerFunc(handlers.GetPTestsFromTest) // GET /tests/{testid}/publishedTests
 
 	api.TestGetQuestionsFromTestHandler = test.GetQuestionsFromTestHandlerFunc(handlers.GetQuestionsFromTest)   // GET /tests/{testid}/questions
 	api.TestGetQuestionFromTestHandler = test.GetQuestionFromTestHandlerFunc(handlers.GetQuestionFromTest)      // GET /tests/{testid}/questions/{questionid}

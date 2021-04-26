@@ -8,6 +8,7 @@ import (
 	"database/sql"
 	"errors"
 	"log"
+	"time"
 	"uva-devtest/models"
 	"uva-devtest/persistence/dao"
 	"uva-devtest/persistence/dbconnection"
@@ -357,7 +358,8 @@ func PublishTest(params test.PostPublishedTestParams, u *models.User) middleware
 							bfalse := false
 							newModelTest.Editable = &bfalse
 							newModelTest.OriginalTestID = &params.Testid
-							newModelTest, err = dao.PostTest(db, *newModelTest.Username, newModelTest)
+							horaCreacion := time.Now()
+							newModelTest, err = dao.PostTest(db, *newModelTest.Username, newModelTest, horaCreacion)
 							if err == nil {
 								err = cloneQuestions(db, mqs, newModelTest, oldDaoTest)
 								if err == nil {
@@ -387,6 +389,28 @@ func PublishTest(params test.PostPublishedTestParams, u *models.User) middleware
 		return test.NewPostPublishedTestInternalServerError()
 	}
 	return test.NewPostPublishedTestForbidden()
+}
+
+// GET /tests/{testid}/publishedTests
+// Auth: TestAdmin or Admin
+func GetPTestsFromTest(params test.GetPublishedTestsFromTestParams, u *models.User) middleware.Responder {
+	if isAdmin(u) || isTestAdmin(u, params.Testid) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			var tests []*dao.Test
+			tests, err = dao.GetTestsByOrigenTestid(db, params.Testid)
+			if err == nil {
+				var mts []*models.Test
+				mts, err = dao.ToModelTests(tests)
+				if err == nil {
+					return test.NewGetPublishedTestsFromTestOK().WithPayload(mts)
+				}
+			}
+		}
+		log.Println("Error en GetPTestsFromTest: ", err)
+		return test.NewGetPublishedTestsFromTestInternalServerError()
+	}
+	return test.NewGetPublishedTestsFromTestForbidden()
 }
 
 // GetQuestionsFromTest GET /tests/{testid}/questions. Get questions from test

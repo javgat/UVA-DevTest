@@ -284,7 +284,7 @@ func GetTestsFromUser(db *sql.DB, username string) ([]*Test, error) {
 	return nil, err
 }
 
-func PostTest(db *sql.DB, username string, t *models.Test) (*models.Test, error) {
+func PostTest(db *sql.DB, username string, t *models.Test, horaCreacion time.Time) (*models.Test, error) {
 	if db == nil || t == nil {
 		return nil, errors.New(errorDBNil)
 	}
@@ -299,7 +299,6 @@ func PostTest(db *sql.DB, username string, t *models.Test) (*models.Test, error)
 		return nil, err
 	}
 	defer query.Close()
-	horaCreacion := time.Now()
 	origID := &t.OriginalTestID
 	if *t.OriginalTestID == -1 {
 		origID = nil
@@ -632,4 +631,27 @@ func RemoveFavoriteTest(db *sql.DB, username string, testid int64) error {
 		err = errors.New(errorResourceNotFound)
 	}
 	return err
+}
+
+func GetTestsByOrigenTestid(db *sql.DB, testid int64) ([]*Test, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var ts []*Test
+	stPrepare := "SELECT * FROM Test WHERE origenTestid=?"
+	query, err := db.Prepare(stPrepare)
+	if err == nil {
+		defer query.Close()
+		rows, err := query.Query(testid)
+		if err == nil {
+			ts, err = rowsToTests(rows)
+			if ts == nil {
+				return nil, nil
+			}
+			return ts, err
+		}
+	} else {
+		log.Print(err)
+	}
+	return nil, err
 }

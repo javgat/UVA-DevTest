@@ -244,6 +244,9 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		TeamGetPublishedTestsFromTeamHandler: team.GetPublishedTestsFromTeamHandlerFunc(func(params team.GetPublishedTestsFromTeamParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation team.GetPublishedTestsFromTeam has not yet been implemented")
 		}),
+		TestGetPublishedTestsFromTestHandler: test.GetPublishedTestsFromTestHandlerFunc(func(params test.GetPublishedTestsFromTestParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation test.GetPublishedTestsFromTest has not yet been implemented")
+		}),
 		UserGetPublishedTestsFromUserHandler: user.GetPublishedTestsFromUserHandlerFunc(func(params user.GetPublishedTestsFromUserParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation user.GetPublishedTestsFromUser has not yet been implemented")
 		}),
@@ -682,6 +685,8 @@ type DevAPI struct {
 	PublishedTestGetPublishedTestsHandler published_test.GetPublishedTestsHandler
 	// TeamGetPublishedTestsFromTeamHandler sets the operation handler for the get published tests from team operation
 	TeamGetPublishedTestsFromTeamHandler team.GetPublishedTestsFromTeamHandler
+	// TestGetPublishedTestsFromTestHandler sets the operation handler for the get published tests from test operation
+	TestGetPublishedTestsFromTestHandler test.GetPublishedTestsFromTestHandler
 	// UserGetPublishedTestsFromUserHandler sets the operation handler for the get published tests from user operation
 	UserGetPublishedTestsFromUserHandler user.GetPublishedTestsFromUserHandler
 	// QuestionGetQuestionHandler sets the operation handler for the get question operation
@@ -1125,6 +1130,9 @@ func (o *DevAPI) Validate() error {
 	}
 	if o.TeamGetPublishedTestsFromTeamHandler == nil {
 		unregistered = append(unregistered, "team.GetPublishedTestsFromTeamHandler")
+	}
+	if o.TestGetPublishedTestsFromTestHandler == nil {
+		unregistered = append(unregistered, "test.GetPublishedTestsFromTestHandler")
 	}
 	if o.UserGetPublishedTestsFromUserHandler == nil {
 		unregistered = append(unregistered, "user.GetPublishedTestsFromUserHandler")
@@ -1739,6 +1747,10 @@ func (o *DevAPI) initHandlerCache() {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
 	o.handlers["GET"]["/teams/{teamname}/publishedTests"] = team.NewGetPublishedTestsFromTeam(o.context, o.TeamGetPublishedTestsFromTeamHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/tests/{testid}/publishedTests"] = test.NewGetPublishedTestsFromTest(o.context, o.TestGetPublishedTestsFromTestHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}

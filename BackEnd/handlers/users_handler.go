@@ -749,7 +749,8 @@ func PostTest(params user.PostTestParams, u *models.User) middleware.Responder {
 		if err == nil {
 			var menosuno int64 = -1
 			params.Test.OriginalTestID = &menosuno
-			t, err := dao.PostTest(db, params.Username, params.Test)
+			horaCreacion := time.Now()
+			t, err := dao.PostTest(db, params.Username, params.Test, horaCreacion)
 			if err == nil && t != nil {
 				return user.NewPostTestCreated().WithPayload(t)
 			}
@@ -844,7 +845,8 @@ func copyTest(t *dao.Test, username string) (*models.Test, error) {
 				mt.Editable = &btrue
 				var menosuno int64 = -1
 				mt.OriginalTestID = &menosuno
-				mt, err = dao.PostTest(db, username, mt)
+				horaCreacion := time.Now()
+				mt, err = dao.PostTest(db, username, mt, horaCreacion)
 				if err == nil {
 					err = copyQuestions(t.ID, mt.ID, username, u.ID)
 					if err == nil {
