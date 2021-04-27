@@ -13,6 +13,7 @@ import { SessionService } from '../shared/session.service';
 export class TestCreateComponent extends LoggedInTeacherController implements OnInit {
 
   test: Test
+  hasUser?: boolean
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService) {
     super(session, router, data, userS)
     this.test = {
@@ -24,6 +25,9 @@ export class TestCreateComponent extends LoggedInTeacherController implements On
       maxMinutes: 0,
       accesoPublicoNoPublicado: true
     }
+    if(this.hasUser!=undefined){
+      this.doHasUserAction()
+    }
   }
 
   ngOnInit(): void {
@@ -34,6 +38,8 @@ export class TestCreateComponent extends LoggedInTeacherController implements On
   }
 
   doHasUserAction(){
+    this.hasUser=true
+    if(this.test==undefined) return
     this.test.username = this.getSessionUser().getUsername()
   }
 

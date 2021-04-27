@@ -178,4 +178,8 @@ export class ProfileComponent extends LoggedInController implements OnInit {
     return this.getSessionUser().isTeacherOrAdmin()
   }
 
+  checkVerBotonesTeacher() : boolean{
+    return this.checkPermisosEditarUser() && this.profileUser.isTeacherOrAdmin()
+  }
+
 }
