@@ -22,4 +22,5 @@ export interface Test {
     accesoPublicoNoPublicado: boolean;
     horaCreacion?: string;
     originalTestID?: number;
+    cantidadRespuestasDelUsuario?: number;
 }

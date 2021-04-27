@@ -145,6 +145,8 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 	api.UserGetSolvableTestFromUserHandler = user.GetSolvableTestFromUserHandlerFunc(handlers.GetSolvableTestFromUser)    // GET /users/{username}/solvableTests/{testid}
 	api.UserStartAnswerHandler = user.StartAnswerHandlerFunc(handlers.StartAnswer)                                        // POST /users/{username}/solvableTests/{testid}/answers
 
+	api.UserGetOpenAnswersFromUserTestHandler = user.GetOpenAnswersFromUserTestHandlerFunc(handlers.GetOpenAnswersTestUser) // GET /users/{username}/solvableTests/{testid}/openAnswers
+
 	api.UserGetAnsweredTestsFromUserHandler = user.GetAnsweredTestsFromUserHandlerFunc(handlers.GetATestsFromUser) // GET /users/{username}/answeredTests
 	api.UserGetAnsweredTestFromUserHandler = user.GetAnsweredTestFromUserHandlerFunc(handlers.GetATestFromUser)    // GET /users/{username}/answeredTests/{testid}
 	api.UserGetAnswersFromUserAnsweredTestHandler =

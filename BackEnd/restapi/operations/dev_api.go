@@ -205,6 +205,9 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		TeamGetMembersHandler: team.GetMembersHandlerFunc(func(params team.GetMembersParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation team.GetMembers has not yet been implemented")
 		}),
+		UserGetOpenAnswersFromUserTestHandler: user.GetOpenAnswersFromUserTestHandlerFunc(func(params user.GetOpenAnswersFromUserTestParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation user.GetOpenAnswersFromUserTest has not yet been implemented")
+		}),
 		QuestionGetOptionFromQuestionHandler: question.GetOptionFromQuestionHandlerFunc(func(params question.GetOptionFromQuestionParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation question.GetOptionFromQuestion has not yet been implemented")
 		}),
@@ -665,6 +668,8 @@ type DevAPI struct {
 	TeamGetMemberHandler team.GetMemberHandler
 	// TeamGetMembersHandler sets the operation handler for the get members operation
 	TeamGetMembersHandler team.GetMembersHandler
+	// UserGetOpenAnswersFromUserTestHandler sets the operation handler for the get open answers from user test operation
+	UserGetOpenAnswersFromUserTestHandler user.GetOpenAnswersFromUserTestHandler
 	// QuestionGetOptionFromQuestionHandler sets the operation handler for the get option from question operation
 	QuestionGetOptionFromQuestionHandler question.GetOptionFromQuestionHandler
 	// PublishedTestGetOptionsFromPublishedQuestionHandler sets the operation handler for the get options from published question operation
@@ -1101,6 +1106,9 @@ func (o *DevAPI) Validate() error {
 	}
 	if o.TeamGetMembersHandler == nil {
 		unregistered = append(unregistered, "team.GetMembersHandler")
+	}
+	if o.UserGetOpenAnswersFromUserTestHandler == nil {
+		unregistered = append(unregistered, "user.GetOpenAnswersFromUserTestHandler")
 	}
 	if o.QuestionGetOptionFromQuestionHandler == nil {
 		unregistered = append(unregistered, "question.GetOptionFromQuestionHandler")
@@ -1711,6 +1719,10 @@ func (o *DevAPI) initHandlerCache() {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
 	o.handlers["GET"]["/teams/{teamname}/members"] = team.NewGetMembers(o.context, o.TeamGetMembersHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/users/{username}/solvableTests/{testid}/openAnswers"] = user.NewGetOpenAnswersFromUserTest(o.context, o.UserGetOpenAnswersFromUserTestHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}

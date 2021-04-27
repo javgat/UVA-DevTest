@@ -1967,9 +1967,9 @@ paths:
         - BearerCookie: []
       tags:
       - user
-      summary: Returns a publishedTest that the user can answer, including public ones and team ones.
+      summary: Returns a publishedTest that the user can answer, including public ones and team ones. The Test DTO will contain the number of answers the user has for the test
       operationId: GetSolvableTestFromUser
-      description: Returns a publishedTest that the user can answer, including public ones and team ones.
+      description: Returns a publishedTest that the user can answer, including public ones and team ones.  The Test DTO will contain the number of answers the user has for the test
       produces:
       - application/json
       parameters:
@@ -2024,6 +2024,44 @@ paths:
           description: Answer started
           schema:
             $ref: '#/definitions/Answer'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
+  /users/{username}/solvableTests/{testid}/openAnswers:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - user
+      summary: Returns all open answers that the user is answering to a test. It should be only one or zero
+      operationId: GetOpenAnswersFromUserTest
+      description: Returns all open answers that the user is answering to a test. It should be only one or zero
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the user who may has had answered the test
+        required: true
+        type: string
+      - in: path
+        name: testid
+        description: Id of the test
+        required: true
+        type: integer
+      responses:
+        200:
+          description: answers found  
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Answer'
         400:
           $ref: '#/responses/BadRequestError'
         403:
@@ -5475,6 +5513,9 @@ definitions:
         type: integer
         example: 15
         default: -1
+      cantidadRespuestasDelUsuario:
+        type: integer
+        example: 1
   Answer:
     type: object
     required:

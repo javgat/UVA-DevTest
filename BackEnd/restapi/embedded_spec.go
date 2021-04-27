@@ -7593,6 +7593,63 @@ func init() {
         }
       }
     },
+    "/users/{username}/solvableTests/{testid}/openAnswers": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all open answers that the user is answering to a test. It should be only one or zero",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns all open answers that the user is answering to a test. It should be only one or zero",
+        "operationId": "GetOpenAnswersFromUserTest",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who may has had answered the test",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the test",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "answers found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Answer"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
     "/users/{username}/teams": {
       "get": {
         "security": [
@@ -8319,6 +8376,10 @@ func init() {
         "accesoPublicoNoPublicado": {
           "type": "boolean",
           "example": true
+        },
+        "cantidadRespuestasDelUsuario": {
+          "type": "integer",
+          "example": 1
         },
         "description": {
           "type": "string",
@@ -17333,6 +17394,72 @@ func init() {
         }
       }
     },
+    "/users/{username}/solvableTests/{testid}/openAnswers": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all open answers that the user is answering to a test. It should be only one or zero",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns all open answers that the user is answering to a test. It should be only one or zero",
+        "operationId": "GetOpenAnswersFromUserTest",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who may has had answered the test",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the test",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "answers found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Answer"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
     "/users/{username}/teams": {
       "get": {
         "security": [
@@ -18121,6 +18248,10 @@ func init() {
         "accesoPublicoNoPublicado": {
           "type": "boolean",
           "example": true
+        },
+        "cantidadRespuestasDelUsuario": {
+          "type": "integer",
+          "example": 1
         },
         "description": {
           "type": "string",

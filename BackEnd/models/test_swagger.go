@@ -29,6 +29,10 @@ type Test struct {
 	// Required: true
 	AccesoPublicoNoPublicado *bool `json:"accesoPublicoNoPublicado"`
 
+	// cantidad respuestas del usuario
+	// Example: 1
+	CantidadRespuestasDelUsuario int64 `json:"cantidadRespuestasDelUsuario,omitempty"`
+
 	// description
 	// Example: En este test se evaluaran los conocimientos respecto al lenguaje de programación Java
 	// Required: true

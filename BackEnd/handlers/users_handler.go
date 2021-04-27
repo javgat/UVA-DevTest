@@ -1042,11 +1042,17 @@ func GetSolvableTestFromUser(params user.GetSolvableTestFromUserParams, u *model
 			if err == nil && t != nil {
 				mt, err := dao.ToModelTest(t)
 				if mt != nil && err == nil {
-					return user.NewGetSolvableTestFromUserOK().WithPayload(mt)
+					var cant int64
+					cant, err = dao.GetNumberAnswersUserTest(db, params.Username, params.Testid)
+					if err == nil {
+						mt.CantidadRespuestasDelUsuario = cant
+						return user.NewGetSolvableTestFromUserOK().WithPayload(mt)
+					}
 				}
 			}
 			return user.NewGetSolvableTestFromUserGone()
 		}
+		log.Println("Error en GetSolvableTestFromUser(): ", err)
 		return user.NewGetSolvableTestFromUserInternalServerError()
 	}
 	return user.NewGetSolvableTestFromUserForbidden()
@@ -1121,6 +1127,29 @@ func GetATestFromUser(params user.GetAnsweredTestFromUserParams, u *models.User)
 	return user.NewGetAnsweredTestFromUserForbidden()
 }
 
+// GET /users/{username}/solvableTests/{testid}/openAnswers
+// Auth: Current User or Admin
+func GetOpenAnswersTestUser(params user.GetOpenAnswersFromUserTestParams, u *models.User) middleware.Responder {
+	if userOrAdmin(params.Username, u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			var a []*dao.Answer
+			a, err = dao.GetOpenAnswersFromUserTest(db, params.Username, params.Testid)
+			if err == nil {
+				var ma []*models.Answer
+				ma, err = dao.ToModelAnswers(a)
+				if err == nil {
+					return user.NewGetOpenAnswersFromUserTestOK().WithPayload(ma)
+				}
+				return user.NewGetOpenAnswersFromUserTestGone()
+			}
+		}
+		log.Println("Error en GetOpenAnswersTestUser(): ", err)
+		return user.NewGetOpenAnswersFromUserTestInternalServerError()
+	}
+	return user.NewGetOpenAnswersFromUserTestForbidden()
+}
+
 // GET /users/{username}/answeredTests/{testid}/answers
 // Auth: Current User or Admin
 func GetAnswersFromUserATest(params user.GetAnswersFromUserAnsweredTestParams, u *models.User) middleware.Responder {
@@ -1128,9 +1157,9 @@ func GetAnswersFromUserATest(params user.GetAnswersFromUserAnsweredTestParams, u
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			a, err := dao.GetAnswersFromUserAnsweredTest(db, params.Username, params.Testid)
-			if err == nil && a != nil {
+			if err == nil {
 				ma, err := dao.ToModelAnswers(a)
-				if ma != nil && err == nil {
+				if err == nil {
 					return user.NewGetAnswersFromUserAnsweredTestOK().WithPayload(ma)
 				}
 				return user.NewGetAnswersFromUserAnsweredTestGone()

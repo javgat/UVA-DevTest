@@ -33,10 +33,38 @@
         <p><b>Visionado público para profesores: </b> <span *ngIf="test.accesoPublicoNoPublicado">Sí</span><span
                 *ngIf="!test.accesoPublicoNoPublicado">No</span>
         </p>
+        <p>Llevas {{test.cantidadRespuestasDelUsuario}} intentos.</p>
+        <div *ngIf="isRespuestaIniciada">
+            <p><button class="btn btn-success btn-lg" type="button">Continuar Respuesta</button></p>
+        </div>
+        <div *ngIf="!isRespuestaIniciada">
+            <p><button class="btn btn-success btn-lg" type="button" data-bs-toggle="modal"
+                    data-bs-target="#startAnswerModal">Iniciar Respuesta</button></p>
+            <!-- Modal iniciar respuesta -->
+            <div class="modal fade" id="startAnswerModal" tabindex="-1" aria-labelledby="startAnswerModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="startAnswerModalLabel">Iniciar respuesta</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            ¿Seguro que quieres iniciar la respuesta al test?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-primary" (click)="startAnswerClick()">Iniciar Respuesta</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div *ngIf="isModoTestAdmin()">
             <p><button class="btn btn-primary" type="button" [routerLink]="['/et', test.id, 'teams']">Ver equipos
                     administradores</button></p>
-            <p><button class="btn btn-primary" type="button" [routerLink]="['/pt', test.id, 'invite']">Ver equipos y usuarios
+            <p><button class="btn btn-primary" type="button" [routerLink]="['/pt', test.id, 'invite']">Ver equipos y
+                    usuarios
                     invitados</button></p>
             <hr />
             <h4>Preguntas:</h4>

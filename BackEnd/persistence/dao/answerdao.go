@@ -156,6 +156,26 @@ func FinishAnswer(db *sql.DB, answerid int64) error {
 	return err
 }
 
+func GetOpenAnswersFromUserTest(db *sql.DB, username string, testid int64) ([]*Answer, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	u, err := GetUserUsername(db, username)
+	if err == nil {
+		var a []*Answer
+		query, err := db.Prepare("SELECT * FROM RespuestaExamen WHERE usuarioid=? AND testid=? AND finished=0")
+		if err == nil {
+			defer query.Close()
+			rows, err := query.Query(u.ID, testid)
+			if err == nil {
+				a, err = rowsToAnswers(rows)
+				return a, err
+			}
+		}
+	}
+	return nil, err
+}
+
 func GetAnswersFromUserAnsweredTest(db *sql.DB, username string, testid int64) ([]*Answer, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
@@ -174,6 +194,26 @@ func GetAnswersFromUserAnsweredTest(db *sql.DB, username string, testid int64) (
 		}
 	}
 	return nil, err
+}
+
+func GetNumberAnswersUserTest(db *sql.DB, username string, testid int64) (int64, error) {
+	if db == nil {
+		return 0, errors.New(errorDBNil)
+	}
+	u, err := GetUserUsername(db, username)
+	if err == nil {
+		var cant *int64
+		query, err := db.Prepare("SELECT COUNT(*) FROM RespuestaExamen WHERE usuarioid=? AND testid=?")
+		if err == nil {
+			defer query.Close()
+			rows, err := query.Query(u.ID, testid)
+			if err == nil {
+				cant, err = rowsToInt64(rows)
+				return *cant, err
+			}
+		}
+	}
+	return 0, err
 }
 
 func GetAnswersFromUser(db *sql.DB, username string) ([]*Answer, error) {

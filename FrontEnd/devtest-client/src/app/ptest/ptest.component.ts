@@ -20,17 +20,22 @@ export class PtestComponent extends LoggedInController implements OnInit {
   id: number
   tags: Tag[]
   isInAdminTeam: boolean
+  respuestaIniciadaId?: number
+  isRespuestaIniciada: boolean
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private route: ActivatedRoute, private ptestS: PublishedTestService) {
     super(session, router, data, userS);
     this.test = new Examen()
     this.preguntas = []
     this.tags = []
-    this.id=0
+    this.id = 0
     this.isInAdminTeam = false
+    this.isRespuestaIniciada = false
     this.routeSub = this.route.params.subscribe(params => {
       this.id = params['testid']
       this.borrarMensaje()
-      this.getPTest(true)
+      if (this.getSessionUser().getUsername() != undefined && this.getSessionUser().getUsername() != "") {
+        this.getPTest(true)
+      }
     });
   }
 
@@ -38,47 +43,34 @@ export class PtestComponent extends LoggedInController implements OnInit {
   }
 
   doHasUserAction() {
-    if (this.id != undefined && this.id != 0)
+    if (this.id != undefined && this.id != 0) {
       this.getIsInAdminTeam(true)
+      this.getPTest(true)
+    }
   }
 
-  gotTest(){
+  gotTest() {
     this.getPreguntasTest(true)
     this.getTags(true)
     if (!this.getSessionUser().isEmpty())
       this.getIsInAdminTeam(true)
+    this.getIsRespuestaIniciada(true)
   }
 
   getPTest(primera: boolean) {
-    this.ptestS.getPublicPublishedTest(this.id).subscribe(
+    this.userS.getSolvableTestFromUser(this.getSessionUser().getUsername(), this.id).subscribe(
       resp => {
-        this.test = resp
+        this.test = Examen.constructorFromTest(resp)
         this.gotTest()
       },
       err => {
-        if(err.status==410){
-          this.getPrivatePTest(true)
-        }else{
-          this.handleErrRelog(err, "obtener test publico", primera, this.getPTest, this)
-        }
+        this.handleErrRelog(err, "obtener test publicado", primera, this.getPTest, this)
       }
     )
   }
 
-  getPrivatePTest(primera: boolean){
-    this.ptestS.getPublishedTest(this.id).subscribe(
-      resp => {
-        this.test = resp
-        this.gotTest()
-      },
-      err => {
-        this.handleErrRelog(err, "obtener test privado", primera, this.getPrivatePTest, this)
-      }
-    )
-  }
-
-  getPreguntasTest(primera: boolean){
-    if(!this.isModoTestAdmin()) return
+  getPreguntasTest(primera: boolean) {
+    if (!this.isModoTestAdmin()) return
     this.ptestS.getQuestionsFromPublishedTests(this.id).subscribe(
       resp => {
         this.preguntas = resp
@@ -89,7 +81,7 @@ export class PtestComponent extends LoggedInController implements OnInit {
     )
   }
 
-  getTags(primera: boolean){
+  getTags(primera: boolean) {
     this.ptestS.getTagsFromPublishedTest(this.id).subscribe(
       resp => this.tags = resp,
       err => this.handleErrRelog(err, "obtener etiquetas de un test publicado", primera, this.getTags, this)
@@ -109,12 +101,41 @@ export class PtestComponent extends LoggedInController implements OnInit {
     )
   }
 
-  tipoPrint(tipo: string, eleccionUnica: boolean | undefined): string{
+  tipoPrint(tipo: string, eleccionUnica: boolean | undefined): string {
     return tipoPrint(tipo, eleccionUnica)
   }
 
-  isModoTestAdmin() : boolean{
+  isModoTestAdmin(): boolean {
     return this.isInAdminTeam || this.test.username == this.getSessionUser().getUsername()
+  }
+
+  getIsRespuestaIniciada(primera: boolean) {
+    this.userS.getOpenAnswersFromUserTest(this.getSessionUser().getUsername(), this.id).subscribe(
+      resp => {
+        if(resp.length==0){
+          this.isRespuestaIniciada = false
+        }else{
+          this.isRespuestaIniciada = true
+          this.respuestaIniciadaId = resp[0].id
+        }
+      },
+      err => this.handleErrRelog(err, "obtener informacion de si hay respuesta iniciada", primera, this.getIsRespuestaIniciada, this)
+    )
+  }
+
+  startAnswerClick(){
+    this.startAnswer(true)
+  }
+
+  startAnswer(primera: boolean){
+    this.userS.startAnswer(this.getSessionUser().getUsername(), this.id).subscribe(
+      resp=>{
+        console.log("Respuesta iniciada con exito")
+      },
+      err =>{
+        this.handleErrRelog(err, "iniciar respuesta a test publicado", primera, this.startAnswer, this)
+      }
+    )
   }
 
 }
