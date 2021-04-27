@@ -209,13 +209,25 @@ export class PublishedTestService {
     /**
      * Returns all public publishedTests
      * Returns all public publishedTests
+     * @param tags 
+     * @param likeTitle 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getPublicPublishedTests(observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
-    public getPublicPublishedTests(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
-    public getPublicPublishedTests(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
-    public getPublicPublishedTests(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getPublicPublishedTests(tags?: Array<Array<string>>, likeTitle?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
+    public getPublicPublishedTests(tags?: Array<Array<string>>, likeTitle?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
+    public getPublicPublishedTests(tags?: Array<Array<string>>, likeTitle?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
+    public getPublicPublishedTests(tags?: Array<Array<string>>, likeTitle?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (tags) {
+            queryParameters = queryParameters.set('tags', tags.join(COLLECTION_FORMATS['pipes']));
+        }
+        if (likeTitle !== undefined && likeTitle !== null) {
+            queryParameters = queryParameters.set('likeTitle', <any>likeTitle);
+        }
 
         let headers = this.defaultHeaders;
 
@@ -239,6 +251,7 @@ export class PublishedTestService {
 
         return this.httpClient.get<Array<Test>>(`${this.basePath}/publicPublishedTests`,
             {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

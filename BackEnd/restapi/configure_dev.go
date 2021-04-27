@@ -118,6 +118,8 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 
 	api.UserGetSharedEditTestsFromUserHandler = user.GetSharedEditTestsFromUserHandlerFunc(handlers.GetSharedEditTests) // GET /users/{username}/sharedEditTests
 
+	api.UserGetSharedPublishedTestsFromUserHandler = user.GetSharedPublishedTestsFromUserHandlerFunc(handlers.GetSharedPublishedTests) // GET /users/{username}/sharedPublishedTests
+
 	api.UserGetSharedTestsFromUserHandler = user.GetSharedTestsFromUserHandlerFunc(handlers.GetSharedTests) // GET /users/{username}/sharedTests
 	api.UserGetSharedTestFromUserHandler = user.GetSharedTestFromUserHandlerFunc(handlers.GetSharedTest)    // GET /users/{username}/sharedTests/{testid}
 

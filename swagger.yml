@@ -1356,6 +1356,51 @@ paths:
         500:
           $ref: '#/responses/InternalServerError'
 
+  /users/{username}/sharedPublishedTests:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - user
+      summary: Returns all published tests shared to a user (teacher).
+      operationId: GetSharedPublishedTestsFromUser
+      description: Returns all published tests shared to a user (teacher).
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the teacher who is shared the published tests
+        required: true
+        type: string
+      - in: query
+        name: tags
+        type: array
+        collectionFormat: pipes
+        items:
+          type: array
+          collectionFormat: csv
+          items:
+            type: string
+      - in: query
+        name: likeTitle
+        type: string
+      responses:
+        200:
+          description: tests found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Test'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
   /users/{username}/sharedTests:
     get:
       security:
@@ -1674,6 +1719,18 @@ paths:
         description: Username of the user who is invited
         required: true
         type: string
+      - in: query
+        name: tags
+        type: array
+        collectionFormat: pipes
+        items:
+          type: array
+          collectionFormat: csv
+          items:
+            type: string
+      - in: query
+        name: likeTitle
+        type: string
       responses:
         200:
           description: publishedTests found
@@ -1742,6 +1799,18 @@ paths:
         description: Username of the user who owns the publishedTests
         required: true
         type: string
+      - in: query
+        name: tags
+        type: array
+        collectionFormat: pipes
+        items:
+          type: array
+          collectionFormat: csv
+          items:
+            type: string
+      - in: query
+        name: likeTitle
+        type: string
       responses:
         200:
           description: publishedTests found
@@ -1775,6 +1844,18 @@ paths:
         description: Username of the user who owns the publishedTests
         required: true
         type: string
+      - in: query
+        name: tags
+        type: array
+        collectionFormat: pipes
+        items:
+          type: array
+          collectionFormat: csv
+          items:
+            type: string
+      - in: query
+        name: likeTitle
+        type: string
       responses:
         200:
           description: publishedTests found
@@ -1807,6 +1888,18 @@ paths:
         name: username
         description: Username of the user who can answer the publishedTests
         required: true
+        type: string
+      - in: query
+        name: tags
+        type: array
+        collectionFormat: pipes
+        items:
+          type: array
+          collectionFormat: csv
+          items:
+            type: string
+      - in: query
+        name: likeTitle
         type: string
       responses:
         200:
@@ -4223,6 +4316,19 @@ paths:
       description: Returns all public publishedTests
       produces:
       - application/json
+      parameters:
+      - in: query
+        name: tags
+        type: array
+        collectionFormat: pipes
+        items:
+          type: array
+          collectionFormat: csv
+          items:
+            type: string
+      - in: query
+        name: likeTitle
+        type: string
       responses:
         200:
           description: PublishedTests found

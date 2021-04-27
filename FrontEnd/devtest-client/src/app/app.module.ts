@@ -55,6 +55,13 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { PtestComponent } from './ptest/ptest.component';
 import { TestPTestsComponent } from './test-ptests/test-ptests.component';
 import { PtestInvitesComponent } from './ptest-invites/ptest-invites.component';
+import { PtestsUserComponent } from './ptests-user/ptests-user.component';
+import { PtestsSharedUserComponent } from './ptests-shared-user/ptests-shared-user.component';
+import { LptUserComponent } from './list-tests/lpt-user/lpt-user.component';
+import { ListPtestsComponent } from './list-tests/list-ptests/list-ptests.component';
+import { LptProfilePublicComponent } from './list-tests/lpt-profile-public/lpt-profile-public.component';
+import { LptSharedUserComponent } from './list-tests/lpt-shared-user/lpt-shared-user.component';
+import { LptInvitedUserComponent } from './list-tests/lpt-invited-user/lpt-invited-user.component';
 
 export function apiConfigFactory (): Configuration {
   const params: ConfigurationParameters = {
@@ -112,7 +119,14 @@ export function apiConfigFactory (): Configuration {
     ForgotPasswordComponent,
     PtestComponent,
     TestPTestsComponent,
-    PtestInvitesComponent
+    PtestInvitesComponent,
+    PtestsUserComponent,
+    PtestsSharedUserComponent,
+    LptUserComponent,
+    ListPtestsComponent,
+    LptProfilePublicComponent,
+    LptSharedUserComponent,
+    LptInvitedUserComponent
   ],
   imports: [
     BrowserModule,

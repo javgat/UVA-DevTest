@@ -13,6 +13,8 @@ import { ProfileTeamsComponent } from './profile/profile-teams/profile-teams.com
 import { ProfileComponent } from './profile/profile.component';
 import { PtestInvitesComponent } from './ptest-invites/ptest-invites.component';
 import { PtestComponent } from './ptest/ptest.component';
+import { PtestsSharedUserComponent } from './ptests-shared-user/ptests-shared-user.component';
+import { PtestsUserComponent } from './ptests-user/ptests-user.component';
 import { QuestionCreateComponent } from './question-create/question-create.component';
 import { QuestionTeamsComponent } from './question-teams/question-teams.component';
 import { QuestionComponent } from './question/question.component';
@@ -46,6 +48,8 @@ const routes: Routes = [
   {path: 'u/:username/et', component: TestsUserComponent},
   {path: 'u/:username/set', component: TestsSharedUserComponent},
   {path: 'u/:username/fet', component: TestsFavUserComponent},
+  {path: 'u/:username/pt', component: PtestsUserComponent},
+  {path: 'u/:username/spt', component: PtestsSharedUserComponent},
   {path: 'admin', component: AdminComponent},
   {path: 'admin/users', component: AdminUsersComponent},
   {path: 'admin/teams', component: AdminTeamsComponent},

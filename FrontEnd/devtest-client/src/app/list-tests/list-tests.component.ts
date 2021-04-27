@@ -20,6 +20,7 @@ export class ListTestsComponent extends LoggedInController implements OnInit {
   likeTitle: string | undefined
   editLikeTitle: string
   hideSwitchInclude: boolean
+  includeLabel: string
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, protected tS: TestService, protected tagS: TagService) {
     super(session, router, data, userS)
     this.includeNonEdit = false
@@ -29,6 +30,7 @@ export class ListTestsComponent extends LoggedInController implements OnInit {
     this.orOperation = true
     this.editLikeTitle = ""
     this.hideSwitchInclude = true
+    this.includeLabel = "Incluir tests publicados"
     this.getTestsFilters()
   }
 

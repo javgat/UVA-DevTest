@@ -295,6 +295,9 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		UserGetSharedEditTestsFromUserHandler: user.GetSharedEditTestsFromUserHandlerFunc(func(params user.GetSharedEditTestsFromUserParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation user.GetSharedEditTestsFromUser has not yet been implemented")
 		}),
+		UserGetSharedPublishedTestsFromUserHandler: user.GetSharedPublishedTestsFromUserHandlerFunc(func(params user.GetSharedPublishedTestsFromUserParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation user.GetSharedPublishedTestsFromUser has not yet been implemented")
+		}),
 		UserGetSharedQuestionFromUserHandler: user.GetSharedQuestionFromUserHandlerFunc(func(params user.GetSharedQuestionFromUserParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation user.GetSharedQuestionFromUser has not yet been implemented")
 		}),
@@ -719,6 +722,8 @@ type DevAPI struct {
 	UserGetQuestionsOfUserHandler user.GetQuestionsOfUserHandler
 	// UserGetSharedEditTestsFromUserHandler sets the operation handler for the get shared edit tests from user operation
 	UserGetSharedEditTestsFromUserHandler user.GetSharedEditTestsFromUserHandler
+	// UserGetSharedPublishedTestsFromUserHandler sets the operation handler for the get shared published tests from user operation
+	UserGetSharedPublishedTestsFromUserHandler user.GetSharedPublishedTestsFromUserHandler
 	// UserGetSharedQuestionFromUserHandler sets the operation handler for the get shared question from user operation
 	UserGetSharedQuestionFromUserHandler user.GetSharedQuestionFromUserHandler
 	// UserGetSharedQuestionsOfUserHandler sets the operation handler for the get shared questions of user operation
@@ -1181,6 +1186,9 @@ func (o *DevAPI) Validate() error {
 	}
 	if o.UserGetSharedEditTestsFromUserHandler == nil {
 		unregistered = append(unregistered, "user.GetSharedEditTestsFromUserHandler")
+	}
+	if o.UserGetSharedPublishedTestsFromUserHandler == nil {
+		unregistered = append(unregistered, "user.GetSharedPublishedTestsFromUserHandler")
 	}
 	if o.UserGetSharedQuestionFromUserHandler == nil {
 		unregistered = append(unregistered, "user.GetSharedQuestionFromUserHandler")
@@ -1815,6 +1823,10 @@ func (o *DevAPI) initHandlerCache() {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
 	o.handlers["GET"]["/users/{username}/sharedEditTests"] = user.NewGetSharedEditTestsFromUser(o.context, o.UserGetSharedEditTestsFromUserHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/users/{username}/sharedPublishedTests"] = user.NewGetSharedPublishedTestsFromUser(o.context, o.UserGetSharedPublishedTestsFromUserHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}

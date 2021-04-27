@@ -435,6 +435,29 @@ func GetSharedEditTestsFromUser(db *sql.DB, username string, tags [][]string, li
 	return nil, err
 }
 
+func GetSharedPublishedTestsFromUser(db *sql.DB, username string, tags [][]string, likeTitle *string) ([]*Test, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var t []*Test
+	stPrepare := "SELECT DISTINCT T.* FROM Test T JOIN GestionTestEquipo G ON T.id=G.testid JOIN EquipoUsuario E ON G.equipoid=E.equipoid JOIN Usuario U ON U.id=E.usuarioid WHERE U.username=? AND T.editable=0"
+	stPrepare = addFiltersToQueryTestLong(true, stPrepare, tags, likeTitle)
+	query, err := db.Prepare(stPrepare)
+	if err == nil {
+		defer query.Close()
+		interfaceParams := FilterParamsSlicesToInterfaceArr(tags, likeTitle)
+		var paramsSlice []interface{}
+		paramsSlice = append(paramsSlice, username)
+		interfaceParams = append(paramsSlice, interfaceParams...)
+		rows, err := query.Query(interfaceParams...)
+		if err == nil {
+			t, err = rowsToTests(rows)
+			return t, err
+		}
+	}
+	return nil, err
+}
+
 func GetSharedTestsFromUser(db *sql.DB, username string) ([]*Test, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)

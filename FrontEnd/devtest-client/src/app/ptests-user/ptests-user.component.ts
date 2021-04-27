@@ -7,11 +7,11 @@ import { DataService } from '../shared/data.service';
 import { SessionService } from '../shared/session.service';
 
 @Component({
-  selector: 'app-tests-user',
-  templateUrl: './tests-user.component.html',
-  styleUrls: ['./tests-user.component.css']
+  selector: 'app-ptests-user',
+  templateUrl: './ptests-user.component.html',
+  styleUrls: ['./ptests-user.component.css']
 })
-export class TestsUserComponent extends LoggedInTeacherController implements OnInit {
+export class PtestsUserComponent extends LoggedInTeacherController implements OnInit {
 
   routeSub: Subscription
   username: string
@@ -35,3 +35,4 @@ export class TestsUserComponent extends LoggedInTeacherController implements OnI
   }
 
 }
+

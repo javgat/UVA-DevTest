@@ -2469,4 +2469,17 @@ bg=yellow
 /tags</panel_attributes>
     <additional_attributes>150.0;70.0;150.0;10.0;10.0;10.0</additional_attributes>
   </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>4872</x>
+      <y>296</y>
+      <w>192</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/sharedPublishedTests</panel_attributes>
+    <additional_attributes>70.0;10.0;40.0;110.0;40.0;40.0;10.0;40.0</additional_attributes>
+  </element>
 </diagram>

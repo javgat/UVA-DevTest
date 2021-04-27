@@ -636,6 +636,28 @@ func GetSharedEditTests(params user.GetSharedEditTestsFromUserParams, u *models.
 	return user.NewGetSharedEditTestsFromUserForbidden()
 }
 
+// GET /users/{username}/sharedPublishedTests
+// Auth: Current User or Admin
+func GetSharedPublishedTests(params user.GetSharedPublishedTestsFromUserParams, u *models.User) middleware.Responder {
+	if userOrAdmin(params.Username, u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			var t []*dao.Test
+			t, err = dao.GetSharedPublishedTestsFromUser(db, params.Username, params.Tags, params.LikeTitle)
+			if err == nil {
+				var mt []*models.Test
+				mt, err = dao.ToModelTests(t)
+				if err == nil {
+					return user.NewGetSharedPublishedTestsFromUserOK().WithPayload(mt)
+				}
+			}
+		}
+		log.Println("Error en GetSharedPublishedTests: ", err)
+		return user.NewGetSharedPublishedTestsFromUserInternalServerError()
+	}
+	return user.NewGetSharedPublishedTestsFromUserForbidden()
+}
+
 // GET /users/{username}/sharedTests
 // Auth: Current User or Admin
 func GetSharedTests(params user.GetSharedTestsFromUserParams, u *models.User) middleware.Responder {
@@ -897,7 +919,7 @@ func GetInvitedTests(params user.GetInvitedTestsFromUserParams, u *models.User) 
 	if userOrAdmin(params.Username, u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			t, err := dao.GetInvitedPTestsFromUser(db, params.Username)
+			t, err := dao.GetInvitedPTestsFromUser(db, params.Username, params.Tags, params.LikeTitle)
 			if err == nil {
 				mt, err := dao.ToModelTests(t)
 				if mt != nil && err == nil {
@@ -931,13 +953,13 @@ func GetInvitedTest(params user.GetInvitedTestFromUserParams, u *models.User) mi
 	return user.NewGetInvitedTestFromUserForbidden()
 }
 
-// GET /users/{username}/solvableTests
+// GET /users/{username}/publishedTests
 // Auth: Current User or Admin
 func GetPublishedTestsFromUser(params user.GetPublishedTestsFromUserParams, u *models.User) middleware.Responder {
 	if userOrAdmin(params.Username, u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			t, err := dao.GetPublishedTestsFromUser(db, params.Username)
+			t, err := dao.GetPublishedTestsFromUser(db, params.Username, params.Tags, params.LikeTitle)
 			if err == nil {
 				mt, err := dao.ToModelTests(t)
 				if mt != nil && err == nil {
@@ -956,7 +978,7 @@ func GetPublishedTestsFromUser(params user.GetPublishedTestsFromUserParams, u *m
 func GetPublicPublishedTestsFromUser(params user.GetPublicPublishedTestsFromUserParams, u *models.User) middleware.Responder {
 	db, err := dbconnection.ConnectDb()
 	if err == nil {
-		t, err := dao.GetPublicPublishedTestsFromUser(db, params.Username)
+		t, err := dao.GetPublicPublishedTestsFromUser(db, params.Username, params.Tags, params.LikeTitle)
 		if err == nil {
 			mt, err := dao.ToModelTests(t)
 			if mt != nil && err == nil {
@@ -968,13 +990,13 @@ func GetPublicPublishedTestsFromUser(params user.GetPublicPublishedTestsFromUser
 	return user.NewGetPublicPublishedTestsFromUserInternalServerError()
 }
 
-// GET /users/{username}/publishedTests
+// GET /users/{username}/solvableTests
 // Auth: Current User or Admin
 func GetSolvableTestsFromUser(params user.GetSolvableTestsFromUserParams, u *models.User) middleware.Responder {
 	if userOrAdmin(params.Username, u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			t, err := dao.GetSolvableTestsFromUser(db, params.Username)
+			t, err := dao.GetSolvableTestsFromUser(db, params.Username, params.Tags, params.LikeTitle)
 			if err == nil {
 				mt, err := dao.ToModelTests(t)
 				if mt != nil && err == nil {

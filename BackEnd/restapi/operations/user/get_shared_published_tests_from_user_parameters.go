@@ -15,19 +15,19 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// NewGetSolvableTestsFromUserParams creates a new GetSolvableTestsFromUserParams object
+// NewGetSharedPublishedTestsFromUserParams creates a new GetSharedPublishedTestsFromUserParams object
 //
 // There are no default values defined in the spec.
-func NewGetSolvableTestsFromUserParams() GetSolvableTestsFromUserParams {
+func NewGetSharedPublishedTestsFromUserParams() GetSharedPublishedTestsFromUserParams {
 
-	return GetSolvableTestsFromUserParams{}
+	return GetSharedPublishedTestsFromUserParams{}
 }
 
-// GetSolvableTestsFromUserParams contains all the bound params for the get solvable tests from user operation
+// GetSharedPublishedTestsFromUserParams contains all the bound params for the get shared published tests from user operation
 // typically these are obtained from a http.Request
 //
-// swagger:parameters GetSolvableTestsFromUser
-type GetSolvableTestsFromUserParams struct {
+// swagger:parameters GetSharedPublishedTestsFromUser
+type GetSharedPublishedTestsFromUserParams struct {
 
 	// HTTP Request Object
 	HTTPRequest *http.Request `json:"-"`
@@ -41,7 +41,7 @@ type GetSolvableTestsFromUserParams struct {
 	  Collection Format: pipes
 	*/
 	Tags [][]string
-	/*Username of the user who can answer the publishedTests
+	/*Username of the teacher who is shared the published tests
 	  Required: true
 	  In: path
 	*/
@@ -51,8 +51,8 @@ type GetSolvableTestsFromUserParams struct {
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
 // for simple values it will use straight method calls.
 //
-// To ensure default values, the struct must have been initialized with NewGetSolvableTestsFromUserParams() beforehand.
-func (o *GetSolvableTestsFromUserParams) BindRequest(r *http.Request, route *middleware.MatchedRoute) error {
+// To ensure default values, the struct must have been initialized with NewGetSharedPublishedTestsFromUserParams() beforehand.
+func (o *GetSharedPublishedTestsFromUserParams) BindRequest(r *http.Request, route *middleware.MatchedRoute) error {
 	var res []error
 
 	o.HTTPRequest = r
@@ -80,7 +80,7 @@ func (o *GetSolvableTestsFromUserParams) BindRequest(r *http.Request, route *mid
 }
 
 // bindLikeTitle binds and validates parameter LikeTitle from query.
-func (o *GetSolvableTestsFromUserParams) bindLikeTitle(rawData []string, hasKey bool, formats strfmt.Registry) error {
+func (o *GetSharedPublishedTestsFromUserParams) bindLikeTitle(rawData []string, hasKey bool, formats strfmt.Registry) error {
 	var raw string
 	if len(rawData) > 0 {
 		raw = rawData[len(rawData)-1]
@@ -100,7 +100,7 @@ func (o *GetSolvableTestsFromUserParams) bindLikeTitle(rawData []string, hasKey 
 // bindTags binds and validates array parameter Tags from query.
 //
 // Arrays are parsed according to CollectionFormat: "pipes" (defaults to "csv" when empty).
-func (o *GetSolvableTestsFromUserParams) bindTags(rawData []string, hasKey bool, formats strfmt.Registry) error {
+func (o *GetSharedPublishedTestsFromUserParams) bindTags(rawData []string, hasKey bool, formats strfmt.Registry) error {
 	var qvTags string
 	if len(rawData) > 0 {
 		qvTags = rawData[len(rawData)-1]
@@ -135,7 +135,7 @@ func (o *GetSolvableTestsFromUserParams) bindTags(rawData []string, hasKey bool,
 }
 
 // bindUsername binds and validates parameter Username from path.
-func (o *GetSolvableTestsFromUserParams) bindUsername(rawData []string, hasKey bool, formats strfmt.Registry) error {
+func (o *GetSharedPublishedTestsFromUserParams) bindUsername(rawData []string, hasKey bool, formats strfmt.Registry) error {
 	var raw string
 	if len(rawData) > 0 {
 		raw = rawData[len(rawData)-1]

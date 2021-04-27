@@ -863,6 +863,26 @@ func init() {
         ],
         "summary": "Returns all public publishedTests",
         "operationId": "GetPublicPublishedTests",
+        "parameters": [
+          {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "collectionFormat": "csv"
+            },
+            "collectionFormat": "pipes",
+            "name": "tags",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "likeTitle",
+            "in": "query"
+          }
+        ],
         "responses": {
           "200": {
             "description": "PublishedTests found",
@@ -6166,6 +6186,24 @@ func init() {
             "name": "username",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "collectionFormat": "csv"
+            },
+            "collectionFormat": "pipes",
+            "name": "tags",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "likeTitle",
+            "in": "query"
           }
         ],
         "responses": {
@@ -6499,6 +6537,24 @@ func init() {
             "name": "username",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "collectionFormat": "csv"
+            },
+            "collectionFormat": "pipes",
+            "name": "tags",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "likeTitle",
+            "in": "query"
           }
         ],
         "responses": {
@@ -6549,6 +6605,24 @@ func init() {
             "name": "username",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "collectionFormat": "csv"
+            },
+            "collectionFormat": "pipes",
+            "name": "tags",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "likeTitle",
+            "in": "query"
           }
         ],
         "responses": {
@@ -6980,6 +7054,74 @@ func init() {
         }
       }
     },
+    "/users/{username}/sharedPublishedTests": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all published tests shared to a user (teacher).",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns all published tests shared to a user (teacher).",
+        "operationId": "GetSharedPublishedTestsFromUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the teacher who is shared the published tests",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "collectionFormat": "csv"
+            },
+            "collectionFormat": "pipes",
+            "name": "tags",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "likeTitle",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "tests found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Test"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
     "/users/{username}/sharedQuestions": {
       "get": {
         "security": [
@@ -7229,6 +7371,24 @@ func init() {
             "name": "username",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "collectionFormat": "csv"
+            },
+            "collectionFormat": "pipes",
+            "name": "tags",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "likeTitle",
+            "in": "query"
           }
         ],
         "responses": {
@@ -9247,6 +9407,26 @@ func init() {
         ],
         "summary": "Returns all public publishedTests",
         "operationId": "GetPublicPublishedTests",
+        "parameters": [
+          {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "collectionFormat": "csv"
+            },
+            "collectionFormat": "pipes",
+            "name": "tags",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "likeTitle",
+            "in": "query"
+          }
+        ],
         "responses": {
           "200": {
             "description": "PublishedTests found",
@@ -15462,6 +15642,24 @@ func init() {
             "name": "username",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "collectionFormat": "csv"
+            },
+            "collectionFormat": "pipes",
+            "name": "tags",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "likeTitle",
+            "in": "query"
           }
         ],
         "responses": {
@@ -15849,6 +16047,24 @@ func init() {
             "name": "username",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "collectionFormat": "csv"
+            },
+            "collectionFormat": "pipes",
+            "name": "tags",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "likeTitle",
+            "in": "query"
           }
         ],
         "responses": {
@@ -15908,6 +16124,24 @@ func init() {
             "name": "username",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "collectionFormat": "csv"
+            },
+            "collectionFormat": "pipes",
+            "name": "tags",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "likeTitle",
+            "in": "query"
           }
         ],
         "responses": {
@@ -16411,6 +16645,83 @@ func init() {
         }
       }
     },
+    "/users/{username}/sharedPublishedTests": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all published tests shared to a user (teacher).",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns all published tests shared to a user (teacher).",
+        "operationId": "GetSharedPublishedTestsFromUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the teacher who is shared the published tests",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "collectionFormat": "csv"
+            },
+            "collectionFormat": "pipes",
+            "name": "tags",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "likeTitle",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "tests found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Test"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
     "/users/{username}/sharedQuestions": {
       "get": {
         "security": [
@@ -16696,6 +17007,24 @@ func init() {
             "name": "username",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "collectionFormat": "csv"
+            },
+            "collectionFormat": "pipes",
+            "name": "tags",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "likeTitle",
+            "in": "query"
           }
         ],
         "responses": {

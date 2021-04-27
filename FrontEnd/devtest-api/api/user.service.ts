@@ -1192,16 +1192,28 @@ export class UserService {
      * Returns all publishedTests where the user is invited a user
      * Returns all publishedTests where the user is invited as a user
      * @param username Username of the user who is invited
+     * @param tags 
+     * @param likeTitle 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getInvitedTestsFromUser(username: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
-    public getInvitedTestsFromUser(username: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
-    public getInvitedTestsFromUser(username: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
-    public getInvitedTestsFromUser(username: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getInvitedTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
+    public getInvitedTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
+    public getInvitedTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
+    public getInvitedTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (username === null || username === undefined) {
             throw new Error('Required parameter username was null or undefined when calling getInvitedTestsFromUser.');
+        }
+
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (tags) {
+            queryParameters = queryParameters.set('tags', tags.join(COLLECTION_FORMATS['pipes']));
+        }
+        if (likeTitle !== undefined && likeTitle !== null) {
+            queryParameters = queryParameters.set('likeTitle', <any>likeTitle);
         }
 
         let headers = this.defaultHeaders;
@@ -1226,6 +1238,7 @@ export class UserService {
 
         return this.httpClient.get<Array<Test>>(`${this.basePath}/users/${encodeURIComponent(String(username))}/invitedTests`,
             {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -1356,16 +1369,28 @@ export class UserService {
      * Returns all public publishedTests that the user owns.
      * Returns all public publishedTests that the user owns
      * @param username Username of the user who owns the publishedTests
+     * @param tags 
+     * @param likeTitle 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getPublicPublishedTestsFromUser(username: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
-    public getPublicPublishedTestsFromUser(username: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
-    public getPublicPublishedTestsFromUser(username: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
-    public getPublicPublishedTestsFromUser(username: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getPublicPublishedTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
+    public getPublicPublishedTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
+    public getPublicPublishedTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
+    public getPublicPublishedTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (username === null || username === undefined) {
             throw new Error('Required parameter username was null or undefined when calling getPublicPublishedTestsFromUser.');
+        }
+
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (tags) {
+            queryParameters = queryParameters.set('tags', tags.join(COLLECTION_FORMATS['pipes']));
+        }
+        if (likeTitle !== undefined && likeTitle !== null) {
+            queryParameters = queryParameters.set('likeTitle', <any>likeTitle);
         }
 
         let headers = this.defaultHeaders;
@@ -1390,6 +1415,7 @@ export class UserService {
 
         return this.httpClient.get<Array<Test>>(`${this.basePath}/users/${encodeURIComponent(String(username))}/publicPublishedPTests`,
             {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -1402,16 +1428,28 @@ export class UserService {
      * Returns all publishedTests that the user owns.
      * Returns all publishedTests that the user owns
      * @param username Username of the user who owns the publishedTests
+     * @param tags 
+     * @param likeTitle 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getPublishedTestsFromUser(username: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
-    public getPublishedTestsFromUser(username: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
-    public getPublishedTestsFromUser(username: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
-    public getPublishedTestsFromUser(username: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getPublishedTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
+    public getPublishedTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
+    public getPublishedTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
+    public getPublishedTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (username === null || username === undefined) {
             throw new Error('Required parameter username was null or undefined when calling getPublishedTestsFromUser.');
+        }
+
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (tags) {
+            queryParameters = queryParameters.set('tags', tags.join(COLLECTION_FORMATS['pipes']));
+        }
+        if (likeTitle !== undefined && likeTitle !== null) {
+            queryParameters = queryParameters.set('likeTitle', <any>likeTitle);
         }
 
         let headers = this.defaultHeaders;
@@ -1436,6 +1474,7 @@ export class UserService {
 
         return this.httpClient.get<Array<Test>>(`${this.basePath}/users/${encodeURIComponent(String(username))}/publishedTests`,
             {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -1603,6 +1642,65 @@ export class UserService {
         ];
 
         return this.httpClient.get<Array<Test>>(`${this.basePath}/users/${encodeURIComponent(String(username))}/sharedEditTests`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns all published tests shared to a user (teacher).
+     * Returns all published tests shared to a user (teacher).
+     * @param username Username of the teacher who is shared the published tests
+     * @param tags 
+     * @param likeTitle 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getSharedPublishedTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
+    public getSharedPublishedTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
+    public getSharedPublishedTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
+    public getSharedPublishedTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (username === null || username === undefined) {
+            throw new Error('Required parameter username was null or undefined when calling getSharedPublishedTestsFromUser.');
+        }
+
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (tags) {
+            queryParameters = queryParameters.set('tags', tags.join(COLLECTION_FORMATS['pipes']));
+        }
+        if (likeTitle !== undefined && likeTitle !== null) {
+            queryParameters = queryParameters.set('likeTitle', <any>likeTitle);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Array<Test>>(`${this.basePath}/users/${encodeURIComponent(String(username))}/sharedPublishedTests`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -1875,16 +1973,28 @@ export class UserService {
      * Returns all publishedTests that the user can answer, including public ones and team ones.
      * Returns all publishedTests that the user can answer, including public ones and team ones.
      * @param username Username of the user who can answer the publishedTests
+     * @param tags 
+     * @param likeTitle 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getSolvableTestsFromUser(username: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
-    public getSolvableTestsFromUser(username: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
-    public getSolvableTestsFromUser(username: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
-    public getSolvableTestsFromUser(username: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getSolvableTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
+    public getSolvableTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
+    public getSolvableTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
+    public getSolvableTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (username === null || username === undefined) {
             throw new Error('Required parameter username was null or undefined when calling getSolvableTestsFromUser.');
+        }
+
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (tags) {
+            queryParameters = queryParameters.set('tags', tags.join(COLLECTION_FORMATS['pipes']));
+        }
+        if (likeTitle !== undefined && likeTitle !== null) {
+            queryParameters = queryParameters.set('likeTitle', <any>likeTitle);
         }
 
         let headers = this.defaultHeaders;
@@ -1909,6 +2019,7 @@ export class UserService {
 
         return this.httpClient.get<Array<Test>>(`${this.basePath}/users/${encodeURIComponent(String(username))}/solvableTests`,
             {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
