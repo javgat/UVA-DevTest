@@ -913,6 +913,26 @@ func CopyTest(params user.CopyTestParams, u *models.User) middleware.Responder {
 	return user.NewCopyTestForbidden()
 }
 
+// GET /users/{username}/invitedTestsByTeamsAndUser
+// Auth: Current User or Admin
+func GetInvitedTestsByTeamsAndUser(params user.GetInvitedTestsByTeamsAndUserParams, u *models.User) middleware.Responder {
+	if userOrAdmin(params.Username, u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			t, err := dao.GetInvitedPTestsByTeamsAndUser(db, params.Username, params.Tags, params.LikeTitle)
+			if err == nil {
+				mt, err := dao.ToModelTests(t)
+				if mt != nil && err == nil {
+					return user.NewGetInvitedTestsByTeamsAndUserOK().WithPayload(mt)
+				}
+				return user.NewGetInvitedTestsByTeamsAndUserGone()
+			}
+		}
+		return user.NewGetInvitedTestsByTeamsAndUserInternalServerError()
+	}
+	return user.NewGetInvitedTestsByTeamsAndUserForbidden()
+}
+
 // GET /users/{username}/invitedTests
 // Auth: Current User or Admin
 func GetInvitedTests(params user.GetInvitedTestsFromUserParams, u *models.User) middleware.Responder {
@@ -996,7 +1016,8 @@ func GetSolvableTestsFromUser(params user.GetSolvableTestsFromUserParams, u *mod
 	if userOrAdmin(params.Username, u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			t, err := dao.GetSolvableTestsFromUser(db, params.Username, params.Tags, params.LikeTitle)
+			var t []*dao.Test
+			t, err = dao.GetSolvableTestsFromUser(db, params.Username, params.Tags, params.LikeTitle)
 			if err == nil {
 				mt, err := dao.ToModelTests(t)
 				if mt != nil && err == nil {
@@ -1005,6 +1026,7 @@ func GetSolvableTestsFromUser(params user.GetSolvableTestsFromUserParams, u *mod
 				return user.NewGetSolvableTestsFromUserGone()
 			}
 		}
+		log.Println("Error en GetSolvableTestsFromUser(): ", err)
 		return user.NewGetSolvableTestsFromUserInternalServerError()
 	}
 	return user.NewGetSolvableTestsFromUserForbidden()

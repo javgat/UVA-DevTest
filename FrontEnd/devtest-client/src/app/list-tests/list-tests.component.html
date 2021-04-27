@@ -48,8 +48,15 @@
                 <th>Tiempo Disponible</th>
             </tr>
         </thead>
-        <tbody *ngFor="let test of tests">
-            <tr role="button" [routerLink]="['/et', test.id]">
+        <tbody *ngIf="!arePublished">
+            <tr *ngFor="let test of tests" role="button" [routerLink]="['/et', test.id]">
+                <td>{{test.title}}</td>
+                <td>{{test.username}}</td>
+                <td>{{test.maxMinutes}} minutos</td>
+            </tr>
+        </tbody>
+        <tbody *ngIf="arePublished">
+            <tr *ngFor="let test of tests" role="button" [routerLink]="['/pt', test.id]">
                 <td>{{test.title}}</td>
                 <td>{{test.username}}</td>
                 <td>{{test.maxMinutes}} minutos</td>

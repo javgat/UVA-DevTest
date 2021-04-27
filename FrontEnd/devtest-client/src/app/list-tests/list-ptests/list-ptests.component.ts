@@ -13,16 +13,10 @@ import { ListTestsComponent } from '../list-tests.component';
 })
 export class ListPtestsComponent extends ListTestsComponent implements OnInit {
 
-  id: string | undefined
-  routeSub: Subscription
-  constructor(session: SessionService, router: Router, data: DataService, userS: UserService, tS: TestService, tagS: TagService, private route: ActivatedRoute, private pS: PublishedTestService) {
+  constructor(session: SessionService, router: Router, data: DataService, userS: UserService, tS: TestService, tagS: TagService, public pS: PublishedTestService) {
     super(session, router, data, userS, tS, tagS)
-    this.id=""
-    this.routeSub = this.route.params.subscribe(params => {
-      this.id = params['username']
-      this.borrarMensaje()
-      this.getTestsFilters()
-    });
+    this.arePublished = true
+    this.getTestsFilters()
   }
 
   ngOnInit(): void {
@@ -30,7 +24,6 @@ export class ListPtestsComponent extends ListTestsComponent implements OnInit {
 
   ngOnDestroy(): void{
     super.ngOnDestroy()
-    this.routeSub.unsubscribe()
   }
 
   getTestsInclude(primera: boolean) {
@@ -40,7 +33,7 @@ export class ListPtestsComponent extends ListTestsComponent implements OnInit {
 
   // EN published tests testEdit es el testPublished
   getTestsEdit(primera: boolean) {
-    if(this.id==undefined) return
+    if (this.pS == undefined) return
     this.pS.getPublicPublishedTests(this.searchTags, this.likeTitle).subscribe(
       resp => this.tests = resp,
       err => this.handleErrRelog(err, "obtener tests publicados publicos", primera, this.getTestsEdit, this)

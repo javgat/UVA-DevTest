@@ -33,9 +33,9 @@ func NewGetInvitedTestsFromUser(ctx *middleware.Context, handler GetInvitedTests
 
 /* GetInvitedTestsFromUser swagger:route GET /users/{username}/invitedTests user getInvitedTestsFromUser
 
-Returns all publishedTests where the user is invited a user
+Returns all publishedTests where the user is invited directly
 
-Returns all publishedTests where the user is invited as a user
+Returns all publishedTests where the user is invited directly
 
 */
 type GetInvitedTestsFromUser struct {

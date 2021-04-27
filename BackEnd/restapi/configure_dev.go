@@ -133,6 +133,8 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 
 	api.UserCopyTestHandler = user.CopyTestHandlerFunc(handlers.CopyTest) // POST /users/{username}/tests/{testid}/copiedTests
 
+	api.UserGetInvitedTestsByTeamsAndUserHandler = user.GetInvitedTestsByTeamsAndUserHandlerFunc(handlers.GetInvitedTestsByTeamsAndUser) // GET /users/{username}/invitedTestsByTeamsAndUser
+
 	api.UserGetInvitedTestsFromUserHandler = user.GetInvitedTestsFromUserHandlerFunc(handlers.GetInvitedTests) // GET /users/{username}/invitedTests
 	api.UserGetInvitedTestFromUserHandler = user.GetInvitedTestFromUserHandlerFunc(handlers.GetInvitedTest)    // GET /users/{username}/invitedTests/{testid}
 

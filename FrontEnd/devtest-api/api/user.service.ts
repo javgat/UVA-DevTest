@@ -1189,8 +1189,67 @@ export class UserService {
     }
 
     /**
-     * Returns all publishedTests where the user is invited a user
-     * Returns all publishedTests where the user is invited as a user
+     * Returns all publishedTests where the user is invited as user or as team member
+     * Returns all publishedTests where the user is invited as as user or as team member
+     * @param username Username of the user who is invited
+     * @param tags 
+     * @param likeTitle 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getInvitedTestsByTeamsAndUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
+    public getInvitedTestsByTeamsAndUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
+    public getInvitedTestsByTeamsAndUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
+    public getInvitedTestsByTeamsAndUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (username === null || username === undefined) {
+            throw new Error('Required parameter username was null or undefined when calling getInvitedTestsByTeamsAndUser.');
+        }
+
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (tags) {
+            queryParameters = queryParameters.set('tags', tags.join(COLLECTION_FORMATS['pipes']));
+        }
+        if (likeTitle !== undefined && likeTitle !== null) {
+            queryParameters = queryParameters.set('likeTitle', <any>likeTitle);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Array<Test>>(`${this.basePath}/users/${encodeURIComponent(String(username))}/invitedTestsByTeamsAndUser`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns all publishedTests where the user is invited directly
+     * Returns all publishedTests where the user is invited directly
      * @param username Username of the user who is invited
      * @param tags 
      * @param likeTitle 

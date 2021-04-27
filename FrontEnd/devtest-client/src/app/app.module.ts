@@ -62,6 +62,11 @@ import { ListPtestsComponent } from './list-tests/list-ptests/list-ptests.compon
 import { LptProfilePublicComponent } from './list-tests/lpt-profile-public/lpt-profile-public.component';
 import { LptSharedUserComponent } from './list-tests/lpt-shared-user/lpt-shared-user.component';
 import { LptInvitedUserComponent } from './list-tests/lpt-invited-user/lpt-invited-user.component';
+import { ProfilePublicPublishedTestsComponent } from './profile/profile-public-published-tests/profile-public-published-tests.component';
+import { PtestsComponent } from './ptests/ptests.component';
+import { PtestsInvitedUserComponent } from './ptests-invited-user/ptests-invited-user.component';
+import { LptSolvableComponent } from './list-tests/lpt-solvable/lpt-solvable.component';
+import { PtestsSolvableUserComponent } from './ptests-solvable-user/ptests-solvable-user.component';
 
 export function apiConfigFactory (): Configuration {
   const params: ConfigurationParameters = {
@@ -126,7 +131,12 @@ export function apiConfigFactory (): Configuration {
     ListPtestsComponent,
     LptProfilePublicComponent,
     LptSharedUserComponent,
-    LptInvitedUserComponent
+    LptInvitedUserComponent,
+    ProfilePublicPublishedTestsComponent,
+    PtestsComponent,
+    PtestsInvitedUserComponent,
+    LptSolvableComponent,
+    PtestsSolvableUserComponent
   ],
   imports: [
     BrowserModule,

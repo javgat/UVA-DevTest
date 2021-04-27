@@ -20,6 +20,7 @@ export class LptInvitedUserComponent extends ListTestsComponent implements OnIni
     this.id=""
     this.includeNonEdit = true
     this.hideSwitchInclude = false
+    this.arePublished = true
     this.includeLabel = "Incluir invitaciones indirectas"
     this.routeSub = this.route.params.subscribe(params => {
       this.id = params['username']
@@ -38,9 +39,9 @@ export class LptInvitedUserComponent extends ListTestsComponent implements OnIni
 
   getTestsInclude(primera: boolean) {
     if(this.id==undefined) return
-    this.userS.getSolvableTestsFromUser(this.id, this.searchTags, this.likeTitle).subscribe(
+    this.userS.getInvitedTestsByTeamsAndUser(this.id, this.searchTags, this.likeTitle).subscribe(
       resp => this.tests = resp,
-      err => this.handleErrRelog(err, "obtener tests accesibles para un usuario", primera, this.getTestsInclude, this)
+      err => this.handleErrRelog(err, "obtener tests invitados directa o indirectamente de un usuario", primera, this.getTestsInclude, this)
     )
   }
 

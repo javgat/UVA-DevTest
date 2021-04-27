@@ -17,6 +17,7 @@ export class LptSharedUserComponent extends ListTestsComponent implements OnInit
   routeSub: Subscription
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, tS: TestService, tagS: TagService, private route: ActivatedRoute) {
     super(session, router, data, userS, tS, tagS)
+    this.arePublished = true
     this.id=""
     this.routeSub = this.route.params.subscribe(params => {
       this.id = params['username']

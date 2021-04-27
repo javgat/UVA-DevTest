@@ -1702,15 +1702,60 @@ paths:
         500:
           $ref: '#/responses/InternalServerError'
 
+  /users/{username}/invitedTestsByTeamsAndUser:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - user
+      summary: Returns all publishedTests where the user is invited as user or as team member
+      operationId: GetInvitedTestsByTeamsAndUser
+      description: Returns all publishedTests where the user is invited as as user or as team member
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the user who is invited
+        required: true
+        type: string
+      - in: query
+        name: tags
+        type: array
+        collectionFormat: pipes
+        items:
+          type: array
+          collectionFormat: csv
+          items:
+            type: string
+      - in: query
+        name: likeTitle
+        type: string
+      responses:
+        200:
+          description: publishedTests found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Test'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
   /users/{username}/invitedTests:
     get:
       security:
         - BearerCookie: []
       tags:
       - user
-      summary: Returns all publishedTests where the user is invited a user
+      summary: Returns all publishedTests where the user is invited directly
       operationId: GetInvitedTestsFromUser
-      description: Returns all publishedTests where the user is invited as a user
+      description: Returns all publishedTests where the user is invited directly
       produces:
       - application/json
       parameters:

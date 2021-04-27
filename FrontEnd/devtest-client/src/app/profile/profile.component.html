@@ -37,6 +37,11 @@
                     Equipos
                 </button>
             </div>
+            <div class="d-grid gap-2">
+                <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/profile', id, 'pt']">
+                    Tests Publicados
+                </button>
+            </div>
             <div *ngIf="checkTeacherOrAdmin()" class="d-grid gap-2">
                 <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/profile', id, 'et']">
                     Tests Editables
@@ -48,23 +53,35 @@
             <div *ngIf="checkPermisosEditarUser()" class="d-grid gap-2">
                 <hr/>
                 <h3 class="text-center">Privado</h3>
-                <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/u', id, 'et']">
-                    Tests editables
-                </button>
-                <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/u', id, 'set']">
-                    Tests editables compartidos
-                </button>
-                <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/u', id, 'fet']">
-                    Tests editables favoritos
-                </button>
                 <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/u', id, 'q']">
                     Preguntas
                 </button>
                 <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/u', id, 'sq']">
-                    Preguntas compartidas
+                    Preguntas compartidas con el usuario
                 </button>
                 <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/u', id, 'fq']">
                     Preguntas favoritas
+                </button>
+                <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/u', id, 'et']">
+                    Tests editables
+                </button>
+                <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/u', id, 'set']">
+                    Tests editables compartidos con el usuario
+                </button>
+                <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/u', id, 'fet']">
+                    Tests editables favoritos
+                </button>
+                <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/u', id, 'pt']">
+                    Tests Publicados
+                </button>
+                <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/u', id, 'spt']">
+                    Tests Publicados compartidos con el usuario
+                </button>
+                <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/u', id, 'invited']">
+                    Tests Publicados con invitación
+                </button>
+                <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/u', id, 'solvable']">
+                    Tests Publicados disponibles
                 </button>
             </div>
         </div>

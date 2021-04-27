@@ -6170,14 +6170,14 @@ func init() {
             "BearerCookie": []
           }
         ],
-        "description": "Returns all publishedTests where the user is invited as a user",
+        "description": "Returns all publishedTests where the user is invited directly",
         "produces": [
           "application/json"
         ],
         "tags": [
           "user"
         ],
-        "summary": "Returns all publishedTests where the user is invited a user",
+        "summary": "Returns all publishedTests where the user is invited directly",
         "operationId": "GetInvitedTestsFromUser",
         "parameters": [
           {
@@ -6268,6 +6268,74 @@ func init() {
             "description": "publishedTest found",
             "schema": {
               "$ref": "#/definitions/Test"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/users/{username}/invitedTestsByTeamsAndUser": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all publishedTests where the user is invited as as user or as team member",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns all publishedTests where the user is invited as user or as team member",
+        "operationId": "GetInvitedTestsByTeamsAndUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who is invited",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "collectionFormat": "csv"
+            },
+            "collectionFormat": "pipes",
+            "name": "tags",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "likeTitle",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "publishedTests found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Test"
+              }
             }
           },
           "400": {
@@ -15626,14 +15694,14 @@ func init() {
             "BearerCookie": []
           }
         ],
-        "description": "Returns all publishedTests where the user is invited as a user",
+        "description": "Returns all publishedTests where the user is invited directly",
         "produces": [
           "application/json"
         ],
         "tags": [
           "user"
         ],
-        "summary": "Returns all publishedTests where the user is invited a user",
+        "summary": "Returns all publishedTests where the user is invited directly",
         "operationId": "GetInvitedTestsFromUser",
         "parameters": [
           {
@@ -15733,6 +15801,83 @@ func init() {
             "description": "publishedTest found",
             "schema": {
               "$ref": "#/definitions/Test"
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/users/{username}/invitedTestsByTeamsAndUser": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all publishedTests where the user is invited as as user or as team member",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns all publishedTests where the user is invited as user or as team member",
+        "operationId": "GetInvitedTestsByTeamsAndUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who is invited",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "collectionFormat": "csv"
+            },
+            "collectionFormat": "pipes",
+            "name": "tags",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "likeTitle",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "publishedTests found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Test"
+              }
             }
           },
           "400": {

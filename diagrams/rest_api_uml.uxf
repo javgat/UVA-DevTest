@@ -1135,8 +1135,8 @@ bg=cyan</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>4296</x>
-      <y>192</y>
+      <x>4312</x>
+      <y>176</y>
       <w>232</w>
       <h>24</h>
     </coordinates>
@@ -1148,13 +1148,13 @@ bg=cyan</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>4432</x>
-      <y>208</y>
-      <w>72</w>
-      <h>48</h>
+      <x>4448</x>
+      <y>192</y>
+      <w>56</w>
+      <h>64</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;70.0;40.0</additional_attributes>
+    <additional_attributes>10.0;10.0;50.0;60.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
@@ -2481,5 +2481,18 @@ bg=yellow
 &lt;&lt;path&gt;&gt;
 /sharedPublishedTests</panel_attributes>
     <additional_attributes>70.0;10.0;40.0;110.0;40.0;40.0;10.0;40.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>4176</x>
+      <y>208</y>
+      <w>296</w>
+      <h>136</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/invitedTestsByTeamsAndUser</panel_attributes>
+    <additional_attributes>350.0;40.0;340.0;20.0;100.0;20.0;10.0;150.0</additional_attributes>
   </element>
 </diagram>

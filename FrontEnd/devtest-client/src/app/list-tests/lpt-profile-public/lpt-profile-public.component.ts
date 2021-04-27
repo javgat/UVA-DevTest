@@ -18,6 +18,7 @@ export class LptProfilePublicComponent extends ListTestsComponent implements OnI
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, tS: TestService, tagS: TagService, private route: ActivatedRoute) {
     super(session, router, data, userS, tS, tagS)
     this.id=""
+    this.arePublished = true
     this.routeSub = this.route.params.subscribe(params => {
       this.id = params['username']
       this.borrarMensaje()

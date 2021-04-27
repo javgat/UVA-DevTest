@@ -2,10 +2,13 @@
   <div class="col-sm d-grid gap-2 dropdown" *ngIf="getSessionUser().isStudent()">
     <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="testsMenuUserLink" data-bs-toggle="dropdown"
       aria-expanded="false">Tests</a>
-      <ul class="dropdown-menu" aria-labelledby="testsMenuUserLink">
-        <li><a class="dropdown-item" [routerLink]="['/ptests']">Explorar Tests Públicos</a></li>
-        <li><a class="dropdown-item" [routerLink]="['/u', getSessionUser().getUsername(), 'invited']">Tests con Invitación</a></li>
-      </ul>
+    <ul class="dropdown-menu" aria-labelledby="testsMenuUserLink">
+      <li><a class="dropdown-item" [routerLink]="['/ptests']">Explorar Tests Públicos</a></li>
+      <li><a class="dropdown-item" [routerLink]="['/u', getSessionUser().getUsername(), 'invited']">Tests con
+          Invitación</a></li>
+      <li><a class="dropdown-item" [routerLink]="['/u', getSessionUser().getUsername(), 'solvable']">Tests
+          Disponibles</a></li>
+    </ul>
   </div>
   <div class="col-sm dropdown d-grid gap-2" *ngIf="!getSessionUser().isStudent()">
     <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="testsMenuLink" data-bs-toggle="dropdown"
@@ -41,6 +44,8 @@
           <li><a class="dropdown-item" [routerLink]="['/ptests']">Tests Públicos</a></li>
           <li><a class="dropdown-item" [routerLink]="['/u', getSessionUser().getUsername(), 'invited']">Tests Con
               Invitación</a></li>
+          <li><a class="dropdown-item" [routerLink]="['/u', getSessionUser().getUsername(), 'solvable']">Tests
+              Disponibles</a></li>
         </ul>
       </li>
     </ul>

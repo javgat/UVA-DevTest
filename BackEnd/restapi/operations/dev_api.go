@@ -190,6 +190,9 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		UserGetInvitedTestFromUserHandler: user.GetInvitedTestFromUserHandlerFunc(func(params user.GetInvitedTestFromUserParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation user.GetInvitedTestFromUser has not yet been implemented")
 		}),
+		UserGetInvitedTestsByTeamsAndUserHandler: user.GetInvitedTestsByTeamsAndUserHandlerFunc(func(params user.GetInvitedTestsByTeamsAndUserParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation user.GetInvitedTestsByTeamsAndUser has not yet been implemented")
+		}),
 		TeamGetInvitedTestsFromTeamHandler: team.GetInvitedTestsFromTeamHandlerFunc(func(params team.GetInvitedTestsFromTeamParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation team.GetInvitedTestsFromTeam has not yet been implemented")
 		}),
@@ -652,6 +655,8 @@ type DevAPI struct {
 	TeamGetInvitedTestFromTeamHandler team.GetInvitedTestFromTeamHandler
 	// UserGetInvitedTestFromUserHandler sets the operation handler for the get invited test from user operation
 	UserGetInvitedTestFromUserHandler user.GetInvitedTestFromUserHandler
+	// UserGetInvitedTestsByTeamsAndUserHandler sets the operation handler for the get invited tests by teams and user operation
+	UserGetInvitedTestsByTeamsAndUserHandler user.GetInvitedTestsByTeamsAndUserHandler
 	// TeamGetInvitedTestsFromTeamHandler sets the operation handler for the get invited tests from team operation
 	TeamGetInvitedTestsFromTeamHandler team.GetInvitedTestsFromTeamHandler
 	// UserGetInvitedTestsFromUserHandler sets the operation handler for the get invited tests from user operation
@@ -1081,6 +1086,9 @@ func (o *DevAPI) Validate() error {
 	}
 	if o.UserGetInvitedTestFromUserHandler == nil {
 		unregistered = append(unregistered, "user.GetInvitedTestFromUserHandler")
+	}
+	if o.UserGetInvitedTestsByTeamsAndUserHandler == nil {
+		unregistered = append(unregistered, "user.GetInvitedTestsByTeamsAndUserHandler")
 	}
 	if o.TeamGetInvitedTestsFromTeamHandler == nil {
 		unregistered = append(unregistered, "team.GetInvitedTestsFromTeamHandler")
@@ -1683,6 +1691,10 @@ func (o *DevAPI) initHandlerCache() {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
 	o.handlers["GET"]["/users/{username}/invitedTests/{testid}"] = user.NewGetInvitedTestFromUser(o.context, o.UserGetInvitedTestFromUserHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/users/{username}/invitedTestsByTeamsAndUser"] = user.NewGetInvitedTestsByTeamsAndUser(o.context, o.UserGetInvitedTestsByTeamsAndUserHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}

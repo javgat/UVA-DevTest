@@ -7,14 +7,18 @@ import { CreateTeamComponent } from './create-team/create-team.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { LoginComponent } from './login/login.component';
 import { MainComponent } from './main/main.component';
+import { ProfilePublicPublishedTestsComponent } from './profile/profile-public-published-tests/profile-public-published-tests.component';
 import { ProfilePublicQuestionsComponent } from './profile/profile-public-questions/profile-public-questions.component';
 import { ProfilePublicTestsComponent } from './profile/profile-public-tests/profile-public-tests.component';
 import { ProfileTeamsComponent } from './profile/profile-teams/profile-teams.component';
 import { ProfileComponent } from './profile/profile.component';
 import { PtestInvitesComponent } from './ptest-invites/ptest-invites.component';
 import { PtestComponent } from './ptest/ptest.component';
+import { PtestsInvitedUserComponent } from './ptests-invited-user/ptests-invited-user.component';
 import { PtestsSharedUserComponent } from './ptests-shared-user/ptests-shared-user.component';
+import { PtestsSolvableUserComponent } from './ptests-solvable-user/ptests-solvable-user.component';
 import { PtestsUserComponent } from './ptests-user/ptests-user.component';
+import { PtestsComponent } from './ptests/ptests.component';
 import { QuestionCreateComponent } from './question-create/question-create.component';
 import { QuestionTeamsComponent } from './question-teams/question-teams.component';
 import { QuestionComponent } from './question/question.component';
@@ -42,6 +46,7 @@ const routes: Routes = [
   {path: 'profile/:id/teams', component: ProfileTeamsComponent},
   {path: 'profile/:id/et', component: ProfilePublicTestsComponent},
   {path: 'profile/:id/q', component: ProfilePublicQuestionsComponent},
+  {path: 'profile/:id/pt', component: ProfilePublicPublishedTestsComponent},
   {path: 'u/:username/q', component: QuestionsUserComponent}, // U (User): Lo ven el usuario y el admin
   {path: 'u/:username/sq', component: QuestionsSharedUserComponent},
   {path: 'u/:username/fq', component: QuestionsFavUserComponent},
@@ -50,10 +55,12 @@ const routes: Routes = [
   {path: 'u/:username/fet', component: TestsFavUserComponent},
   {path: 'u/:username/pt', component: PtestsUserComponent},
   {path: 'u/:username/spt', component: PtestsSharedUserComponent},
+  {path: 'u/:username/invited', component: PtestsInvitedUserComponent},
+  {path: 'u/:username/solvable', component: PtestsSolvableUserComponent},
   {path: 'admin', component: AdminComponent},
   {path: 'admin/users', component: AdminUsersComponent},
   {path: 'admin/teams', component: AdminTeamsComponent},
-  {path: 'ptests', component: TestsComponent},
+  {path: 'ptests', component: PtestsComponent},
   {path: 'teams', component: TeamsComponent},
   {path: 'teams/:id', component: TeamComponent},
   {path: 'createTeam', component: CreateTeamComponent},
