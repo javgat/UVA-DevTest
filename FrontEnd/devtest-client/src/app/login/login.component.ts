@@ -35,7 +35,6 @@ export class LoginComponent implements OnInit {
     this.sessionSubscription = this.session.sessionLogin.subscribe(
       valor => {
         this.sessionLogin = valor
-        console.log(valor.isLoggedIn()) 
         if(this.sessionLogin.isLoggedIn()){
           this.router.navigate(['/'])
         }

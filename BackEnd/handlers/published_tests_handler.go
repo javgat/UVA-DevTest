@@ -49,6 +49,9 @@ func GetPublicPTest(params published_test.GetPublicPublishedTestParams, u *model
 				return published_test.NewGetPublicPublishedTestOK().WithPayload(mts)
 			}
 		}
+		if ts == nil {
+			return published_test.NewGetPublicPublishedTestGone()
+		}
 	}
 	log.Println("Error en users_handler GetPublicPTest(): ", err)
 	return published_test.NewGetPublicPublishedTestInternalServerError()
