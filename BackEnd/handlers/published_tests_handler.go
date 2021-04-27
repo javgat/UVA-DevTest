@@ -79,11 +79,11 @@ func GetPTests(params published_test.GetPublishedTestsParams, u *models.User) mi
 	return published_test.NewGetPublishedTestsForbidden()
 }
 
-// GetPTest GET /publishedTests/{testid}. Returns a published tests.
-// Auth: Admin
+// GetPTest GET /publishedTests/{testid}. Returns a published test.
+// Auth: Admin, or Test TestAdmin or TestInvited
 func GetPTest(params published_test.GetPublishedTestParams, u *models.User) middleware.Responder {
 	db, err := dbconnection.ConnectDb()
-	if isAdmin(u) {
+	if isAdmin(u) || isTestAdmin(u, params.Testid) || isTestInvited(u, params.Testid) {
 		if err == nil {
 			var ts *dao.Test
 			ts, err = dao.GetPublishedTest(db, params.Testid)

@@ -66,7 +66,7 @@ export class PtestComponent extends LoggedInController implements OnInit {
   }
 
   getPrivatePTest(primera: boolean){
-    this.userS.getSolvableTestFromUser(this.getSessionUser().getUsername(), this.id).subscribe(
+    this.ptestS.getPublishedTest(this.id).subscribe(
       resp => {
         this.test = resp
         this.gotTest()
