@@ -3,6 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { AdminTeamsComponent } from './admin/admin-teams/admin-teams.component';
 import { AdminUsersComponent } from './admin/admin-users/admin-users.component';
 import { AdminComponent } from './admin/admin.component';
+import { AnsweringListPQuestionsComponent } from './answering-list-pquestions/answering-list-pquestions.component';
+import { AnsweringPQuestionComponent } from './answering-pquestion/answering-pquestion.component';
 import { CreateTeamComponent } from './create-team/create-team.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { LoginComponent } from './login/login.component';
@@ -76,6 +78,8 @@ const routes: Routes = [
   {path: 'pt/:testid', component: PtestComponent},
   {path: 'pt/:testid/invite', component: PtestInvitesComponent},
   {path: 'pt/:testid/q/:id', component: QuestionComponent},
+  {path: 'pt/:testid/answering', component: AnsweringListPQuestionsComponent},
+  {path: 'pt/:testid/answering/pq/:questionid', component: AnsweringPQuestionComponent},
   {path: 'forgotPassword', component: ForgotPasswordComponent},
   {path: 'recoverPassword/:username', component: RecoverPasswordComponent},
   {path: '**', component: MainComponent, pathMatch:'full'}

@@ -67,6 +67,8 @@ import { PtestsComponent } from './ptests/ptests.component';
 import { PtestsInvitedUserComponent } from './ptests-invited-user/ptests-invited-user.component';
 import { LptSolvableComponent } from './list-tests/lpt-solvable/lpt-solvable.component';
 import { PtestsSolvableUserComponent } from './ptests-solvable-user/ptests-solvable-user.component';
+import { AnsweringListPQuestionsComponent } from './answering-list-pquestions/answering-list-pquestions.component';
+import { AnsweringPQuestionComponent } from './answering-pquestion/answering-pquestion.component';
 
 export function apiConfigFactory (): Configuration {
   const params: ConfigurationParameters = {
@@ -136,7 +138,9 @@ export function apiConfigFactory (): Configuration {
     PtestsComponent,
     PtestsInvitedUserComponent,
     LptSolvableComponent,
-    PtestsSolvableUserComponent
+    PtestsSolvableUserComponent,
+    AnsweringListPQuestionsComponent,
+    AnsweringPQuestionComponent
   ],
   imports: [
     BrowserModule,

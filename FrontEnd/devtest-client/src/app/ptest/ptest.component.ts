@@ -42,6 +42,11 @@ export class PtestComponent extends LoggedInController implements OnInit {
   ngOnInit(): void {
   }
 
+  ngOnDestroy() : void{
+    this.routeSub.unsubscribe()
+    super.onDestroy()
+  }
+
   doHasUserAction() {
     if (this.id != undefined && this.id != 0) {
       this.getIsInAdminTeam(true)
@@ -130,7 +135,7 @@ export class PtestComponent extends LoggedInController implements OnInit {
   startAnswer(primera: boolean){
     this.userS.startAnswer(this.getSessionUser().getUsername(), this.id).subscribe(
       resp=>{
-        console.log("Respuesta iniciada con exito")
+        this.router.navigate(['/pt', this.id, "answering"])
       },
       err =>{
         this.handleErrRelog(err, "iniciar respuesta a test publicado", primera, this.startAnswer, this)

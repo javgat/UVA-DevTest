@@ -35,7 +35,7 @@
         </p>
         <p>Llevas {{test.cantidadRespuestasDelUsuario}} intentos.</p>
         <div *ngIf="isRespuestaIniciada">
-            <p><button class="btn btn-success btn-lg" type="button">Continuar Respuesta</button></p>
+            <p><button class="btn btn-success btn-lg" type="button" [routerLink]="['/pt', id, 'answering']">Continuar Respuesta</button></p>
         </div>
         <div *ngIf="!isRespuestaIniciada">
             <p><button class="btn btn-success btn-lg" type="button" data-bs-toggle="modal"
@@ -54,7 +54,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="button" class="btn btn-primary" (click)="startAnswerClick()">Iniciar Respuesta</button>
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="startAnswerClick()">Iniciar Respuesta</button>
                         </div>
                     </div>
                 </div>

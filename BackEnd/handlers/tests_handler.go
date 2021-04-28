@@ -498,7 +498,7 @@ func AddQuestionToTest(params test.AddQuestionToTestParams, u *models.User) midd
 			q, err = dao.GetQuestion(db, params.Questionid)
 			if q != nil && err == nil {
 				puedeHacerse := false
-				qt, err = dao.GetQuestionFromTest(db, params.Questionid, params.Testid)
+				qt, err = dao.GetQuestionFromTest(db, params.Testid, params.Questionid)
 				if qt != nil && err == nil {
 					puedeHacerse = true
 				} else if *q.AccesoPublicoNoPublicada {

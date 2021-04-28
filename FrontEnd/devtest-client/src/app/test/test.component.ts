@@ -65,23 +65,26 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
   }
 
   doHasUserAction() {
-    if (this.id != undefined && this.id != 0)
+    if (this.id != undefined && this.id != 0){
       this.getIsInAdminTeam(true)
+      this.getIsFavorita(true)
+    }
   }
 
   getTest(primera: boolean) {
     this.testS.getTest(this.id).subscribe(
       resp => {
-        if(!resp.editable){
+        if (!resp.editable) {
           this.router.navigate(['/pt', this.id])
         }
         this.test = new Examen(resp.title, resp.description, resp.accesoPublico, resp.editable, resp.maxMinutes, resp.username, resp.id, resp.accesoPublicoNoPublicado)
         this.testEdit = new Examen(resp.title, resp.description, resp.accesoPublico, resp.editable, resp.maxMinutes, resp.username, resp.id, resp.accesoPublicoNoPublicado)
         this.getPreguntasTest(true)
         this.getTags(true)
-        if (!this.getSessionUser().isEmpty())
+        if (!this.getSessionUser().isEmpty()) {
           this.getIsInAdminTeam(true)
-        this.getIsFavorita(true)
+          this.getIsFavorita(true)
+        }
       },
       err => this.handleErrRelog(err, "obtener test", primera, this.getTest, this)
     )
@@ -296,11 +299,11 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
     )
   }
 
-  publishTestClick(){
-    this.publishTest(true)    
+  publishTestClick() {
+    this.publishTest(true)
   }
 
-  publishTest(primera: boolean){
+  publishTest(primera: boolean) {
     this.testS.postPublishedTest(this.id).subscribe(
       resp => {
         this.router.navigate(['/pt', resp.id])

@@ -1,0 +1,16 @@
+<app-nav-bar></app-nav-bar>
+<div class="mt-5">
+    <div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message" role="alert">
+        {{getMensaje().texto}}</div>
+    <h3>Respondiendo al test {{test.title}}</h3>
+    <h4>Preguntas: </h4>
+    <div *ngFor="let pregunta of preguntas" class="card my-3">
+        <div class="card-body" role="button" [routerLink]="['/pt', testid, 'answering', 'pq', pregunta.id]">
+            <h5 class="card-title">{{pregunta.title}}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Valor: {{pregunta.valorFinal}} puntos</h6>
+            <h6 class="card-subtitle mb-2 text-muted">Tiempo estimado: {{pregunta.estimatedTime}} minutos</h6>
+            <h6 class="card-subtitle mb-2 text-muted">Tipo: {{tipoPrint(pregunta.tipoPregunta, pregunta.eleccionUnica)}}</h6>
+            <p class="card-text"><span class="badge bg-danger">No respondida</span> <span class="badge bg-success">Respondida</span></p>
+        </div>
+    </div>
+</div>

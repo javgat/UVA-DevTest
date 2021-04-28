@@ -234,10 +234,11 @@ func isTestInvited(u *models.User, testid int64) bool {
 func isTestStartedByUser(u *models.User, testid int64) (bool, error) {
 	db, err := dbconnection.ConnectDb()
 	if err == nil {
-		var at *dao.Test
-		at, err = dao.GetATestFromUser(db, *u.Username, testid)
+		var oa []*dao.Answer
+		oa, err = dao.GetOpenAnswersFromUserTest(db, *u.Username, testid)
 		if err == nil {
-			return at != nil, nil
+			isTestStarted := (oa != nil) && len(oa) > 0
+			return isTestStarted, nil
 		}
 	}
 	return false, err

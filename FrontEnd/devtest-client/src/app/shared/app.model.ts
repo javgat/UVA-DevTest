@@ -130,7 +130,7 @@ export class Equipo implements Team {
 }
 
 export class Pregunta implements Question {
-    id: number | undefined;
+    id: number;
     title: string;
     question: string;
     estimatedTime: number;
@@ -143,21 +143,21 @@ export class Pregunta implements Question {
     valorFinal: number | undefined;
     accesoPublicoNoPublicada: boolean;
 
-    constructor(id: number | undefined, title: string, question: string, estT: number, autoC: boolean,
-        edit: boolean, username: string, accesoPublicoNoPublicada: boolean, eleUni: boolean | undefined, solu: string | undefined,
-        tipo: Question.TipoPreguntaEnum, valor: number | undefined) {
-        this.id = id
-        this.title = title
-        this.question = question
-        this.estimatedTime = estT
-        this.autoCorrect = autoC
-        this.editable = edit
-        this.username = username
+    constructor(id?: number | undefined, title?: string, question?: string, estT?: number, autoC?: boolean,
+        edit?: boolean, username?: string, accesoPublicoNoPublicada?: boolean, eleUni?: boolean | undefined, solu?: string | undefined,
+        tipo?: Question.TipoPreguntaEnum, valor?: number | undefined) {
+        this.id = id || 0
+        this.title = title || ""
+        this.question = question || ""
+        this.estimatedTime = estT || 0
+        this.autoCorrect = autoC || false
+        this.editable = edit || false
+        this.username = username || ""
         this.eleccionUnica = eleUni
         this.solucion = solu
-        this.tipoPregunta = tipo
+        this.tipoPregunta = tipo || Question.TipoPreguntaEnum.String
         this.valorFinal = valor
-        this.accesoPublicoNoPublicada = accesoPublicoNoPublicada
+        this.accesoPublicoNoPublicada = accesoPublicoNoPublicada || false
     }
 }
 

@@ -1,0 +1,12 @@
+<app-nav-bar></app-nav-bar>
+<div class="mt-5">
+    <div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message" role="alert">
+        {{getMensaje().texto}}</div>
+    <h3>Respondiendo a la pregunta {{pregunta.title}}</h3>
+    <p>Valor: {{pregunta.valorFinal}} puntos</p>
+    <p>Tiempo estimado: {{pregunta.estimatedTime}} minutos</p>
+    <p>Tipo: {{tipoPrint(pregunta.tipoPregunta, pregunta.eleccionUnica)}}</p>
+    <p><span class="badge bg-danger">No respondida</span> <span class="badge bg-success">Respondida</span></p>
+    <h4>Enunciado:</h4>
+    <p><span style="white-space: pre-line">{{pregunta.question}}</span></p>
+</div>
