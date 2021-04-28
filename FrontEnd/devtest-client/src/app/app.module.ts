@@ -69,6 +69,11 @@ import { LptSolvableComponent } from './list-tests/lpt-solvable/lpt-solvable.com
 import { PtestsSolvableUserComponent } from './ptests-solvable-user/ptests-solvable-user.component';
 import { AnsweringListPQuestionsComponent } from './answering-list-pquestions/answering-list-pquestions.component';
 import { AnsweringPQuestionComponent } from './answering-pquestion/answering-pquestion.component';
+import { PtestAnswersComponent } from './ptest-answers/ptest-answers.component';
+import { PquestionQAnswersComponent } from './pquestion-qanswers/pquestion-qanswers.component';
+import { AnswerComponent } from './answer/answer.component';
+import { AnswerQAnswersComponent } from './answer-qanswers/answer-qanswers.component';
+import { QanswerComponent } from './qanswer/qanswer.component';
 
 export function apiConfigFactory (): Configuration {
   const params: ConfigurationParameters = {
@@ -140,7 +145,12 @@ export function apiConfigFactory (): Configuration {
     LptSolvableComponent,
     PtestsSolvableUserComponent,
     AnsweringListPQuestionsComponent,
-    AnsweringPQuestionComponent
+    AnsweringPQuestionComponent,
+    PtestAnswersComponent,
+    PquestionQAnswersComponent,
+    AnswerComponent,
+    AnswerQAnswersComponent,
+    QanswerComponent
   ],
   imports: [
     BrowserModule,
