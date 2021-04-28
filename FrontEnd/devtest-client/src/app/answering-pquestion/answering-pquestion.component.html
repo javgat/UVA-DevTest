@@ -2,13 +2,89 @@
 <div class="mt-5">
     <div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message" role="alert">
         {{getMensaje().texto}}</div>
+    <button class="button btn btn-outline-primary m-3" [routerLink]="['/pt', testid, 'answering']">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+            class="bi bi-chevron-double-left" viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+                d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+            <path fill-rule="evenodd"
+                d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+        </svg>
+        Volver
+    </button>
     <h3>Respondiendo a la pregunta {{pregunta.title}}</h3>
     <p>Valor: {{pregunta.valorFinal}} puntos</p>
     <p>Tiempo estimado: {{pregunta.estimatedTime}} minutos</p>
     <p>Tipo: {{tipoPrint(pregunta.tipoPregunta, pregunta.eleccionUnica)}}</p>
     <p class="card-text"><span class="badge bg-danger" *ngIf="!(pregunta.isRespondida || false)">No
-        respondida</span> <span class="badge bg-success"
-        *ngIf="(pregunta.isRespondida || false)">Respondida</span></p>
+            respondida</span> <span class="badge bg-success" *ngIf="(pregunta.isRespondida || false)">Respondida</span>
+    </p>
+    <div class="my-3" *ngIf="(pregunta.isRespondida || false)">
+        <a class="link-dark" role="button" data-bs-toggle="modal" data-bs-target="#deleteQAnswerModal">Borrar respuesta</a>
+
+        <!-- Modal borrar respuesta-->
+        <div class="modal fade" id="deleteQAnswerModal" tabindex="-1" aria-labelledby="deleteQAnswerModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteQAnswerModalLabel">¿Borrar respuesta de la pregunta?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Si borras la respuesta la pregunta se marcará como no respondida
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
+                            (click)="borrarRespuestaClick()">Borrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
     <h4>Enunciado:</h4>
     <p><span style="white-space: pre-line">{{pregunta.question}}</span></p>
+    <h4 class="my-3">Respuesta:</h4>
+    <div class="my-3" *ngIf="pregunta.tipoPregunta=='string'">
+        <h5>Respuesta registrada:</h5>
+        <p><span style="white-space: pre-line">{{questionAnswer.respuesta}}</span></p>
+        <form (ngSubmit)="sendTextRespuestaClick()">
+            <div class="input-group my-3">
+                <input type="text" class="form-control" name="inputAddRespuesta" [(ngModel)]="newRespuesta" required />
+            </div>
+            <input class="button btn btn-primary" type="submit" value="Guardar respuesta" />
+        </form>
+    </div>
+    <div class="m-3" *ngIf="pregunta.tipoPregunta=='opciones'">
+        <div *ngIf="!(pregunta.eleccionUnica || false)">
+            <form (ngSubmit)="sendRespuestaTipoTest()">
+                <div class="form-check" *ngFor="let option of options">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheck{{option.indice}}"
+                        (change)="pressedCheckbox(option.indice)" [checked]="isChecked(option.indice)">
+                    <label class="form-check-label" for="flexCheck{{option.indice}}">
+                        {{option.texto}}
+                    </label>
+                </div>
+                <input class="button btn btn-primary my-3" type="submit" value="Guardar respuesta" />
+            </form>
+        </div>
+        <div *ngIf="(pregunta.eleccionUnica || false)">
+            <form (ngSubmit)="sendRespuestaTipoTest()">
+                <div class="form-check" *ngFor="let option of options">
+                    <input class="form-check-input" type="radio" name="flexRadioRespuesta"
+                        id="flexRadio{{option.indice}}" [checked]="isChecked(option.indice)"
+                        (change)="pressedRadio(option.indice)">
+                    <label class="form-check-label" for="flexRadio{{option.indice}}">
+                        {{option.texto}}
+                    </label>
+                </div>
+                <input class="button btn btn-primary my-3" type="submit" value="Guardar respuesta" />
+            </form>
+        </div>
+    </div>
+    <div class="m-3" *ngIf="pregunta.tipoPregunta=='codigo'">
+        <p>TODO:</p>
+    </div>
 </div>

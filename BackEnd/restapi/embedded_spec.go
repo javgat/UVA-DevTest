@@ -596,6 +596,55 @@ func init() {
             "$ref": "#/responses/InternalServerError"
           }
         }
+      },
+      "delete": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Deletes an answers's questionAnswer. Only if answer is open",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "answer"
+        ],
+        "summary": "Deletes an answer's questionAnswer. Only if answer is open",
+        "operationId": "DeleteQuestionAnswerFromAnswer",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the answer",
+            "name": "answerid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the question it is answering",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "QuestionAnswer deleted"
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
       }
     },
     "/answers/{answerid}/qanswers/{questionid}/review": {
@@ -715,14 +764,14 @@ func init() {
             "BearerCookie": []
           }
         ],
-        "description": "Returns an answer question's questionAnswers. It should be only one",
+        "description": "Returns an answer question's questionAnswers. It must be only one",
         "produces": [
           "application/json"
         ],
         "tags": [
           "answer"
         ],
-        "summary": "Returns an answer question's questionAnswers. It should be only one",
+        "summary": "Returns an answer question's questionAnswers. It must be only one",
         "operationId": "GetQuestionAnswersFromAnswerAndQuestion",
         "parameters": [
           {
@@ -9346,6 +9395,64 @@ func init() {
             "description": "Internal error"
           }
         }
+      },
+      "delete": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Deletes an answers's questionAnswer. Only if answer is open",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "answer"
+        ],
+        "summary": "Deletes an answer's questionAnswer. Only if answer is open",
+        "operationId": "DeleteQuestionAnswerFromAnswer",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the answer",
+            "name": "answerid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the question it is answering",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "QuestionAnswer deleted"
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
       }
     },
     "/answers/{answerid}/qanswers/{questionid}/review": {
@@ -9483,14 +9590,14 @@ func init() {
             "BearerCookie": []
           }
         ],
-        "description": "Returns an answer question's questionAnswers. It should be only one",
+        "description": "Returns an answer question's questionAnswers. It must be only one",
         "produces": [
           "application/json"
         ],
         "tags": [
           "answer"
         ],
-        "summary": "Returns an answer question's questionAnswers. It should be only one",
+        "summary": "Returns an answer question's questionAnswers. It must be only one",
         "operationId": "GetQuestionAnswersFromAnswerAndQuestion",
         "parameters": [
           {

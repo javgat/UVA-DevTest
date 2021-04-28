@@ -60,6 +60,57 @@ export class AnswerService {
 
 
     /**
+     * Deletes an answer&#39;s questionAnswer. Only if answer is open
+     * Deletes an answers&#39;s questionAnswer. Only if answer is open
+     * @param answerid Id of the answer
+     * @param questionid Id of the question it is answering
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public deleteQuestionAnswerFromAnswer(answerid: number, questionid: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public deleteQuestionAnswerFromAnswer(answerid: number, questionid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public deleteQuestionAnswerFromAnswer(answerid: number, questionid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public deleteQuestionAnswerFromAnswer(answerid: number, questionid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (answerid === null || answerid === undefined) {
+            throw new Error('Required parameter answerid was null or undefined when calling deleteQuestionAnswerFromAnswer.');
+        }
+
+        if (questionid === null || questionid === undefined) {
+            throw new Error('Required parameter questionid was null or undefined when calling deleteQuestionAnswerFromAnswer.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.delete<any>(`${this.basePath}/answers/${encodeURIComponent(String(answerid))}/qanswers/${encodeURIComponent(String(questionid))}`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Finishes an answer
      * Finishes an answers
      * @param answerid Id of the answer

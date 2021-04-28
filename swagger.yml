@@ -5214,6 +5214,38 @@ paths:
           $ref: '#/responses/GoneError'
         500:
           $ref: '#/responses/InternalServerError'
+    delete:
+      security:
+        - BearerCookie: []
+      tags:
+      - answer
+      summary: Deletes an answer's questionAnswer. Only if answer is open
+      operationId: DeleteQuestionAnswerFromAnswer
+      description: Deletes an answers's questionAnswer. Only if answer is open
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: answerid
+        description: Id of the answer
+        required: true
+        type: integer
+      - in: path
+        name: questionid
+        description: Id of the question it is answering
+        required: true
+        type: integer
+      responses:
+        200:
+          description: QuestionAnswer deleted
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
 
   /answers/{answerid}/qanswers/{questionid}/review:
     put:

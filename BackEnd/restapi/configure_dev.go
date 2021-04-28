@@ -281,10 +281,11 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 	api.AnswerGetAnswerHandler = answer.GetAnswerHandlerFunc(handlers.GetAnswer)          // GET /answers/{answerid}
 	api.AnswerFinishAnswerHandler = answer.FinishAnswerHandlerFunc(handlers.FinishAnswer) // PUT /answers/{answerid}
 
-	api.AnswerGetQuestionAnswersFromAnswerHandler = answer.GetQuestionAnswersFromAnswerHandlerFunc(handlers.GetQuestionAnswers) // GET /answers/{answerid}/qanswers
-	api.AnswerPostQuestionAnswerHandler = answer.PostQuestionAnswerHandlerFunc(handlers.PostQuestionAnswer)                     // POST /answers/{answerid}/qanswers
-	api.AnswerGetQuestionAnswerFromAnswerHandler = answer.GetQuestionAnswerFromAnswerHandlerFunc(handlers.GetQuestionAnswer)    // GET /answers/{answerid}/qanswers/{questionid}
-	api.AnswerPutQuestionAnswerFromAnswerHandler = answer.PutQuestionAnswerFromAnswerHandlerFunc(handlers.PutQuestionAnswer)    // PUT /answers/{answerid}/qanswers/{questionid}
+	api.AnswerGetQuestionAnswersFromAnswerHandler = answer.GetQuestionAnswersFromAnswerHandlerFunc(handlers.GetQuestionAnswers)       // GET /answers/{answerid}/qanswers
+	api.AnswerPostQuestionAnswerHandler = answer.PostQuestionAnswerHandlerFunc(handlers.PostQuestionAnswer)                           // POST /answers/{answerid}/qanswers
+	api.AnswerGetQuestionAnswerFromAnswerHandler = answer.GetQuestionAnswerFromAnswerHandlerFunc(handlers.GetQuestionAnswer)          // GET /answers/{answerid}/qanswers/{questionid}
+	api.AnswerPutQuestionAnswerFromAnswerHandler = answer.PutQuestionAnswerFromAnswerHandlerFunc(handlers.PutQuestionAnswer)          // PUT /answers/{answerid}/qanswers/{questionid}
+	api.AnswerDeleteQuestionAnswerFromAnswerHandler = answer.DeleteQuestionAnswerFromAnswerHandlerFunc(handlers.DeleteQuestionAnswer) // DELETE /answers/{answerid}/qanswers/{questionid}
 
 	api.AnswerPutReviewHandler = answer.PutReviewHandlerFunc(handlers.PutReview) // PUT /answers/{answerid}/qanswers/{questionid}/review
 

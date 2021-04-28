@@ -181,6 +181,24 @@ func PutQuestionAnswer(params answer.PutQuestionAnswerFromAnswerParams, u *model
 	return answer.NewPutQuestionAnswerFromAnswerForbidden()
 }
 
+// DELETE /answers/{answerid}/qanswers/{questionid}
+// Auth: Admin OR AnswerOwner
+// Req: Question no finished
+func DeleteQuestionAnswer(params answer.DeleteQuestionAnswerFromAnswerParams, u *models.User) middleware.Responder {
+	if !isAnswerFinished(params.Answerid) && (isAdmin(u) || isAnswerOwner(params.Answerid, u)) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			err = dao.DeleteQuestionAnswer(db, params.Answerid, params.Questionid)
+			if err == nil {
+				return answer.NewDeleteQuestionAnswerFromAnswerOK()
+			}
+		}
+		log.Println("Error en answers_handler DeleteQuestionAnswer(): ", err)
+		return answer.NewDeleteQuestionAnswerFromAnswerInternalServerError()
+	}
+	return answer.NewDeleteQuestionAnswerFromAnswerForbidden()
+}
+
 func isAnswerTestAdmin(u *models.User, answerid int64) bool {
 	db, err := dbconnection.ConnectDb()
 	if err == nil {

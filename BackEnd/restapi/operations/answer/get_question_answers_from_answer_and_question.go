@@ -33,9 +33,9 @@ func NewGetQuestionAnswersFromAnswerAndQuestion(ctx *middleware.Context, handler
 
 /* GetQuestionAnswersFromAnswerAndQuestion swagger:route GET /answers/{answerid}/questions/{questionid}/qanswers answer getQuestionAnswersFromAnswerAndQuestion
 
-Returns an answer question's questionAnswers. It should be only one
+Returns an answer question's questionAnswers. It must be only one
 
-Returns an answer question's questionAnswers. It should be only one
+Returns an answer question's questionAnswers. It must be only one
 
 */
 type GetQuestionAnswersFromAnswerAndQuestion struct {

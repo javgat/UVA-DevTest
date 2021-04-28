@@ -225,6 +225,24 @@ func PutQuestionAnswer(db *sql.DB, answerid int64, questionid int64, qa *models.
 	return err
 }
 
+func DeleteQuestionAnswer(db *sql.DB, answerid int64, questionid int64) error {
+	if db == nil {
+		return errors.New(errorDBNil)
+	}
+	query, err := db.Prepare("DELETE FROM RespuestaPregunta WHERE respuestaExamenid=? AND preguntaid=?")
+	if err == nil {
+		defer query.Close()
+		_, err = query.Exec(answerid, questionid)
+		if err == nil {
+			err = DeleteIndiceOpcionesQuestionAnswer(db, answerid, questionid)
+			if err == nil {
+				return err
+			}
+		}
+	}
+	return err
+}
+
 func PutReview(db *sql.DB, answerid int64, questionid int64, rev *models.Review) error {
 	if db == nil {
 		return errors.New(errorDBNil)

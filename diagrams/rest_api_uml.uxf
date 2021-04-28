@@ -546,7 +546,8 @@ bg=yellow
 --
 --
 + &lt;&lt;GET&gt;&gt; getQuestionAnswer(): QuestionAnswer
-+ &lt;&lt;PUT&gt;&gt; putQuestionAnswer(q: QuestionAnswer): void</panel_attributes>
++ &lt;&lt;PUT&gt;&gt; putQuestionAnswer(q: QuestionAnswer): void
++ &lt;&lt;DELETE&gt;&gt; deleteQuestionAnswer(): void</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -580,12 +581,12 @@ bg=yellow
     <coordinates>
       <x>5664</x>
       <y>632</y>
-      <w>152</w>
+      <w>112</w>
       <h>88</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
-/{questionanswerid}</panel_attributes>
+/{questionid}</panel_attributes>
     <additional_attributes>10.0;90.0;10.0;10.0</additional_attributes>
   </element>
   <element>
@@ -2511,14 +2512,14 @@ bg=yellow
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>5208</x>
-      <y>472</y>
-      <w>376</w>
-      <h>120</h>
+      <x>5184</x>
+      <y>480</y>
+      <w>400</w>
+      <h>112</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
 /questions</panel_attributes>
-    <additional_attributes>10.0;130.0;10.0;80.0;120.0;10.0;450.0;10.0</additional_attributes>
+    <additional_attributes>10.0;120.0;10.0;60.0;120.0;10.0;480.0;10.0</additional_attributes>
   </element>
 </diagram>

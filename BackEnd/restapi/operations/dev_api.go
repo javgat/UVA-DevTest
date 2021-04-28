@@ -91,6 +91,9 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		QuestionDeleteQuestionHandler: question.DeleteQuestionHandlerFunc(func(params question.DeleteQuestionParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation question.DeleteQuestion has not yet been implemented")
 		}),
+		AnswerDeleteQuestionAnswerFromAnswerHandler: answer.DeleteQuestionAnswerFromAnswerHandlerFunc(func(params answer.DeleteQuestionAnswerFromAnswerParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation answer.DeleteQuestionAnswerFromAnswer has not yet been implemented")
+		}),
 		TestDeleteTestHandler: test.DeleteTestHandlerFunc(func(params test.DeleteTestParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation test.DeleteTest has not yet been implemented")
 		}),
@@ -598,6 +601,8 @@ type DevAPI struct {
 	QuestionDeleteOptionHandler question.DeleteOptionHandler
 	// QuestionDeleteQuestionHandler sets the operation handler for the delete question operation
 	QuestionDeleteQuestionHandler question.DeleteQuestionHandler
+	// AnswerDeleteQuestionAnswerFromAnswerHandler sets the operation handler for the delete question answer from answer operation
+	AnswerDeleteQuestionAnswerFromAnswerHandler answer.DeleteQuestionAnswerFromAnswerHandler
 	// TestDeleteTestHandler sets the operation handler for the delete test operation
 	TestDeleteTestHandler test.DeleteTestHandler
 	// TeamDeleteUserFromTeamHandler sets the operation handler for the delete user from team operation
@@ -1002,6 +1007,9 @@ func (o *DevAPI) Validate() error {
 	}
 	if o.QuestionDeleteQuestionHandler == nil {
 		unregistered = append(unregistered, "question.DeleteQuestionHandler")
+	}
+	if o.AnswerDeleteQuestionAnswerFromAnswerHandler == nil {
+		unregistered = append(unregistered, "answer.DeleteQuestionAnswerFromAnswerHandler")
 	}
 	if o.TestDeleteTestHandler == nil {
 		unregistered = append(unregistered, "test.DeleteTestHandler")
@@ -1583,6 +1591,10 @@ func (o *DevAPI) initHandlerCache() {
 		o.handlers["DELETE"] = make(map[string]http.Handler)
 	}
 	o.handlers["DELETE"]["/questions/{questionid}"] = question.NewDeleteQuestion(o.context, o.QuestionDeleteQuestionHandler)
+	if o.handlers["DELETE"] == nil {
+		o.handlers["DELETE"] = make(map[string]http.Handler)
+	}
+	o.handlers["DELETE"]["/answers/{answerid}/qanswers/{questionid}"] = answer.NewDeleteQuestionAnswerFromAnswer(o.context, o.AnswerDeleteQuestionAnswerFromAnswerHandler)
 	if o.handlers["DELETE"] == nil {
 		o.handlers["DELETE"] = make(map[string]http.Handler)
 	}
