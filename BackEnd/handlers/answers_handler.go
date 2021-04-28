@@ -149,7 +149,10 @@ func GetQuestionAnswer(params answer.GetQuestionAnswerFromAnswerParams, u *model
 		if err == nil {
 			var qas *dao.QuestionAnswer
 			qas, err = dao.GetQuestionAnswerFromAnswer(db, params.Answerid, params.Questionid)
-			if err == nil && qas != nil {
+			if err == nil {
+				if qas == nil {
+					return answer.NewGetQuestionAnswerFromAnswerGone()
+				}
 				mqas := dao.ToModelQuestionAnswer(qas)
 				return answer.NewGetQuestionAnswerFromAnswerOK().WithPayload(mqas)
 			}

@@ -6,7 +6,9 @@
     <p>Valor: {{pregunta.valorFinal}} puntos</p>
     <p>Tiempo estimado: {{pregunta.estimatedTime}} minutos</p>
     <p>Tipo: {{tipoPrint(pregunta.tipoPregunta, pregunta.eleccionUnica)}}</p>
-    <p><span class="badge bg-danger">No respondida</span> <span class="badge bg-success">Respondida</span></p>
+    <p class="card-text"><span class="badge bg-danger" *ngIf="!(pregunta.isRespondida || false)">No
+        respondida</span> <span class="badge bg-success"
+        *ngIf="(pregunta.isRespondida || false)">Respondida</span></p>
     <h4>Enunciado:</h4>
     <p><span style="white-space: pre-line">{{pregunta.question}}</span></p>
 </div>

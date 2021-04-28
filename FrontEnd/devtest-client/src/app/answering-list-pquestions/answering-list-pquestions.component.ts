@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Answer, PublishedTestService, Question, Test, UserService } from '@javgat/devtest-api';
+import { Answer, AnswerService, PublishedTestService, Question, Test, UserService } from '@javgat/devtest-api';
 import { Subscription } from 'rxjs';
 import { LoggedInController } from '../shared/app.controller';
 import { Examen, Mensaje, Tipo, tipoPrint } from '../shared/app.model';
@@ -19,7 +19,7 @@ export class AnsweringListPQuestionsComponent extends LoggedInController impleme
   openAnswer?: Answer
   test: Test
   preguntas: Question[]
-  constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private route: ActivatedRoute, private ptestS: PublishedTestService) {
+  constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private route: ActivatedRoute, private ptestS: PublishedTestService, private answerS: AnswerService) {
     super(session, router, data, userS);
     this.testid = 0
     this.preguntas = []
@@ -55,6 +55,7 @@ export class AnsweringListPQuestionsComponent extends LoggedInController impleme
         } else {
           this.openAnswer = resp[0]
           this.getPTest(true)
+          this.getPreguntasAnswer(true)
         }
       },
       err => this.handleErrRelog(err, "obtener respuesta no finalizada de usuario en test", primera, this.getOpenAnswer, this)
@@ -65,7 +66,6 @@ export class AnsweringListPQuestionsComponent extends LoggedInController impleme
     this.userS.getSolvableTestFromUser(this.getSessionUser().getUsername(), this.testid).subscribe(
       resp => {
         this.test = Examen.constructorFromTest(resp)
-        this.getPreguntasTest(true)
       },
       err => {
         this.handleErrRelog(err, "obtener test publicado", primera, this.getPTest, this)
@@ -73,19 +73,36 @@ export class AnsweringListPQuestionsComponent extends LoggedInController impleme
     )
   }
 
-  getPreguntasTest(primera: boolean) {
-    this.ptestS.getQuestionsFromPublishedTests(this.testid).subscribe(
+  getPreguntasAnswer(primera: boolean) {
+    if(this.openAnswer == undefined || this.openAnswer.id == undefined) return
+    this.answerS.getQuestionsFromAnswer(this.openAnswer.id).subscribe(
       resp => {
         this.preguntas = resp
       },
       err => {
-        this.handleErrRelog(err, "obtener preguntas de test publicado", primera, this.getPreguntasTest, this)
+        this.handleErrRelog(err, "obtener preguntas de test publicado respondiendo", primera, this.getPreguntasAnswer, this)
       }
     )
   }
 
   tipoPrint(tipo: string, eleccionUnica: boolean | undefined): string{
     return tipoPrint(tipo, eleccionUnica)
+  }
+
+  finishAnswerClick(){
+    this.finishAnswer(true)
+  }
+
+  finishAnswer(primera: boolean){
+    if(this.openAnswer == undefined || this.openAnswer.id == undefined) return
+    this.answerS.finishAnswer(this.openAnswer.id).subscribe(
+      resp => {
+        console.log("respuesta enviada con éxito")
+        this.router.navigate(['/pt', this.testid])
+        this.cambiarMensaje(new Mensaje("respuesta enviada con éxito", Tipo.SUCCESS, true))
+      },
+      err => this.handleErrRelog(err, "marcar como finalizada una respuesta", primera, this.finishAnswer, this)
+    )
   }
 
 }

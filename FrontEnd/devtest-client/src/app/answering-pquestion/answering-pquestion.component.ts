@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Answer, PublishedTestService, Question, UserService } from '@javgat/devtest-api';
+import { Answer, AnswerService, PublishedTestService, Question, UserService } from '@javgat/devtest-api';
 import { Subscription } from 'rxjs';
 import { LoggedInController } from '../shared/app.controller';
 import { Mensaje, Pregunta, Tipo, tipoPrint } from '../shared/app.model';
@@ -20,7 +20,7 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
   openAnswer?: Answer
   pregunta: Question
 
-  constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private route: ActivatedRoute, private ptestS: PublishedTestService) {
+  constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private route: ActivatedRoute, private ptestS: PublishedTestService, private answerS: AnswerService) {
     super(session, router, data, userS);
     this.testid = 0
     this.preguntaid = 0
@@ -63,10 +63,11 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
     )
   }
 
-  getPQuestionFromPTest(primera: boolean){
+  getPQuestionFromPTest(primera: boolean) {
     this.ptestS.getQuestionFromPublishedTests(this.testid, this.preguntaid).subscribe(
       resp => {
         this.pregunta = resp
+        this.getQuestionAnswersQuestion(true)
       },
       err => {
         this.handleErrRelog(err, "obtener pregunta publicada de test publicado", primera, this.getPQuestionFromPTest, this)
@@ -74,8 +75,23 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
     )
   }
 
+  getQuestionAnswersQuestion(primera: boolean) {
+    if (this.openAnswer == undefined || this.openAnswer.id == undefined) return
+    this.answerS.getQuestionAnswerFromAnswer(this.openAnswer.id, this.preguntaid).subscribe(
+      resp => {
+        this.pregunta.isRespondida = true
+      },
+      err => {
+        if (err.status == 410) {
+          this.pregunta.isRespondida = false
+        } else {
+          this.handleErrRelog(err, "obtener respuestas de una pregunta del test realizandose", primera, this.getQuestionAnswersQuestion, this)
+        }
+      }
+    )
+  }
 
-  tipoPrint(tipo: string, eleccionUnica: boolean | undefined): string{
+  tipoPrint(tipo: string, eleccionUnica: boolean | undefined): string {
     return tipoPrint(tipo, eleccionUnica)
   }
 

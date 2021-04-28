@@ -9,8 +9,33 @@
             <h5 class="card-title">{{pregunta.title}}</h5>
             <h6 class="card-subtitle mb-2 text-muted">Valor: {{pregunta.valorFinal}} puntos</h6>
             <h6 class="card-subtitle mb-2 text-muted">Tiempo estimado: {{pregunta.estimatedTime}} minutos</h6>
-            <h6 class="card-subtitle mb-2 text-muted">Tipo: {{tipoPrint(pregunta.tipoPregunta, pregunta.eleccionUnica)}}</h6>
-            <p class="card-text"><span class="badge bg-danger">No respondida</span> <span class="badge bg-success">Respondida</span></p>
+            <h6 class="card-subtitle mb-2 text-muted">Tipo: {{tipoPrint(pregunta.tipoPregunta, pregunta.eleccionUnica)}}
+            </h6>
+            <p class="card-text"><span class="badge bg-danger" *ngIf="!(pregunta.isRespondida || false)">No
+                    respondida</span> <span class="badge bg-success"
+                    *ngIf="(pregunta.isRespondida || false)">Respondida</span></p>
+        </div>
+    </div>
+    <p><button class="btn btn-success btn-lg" type="button" data-bs-toggle="modal"
+            data-bs-target="#finnishAnswerModal">Enviar todo y terminar</button></p>
+    <!-- Modal iniciar respuesta -->
+    <div class="modal fade" id="finnishAnswerModal" tabindex="-1" aria-labelledby="finnishAnswerModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="finnishAnswerModalLabel">Enviar todo y terminar</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Una vez finalices la respuesta no podrás modificar los datos enviados
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal"
+                        (click)="finishAnswerClick()">Enviar</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
