@@ -19,6 +19,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { Answer } from '../model/answer';
+import { Question } from '../model/question';
 import { QuestionAnswer } from '../model/questionAnswer';
 import { Review } from '../model/review';
 
@@ -279,6 +280,103 @@ export class AnswerService {
         ];
 
         return this.httpClient.get<Array<QuestionAnswer>>(`${this.basePath}/answers/${encodeURIComponent(String(answerid))}/qanswers`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns an answer question&#39;s questionAnswers. It must be only one
+     * Returns an answer question&#39;s questionAnswers. It must be only one
+     * @param answerid Id of the answer
+     * @param questionid Id of the question
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getQuestionAnswersFromAnswerAndQuestion(answerid: number, questionid: number, observe?: 'body', reportProgress?: boolean): Observable<Array<QuestionAnswer>>;
+    public getQuestionAnswersFromAnswerAndQuestion(answerid: number, questionid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<QuestionAnswer>>>;
+    public getQuestionAnswersFromAnswerAndQuestion(answerid: number, questionid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<QuestionAnswer>>>;
+    public getQuestionAnswersFromAnswerAndQuestion(answerid: number, questionid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (answerid === null || answerid === undefined) {
+            throw new Error('Required parameter answerid was null or undefined when calling getQuestionAnswersFromAnswerAndQuestion.');
+        }
+
+        if (questionid === null || questionid === undefined) {
+            throw new Error('Required parameter questionid was null or undefined when calling getQuestionAnswersFromAnswerAndQuestion.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Array<QuestionAnswer>>(`${this.basePath}/answers/${encodeURIComponent(String(answerid))}/questions/${encodeURIComponent(String(questionid))}/qanswers`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns all published questions in the test related to the answer. The DTOs will contain isRespondida
+     * Returns all published questions in the test related to the answer. The DTOs will contain isRespondida
+     * @param answerid Id of the answer
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getQuestionsFromAnswer(answerid: number, observe?: 'body', reportProgress?: boolean): Observable<Array<Question>>;
+    public getQuestionsFromAnswer(answerid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Question>>>;
+    public getQuestionsFromAnswer(answerid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Question>>>;
+    public getQuestionsFromAnswer(answerid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (answerid === null || answerid === undefined) {
+            throw new Error('Required parameter answerid was null or undefined when calling getQuestionsFromAnswer.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Array<Question>>(`${this.basePath}/answers/${encodeURIComponent(String(answerid))}/questions`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

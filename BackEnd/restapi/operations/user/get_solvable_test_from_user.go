@@ -33,9 +33,9 @@ func NewGetSolvableTestFromUser(ctx *middleware.Context, handler GetSolvableTest
 
 /* GetSolvableTestFromUser swagger:route GET /users/{username}/solvableTests/{testid} user getSolvableTestFromUser
 
-Returns a publishedTest that the user can answer, including public ones and team ones.
+Returns a publishedTest that the user can answer, including public ones and team ones. The Test DTO will contain the number of answers the user has for the test
 
-Returns a publishedTest that the user can answer, including public ones and team ones.
+Returns a publishedTest that the user can answer, including public ones and team ones.  The Test DTO will contain the number of answers the user has for the test
 
 */
 type GetSolvableTestFromUser struct {

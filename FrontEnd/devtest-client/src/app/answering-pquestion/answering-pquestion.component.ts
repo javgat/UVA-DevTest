@@ -33,8 +33,8 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
         this.getOpenAnswer(true)
       }
     });
-    
   }
+
   ngOnInit(): void {
   }
 

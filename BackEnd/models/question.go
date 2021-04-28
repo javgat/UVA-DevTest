@@ -49,6 +49,10 @@ type Question struct {
 	// Example: 1
 	ID int64 `json:"id,omitempty"`
 
+	// only present in GetQuestionsFromAnswer
+	// Example: false
+	IsRespondida bool `json:"isRespondida,omitempty"`
+
 	// question
 	// Example: ¿Cual es el lenguaje que tiene un nombre más largo de todos?
 	// Required: true

@@ -231,7 +231,7 @@ func isTestInvited(u *models.User, testid int64) bool {
 	return false
 }
 
-func isTestStartedByUser(u *models.User, testid int64) (bool, error) {
+func isTestOpenByUser(u *models.User, testid int64) (bool, error) {
 	db, err := dbconnection.ConnectDb()
 	if err == nil {
 		var oa []*dao.Answer
@@ -244,8 +244,8 @@ func isTestStartedByUser(u *models.User, testid int64) (bool, error) {
 	return false, err
 }
 
-func isTestStartedByUserAuth(u *models.User, testid int64) bool {
-	b, e := isTestStartedByUser(u, testid)
+func isTestOpenByUserAuth(u *models.User, testid int64) bool {
+	b, e := isTestOpenByUser(u, testid)
 	if e == nil {
 		return b
 	}
@@ -253,7 +253,7 @@ func isTestStartedByUserAuth(u *models.User, testid int64) bool {
 }
 
 // GetQuestionsPTest GET /publishedTests/{testid}/questions
-// Auth: (TestAdmin or Admin) OR ((ALL AND accesoPublico OR TestInvited) AND TestStartedByThem)
+// Auth: (TestAdmin or Admin) OR ((ALL AND accesoPublico OR TestInvited) AND TestOpenByThem)
 func GetQuestionsPTest(params published_test.GetQuestionsFromPublishedTestsParams, u *models.User) middleware.Responder {
 	db, err := dbconnection.ConnectDb()
 	if err == nil {
@@ -261,7 +261,7 @@ func GetQuestionsPTest(params published_test.GetQuestionsFromPublishedTestsParam
 		ts, err = dao.GetPublishedTest(db, params.Testid)
 		if err == nil && ts != nil {
 			if !(isAdmin(u) || isTestAdmin(u, params.Testid)) {
-				if !(isTestStartedByUserAuth(u, params.Testid) && (*ts.AccesoPublico || isTestInvited(u, params.Testid))) {
+				if !(isTestOpenByUserAuth(u, params.Testid) && (*ts.AccesoPublico || isTestInvited(u, params.Testid))) {
 					return published_test.NewGetQuestionsFromPublishedTestsForbidden()
 				}
 			}
@@ -288,7 +288,7 @@ func GetQuestionPTest(params published_test.GetQuestionFromPublishedTestsParams,
 		ts, err = dao.GetPublishedTest(db, params.Testid)
 		if err == nil && ts != nil {
 			if !(isAdmin(u) || isTestAdmin(u, params.Testid)) {
-				if !(isTestStartedByUserAuth(u, params.Testid) && (*ts.AccesoPublico || isTestInvited(u, params.Testid))) {
+				if !(isTestOpenByUserAuth(u, params.Testid) && (*ts.AccesoPublico || isTestInvited(u, params.Testid))) {
 					return published_test.NewGetQuestionFromPublishedTestsForbidden()
 				}
 			}

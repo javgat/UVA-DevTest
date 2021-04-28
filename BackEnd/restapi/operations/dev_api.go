@@ -265,6 +265,9 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		AnswerGetQuestionAnswersFromAnswerHandler: answer.GetQuestionAnswersFromAnswerHandlerFunc(func(params answer.GetQuestionAnswersFromAnswerParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation answer.GetQuestionAnswersFromAnswer has not yet been implemented")
 		}),
+		AnswerGetQuestionAnswersFromAnswerAndQuestionHandler: answer.GetQuestionAnswersFromAnswerAndQuestionHandlerFunc(func(params answer.GetQuestionAnswersFromAnswerAndQuestionParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation answer.GetQuestionAnswersFromAnswerAndQuestion has not yet been implemented")
+		}),
 		PublishedTestGetQuestionAnswersFromPublishedTestQuestionHandler: published_test.GetQuestionAnswersFromPublishedTestQuestionHandlerFunc(func(params published_test.GetQuestionAnswersFromPublishedTestQuestionParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation published_test.GetQuestionAnswersFromPublishedTestQuestion has not yet been implemented")
 		}),
@@ -282,6 +285,9 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		}),
 		QuestionGetQuestionsHandler: question.GetQuestionsHandlerFunc(func(params question.GetQuestionsParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation question.GetQuestions has not yet been implemented")
+		}),
+		AnswerGetQuestionsFromAnswerHandler: answer.GetQuestionsFromAnswerHandlerFunc(func(params answer.GetQuestionsFromAnswerParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation answer.GetQuestionsFromAnswer has not yet been implemented")
 		}),
 		PublishedTestGetQuestionsFromPublishedTestsHandler: published_test.GetQuestionsFromPublishedTestsHandlerFunc(func(params published_test.GetQuestionsFromPublishedTestsParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation published_test.GetQuestionsFromPublishedTests has not yet been implemented")
@@ -708,6 +714,8 @@ type DevAPI struct {
 	AnswerGetQuestionAnswerFromAnswerHandler answer.GetQuestionAnswerFromAnswerHandler
 	// AnswerGetQuestionAnswersFromAnswerHandler sets the operation handler for the get question answers from answer operation
 	AnswerGetQuestionAnswersFromAnswerHandler answer.GetQuestionAnswersFromAnswerHandler
+	// AnswerGetQuestionAnswersFromAnswerAndQuestionHandler sets the operation handler for the get question answers from answer and question operation
+	AnswerGetQuestionAnswersFromAnswerAndQuestionHandler answer.GetQuestionAnswersFromAnswerAndQuestionHandler
 	// PublishedTestGetQuestionAnswersFromPublishedTestQuestionHandler sets the operation handler for the get question answers from published test question operation
 	PublishedTestGetQuestionAnswersFromPublishedTestQuestionHandler published_test.GetQuestionAnswersFromPublishedTestQuestionHandler
 	// PublishedTestGetQuestionFromPublishedTestsHandler sets the operation handler for the get question from published tests operation
@@ -720,6 +728,8 @@ type DevAPI struct {
 	UserGetQuestionFromUserHandler user.GetQuestionFromUserHandler
 	// QuestionGetQuestionsHandler sets the operation handler for the get questions operation
 	QuestionGetQuestionsHandler question.GetQuestionsHandler
+	// AnswerGetQuestionsFromAnswerHandler sets the operation handler for the get questions from answer operation
+	AnswerGetQuestionsFromAnswerHandler answer.GetQuestionsFromAnswerHandler
 	// PublishedTestGetQuestionsFromPublishedTestsHandler sets the operation handler for the get questions from published tests operation
 	PublishedTestGetQuestionsFromPublishedTestsHandler published_test.GetQuestionsFromPublishedTestsHandler
 	// TagGetQuestionsFromTagHandler sets the operation handler for the get questions from tag operation
@@ -1167,6 +1177,9 @@ func (o *DevAPI) Validate() error {
 	if o.AnswerGetQuestionAnswersFromAnswerHandler == nil {
 		unregistered = append(unregistered, "answer.GetQuestionAnswersFromAnswerHandler")
 	}
+	if o.AnswerGetQuestionAnswersFromAnswerAndQuestionHandler == nil {
+		unregistered = append(unregistered, "answer.GetQuestionAnswersFromAnswerAndQuestionHandler")
+	}
 	if o.PublishedTestGetQuestionAnswersFromPublishedTestQuestionHandler == nil {
 		unregistered = append(unregistered, "published_test.GetQuestionAnswersFromPublishedTestQuestionHandler")
 	}
@@ -1184,6 +1197,9 @@ func (o *DevAPI) Validate() error {
 	}
 	if o.QuestionGetQuestionsHandler == nil {
 		unregistered = append(unregistered, "question.GetQuestionsHandler")
+	}
+	if o.AnswerGetQuestionsFromAnswerHandler == nil {
+		unregistered = append(unregistered, "answer.GetQuestionsFromAnswerHandler")
 	}
 	if o.PublishedTestGetQuestionsFromPublishedTestsHandler == nil {
 		unregistered = append(unregistered, "published_test.GetQuestionsFromPublishedTestsHandler")
@@ -1802,6 +1818,10 @@ func (o *DevAPI) initHandlerCache() {
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
+	o.handlers["GET"]["/answers/{answerid}/questions/{questionid}/qanswers"] = answer.NewGetQuestionAnswersFromAnswerAndQuestion(o.context, o.AnswerGetQuestionAnswersFromAnswerAndQuestionHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
 	o.handlers["GET"]["/publishedTests/{testid}/questions/{questionid}/qanswers"] = published_test.NewGetQuestionAnswersFromPublishedTestQuestion(o.context, o.PublishedTestGetQuestionAnswersFromPublishedTestQuestionHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
@@ -1823,6 +1843,10 @@ func (o *DevAPI) initHandlerCache() {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
 	o.handlers["GET"]["/questions"] = question.NewGetQuestions(o.context, o.QuestionGetQuestionsHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/answers/{answerid}/questions"] = answer.NewGetQuestionsFromAnswer(o.context, o.AnswerGetQuestionsFromAnswerHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}

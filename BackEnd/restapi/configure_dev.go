@@ -288,6 +288,10 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 
 	api.AnswerPutReviewHandler = answer.PutReviewHandlerFunc(handlers.PutReview) // PUT /answers/{answerid}/qanswers/{questionid}/review
 
+	api.AnswerGetQuestionsFromAnswerHandler = answer.GetQuestionsFromAnswerHandlerFunc(handlers.GetQuestionsFromAnswer) // GET /answers/{answerid}/questions
+
+	api.AnswerGetQuestionAnswersFromAnswerAndQuestionHandler = answer.GetQuestionAnswersFromAnswerAndQuestionHandlerFunc(handlers.GetQAnswerFromAnswerAndQuestion) // GET /answers/{answerid}/questions/{questionid}/qanswers
+
 	// /tags
 
 	api.TagGetTagsHandler = tag.GetTagsHandlerFunc(handlers.GetTags)                                                 // GET /tags

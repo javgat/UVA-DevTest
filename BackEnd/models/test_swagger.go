@@ -29,7 +29,7 @@ type Test struct {
 	// Required: true
 	AccesoPublicoNoPublicado *bool `json:"accesoPublicoNoPublicado"`
 
-	// cantidad respuestas del usuario
+	// only present in GetSolvableTestFromUser
 	// Example: 1
 	CantidadRespuestasDelUsuario int64 `json:"cantidadRespuestasDelUsuario,omitempty"`
 

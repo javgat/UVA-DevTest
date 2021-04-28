@@ -24,6 +24,10 @@ export interface Question {
     tipoPregunta: Question.TipoPreguntaEnum;
     valorFinal?: number;
     accesoPublicoNoPublicada: boolean;
+    /**
+     * only present in GetQuestionsFromAnswer
+     */
+    isRespondida?: boolean;
 }
 export namespace Question {
     export type TipoPreguntaEnum = 'opciones' | 'string' | 'codigo';

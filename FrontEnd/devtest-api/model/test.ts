@@ -22,5 +22,8 @@ export interface Test {
     accesoPublicoNoPublicado: boolean;
     horaCreacion?: string;
     originalTestID?: number;
+    /**
+     * only present in GetSolvableTestFromUser
+     */
     cantidadRespuestasDelUsuario?: number;
 }

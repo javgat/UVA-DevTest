@@ -5,6 +5,7 @@
 package handlers
 
 import (
+	"database/sql"
 	"log"
 	"uva-devtest/models"
 	"uva-devtest/persistence/dao"
@@ -205,4 +206,81 @@ func PutReview(params answer.PutReviewParams, u *models.User) middleware.Respond
 
 	}
 	return answer.NewPutReviewForbidden()
+}
+
+func fillQuestionsIsRespondida(db *sql.DB, mqs []*models.Question, answerid int64) error {
+	var qan *dao.QuestionAnswer
+	var err error
+	for _, mq := range mqs {
+		qan, err = dao.GetQuestionAnswerFromAnswer(db, answerid, mq.ID)
+		if err != nil {
+			return err
+		}
+		mq.IsRespondida = qan != nil
+	}
+	return nil
+}
+
+// GET /answers/{answerid}/questions
+// Auth: Admin or User with testStarted or TestAdmin
+func GetQuestionsFromAnswer(params answer.GetQuestionsFromAnswerParams, u *models.User) middleware.Responder {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		var ans *dao.Answer
+		ans, err = dao.GetAnswer(db, params.Answerid)
+		if err == nil {
+			if ans == nil {
+				return answer.NewGetQuestionsFromAnswerGone()
+			}
+			if isAdmin(u) || isTestOpenByUserAuth(u, ans.Testid) || isTestAdmin(u, ans.Testid) {
+				var qs []*dao.Question
+				qs, err = dao.GetQuestionsFromTest(db, ans.Testid)
+				if err == nil {
+					var mqs []*models.Question
+					mqs, err = dao.ToModelQuestions(qs)
+					if err == nil {
+						err = fillQuestionsIsRespondida(db, mqs, params.Answerid)
+						if err == nil {
+							return answer.NewGetQuestionsFromAnswerOK().WithPayload(mqs)
+						}
+					}
+				}
+				log.Println("Error en GetQuestionsFromAnswer() ", err)
+				return answer.NewGetQuestionsFromAnswerInternalServerError()
+			}
+			return answer.NewGetQuestionsFromAnswerForbidden()
+		}
+	}
+	log.Println("Error en GetQuestionsFromAnswer() ", err)
+	return answer.NewGetQuestionsFromAnswerInternalServerError()
+}
+
+// GET /answers/{answerid}/questions/{questionid}/qanswers
+// Auth: Admin or User with testStarted or TestAdmin
+func GetQAnswerFromAnswerAndQuestion(params answer.GetQuestionAnswersFromAnswerAndQuestionParams, u *models.User) middleware.Responder {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		var ans *dao.Answer
+		ans, err = dao.GetAnswer(db, params.Answerid)
+		if err == nil {
+			if ans == nil {
+				return answer.NewGetQuestionAnswersFromAnswerAndQuestionGone()
+			}
+			if isAdmin(u) || isTestOpenByUserAuth(u, ans.Testid) || isTestAdmin(u, ans.Testid) {
+				var qan *dao.QuestionAnswer
+				qan, err = dao.GetQuestionAnswerFromAnswer(db, params.Answerid, params.Questionid)
+				if err == nil {
+					mqa := dao.ToModelQuestionAnswer(qan)
+					if err == nil {
+						return answer.NewGetQuestionAnswersFromAnswerAndQuestionOK().WithPayload([]*models.QuestionAnswer{mqa})
+					}
+				}
+				log.Println("Error en GetQuestionAnswersFromAnswerAndQuestion() ", err)
+				return answer.NewGetQuestionAnswersFromAnswerAndQuestionInternalServerError()
+			}
+			return answer.NewGetQuestionAnswersFromAnswerAndQuestionForbidden()
+		}
+	}
+	log.Println("Error en GetQuestionAnswersFromAnswerAndQuestion() ", err)
+	return answer.NewGetQuestionAnswersFromAnswerAndQuestionInternalServerError()
 }

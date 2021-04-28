@@ -658,6 +658,113 @@ func init() {
         }
       }
     },
+    "/answers/{answerid}/questions": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all published questions in the test related to the answer. The DTOs will contain isRespondida",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "answer"
+        ],
+        "summary": "Returns all published questions in the test related to the answer. The DTOs will contain isRespondida",
+        "operationId": "GetQuestionsFromAnswer",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the answer",
+            "name": "answerid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "questions found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Question"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/answers/{answerid}/questions/{questionid}/qanswers": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns an answer question's questionAnswers. It should be only one",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "answer"
+        ],
+        "summary": "Returns an answer question's questionAnswers. It should be only one",
+        "operationId": "GetQuestionAnswersFromAnswerAndQuestion",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the answer",
+            "name": "answerid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the question",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "QuestionAnswers found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/QuestionAnswer"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
     "/editQuestions": {
       "get": {
         "security": [
@@ -7491,14 +7598,14 @@ func init() {
             "BearerCookie": []
           }
         ],
-        "description": "Returns a publishedTest that the user can answer, including public ones and team ones.",
+        "description": "Returns a publishedTest that the user can answer, including public ones and team ones.  The Test DTO will contain the number of answers the user has for the test",
         "produces": [
           "application/json"
         ],
         "tags": [
           "user"
         ],
-        "summary": "Returns a publishedTest that the user can answer, including public ones and team ones.",
+        "summary": "Returns a publishedTest that the user can answer, including public ones and team ones. The Test DTO will contain the number of answers the user has for the test",
         "operationId": "GetSolvableTestFromUser",
         "parameters": [
           {
@@ -8202,6 +8309,11 @@ func init() {
           "type": "integer",
           "example": 1
         },
+        "isRespondida": {
+          "description": "only present in GetQuestionsFromAnswer",
+          "type": "boolean",
+          "example": false
+        },
         "question": {
           "type": "string",
           "example": "¿Cual es el lenguaje que tiene un nombre más largo de todos?"
@@ -8378,6 +8490,7 @@ func init() {
           "example": true
         },
         "cantidadRespuestasDelUsuario": {
+          "description": "only present in GetSolvableTestFromUser",
           "type": "integer",
           "example": 1
         },
@@ -9304,6 +9417,131 @@ func init() {
         }
       }
     },
+    "/answers/{answerid}/questions": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all published questions in the test related to the answer. The DTOs will contain isRespondida",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "answer"
+        ],
+        "summary": "Returns all published questions in the test related to the answer. The DTOs will contain isRespondida",
+        "operationId": "GetQuestionsFromAnswer",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the answer",
+            "name": "answerid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "questions found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Question"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/answers/{answerid}/questions/{questionid}/qanswers": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns an answer question's questionAnswers. It should be only one",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "answer"
+        ],
+        "summary": "Returns an answer question's questionAnswers. It should be only one",
+        "operationId": "GetQuestionAnswersFromAnswerAndQuestion",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the answer",
+            "name": "answerid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the question",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "QuestionAnswers found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/QuestionAnswer"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
     "/editQuestions": {
       "get": {
         "security": [
@@ -17274,14 +17512,14 @@ func init() {
             "BearerCookie": []
           }
         ],
-        "description": "Returns a publishedTest that the user can answer, including public ones and team ones.",
+        "description": "Returns a publishedTest that the user can answer, including public ones and team ones.  The Test DTO will contain the number of answers the user has for the test",
         "produces": [
           "application/json"
         ],
         "tags": [
           "user"
         ],
-        "summary": "Returns a publishedTest that the user can answer, including public ones and team ones.",
+        "summary": "Returns a publishedTest that the user can answer, including public ones and team ones. The Test DTO will contain the number of answers the user has for the test",
         "operationId": "GetSolvableTestFromUser",
         "parameters": [
           {
@@ -18073,6 +18311,11 @@ func init() {
           "type": "integer",
           "example": 1
         },
+        "isRespondida": {
+          "description": "only present in GetQuestionsFromAnswer",
+          "type": "boolean",
+          "example": false
+        },
         "question": {
           "type": "string",
           "example": "¿Cual es el lenguaje que tiene un nombre más largo de todos?"
@@ -18250,6 +18493,7 @@ func init() {
           "example": true
         },
         "cantidadRespuestasDelUsuario": {
+          "description": "only present in GetSolvableTestFromUser",
           "type": "integer",
           "example": 1
         },

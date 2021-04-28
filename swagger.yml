@@ -5254,6 +5254,76 @@ paths:
           $ref: '#/responses/GoneError'
         500:
           $ref: '#/responses/InternalServerError'
+  
+  /answers/{answerid}/questions:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - answer
+      summary: Returns all published questions in the test related to the answer. The DTOs will contain isRespondida
+      operationId: GetQuestionsFromAnswer
+      description: Returns all published questions in the test related to the answer. The DTOs will contain isRespondida
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: answerid
+        description: Id of the answer
+        required: true
+        type: integer
+      responses:
+        200:
+          description: questions found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Question'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  /answers/{answerid}/questions/{questionid}/qanswers:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - answer
+      summary: Returns an answer question's questionAnswers. It must be only one
+      operationId: GetQuestionAnswersFromAnswerAndQuestion
+      description: Returns an answer question's questionAnswers. It must be only one
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: answerid
+        description: Id of the answer
+        required: true
+        type: integer
+      - in: path
+        name: questionid
+        description: Id of the question
+        required: true
+        type: integer
+      responses:
+        200:
+          description: QuestionAnswers found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/QuestionAnswer'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
 
 responses:
   BadRequestError:
@@ -5470,6 +5540,10 @@ definitions:
       accesoPublicoNoPublicada:
         type: boolean
         example: false
+      isRespondida:
+        type: boolean
+        description: only present in GetQuestionsFromAnswer
+        example: false
   Test:
     type: object
     required:
@@ -5515,6 +5589,7 @@ definitions:
         default: -1
       cantidadRespuestasDelUsuario:
         type: integer
+        description: only present in GetSolvableTestFromUser
         example: 1
   Answer:
     type: object
