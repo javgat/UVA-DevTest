@@ -1,1 +1,5 @@
 <app-nav-bar></app-nav-bar>
+<div class="mt-5">
+    <div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message" role="alert">
+        {{getMensaje().texto}}</div>
+</div>
