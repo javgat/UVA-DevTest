@@ -20,7 +20,7 @@ export class LptProfilePublicComponent extends ListTestsComponent implements OnI
     this.id=""
     this.arePublished = true
     this.routeSub = this.route.params.subscribe(params => {
-      this.id = params['username']
+      this.id = params['id']
       this.borrarMensaje()
       this.getTestsFilters()
     });
