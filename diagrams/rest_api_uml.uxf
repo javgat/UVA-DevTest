@@ -1497,7 +1497,7 @@ bg=yellow
 bg=yellow
 --
 --
-+ &lt;&lt;&lt;PUT&gt;&gt; addUser(): void
++ &lt;&lt;&lt;PUT&gt;&gt; addUser(m: Message): void
 + &lt;&lt;DELETE&gt;&gt; removeUser(): void</panel_attributes>
     <additional_attributes/>
   </element>
@@ -1540,7 +1540,7 @@ bg=yellow
 bg=yellow
 --
 --
-+ &lt;&lt;&lt;PUT&gt;&gt; addTeam(): void
++ &lt;&lt;&lt;PUT&gt;&gt; addTeam(m: Message): void
 + &lt;&lt;DELETE&gt;&gt; removeTeam(): void</panel_attributes>
     <additional_attributes/>
   </element>

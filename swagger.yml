@@ -4561,6 +4561,12 @@ paths:
       produces:
       - application/json
       parameters:
+      - in: body
+        name: message
+        description: Message sent to the user as a notification
+        required: false
+        schema:
+          $ref: '#/definitions/Message'
       - in: path
         name: username
         description: Username of the user who can answer the publishedTest
@@ -4659,6 +4665,12 @@ paths:
       produces:
       - application/json
       parameters:
+      - in: body
+        name: message
+        description: Message sent to the users as a notification
+        required: false
+        schema:
+          $ref: '#/definitions/Message'
       - in: path
         name: teamname
         description: Teamname of the team to invite to test
@@ -5735,6 +5747,14 @@ definitions:
       title:
         type: string
         example: Nuevo titulo
+  Message:
+    type: object
+    required:
+    - body
+    properties:
+      body:
+        type: string
+        example: Este test es para que lo hagais en vuestra casa
 securityDefinitions:
   BearerCookie:
     type: apiKey

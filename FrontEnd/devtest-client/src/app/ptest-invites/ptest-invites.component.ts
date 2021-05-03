@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PublishedTestService, Team, Test, TestService, User, UserService } from '@javgat/devtest-api';
+import { Message, PublishedTestService, Team, Test, TestService, User, UserService } from '@javgat/devtest-api';
 import { Subscription } from 'rxjs';
 import { LoggedInTeacherController } from '../shared/app.controller';
 import { Examen, Mensaje, Tipo } from '../shared/app.model';
@@ -25,6 +25,8 @@ export class PtestInvitesComponent extends LoggedInTeacherController implements 
   kickingUsername: string
   isInAdminTeam: boolean
   lookingForTeams: boolean
+  customMessageNotification: string
+  enviaMensaje: boolean
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, 
       private tS: TestService, private route: ActivatedRoute, private ptS: PublishedTestService) {
     super(session, router, data, userS)
@@ -37,7 +39,9 @@ export class PtestInvitesComponent extends LoggedInTeacherController implements 
     this.kickingTeamname = ""
     this.kickingUsername = ""
     this.addUserUsername = ""
+    this.customMessageNotification = ""
     this.lookingForTeams = true
+    this.enviaMensaje = false
     this.routeSub = this.route.params.subscribe(params => {
       this.id = params['testid']
       this.borrarMensaje()
@@ -123,7 +127,10 @@ export class PtestInvitesComponent extends LoggedInTeacherController implements 
   }
 
   inviteTeamSubmit(){
-    this.inviteTeam(true)
+    if(!this.enviaMensaje)
+      this.inviteTeam(true)
+    else
+      this.inviteTeamMessage(true)
   }
 
   inviteTeam(primera: boolean){
@@ -136,8 +143,25 @@ export class PtestInvitesComponent extends LoggedInTeacherController implements 
     )
   }
 
+  inviteTeamMessage(primera: boolean){
+    var message: Message
+    message = {
+      body: this.customMessageNotification
+    }
+    this.ptS.inviteTeamToPublishedTest(this.addTeamTeamname, this.id, message).subscribe(
+      resp =>{
+        this.cambiarMensaje(new Mensaje("Equipo invitado con éxito", Tipo.SUCCESS, true))
+        this.getTeamsTest(true)
+      },
+      err => this.handleErrRelog(err, "invitar equipo a realizar un test con mensaje personalizado", primera, this.inviteTeamMessage, this)
+    )
+  }
+
   inviteUserSubmit(){
-    this.inviteUser(true)
+    if(!this.enviaMensaje)
+      this.inviteUser(true)
+    else
+      this.inviteUserMessage(true)
   }
 
   inviteUser(primera: boolean){
@@ -147,6 +171,20 @@ export class PtestInvitesComponent extends LoggedInTeacherController implements 
         this.getUsersTest(true)
       },
       err => this.handleErrRelog(err, "invitar usuario a realizar un test", primera, this.inviteUser, this)
+    )
+  }
+
+  inviteUserMessage(primera: boolean){
+    var message: Message
+    message = {
+      body: this.customMessageNotification
+    }
+    this.ptS.inviteUserToPublishedTest(this.addUserUsername, this.id, message).subscribe(
+      resp=>{
+        this.cambiarMensaje(new Mensaje("Usuario invitado con éxito", Tipo.SUCCESS, true))
+        this.getUsersTest(true)
+      },
+      err => this.handleErrRelog(err, "invitar usuario a realizar un test con mensaje personalizado", primera, this.inviteUser, this)
     )
   }
 
@@ -178,6 +216,14 @@ export class PtestInvitesComponent extends LoggedInTeacherController implements 
       },
       err => this.handleErrRelog(err, "expulsar a un usuario de realizar un test", primera, this.uninviteUser, this)
     )
+  }
+
+  changeEnviaMensaje(){
+    this.enviaMensaje = true
+  }
+
+  changeNoEnviaMensaje(){
+    this.enviaMensaje = false
   }
 
 }

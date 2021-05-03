@@ -127,7 +127,7 @@ func InviteUserPTest(params published_test.InviteUserToPublishedTestParams, u *m
 		if err == nil {
 			err = dao.InviteUserPTest(db, params.Testid, params.Username)
 			if err == nil {
-				emailHelper.SendEmailUserInvitedToTest(params.Username, params.Testid)
+				emailHelper.SendEmailUserInvitedToTest(params.Username, params.Testid, params.Message)
 				return published_test.NewInviteUserToPublishedTestOK()
 			}
 		}
@@ -172,11 +172,11 @@ func GetTeamsFromPTest(params published_test.GetTeamsFromPublishedTestParams, u 
 	return published_test.NewGetTeamsFromPublishedTestInternalServerError()
 }
 
-func sendEmailInvitedTeamMembers(db *sql.DB, teamname string, testid int64) {
+func sendEmailInvitedTeamMembers(db *sql.DB, teamname string, testid int64, message *models.Message) {
 	users, err := dao.GetUsersFromTeam(db, teamname)
 	if err == nil {
 		for _, u := range users {
-			emailHelper.SendEmailUserTeamInvitedToTest(*u.Username, testid, teamname)
+			emailHelper.SendEmailUserTeamInvitedToTest(*u.Username, testid, teamname, message)
 		}
 	}
 }
@@ -189,7 +189,7 @@ func InviteTeamPTest(params published_test.InviteTeamToPublishedTestParams, u *m
 		if err == nil {
 			err = dao.InviteTeamPTest(db, params.Testid, params.Teamname)
 			if err == nil {
-				sendEmailInvitedTeamMembers(db, params.Teamname, params.Testid)
+				sendEmailInvitedTeamMembers(db, params.Teamname, params.Testid, params.Message)
 				return published_test.NewInviteTeamToPublishedTestOK()
 			}
 		}

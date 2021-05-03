@@ -19,6 +19,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { Answer } from '../model/answer';
+import { Message } from '../model/message';
 import { Option } from '../model/option';
 import { PublishTestParams } from '../model/publishTestParams';
 import { Question } from '../model/question';
@@ -787,13 +788,14 @@ export class PublishedTestService {
      * Invites a team to do a test
      * @param teamname Teamname of the team to invite to test
      * @param testid Id of the test to find
+     * @param message Message sent to the users as a notification
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public inviteTeamToPublishedTest(teamname: string, testid: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public inviteTeamToPublishedTest(teamname: string, testid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public inviteTeamToPublishedTest(teamname: string, testid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public inviteTeamToPublishedTest(teamname: string, testid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public inviteTeamToPublishedTest(teamname: string, testid: number, message?: Message, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public inviteTeamToPublishedTest(teamname: string, testid: number, message?: Message, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public inviteTeamToPublishedTest(teamname: string, testid: number, message?: Message, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public inviteTeamToPublishedTest(teamname: string, testid: number, message?: Message, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (teamname === null || teamname === undefined) {
             throw new Error('Required parameter teamname was null or undefined when calling inviteTeamToPublishedTest.');
@@ -802,6 +804,7 @@ export class PublishedTestService {
         if (testid === null || testid === undefined) {
             throw new Error('Required parameter testid was null or undefined when calling inviteTeamToPublishedTest.');
         }
+
 
         let headers = this.defaultHeaders;
 
@@ -822,9 +825,13 @@ export class PublishedTestService {
         // to determine the Content-Type header
         const consumes: string[] = [
         ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
 
         return this.httpClient.put<any>(`${this.basePath}/publishedTests/${encodeURIComponent(String(testid))}/teams/${encodeURIComponent(String(teamname))}`,
-            null,
+            message,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -839,13 +846,14 @@ export class PublishedTestService {
      * Invites a user to do a test
      * @param username Username of the user who can answer the publishedTest
      * @param testid Id of the test
+     * @param message Message sent to the user as a notification
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public inviteUserToPublishedTest(username: string, testid: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public inviteUserToPublishedTest(username: string, testid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public inviteUserToPublishedTest(username: string, testid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public inviteUserToPublishedTest(username: string, testid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public inviteUserToPublishedTest(username: string, testid: number, message?: Message, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public inviteUserToPublishedTest(username: string, testid: number, message?: Message, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public inviteUserToPublishedTest(username: string, testid: number, message?: Message, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public inviteUserToPublishedTest(username: string, testid: number, message?: Message, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (username === null || username === undefined) {
             throw new Error('Required parameter username was null or undefined when calling inviteUserToPublishedTest.');
@@ -854,6 +862,7 @@ export class PublishedTestService {
         if (testid === null || testid === undefined) {
             throw new Error('Required parameter testid was null or undefined when calling inviteUserToPublishedTest.');
         }
+
 
         let headers = this.defaultHeaders;
 
@@ -874,9 +883,13 @@ export class PublishedTestService {
         // to determine the Content-Type header
         const consumes: string[] = [
         ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
 
         return this.httpClient.put<any>(`${this.basePath}/publishedTests/${encodeURIComponent(String(testid))}/users/${encodeURIComponent(String(username))}`,
-            null,
+            message,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

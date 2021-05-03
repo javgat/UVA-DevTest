@@ -1728,6 +1728,14 @@ func init() {
         "operationId": "InviteTeamToPublishedTest",
         "parameters": [
           {
+            "description": "Message sent to the users as a notification",
+            "name": "message",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/Message"
+            }
+          },
+          {
             "type": "string",
             "description": "Teamname of the team to invite to test",
             "name": "teamname",
@@ -1877,6 +1885,14 @@ func init() {
         "summary": "Invites a user to do a test",
         "operationId": "InviteUserToPublishedTest",
         "parameters": [
+          {
+            "description": "Message sent to the user as a notification",
+            "name": "message",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/Message"
+            }
+          },
           {
             "type": "string",
             "description": "Username of the user who can answer the publishedTest",
@@ -8249,6 +8265,18 @@ func init() {
           "format": "password",
           "pattern": "^.{6,}$",
           "example": "password"
+        }
+      }
+    },
+    "Message": {
+      "type": "object",
+      "required": [
+        "body"
+      ],
+      "properties": {
+        "body": {
+          "type": "string",
+          "example": "Este test es para que lo hagais en vuestra casa"
         }
       }
     },
@@ -10728,6 +10756,14 @@ func init() {
         "operationId": "InviteTeamToPublishedTest",
         "parameters": [
           {
+            "description": "Message sent to the users as a notification",
+            "name": "message",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/Message"
+            }
+          },
+          {
             "type": "string",
             "description": "Teamname of the team to invite to test",
             "name": "teamname",
@@ -10904,6 +10940,14 @@ func init() {
         "summary": "Invites a user to do a test",
         "operationId": "InviteUserToPublishedTest",
         "parameters": [
+          {
+            "description": "Message sent to the user as a notification",
+            "name": "message",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/Message"
+            }
+          },
           {
             "type": "string",
             "description": "Username of the user who can answer the publishedTest",
@@ -18329,6 +18373,18 @@ func init() {
           "format": "password",
           "pattern": "^.{6,}$",
           "example": "password"
+        }
+      }
+    },
+    "Message": {
+      "type": "object",
+      "required": [
+        "body"
+      ],
+      "properties": {
+        "body": {
+          "type": "string",
+          "example": "Este test es para que lo hagais en vuestra casa"
         }
       }
     },

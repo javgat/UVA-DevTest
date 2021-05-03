@@ -33,6 +33,13 @@
                 <div id="inputAddUserHelp" class="form-text text-muted">Invita a un usuario a realizar un test</div>
             </div>
         </form>
+        <p *ngIf="!enviaMensaje"><a class="link-dark mx-3" role="button" (click)="changeEnviaMensaje()">Enviar mensaje personalizado en la notificación</a></p>
+        <p *ngIf="enviaMensaje"><a class="link-dark mx-3" role="button" (click)="changeNoEnviaMensaje()">No enviar mensaje personalizado en la notificación</a></p>
+
+        <div *ngIf="enviaMensaje" class="input-group my-3">
+            <textarea class="form-control" name="inputAddQuestion" [(ngModel)]="customMessageNotification"
+                placeholder="Mensaje personalizado" required min=1></textarea>
+        </div>
     </div>
     <ul role="button" class="nav nav-tabs nav-fill">
         <li class="nav-item">
