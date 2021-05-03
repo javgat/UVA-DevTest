@@ -377,13 +377,18 @@ func GetSolvableTestsFromUser(db *sql.DB, username string, tags [][]string, like
 			"TestsUserTeamInvited AS ( SELECT T.* FROM Test T JOIN InvitacionTestEquipo I ON T.id=I.testid JOIN EquipoUsuario E ON E.equipoid=I.equipoid JOIN Usuario U ON U.id=E.usuarioid WHERE U.username=? AND T.editable=0) " +
 			"SELECT DISTINCT T.* FROM Test T LEFT JOIN TestsUserInvited U ON T.id=U.id " +
 			"LEFT JOIN TestsUserTeamInvited E ON E.id=T.id " +
-			"WHERE T.editable=0 AND ( T.accesoPublico=1 OR U.accesoPublico=0 OR E.accesoPublico=0 ) "
+			"WHERE T.editable=0 AND ( T.accesoPublico=1 OR U.accesoPublico=0 OR E.accesoPublico=0 ) " +
+			"UNION SELECT T.* FROM Test T JOIN Usuario U ON T.usuarioid=U.id WHERE U.username=? " +
+			"UNION SELECT T.* FROM Test T JOIN GestionTestEquipo G ON T.id=G.testid JOIN EquipoUsuario E ON E.equipoid=G.equipoid " +
+			"JOIN Usuario U ON E.usuarioid=U.id WHERE U.username=? "
 	stPrepare = addFiltersToQueryTestLong(true, stPrepare, tags, likeTitle)
 	query, err := db.Prepare(stPrepare)
 	if err == nil {
 		defer query.Close()
 		interfaceParams := FilterParamsSlicesToInterfaceArr(tags, likeTitle)
 		var paramsSlice []interface{}
+		paramsSlice = append(paramsSlice, username)
+		paramsSlice = append(paramsSlice, username)
 		paramsSlice = append(paramsSlice, username)
 		paramsSlice = append(paramsSlice, username)
 		interfaceParams = append(paramsSlice, interfaceParams...)
@@ -406,11 +411,14 @@ func GetSolvableTestFromUser(db *sql.DB, username string, testid int64) (*Test, 
 			"TestsUserTeamInvited AS ( SELECT T.* FROM Test T JOIN InvitacionTestEquipo I ON T.id=I.testid JOIN EquipoUsuario E ON E.equipoid=I.equipoid JOIN Usuario U ON U.id=E.usuarioid WHERE U.username=? AND T.id=? AND T.editable=0)" +
 			"SELECT DISTINCT T.* FROM Test T LEFT JOIN TestsUserInvited U ON T.id=U.id " +
 			"LEFT JOIN TestsUserTeamInvited E ON E.id=T.id " +
-			"WHERE T.id=? AND T.editable=0 AND (T.accesoPublico=1 OR U.accesoPublico=0 OR E.accesoPublico=0)")
+			"WHERE T.id=? AND T.editable=0 AND (T.accesoPublico=1 OR U.accesoPublico=0 OR E.accesoPublico=0 ) " +
+			"UNION SELECT T.* FROM Test T JOIN Usuario U ON T.usuarioid=U.id WHERE T.id=? AND U.username=? " +
+			"UNION SELECT T.* FROM Test T JOIN GestionTestEquipo G ON T.id=G.testid JOIN EquipoUsuario E ON E.equipoid=G.equipoid " +
+			"JOIN Usuario U ON E.usuarioid=U.id WHERE T.id=? AND U.username=? ")
 
 	if err == nil {
 		defer query.Close()
-		rows, err := query.Query(username, testid, username, testid, testid)
+		rows, err := query.Query(username, testid, username, testid, testid, testid, username, testid, username)
 		if err == nil {
 			ts, err = rowsToTest(rows)
 			return ts, err
