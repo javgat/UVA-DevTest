@@ -6,6 +6,7 @@ package handlers
 
 import (
 	"log"
+	"uva-devtest/emailHelper"
 	"uva-devtest/models"
 	"uva-devtest/persistence/dao"
 	"uva-devtest/persistence/dbconnection"
@@ -144,9 +145,19 @@ func AddAdminToTeam(params team.AddAdminParams, u *models.User) middleware.Respo
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			if canBeAddedTeam(params.Username, params.Teamname) {
-				err = dao.AddUserTeamAdmin(db, params.Username, params.Teamname)
+				var us *dao.User
+				us, err = dao.GetTeamMember(db, params.Teamname, params.Username)
 				if err == nil {
-					return team.NewAddAdminOK()
+					newAdmin := us == nil
+					err = dao.AddUserTeamAdmin(db, params.Username, params.Teamname)
+					if err == nil {
+						if newAdmin {
+							emailHelper.SendEmailUserAddedToTeamAsAdmin(params.Username, params.Teamname, params.Message)
+						} else {
+							emailHelper.SendEmailUserChangedToTeamAdmin(params.Username, params.Teamname, params.Message)
+						}
+						return team.NewAddAdminOK()
+					}
 				}
 			} else {
 				s := "No se puede añadir un estudiante a un equipo de solo profesores"
@@ -229,9 +240,19 @@ func AddMemberToTeam(params team.AddMemberParams, u *models.User) middleware.Res
 						s := "Es el unico administrador existente en el equipo"
 						return team.NewAddMemberBadRequest().WithPayload(&models.Error{Message: &s}) //Conflict???
 					}
-					err = dao.AddUserTeamMember(db, params.Username, params.Teamname)
+					var us *dao.User
+					us, err = dao.GetTeamAdmin(db, params.Teamname, params.Username)
 					if err == nil {
-						return team.NewAddMemberOK()
+						newMember := us == nil
+						err = dao.AddUserTeamMember(db, params.Username, params.Teamname)
+						if err == nil {
+							if newMember {
+								emailHelper.SendEmailUserAddedToTeamAsMember(params.Username, params.Teamname, params.Message)
+							} else {
+								emailHelper.SendEmailUserChangedToTeamMember(params.Username, params.Teamname, params.Message)
+							}
+							return team.NewAddMemberOK()
+						}
 					}
 				}
 			} else {

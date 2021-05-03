@@ -18,6 +18,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
+import { Message } from '../model/message';
 import { Question } from '../model/question';
 import { Team } from '../model/team';
 import { Test } from '../model/test';
@@ -64,13 +65,14 @@ export class TeamService {
      * Adds user {username} to team {teamname} as an Admin.
      * @param teamname Teamname of the team to modify
      * @param username Username of the user to add
+     * @param message Message sent to the user as a notification
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public addAdmin(teamname: string, username: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public addAdmin(teamname: string, username: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public addAdmin(teamname: string, username: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public addAdmin(teamname: string, username: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public addAdmin(teamname: string, username: string, message?: Message, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public addAdmin(teamname: string, username: string, message?: Message, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public addAdmin(teamname: string, username: string, message?: Message, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public addAdmin(teamname: string, username: string, message?: Message, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (teamname === null || teamname === undefined) {
             throw new Error('Required parameter teamname was null or undefined when calling addAdmin.');
@@ -79,6 +81,7 @@ export class TeamService {
         if (username === null || username === undefined) {
             throw new Error('Required parameter username was null or undefined when calling addAdmin.');
         }
+
 
         let headers = this.defaultHeaders;
 
@@ -99,9 +102,13 @@ export class TeamService {
         // to determine the Content-Type header
         const consumes: string[] = [
         ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
 
         return this.httpClient.put<any>(`${this.basePath}/teams/${encodeURIComponent(String(teamname))}/admins/${encodeURIComponent(String(username))}`,
-            null,
+            message,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -116,13 +123,14 @@ export class TeamService {
      * Adds user {username} to team {teamname} as a Member.
      * @param teamname Teamname of the team to modify
      * @param username Username of the user to add
+     * @param message Message sent to the user as a notification
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public addMember(teamname: string, username: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public addMember(teamname: string, username: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public addMember(teamname: string, username: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public addMember(teamname: string, username: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public addMember(teamname: string, username: string, message?: Message, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public addMember(teamname: string, username: string, message?: Message, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public addMember(teamname: string, username: string, message?: Message, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public addMember(teamname: string, username: string, message?: Message, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (teamname === null || teamname === undefined) {
             throw new Error('Required parameter teamname was null or undefined when calling addMember.');
@@ -131,6 +139,7 @@ export class TeamService {
         if (username === null || username === undefined) {
             throw new Error('Required parameter username was null or undefined when calling addMember.');
         }
+
 
         let headers = this.defaultHeaders;
 
@@ -151,9 +160,13 @@ export class TeamService {
         // to determine the Content-Type header
         const consumes: string[] = [
         ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
 
         return this.httpClient.put<any>(`${this.basePath}/teams/${encodeURIComponent(String(teamname))}/members/${encodeURIComponent(String(username))}`,
-            null,
+            message,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

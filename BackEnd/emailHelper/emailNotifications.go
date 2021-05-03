@@ -86,3 +86,89 @@ func SendEmailUserTeamInvitedToTest(username string, testid int64, teamname stri
 		}
 	}
 }
+
+func generateEmailBodyUserInvitedTeam(address string, m *models.Message, titulo string, cuerpo string) []byte {
+	mensInvitacion := ""
+	if m != nil && m.Body != nil {
+		mensInvitacion = *m.Body
+	}
+	msg := []byte("To: " + address + "\r\n" +
+		titulo + "\r\n" +
+		"\r\n" +
+		cuerpo + "\r\n" +
+		"\r\n" +
+		mensInvitacion)
+	return msg
+}
+
+func generateEmailBodyUserAddedToTeamAsMember(username string, address string, frontEnd string, teamname string, m *models.Message) []byte {
+	titulo := "Subject: [NO RESPONDER] Añadido al equipo: " + teamname
+	cuerpo := "Hola " + username + ", has sido añadido al equipo " + teamname + ".\r\n" +
+		"Puedes acceder mediante la web, o pulsando el siguiente enlace: " + frontEnd + "/teams/" + teamname + "."
+	return generateEmailBodyUserInvitedTeam(address, m, titulo, cuerpo)
+}
+
+func generateEmailBodyUserChangedToTeamMember(username string, address string, frontEnd string, teamname string, m *models.Message) []byte {
+	titulo := "Subject: [NO RESPONDER] Retirados permisos de administración del equipo: " + teamname
+	cuerpo := "Hola " + username + ", se te han retirado los permisos de administración en el equipo " + teamname + ".\r\n" +
+		"Puedes acceder mediante la web, o pulsando el siguiente enlace: " + frontEnd + "/teams/" + teamname + "."
+	return generateEmailBodyUserInvitedTeam(address, m, titulo, cuerpo)
+}
+
+func generateEmailBodyUserAddedToTeamAsAdmin(username string, address string, frontEnd string, teamname string, m *models.Message) []byte {
+	titulo := "Subject: [NO RESPONDER] Añadido como administrador al equipo: " + teamname
+	cuerpo := "Hola " + username + ", has sido añadido como administrador al equipo " + teamname + ".\r\n" +
+		"Puedes acceder mediante la web, o pulsando el siguiente enlace: " + frontEnd + "/teams/" + teamname + "."
+	return generateEmailBodyUserInvitedTeam(address, m, titulo, cuerpo)
+}
+
+func generateEmailBodyUserChangedToTeamAdmin(username string, address string, frontEnd string, teamname string, m *models.Message) []byte {
+	titulo := "Subject: [NO RESPONDER] Obtenido permisos de administración del equipo: " + teamname
+	cuerpo := "Hola " + username + ", has sido cambiado a administrador en el equipo " + teamname + ".\r\n" +
+		"Puedes acceder mediante la web, o pulsando el siguiente enlace: " + frontEnd + "/teams/" + teamname + "."
+	return generateEmailBodyUserInvitedTeam(address, m, titulo, cuerpo)
+}
+
+func SendEmailUserAddedToTeamAsMember(username string, teamname string, m *models.Message) {
+	address, err := getEmailFromUsername(username)
+	if err == nil {
+		emailInfo, err := getOwnEmailInfo()
+		if err == nil {
+			emailBody := generateEmailBodyUserAddedToTeamAsMember(username, address, emailInfo.FrontEndUrl, teamname, m)
+			sendEmail(emailBody, address)
+		}
+	}
+}
+
+func SendEmailUserChangedToTeamMember(username string, teamname string, m *models.Message) {
+	address, err := getEmailFromUsername(username)
+	if err == nil {
+		emailInfo, err := getOwnEmailInfo()
+		if err == nil {
+			emailBody := generateEmailBodyUserChangedToTeamMember(username, address, emailInfo.FrontEndUrl, teamname, m)
+			sendEmail(emailBody, address)
+		}
+	}
+}
+
+func SendEmailUserAddedToTeamAsAdmin(username string, teamname string, m *models.Message) {
+	address, err := getEmailFromUsername(username)
+	if err == nil {
+		emailInfo, err := getOwnEmailInfo()
+		if err == nil {
+			emailBody := generateEmailBodyUserAddedToTeamAsAdmin(username, address, emailInfo.FrontEndUrl, teamname, m)
+			sendEmail(emailBody, address)
+		}
+	}
+}
+
+func SendEmailUserChangedToTeamAdmin(username string, teamname string, m *models.Message) {
+	address, err := getEmailFromUsername(username)
+	if err == nil {
+		emailInfo, err := getOwnEmailInfo()
+		if err == nil {
+			emailBody := generateEmailBodyUserChangedToTeamAdmin(username, address, emailInfo.FrontEndUrl, teamname, m)
+			sendEmail(emailBody, address)
+		}
+	}
+}

@@ -6,11 +6,16 @@ package team
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/validate"
+
+	"uva-devtest/models"
 )
 
 // NewAddMemberParams creates a new AddMemberParams object
@@ -30,6 +35,10 @@ type AddMemberParams struct {
 	// HTTP Request Object
 	HTTPRequest *http.Request `json:"-"`
 
+	/*Message sent to the user as a notification
+	  In: body
+	*/
+	Message *models.Message
 	/*Teamname of the team to modify
 	  Required: true
 	  In: path
@@ -50,6 +59,28 @@ func (o *AddMemberParams) BindRequest(r *http.Request, route *middleware.Matched
 	var res []error
 
 	o.HTTPRequest = r
+
+	if runtime.HasBody(r) {
+		defer r.Body.Close()
+		var body models.Message
+		if err := route.Consumer.Consume(r.Body, &body); err != nil {
+			res = append(res, errors.NewParseError("message", "body", "", err))
+		} else {
+			// validate body object
+			if err := body.Validate(route.Formats); err != nil {
+				res = append(res, err)
+			}
+
+			ctx := validate.WithOperationRequest(context.Background())
+			if err := body.ContextValidate(ctx, route.Formats); err != nil {
+				res = append(res, err)
+			}
+
+			if len(res) == 0 {
+				o.Message = &body
+			}
+		}
+	}
 
 	rTeamname, rhkTeamname, _ := route.Params.GetOK("teamname")
 	if err := o.bindTeamname(rTeamname, rhkTeamname, route.Formats); err != nil {

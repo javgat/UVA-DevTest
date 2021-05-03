@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Team, TeamService, User, UserService } from '@javgat/devtest-api';
+import { Message, Team, TeamService, User, UserService } from '@javgat/devtest-api';
 import { Subscription } from 'rxjs';
 import { LoggedInController } from '../shared/app.controller';
 import { Equipo, Mensaje, Tipo } from '../shared/app.model';
@@ -26,6 +26,8 @@ export class TeamComponent extends LoggedInController implements OnInit {
   mightKickUsername: string
   teamEdit: Team
 
+  customMessageNotification: string
+  enviaMensaje: boolean
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService,
     private route: ActivatedRoute, private teamService: TeamService) {
     super(session, router, data, userS)
@@ -33,6 +35,8 @@ export class TeamComponent extends LoggedInController implements OnInit {
     this.admins = []
     this.miembros = []
     this.teamEdit = new Equipo("", "", false)
+    this.customMessageNotification = ""
+    this.enviaMensaje = false
     this.id = this.addMiembroUsername = this.usernamePutAdmin = this.kickingUsername = this.mightKickUsername = ""
     this.routeSub = this.route.params.subscribe(params => {
       this.id = params['id']
@@ -104,7 +108,10 @@ export class TeamComponent extends LoggedInController implements OnInit {
   }
 
   addMemberSubmit() {
-    this.addMember(true)
+    if(!this.enviaMensaje)
+      this.addMember(true)
+    else
+      this.addMemberMessage(true)
   }
 
   addMember(primera: boolean) {
@@ -114,6 +121,21 @@ export class TeamComponent extends LoggedInController implements OnInit {
       this.teamService.addMember(this.id, this.addMiembroUsername).subscribe(
         resp => this.getMiembros(true),
         err => this.handleErrRelog(err, "añadir miembro a equipo", primera, this.addMember, this)
+      )
+    }
+  }
+
+  addMemberMessage(primera: boolean) {
+    if (this.isTeamAdmin(this.addMiembroUsername) || this.isTeamMiembro(this.addMiembroUsername)) {
+      this.cambiarMensaje(new Mensaje("Ese usuario ya pertenece al equipo", Tipo.ERROR, true))
+    } else {
+      var message: Message
+      message = {
+        body: this.customMessageNotification
+      }
+      this.teamService.addMember(this.id, this.addMiembroUsername, message).subscribe(
+        resp => this.getMiembros(true),
+        err => this.handleErrRelog(err, "añadir miembro a equipo con mensaje", primera, this.addMemberMessage, this)
       )
     }
   }
@@ -221,6 +243,14 @@ export class TeamComponent extends LoggedInController implements OnInit {
 
   lastMember(): boolean{
     return (this.miembros.length==0 && this.admins.length==1)
+  }
+
+  changeEnviaMensaje(){
+    this.enviaMensaje = true
+  }
+
+  changeNoEnviaMensaje(){
+    this.enviaMensaje = false
   }
 
 }

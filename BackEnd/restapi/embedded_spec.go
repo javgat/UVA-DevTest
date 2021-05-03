@@ -3402,6 +3402,14 @@ func init() {
         "operationId": "AddAdmin",
         "parameters": [
           {
+            "description": "Message sent to the user as a notification",
+            "name": "message",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/Message"
+            }
+          },
+          {
             "type": "string",
             "description": "Teamname of the team to modify",
             "name": "teamname",
@@ -3661,6 +3669,14 @@ func init() {
         "summary": "Adds user {username} to team {teamname} as a Member",
         "operationId": "AddMember",
         "parameters": [
+          {
+            "description": "Message sent to the user as a notification",
+            "name": "message",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/Message"
+            }
+          },
           {
             "type": "string",
             "description": "Teamname of the team to modify",
@@ -12724,6 +12740,14 @@ func init() {
         "operationId": "AddAdmin",
         "parameters": [
           {
+            "description": "Message sent to the user as a notification",
+            "name": "message",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/Message"
+            }
+          },
+          {
             "type": "string",
             "description": "Teamname of the team to modify",
             "name": "teamname",
@@ -13031,6 +13055,14 @@ func init() {
         "summary": "Adds user {username} to team {teamname} as a Member",
         "operationId": "AddMember",
         "parameters": [
+          {
+            "description": "Message sent to the user as a notification",
+            "name": "message",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/Message"
+            }
+          },
           {
             "type": "string",
             "description": "Teamname of the team to modify",

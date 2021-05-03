@@ -249,9 +249,9 @@ bg=yellow
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1720</x>
+      <x>1680</x>
       <y>672</y>
-      <w>224</w>
+      <w>248</w>
       <h>72</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Resource&gt;&gt;
@@ -260,7 +260,7 @@ bg=yellow
 --
 --
 + &lt;&lt;GET&gt;&gt; getMember(): User
-+ &lt;&lt;PUT&gt;&gt; putMember(): void</panel_attributes>
++ &lt;&lt;PUT&gt;&gt; putMember(m: Message): void</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -279,7 +279,7 @@ bg=yellow
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1824</x>
+      <x>1808</x>
       <y>600</y>
       <w>96</w>
       <h>88</h>
@@ -707,9 +707,9 @@ bg=yellow
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1960</x>
+      <x>1944</x>
       <y>672</y>
-      <w>224</w>
+      <w>240</w>
       <h>72</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Resource&gt;&gt;
@@ -718,7 +718,7 @@ bg=yellow
 --
 --
 + &lt;&lt;GET&gt;&gt; getAdmin(): User
-+ &lt;&lt;PUT&gt;&gt; putAdmin(): void</panel_attributes>
++ &lt;&lt;PUT&gt;&gt; putAdmin(m: Message): void</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
