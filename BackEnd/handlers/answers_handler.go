@@ -77,6 +77,7 @@ func GetAnswer(params answer.GetAnswerParams, u *models.User) middleware.Respond
 
 // PUT /answers/{answerid}
 // Auth: Admin OR AnswerOwner
+
 func FinishAnswer(params answer.FinishAnswerParams, u *models.User) middleware.Responder {
 	if isAdmin(u) || isAnswerOwner(params.Answerid, u) {
 		db, err := dbconnection.ConnectDb()
@@ -122,11 +123,33 @@ func isAnswerFinished(answerid int64) bool {
 	return false
 }
 
+// Comprueba que una pregunta, en caso de ser de opciones y eleccion unica, sea valida
+func isAnswerOpcionesUnicaValida(qa *models.QuestionAnswer) bool {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		var q *dao.Question
+		q, err = dao.GetQuestion(db, *qa.IDPregunta)
+		if err == nil {
+			if *q.TipoPregunta != models.QuestionTipoPreguntaOpciones || !q.EleccionUnica {
+				return true
+			}
+			return (len(qa.IndicesOpciones) < 2)
+		}
+	}
+	return false
+}
+
+// isQAnswerValida comprueba que la respuesta a la pregunta es valida para el tipo de pregunta
+func isQAnswerValida(qa *models.QuestionAnswer) bool {
+	return isAnswerOpcionesUnicaValida(qa)
+}
+
 // POST /answers/{answerid}/qanswers
 // Auth: Admin OR AnswerOwner
-// Req: Question no finished
+// Req: Question no finished. If Question Tipo Opciones & eleccionUnica -> Solo una opcion marcada
 func PostQuestionAnswer(params answer.PostQuestionAnswerParams, u *models.User) middleware.Responder {
-	if !isAnswerFinished(params.Answerid) && (isAdmin(u) || isAnswerOwner(params.Answerid, u)) {
+	if !isAnswerFinished(params.Answerid) && (isAdmin(u) || isAnswerOwner(params.Answerid, u) &&
+		isQAnswerValida(params.QuestionAnswer)) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var pqa *models.QuestionAnswer
@@ -165,9 +188,9 @@ func GetQuestionAnswer(params answer.GetQuestionAnswerFromAnswerParams, u *model
 
 // PUT /answers/{answerid}/qanswers/{questionid}
 // Auth: Admin OR AnswerOwner
-// Req: Question no finished
+// Req: Question no finished. If Question Tipo Opciones & eleccionUnica -> Solo una opcion marcada
 func PutQuestionAnswer(params answer.PutQuestionAnswerFromAnswerParams, u *models.User) middleware.Responder {
-	if !isAnswerFinished(params.Answerid) && (isAdmin(u) || isAnswerOwner(params.Answerid, u)) {
+	if !isAnswerFinished(params.Answerid) && (isAdmin(u) || isAnswerOwner(params.Answerid, u) && isQAnswerValida(params.QuestionAnswer)) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			err = dao.PutQuestionAnswer(db, params.Answerid, params.Questionid, params.QuestionAnswer)
