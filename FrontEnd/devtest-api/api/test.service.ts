@@ -18,6 +18,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
+import { PublishTestParams } from '../model/publishTestParams';
 import { Question } from '../model/question';
 import { Tag } from '../model/tag';
 import { Team } from '../model/team';
@@ -832,14 +833,19 @@ export class TestService {
     /**
      * Creates a new publishedTest. The user must be the owner of the test.
      * Creates a new publishedTest. The user must be the owner of the test.
+     * @param publishTestParams New Title of the test
      * @param testid Id of the test to publish
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postPublishedTest(testid: number, observe?: 'body', reportProgress?: boolean): Observable<Test>;
-    public postPublishedTest(testid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Test>>;
-    public postPublishedTest(testid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Test>>;
-    public postPublishedTest(testid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public postPublishedTest(publishTestParams: PublishTestParams, testid: number, observe?: 'body', reportProgress?: boolean): Observable<Test>;
+    public postPublishedTest(publishTestParams: PublishTestParams, testid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Test>>;
+    public postPublishedTest(publishTestParams: PublishTestParams, testid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Test>>;
+    public postPublishedTest(publishTestParams: PublishTestParams, testid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (publishTestParams === null || publishTestParams === undefined) {
+            throw new Error('Required parameter publishTestParams was null or undefined when calling postPublishedTest.');
+        }
 
         if (testid === null || testid === undefined) {
             throw new Error('Required parameter testid was null or undefined when calling postPublishedTest.');
@@ -864,9 +870,13 @@ export class TestService {
         // to determine the Content-Type header
         const consumes: string[] = [
         ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
 
         return this.httpClient.post<Test>(`${this.basePath}/tests/${encodeURIComponent(String(testid))}/publishedTests`,
-            null,
+            publishTestParams,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

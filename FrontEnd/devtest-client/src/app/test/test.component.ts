@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Question, Tag, Test, TestService, UserService, ValorFinal } from '@javgat/devtest-api';
+import { PublishTestParams, Question, Tag, Test, TestService, UserService, ValorFinal } from '@javgat/devtest-api';
 import { Subscription } from 'rxjs';
 import { LoggedInTeacherController } from '../shared/app.controller';
 import { Examen, Mensaje, Tipo, tipoPrint } from '../shared/app.model';
@@ -28,6 +28,7 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
   addQuestionById: boolean
   preguntaQuitando: number
   isFavorita: boolean
+  publishedTitle: string
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private route: ActivatedRoute, private testS: TestService) {
     super(session, router, data, userS)
     this.isInAdminTeam = false
@@ -42,6 +43,7 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
     this.mantenerMensaje = false
     this.isFavorita = false
     this.preguntaQuitando = 0
+    this.publishedTitle = ""
     this.routeSub = this.route.params.subscribe(params => {
       this.id = params['testid']
       if (!this.mantenerMensaje) {
@@ -79,6 +81,7 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
         }
         this.test = new Examen(resp.title, resp.description, resp.accesoPublico, resp.editable, resp.maxMinutes, resp.username, resp.id, resp.accesoPublicoNoPublicado)
         this.testEdit = new Examen(resp.title, resp.description, resp.accesoPublico, resp.editable, resp.maxMinutes, resp.username, resp.id, resp.accesoPublicoNoPublicado)
+        this.publishedTitle = this.test.title
         this.getPreguntasTest(true)
         this.getTags(true)
         if (!this.getSessionUser().isEmpty()) {
@@ -304,7 +307,11 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
   }
 
   publishTest(primera: boolean) {
-    this.testS.postPublishedTest(this.id).subscribe(
+    var params: PublishTestParams
+    params = {
+      title: this.publishedTitle
+    }
+    this.testS.postPublishedTest(params, this.id).subscribe(
       resp => {
         this.router.navigate(['/pt', resp.id])
       },

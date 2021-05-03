@@ -4203,6 +4203,12 @@ paths:
       produces:
       - application/json
       parameters:
+      - in: body
+        name: publishTestParams
+        description: New Title of the test
+        required: true
+        schema:
+          $ref: '#/definitions/PublishTestParams'
       - in: path
         name: testid
         description: Id of the test to publish
@@ -5721,6 +5727,14 @@ definitions:
         type: boolean
         example: false
         default: false
+  PublishTestParams:
+    type: object
+    required:
+    - title
+    properties:
+      title:
+        type: string
+        example: Nuevo titulo
 securityDefinitions:
   BearerCookie:
     type: apiKey

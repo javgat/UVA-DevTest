@@ -5,6 +5,7 @@ export * from './option';
 export * from './password';
 export * from './passwordRecovery';
 export * from './passwordUpdate';
+export * from './publishTestParams';
 export * from './question';
 export * from './questionAnswer';
 export * from './review';

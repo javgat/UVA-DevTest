@@ -4555,6 +4555,15 @@ func init() {
         "operationId": "PostPublishedTest",
         "parameters": [
           {
+            "description": "New Title of the test",
+            "name": "publishTestParams",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PublishTestParams"
+            }
+          },
+          {
             "type": "integer",
             "description": "Id of the test to publish",
             "name": "testid",
@@ -8318,6 +8327,18 @@ func init() {
           "format": "password",
           "pattern": "^.{6,}$",
           "example": "password"
+        }
+      }
+    },
+    "PublishTestParams": {
+      "type": "object",
+      "required": [
+        "title"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "example": "Nuevo titulo"
         }
       }
     },
@@ -14035,6 +14056,15 @@ func init() {
         "operationId": "PostPublishedTest",
         "parameters": [
           {
+            "description": "New Title of the test",
+            "name": "publishTestParams",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PublishTestParams"
+            }
+          },
+          {
             "type": "integer",
             "description": "Id of the test to publish",
             "name": "testid",
@@ -18377,6 +18407,18 @@ func init() {
           "format": "password",
           "pattern": "^.{6,}$",
           "example": "password"
+        }
+      }
+    },
+    "PublishTestParams": {
+      "type": "object",
+      "required": [
+        "title"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "example": "Nuevo titulo"
         }
       }
     },

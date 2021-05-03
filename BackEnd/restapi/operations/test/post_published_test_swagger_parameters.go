@@ -6,12 +6,18 @@ package test
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+	"io"
 	"net/http"
 
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
+
+	"uva-devtest/models"
 )
 
 // NewPostPublishedTestParams creates a new PostPublishedTestParams object
@@ -31,6 +37,11 @@ type PostPublishedTestParams struct {
 	// HTTP Request Object
 	HTTPRequest *http.Request `json:"-"`
 
+	/*New Title of the test
+	  Required: true
+	  In: body
+	*/
+	PublishTestParams *models.PublishTestParams
 	/*Id of the test to publish
 	  Required: true
 	  In: path
@@ -46,6 +57,34 @@ func (o *PostPublishedTestParams) BindRequest(r *http.Request, route *middleware
 	var res []error
 
 	o.HTTPRequest = r
+
+	if runtime.HasBody(r) {
+		defer r.Body.Close()
+		var body models.PublishTestParams
+		if err := route.Consumer.Consume(r.Body, &body); err != nil {
+			if err == io.EOF {
+				res = append(res, errors.Required("publishTestParams", "body", ""))
+			} else {
+				res = append(res, errors.NewParseError("publishTestParams", "body", "", err))
+			}
+		} else {
+			// validate body object
+			if err := body.Validate(route.Formats); err != nil {
+				res = append(res, err)
+			}
+
+			ctx := validate.WithOperationRequest(context.Background())
+			if err := body.ContextValidate(ctx, route.Formats); err != nil {
+				res = append(res, err)
+			}
+
+			if len(res) == 0 {
+				o.PublishTestParams = &body
+			}
+		}
+	} else {
+		res = append(res, errors.Required("publishTestParams", "body", ""))
+	}
 
 	rTestid, rhkTestid, _ := route.Params.GetOK("testid")
 	if err := o.bindTestid(rTestid, rhkTestid, route.Formats); err != nil {
