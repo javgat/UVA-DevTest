@@ -19,7 +19,7 @@ func generateEmailBodyUserInvitedTest(username string, testid int64, address str
 			msg := []byte("To: " + address + "\r\n" +
 				"Subject: [NO RESPONDER] Invitado al test: " + *test.Title + "\r\n" +
 				"\r\n" +
-				"Hola" + username + ", has sido invitado a realizar el test " + *test.Title + ".\r\n" +
+				"Hola " + username + ", has sido invitado a realizar el test " + *test.Title + ".\r\n" +
 				"Puedes acceder mediante la web, o pulsando el siguiente enlace: " + frontEnd + "/pt/" + fmt.Sprint(testid) + "\r\n")
 			return msg, nil
 		}
@@ -51,7 +51,7 @@ func generateEmailBodyUserTeamInvitedTest(username string, testid int64, address
 			msg := []byte("To: " + address + "\r\n" +
 				"Subject: [NO RESPONDER] Invitado al test: " + *test.Title + "\r\n" +
 				"\r\n" +
-				"Hola" + username + ", has sido invitado a realizar el test " + *test.Title + ", debido a pertenecer al equipo " + teamname + ".\r\n" +
+				"Hola " + username + ", has sido invitado a realizar el test " + *test.Title + ", debido a pertenecer al equipo " + teamname + ".\r\n" +
 				"Puedes acceder mediante la web, o pulsando el siguiente enlace: " + frontEnd + "/pt/" + fmt.Sprint(testid) + "\r\n")
 			return msg, nil
 		}
