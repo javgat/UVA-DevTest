@@ -8280,10 +8280,10 @@ func init() {
     "Answer": {
       "type": "object",
       "required": [
-        "finished"
+        "entregado"
       ],
       "properties": {
-        "finished": {
+        "entregado": {
           "type": "boolean",
           "example": false
         },
@@ -18479,10 +18479,10 @@ func init() {
     "Answer": {
       "type": "object",
       "required": [
-        "finished"
+        "entregado"
       ],
       "properties": {
-        "finished": {
+        "entregado": {
           "type": "boolean",
           "example": false
         },

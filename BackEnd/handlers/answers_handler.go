@@ -117,7 +117,7 @@ func isAnswerFinished(answerid int64) bool {
 	if err == nil {
 		a, err := dao.GetAnswer(db, answerid)
 		if err == nil && a != nil {
-			return *a.Finished
+			return *a.Entregado
 		}
 	}
 	return false

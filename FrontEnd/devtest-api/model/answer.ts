@@ -14,7 +14,7 @@
 export interface Answer { 
     id?: number;
     startime?: string;
-    finished: boolean;
+    entregado: boolean;
     testid?: number;
     username?: string;
 }

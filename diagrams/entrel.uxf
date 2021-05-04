@@ -58,7 +58,7 @@ bg=yellow
 --
 - id: int {id}
 - startTime: DateTime
-- finished: bool</panel_attributes>
+- entregado: bool</panel_attributes>
     <additional_attributes/>
   </element>
   <element>

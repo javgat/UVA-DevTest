@@ -23,7 +23,7 @@ func rowsToAnswers(rows *sql.Rows) ([]*Answer, error) {
 	var answers []*Answer
 	for rows.Next() {
 		var t Answer
-		err := rows.Scan(&t.ID, &t.Startime, &t.Finished, &t.Testid, &t.Usuarioid)
+		err := rows.Scan(&t.ID, &t.Startime, &t.Entregado, &t.Testid, &t.Usuarioid)
 		if err != nil {
 			return answers, err
 		}
@@ -51,11 +51,11 @@ func ToModelAnswer(a *Answer) (*models.Answer, error) {
 		u, err := GetUserByID(db, a.Usuarioid)
 		if err == nil {
 			mt := &models.Answer{
-				Finished: a.Finished,
-				Startime: a.Startime,
-				Testid:   a.Testid,
-				ID:       a.ID,
-				Username: *u.Username,
+				Entregado: a.Entregado,
+				Startime:  a.Startime,
+				Testid:    a.Testid,
+				ID:        a.ID,
+				Username:  *u.Username,
 			}
 			return mt, nil
 		}
@@ -117,7 +117,7 @@ func StartAnswer(db *sql.DB, username string, testid int64) (*Answer, error) {
 	if err != nil || u == nil {
 		return nil, errors.New(errorResourceNotFound)
 	}
-	query, err := db.Prepare("INSERT INTO RespuestaExamen(startTime, finished, testid, usuarioid) VALUES (?,?,?,?)")
+	query, err := db.Prepare("INSERT INTO RespuestaExamen(startTime, entregado, testid, usuarioid) VALUES (?,?,?,?)")
 
 	if err != nil {
 		return nil, err
@@ -132,7 +132,7 @@ func StartAnswer(db *sql.DB, username string, testid int64) (*Answer, error) {
 		if err == nil {
 			bfalse := false
 			ar := &Answer{
-				Finished:  &bfalse,
+				Entregado: &bfalse,
 				Testid:    testid,
 				Usuarioid: u.ID,
 				Startime:  now.String(),
@@ -148,7 +148,7 @@ func FinishAnswer(db *sql.DB, answerid int64) error {
 	if db == nil {
 		return errors.New(errorDBNil)
 	}
-	query, err := db.Prepare("UPDATE RespuestaExamen SET finished=1 WHERE id=?")
+	query, err := db.Prepare("UPDATE RespuestaExamen SET entregado=1 WHERE id=?")
 	if err == nil {
 		defer query.Close()
 		_, err = query.Exec(answerid)
@@ -163,7 +163,7 @@ func GetOpenAnswersFromUserTest(db *sql.DB, username string, testid int64) ([]*A
 	u, err := GetUserUsername(db, username)
 	if err == nil {
 		var a []*Answer
-		query, err := db.Prepare("SELECT * FROM RespuestaExamen WHERE usuarioid=? AND testid=? AND finished=0")
+		query, err := db.Prepare("SELECT * FROM RespuestaExamen WHERE usuarioid=? AND testid=? AND entregado=0")
 		if err == nil {
 			defer query.Close()
 			rows, err := query.Query(u.ID, testid)

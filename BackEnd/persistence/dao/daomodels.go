@@ -198,10 +198,10 @@ type Test struct {
 // swagger:model Answer
 type Answer struct {
 
-	// finished
+	// entregado
 	// Example: false
 	// Required: true
-	Finished *bool `json:"finished"`
+	Entregado *bool `json:"entregado"`
 
 	// id
 	// Example: 1

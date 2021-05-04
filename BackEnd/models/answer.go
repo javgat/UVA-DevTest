@@ -19,10 +19,10 @@ import (
 // swagger:model Answer
 type Answer struct {
 
-	// finished
+	// entregado
 	// Example: false
 	// Required: true
-	Finished *bool `json:"finished"`
+	Entregado *bool `json:"entregado"`
 
 	// id
 	// Example: 1
@@ -45,7 +45,7 @@ type Answer struct {
 func (m *Answer) Validate(formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.validateFinished(formats); err != nil {
+	if err := m.validateEntregado(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -55,9 +55,9 @@ func (m *Answer) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *Answer) validateFinished(formats strfmt.Registry) error {
+func (m *Answer) validateEntregado(formats strfmt.Registry) error {
 
-	if err := validate.Required("finished", "body", m.Finished); err != nil {
+	if err := validate.Required("entregado", "body", m.Entregado); err != nil {
 		return err
 	}
 

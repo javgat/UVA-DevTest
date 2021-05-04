@@ -5699,7 +5699,7 @@ definitions:
   Answer:
     type: object
     required:
-    - finished
+    - entregado
     properties:
       id:
         type: integer
@@ -5707,7 +5707,7 @@ definitions:
       startime:
         type: string
         example: 2021-02-25 14:44:55
-      finished:
+      entregado:
         type: boolean
         example: false
       testid:
