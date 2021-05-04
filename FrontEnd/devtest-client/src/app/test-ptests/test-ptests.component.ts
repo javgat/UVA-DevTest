@@ -53,7 +53,7 @@ export class TestPTestsComponent extends LoggedInTeacherController implements On
   getTest(primera: boolean) {
     this.tS.getTest(this.id).subscribe(
       resp => {
-        this.test = new Examen(resp.title, resp.description, resp.accesoPublico, resp.editable, resp.maxMinutes, resp.username, resp.id, resp.accesoPublicoNoPublicado)
+        this.test = Examen.constructorFromTest(resp)
         this.getTestPTests(true)
         if (!this.getSessionUser().isEmpty())
           this.getIsInAdminTeam(true)

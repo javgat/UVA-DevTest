@@ -13,8 +13,11 @@
 
 export interface Answer { 
     id?: number;
-    startime?: string;
+    startime?: Date;
+    finishTime?: Date;
     entregado: boolean;
     testid?: number;
     username?: string;
+    puntuacion?: number;
+    corregida?: boolean;
 }

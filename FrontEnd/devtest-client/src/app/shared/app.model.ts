@@ -171,11 +171,12 @@ export class Examen implements Test{
     username: string;
     accesoPublicoNoPublicado: boolean;
     originalTestID: number;
-    horaCreacion: string;
+    horaCreacion?: Date;
     cantidadRespuestasDelUsuario: number;
+    notaMaxima: number;
     constructor(title?: string, description?: string, accesoPublico?: boolean, editable?: boolean, maxMinutes?: number, 
-        username?: string, id?: number, accesoPublicoNoPublicado?: boolean, horaCreacion?: string, originalTestID?: number,
-        cantidadRespuestasDelUsuario?: number){
+        username?: string, id?: number, accesoPublicoNoPublicado?: boolean, horaCreacion?: Date, originalTestID?: number,
+        cantidadRespuestasDelUsuario?: number, notaMaxima?: number){
         this.title=title || ""
         this.description=description || ""
         this.maxMinutes=maxMinutes || 0
@@ -185,13 +186,14 @@ export class Examen implements Test{
         this.id=id || 0
         this.accesoPublicoNoPublicado=accesoPublicoNoPublicado || false
         this.originalTestID = originalTestID || -1
-        this.horaCreacion = horaCreacion || ""
+        this.horaCreacion = horaCreacion
         this.cantidadRespuestasDelUsuario = cantidadRespuestasDelUsuario || 0
+        this.notaMaxima = notaMaxima || 0
     }
 
     static constructorFromTest(t: Test): Examen{
         return new Examen(t.title, t.description, t.accesoPublico, t.editable, t.maxMinutes, t.username, t.id,
-            t.accesoPublicoNoPublicado, t.horaCreacion, t.originalTestID, t.cantidadRespuestasDelUsuario)
+            t.accesoPublicoNoPublicado, t.horaCreacion, t.originalTestID, t.cantidadRespuestasDelUsuario, t.notaMaxima)
     }
 }
 

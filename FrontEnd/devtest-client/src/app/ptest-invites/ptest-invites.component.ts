@@ -68,7 +68,7 @@ export class PtestInvitesComponent extends LoggedInTeacherController implements 
   getTest(primera: boolean) {
     this.tS.getTest(this.id).subscribe(
       resp => {
-        this.test = new Examen(resp.title, resp.description, resp.accesoPublico, resp.editable, resp.maxMinutes, resp.username, resp.id, resp.accesoPublicoNoPublicado)
+        this.test = Examen.constructorFromTest(resp)
         this.getTeamsTest(true)
         this.getUsersTest(true)
         if (!this.getSessionUser().isEmpty())

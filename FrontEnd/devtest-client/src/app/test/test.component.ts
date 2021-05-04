@@ -79,8 +79,8 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
         if (!resp.editable) {
           this.router.navigate(['/pt', this.id])
         }
-        this.test = new Examen(resp.title, resp.description, resp.accesoPublico, resp.editable, resp.maxMinutes, resp.username, resp.id, resp.accesoPublicoNoPublicado)
-        this.testEdit = new Examen(resp.title, resp.description, resp.accesoPublico, resp.editable, resp.maxMinutes, resp.username, resp.id, resp.accesoPublicoNoPublicado)
+        this.test = Examen.constructorFromTest(resp)
+        this.testEdit = Examen.constructorFromTest(resp)
         this.publishedTitle = this.test.title
         this.getPreguntasTest(true)
         this.getTags(true)

@@ -20,8 +20,9 @@ export interface Test {
     editable: boolean;
     username: string;
     accesoPublicoNoPublicado: boolean;
-    horaCreacion?: string;
+    horaCreacion?: Date;
     originalTestID?: number;
+    notaMaxima?: number;
     /**
      * only present in GetSolvableTestFromUser
      */
