@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Message, PublishedTestService, Team, Test, TestService, User, UserService } from '@javgat/devtest-api';
+import { EmailUser, Message, PublishedTestService, Team, Test, TestService, User, UserService } from '@javgat/devtest-api';
 import { Subscription } from 'rxjs';
 import { LoggedInTeacherController } from '../shared/app.controller';
 import { Examen, Mensaje, Tipo } from '../shared/app.model';
@@ -27,6 +27,7 @@ export class PtestInvitesComponent extends LoggedInTeacherController implements 
   lookingForTeams: boolean
   customMessageNotification: string
   enviaMensaje: boolean
+  createUser: boolean
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, 
       private tS: TestService, private route: ActivatedRoute, private ptS: PublishedTestService) {
     super(session, router, data, userS)
@@ -42,6 +43,7 @@ export class PtestInvitesComponent extends LoggedInTeacherController implements 
     this.customMessageNotification = ""
     this.lookingForTeams = true
     this.enviaMensaje = false
+    this.createUser = false
     this.routeSub = this.route.params.subscribe(params => {
       this.id = params['testid']
       this.borrarMensaje()
@@ -224,6 +226,32 @@ export class PtestInvitesComponent extends LoggedInTeacherController implements 
 
   changeNoEnviaMensaje(){
     this.enviaMensaje = false
+  }
+
+  changeNotAddUser(){
+    this.createUser = false
+  }
+
+  changeAddUser(){
+    this.createUser = true
+  }
+
+  createInviteUserSubmit(){
+    this.createInviteUser(true)
+  }
+
+  createInviteUser(primera: boolean){
+    var eu: EmailUser
+    eu = {
+      email: this.addUserUsername
+    }
+    this.userS.postEmailUser(eu).subscribe(
+      resp =>{
+        this.inviteUserSubmit()
+        this.cambiarMensaje(new Mensaje("Usuario creado con éxito.", Tipo.SUCCESS, true))
+      },
+      err => this.handleErrRelog(err, "crear usuario para añadir a test", primera, this.createInviteUser, this)
+    )
   }
 
 }

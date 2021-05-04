@@ -23,7 +23,7 @@
                 <div id="inputAddTeamHelp" class="form-text text-muted">Invita a los miembros de un equipo a realizar un test</div>
             </div>
         </form>
-        <form (ngSubmit)='inviteUserSubmit()' ngNativeValidate>
+        <form *ngIf="!createUser" (ngSubmit)='inviteUserSubmit()' ngNativeValidate>
             <div class="my-3">
                 <div class="input-group">
                     <input class="button btn btn-primary" type="submit" value="Añadir usuario" />
@@ -32,6 +32,18 @@
                 </div>
                 <div id="inputAddUserHelp" class="form-text text-muted">Invita a un usuario a realizar un test</div>
             </div>
+            <p><a class="link-dark m-3" role="button" (click)="changeAddUser()">Crear cuenta de usuario por correo electronico</a></p>
+        </form>
+        <form *ngIf="createUser" (ngSubmit)='createInviteUserSubmit()' ngNativeValidate>
+            <div class="my-3">
+                <div class="input-group">
+                    <input class="button btn btn-primary" type="submit" value="Crear y Añadir usuario" />
+                    <input type="text" class="form-control" name="inputAddUser" aria-describedby="inputAddUserHelp"
+                        [(ngModel)]="addUserUsername" placeholder="Correo electrónico" required />
+                </div>
+                <div id="inputAddUserHelp" class="form-text text-muted">Crea una nueva cuenta e invitala a realizar un test</div>
+            </div>
+            <p><a class="link-dark m-3" role="button" (click)="changeAddUser()">Crear cuenta de usuario por correo electronico</a></p>
         </form>
         <p *ngIf="!enviaMensaje"><a class="link-dark mx-3" role="button" (click)="changeEnviaMensaje()">Enviar mensaje personalizado en la notificación</a></p>
         <p *ngIf="enviaMensaje"><a class="link-dark mx-3" role="button" (click)="changeNoEnviaMensaje()">No enviar mensaje personalizado en la notificación</a></p>

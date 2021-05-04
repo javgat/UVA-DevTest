@@ -110,12 +110,21 @@
     <div class="my-4">
         <h4>Miembros:</h4>
         <div *ngIf="checkTeamAdmin()">
-            <form (ngSubmit)='addMemberSubmit()' ngNativeValidate>
+            <form *ngIf="!createUser" (ngSubmit)='addMemberSubmit()' ngNativeValidate>
                 <div class="input-group my-3">
                     <input class="button btn btn-primary" type="submit" value="Añadir miembro" />
                     <input type="text" class="form-control" name="inputAddMember" aria-describedby="inputAddMemberHelp"
                         [(ngModel)]="addMiembroUsername" placeholder="Nombre de usuario" required pattern="[^@]+" />
                 </div>
+                <p><a class="link-dark m-3" role="button" (click)="changeAddUser()">Crear cuenta de usuario por correo electronico</a></p>
+            </form>
+            <form *ngIf="createUser" (ngSubmit)='createAddMemberSubmit()' ngNativeValidate>
+                <div class="input-group my-3">
+                    <input class="button btn btn-primary" type="submit" value="Crear Usuario y Añadir miembro" />
+                    <input type="text" class="form-control" name="inputAddMember" aria-describedby="inputAddMemberHelp"
+                        [(ngModel)]="addMiembroUsername" placeholder="Correo electrónico" required/>
+                </div>
+                <p><a class="link-dark m-3" role="button" (click)="changeNotAddUser()">Añadir usuario existente</a></p>
             </form>
             <p *ngIf="!enviaMensaje"><a class="link-dark mx-3" role="button" (click)="changeEnviaMensaje()">Enviar
                     mensaje personalizado en la notificación</a></p>

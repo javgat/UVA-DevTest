@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Message, Team, TeamService, User, UserService } from '@javgat/devtest-api';
+import { EmailUser, Message, Team, TeamService, User, UserService } from '@javgat/devtest-api';
 import { Subscription } from 'rxjs';
 import { LoggedInController } from '../shared/app.controller';
 import { Equipo, Mensaje, Tipo } from '../shared/app.model';
@@ -25,6 +25,7 @@ export class TeamComponent extends LoggedInController implements OnInit {
   kickingUsername: string
   mightKickUsername: string
   teamEdit: Team
+  createUser: boolean
 
   customMessageNotification: string
   enviaMensaje: boolean
@@ -37,6 +38,7 @@ export class TeamComponent extends LoggedInController implements OnInit {
     this.teamEdit = new Equipo("", "", false)
     this.customMessageNotification = ""
     this.enviaMensaje = false
+    this.createUser = false
     this.id = this.addMiembroUsername = this.usernamePutAdmin = this.kickingUsername = this.mightKickUsername = ""
     this.routeSub = this.route.params.subscribe(params => {
       this.id = params['id']
@@ -251,6 +253,32 @@ export class TeamComponent extends LoggedInController implements OnInit {
 
   changeNoEnviaMensaje(){
     this.enviaMensaje = false
+  }
+
+  changeNotAddUser(){
+    this.createUser = false
+  }
+
+  changeAddUser(){
+    this.createUser = true
+  }
+
+  createAddMemberSubmit(){
+    this.createAddMember(true)
+  }
+
+  createAddMember(primera: boolean){
+    var eu: EmailUser
+    eu = {
+      email: this.addMiembroUsername
+    }
+    this.userS.postEmailUser(eu).subscribe(
+      resp =>{
+        this.addMemberSubmit()
+        this.cambiarMensaje(new Mensaje("Usuario creado con éxito.", Tipo.SUCCESS, true))
+      },
+      err => this.handleErrRelog(err, "crear usuario para añadir a equipo", primera, this.createAddMember, this)
+    )
   }
 
 }

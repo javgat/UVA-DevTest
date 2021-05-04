@@ -9,7 +9,7 @@ func generateEmailBodyUserCreated(username string, pass string, address string, 
 	msg := []byte("To: " + address + "\r\n" +
 		"Subject: [NO RESPONDER] Usuario Creado\r\n" +
 		"\r\n" +
-		"Hola " + username + ", se ha creado una cuenta asociada a este correo electronico.\r\n" +
+		"Hola " + username + ", se ha creado una cuenta en DevTest asociada a este correo electronico.\r\n" +
 		"Puedes acceder mediante la web, o pulsando el siguiente enlace: " + frontEnd + "/login \r\n" +
 		"\r\n" +
 		"Los datos de inicio de sesion son:\r\n" +
