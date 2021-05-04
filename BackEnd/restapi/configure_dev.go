@@ -74,6 +74,8 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 	api.UserRegisterUserHandler = user.RegisterUserHandlerFunc(handlers.RegisterUser) // POST /users
 	api.UserGetUsersHandler = user.GetUsersHandlerFunc(handlers.GetUsers)             // GET /users
 
+	api.UserPostEmailUserHandler = user.PostEmailUserHandlerFunc(handlers.PostEmailUser) // POST /emailUsers
+
 	api.UserGetUserHandler = user.GetUserHandlerFunc(handlers.GetUser)             // GET /users/{username}
 	api.UserPutUserHandler = user.PutUserHandlerFunc(handlers.PutUser)             // PUT /users/{username}
 	api.UserDeleteUserHandler = user.DeleteUserHandlerFunc(handlers.DeleteUser)    // DELETE /users/{username}

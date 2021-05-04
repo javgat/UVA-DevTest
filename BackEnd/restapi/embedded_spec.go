@@ -910,6 +910,58 @@ func init() {
         }
       }
     },
+    "/emailUsers": {
+      "post": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Adds a user without specifying username or password",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Adds a user without specifying username or password",
+        "operationId": "PostEmailUser",
+        "parameters": [
+          {
+            "description": "User item to add",
+            "name": "emailUser",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/EmailUser"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "user created",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "409": {
+            "$ref": "#/responses/ConflictError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
     "/logout": {
       "get": {
         "description": "Returns a useless cookie that will expire soon",
@@ -8250,6 +8302,20 @@ func init() {
         "username": {
           "type": "string",
           "example": "javgat"
+        }
+      }
+    },
+    "EmailUser": {
+      "type": "object",
+      "required": [
+        "email"
+      ],
+      "properties": {
+        "email": {
+          "type": "string",
+          "format": "email",
+          "pattern": "^[^@ \\t\\r\\n]+@[^@ \\t\\r\\n]+\\.[^@ \\t\\r\\n]+$",
+          "example": "carlos@mail.com"
         }
       }
     },
@@ -9822,6 +9888,67 @@ func init() {
         }
       }
     },
+    "/emailUsers": {
+      "post": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Adds a user without specifying username or password",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Adds a user without specifying username or password",
+        "operationId": "PostEmailUser",
+        "parameters": [
+          {
+            "description": "User item to add",
+            "name": "emailUser",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/EmailUser"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "user created",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "409": {
+            "description": "A user with same username/email already exists",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
     "/logout": {
       "get": {
         "description": "Returns a useless cookie that will expire soon",
@@ -18374,6 +18501,20 @@ func init() {
         "username": {
           "type": "string",
           "example": "javgat"
+        }
+      }
+    },
+    "EmailUser": {
+      "type": "object",
+      "required": [
+        "email"
+      ],
+      "properties": {
+        "email": {
+          "type": "string",
+          "format": "email",
+          "pattern": "^[^@ \\t\\r\\n]+@[^@ \\t\\r\\n]+\\.[^@ \\t\\r\\n]+$",
+          "example": "carlos@mail.com"
         }
       }
     },

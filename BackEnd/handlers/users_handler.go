@@ -1304,3 +1304,44 @@ func PostRecoveryToken(params user.PostRecoveryTokenParams) middleware.Responder
 	log.Println("error en PostRecoveryToken()", err)
 	return user.NewPostRecoveryTokenInternalServerError()
 }
+
+func PostEmailUser(params user.PostEmailUserParams, u *models.User) middleware.Responder {
+	if isTeacherOrAdmin(u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			eu := params.EmailUser
+			username := eu.Email.String()
+			studentRol := models.UserRolEstudiante
+			pass := RandomString(40)
+			var bytes []byte
+			var du *dao.User
+			du, err = dao.GetUserEmail(db, eu.Email.String())
+			if err == nil {
+				if du != nil {
+					return user.NewPostEmailUserConflict()
+				}
+				bytes, err = bcrypt.GenerateFromPassword([]byte(pass), Cost)
+				if err == nil {
+					pwhashstring := string(bytes)
+					du := &dao.User{
+						Username: &username,
+						Email:    eu.Email,
+						Pwhash:   &pwhashstring,
+						Rol:      &studentRol,
+						Fullname: &username,
+					}
+					err = dao.InsertUser(db, du)
+					if err == nil {
+						mu := dao.ToModelUser(du)
+						// ENVIAR MAIL
+						emailHelper.SendEmailUserCreated(username, pass)
+						return user.NewPostEmailUserCreated().WithPayload(mu)
+					}
+				}
+			}
+		}
+		log.Println("Error en PostEmailUser(): ", err)
+		return user.NewPostEmailUserInternalServerError()
+	}
+	return user.NewPostEmailUserForbidden()
+}

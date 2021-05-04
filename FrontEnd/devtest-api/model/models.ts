@@ -1,4 +1,5 @@
 export * from './answer';
+export * from './emailUser';
 export * from './loginUser';
 export * from './message';
 export * from './modelError';

@@ -19,6 +19,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { Answer } from '../model/answer';
+import { EmailUser } from '../model/emailUser';
 import { PasswordRecovery } from '../model/passwordRecovery';
 import { PasswordUpdate } from '../model/passwordUpdate';
 import { Question } from '../model/question';
@@ -2410,6 +2411,58 @@ export class UserService {
         ];
 
         return this.httpClient.get<Array<User>>(`${this.basePath}/users`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Adds a user without specifying username or password
+     * Adds a user without specifying username or password
+     * @param emailUser User item to add
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public postEmailUser(emailUser: EmailUser, observe?: 'body', reportProgress?: boolean): Observable<User>;
+    public postEmailUser(emailUser: EmailUser, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<User>>;
+    public postEmailUser(emailUser: EmailUser, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<User>>;
+    public postEmailUser(emailUser: EmailUser, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (emailUser === null || emailUser === undefined) {
+            throw new Error('Required parameter emailUser was null or undefined when calling postEmailUser.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.post<User>(`${this.basePath}/emailUsers`,
+            emailUser,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

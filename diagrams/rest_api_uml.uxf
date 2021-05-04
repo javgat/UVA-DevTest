@@ -38,7 +38,8 @@ bg=yellow
 --
 --
 + &lt;&lt;GET&gt;&gt; getUsers(): User[]
-+ &lt;&lt;POST&gt;&gt; registerUser(su : SigninUser): User</panel_attributes>
++ &lt;&lt;POST&gt;&gt; registerUser(su : SigninUser): User
++ &lt;&lt;POST&gt;&gt; postEmailUser(e: EmailUser): User</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -855,7 +856,7 @@ bg=yellow
 --
 --
 + &lt;&lt;GET&gt;&gt; getPublishedTests(tags: String[][], likeTitle: String): Test[]
-+ &lt;&lt;POST&gt;&gt; publishTest(): Test</panel_attributes>
++ &lt;&lt;POST&gt;&gt; publishTest(p: PublishTestParams): Test</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -2521,5 +2522,18 @@ bg=yellow
 &lt;&lt;path&gt;&gt;
 /questions</panel_attributes>
     <additional_attributes>10.0;120.0;10.0;60.0;120.0;10.0;480.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1616</x>
+      <y>136</y>
+      <w>88</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/emailUsers</panel_attributes>
+    <additional_attributes>10.0;130.0;10.0;70.0;90.0;10.0;60.0;10.0</additional_attributes>
   </element>
 </diagram>

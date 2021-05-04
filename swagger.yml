@@ -196,6 +196,39 @@ paths:
           $ref: '#/responses/ForbiddenError'
         500:
           $ref: '#/responses/InternalServerError'
+  /emailUsers:
+    post:
+      security:
+        - BearerCookie: []
+      tags:
+      - user
+      summary: Adds a user without specifying username or password
+      operationId: PostEmailUser
+      description: Adds a user without specifying username or password
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: emailUser
+        description: User item to add
+        required: true
+        schema:
+          $ref: '#/definitions/EmailUser'
+      responses:
+        201:
+          description: user created
+          schema:
+            $ref: '#/definitions/User'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        409:
+          $ref: '#/responses/ConflictError'
+        500:
+          $ref: '#/responses/InternalServerError'
   /users/{username}:
     get:
       security:
@@ -5428,6 +5461,16 @@ definitions:
         example: password
         format: password
         pattern: '^.{6,}$'
+  EmailUser:
+    type: object
+    required:
+    - email
+    properties:
+      email:
+        type: string
+        example: carlos@mail.com
+        format: email
+        pattern: '^[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+$'
   LoginUser:
     type: object
     required:

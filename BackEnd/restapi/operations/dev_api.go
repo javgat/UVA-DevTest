@@ -412,6 +412,9 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		AuthLogoutHandler: auth.LogoutHandlerFunc(func(params auth.LogoutParams) middleware.Responder {
 			return middleware.NotImplemented("operation auth.Logout has not yet been implemented")
 		}),
+		UserPostEmailUserHandler: user.PostEmailUserHandlerFunc(func(params user.PostEmailUserParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation user.PostEmailUser has not yet been implemented")
+		}),
 		QuestionPostOptionHandler: question.PostOptionHandlerFunc(func(params question.PostOptionParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation question.PostOption has not yet been implemented")
 		}),
@@ -815,6 +818,8 @@ type DevAPI struct {
 	AuthLoginHandler auth.LoginHandler
 	// AuthLogoutHandler sets the operation handler for the logout operation
 	AuthLogoutHandler auth.LogoutHandler
+	// UserPostEmailUserHandler sets the operation handler for the post email user operation
+	UserPostEmailUserHandler user.PostEmailUserHandler
 	// QuestionPostOptionHandler sets the operation handler for the post option operation
 	QuestionPostOptionHandler question.PostOptionHandler
 	// TestPostPublishedTestHandler sets the operation handler for the post published test operation
@@ -1328,6 +1333,9 @@ func (o *DevAPI) Validate() error {
 	}
 	if o.AuthLogoutHandler == nil {
 		unregistered = append(unregistered, "auth.LogoutHandler")
+	}
+	if o.UserPostEmailUserHandler == nil {
+		unregistered = append(unregistered, "user.PostEmailUserHandler")
 	}
 	if o.QuestionPostOptionHandler == nil {
 		unregistered = append(unregistered, "question.PostOptionHandler")
@@ -2019,6 +2027,10 @@ func (o *DevAPI) initHandlerCache() {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
 	o.handlers["GET"]["/logout"] = auth.NewLogout(o.context, o.AuthLogoutHandler)
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
+	}
+	o.handlers["POST"]["/emailUsers"] = user.NewPostEmailUser(o.context, o.UserPostEmailUserHandler)
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}

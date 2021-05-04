@@ -1,4 +1,6 @@
 <app-nav-bar></app-nav-bar>
+<div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message" role="alert">
+    {{getMensaje().texto}}</div>
 <button class="button btn btn-outline-primary m-3" [routerLink]="['/admin']">
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-double-left"
         viewBox="0 0 16 16">
@@ -10,6 +12,19 @@
     Volver
 </button>
 <h2>Administración: Usuarios</h2>
+<div *ngIf="!addUser">
+    <p><a class="link-dark m-3" role="button" (click)="changeAddUser()">Crear Usuario por correo electrónico</a></p>
+</div>
+<div *ngIf="addUser">
+    <form (ngSubmit)="crearUsuarioSubmit()" ngNativeValidate>
+        <div class="input-group my-3">
+            <input class="button btn btn-primary" type="submit" value="Crear usuario y enviar correo" />
+            <input type="text" class="form-control" name="inputAddQuestion" [(ngModel)]="addUserEmail"
+                placeholder="Correo electrónico" required />
+        </div>
+    </form>
+    <p><a class="link-dark m-3" role="button" (click)="changeNotAddUser()">Ocultar</a></p>
+</div>
 <table class="table table-striped table-hover table-primary">
     <thead>
         <tr>
