@@ -13,6 +13,7 @@ import (
 	"uva-devtest/persistence/dbconnection"
 
 	// Blank import of mysql driver
+	"github.com/go-openapi/strfmt"
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -32,6 +33,7 @@ func ToModelTest(t *Test) (*models.Test, error) {
 				Username:                 u.Username,
 				HoraCreacion:             t.HoraCreacion,
 				OriginalTestID:           t.OriginalTestID,
+				NotaMaxima:               t.NotaMaxima,
 			}
 			return mt, nil
 		}
@@ -60,14 +62,15 @@ func rowsToTests(rows *sql.Rows) ([]*Test, error) {
 	for rows.Next() {
 		var t Test
 		var timeNull sql.NullTime
-		err := rows.Scan(&t.ID, &t.Title, &t.Description, &t.MaxMinutes, &t.AccesoPublico, &t.Editable, &t.Usuarioid, &t.AccesoPublicoNoPublicado, &timeNull, &t.OriginalTestID)
+		err := rows.Scan(&t.ID, &t.Title, &t.Description, &t.MaxMinutes, &t.AccesoPublico, &t.Editable, &t.Usuarioid,
+			&t.AccesoPublicoNoPublicado, &timeNull, &t.OriginalTestID, &t.NotaMaxima)
 		if err != nil {
 			return tests, err
 		}
 		if !timeNull.Valid {
 			return tests, errors.New("tiempo SQL no valido")
 		}
-		t.HoraCreacion = timeNull.Time.String()
+		t.HoraCreacion = strfmt.DateTime(timeNull.Time)
 		tests = append(tests, &t)
 	}
 	return tests, nil
@@ -190,13 +193,14 @@ func PutTest(db *sql.DB, testid int64, t *models.Test) error {
 	if err != nil || u == nil {
 		return errors.New(errorResourceNotFound)
 	}
-	query, err := db.Prepare("UPDATE Test SET title=?, description=?, maxMinutes=?, accesoPublico=?, usuarioid=?, accesoPublicoNoPublicado=? WHERE editable=1 AND id=?")
+	query, err := db.Prepare("UPDATE Test SET title=?, description=?, maxMinutes=?, accesoPublico=?, usuarioid=?, " +
+		"accesoPublicoNoPublicado=?, notaMaxima=? WHERE editable=1 AND id=?")
 
 	if err != nil {
 		return err
 	}
 	defer query.Close()
-	_, err = query.Exec(t.Title, t.Description, t.MaxMinutes, *t.AccesoPublico, u.ID, *t.AccesoPublicoNoPublicado, testid)
+	_, err = query.Exec(t.Title, t.Description, t.MaxMinutes, *t.AccesoPublico, u.ID, *t.AccesoPublicoNoPublicado, t.NotaMaxima, testid)
 	return err
 }
 
@@ -292,8 +296,8 @@ func PostTest(db *sql.DB, username string, t *models.Test, horaCreacion time.Tim
 	if err != nil || u == nil {
 		return nil, errors.New(errorResourceNotFound)
 	}
-	query, err := db.Prepare("INSERT INTO Test(title, description, maxMinutes, accesoPublico, editable, usuarioid, accesoPublicoNoPublicado, horaCreacion, origenTestid) " +
-		"VALUES (?,?,?,?,?,?,?,?,?)")
+	query, err := db.Prepare("INSERT INTO Test(title, description, maxMinutes, accesoPublico, editable, usuarioid, accesoPublicoNoPublicado, horaCreacion, origenTestid, notaMaxima) " +
+		"VALUES (?,?,?,?,?,?,?,?,?,?)")
 
 	if err != nil {
 		return nil, err
@@ -303,7 +307,7 @@ func PostTest(db *sql.DB, username string, t *models.Test, horaCreacion time.Tim
 	if *t.OriginalTestID == -1 {
 		origID = nil
 	}
-	sol, err := query.Exec(t.Title, t.Description, t.MaxMinutes, t.AccesoPublico, t.Editable, u.ID, t.AccesoPublicoNoPublicado, horaCreacion, origID)
+	sol, err := query.Exec(t.Title, t.Description, t.MaxMinutes, t.AccesoPublico, t.Editable, u.ID, t.AccesoPublicoNoPublicado, horaCreacion, origID, t.NotaMaxima)
 	if err == nil {
 		ts := t
 		ts.ID, err = sol.LastInsertId()

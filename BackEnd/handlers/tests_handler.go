@@ -488,6 +488,42 @@ func addQuestionTimeToTest(qt *dao.Question, testid int64) error {
 	return err
 }
 
+func removeQuestionPointsTest(q *dao.Question, testid int64) error {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		var t *dao.Test
+		t, err = dao.GetTest(db, testid)
+		if t != nil && err == nil {
+			var mt *models.Test
+			mt, err = dao.ToModelTest(t)
+			if err == nil && mt != nil {
+				mt.NotaMaxima = mt.NotaMaxima - *q.ValorFinal
+				err = dao.PutTest(db, testid, mt)
+				return err
+			}
+		}
+	}
+	return err
+}
+
+func addQuestionPointsTest(vf int64, testid int64) error {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		var t *dao.Test
+		t, err = dao.GetTest(db, testid)
+		if t != nil && err == nil {
+			var mt *models.Test
+			mt, err = dao.ToModelTest(t)
+			if err == nil && mt != nil {
+				mt.NotaMaxima = mt.NotaMaxima + vf
+				err = dao.PutTest(db, testid, mt)
+				return err
+			}
+		}
+	}
+	return err
+}
+
 // AddQuestionToTest PUT /tests/{testid}/questions/{questionid}. Add question to test
 // Auth: TestAdmin or Admin. Si question no publica => además questionAdmin or Admin, o que ya esté en el test
 // Req: Test.editable
@@ -510,13 +546,19 @@ func AddQuestionToTest(params test.AddQuestionToTestParams, u *models.User) midd
 				if puedeHacerse {
 					if qt != nil {
 						err = dao.RemoveQuestionTest(db, params.Questionid, params.Testid)
+						if err == nil {
+							err = removeQuestionPointsTest(qt, params.Testid)
+						}
 					} else {
 						err = addQuestionTimeToTest(q, params.Testid)
 					}
 					if err == nil {
-						err = dao.AddQuestionTest(db, params.Questionid, params.Testid, *params.ValorFinal.ValorFinal)
+						err = addQuestionPointsTest(*params.ValorFinal.ValorFinal, params.Testid)
 						if err == nil {
-							return test.NewAddQuestionToTestOK()
+							err = dao.AddQuestionTest(db, params.Questionid, params.Testid, *params.ValorFinal.ValorFinal)
+							if err == nil {
+								return test.NewAddQuestionToTestOK()
+							}
 						}
 					}
 				} else {
@@ -564,13 +606,25 @@ func RemoveQuestionTest(params test.RemoveQuestionFromTestParams, u *models.User
 	if testEditable(params.Testid) && (isAdmin(u) || isTestAdmin(u, params.Testid)) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			err = dao.RemoveQuestionTest(db, params.Questionid, params.Testid)
+			var qt *dao.Question
+			qt, err = dao.GetQuestionFromTest(db, params.Testid, params.Questionid)
 			if err == nil {
-				err = substractQuestionTimeTest(params.Questionid, params.Testid)
-				if err == nil {
+				if qt != nil {
+					err = dao.RemoveQuestionTest(db, params.Questionid, params.Testid)
+					if err == nil {
+						err = substractQuestionTimeTest(params.Questionid, params.Testid)
+						if err == nil {
+							err = removeQuestionPointsTest(qt, params.Testid)
+							if err == nil {
+								return test.NewRemoveQuestionFromTestOK()
+							}
+						}
+					}
+				} else {
 					return test.NewRemoveQuestionFromTestOK()
 				}
 			}
+
 			log.Println("Error en users_handler AddQuestionToTest(): ", err)
 			return test.NewRemoveQuestionFromTestGone()
 		}

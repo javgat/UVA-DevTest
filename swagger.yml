@@ -5687,11 +5687,15 @@ definitions:
         example: true
       horaCreacion:
         type: string
+        format: date-time
         example: 2021-02-25 14:44:55
       originalTestID:
         type: integer
         example: 15
         default: -1
+      notaMaxima:
+        type: integer
+        example: 10
       cantidadRespuestasDelUsuario:
         type: integer
         description: only present in GetSolvableTestFromUser
@@ -5707,6 +5711,11 @@ definitions:
       startime:
         type: string
         example: 2021-02-25 14:44:55
+        format: date-time
+      finishTime:
+        type: string
+        example: 2021-02-25 14:44:55
+        format: date-time
       entregado:
         type: boolean
         example: false
@@ -5716,6 +5725,12 @@ definitions:
       username:
         type: string
         example: javgat
+      puntuacion:
+        type: number
+        example: 8.7
+      corregida:
+        type: boolean
+        example: false
   QuestionAnswer:
     type: object
     required:

@@ -45,7 +45,8 @@ type Test struct {
 
 	// hora creacion
 	// Example: 2021-02-25 14:44:55
-	HoraCreacion string `json:"horaCreacion,omitempty"`
+	// Format: date-time
+	HoraCreacion strfmt.DateTime `json:"horaCreacion,omitempty"`
 
 	// id
 	// Example: 1
@@ -56,6 +57,10 @@ type Test struct {
 	// Required: true
 	// Minimum: 0
 	MaxMinutes *int64 `json:"maxMinutes"`
+
+	// nota maxima
+	// Example: 10
+	NotaMaxima int64 `json:"notaMaxima,omitempty"`
 
 	// original test ID
 	// Example: 15
@@ -89,6 +94,10 @@ func (m *Test) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateEditable(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateHoraCreacion(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -140,6 +149,18 @@ func (m *Test) validateDescription(formats strfmt.Registry) error {
 func (m *Test) validateEditable(formats strfmt.Registry) error {
 
 	if err := validate.Required("editable", "body", m.Editable); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Test) validateHoraCreacion(formats strfmt.Registry) error {
+	if swag.IsZero(m.HoraCreacion) { // not required
+		return nil
+	}
+
+	if err := validate.FormatOf("horaCreacion", "body", "date-time", m.HoraCreacion.String(), formats); err != nil {
 		return err
 	}
 

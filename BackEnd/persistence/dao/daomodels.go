@@ -186,7 +186,12 @@ type Test struct {
 
 	// hora creacion
 	// Example: 2021-02-25 14:44:55
-	HoraCreacion string `json:"horaCreacion,omitempty"`
+	// Format: date-time
+	HoraCreacion strfmt.DateTime `json:"horaCreacion,omitempty"`
+
+	// nota maxima
+	// Example: 10
+	NotaMaxima int64 `json:"notaMaxima,omitempty"`
 
 	// original test ID
 	// Example: 15
@@ -198,18 +203,32 @@ type Test struct {
 // swagger:model Answer
 type Answer struct {
 
+	// corregida
+	// Example: false
+	Corregida bool `json:"corregida,omitempty"`
+
 	// entregado
 	// Example: false
 	// Required: true
 	Entregado *bool `json:"entregado"`
 
+	// finish time
+	// Example: 2021-02-25 14:44:55
+	// Format: date-time
+	FinishTime strfmt.DateTime `json:"finishTime,omitempty"`
+
 	// id
 	// Example: 1
 	ID int64 `json:"id,omitempty"`
 
+	// puntuacion
+	// Example: 8.7
+	Puntuacion float64 `json:"puntuacion,omitempty"`
+
 	// startime
 	// Example: 2021-02-25 14:44:55
-	Startime string `json:"startime,omitempty"`
+	// Format: date-time
+	Startime strfmt.DateTime `json:"startime,omitempty"`
 
 	// testid
 	// Example: 343

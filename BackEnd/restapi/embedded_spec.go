@@ -8283,16 +8283,30 @@ func init() {
         "entregado"
       ],
       "properties": {
+        "corregida": {
+          "type": "boolean",
+          "example": false
+        },
         "entregado": {
           "type": "boolean",
           "example": false
+        },
+        "finishTime": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2021-02-25 14:44:55"
         },
         "id": {
           "type": "integer",
           "example": 1
         },
+        "puntuacion": {
+          "type": "number",
+          "example": 8.7
+        },
         "startime": {
           "type": "string",
+          "format": "date-time",
           "example": "2021-02-25 14:44:55"
         },
         "testid": {
@@ -8684,6 +8698,7 @@ func init() {
         },
         "horaCreacion": {
           "type": "string",
+          "format": "date-time",
           "example": "2021-02-25 14:44:55"
         },
         "id": {
@@ -8693,6 +8708,10 @@ func init() {
         "maxMinutes": {
           "type": "integer",
           "example": 60
+        },
+        "notaMaxima": {
+          "type": "integer",
+          "example": 10
         },
         "originalTestID": {
           "type": "integer",
@@ -18482,16 +18501,30 @@ func init() {
         "entregado"
       ],
       "properties": {
+        "corregida": {
+          "type": "boolean",
+          "example": false
+        },
         "entregado": {
           "type": "boolean",
           "example": false
+        },
+        "finishTime": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2021-02-25 14:44:55"
         },
         "id": {
           "type": "integer",
           "example": 1
         },
+        "puntuacion": {
+          "type": "number",
+          "example": 8.7
+        },
         "startime": {
           "type": "string",
+          "format": "date-time",
           "example": "2021-02-25 14:44:55"
         },
         "testid": {
@@ -18885,6 +18918,7 @@ func init() {
         },
         "horaCreacion": {
           "type": "string",
+          "format": "date-time",
           "example": "2021-02-25 14:44:55"
         },
         "id": {
@@ -18895,6 +18929,10 @@ func init() {
           "type": "integer",
           "minimum": 0,
           "example": 60
+        },
+        "notaMaxima": {
+          "type": "integer",
+          "example": 10
         },
         "originalTestID": {
           "type": "integer",

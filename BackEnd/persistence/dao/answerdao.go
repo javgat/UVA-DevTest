@@ -12,6 +12,7 @@ import (
 	"uva-devtest/models"
 	"uva-devtest/persistence/dbconnection"
 
+	"github.com/go-openapi/strfmt"
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -23,7 +24,7 @@ func rowsToAnswers(rows *sql.Rows) ([]*Answer, error) {
 	var answers []*Answer
 	for rows.Next() {
 		var t Answer
-		err := rows.Scan(&t.ID, &t.Startime, &t.Entregado, &t.Testid, &t.Usuarioid)
+		err := rows.Scan(&t.ID, &t.Startime, &t.FinishTime, &t.Entregado, &t.Testid, &t.Usuarioid, &t.Puntuacion, &t.Corregida)
 		if err != nil {
 			return answers, err
 		}
@@ -51,11 +52,14 @@ func ToModelAnswer(a *Answer) (*models.Answer, error) {
 		u, err := GetUserByID(db, a.Usuarioid)
 		if err == nil {
 			mt := &models.Answer{
-				Entregado: a.Entregado,
-				Startime:  a.Startime,
-				Testid:    a.Testid,
-				ID:        a.ID,
-				Username:  *u.Username,
+				Entregado:  a.Entregado,
+				Startime:   a.Startime,
+				FinishTime: a.FinishTime,
+				Testid:     a.Testid,
+				ID:         a.ID,
+				Username:   *u.Username,
+				Puntuacion: a.Puntuacion,
+				Corregida:  a.Corregida,
 			}
 			return mt, nil
 		}
@@ -117,7 +121,7 @@ func StartAnswer(db *sql.DB, username string, testid int64) (*Answer, error) {
 	if err != nil || u == nil {
 		return nil, errors.New(errorResourceNotFound)
 	}
-	query, err := db.Prepare("INSERT INTO RespuestaExamen(startTime, entregado, testid, usuarioid) VALUES (?,?,?,?)")
+	query, err := db.Prepare("INSERT INTO RespuestaExamen(startTime, finishTime, entregado, testid, usuarioid, puntuacion, corregida) VALUES (?,NULL,?,?,?,0,0)")
 
 	if err != nil {
 		return nil, err
@@ -129,14 +133,17 @@ func StartAnswer(db *sql.DB, username string, testid int64) (*Answer, error) {
 	if err == nil {
 		var id int64
 		id, err = res.LastInsertId()
+		dt := strfmt.DateTime(now)
 		if err == nil {
 			bfalse := false
 			ar := &Answer{
-				Entregado: &bfalse,
-				Testid:    testid,
-				Usuarioid: u.ID,
-				Startime:  now.String(),
-				ID:        id,
+				Entregado:  &bfalse,
+				Testid:     testid,
+				Usuarioid:  u.ID,
+				Startime:   dt,
+				ID:         id,
+				Puntuacion: 0,
+				Corregida:  false,
 			}
 			return ar, err
 		}

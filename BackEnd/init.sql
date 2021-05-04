@@ -72,6 +72,7 @@ CREATE TABLE Test(
   accesoPublicoNoPublicado boolean NOT NULL,
   horaCreacion DateTime NOT NULL,
   origenTestid int(11),
+  notaMaxima int(11) NOT NULL,
   FOREIGN KEY(usuarioid) REFERENCES Usuario(id),
   FOREIGN KEY(origenTestid) REFERENCES Test(id),
   PRIMARY KEY(id)
@@ -179,9 +180,12 @@ CREATE TABLE TestEtiqueta(
 CREATE TABLE RespuestaExamen(
   id int(11) NOT NULL AUTO_INCREMENT,
   startTime DateTime NOT NULL,
+  finishTime DateTime,
   entregado boolean NOT NULL,
   testid int(11) NOT NULL,
   usuarioid int(11) NOT NULL,
+  puntuacion DEC(12,3),
+  corregida boolean NOT NULL,
   FOREIGN KEY(testid) REFERENCES Test(id) ON DELETE CASCADE,
   FOREIGN KEY(usuarioid) REFERENCES Usuario(id) ON DELETE CASCADE,
   PRIMARY KEY(id)

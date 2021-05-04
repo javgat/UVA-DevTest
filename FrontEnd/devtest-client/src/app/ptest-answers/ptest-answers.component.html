@@ -24,7 +24,7 @@
         <tbody>
             <tr *ngFor="let ans of answers" role="button" [routerLink]="['/pt', test.id, 'answers', ans.id]">
                 <td>{{ans.username || ""}}</td>
-                <td><span *ngIf="ans.finished">Sí</span><span *ngIf="!ans.finished">No</span></td>
+                <td><span *ngIf="ans.entregado">Sí</span><span *ngIf="!ans.entregado">No</span></td>
             </tr>
         </tbody>
     </table>

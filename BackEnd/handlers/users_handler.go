@@ -772,6 +772,7 @@ func PostTest(params user.PostTestParams, u *models.User) middleware.Responder {
 			var menosuno int64 = -1
 			params.Test.OriginalTestID = &menosuno
 			horaCreacion := time.Now()
+			params.Test.NotaMaxima = 0
 			t, err := dao.PostTest(db, params.Username, params.Test, horaCreacion)
 			if err == nil && t != nil {
 				return user.NewPostTestCreated().WithPayload(t)

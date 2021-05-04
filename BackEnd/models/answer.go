@@ -19,18 +19,32 @@ import (
 // swagger:model Answer
 type Answer struct {
 
+	// corregida
+	// Example: false
+	Corregida bool `json:"corregida,omitempty"`
+
 	// entregado
 	// Example: false
 	// Required: true
 	Entregado *bool `json:"entregado"`
 
+	// finish time
+	// Example: 2021-02-25 14:44:55
+	// Format: date-time
+	FinishTime strfmt.DateTime `json:"finishTime,omitempty"`
+
 	// id
 	// Example: 1
 	ID int64 `json:"id,omitempty"`
 
+	// puntuacion
+	// Example: 8.7
+	Puntuacion float64 `json:"puntuacion,omitempty"`
+
 	// startime
 	// Example: 2021-02-25 14:44:55
-	Startime string `json:"startime,omitempty"`
+	// Format: date-time
+	Startime strfmt.DateTime `json:"startime,omitempty"`
 
 	// testid
 	// Example: 343
@@ -49,6 +63,14 @@ func (m *Answer) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateFinishTime(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateStartime(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
@@ -58,6 +80,30 @@ func (m *Answer) Validate(formats strfmt.Registry) error {
 func (m *Answer) validateEntregado(formats strfmt.Registry) error {
 
 	if err := validate.Required("entregado", "body", m.Entregado); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Answer) validateFinishTime(formats strfmt.Registry) error {
+	if swag.IsZero(m.FinishTime) { // not required
+		return nil
+	}
+
+	if err := validate.FormatOf("finishTime", "body", "date-time", m.FinishTime.String(), formats); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Answer) validateStartime(formats strfmt.Registry) error {
+	if swag.IsZero(m.Startime) { // not required
+		return nil
+	}
+
+	if err := validate.FormatOf("startime", "body", "date-time", m.Startime.String(), formats); err != nil {
 		return err
 	}
 
