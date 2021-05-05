@@ -25,7 +25,7 @@
                 <td><span *ngIf="ans.entregado">Sí</span><span *ngIf="!ans.entregado">No</span></td>
                 <td>{{ans.startTime?.toLocaleString()}}</td>
                 <td><span *ngIf="ans.entregado">{{ans.finishTime}}</span></td>
-                <td>{{ans.puntuacion}}</td>
+                <td>{{ans.puntuacion || 0}}</td>
             </tr>
         </tbody>
     </table>

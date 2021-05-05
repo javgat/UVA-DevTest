@@ -5271,6 +5271,54 @@ paths:
           $ref: '#/responses/GoneError'
         500:
           $ref: '#/responses/InternalServerError'
+  /answers/{answerid}/corrected:
+    put:
+      security:
+        - BearerCookie: []
+      tags:
+      - answer
+      summary: Marks answer as corrected. Only for TestAdmins
+      operationId: SetAnswerCorrected
+      description: Marks answer as corrected
+      parameters:
+      - in: path
+        name: answerid
+        description: Id of the answer
+        required: true
+        type: integer
+      responses:
+        200:
+          description: Answer updated
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+    delete:
+      security:
+        - BearerCookie: []
+      tags:
+      - answer
+      summary: Marks answer as not corrected. Only for TestAdmins
+      operationId: SetAnswerNotCorrected
+      description: Marks answer as not corrected
+      parameters:
+      - in: path
+        name: answerid
+        description: Id of the answer
+        required: true
+        type: integer
+      responses:
+        200:
+          description: Answer updated
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
   /answers/{answerid}/qanswers:
     get:
       security:

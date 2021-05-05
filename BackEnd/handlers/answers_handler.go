@@ -77,7 +77,6 @@ func GetAnswer(params answer.GetAnswerParams, u *models.User) middleware.Respond
 
 // PUT /answers/{answerid}
 // Auth: Admin OR AnswerOwner
-
 func FinishAnswer(params answer.FinishAnswerParams, u *models.User) middleware.Responder {
 	if isAdmin(u) || isAnswerOwner(params.Answerid, u) {
 		db, err := dbconnection.ConnectDb()
@@ -91,6 +90,40 @@ func FinishAnswer(params answer.FinishAnswerParams, u *models.User) middleware.R
 		return answer.NewFinishAnswerInternalServerError()
 	}
 	return answer.NewFinishAnswerForbidden()
+}
+
+// PUT /answers/{answerid}/corrected
+// Auth: Admin OR TestAdmin
+func SetAnswerCorrected(params answer.SetAnswerCorrectedParams, u *models.User) middleware.Responder {
+	if isAdmin(u) || isAnswerTestAdmin(u, params.Answerid) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			err = dao.SetAnswerCorrected(db, params.Answerid)
+			if err == nil {
+				return answer.NewSetAnswerCorrectedOK()
+			}
+		}
+		log.Println("Error en answers_handler SetAnswerCorrected(): ", err)
+		return answer.NewSetAnswerCorrectedInternalServerError()
+	}
+	return answer.NewSetAnswerCorrectedForbidden()
+}
+
+// DELETE /answers/{answerid}/corrected
+// Auth: Admin OR TestAdmin
+func SetAnswerNotCorrected(params answer.SetAnswerNotCorrectedParams, u *models.User) middleware.Responder {
+	if isAdmin(u) || isAnswerTestAdmin(u, params.Answerid) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			err = dao.SetAnswerNotCorrected(db, params.Answerid)
+			if err == nil {
+				return answer.NewSetAnswerNotCorrectedOK()
+			}
+		}
+		log.Println("Error en answers_handler SetAnswerNotCorrected(): ", err)
+		return answer.NewSetAnswerNotCorrectedInternalServerError()
+	}
+	return answer.NewSetAnswerNotCorrectedForbidden()
 }
 
 // GET /answers/{answerid}/qanswers

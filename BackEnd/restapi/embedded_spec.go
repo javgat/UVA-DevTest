@@ -376,6 +376,80 @@ func init() {
         }
       }
     },
+    "/answers/{answerid}/corrected": {
+      "put": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Marks answer as corrected",
+        "tags": [
+          "answer"
+        ],
+        "summary": "Marks answer as corrected. Only for TestAdmins",
+        "operationId": "SetAnswerCorrected",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the answer",
+            "name": "answerid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Answer updated"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Marks answer as not corrected",
+        "tags": [
+          "answer"
+        ],
+        "summary": "Marks answer as not corrected. Only for TestAdmins",
+        "operationId": "SetAnswerNotCorrected",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the answer",
+            "name": "answerid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Answer updated"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
     "/answers/{answerid}/qanswers": {
       "get": {
         "security": [
@@ -9484,6 +9558,92 @@ func init() {
             "schema": {
               "$ref": "#/definitions/Error"
             }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/answers/{answerid}/corrected": {
+      "put": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Marks answer as corrected",
+        "tags": [
+          "answer"
+        ],
+        "summary": "Marks answer as corrected. Only for TestAdmins",
+        "operationId": "SetAnswerCorrected",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the answer",
+            "name": "answerid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Answer updated"
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Marks answer as not corrected",
+        "tags": [
+          "answer"
+        ],
+        "summary": "Marks answer as not corrected. Only for TestAdmins",
+        "operationId": "SetAnswerNotCorrected",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the answer",
+            "name": "answerid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Answer updated"
           },
           "403": {
             "description": "Not authorized to this content",

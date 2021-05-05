@@ -289,6 +289,9 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 	api.AnswerGetAnswerHandler = answer.GetAnswerHandlerFunc(handlers.GetAnswer)          // GET /answers/{answerid}
 	api.AnswerFinishAnswerHandler = answer.FinishAnswerHandlerFunc(handlers.FinishAnswer) // PUT /answers/{answerid}
 
+	api.AnswerSetAnswerCorrectedHandler = answer.SetAnswerCorrectedHandlerFunc(handlers.SetAnswerCorrected)          // PUT /answers/{answerid}/corrected
+	api.AnswerSetAnswerNotCorrectedHandler = answer.SetAnswerNotCorrectedHandlerFunc(handlers.SetAnswerNotCorrected) // DELETE /answers/{answerid}/corrected
+
 	api.AnswerGetQuestionAnswersFromAnswerHandler = answer.GetQuestionAnswersFromAnswerHandlerFunc(handlers.GetQuestionAnswers)       // GET /answers/{answerid}/qanswers
 	api.AnswerPostQuestionAnswerHandler = answer.PostQuestionAnswerHandlerFunc(handlers.PostQuestionAnswer)                           // POST /answers/{answerid}/qanswers
 	api.AnswerGetQuestionAnswerFromAnswerHandler = answer.GetQuestionAnswerFromAnswerHandlerFunc(handlers.GetQuestionAnswer)          // GET /answers/{answerid}/qanswers/{questionid}

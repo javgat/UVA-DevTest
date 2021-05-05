@@ -1,5 +1,15 @@
 <app-nav-bar></app-nav-bar>
 <div class="mt-5">
+    <button *ngIf="isModoTestAdmin()" class="button btn btn-outline-primary m-3" [routerLink]="['/pt', test.id, 'answers']">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+            class="bi bi-chevron-double-left" viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+                d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+            <path fill-rule="evenodd"
+                d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+        </svg>
+        Ver todas las respuestas al test
+    </button>
     <div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message" role="alert">
         {{getMensaje().texto}}</div>
     <h3>Respuesta al test <a [routerLink]="['/pt', testid]">{{test.title}}</a></h3>
@@ -8,5 +18,35 @@
     <p>Fecha de inicio: {{answer.startTime}}</p>
     <p>Fecha de entrega: {{answer.finishTime}}</p>
     <p>Puntuacion: {{answer.puntuacion || 0}}</p>
-    <p>Corregida:  <span *ngIf="answer.corregida">Sí</span><span *ngIf="!answer.corregida">No</span></p>
+    <p>Corregida: <span *ngIf="answer.corregida">Sí</span><span *ngIf="!answer.corregida">No</span></p>
+    <div *ngIf="isModoTestAdmin()">
+        <button *ngIf="!answer.corregida" type="button" class="btn btn-primary" data-bs-toggle="modal"
+            data-bs-target="#modalCorregida">Marcar como corregida</button>
+        <button *ngIf="answer.corregida" type="button" class="btn btn-primary" data-bs-toggle="modal"
+            data-bs-target="#modalCorregida">Marcar como no corregida</button>
+
+        <div class="modal fade" id="modalCorregida" tabindex="-1" aria-labelledby="modalCorregidaLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalCorregidaLabel">Marcar como <span *ngIf="answer.corregida">no
+                            </span>corregida</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        ¿Marcar respuesta como <span *ngIf="answer.corregida">no </span>corregida?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button *ngIf="!answer.corregida" type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                            (click)="setAsCorregidaClick()">Marcar como corregida</button>
+                        <button *ngIf="answer.corregida" type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                            (click)="setAsNotCorregidaClick()">Marcar como no corregida</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>

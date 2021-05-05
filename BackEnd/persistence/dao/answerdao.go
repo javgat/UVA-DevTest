@@ -164,6 +164,30 @@ func FinishAnswer(db *sql.DB, answerid int64) error {
 	return err
 }
 
+func SetAnswerCorrected(db *sql.DB, answerid int64) error {
+	if db == nil {
+		return errors.New(errorDBNil)
+	}
+	query, err := db.Prepare("UPDATE RespuestaExamen SET corregida=1 WHERE id=?")
+	if err == nil {
+		defer query.Close()
+		_, err = query.Exec(answerid)
+	}
+	return err
+}
+
+func SetAnswerNotCorrected(db *sql.DB, answerid int64) error {
+	if db == nil {
+		return errors.New(errorDBNil)
+	}
+	query, err := db.Prepare("UPDATE RespuestaExamen SET corregida=0 WHERE id=?")
+	if err == nil {
+		defer query.Close()
+		_, err = query.Exec(answerid)
+	}
+	return err
+}
+
 func GetOpenAnswersFromUserTest(db *sql.DB, username string, testid int64) ([]*Answer, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)

@@ -91,4 +91,26 @@ export class AnswerComponent extends LoggedInController implements OnInit {
     )
   }
 
+  setAsCorregidaClick(){
+    this.setAsCorregida(true)
+  }
+
+  setAsCorregida(primera: boolean){
+    this.answerS.setAnswerCorrected(this.answerid).subscribe(
+      resp => this.getAnswer(true),
+      err => this.handleErrRelog(err, "marcar respuesta como corregida", primera, this.setAsCorregida, this)
+    )
+  }
+
+  setAsNotCorregidaClick(){
+    this.setAsNotCorregida(true)
+  }
+
+  setAsNotCorregida(primera: boolean){
+    this.answerS.setAnswerNotCorrected(this.answerid).subscribe(
+      resp => this.getAnswer(true),
+      err => this.handleErrRelog(err, "marcar pregunta como no corregida", primera, this.setAsNotCorregida, this)
+    )
+  }
+
 }

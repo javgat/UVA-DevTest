@@ -490,6 +490,12 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		PublishedTestRemoveUserToPublishedTestHandler: published_test.RemoveUserToPublishedTestHandlerFunc(func(params published_test.RemoveUserToPublishedTestParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation published_test.RemoveUserToPublishedTest has not yet been implemented")
 		}),
+		AnswerSetAnswerCorrectedHandler: answer.SetAnswerCorrectedHandlerFunc(func(params answer.SetAnswerCorrectedParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation answer.SetAnswerCorrected has not yet been implemented")
+		}),
+		AnswerSetAnswerNotCorrectedHandler: answer.SetAnswerNotCorrectedHandlerFunc(func(params answer.SetAnswerNotCorrectedParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation answer.SetAnswerNotCorrected has not yet been implemented")
+		}),
 		UserStartAnswerHandler: user.StartAnswerHandlerFunc(func(params user.StartAnswerParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation user.StartAnswer has not yet been implemented")
 		}),
@@ -882,6 +888,10 @@ type DevAPI struct {
 	UserRemoveTestFavoriteHandler user.RemoveTestFavoriteHandler
 	// PublishedTestRemoveUserToPublishedTestHandler sets the operation handler for the remove user to published test operation
 	PublishedTestRemoveUserToPublishedTestHandler published_test.RemoveUserToPublishedTestHandler
+	// AnswerSetAnswerCorrectedHandler sets the operation handler for the set answer corrected operation
+	AnswerSetAnswerCorrectedHandler answer.SetAnswerCorrectedHandler
+	// AnswerSetAnswerNotCorrectedHandler sets the operation handler for the set answer not corrected operation
+	AnswerSetAnswerNotCorrectedHandler answer.SetAnswerNotCorrectedHandler
 	// UserStartAnswerHandler sets the operation handler for the start answer operation
 	UserStartAnswerHandler user.StartAnswerHandler
 	// AuthCloseSessionsHandler sets the operation handler for the close sessions operation
@@ -1431,6 +1441,12 @@ func (o *DevAPI) Validate() error {
 	}
 	if o.PublishedTestRemoveUserToPublishedTestHandler == nil {
 		unregistered = append(unregistered, "published_test.RemoveUserToPublishedTestHandler")
+	}
+	if o.AnswerSetAnswerCorrectedHandler == nil {
+		unregistered = append(unregistered, "answer.SetAnswerCorrectedHandler")
+	}
+	if o.AnswerSetAnswerNotCorrectedHandler == nil {
+		unregistered = append(unregistered, "answer.SetAnswerNotCorrectedHandler")
 	}
 	if o.UserStartAnswerHandler == nil {
 		unregistered = append(unregistered, "user.StartAnswerHandler")
@@ -2163,6 +2179,14 @@ func (o *DevAPI) initHandlerCache() {
 		o.handlers["DELETE"] = make(map[string]http.Handler)
 	}
 	o.handlers["DELETE"]["/publishedTests/{testid}/users/{username}"] = published_test.NewRemoveUserToPublishedTest(o.context, o.PublishedTestRemoveUserToPublishedTestHandler)
+	if o.handlers["PUT"] == nil {
+		o.handlers["PUT"] = make(map[string]http.Handler)
+	}
+	o.handlers["PUT"]["/answers/{answerid}/corrected"] = answer.NewSetAnswerCorrected(o.context, o.AnswerSetAnswerCorrectedHandler)
+	if o.handlers["DELETE"] == nil {
+		o.handlers["DELETE"] = make(map[string]http.Handler)
+	}
+	o.handlers["DELETE"]["/answers/{answerid}/corrected"] = answer.NewSetAnswerNotCorrected(o.context, o.AnswerSetAnswerNotCorrectedHandler)
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
