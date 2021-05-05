@@ -155,10 +155,11 @@ func FinishAnswer(db *sql.DB, answerid int64) error {
 	if db == nil {
 		return errors.New(errorDBNil)
 	}
-	query, err := db.Prepare("UPDATE RespuestaExamen SET entregado=1 WHERE id=?")
+	now := time.Now()
+	query, err := db.Prepare("UPDATE RespuestaExamen SET entregado=1 AND finishTime=? WHERE id=?")
 	if err == nil {
 		defer query.Close()
-		_, err = query.Exec(answerid)
+		_, err = query.Exec(now, answerid)
 	}
 	return err
 }
@@ -189,8 +190,57 @@ func GetAnswersFromUserAnsweredTest(db *sql.DB, username string, testid int64) (
 	}
 	u, err := GetUserUsername(db, username)
 	if err == nil {
+		if u == nil {
+			return []*Answer{}, nil
+		}
 		var a []*Answer
 		query, err := db.Prepare("SELECT * FROM RespuestaExamen WHERE usuarioid=? AND testid=?")
+		if err == nil {
+			defer query.Close()
+			rows, err := query.Query(u.ID, testid)
+			if err == nil {
+				a, err = rowsToAnswers(rows)
+				return a, err
+			}
+		}
+	}
+	return nil, err
+}
+
+func GetCorrectedAnswersFromUserAnsweredTest(db *sql.DB, username string, testid int64) ([]*Answer, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	u, err := GetUserUsername(db, username)
+	if err == nil {
+		if u == nil {
+			return []*Answer{}, nil
+		}
+		var a []*Answer
+		query, err := db.Prepare("SELECT * FROM RespuestaExamen WHERE usuarioid=? AND testid=? AND corregida=1")
+		if err == nil {
+			defer query.Close()
+			rows, err := query.Query(u.ID, testid)
+			if err == nil {
+				a, err = rowsToAnswers(rows)
+				return a, err
+			}
+		}
+	}
+	return nil, err
+}
+
+func GetUncorrectedAnswersFromUserAnsweredTest(db *sql.DB, username string, testid int64) ([]*Answer, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	u, err := GetUserUsername(db, username)
+	if err == nil {
+		if u == nil {
+			return []*Answer{}, nil
+		}
+		var a []*Answer
+		query, err := db.Prepare("SELECT * FROM RespuestaExamen WHERE usuarioid=? AND testid=? AND corregida=0")
 		if err == nil {
 			defer query.Close()
 			rows, err := query.Query(u.ID, testid)

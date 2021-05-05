@@ -202,6 +202,40 @@ func GetAnswersFromPTest(db *sql.DB, testid int64) ([]*Answer, error) {
 	return nil, err
 }
 
+func GetCorrectedAnswersFromPTest(db *sql.DB, testid int64) ([]*Answer, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var as []*Answer
+	query, err := db.Prepare("SELECT * FROM RespuestaExamen WHERE testid=? AND corregida=1")
+	if err == nil {
+		defer query.Close()
+		rows, err := query.Query(testid)
+		if err == nil {
+			as, err = rowsToAnswers(rows)
+			return as, err
+		}
+	}
+	return nil, err
+}
+
+func GetUncorrectedAnswersFromPTest(db *sql.DB, testid int64) ([]*Answer, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var as []*Answer
+	query, err := db.Prepare("SELECT * FROM RespuestaExamen WHERE testid=? AND corregida=0")
+	if err == nil {
+		defer query.Close()
+		rows, err := query.Query(testid)
+		if err == nil {
+			as, err = rowsToAnswers(rows)
+			return as, err
+		}
+	}
+	return nil, err
+}
+
 func GetInvitedTestsFromTeam(db *sql.DB, teamname string) ([]*Test, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)

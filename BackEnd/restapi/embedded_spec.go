@@ -1333,6 +1333,56 @@ func init() {
         }
       }
     },
+    "/publishedTests/{testid}/correctedAnswers": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all answers from a published test that are corrected",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "publishedTest"
+        ],
+        "summary": "Returns all answers from a published test that are corrected",
+        "operationId": "GetCorrectedAnswersFromPublishedTests",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the publishedTest",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Answers found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Answer"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
     "/publishedTests/{testid}/questions": {
       "get": {
         "security": [
@@ -1854,6 +1904,56 @@ func init() {
         "responses": {
           "200": {
             "description": "team removed"
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/publishedTests/{testid}/uncorrectedAnswers": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all answers from a published test that are uncorrected",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "publishedTest"
+        ],
+        "summary": "Returns all answers from a published test that are uncorrected",
+        "operationId": "GetUncorrectedAnswersFromPublishedTests",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the publishedTest",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Answers found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Answer"
+              }
+            }
           },
           "400": {
             "$ref": "#/responses/BadRequestError"
@@ -5419,6 +5519,120 @@ func init() {
         ],
         "summary": "Returns all answers that the user has answered to a test",
         "operationId": "GetAnswersFromUserAnsweredTest",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who has answered the test",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the test",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "answers found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Answer"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/users/{username}/answeredTests/{testid}/finishedAnswers": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all answers that the user has answered to a test and are corrected",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns all answers that the user has answered to a test and are corrected",
+        "operationId": "GetCorrectedAnswersFromUserAnsweredTest",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who has answered the test",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the test",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "answers found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Answer"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/users/{username}/answeredTests/{testid}/uncorrectedAnswers": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all answers that the user has answered to a test and are uncorrected",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns all answers that the user has answered to a test and are uncorrected",
+        "operationId": "GetUncorrectedAnswersFromUserAnsweredTest",
         "parameters": [
           {
             "type": "string",
@@ -10399,6 +10613,65 @@ func init() {
         }
       }
     },
+    "/publishedTests/{testid}/correctedAnswers": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all answers from a published test that are corrected",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "publishedTest"
+        ],
+        "summary": "Returns all answers from a published test that are corrected",
+        "operationId": "GetCorrectedAnswersFromPublishedTests",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the publishedTest",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Answers found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Answer"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
     "/publishedTests/{testid}/questions": {
       "get": {
         "security": [
@@ -11001,6 +11274,65 @@ func init() {
         "responses": {
           "200": {
             "description": "team removed"
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/publishedTests/{testid}/uncorrectedAnswers": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all answers from a published test that are uncorrected",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "publishedTest"
+        ],
+        "summary": "Returns all answers from a published test that are uncorrected",
+        "operationId": "GetUncorrectedAnswersFromPublishedTests",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the publishedTest",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Answers found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Answer"
+              }
+            }
           },
           "400": {
             "description": "Incorrect Request, or invalida data",
@@ -15199,6 +15531,138 @@ func init() {
         ],
         "summary": "Returns all answers that the user has answered to a test",
         "operationId": "GetAnswersFromUserAnsweredTest",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who has answered the test",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the test",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "answers found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Answer"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/users/{username}/answeredTests/{testid}/finishedAnswers": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all answers that the user has answered to a test and are corrected",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns all answers that the user has answered to a test and are corrected",
+        "operationId": "GetCorrectedAnswersFromUserAnsweredTest",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who has answered the test",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the test",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "answers found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Answer"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/users/{username}/answeredTests/{testid}/uncorrectedAnswers": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all answers that the user has answered to a test and are uncorrected",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns all answers that the user has answered to a test and are uncorrected",
+        "operationId": "GetUncorrectedAnswersFromUserAnsweredTest",
         "parameters": [
           {
             "type": "string",

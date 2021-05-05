@@ -683,6 +683,57 @@ export class UserService {
     }
 
     /**
+     * Returns all answers that the user has answered to a test and are corrected
+     * Returns all answers that the user has answered to a test and are corrected
+     * @param username Username of the user who has answered the test
+     * @param testid Id of the test
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getCorrectedAnswersFromUserAnsweredTest(username: string, testid: number, observe?: 'body', reportProgress?: boolean): Observable<Array<Answer>>;
+    public getCorrectedAnswersFromUserAnsweredTest(username: string, testid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Answer>>>;
+    public getCorrectedAnswersFromUserAnsweredTest(username: string, testid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Answer>>>;
+    public getCorrectedAnswersFromUserAnsweredTest(username: string, testid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (username === null || username === undefined) {
+            throw new Error('Required parameter username was null or undefined when calling getCorrectedAnswersFromUserAnsweredTest.');
+        }
+
+        if (testid === null || testid === undefined) {
+            throw new Error('Required parameter testid was null or undefined when calling getCorrectedAnswersFromUserAnsweredTest.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Array<Answer>>(`${this.basePath}/users/${encodeURIComponent(String(username))}/answeredTests/${encodeURIComponent(String(testid))}/finishedAnswers`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Returns all non-published questions owned by the user
      * Returns all non-published questions owned by the user
      * @param username Username of the user who owns the questions
@@ -2324,6 +2375,57 @@ export class UserService {
         ];
 
         return this.httpClient.get<Array<Test>>(`${this.basePath}/users/${encodeURIComponent(String(username))}/tests`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns all answers that the user has answered to a test and are uncorrected
+     * Returns all answers that the user has answered to a test and are uncorrected
+     * @param username Username of the user who has answered the test
+     * @param testid Id of the test
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getUncorrectedAnswersFromUserAnsweredTest(username: string, testid: number, observe?: 'body', reportProgress?: boolean): Observable<Array<Answer>>;
+    public getUncorrectedAnswersFromUserAnsweredTest(username: string, testid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Answer>>>;
+    public getUncorrectedAnswersFromUserAnsweredTest(username: string, testid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Answer>>>;
+    public getUncorrectedAnswersFromUserAnsweredTest(username: string, testid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (username === null || username === undefined) {
+            throw new Error('Required parameter username was null or undefined when calling getUncorrectedAnswersFromUserAnsweredTest.');
+        }
+
+        if (testid === null || testid === undefined) {
+            throw new Error('Required parameter testid was null or undefined when calling getUncorrectedAnswersFromUserAnsweredTest.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Array<Answer>>(`${this.basePath}/users/${encodeURIComponent(String(username))}/answeredTests/${encodeURIComponent(String(testid))}/uncorrectedAnswers`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

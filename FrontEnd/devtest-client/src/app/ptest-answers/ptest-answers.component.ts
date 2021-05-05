@@ -28,7 +28,6 @@ export class PtestAnswersComponent extends LoggedInTeacherController implements 
       this.testid = params['testid']
       this.borrarMensaje()
       if (this.getSessionUser().getUsername() != undefined && this.getSessionUser().getUsername() != "") {
-        this.getPTestAnswers(true)
         this.getPTest(true)
       }
     });
@@ -43,20 +42,8 @@ export class PtestAnswersComponent extends LoggedInTeacherController implements 
 
   doHasUserAction() {
     if (this.testid != undefined && this.testid != 0) {
-      this.getPTestAnswers(true)
       this.getPTest(true)
     }
-  }
-
-  getPTestAnswers(primera: boolean){
-    this.ptestS.getAnswersFromPublishedTests(this.testid).subscribe(
-      resp => {
-        this.answers = resp
-      },
-      err => {
-        this.handleErrRelog(err, "obtener respuestas de test", primera, this.getPTestAnswers, this)
-      }
-    )
   }
 
   getPTest(primera: boolean) {

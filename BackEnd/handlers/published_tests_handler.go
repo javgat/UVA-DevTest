@@ -333,6 +333,58 @@ func GetAnswersPTest(params published_test.GetAnswersFromPublishedTestsParams, u
 	return published_test.NewGetAnswersFromPublishedTestsInternalServerError()
 }
 
+// GetCAnswersPTest GET /publishedTests/{testid}/correctedAnswers
+// Auth: Teacher or Admin if accesoPublico, else: TestAdmin or Admin
+func GetCAnswersPTest(params published_test.GetCorrectedAnswersFromPublishedTestsParams, u *models.User) middleware.Responder {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		var ts *dao.Test
+		ts, err = dao.GetPublishedTest(db, params.Testid)
+		if err == nil && ts != nil {
+			if (!*ts.AccesoPublico && !(isAdmin(u) || isTestAdmin(u, params.Testid))) ||
+				!isTeacherOrAdmin(u) {
+				return published_test.NewGetCorrectedAnswersFromPublishedTestsForbidden()
+			}
+			var as []*dao.Answer
+			as, err = dao.GetCorrectedAnswersFromPTest(db, params.Testid)
+			if err == nil {
+				var mas []*models.Answer
+				mas, err = dao.ToModelAnswers(as)
+				if err == nil {
+					return published_test.NewGetCorrectedAnswersFromPublishedTestsOK().WithPayload(mas)
+				}
+			}
+		}
+	}
+	return published_test.NewGetCorrectedAnswersFromPublishedTestsInternalServerError()
+}
+
+// GetUCAnswersPTest GET /publishedTests/{testid}/correctedAnswers
+// Auth: Teacher or Admin if accesoPublico, else: TestAdmin or Admin
+func GetUCAnswersPTest(params published_test.GetUncorrectedAnswersFromPublishedTestsParams, u *models.User) middleware.Responder {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		var ts *dao.Test
+		ts, err = dao.GetPublishedTest(db, params.Testid)
+		if err == nil && ts != nil {
+			if (!*ts.AccesoPublico && !(isAdmin(u) || isTestAdmin(u, params.Testid))) ||
+				!isTeacherOrAdmin(u) {
+				return published_test.NewGetUncorrectedAnswersFromPublishedTestsForbidden()
+			}
+			var as []*dao.Answer
+			as, err = dao.GetUncorrectedAnswersFromPTest(db, params.Testid)
+			if err == nil {
+				var mas []*models.Answer
+				mas, err = dao.ToModelAnswers(as)
+				if err == nil {
+					return published_test.NewGetUncorrectedAnswersFromPublishedTestsOK().WithPayload(mas)
+				}
+			}
+		}
+	}
+	return published_test.NewGetUncorrectedAnswersFromPublishedTestsInternalServerError()
+}
+
 // GetQuestionAnswersPTest GET /publishedTests/{testid}/questions/{questionid}/qanswers
 // Auth: Teacher or Admin if accesoPublico, else: TestAdmin or Admin
 func GetQuestionAnswersPTest(params published_test.GetQuestionAnswersFromPublishedTestQuestionParams, u *models.User) middleware.Responder {

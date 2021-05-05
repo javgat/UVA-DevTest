@@ -14,18 +14,5 @@
         Volver
     </button>
     <h3>Respuestas al test {{test.title}}:</h3>
-    <table class="table table-striped table-hover table-primary my-3">
-        <thead>
-            <tr>
-                <th>Autor</th>
-                <th>Terminado</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let ans of answers" role="button" [routerLink]="['/pt', test.id, 'answers', ans.id]">
-                <td>{{ans.username || ""}}</td>
-                <td><span *ngIf="ans.entregado">Sí</span><span *ngIf="!ans.entregado">No</span></td>
-            </tr>
-        </tbody>
-    </table>
+    <app-list-answers></app-list-answers>
 </div>

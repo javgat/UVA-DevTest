@@ -1171,6 +1171,46 @@ func GetAnswersFromUserATest(params user.GetAnswersFromUserAnsweredTestParams, u
 	return user.NewGetAnswersFromUserAnsweredTestForbidden()
 }
 
+// GET /users/{username}/answeredTests/{testid}/correctedAnswers
+// Auth: Current User or Admin
+func GetCAnswersFromUserATest(params user.GetCorrectedAnswersFromUserAnsweredTestParams, u *models.User) middleware.Responder {
+	if userOrAdmin(params.Username, u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			a, err := dao.GetCorrectedAnswersFromUserAnsweredTest(db, params.Username, params.Testid)
+			if err == nil {
+				ma, err := dao.ToModelAnswers(a)
+				if err == nil {
+					return user.NewGetCorrectedAnswersFromUserAnsweredTestOK().WithPayload(ma)
+				}
+				return user.NewGetCorrectedAnswersFromUserAnsweredTestGone()
+			}
+		}
+		return user.NewGetCorrectedAnswersFromUserAnsweredTestInternalServerError()
+	}
+	return user.NewGetCorrectedAnswersFromUserAnsweredTestForbidden()
+}
+
+// GET /users/{username}/answeredTests/{testid}/uncorrectedAnswers
+// Auth: Current User or Admin
+func GetUCAnswersFromUserATest(params user.GetUncorrectedAnswersFromUserAnsweredTestParams, u *models.User) middleware.Responder {
+	if userOrAdmin(params.Username, u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			a, err := dao.GetUncorrectedAnswersFromUserAnsweredTest(db, params.Username, params.Testid)
+			if err == nil {
+				ma, err := dao.ToModelAnswers(a)
+				if err == nil {
+					return user.NewGetUncorrectedAnswersFromUserAnsweredTestOK().WithPayload(ma)
+				}
+				return user.NewGetUncorrectedAnswersFromUserAnsweredTestGone()
+			}
+		}
+		return user.NewGetUncorrectedAnswersFromUserAnsweredTestInternalServerError()
+	}
+	return user.NewGetUncorrectedAnswersFromUserAnsweredTestForbidden()
+}
+
 // GET /users/{username}/answers
 // Auth: Current User or Admin
 func GetAnswersFromUser(params user.GetAnswersFromUserParams, u *models.User) middleware.Responder {

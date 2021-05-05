@@ -112,6 +112,52 @@ export class PublishedTestService {
     }
 
     /**
+     * Returns all answers from a published test that are corrected
+     * Returns all answers from a published test that are corrected
+     * @param testid Id of the publishedTest
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getCorrectedAnswersFromPublishedTests(testid: number, observe?: 'body', reportProgress?: boolean): Observable<Array<Answer>>;
+    public getCorrectedAnswersFromPublishedTests(testid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Answer>>>;
+    public getCorrectedAnswersFromPublishedTests(testid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Answer>>>;
+    public getCorrectedAnswersFromPublishedTests(testid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (testid === null || testid === undefined) {
+            throw new Error('Required parameter testid was null or undefined when calling getCorrectedAnswersFromPublishedTests.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Array<Answer>>(`${this.basePath}/publishedTests/${encodeURIComponent(String(testid))}/correctedAnswers`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Returns all options from a question.
      * Returns all options from a question.
      * @param testid Id of the publishedTest
@@ -728,6 +774,52 @@ export class PublishedTestService {
         ];
 
         return this.httpClient.get<Array<Team>>(`${this.basePath}/publishedTests/${encodeURIComponent(String(testid))}/teams`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns all answers from a published test that are uncorrected
+     * Returns all answers from a published test that are uncorrected
+     * @param testid Id of the publishedTest
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getUncorrectedAnswersFromPublishedTests(testid: number, observe?: 'body', reportProgress?: boolean): Observable<Array<Answer>>;
+    public getUncorrectedAnswersFromPublishedTests(testid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Answer>>>;
+    public getUncorrectedAnswersFromPublishedTests(testid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Answer>>>;
+    public getUncorrectedAnswersFromPublishedTests(testid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (testid === null || testid === undefined) {
+            throw new Error('Required parameter testid was null or undefined when calling getUncorrectedAnswersFromPublishedTests.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Array<Answer>>(`${this.basePath}/publishedTests/${encodeURIComponent(String(testid))}/uncorrectedAnswers`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

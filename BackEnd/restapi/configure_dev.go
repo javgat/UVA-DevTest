@@ -154,6 +154,9 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 	api.UserGetAnswersFromUserAnsweredTestHandler =
 		user.GetAnswersFromUserAnsweredTestHandlerFunc(handlers.GetAnswersFromUserATest) // GET /users/{username}/answeredTests/{testid}/answers
 
+	api.UserGetCorrectedAnswersFromUserAnsweredTestHandler = user.GetCorrectedAnswersFromUserAnsweredTestHandlerFunc(handlers.GetCAnswersFromUserATest)      // GET /users/{username}/answeredTests/{testid}/finishedAnswers
+	api.UserGetUncorrectedAnswersFromUserAnsweredTestHandler = user.GetUncorrectedAnswersFromUserAnsweredTestHandlerFunc(handlers.GetUCAnswersFromUserATest) // GET /users/{username}/answeredTests/{testid}/unfinishedAnswers
+
 	api.UserGetAnswersFromUserHandler = user.GetAnswersFromUserHandlerFunc(handlers.GetAnswersFromUser) // GET /users/{username}/answers
 	api.UserGetAnswerFromUserHandler = user.GetAnswerFromUserHandlerFunc(handlers.GetAnswerFromUser)    // GET /users/{username}/answers/{answerid}
 
@@ -273,6 +276,9 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 	api.PublishedTestGetTagsFromPublishedQuestionHandler = published_test.GetTagsFromPublishedQuestionHandlerFunc(handlers.GetTagsPQuestion) // GET /publishedTests/{testid}/questions/{questionid}/tags
 
 	api.PublishedTestGetAnswersFromPublishedTestsHandler = published_test.GetAnswersFromPublishedTestsHandlerFunc(handlers.GetAnswersPTest) // GET /publishedTests/{testid}/answers
+
+	api.PublishedTestGetCorrectedAnswersFromPublishedTestsHandler = published_test.GetCorrectedAnswersFromPublishedTestsHandlerFunc(handlers.GetCAnswersPTest)      // GET /publishedTests/{testid}/finishedAnswers
+	api.PublishedTestGetUncorrectedAnswersFromPublishedTestsHandler = published_test.GetUncorrectedAnswersFromPublishedTestsHandlerFunc(handlers.GetUCAnswersPTest) // GET /publishedTests/{testid}/unfinishedAnswers
 
 	api.PublishedTestGetQuestionAnswersFromPublishedTestQuestionHandler =
 		published_test.GetQuestionAnswersFromPublishedTestQuestionHandlerFunc(handlers.GetQuestionAnswersPTest) // GET /publishedTests/{testid}/questions/{questionid}/qanswers
