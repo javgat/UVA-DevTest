@@ -8518,7 +8518,7 @@ func init() {
           "type": "number",
           "example": 8.7
         },
-        "startime": {
+        "startTime": {
           "type": "string",
           "format": "date-time",
           "example": "2021-02-25 14:44:55"
@@ -18986,7 +18986,7 @@ func init() {
           "type": "number",
           "example": 8.7
         },
-        "startime": {
+        "startTime": {
           "type": "string",
           "format": "date-time",
           "example": "2021-02-25 14:44:55"

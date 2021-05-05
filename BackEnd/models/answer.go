@@ -41,10 +41,10 @@ type Answer struct {
 	// Example: 8.7
 	Puntuacion float64 `json:"puntuacion,omitempty"`
 
-	// startime
+	// start time
 	// Example: 2021-02-25 14:44:55
 	// Format: date-time
-	Startime strfmt.DateTime `json:"startime,omitempty"`
+	StartTime strfmt.DateTime `json:"startTime,omitempty"`
 
 	// testid
 	// Example: 343
@@ -67,7 +67,7 @@ func (m *Answer) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
-	if err := m.validateStartime(formats); err != nil {
+	if err := m.validateStartTime(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -98,12 +98,12 @@ func (m *Answer) validateFinishTime(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *Answer) validateStartime(formats strfmt.Registry) error {
-	if swag.IsZero(m.Startime) { // not required
+func (m *Answer) validateStartTime(formats strfmt.Registry) error {
+	if swag.IsZero(m.StartTime) { // not required
 		return nil
 	}
 
-	if err := validate.FormatOf("startime", "body", "date-time", m.Startime.String(), formats); err != nil {
+	if err := validate.FormatOf("startTime", "body", "date-time", m.StartTime.String(), formats); err != nil {
 		return err
 	}
 

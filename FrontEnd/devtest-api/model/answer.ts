@@ -13,7 +13,7 @@
 
 export interface Answer { 
     id?: number;
-    startime?: Date;
+    startTime?: Date;
     finishTime?: Date;
     entregado: boolean;
     testid?: number;

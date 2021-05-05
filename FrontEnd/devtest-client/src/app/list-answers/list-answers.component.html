@@ -23,7 +23,7 @@
             <tr *ngFor="let ans of answers" role="button" [routerLink]="['/pt', testid, 'answers', ans.id]">
                 <td>{{ans.username || ""}}</td>
                 <td><span *ngIf="ans.entregado">Sí</span><span *ngIf="!ans.entregado">No</span></td>
-                <td>{{ans.startime?.toLocaleString()}}</td>
+                <td>{{ans.startTime?.toLocaleString()}}</td>
                 <td><span *ngIf="ans.entregado">{{ans.finishTime}}</span></td>
                 <td>{{ans.puntuacion}}</td>
             </tr>

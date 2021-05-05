@@ -1,4 +1,4 @@
-import { User, Team, Question, Test } from "@javgat/devtest-api";
+import { User, Team, Question, Test, Answer } from "@javgat/devtest-api";
 
 export enum Tipo {
     SUCCESS = "success",
@@ -210,5 +210,26 @@ export function tipoPrint(tipo: string, eleccionUnica: boolean | undefined): str
                 return "Respuesta múltiple"
         default:
             return ""
+    }
+}
+
+export class Respuesta implements Answer{
+    id: number;
+    startTime?: Date | undefined;
+    finishTime?: Date | undefined;
+    entregado: boolean;
+    testid: number;
+    username: string;
+    puntuacion: number;
+    corregida: boolean;
+    constructor(resp?: Answer){
+        this.id = resp?.id || 0
+        this.startTime = resp?.startTime
+        this.finishTime = resp?.finishTime
+        this.entregado = resp?.entregado || false
+        this.testid = resp?.testid || 0
+        this.username = resp?.username || ""
+        this.puntuacion = resp?.puntuacion || 0
+        this.corregida = resp?.corregida || false
     }
 }

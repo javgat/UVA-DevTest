@@ -53,7 +53,7 @@ func ToModelAnswer(a *Answer) (*models.Answer, error) {
 		if err == nil {
 			mt := &models.Answer{
 				Entregado:  a.Entregado,
-				Startime:   a.Startime,
+				StartTime:  a.Startime,
 				FinishTime: a.FinishTime,
 				Testid:     a.Testid,
 				ID:         a.ID,
