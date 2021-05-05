@@ -18,6 +18,7 @@ export class PtestAnswersComponent extends LoggedInTeacherController implements 
   routeSub: Subscription
   answers: Answer[]
   test: Test
+  lookCorregidas: boolean
 
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private ptestS : PublishedTestService, private route: ActivatedRoute) {
     super(session, router, data, userS)
@@ -31,6 +32,7 @@ export class PtestAnswersComponent extends LoggedInTeacherController implements 
         this.getPTest(true)
       }
     });
+    this.lookCorregidas = true
   }
 
   ngOnInit(): void {
@@ -55,5 +57,21 @@ export class PtestAnswersComponent extends LoggedInTeacherController implements 
         this.handleErrRelog(err, "obtener test publicado", primera, this.getPTest, this)
       }
     )
+  }
+
+  isLookingCorregidas() : boolean{
+    return this.lookCorregidas
+  }
+
+  isLookingNoCorregidas(): boolean{
+    return !this.lookCorregidas
+  }
+
+  lookForCorregidas(){
+    this.lookCorregidas = true
+  }
+
+  lookForNoCorregidas(){
+    this.lookCorregidas = false
   }
 }

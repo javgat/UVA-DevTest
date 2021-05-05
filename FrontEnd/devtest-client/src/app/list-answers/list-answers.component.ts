@@ -18,7 +18,7 @@ export class ListAnswersComponent extends LoggedInController implements OnInit {
   routeSub: Subscription
   editLikeUsername: string
   likeUsername?: string
-  constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private ptestS : PublishedTestService, private route: ActivatedRoute) {
+  constructor(session: SessionService, router: Router, data: DataService, userS: UserService, protected ptestS : PublishedTestService, private route: ActivatedRoute) {
     super(session, router, data, userS)
     this.testid = 0
     this.answers = []
@@ -35,6 +35,11 @@ export class ListAnswersComponent extends LoggedInController implements OnInit {
   ngOnInit(): void {
   }
 
+  ngOnDestroy(): void{
+    this.routeSub.unsubscribe()
+    super.onDestroy()
+  }
+
 
   doHasUserAction() {
     if (this.testid != undefined && this.testid != 0) {
@@ -49,6 +54,7 @@ export class ListAnswersComponent extends LoggedInController implements OnInit {
       this.getPTestAnswersFromUser(true)
   }
 
+  //Sobreescribir
   getPTestAllAnswers(primera: boolean){
     this.ptestS.getAnswersFromPublishedTests(this.testid).subscribe(
       resp => {
@@ -60,6 +66,7 @@ export class ListAnswersComponent extends LoggedInController implements OnInit {
     )
   }
 
+  //Sobreescribir
   getPTestAnswersFromUser(primera: boolean){
     if(this.likeUsername==undefined) return
     this.userS.getAnswersFromUserAnsweredTest(this.likeUsername, this.testid).subscribe(

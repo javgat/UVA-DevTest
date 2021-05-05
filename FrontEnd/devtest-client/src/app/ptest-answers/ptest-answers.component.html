@@ -14,5 +14,18 @@
         Volver
     </button>
     <h3>Respuestas al test {{test.title}}:</h3>
-    <app-list-answers></app-list-answers>
+    <ul role="button" class="nav nav-tabs nav-fill">
+        <li class="nav-item">
+            <a class="nav-link" [ngClass]="{'active': isLookingCorregidas()}" (click)="lookForCorregidas()">Corregidas</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" [ngClass]="{'active': isLookingNoCorregidas()}" (click)="lookForNoCorregidas()">No Corregidas</a>
+        </li>
+    </ul>
+    <div *ngIf="isLookingCorregidas()">
+        <app-la-corrected></app-la-corrected>
+    </div>
+    <div *ngIf="isLookingNoCorregidas()">
+        <app-la-uncorrected></app-la-uncorrected>
+    </div>
 </div>
