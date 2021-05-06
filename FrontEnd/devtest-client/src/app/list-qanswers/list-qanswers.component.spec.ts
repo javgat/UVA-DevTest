@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LaUncorrectedComponent } from './la-uncorrected.component';
+import { ListQAnswersComponent } from './list-qanswers.component';
 
-describe('LaUncorrectedComponent', () => {
-  let component: LaUncorrectedComponent;
-  let fixture: ComponentFixture<LaUncorrectedComponent>;
+describe('ListQAnswersComponent', () => {
+  let component: ListQAnswersComponent;
+  let fixture: ComponentFixture<ListQAnswersComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ LaUncorrectedComponent ]
+      declarations: [ ListQAnswersComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LaUncorrectedComponent);
+    fixture = TestBed.createComponent(ListQAnswersComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

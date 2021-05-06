@@ -77,6 +77,7 @@ import { QanswerComponent } from './qanswer/qanswer.component';
 import { ListAnswersComponent } from './list-answers/list-answers.component';
 import { LaCorrectedComponent } from './list-answers/la-corrected/la-corrected.component';
 import { LaUncorrectedComponent } from './list-answers/la-uncorrected/la-uncorrected.component';
+import { ListQAnswersComponent } from './list-qanswers/list-qanswers.component';
 
 export function apiConfigFactory (): Configuration {
   const params: ConfigurationParameters = {
@@ -156,7 +157,8 @@ export function apiConfigFactory (): Configuration {
     QanswerComponent,
     ListAnswersComponent,
     LaCorrectedComponent,
-    LaUncorrectedComponent
+    LaUncorrectedComponent,
+    ListQAnswersComponent
   ],
   imports: [
     BrowserModule,
