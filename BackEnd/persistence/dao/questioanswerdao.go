@@ -9,18 +9,33 @@ import (
 	"errors"
 	"log"
 	"uva-devtest/models"
+	"uva-devtest/persistence/dbconnection"
 
 	// Blank import of mysql driver
 	_ "github.com/go-sql-driver/mysql"
 )
 
 func ToModelQuestionAnswer(q *QuestionAnswer) *models.QuestionAnswer {
+	db, err := dbconnection.ConnectDb()
+	username := ""
+	if err == nil {
+		var a *Answer
+		a, err = GetAnswer(db, *q.IDRespuesta)
+		if err == nil && a != nil {
+			var u *User
+			u, err = GetUserByID(db, a.Usuarioid)
+			if err == nil && u != nil {
+				username = *u.Username
+			}
+		}
+	}
 	mq := &models.QuestionAnswer{
 		IDPregunta:  q.IDPregunta,
 		IDRespuesta: q.IDRespuesta,
 		Respuesta:   q.Respuesta,
 		Corregida:   q.Corregida,
 		Puntuacion:  q.Puntuacion,
+		Username:    username,
 	}
 	mq.IndicesOpciones = append(mq.IndicesOpciones, q.IndicesOpciones...)
 	return mq

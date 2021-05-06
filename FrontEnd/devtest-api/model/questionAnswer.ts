@@ -18,4 +18,5 @@ export interface QuestionAnswer {
     puntuacion: number;
     corregida: boolean;
     indicesOpciones?: Array<number>;
+    username?: string;
 }

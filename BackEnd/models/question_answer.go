@@ -45,6 +45,10 @@ type QuestionAnswer struct {
 	// respuesta
 	// Example: Javadoc
 	Respuesta string `json:"respuesta,omitempty"`
+
+	// username
+	// Example: joselito97
+	Username string `json:"username,omitempty"`
 }
 
 // Validate validates this question answer

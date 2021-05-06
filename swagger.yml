@@ -5945,6 +5945,9 @@ definitions:
         type: array
         items: 
           type: integer
+      username:
+        type: string
+        example: joselito97
   Tag:
     type: object
     required:

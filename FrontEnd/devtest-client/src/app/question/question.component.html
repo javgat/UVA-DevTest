@@ -2,8 +2,7 @@
 <div class="mt-5">
     <div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message" role="alert">
         {{getMensaje().texto}}</div>
-    <button *ngIf="testid!=undefined" class="button btn btn-outline-primary m-3"
-        [routerLink]="['/pt', testid]">
+    <button *ngIf="testid!=undefined" class="button btn btn-outline-primary m-3" [routerLink]="['/pt', testid]">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
             class="bi bi-chevron-double-left" viewBox="0 0 16 16">
             <path fill-rule="evenodd"
@@ -59,6 +58,8 @@
             <p>Tipo: {{tipoPrint}}</p>
             <p><button class="btn btn-primary" type="button" [routerLink]="['/q', question.id, 'teams']">Ver equipos
                     administradores</button></p>
+            <p *ngIf="!question.editable"><button class="btn btn-primary" type="button"
+                    [routerLink]="['/pt', testid, 'q', question.id, 'qanswers']">Ver respuestas entregadas</button></p>
             <p><button *ngIf="checkPermisosEdicion()" type="button" class="btn btn-primary" data-bs-toggle="modal"
                     data-bs-target="#editQuestionModal">Editar pregunta</button></p>
             <hr />
@@ -108,10 +109,11 @@
                                         correcta</label>
                                 </div>
                                 <div class="col-sm">
-                                    <div class="btn-group dropstart d-grid gap-2 d-md-flex d-inline-flex justify-content-md-end col-sm" role="button" *ngIf="checkPermisosEdicion()">
+                                    <div class="btn-group dropstart d-grid gap-2 d-md-flex d-inline-flex justify-content-md-end col-sm"
+                                        role="button" *ngIf="checkPermisosEdicion()">
                                         <a data-bs-toggle="dropdown" class="link-dark" aria-expanded="false">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                                class="bi bi-list" viewBox="0 0 16 16">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
                                                 <path fill-rule="evenodd"
                                                     d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z" />
                                             </svg>

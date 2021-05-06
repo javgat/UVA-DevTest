@@ -78,6 +78,8 @@ import { ListAnswersComponent } from './list-answers/list-answers.component';
 import { LaCorrectedComponent } from './list-answers/la-corrected/la-corrected.component';
 import { LaUncorrectedComponent } from './list-answers/la-uncorrected/la-uncorrected.component';
 import { ListQAnswersComponent } from './list-qanswers/list-qanswers.component';
+import { LqaAnswerComponent } from './list-qanswers/lqa-answer/lqa-answer.component';
+import { LqaQuestionComponent } from './list-qanswers/lqa-question/lqa-question.component';
 
 export function apiConfigFactory (): Configuration {
   const params: ConfigurationParameters = {
@@ -158,7 +160,9 @@ export function apiConfigFactory (): Configuration {
     ListAnswersComponent,
     LaCorrectedComponent,
     LaUncorrectedComponent,
-    ListQAnswersComponent
+    ListQAnswersComponent,
+    LqaAnswerComponent,
+    LqaQuestionComponent
   ],
   imports: [
     BrowserModule,

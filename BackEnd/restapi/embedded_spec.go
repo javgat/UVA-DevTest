@@ -8859,6 +8859,10 @@ func init() {
         "respuesta": {
           "type": "string",
           "example": "Javadoc"
+        },
+        "username": {
+          "type": "string",
+          "example": "joselito97"
         }
       }
     },
@@ -19415,6 +19419,10 @@ func init() {
         "respuesta": {
           "type": "string",
           "example": "Javadoc"
+        },
+        "username": {
+          "type": "string",
+          "example": "joselito97"
         }
       }
     },

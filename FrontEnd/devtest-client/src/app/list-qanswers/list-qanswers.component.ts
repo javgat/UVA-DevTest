@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AnswerService, PublishedTestService, Question, QuestionAnswer, UserService } from '@javgat/devtest-api';
+import { Answer, AnswerService, PublishedTestService, Question, QuestionAnswer, UserService } from '@javgat/devtest-api';
 import { Subscription } from 'rxjs';
 import { LoggedInController } from '../shared/app.controller';
-import { tipoPrint } from '../shared/app.model';
+import { Respuesta, tipoPrint } from '../shared/app.model';
 import { DataService } from '../shared/data.service';
 import { SessionService } from '../shared/session.service';
 
@@ -18,7 +18,9 @@ export class ListQAnswersComponent extends LoggedInController implements OnInit 
   questionAnswers: QuestionAnswer[]
   testid: number
   answerid: number
+  questionid: number
   questions: Question[]
+  mostrarAutor: boolean
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService,
     private route: ActivatedRoute, protected answerS: AnswerService, protected ptestS: PublishedTestService) {
     super(session, router, data, userS)
@@ -26,9 +28,12 @@ export class ListQAnswersComponent extends LoggedInController implements OnInit 
     this.questions = []
     this.testid = 0
     this.answerid = 0
+    this.questionid = 0
+    this.mostrarAutor = false
     this.routeSub = this.route.params.subscribe(params => {
       this.testid = params['testid']
       this.answerid = params['answerid']
+      this.questionid = params['questionid']
       this.borrarMensaje()
       if (this.getSessionUser().getUsername() != undefined && this.getSessionUser().getUsername() != "") {
         this.getQAnswers(true)
@@ -46,24 +51,22 @@ export class ListQAnswersComponent extends LoggedInController implements OnInit 
   }
 
   doHasUserAction() {
-    if (this.testid != undefined && this.testid != 0 && this.answerid != undefined && this.answerid != 0) {
+    if (this.isDefinido(this.testid) && (this.isDefinido(this.answerid) || this.isDefinido(this.questionid))) {
       this.getQAnswers(true)
       this.getQuestionsTest(true)
     }
   }
 
-  getQAnswers(primera: boolean) {
-    this.answerS.getQuestionAnswersFromAnswer(this.answerid).subscribe(
-      resp => this.questionAnswers = resp,
-      err => this.handleErrRelog(err, "obtener respuestas a preguntas del test", primera, this.getQAnswers, this)
-    )
+  isDefinido(num: number | undefined): boolean{
+    return (num!=undefined && num!=0)
   }
 
-  getQuestionsTest(primera: boolean) {
-    this.ptestS.getQuestionsFromPublishedTests(this.testid).subscribe(
-      resp => this.questions = resp,
-      err => this.handleErrRelog(err, "obtener preguntas del test", primera, this.getQuestionsTest, this)
-    )
+  getQAnswers(primera: boolean): void{
+
+  }
+
+  getQuestionsTest(primera: boolean): void{
+    
   }
 
   tipoPrint(tipo: string, eleccionUnica: boolean | undefined) {
