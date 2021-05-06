@@ -1414,15 +1414,16 @@ bg=yellow
     <coordinates>
       <x>5528</x>
       <y>832</y>
-      <w>264</w>
-      <h>56</h>
+      <w>280</w>
+      <h>64</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Resource&gt;&gt;
 *Revision*
 bg=yellow
 --
 --
-+ &lt;&lt;PUT&gt;&gt; putReview(r: Review): void</panel_attributes>
++ &lt;&lt;PUT&gt;&gt; putReview(r: Review): void
++ &lt;&lt;DELETE&gt;&gt; deleteReview(r: Review): void</panel_attributes>
     <additional_attributes/>
   </element>
   <element>

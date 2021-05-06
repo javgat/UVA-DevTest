@@ -779,6 +779,52 @@ func init() {
             "$ref": "#/responses/InternalServerError"
           }
         }
+      },
+      "delete": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Deletes an answer review",
+        "tags": [
+          "answer"
+        ],
+        "summary": "Deletes an answer review",
+        "operationId": "DeleteReview",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the answer",
+            "name": "answerid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the question it is answering",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Review deleted"
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
       }
     },
     "/answers/{answerid}/questions": {
@@ -10027,6 +10073,61 @@ func init() {
         "responses": {
           "200": {
             "description": "Review updated"
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Deletes an answer review",
+        "tags": [
+          "answer"
+        ],
+        "summary": "Deletes an answer review",
+        "operationId": "DeleteReview",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the answer",
+            "name": "answerid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the question it is answering",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Review deleted"
           },
           "400": {
             "description": "Incorrect Request, or invalida data",

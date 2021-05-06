@@ -336,3 +336,15 @@ func GetAnswerFromUser(db *sql.DB, username string, answerid int64) (*Answer, er
 	}
 	return nil, err
 }
+
+func PutAnswerPuntuacion(db *sql.DB, answerid int64, newPuntuacion float64) error {
+	if db == nil {
+		return errors.New(errorDBNil)
+	}
+	query, err := db.Prepare("UPDATE RespuestaExamen SET puntuacion=? WHERE id=?")
+	if err == nil {
+		defer query.Close()
+		_, err = query.Exec(newPuntuacion, answerid)
+	}
+	return err
+}

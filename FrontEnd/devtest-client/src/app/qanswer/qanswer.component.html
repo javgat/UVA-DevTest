@@ -12,6 +12,32 @@
             <p>Tiempo estimado: {{question.estimatedTime}} minutos</p>
             <p>Corrección automática: <span *ngIf="question.autoCorrect">Sí</span><span
                     *ngIf="!question.autoCorrect">No</span></p>
+            <p>Corregida: <span class="badge bg-success" *ngIf="qa.corregida">Sí</span><span class="badge bg-danger"
+                    *ngIf="!qa.corregida">No</span></p>
+            <p *ngIf="qa.corregida">Puntuación: {{qa.puntuacion}}%</p>
+            <p *ngIf="!qa.corregida">
+                <button *ngIf="!showCorregir" type="button" class="btn btn-primary"
+                    (click)="clickShowCorregir()">Corregir</button>
+                <button *ngIf="showCorregir" type="button" class="btn btn-primary"
+                    (click)="clickNotShowCorregir()">Cancelar</button>
+            </p>
+            <p *ngIf="qa.corregida"><a class="link-dark" role="button" data-bs-toggle="modal"
+                    data-bs-target="#modalBorrarCorreccion">Borrar corrección</a></p>
+
+            <p *ngIf="qa.corregida">
+                <button *ngIf="!showCorregir" type="button" class="btn btn-primary"
+                    (click)="clickShowCorregir()">Cambiar corrección</button>
+                <button *ngIf="showCorregir" type="button" class="btn btn-primary"
+                    (click)="clickNotShowCorregir()">Cancelar</button>
+            </p>
+            <form *ngIf="showCorregir" (ngSubmit)="submitUpdateCorrection()" ngNativeValidate>
+                <div class="mb-3">
+                    <label for="porcentajeCorreccion" class="form-label">Puntuacion (0-100):</label>
+                    <input type="number" required min=0 max=100 class="form-control" id="porcentajeCorreccion"
+                        [(ngModel)]="editPuntuacion" name="editPuntuacion" />
+                </div>
+                <input type="submit" class="button btn btn-primary" value="Guardar" />
+            </form>
             <hr />
             <p><span style="white-space: pre-line">{{question.question}}</span></p>
         </div>
@@ -31,7 +57,7 @@
                     <div class="card-body">
                         <div class="form-check">
                             <input class="form-check-input" disabled type="radio" name="flexRadioOpcion"
-                                id="flexRadioOpcion{{opc.indice}}" [checked]="opcionSeleccionada(opc.indice)"/>
+                                id="flexRadioOpcion{{opc.indice}}" [checked]="opcionSeleccionada(opc.indice)" />
                             <label class="form-check-label">
                                 {{opc.texto}}
                                 <span style="color:green" *ngIf="radioShowTick(opc)">
@@ -62,7 +88,7 @@
                     <div class="card-body">
                         <div class="form-check">
                             <input class="form-check-input" disabled type="checkbox" name="flexCheckOpcion"
-                                id="flexCheckOpcion{{opc.indice}}" [checked]="opcionSeleccionada(opc.indice)"/>
+                                id="flexCheckOpcion{{opc.indice}}" [checked]="opcionSeleccionada(opc.indice)" />
                             <label class="form-check-label">
                                 {{opc.texto}}
                                 <span style="color:green" *ngIf="checkShowTick(opc)">
@@ -91,6 +117,28 @@
         </div>
         <div class="m-3" *ngIf="question.tipoPregunta=='codigo'">
             <p>Tests:</p>
+        </div>
+    </div>
+
+    <!-- modal borrar correccion-->
+    <div *ngIf="qa.corregida" class="modal fade" id="modalBorrarCorreccion" tabindex="-1"
+        aria-labelledby="modalBorrarCorreccionLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalBorrarCorreccionLabel">Marcar como no corregida</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ¿Marcar respuesta como no corregida?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                        (click)="setAsNotCorregidaClick()">Marcar como no
+                        corregida</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>

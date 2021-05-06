@@ -94,6 +94,9 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		AnswerDeleteQuestionAnswerFromAnswerHandler: answer.DeleteQuestionAnswerFromAnswerHandlerFunc(func(params answer.DeleteQuestionAnswerFromAnswerParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation answer.DeleteQuestionAnswerFromAnswer has not yet been implemented")
 		}),
+		AnswerDeleteReviewHandler: answer.DeleteReviewHandlerFunc(func(params answer.DeleteReviewParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation answer.DeleteReview has not yet been implemented")
+		}),
 		TestDeleteTestHandler: test.DeleteTestHandlerFunc(func(params test.DeleteTestParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation test.DeleteTest has not yet been implemented")
 		}),
@@ -624,6 +627,8 @@ type DevAPI struct {
 	QuestionDeleteQuestionHandler question.DeleteQuestionHandler
 	// AnswerDeleteQuestionAnswerFromAnswerHandler sets the operation handler for the delete question answer from answer operation
 	AnswerDeleteQuestionAnswerFromAnswerHandler answer.DeleteQuestionAnswerFromAnswerHandler
+	// AnswerDeleteReviewHandler sets the operation handler for the delete review operation
+	AnswerDeleteReviewHandler answer.DeleteReviewHandler
 	// TestDeleteTestHandler sets the operation handler for the delete test operation
 	TestDeleteTestHandler test.DeleteTestHandler
 	// TeamDeleteUserFromTeamHandler sets the operation handler for the delete user from team operation
@@ -1045,6 +1050,9 @@ func (o *DevAPI) Validate() error {
 	}
 	if o.AnswerDeleteQuestionAnswerFromAnswerHandler == nil {
 		unregistered = append(unregistered, "answer.DeleteQuestionAnswerFromAnswerHandler")
+	}
+	if o.AnswerDeleteReviewHandler == nil {
+		unregistered = append(unregistered, "answer.DeleteReviewHandler")
 	}
 	if o.TestDeleteTestHandler == nil {
 		unregistered = append(unregistered, "test.DeleteTestHandler")
@@ -1651,6 +1659,10 @@ func (o *DevAPI) initHandlerCache() {
 		o.handlers["DELETE"] = make(map[string]http.Handler)
 	}
 	o.handlers["DELETE"]["/answers/{answerid}/qanswers/{questionid}"] = answer.NewDeleteQuestionAnswerFromAnswer(o.context, o.AnswerDeleteQuestionAnswerFromAnswerHandler)
+	if o.handlers["DELETE"] == nil {
+		o.handlers["DELETE"] = make(map[string]http.Handler)
+	}
+	o.handlers["DELETE"]["/answers/{answerid}/qanswers/{questionid}/review"] = answer.NewDeleteReview(o.context, o.AnswerDeleteReviewHandler)
 	if o.handlers["DELETE"] == nil {
 		o.handlers["DELETE"] = make(map[string]http.Handler)
 	}

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AnswerService, Option, PublishedTestService, Question, QuestionAnswer, QuestionService, UserService } from '@javgat/devtest-api';
+import { AnswerService, Option, PublishedTestService, Question, QuestionAnswer, QuestionService, Review, UserService } from '@javgat/devtest-api';
 import { Subscription } from 'rxjs';
 import { LoggedInController } from '../shared/app.controller';
 import { Pregunta, RespuestaPregunta, tipoPrint } from '../shared/app.model';
@@ -21,6 +21,8 @@ export class QanswerComponent extends LoggedInController implements OnInit {
   qa: RespuestaPregunta
   question: Pregunta
   options: Option[]
+  showCorregir: boolean
+  editPuntuacion: number
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService,
     private route: ActivatedRoute, private answerS: AnswerService, private ptestS: PublishedTestService, private qS: QuestionService) {
     super(session, router, data, userS)
@@ -29,7 +31,9 @@ export class QanswerComponent extends LoggedInController implements OnInit {
     this.answerid = 0
     this.options = []
     this.question = new Pregunta()
+    this.editPuntuacion = 0
     this.qa = new RespuestaPregunta()
+    this.showCorregir = false
     this.routeSub = this.route.params.subscribe(params => {
       this.questionid = params['questionid']
       this.testid = params['testid']
@@ -62,7 +66,10 @@ export class QanswerComponent extends LoggedInController implements OnInit {
 
   getQAnswer(primera: boolean) {
     this.answerS.getQuestionAnswerFromAnswer(this.answerid, this.questionid).subscribe(
-      resp => this.qa = new RespuestaPregunta(resp),
+      resp => {
+        this.qa = new RespuestaPregunta(resp)
+        this.editPuntuacion = this.qa.puntuacion
+      },
       err => this.handleErrRelog(err, "obtener respuesta de una pregunta", primera, this.getQAnswer, this)
     )
   }
@@ -139,5 +146,39 @@ export class QanswerComponent extends LoggedInController implements OnInit {
     return !this.isRadioQuestion()
   }
   
+  clickShowCorregir(){
+    this.showCorregir = true
+  }
+
+  clickNotShowCorregir(){
+    this.showCorregir = false
+  }
+
+  submitUpdateCorrection(){
+    this.showCorregir = false
+    this.updateCorrection(true)
+  }
+
+  updateCorrection(primera: boolean){
+    let review: Review
+    review = {
+      puntuacion : this.editPuntuacion
+    }
+    this.answerS.putReview(this.answerid, this.questionid, review).subscribe(
+      resp => this.getQAnswer(true),
+      err => this.handleErrRelog(err, "actualizar correccion", primera, this.updateCorrection, this)
+    )
+  }
+
+  setAsNotCorregidaClick(){
+    this.setAsNotCorregida(true)
+  }
+
+  setAsNotCorregida(primera: boolean){
+    this.answerS.deleteReview(this.answerid, this.questionid).subscribe(
+      resp => this.getQAnswer(true),
+      err => this.handleErrRelog(err, "borrar correccion", primera, this.setAsNotCorregida, this)
+    )
+  }
 
 }

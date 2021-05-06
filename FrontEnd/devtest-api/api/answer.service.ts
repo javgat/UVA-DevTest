@@ -111,6 +111,56 @@ export class AnswerService {
     }
 
     /**
+     * Deletes an answer review
+     * Deletes an answer review
+     * @param answerid Id of the answer
+     * @param questionid Id of the question it is answering
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public deleteReview(answerid: number, questionid: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public deleteReview(answerid: number, questionid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public deleteReview(answerid: number, questionid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public deleteReview(answerid: number, questionid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (answerid === null || answerid === undefined) {
+            throw new Error('Required parameter answerid was null or undefined when calling deleteReview.');
+        }
+
+        if (questionid === null || questionid === undefined) {
+            throw new Error('Required parameter questionid was null or undefined when calling deleteReview.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.delete<any>(`${this.basePath}/answers/${encodeURIComponent(String(answerid))}/qanswers/${encodeURIComponent(String(questionid))}/review`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Finishes an answer
      * Finishes an answers
      * @param answerid Id of the answer

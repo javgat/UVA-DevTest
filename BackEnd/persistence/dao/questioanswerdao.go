@@ -269,3 +269,15 @@ func PutReview(db *sql.DB, answerid int64, questionid int64, rev *models.Review)
 	}
 	return err
 }
+
+func DeleteReview(db *sql.DB, answerid int64, questionid int64) error {
+	if db == nil {
+		return errors.New(errorDBNil)
+	}
+	query, err := db.Prepare("UPDATE RespuestaPregunta SET puntuacion=0, corregida=0 WHERE respuestaExamenid=? AND preguntaid=?")
+	if err == nil {
+		defer query.Close()
+		_, err = query.Exec(answerid, questionid)
+	}
+	return err
+}

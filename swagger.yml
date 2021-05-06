@@ -5536,7 +5536,36 @@ paths:
           $ref: '#/responses/GoneError'
         500:
           $ref: '#/responses/InternalServerError'
-  
+    delete:
+      security:
+        - BearerCookie: []
+      tags:
+      - answer
+      summary: Deletes an answer review
+      operationId: DeleteReview
+      description: Deletes an answer review
+      parameters:
+      - in: path
+        name: answerid
+        description: Id of the answer
+        required: true
+        type: integer
+      - in: path
+        name: questionid
+        description: Id of the question it is answering
+        required: true
+        type: integer
+      responses:
+        200:
+          description: Review deleted
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
   /answers/{answerid}/questions:
     get:
       security:

@@ -298,7 +298,8 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 	api.AnswerPutQuestionAnswerFromAnswerHandler = answer.PutQuestionAnswerFromAnswerHandlerFunc(handlers.PutQuestionAnswer)          // PUT /answers/{answerid}/qanswers/{questionid}
 	api.AnswerDeleteQuestionAnswerFromAnswerHandler = answer.DeleteQuestionAnswerFromAnswerHandlerFunc(handlers.DeleteQuestionAnswer) // DELETE /answers/{answerid}/qanswers/{questionid}
 
-	api.AnswerPutReviewHandler = answer.PutReviewHandlerFunc(handlers.PutReview) // PUT /answers/{answerid}/qanswers/{questionid}/review
+	api.AnswerPutReviewHandler = answer.PutReviewHandlerFunc(handlers.PutReview)          // PUT /answers/{answerid}/qanswers/{questionid}/review
+	api.AnswerDeleteReviewHandler = answer.DeleteReviewHandlerFunc(handlers.DeleteReview) // DELETE /answers/{answerid}/qanswers/{questionid}/review
 
 	api.AnswerGetQuestionsFromAnswerHandler = answer.GetQuestionsFromAnswerHandlerFunc(handlers.GetQuestionsFromAnswer) // GET /answers/{answerid}/questions
 

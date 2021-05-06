@@ -6,6 +6,7 @@ package handlers
 
 import (
 	"database/sql"
+	"errors"
 	"log"
 	"uva-devtest/models"
 	"uva-devtest/persistence/dao"
@@ -267,15 +268,55 @@ func isAnswerTestAdmin(u *models.User, answerid int64) bool {
 	return false
 }
 
+func addAnswerPuntuacion(aid int64, qid int64, puntuacion int64) error {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		var a *dao.Answer
+		var q *dao.Question
+		a, err = dao.GetAnswer(db, aid)
+		if err == nil {
+			if a == nil {
+				return errors.New("no se encontro el recurso")
+			}
+			q, err = dao.GetQuestionFromTest(db, a.Testid, qid)
+			if err == nil {
+				if q == nil {
+					return errors.New("no se encontro el recurso")
+				}
+				punt := a.Puntuacion + float64(*q.ValorFinal*puntuacion)/float64(100)
+				err = dao.PutAnswerPuntuacion(db, aid, punt)
+				if err == nil {
+					return nil
+				}
+			}
+		}
+	}
+	return err
+}
+
+func substractAnswerPuntuacion(aid int64, qid int64, puntuacion int64) error {
+	return addAnswerPuntuacion(aid, qid, -puntuacion)
+}
+
 // PUT /answers/{answerid}/qanswers/{questionid}/review
 // Auth: TestAdmin or Admin
 func PutReview(params answer.PutReviewParams, u *models.User) middleware.Responder {
 	if isAnswerTestAdmin(u, params.Answerid) || isAnswerOwner(params.Answerid, u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			err = dao.PutReview(db, params.Answerid, params.Questionid, params.Review)
+			var qa *dao.QuestionAnswer
+			qa, err = dao.GetQuestionAnswerFromAnswer(db, params.Answerid, params.Questionid)
+			if qa != nil && err == nil {
+				err = substractAnswerPuntuacion(params.Answerid, params.Questionid, *qa.Puntuacion)
+			}
 			if err == nil {
-				return answer.NewPutReviewOK()
+				err = addAnswerPuntuacion(params.Answerid, params.Questionid, *params.Review.Puntuacion)
+				if err == nil {
+					err = dao.PutReview(db, params.Answerid, params.Questionid, params.Review)
+					if err == nil {
+						return answer.NewPutReviewOK()
+					}
+				}
 			}
 		}
 		log.Println("Error en answers_handler PutReview(): ", err)
@@ -283,6 +324,31 @@ func PutReview(params answer.PutReviewParams, u *models.User) middleware.Respond
 
 	}
 	return answer.NewPutReviewForbidden()
+}
+
+// DELETE /answers/{answerid}/qanswers/{questionid}/review
+// Auth: TestAdmin or Admin
+func DeleteReview(params answer.DeleteReviewParams, u *models.User) middleware.Responder {
+	if isAnswerTestAdmin(u, params.Answerid) || isAnswerOwner(params.Answerid, u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			var qa *dao.QuestionAnswer
+			qa, err = dao.GetQuestionAnswerFromAnswer(db, params.Answerid, params.Questionid)
+			if qa != nil && err == nil {
+				err = substractAnswerPuntuacion(params.Answerid, params.Questionid, *qa.Puntuacion)
+			}
+			if err == nil {
+				err = dao.DeleteReview(db, params.Answerid, params.Questionid)
+				if err == nil {
+					return answer.NewDeleteReviewOK()
+				}
+			}
+		}
+		log.Println("Error en answers_handler DeleteReview(): ", err)
+		return answer.NewDeleteReviewInternalServerError()
+
+	}
+	return answer.NewDeleteReviewForbidden()
 }
 
 func fillQuestionsIsRespondida(db *sql.DB, mqs []*models.Question, answerid int64) error {

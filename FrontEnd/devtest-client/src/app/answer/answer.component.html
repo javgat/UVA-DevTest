@@ -18,7 +18,7 @@
     <p>Fecha de inicio: {{answer.startTime}}</p>
     <p>Fecha de entrega: {{answer.finishTime}}</p>
     <p>Puntuacion: {{answer.puntuacion || 0}}</p>
-    <p>Corregida: <span *ngIf="answer.corregida">Sí</span><span *ngIf="!answer.corregida">No</span></p>
+    <p>Corregida: <span class="badge bg-success" *ngIf="answer.corregida">Sí</span><span class="badge bg-danger" *ngIf="!answer.corregida">No</span></p>
     <div class="my-3" *ngIf="isModoTestAdmin()">
         <button *ngIf="!answer.corregida" type="button" class="btn btn-primary" data-bs-toggle="modal"
             data-bs-target="#modalCorregida">Marcar como corregida</button>
