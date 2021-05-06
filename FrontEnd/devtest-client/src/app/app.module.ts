@@ -72,7 +72,6 @@ import { AnsweringPQuestionComponent } from './answering-pquestion/answering-pqu
 import { PtestAnswersComponent } from './ptest-answers/ptest-answers.component';
 import { PquestionQAnswersComponent } from './pquestion-qanswers/pquestion-qanswers.component';
 import { AnswerComponent } from './answer/answer.component';
-import { AnswerQAnswersComponent } from './answer-qanswers/answer-qanswers.component';
 import { QanswerComponent } from './qanswer/qanswer.component';
 import { ListAnswersComponent } from './list-answers/list-answers.component';
 import { LaCorrectedComponent } from './list-answers/la-corrected/la-corrected.component';
@@ -155,7 +154,6 @@ export function apiConfigFactory (): Configuration {
     PtestAnswersComponent,
     PquestionQAnswersComponent,
     AnswerComponent,
-    AnswerQAnswersComponent,
     QanswerComponent,
     ListAnswersComponent,
     LaCorrectedComponent,

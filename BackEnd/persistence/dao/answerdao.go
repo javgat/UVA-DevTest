@@ -156,7 +156,7 @@ func FinishAnswer(db *sql.DB, answerid int64) error {
 		return errors.New(errorDBNil)
 	}
 	now := time.Now()
-	query, err := db.Prepare("UPDATE RespuestaExamen SET entregado=1 AND finishTime=? WHERE id=?")
+	query, err := db.Prepare("UPDATE RespuestaExamen SET entregado=1, finishTime=? WHERE id=?")
 	if err == nil {
 		defer query.Close()
 		_, err = query.Exec(now, answerid)

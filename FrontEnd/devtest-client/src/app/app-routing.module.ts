@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { AdminTeamsComponent } from './admin/admin-teams/admin-teams.component';
 import { AdminUsersComponent } from './admin/admin-users/admin-users.component';
 import { AdminComponent } from './admin/admin.component';
-import { AnswerQAnswersComponent } from './answer-qanswers/answer-qanswers.component';
 import { AnswerComponent } from './answer/answer.component';
 import { AnsweringListPQuestionsComponent } from './answering-list-pquestions/answering-list-pquestions.component';
 import { AnsweringPQuestionComponent } from './answering-pquestion/answering-pquestion.component';
@@ -86,7 +85,6 @@ const routes: Routes = [
   {path: 'pt/:testid/q/:questionid/qanswers', component: PquestionQAnswersComponent},
   {path: 'pt/:testid/answers', component: PtestAnswersComponent},
   {path: 'pt/:testid/answers/:answerid', component: AnswerComponent},
-  {path: 'pt/:testid/answers/:answerid/qanswers', component: AnswerQAnswersComponent},
   {path: 'pt/:testid/answers/:answerid/qanswers/:questionid', component: QanswerComponent},
   {path: 'pt/:testid/answering', component: AnsweringListPQuestionsComponent},
   {path: 'pt/:testid/answering/pq/:questionid', component: AnsweringPQuestionComponent},

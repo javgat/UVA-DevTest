@@ -1,4 +1,4 @@
-import { User, Team, Question, Test, Answer } from "@javgat/devtest-api";
+import { User, Team, Question, Test, Answer, QuestionAnswer } from "@javgat/devtest-api";
 
 export enum Tipo {
     SUCCESS = "success",
@@ -232,4 +232,24 @@ export class Respuesta implements Answer{
         this.puntuacion = resp?.puntuacion || 0
         this.corregida = resp?.corregida || false
     }
+}
+
+export class RespuestaPregunta implements QuestionAnswer{
+    respuesta: string;
+    idPregunta: number;
+    idRespuesta: number;
+    puntuacion: number;
+    corregida: boolean;
+    indicesOpciones: number[];
+    username: string;
+    constructor(qa?: QuestionAnswer){
+        this.idPregunta = qa?.idPregunta || 0
+        this.idRespuesta = qa?.idRespuesta || 0
+        this.puntuacion = qa?.puntuacion || 0
+        this.corregida = qa?.corregida || false
+        this.respuesta = qa?.respuesta || ""
+        this.indicesOpciones = qa?.indicesOpciones || []
+        this.username = qa?.username || ""
+    }
+
 }

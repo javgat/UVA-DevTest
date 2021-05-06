@@ -176,9 +176,10 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
         this.questionAnswer.indicesOpciones?.splice(index, 1);
       }
     } else {
-      this.questionAnswer.indicesOpciones?.push(indicePressed)
+      if(this.questionAnswer.indicesOpciones == undefined)
+        this.questionAnswer.indicesOpciones =[]
+      this.questionAnswer.indicesOpciones.push(indicePressed)
     }
-    this.sendRespuesta()
   }
 
   pressedRadio(indicePressed: number | undefined) {
