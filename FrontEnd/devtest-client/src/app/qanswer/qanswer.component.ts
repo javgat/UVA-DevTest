@@ -181,4 +181,9 @@ export class QanswerComponent extends LoggedInController implements OnInit {
     )
   }
 
+  calcValor(porcentaje: number | undefined, valorFinal: number | undefined): number{
+    if(porcentaje == undefined || valorFinal == undefined) return 0
+    return (porcentaje * valorFinal)/100
+  }
+
 }

@@ -14,7 +14,8 @@
                     *ngIf="!question.autoCorrect">No</span></p>
             <p>Corregida: <span class="badge bg-success" *ngIf="qa.corregida">Sí</span><span class="badge bg-danger"
                     *ngIf="!qa.corregida">No</span></p>
-            <p *ngIf="qa.corregida">Puntuación: {{qa.puntuacion}}%</p>
+            <p *ngIf="qa.corregida">Puntuación: {{qa.puntuacion}}% ({{calcValor(qa.puntuacion,
+                question.valorFinal)}}/{{question.valorFinal}})</p>
             <p *ngIf="!qa.corregida">
                 <button *ngIf="!showCorregir" type="button" class="btn btn-primary"
                     (click)="clickShowCorregir()">Corregir</button>
