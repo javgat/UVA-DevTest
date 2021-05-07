@@ -15,6 +15,9 @@ export interface QuestionAnswer {
     respuesta?: string;
     idPregunta: number;
     idRespuesta: number;
+    /**
+     * Percentage of the max points given to the answer
+     */
     puntuacion: number;
     corregida: boolean;
     indicesOpciones?: Array<number>;

@@ -109,6 +109,12 @@ type Question struct {
 	// Example: 1
 	ID int64 `json:"id,omitempty"`
 
+	// penalizacion
+	// Required: true
+	// Maximum: 100
+	// Minimum: 0
+	Penalizacion *int64 `json:"penalizacion"`
+
 	// question
 	// Example: ¿Cual es el lenguaje que tiene un nombre más largo de todos?
 	// Required: true
@@ -153,6 +159,11 @@ type Test struct {
 	// Example: true
 	// Required: true
 	AccesoPublicoNoPublicado *bool `json:"accesoPublicoNoPublicado"`
+
+	// auto correct
+	// Example: true
+	// Required: true
+	AutoCorrect *bool `json:"autoCorrect"`
 
 	// description
 	// Example: En este test se evaluaran los conocimientos respecto al lenguaje de programación Java
@@ -285,9 +296,11 @@ type QuestionAnswer struct {
 	// Required: true
 	IDRespuesta *int64 `json:"idRespuesta"`
 
-	// puntuacion
+	// Percentage of the max points given to the answer
 	// Example: 1
 	// Required: true
+	// Maximum: 100
+	// Minimum: -100
 	Puntuacion *int64 `json:"puntuacion"`
 
 	// respuesta

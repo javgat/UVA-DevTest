@@ -42,8 +42,8 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
     this.deleteIndex = -1
     this.deletingTag = ""
     this.mantenerMensaje = false
-    this.question = new Pregunta(undefined, "", "", 0, false, true, "", true, undefined, undefined, Question.TipoPreguntaEnum.String, undefined)
-    this.questionEdit = new Pregunta(undefined, "", "", 0, false, true, "", true, undefined, undefined, Question.TipoPreguntaEnum.String, undefined)
+    this.question = new Pregunta()
+    this.questionEdit = new Pregunta()
     this.isFavorita = false
     this.nuevaOpcion = {
       correcta: false,
@@ -104,12 +104,8 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
   getPregunta(primera: boolean) {
     this.qS.getQuestion(this.id).subscribe(
       resp => {
-        this.question = new Pregunta(resp.id, resp.title, resp.question, resp.estimatedTime,
-          resp.autoCorrect, resp.editable, resp.username, resp.accesoPublicoNoPublicada, resp.eleccionUnica, resp.solucion,
-          resp.tipoPregunta, resp.valorFinal)
-        this.questionEdit = new Pregunta(resp.id, resp.title, resp.question, resp.estimatedTime,
-          resp.autoCorrect, resp.editable, resp.username, resp.accesoPublicoNoPublicada, resp.eleccionUnica, resp.solucion,
-          resp.tipoPregunta, resp.valorFinal)
+        this.question = Pregunta.constructorFromQuestion(resp)
+        this.questionEdit = Pregunta.constructorFromQuestion(resp)
         this.setTipoPrint()
         if (this.question.tipoPregunta == Question.TipoPreguntaEnum.Opciones) {
           this.getOptions(true)

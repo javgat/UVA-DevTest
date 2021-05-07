@@ -37,9 +37,11 @@ type QuestionAnswer struct {
 	// indices opciones
 	IndicesOpciones []int64 `json:"indicesOpciones"`
 
-	// puntuacion
+	// Percentage of the max points given to the answer
 	// Example: 1
 	// Required: true
+	// Maximum: 100
+	// Minimum: -100
 	Puntuacion *int64 `json:"puntuacion"`
 
 	// respuesta
@@ -107,6 +109,14 @@ func (m *QuestionAnswer) validateIDRespuesta(formats strfmt.Registry) error {
 func (m *QuestionAnswer) validatePuntuacion(formats strfmt.Registry) error {
 
 	if err := validate.Required("puntuacion", "body", m.Puntuacion); err != nil {
+		return err
+	}
+
+	if err := validate.MinimumInt("puntuacion", "body", *m.Puntuacion, -100, false); err != nil {
+		return err
+	}
+
+	if err := validate.MaximumInt("puntuacion", "body", *m.Puntuacion, 100, false); err != nil {
 		return err
 	}
 

@@ -77,9 +77,7 @@ export class QanswerComponent extends LoggedInController implements OnInit {
   getPregunta(primera: boolean) {
     this.ptestS.getQuestionFromPublishedTests(this.testid, this.questionid).subscribe(
       resp => {
-        this.question = new Pregunta(resp.id, resp.title, resp.question, resp.estimatedTime,
-          resp.autoCorrect, resp.editable, resp.username, resp.accesoPublicoNoPublicada, resp.eleccionUnica, resp.solucion,
-          resp.tipoPregunta, resp.valorFinal)
+        this.question = Pregunta.constructorFromQuestion(resp)
         if (this.question.tipoPregunta == Question.TipoPreguntaEnum.Opciones) {
           this.getOptions(true)
         }

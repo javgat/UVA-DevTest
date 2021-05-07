@@ -8810,7 +8810,8 @@ func init() {
         "editable",
         "username",
         "tipoPregunta",
-        "accesoPublicoNoPublicada"
+        "accesoPublicoNoPublicada",
+        "penalizacion"
       ],
       "properties": {
         "accesoPublicoNoPublicada": {
@@ -8841,6 +8842,10 @@ func init() {
           "description": "only present in GetQuestionsFromAnswer",
           "type": "boolean",
           "example": false
+        },
+        "penalizacion": {
+          "type": "integer",
+          "maximum": 100
         },
         "question": {
           "type": "string",
@@ -8899,7 +8904,10 @@ func init() {
           }
         },
         "puntuacion": {
+          "description": "Percentage of the max points given to the answer",
           "type": "integer",
+          "maximum": 100,
+          "minimum": -100,
           "example": 1
         },
         "respuesta": {
@@ -9010,7 +9018,8 @@ func init() {
         "accesoPublico",
         "editable",
         "username",
-        "accesoPublicoNoPublicado"
+        "accesoPublicoNoPublicado",
+        "autoCorrect"
       ],
       "properties": {
         "accesoPublico": {
@@ -9018,6 +9027,10 @@ func init() {
           "example": true
         },
         "accesoPublicoNoPublicado": {
+          "type": "boolean",
+          "example": true
+        },
+        "autoCorrect": {
           "type": "boolean",
           "example": true
         },
@@ -19423,7 +19436,8 @@ func init() {
         "editable",
         "username",
         "tipoPregunta",
-        "accesoPublicoNoPublicada"
+        "accesoPublicoNoPublicada",
+        "penalizacion"
       ],
       "properties": {
         "accesoPublicoNoPublicada": {
@@ -19455,6 +19469,11 @@ func init() {
           "description": "only present in GetQuestionsFromAnswer",
           "type": "boolean",
           "example": false
+        },
+        "penalizacion": {
+          "type": "integer",
+          "maximum": 100,
+          "minimum": 0
         },
         "question": {
           "type": "string",
@@ -19514,7 +19533,10 @@ func init() {
           }
         },
         "puntuacion": {
+          "description": "Percentage of the max points given to the answer",
           "type": "integer",
+          "maximum": 100,
+          "minimum": -100,
           "example": 1
         },
         "respuesta": {
@@ -19625,7 +19647,8 @@ func init() {
         "accesoPublico",
         "editable",
         "username",
-        "accesoPublicoNoPublicado"
+        "accesoPublicoNoPublicado",
+        "autoCorrect"
       ],
       "properties": {
         "accesoPublico": {
@@ -19633,6 +19656,10 @@ func init() {
           "example": true
         },
         "accesoPublicoNoPublicado": {
+          "type": "boolean",
+          "example": true
+        },
+        "autoCorrect": {
           "type": "boolean",
           "example": true
         },

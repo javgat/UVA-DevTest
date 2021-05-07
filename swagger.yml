@@ -5823,6 +5823,7 @@ definitions:
     - username
     - tipoPregunta
     - accesoPublicoNoPublicada
+    - penalizacion
     properties:
       id:
         type: integer
@@ -5865,6 +5866,10 @@ definitions:
         type: boolean
         description: only present in GetQuestionsFromAnswer
         example: false
+      penalizacion:
+        type: integer
+        minimum: 0
+        maximum: 100
   Test:
     type: object
     required:
@@ -5875,6 +5880,7 @@ definitions:
     - editable
     - username
     - accesoPublicoNoPublicado
+    - autoCorrect
     properties:
       id:
         type: integer
@@ -5916,6 +5922,9 @@ definitions:
         type: integer
         description: only present in GetSolvableTestFromUser
         example: 1
+      autoCorrect:
+        type: boolean
+        example: true
   Answer:
     type: object
     required:
@@ -5966,7 +5975,10 @@ definitions:
         example: 1
       puntuacion:
         type: integer
+        description: Percentage of the max points given to the answer
         example: 1
+        minimum: -100
+        maximum: 100
       corregida:
         type: boolean
         example: true

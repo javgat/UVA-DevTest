@@ -29,6 +29,11 @@ type Test struct {
 	// Required: true
 	AccesoPublicoNoPublicado *bool `json:"accesoPublicoNoPublicado"`
 
+	// auto correct
+	// Example: true
+	// Required: true
+	AutoCorrect *bool `json:"autoCorrect"`
+
 	// only present in GetSolvableTestFromUser
 	// Example: 1
 	CantidadRespuestasDelUsuario int64 `json:"cantidadRespuestasDelUsuario,omitempty"`
@@ -89,6 +94,10 @@ func (m *Test) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateAutoCorrect(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateDescription(formats); err != nil {
 		res = append(res, err)
 	}
@@ -131,6 +140,15 @@ func (m *Test) validateAccesoPublico(formats strfmt.Registry) error {
 func (m *Test) validateAccesoPublicoNoPublicado(formats strfmt.Registry) error {
 
 	if err := validate.Required("accesoPublicoNoPublicado", "body", m.AccesoPublicoNoPublicado); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Test) validateAutoCorrect(formats strfmt.Registry) error {
+
+	if err := validate.Required("autoCorrect", "body", m.AutoCorrect); err != nil {
 		return err
 	}
 

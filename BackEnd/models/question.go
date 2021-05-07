@@ -53,6 +53,12 @@ type Question struct {
 	// Example: false
 	IsRespondida bool `json:"isRespondida,omitempty"`
 
+	// penalizacion
+	// Required: true
+	// Maximum: 100
+	// Minimum: 0
+	Penalizacion *int64 `json:"penalizacion"`
+
 	// question
 	// Example: ¿Cual es el lenguaje que tiene un nombre más largo de todos?
 	// Required: true
@@ -99,6 +105,10 @@ func (m *Question) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateEstimatedTime(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validatePenalizacion(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -162,6 +172,23 @@ func (m *Question) validateEstimatedTime(formats strfmt.Registry) error {
 	}
 
 	if err := validate.MinimumInt("estimatedTime", "body", *m.EstimatedTime, 0, false); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Question) validatePenalizacion(formats strfmt.Registry) error {
+
+	if err := validate.Required("penalizacion", "body", m.Penalizacion); err != nil {
+		return err
+	}
+
+	if err := validate.MinimumInt("penalizacion", "body", *m.Penalizacion, 0, false); err != nil {
+		return err
+	}
+
+	if err := validate.MaximumInt("penalizacion", "body", *m.Penalizacion, 100, false); err != nil {
 		return err
 	}
 

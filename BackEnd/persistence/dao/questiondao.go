@@ -35,6 +35,7 @@ func ToModelQuestion(q *Question) (*models.Question, error) {
 				TipoPregunta:             q.TipoPregunta,
 				ValorFinal:               q.ValorFinal,
 				AccesoPublicoNoPublicada: q.AccesoPublicoNoPublicada,
+				Penalizacion:             q.Penalizacion,
 			}
 			return mq, nil
 		}
@@ -64,7 +65,8 @@ func rowsToQuestions(rows *sql.Rows) ([]*Question, error) {
 		var q Question
 		var eleUni sql.NullBool
 		var solu sql.NullString
-		err := rows.Scan(&q.ID, &q.Title, &q.Question, &q.EstimatedTime, &q.AutoCorrect, &q.Editable, &q.Usuarioid, &eleUni, &solu, &q.AccesoPublicoNoPublicada)
+		err := rows.Scan(&q.ID, &q.Title, &q.Question, &q.EstimatedTime, &q.AutoCorrect, &q.Editable, &q.Usuarioid, &eleUni,
+			&solu, &q.AccesoPublicoNoPublicada, &q.Penalizacion)
 		var tipo string
 		if eleUni.Valid {
 			q.EleccionUnica = eleUni.Bool
@@ -285,7 +287,8 @@ func PutQuestion(db *sql.DB, questionid int64, q *models.Question) error {
 	if err != nil || u == nil {
 		return errors.New(errorResourceNotFound)
 	}
-	query, err := db.Prepare("UPDATE Pregunta SET title=?, question=?, estimatedTime=?, autoCorrect=?, editable=?, usuarioid=?, eleccionUnica=?, solucion=?, accesoPublicoNoPublicada=? WHERE id=? ")
+	query, err := db.Prepare("UPDATE Pregunta SET title=?, question=?, estimatedTime=?, autoCorrect=?, editable=?, usuarioid=?, " +
+		" eleccionUnica=?, solucion=?, accesoPublicoNoPublicada=?, penalizacion=? WHERE id=? ")
 	if err != nil {
 		return err
 	}
@@ -297,7 +300,7 @@ func PutQuestion(db *sql.DB, questionid int64, q *models.Question) error {
 		solucion = &q.Solucion
 	}
 	defer query.Close()
-	_, err = query.Exec(q.Title, q.Question, q.EstimatedTime, q.AutoCorrect, q.Editable, u.ID, eleUni, solucion, q.AccesoPublicoNoPublicada, questionid)
+	_, err = query.Exec(q.Title, q.Question, q.EstimatedTime, q.AutoCorrect, q.Editable, u.ID, eleUni, solucion, q.AccesoPublicoNoPublicada, q.Penalizacion, questionid)
 	return err
 }
 
@@ -420,8 +423,9 @@ func PostQuestion(db *sql.DB, q *models.Question, username string) (*models.Ques
 	if err != nil || u == nil {
 		return nil, errors.New(errorResourceNotFound)
 	}
-	query, err := db.Prepare("INSERT INTO Pregunta(title, question, estimatedTime, autoCorrect, editable, usuarioid, eleccionUnica, solucion, accesoPublicoNoPublicada) " +
-		"VALUES (?,?,?,?,?,?,?,?,?)")
+	query, err := db.Prepare("INSERT INTO Pregunta(title, question, estimatedTime, autoCorrect, editable, usuarioid, " +
+		" eleccionUnica, solucion, accesoPublicoNoPublicada, penalizacion) " +
+		"VALUES (?,?,?,?,?,?,?,?,?,?)")
 
 	if err != nil {
 		return nil, err
@@ -434,7 +438,8 @@ func PostQuestion(db *sql.DB, q *models.Question, username string) (*models.Ques
 		solucion = &q.Solucion
 	}
 	defer query.Close()
-	sol, err := query.Exec(q.Title, q.Question, q.EstimatedTime, q.AutoCorrect, q.Editable, u.ID, eleUni, solucion, q.AccesoPublicoNoPublicada)
+	sol, err := query.Exec(q.Title, q.Question, q.EstimatedTime, q.AutoCorrect, q.Editable,
+		u.ID, eleUni, solucion, q.AccesoPublicoNoPublicada, q.Penalizacion)
 	if err == nil {
 		qs := q
 		qs.ID, err = sol.LastInsertId()

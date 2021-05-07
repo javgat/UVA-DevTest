@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Question, QuestionService, UserService } from '@javgat/devtest-api';
 import { LoggedInTeacherController } from '../shared/app.controller';
-import { Mensaje, Tipo } from '../shared/app.model';
+import { Mensaje, Pregunta, Tipo } from '../shared/app.model';
 import { DataService } from '../shared/data.service';
 import { SessionService } from '../shared/session.service';
 
@@ -13,18 +13,10 @@ import { SessionService } from '../shared/session.service';
 })
 export class QuestionCreateComponent extends LoggedInTeacherController implements OnInit {
 
-  question: Question =  {
-    title: "",
-    question: "",
-    estimatedTime: 0,
-    autoCorrect: false,
-    editable: true,
-    username: "",
-    tipoPregunta: Question.TipoPreguntaEnum.String,
-    accesoPublicoNoPublicada: true
-  }
+  question: Question
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private qS : QuestionService) {
     super(session, router, data, userS)
+    this.question = new Pregunta()
   }
 
   doHasUserAction(){

@@ -28,6 +28,7 @@ export interface Question {
      * only present in GetQuestionsFromAnswer
      */
     isRespondida?: boolean;
+    penalizacion: number;
 }
 export namespace Question {
     export type TipoPreguntaEnum = 'opciones' | 'string' | 'codigo';

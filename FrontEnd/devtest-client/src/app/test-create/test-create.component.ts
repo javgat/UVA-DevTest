@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Test, UserService } from '@javgat/devtest-api';
 import { LoggedInTeacherController } from '../shared/app.controller';
+import { Examen } from '../shared/app.model';
 import { DataService } from '../shared/data.service';
 import { SessionService } from '../shared/session.service';
 
@@ -16,15 +17,7 @@ export class TestCreateComponent extends LoggedInTeacherController implements On
   hasUser?: boolean
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService) {
     super(session, router, data, userS)
-    this.test = {
-      title: "",
-      description: "",
-      accesoPublico: false,
-      editable: true,
-      username: "",
-      maxMinutes: 0,
-      accesoPublicoNoPublicado: true
-    }
+    this.test = new Examen()
     if(this.hasUser!=undefined){
       this.doHasUserAction()
     }

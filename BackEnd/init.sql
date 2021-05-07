@@ -73,6 +73,7 @@ CREATE TABLE Test(
   horaCreacion DateTime NOT NULL,
   origenTestid int(11),
   notaMaxima int(11) NOT NULL,
+  autoCorrect boolean NOT NULL,
   FOREIGN KEY(usuarioid) REFERENCES Usuario(id),
   FOREIGN KEY(origenTestid) REFERENCES Test(id),
   PRIMARY KEY(id)
@@ -118,6 +119,8 @@ CREATE TABLE Pregunta(
   eleccionUnica boolean,
   solucion varchar(100) COLLATE utf8_unicode_ci,
   accesoPublicoNoPublicada boolean NOT NULL,
+  penalizacion int(11) NOT NULL,
+  CONSTRAINT CHK_penalizacion CHECK (penalizacion>=0 AND penalizacion<=100),
   FOREIGN KEY(usuarioid) REFERENCES Usuario(id) ON DELETE CASCADE,
   PRIMARY KEY(id)
 );
@@ -197,7 +200,7 @@ CREATE TABLE RespuestaPregunta(
   puntuacion int(11) NOT NULL, /*porcentaje*/
   corregida boolean NOT NULL,
   respuesta longtext COLLATE utf8_unicode_ci,
-  CONSTRAINT CHK_puntuacion CHECK (puntuacion>=0 AND puntuacion<=100),
+  CONSTRAINT CHK_puntuacion CHECK (puntuacion>=-100 AND puntuacion<=100),
   FOREIGN KEY(respuestaExamenid) REFERENCES RespuestaExamen(id) ON DELETE CASCADE,
   FOREIGN KEY(preguntaid) REFERENCES Pregunta(id) ON DELETE CASCADE,
   CONSTRAINT PRIMARY KEY(respuestaExamenid, preguntaid)

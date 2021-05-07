@@ -27,4 +27,5 @@ export interface Test {
      * only present in GetSolvableTestFromUser
      */
     cantidadRespuestasDelUsuario?: number;
+    autoCorrect: boolean;
 }

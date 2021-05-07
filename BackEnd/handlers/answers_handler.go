@@ -8,6 +8,7 @@ import (
 	"database/sql"
 	"errors"
 	"log"
+	"strings"
 	"uva-devtest/models"
 	"uva-devtest/persistence/dao"
 	"uva-devtest/persistence/dbconnection"
@@ -76,6 +77,151 @@ func GetAnswer(params answer.GetAnswerParams, u *models.User) middleware.Respond
 	return answer.NewGetAnswerForbidden()
 }
 
+func autoCorrigeString(daq *dao.QuestionAnswer, dq *dao.Question) error {
+	var puntuacion int64 = 0
+	if strings.ToLower(daq.Respuesta) == strings.ToLower(dq.Solucion) {
+		puntuacion = 100
+	}
+	review := &models.Review{
+		Puntuacion: &puntuacion,
+	}
+	err := updateReview(*daq.IDRespuesta, dq.ID, review)
+	return err
+}
+
+func autoCorrigeOpcionesEleUni(daq *dao.QuestionAnswer, dq *dao.Question) error {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		var puntuacion int64 = 0
+		if len(daq.IndicesOpciones) > 0 {
+			ind := daq.IndicesOpciones[0]
+			var opt *dao.Option
+			opt, err = dao.GetOptionQuestion(db, dq.ID, ind)
+			if err != nil {
+				return err
+			}
+			if opt == nil {
+				return errors.New("opcion seleccionada no existe")
+			}
+			if *opt.Correcta {
+				puntuacion = 100
+			}
+		}
+		review := &models.Review{
+			Puntuacion: &puntuacion,
+		}
+		err = updateReview(*daq.IDRespuesta, dq.ID, review)
+	}
+	return err
+}
+
+func int64sliceContains(slice []int64, value int64) bool {
+	for _, val := range slice {
+		if val == value {
+			return true
+		}
+	}
+	return false
+}
+
+func autoCorrigeOpcionesEleMulti(daq *dao.QuestionAnswer, dq *dao.Question) error {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		var puntuacion int64 = 100
+		var opts []*dao.Option
+		opts, err = dao.GetOptionsQuestion(db, dq.ID)
+		if err == nil {
+			for _, opt := range opts {
+				if (*opt.Correcta && !int64sliceContains(daq.IndicesOpciones, opt.Indice)) ||
+					(!*opt.Correcta && int64sliceContains(daq.IndicesOpciones, opt.Indice)) {
+					puntuacion = 0
+					break
+				}
+			}
+			review := &models.Review{
+				Puntuacion: &puntuacion,
+			}
+			err = updateReview(*daq.IDRespuesta, dq.ID, review)
+		}
+	}
+	return err
+}
+
+func autoCorrigeRespuestaPregunta(aid int64, dq *dao.Question) error {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		var daq *dao.QuestionAnswer
+		daq, err = dao.GetQuestionAnswerFromAnswer(db, aid, dq.ID)
+		if err == nil {
+			if daq == nil {
+				return nil // Es valido que no haya respondido a una pregunta
+			}
+			switch *dq.TipoPregunta {
+			case models.QuestionTipoPreguntaString:
+				err = autoCorrigeString(daq, dq)
+			case models.QuestionTipoPreguntaOpciones:
+				if err == nil {
+					if dq.EleccionUnica {
+						err = autoCorrigeOpcionesEleUni(daq, dq)
+					} else {
+						err = autoCorrigeOpcionesEleMulti(daq, dq)
+					}
+				}
+			default:
+				return errors.New("tipo de pregunta extraño")
+			}
+		}
+	}
+	return err
+}
+
+func marcarRespuestaComoCorregida(aid int64) error {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		err = dao.SetAnswerCorrected(db, aid)
+	}
+	return err
+}
+
+func autoCorregirLoPosible(aid int64) error {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		var da *dao.Answer
+		da, err = dao.GetAnswer(db, aid)
+		if err == nil {
+			if da == nil {
+				return errors.New("respuesta no existe con ese id")
+			}
+			var dqs []*dao.Question
+			dqs, err = dao.GetQuestionsFromTest(db, da.Testid)
+			if err == nil {
+				for _, dq := range dqs {
+					if *dq.AutoCorrect {
+						err = autoCorrigeRespuestaPregunta(aid, dq)
+						if err != nil {
+							return err
+						}
+					}
+				}
+			}
+			var dt *dao.Test
+			dt, err = dao.GetTest(db, da.Testid)
+			if err == nil {
+				if dt == nil {
+					return errors.New("test no existe con ese id")
+				}
+				if *dt.AutoCorrect {
+					err = marcarRespuestaComoCorregida(aid)
+					if err != nil {
+						return err
+					}
+				}
+			}
+		}
+	}
+	return err
+}
+
 // PUT /answers/{answerid}
 // Auth: Admin OR AnswerOwner
 func FinishAnswer(params answer.FinishAnswerParams, u *models.User) middleware.Responder {
@@ -84,7 +230,10 @@ func FinishAnswer(params answer.FinishAnswerParams, u *models.User) middleware.R
 		if err == nil {
 			err = dao.FinishAnswer(db, params.Answerid)
 			if err == nil {
-				return answer.NewFinishAnswerOK()
+				err = autoCorregirLoPosible(params.Answerid)
+				if err == nil {
+					return answer.NewFinishAnswerOK()
+				}
 			}
 		}
 		log.Println("Error en answers_handler FinishAnswer(): ", err)
@@ -97,12 +246,9 @@ func FinishAnswer(params answer.FinishAnswerParams, u *models.User) middleware.R
 // Auth: Admin OR TestAdmin
 func SetAnswerCorrected(params answer.SetAnswerCorrectedParams, u *models.User) middleware.Responder {
 	if isAdmin(u) || isAnswerTestAdmin(u, params.Answerid) {
-		db, err := dbconnection.ConnectDb()
+		err := marcarRespuestaComoCorregida(params.Answerid)
 		if err == nil {
-			err = dao.SetAnswerCorrected(db, params.Answerid)
-			if err == nil {
-				return answer.NewSetAnswerCorrectedOK()
-			}
+			return answer.NewSetAnswerCorrectedOK()
 		}
 		log.Println("Error en answers_handler SetAnswerCorrected(): ", err)
 		return answer.NewSetAnswerCorrectedInternalServerError()
@@ -298,26 +444,31 @@ func substractAnswerPuntuacion(aid int64, qid int64, puntuacion int64) error {
 	return addAnswerPuntuacion(aid, qid, -puntuacion)
 }
 
+func updateReview(aid int64, qid int64, review *models.Review) error {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		var qa *dao.QuestionAnswer
+		qa, err = dao.GetQuestionAnswerFromAnswer(db, aid, qid)
+		if qa != nil && err == nil {
+			err = substractAnswerPuntuacion(aid, qid, *qa.Puntuacion)
+		}
+		if err == nil {
+			err = addAnswerPuntuacion(aid, qid, *review.Puntuacion)
+			if err == nil {
+				err = dao.PutReview(db, aid, qid, review)
+			}
+		}
+	}
+	return err
+}
+
 // PUT /answers/{answerid}/qanswers/{questionid}/review
 // Auth: TestAdmin or Admin
 func PutReview(params answer.PutReviewParams, u *models.User) middleware.Responder {
 	if isAnswerTestAdmin(u, params.Answerid) || isAnswerOwner(params.Answerid, u) {
-		db, err := dbconnection.ConnectDb()
+		err := updateReview(params.Answerid, params.Questionid, params.Review)
 		if err == nil {
-			var qa *dao.QuestionAnswer
-			qa, err = dao.GetQuestionAnswerFromAnswer(db, params.Answerid, params.Questionid)
-			if qa != nil && err == nil {
-				err = substractAnswerPuntuacion(params.Answerid, params.Questionid, *qa.Puntuacion)
-			}
-			if err == nil {
-				err = addAnswerPuntuacion(params.Answerid, params.Questionid, *params.Review.Puntuacion)
-				if err == nil {
-					err = dao.PutReview(db, params.Answerid, params.Questionid, params.Review)
-					if err == nil {
-						return answer.NewPutReviewOK()
-					}
-				}
-			}
+			return answer.NewPutReviewOK()
 		}
 		log.Println("Error en answers_handler PutReview(): ", err)
 		return answer.NewPutReviewInternalServerError()

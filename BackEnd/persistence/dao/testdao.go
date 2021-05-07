@@ -34,6 +34,7 @@ func ToModelTest(t *Test) (*models.Test, error) {
 				HoraCreacion:             t.HoraCreacion,
 				OriginalTestID:           t.OriginalTestID,
 				NotaMaxima:               t.NotaMaxima,
+				AutoCorrect:              t.AutoCorrect,
 			}
 			return mt, nil
 		}
@@ -63,7 +64,7 @@ func rowsToTests(rows *sql.Rows) ([]*Test, error) {
 		var t Test
 		var timeNull sql.NullTime
 		err := rows.Scan(&t.ID, &t.Title, &t.Description, &t.MaxMinutes, &t.AccesoPublico, &t.Editable, &t.Usuarioid,
-			&t.AccesoPublicoNoPublicado, &timeNull, &t.OriginalTestID, &t.NotaMaxima)
+			&t.AccesoPublicoNoPublicado, &timeNull, &t.OriginalTestID, &t.NotaMaxima, &t.AutoCorrect)
 		if err != nil {
 			return tests, err
 		}
@@ -194,13 +195,13 @@ func PutTest(db *sql.DB, testid int64, t *models.Test) error {
 		return errors.New(errorResourceNotFound)
 	}
 	query, err := db.Prepare("UPDATE Test SET title=?, description=?, maxMinutes=?, accesoPublico=?, usuarioid=?, " +
-		"accesoPublicoNoPublicado=?, notaMaxima=? WHERE editable=1 AND id=?")
+		"accesoPublicoNoPublicado=?, notaMaxima=?, autoCorrect=? WHERE editable=1 AND id=?")
 
 	if err != nil {
 		return err
 	}
 	defer query.Close()
-	_, err = query.Exec(t.Title, t.Description, t.MaxMinutes, *t.AccesoPublico, u.ID, *t.AccesoPublicoNoPublicado, t.NotaMaxima, testid)
+	_, err = query.Exec(t.Title, t.Description, t.MaxMinutes, *t.AccesoPublico, u.ID, *t.AccesoPublicoNoPublicado, t.NotaMaxima, t.AutoCorrect, testid)
 	return err
 }
 
@@ -296,8 +297,9 @@ func PostTest(db *sql.DB, username string, t *models.Test, horaCreacion time.Tim
 	if err != nil || u == nil {
 		return nil, errors.New(errorResourceNotFound)
 	}
-	query, err := db.Prepare("INSERT INTO Test(title, description, maxMinutes, accesoPublico, editable, usuarioid, accesoPublicoNoPublicado, horaCreacion, origenTestid, notaMaxima) " +
-		"VALUES (?,?,?,?,?,?,?,?,?,?)")
+	query, err := db.Prepare("INSERT INTO Test(title, description, maxMinutes, accesoPublico, editable, usuarioid, " +
+		" accesoPublicoNoPublicado, horaCreacion, origenTestid, notaMaxima, autoCorrect) " +
+		"VALUES (?,?,?,?,?,?,?,?,?,?,?)")
 
 	if err != nil {
 		return nil, err
@@ -307,7 +309,8 @@ func PostTest(db *sql.DB, username string, t *models.Test, horaCreacion time.Tim
 	if *t.OriginalTestID == -1 {
 		origID = nil
 	}
-	sol, err := query.Exec(t.Title, t.Description, t.MaxMinutes, t.AccesoPublico, t.Editable, u.ID, t.AccesoPublicoNoPublicado, horaCreacion, origID, t.NotaMaxima)
+	sol, err := query.Exec(t.Title, t.Description, t.MaxMinutes, t.AccesoPublico, t.Editable, u.ID,
+		t.AccesoPublicoNoPublicado, horaCreacion, origID, t.NotaMaxima, t.AutoCorrect)
 	if err == nil {
 		ts := t
 		ts.ID, err = sol.LastInsertId()
