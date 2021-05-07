@@ -78,8 +78,8 @@ func GetAnswer(params answer.GetAnswerParams, u *models.User) middleware.Respond
 }
 
 func autoCorrigeString(daq *dao.QuestionAnswer, dq *dao.Question) error {
-	var puntuacion int64 = 0
-	if strings.ToLower(daq.Respuesta) == strings.ToLower(dq.Solucion) {
+	var puntuacion int64 = -*dq.Penalizacion
+	if strings.EqualFold(daq.Respuesta, dq.Solucion) {
 		puntuacion = 100
 	}
 	review := &models.Review{
@@ -92,7 +92,7 @@ func autoCorrigeString(daq *dao.QuestionAnswer, dq *dao.Question) error {
 func autoCorrigeOpcionesEleUni(daq *dao.QuestionAnswer, dq *dao.Question) error {
 	db, err := dbconnection.ConnectDb()
 	if err == nil {
-		var puntuacion int64 = 0
+		var puntuacion int64 = -*dq.Penalizacion
 		if len(daq.IndicesOpciones) > 0 {
 			ind := daq.IndicesOpciones[0]
 			var opt *dao.Option
@@ -134,7 +134,7 @@ func autoCorrigeOpcionesEleMulti(daq *dao.QuestionAnswer, dq *dao.Question) erro
 			for _, opt := range opts {
 				if (*opt.Correcta && !int64sliceContains(daq.IndicesOpciones, opt.Indice)) ||
 					(!*opt.Correcta && int64sliceContains(daq.IndicesOpciones, opt.Indice)) {
-					puntuacion = 0
+					puntuacion = -*dq.Penalizacion
 					break
 				}
 			}
@@ -453,6 +453,7 @@ func updateReview(aid int64, qid int64, review *models.Review) error {
 			err = substractAnswerPuntuacion(aid, qid, *qa.Puntuacion)
 		}
 		if err == nil {
+			log.Println(*review.Puntuacion)
 			err = addAnswerPuntuacion(aid, qid, *review.Puntuacion)
 			if err == nil {
 				err = dao.PutReview(db, aid, qid, review)

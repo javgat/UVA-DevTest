@@ -14,6 +14,7 @@
     </button>
     <h3>Respondiendo a la pregunta {{pregunta.title}}</h3>
     <p>Valor: {{pregunta.valorFinal}} puntos</p>
+    <p>Penalización por fallo: {{pregunta.penalizacion}} %</p>
     <p>Tiempo estimado: {{pregunta.estimatedTime}} minutos</p>
     <p>Tipo: {{tipoPrint(pregunta.tipoPregunta, pregunta.eleccionUnica)}}</p>
     <p class="card-text"><span class="badge bg-danger" *ngIf="!(pregunta.isRespondida || false)">No

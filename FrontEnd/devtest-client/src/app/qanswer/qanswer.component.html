@@ -10,6 +10,8 @@
             <h2> <a class="link-dark" [routerLink]="['/pt', testid, 'q', questionid]">{{question.title}}</a></h2>
             <p>Autor: <a [routerLink]="['/profile', question.username]">{{question.username}}</a></p>
             <p>Tiempo estimado: {{question.estimatedTime}} minutos</p>
+            <p>Valor: {{question.valorFinal}} puntos</p>
+            <p>Penalización por fallo: {{question.penalizacion}} %</p>
             <p>Corrección automática: <span *ngIf="question.autoCorrect">Sí</span><span
                     *ngIf="!question.autoCorrect">No</span></p>
             <p>Corregida: <span class="badge bg-success" *ngIf="qa.corregida">Sí</span><span class="badge bg-danger"
@@ -33,8 +35,8 @@
             </p>
             <form *ngIf="showCorregir" (ngSubmit)="submitUpdateCorrection()" ngNativeValidate>
                 <div class="mb-3">
-                    <label for="porcentajeCorreccion" class="form-label">Puntuacion (0-100):</label>
-                    <input type="number" required min=0 max=100 class="form-control" id="porcentajeCorreccion"
+                    <label for="porcentajeCorreccion" class="form-label">Puntuacion [-100,100]:</label>
+                    <input type="number" required min=-100 max=100 class="form-control" id="porcentajeCorreccion"
                         [(ngModel)]="editPuntuacion" name="editPuntuacion" />
                 </div>
                 <input type="submit" class="button btn btn-primary" value="Guardar" />

@@ -55,6 +55,11 @@
                     *ngIf="!question.autoCorrect">No</span></p>
             <p>Acceso público para profesores: <span *ngIf="question.accesoPublicoNoPublicada">Sí</span><span
                     *ngIf="!question.accesoPublicoNoPublicada">No</span></p>
+            <p>Penalización por fallo:
+                <span *ngIf="question.penalizacion!=0">{{question.penalizacion}} %</span>
+                <span *ngIf="question.penalizacion==0">No</span>
+            </p>
+
             <p>Tipo: {{tipoPrint}}</p>
             <p><button class="btn btn-primary" type="button" [routerLink]="['/q', question.id, 'teams']">Ver equipos
                     administradores</button></p>
@@ -173,6 +178,11 @@
                             (change)="questionEdit.accesoPublicoNoPublicada = !questionEdit.accesoPublicoNoPublicada">
                         <label class="form-check-label" for="flexSwitchAccesoPublicoNoPublicada">Acceso público para
                             profesores</label>
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputPenalizacion" class="form-label">Penalización (%)</label>
+                        <input type="number" class="form-control" name="inputPenalizacion"
+                            [(ngModel)]="questionEdit.penalizacion" required min=0 max=100 />
                     </div>
                     <div class="my-3">
                         <label class="form-label">Tipo de pregunta:</label>
