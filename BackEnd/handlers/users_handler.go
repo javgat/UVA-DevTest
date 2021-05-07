@@ -7,6 +7,7 @@ package handlers
 import (
 	"log"
 	"math/rand"
+	"strings"
 	"time"
 	"uva-devtest/emailHelper"
 	"uva-devtest/models"
@@ -1070,8 +1071,9 @@ func StartAnswer(params user.StartAnswerParams, u *models.User) middleware.Respo
 				t, err = dao.GetPublishedTest(db, params.Testid)
 			}
 			if err == nil && t != nil {
+				visible := strings.EqualFold(*t.Visibilidad, models.TestVisibilidadAlEntregar)
 				var a *dao.Answer
-				a, err = dao.StartAnswer(db, params.Username, params.Testid)
+				a, err = dao.StartAnswer(db, params.Username, params.Testid, visible)
 				if err == nil && a != nil {
 					var ma *models.Answer
 					ma, err = dao.ToModelAnswer(a)

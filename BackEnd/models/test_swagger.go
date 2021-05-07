@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -80,6 +81,11 @@ type Test struct {
 	// Example: javgat
 	// Required: true
 	Username *string `json:"username"`
+
+	// visibilidad
+	// Required: true
+	// Enum: [alEntregar alCorregir manual]
+	Visibilidad *string `json:"visibilidad"`
 }
 
 // Validate validates this test
@@ -119,6 +125,10 @@ func (m *Test) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateUsername(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateVisibilidad(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -210,6 +220,52 @@ func (m *Test) validateTitle(formats strfmt.Registry) error {
 func (m *Test) validateUsername(formats strfmt.Registry) error {
 
 	if err := validate.Required("username", "body", m.Username); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+var testTypeVisibilidadPropEnum []interface{}
+
+func init() {
+	var res []string
+	if err := json.Unmarshal([]byte(`["alEntregar","alCorregir","manual"]`), &res); err != nil {
+		panic(err)
+	}
+	for _, v := range res {
+		testTypeVisibilidadPropEnum = append(testTypeVisibilidadPropEnum, v)
+	}
+}
+
+const (
+
+	// TestVisibilidadAlEntregar captures enum value "alEntregar"
+	TestVisibilidadAlEntregar string = "alEntregar"
+
+	// TestVisibilidadAlCorregir captures enum value "alCorregir"
+	TestVisibilidadAlCorregir string = "alCorregir"
+
+	// TestVisibilidadManual captures enum value "manual"
+	TestVisibilidadManual string = "manual"
+)
+
+// prop value enum
+func (m *Test) validateVisibilidadEnum(path, location string, value string) error {
+	if err := validate.EnumCase(path, location, value, testTypeVisibilidadPropEnum, true); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (m *Test) validateVisibilidad(formats strfmt.Registry) error {
+
+	if err := validate.Required("visibilidad", "body", m.Visibilidad); err != nil {
+		return err
+	}
+
+	// value enum
+	if err := m.validateVisibilidadEnum("visibilidad", "body", *m.Visibilidad); err != nil {
 		return err
 	}
 

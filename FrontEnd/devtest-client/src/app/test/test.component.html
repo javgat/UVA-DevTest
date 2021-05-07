@@ -53,6 +53,7 @@
         </p>
         <p><b>Publicación automática de corrección de respuestas: </b> <span *ngIf="test.autoCorrect">Sí</span><span
                 *ngIf="!test.autoCorrect">No</span></p>
+        <p><b>Visibilidad de la respuesta: </b>{{visibilidadToString(test.visibilidad)}}</p>
         <p><button class="btn btn-primary" type="button" [routerLink]="['/et', test.id, 'teams']">Ver equipos
                 administradores</button></p>
         <p><button *ngIf="checkPermisosEdicion()" type="button" class="btn btn-primary" data-bs-toggle="modal"
@@ -174,6 +175,14 @@
                                 (change)="testEdit.autoCorrect = !testEdit.autoCorrect">
                             <label class="form-check-label" for="flexSwitchCheckAutoCorrect">Publicación automática de
                                 corrección de respuestas</label>
+                        </div>
+                        <div>
+                            <label class="form-label" for="selectVisibilidadLabel">Visibilidad de la respuesta</label>
+                            <select class="form-select" name="visibilidad" [(ngModel)]="testEdit.visibilidad">
+                                <option [value]="getValueManual()">{{printManual()}}</option>
+                                <option [value]="getValueCorregir()">{{printCorregir()}}</option>
+                                <option [value]="getValueEntregar()">{{printEntregar()}}</option>
+                            </select>
                         </div>
                     </div>
                     <div class="modal-footer">

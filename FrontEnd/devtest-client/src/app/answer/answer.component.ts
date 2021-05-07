@@ -113,4 +113,25 @@ export class AnswerComponent extends LoggedInController implements OnInit {
     )
   }
 
+  clickHacerVisible(){
+    if(this.answer.visibleParaUsuario)
+      this.hacerNoVisible(true)
+    else
+      this.hacerVisible(true)
+  }
+
+  hacerVisible(primera: boolean){
+    this.answerS.setAnswerVisible(this.answerid).subscribe(
+      resp => this.getAnswer(true),
+      err => this.handleErrRelog(err, "hacer visible para usuario la respuesta", primera, this.hacerVisible, this)
+    )
+  }
+
+  hacerNoVisible(primera: boolean){
+    this.answerS.setAnswerNotVisible(this.answerid).subscribe(
+      resp => this.getAnswer(true),
+      err => this.handleErrRelog(err, "hacer no visible para usuario la respuesta", primera, this.hacerNoVisible, this)
+    )
+  }
+
 }

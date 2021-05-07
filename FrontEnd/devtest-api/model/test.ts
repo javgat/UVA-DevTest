@@ -28,4 +28,13 @@ export interface Test {
      */
     cantidadRespuestasDelUsuario?: number;
     autoCorrect: boolean;
+    visibilidad: Test.VisibilidadEnum;
+}
+export namespace Test {
+    export type VisibilidadEnum = 'alEntregar' | 'alCorregir' | 'manual';
+    export const VisibilidadEnum = {
+        AlEntregar: 'alEntregar' as VisibilidadEnum,
+        AlCorregir: 'alCorregir' as VisibilidadEnum,
+        Manual: 'manual' as VisibilidadEnum
+    };
 }

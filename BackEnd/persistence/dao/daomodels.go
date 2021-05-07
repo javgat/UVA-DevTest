@@ -207,6 +207,11 @@ type Test struct {
 	// original test ID
 	// Example: 15
 	OriginalTestID *int64 `json:"originalTestID,omitempty"`
+
+	// visibilidad
+	// Required: true
+	// Enum: [alEntregar alCorregir manual]
+	Visibilidad *string `json:"visibilidad"`
 }
 
 // Answer answer
@@ -249,6 +254,10 @@ type Answer struct {
 	// Example: 3
 	// Required: true
 	Usuarioid int64 `json:"usuarioid"`
+
+	// visible para usuario
+	// Example: true
+	VisibleParaUsuario bool `json:"visibleParaUsuario,omitempty"`
 }
 
 // TeamRole team role

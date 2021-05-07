@@ -318,4 +318,32 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
       err => this.handleErrRelog(err, "publicar test", primera, this.publishTest, this)
     )
   }
+
+  visibilidadToString(vis: Test.VisibilidadEnum): string{
+    return Examen.visibilidadToString(vis)
+  }
+
+  printManual(): string{
+    return this.visibilidadToString(Test.VisibilidadEnum.Manual)
+  }
+
+  printCorregir(): string{
+    return this.visibilidadToString(Test.VisibilidadEnum.AlCorregir)
+  }
+
+  printEntregar(): string{
+    return this.visibilidadToString(Test.VisibilidadEnum.AlEntregar)
+  }
+
+  getValueManual(): Test.VisibilidadEnum {
+    return Test.VisibilidadEnum.Manual
+  }
+
+  getValueCorregir(): Test.VisibilidadEnum {
+    return Test.VisibilidadEnum.AlCorregir
+  }
+
+  getValueEntregar(): Test.VisibilidadEnum {
+    return Test.VisibilidadEnum.AlEntregar
+  }
 }

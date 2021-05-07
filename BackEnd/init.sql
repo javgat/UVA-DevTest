@@ -74,6 +74,7 @@ CREATE TABLE Test(
   origenTestid int(11),
   notaMaxima int(11) NOT NULL,
   autoCorrect boolean NOT NULL,
+  visibilidad ENUM('alEntregar', 'alCorregir', 'manual') NOT NULL,
   FOREIGN KEY(usuarioid) REFERENCES Usuario(id),
   FOREIGN KEY(origenTestid) REFERENCES Test(id),
   PRIMARY KEY(id)
@@ -189,6 +190,7 @@ CREATE TABLE RespuestaExamen(
   usuarioid int(11) NOT NULL,
   puntuacion DEC(12,3),
   corregida boolean NOT NULL,
+  visibleParaUsuario boolean NOT NULL,
   FOREIGN KEY(testid) REFERENCES Test(id) ON DELETE CASCADE,
   FOREIGN KEY(usuarioid) REFERENCES Usuario(id) ON DELETE CASCADE,
   PRIMARY KEY(id)

@@ -2604,4 +2604,34 @@ bg=yellow
 /corrected</panel_attributes>
     <additional_attributes>140.0;10.0;10.0;80.0</additional_attributes>
   </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>5904</x>
+      <y>464</y>
+      <w>232</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*Visible*
+bg=yellow
+--
+--
++ &lt;&lt;PUT&gt;&gt; setVisible(): void
++ &lt;&lt;DELETE&gt;&gt; setNotVisible(): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>5792</x>
+      <y>464</y>
+      <w>128</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/visible</panel_attributes>
+    <additional_attributes>140.0;50.0;10.0;10.0</additional_attributes>
+  </element>
 </diagram>

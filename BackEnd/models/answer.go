@@ -53,6 +53,10 @@ type Answer struct {
 	// username
 	// Example: javgat
 	Username string `json:"username,omitempty"`
+
+	// visible para usuario
+	// Example: true
+	VisibleParaUsuario bool `json:"visibleParaUsuario,omitempty"`
 }
 
 // Validate validates this answer

@@ -5319,6 +5319,54 @@ paths:
         500:
           $ref: '#/responses/InternalServerError'
 
+  /answers/{answerid}/visible:
+    put:
+      security:
+        - BearerCookie: []
+      tags:
+      - answer
+      summary: Marks answer as visible. Only for TestAdmins
+      operationId: SetAnswerVisible
+      description: Marks answer as visible
+      parameters:
+      - in: path
+        name: answerid
+        description: Id of the answer
+        required: true
+        type: integer
+      responses:
+        200:
+          description: Answer updated
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+    delete:
+      security:
+        - BearerCookie: []
+      tags:
+      - answer
+      summary: Marks answer as not visible. Only for TestAdmins
+      operationId: SetAnswerNotVisible
+      description: Marks answer as not visible
+      parameters:
+      - in: path
+        name: answerid
+        description: Id of the answer
+        required: true
+        type: integer
+      responses:
+        200:
+          description: Answer updated
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
   /answers/{answerid}/qanswers:
     get:
       security:
@@ -5881,6 +5929,7 @@ definitions:
     - username
     - accesoPublicoNoPublicado
     - autoCorrect
+    - visibilidad
     properties:
       id:
         type: integer
@@ -5925,6 +5974,9 @@ definitions:
       autoCorrect:
         type: boolean
         example: true
+      visibilidad:
+        type: string
+        enum: [alEntregar, alCorregir, manual]
   Answer:
     type: object
     required:
@@ -5956,6 +6008,9 @@ definitions:
       corregida:
         type: boolean
         example: false
+      visibleParaUsuario:
+        type: boolean
+        example: true
   QuestionAnswer:
     type: object
     required:

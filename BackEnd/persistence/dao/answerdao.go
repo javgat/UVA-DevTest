@@ -24,7 +24,8 @@ func rowsToAnswers(rows *sql.Rows) ([]*Answer, error) {
 	var answers []*Answer
 	for rows.Next() {
 		var t Answer
-		err := rows.Scan(&t.ID, &t.Startime, &t.FinishTime, &t.Entregado, &t.Testid, &t.Usuarioid, &t.Puntuacion, &t.Corregida)
+		err := rows.Scan(&t.ID, &t.Startime, &t.FinishTime, &t.Entregado, &t.Testid, &t.Usuarioid,
+			&t.Puntuacion, &t.Corregida, &t.VisibleParaUsuario)
 		if err != nil {
 			return answers, err
 		}
@@ -52,14 +53,15 @@ func ToModelAnswer(a *Answer) (*models.Answer, error) {
 		u, err := GetUserByID(db, a.Usuarioid)
 		if err == nil {
 			mt := &models.Answer{
-				Entregado:  a.Entregado,
-				StartTime:  a.Startime,
-				FinishTime: a.FinishTime,
-				Testid:     a.Testid,
-				ID:         a.ID,
-				Username:   *u.Username,
-				Puntuacion: a.Puntuacion,
-				Corregida:  a.Corregida,
+				Entregado:          a.Entregado,
+				StartTime:          a.Startime,
+				FinishTime:         a.FinishTime,
+				Testid:             a.Testid,
+				ID:                 a.ID,
+				Username:           *u.Username,
+				Puntuacion:         a.Puntuacion,
+				Corregida:          a.Corregida,
+				VisibleParaUsuario: a.VisibleParaUsuario,
 			}
 			return mt, nil
 		}
@@ -113,7 +115,7 @@ func GetAnswer(db *sql.DB, answerid int64) (*Answer, error) {
 	return nil, err
 }
 
-func StartAnswer(db *sql.DB, username string, testid int64) (*Answer, error) {
+func StartAnswer(db *sql.DB, username string, testid int64, visible bool) (*Answer, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
@@ -121,7 +123,8 @@ func StartAnswer(db *sql.DB, username string, testid int64) (*Answer, error) {
 	if err != nil || u == nil {
 		return nil, errors.New(errorResourceNotFound)
 	}
-	query, err := db.Prepare("INSERT INTO RespuestaExamen(startTime, finishTime, entregado, testid, usuarioid, puntuacion, corregida) VALUES (?,NULL,?,?,?,0,0)")
+	query, err := db.Prepare("INSERT INTO RespuestaExamen(startTime, finishTime, entregado, testid, usuarioid, puntuacion, corregida," +
+		" visibleParaUsuario) VALUES (?,NULL,?,?,?,0,0,?)")
 
 	if err != nil {
 		return nil, err
@@ -129,7 +132,7 @@ func StartAnswer(db *sql.DB, username string, testid int64) (*Answer, error) {
 	defer query.Close()
 	now := time.Now()
 	var res sql.Result
-	res, err = query.Exec(now, false, testid, u.ID)
+	res, err = query.Exec(now, false, testid, u.ID, visible)
 	if err == nil {
 		var id int64
 		id, err = res.LastInsertId()
@@ -137,13 +140,14 @@ func StartAnswer(db *sql.DB, username string, testid int64) (*Answer, error) {
 		if err == nil {
 			bfalse := false
 			ar := &Answer{
-				Entregado:  &bfalse,
-				Testid:     testid,
-				Usuarioid:  u.ID,
-				Startime:   dt,
-				ID:         id,
-				Puntuacion: 0,
-				Corregida:  false,
+				Entregado:          &bfalse,
+				Testid:             testid,
+				Usuarioid:          u.ID,
+				Startime:           dt,
+				ID:                 id,
+				Puntuacion:         0,
+				Corregida:          false,
+				VisibleParaUsuario: visible,
 			}
 			return ar, err
 		}
@@ -181,6 +185,30 @@ func SetAnswerNotCorrected(db *sql.DB, answerid int64) error {
 		return errors.New(errorDBNil)
 	}
 	query, err := db.Prepare("UPDATE RespuestaExamen SET corregida=0 WHERE id=?")
+	if err == nil {
+		defer query.Close()
+		_, err = query.Exec(answerid)
+	}
+	return err
+}
+
+func SetAnswerVisible(db *sql.DB, answerid int64) error {
+	if db == nil {
+		return errors.New(errorDBNil)
+	}
+	query, err := db.Prepare("UPDATE RespuestaExamen SET visibleParaUsuario=1 WHERE id=?")
+	if err == nil {
+		defer query.Close()
+		_, err = query.Exec(answerid)
+	}
+	return err
+}
+
+func SetAnswerNotVisible(db *sql.DB, answerid int64) error {
+	if db == nil {
+		return errors.New(errorDBNil)
+	}
+	query, err := db.Prepare("UPDATE RespuestaExamen SET visibleParaUsuario=0 WHERE id=?")
 	if err == nil {
 		defer query.Close()
 		_, err = query.Exec(answerid)

@@ -934,6 +934,80 @@ func init() {
         }
       }
     },
+    "/answers/{answerid}/visible": {
+      "put": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Marks answer as visible",
+        "tags": [
+          "answer"
+        ],
+        "summary": "Marks answer as visible. Only for TestAdmins",
+        "operationId": "SetAnswerVisible",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the answer",
+            "name": "answerid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Answer updated"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Marks answer as not visible",
+        "tags": [
+          "answer"
+        ],
+        "summary": "Marks answer as not visible. Only for TestAdmins",
+        "operationId": "SetAnswerNotVisible",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the answer",
+            "name": "answerid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Answer updated"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
     "/editQuestions": {
       "get": {
         "security": [
@@ -8650,6 +8724,10 @@ func init() {
         "username": {
           "type": "string",
           "example": "javgat"
+        },
+        "visibleParaUsuario": {
+          "type": "boolean",
+          "example": true
         }
       }
     },
@@ -9019,7 +9097,8 @@ func init() {
         "editable",
         "username",
         "accesoPublicoNoPublicado",
-        "autoCorrect"
+        "autoCorrect",
+        "visibilidad"
       ],
       "properties": {
         "accesoPublico": {
@@ -9076,6 +9155,14 @@ func init() {
         "username": {
           "type": "string",
           "example": "javgat"
+        },
+        "visibilidad": {
+          "type": "string",
+          "enum": [
+            "alEntregar",
+            "alCorregir",
+            "manual"
+          ]
         }
       }
     },
@@ -10291,6 +10378,92 @@ func init() {
         }
       }
     },
+    "/answers/{answerid}/visible": {
+      "put": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Marks answer as visible",
+        "tags": [
+          "answer"
+        ],
+        "summary": "Marks answer as visible. Only for TestAdmins",
+        "operationId": "SetAnswerVisible",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the answer",
+            "name": "answerid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Answer updated"
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Marks answer as not visible",
+        "tags": [
+          "answer"
+        ],
+        "summary": "Marks answer as not visible. Only for TestAdmins",
+        "operationId": "SetAnswerNotVisible",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the answer",
+            "name": "answerid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Answer updated"
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
     "/editQuestions": {
       "get": {
         "security": [
@@ -19276,6 +19449,10 @@ func init() {
         "username": {
           "type": "string",
           "example": "javgat"
+        },
+        "visibleParaUsuario": {
+          "type": "boolean",
+          "example": true
         }
       }
     },
@@ -19648,7 +19825,8 @@ func init() {
         "editable",
         "username",
         "accesoPublicoNoPublicado",
-        "autoCorrect"
+        "autoCorrect",
+        "visibilidad"
       ],
       "properties": {
         "accesoPublico": {
@@ -19706,6 +19884,14 @@ func init() {
         "username": {
           "type": "string",
           "example": "javgat"
+        },
+        "visibilidad": {
+          "type": "string",
+          "enum": [
+            "alEntregar",
+            "alCorregir",
+            "manual"
+          ]
         }
       }
     },

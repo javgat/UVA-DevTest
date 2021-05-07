@@ -759,6 +759,97 @@ export class AnswerService {
     }
 
     /**
+     * Marks answer as not visible. Only for TestAdmins
+     * Marks answer as not visible
+     * @param answerid Id of the answer
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public setAnswerNotVisible(answerid: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public setAnswerNotVisible(answerid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public setAnswerNotVisible(answerid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public setAnswerNotVisible(answerid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (answerid === null || answerid === undefined) {
+            throw new Error('Required parameter answerid was null or undefined when calling setAnswerNotVisible.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.delete<any>(`${this.basePath}/answers/${encodeURIComponent(String(answerid))}/visible`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Marks answer as visible. Only for TestAdmins
+     * Marks answer as visible
+     * @param answerid Id of the answer
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public setAnswerVisible(answerid: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public setAnswerVisible(answerid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public setAnswerVisible(answerid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public setAnswerVisible(answerid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (answerid === null || answerid === undefined) {
+            throw new Error('Required parameter answerid was null or undefined when calling setAnswerVisible.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.put<any>(`${this.basePath}/answers/${encodeURIComponent(String(answerid))}/visible`,
+            null,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Starts a new answer
      * Starts a new answer
      * @param username Username of the user who can answer the publishedTest

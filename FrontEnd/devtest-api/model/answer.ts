@@ -20,4 +20,5 @@ export interface Answer {
     username?: string;
     puntuacion?: number;
     corregida?: boolean;
+    visibleParaUsuario?: boolean;
 }

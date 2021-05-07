@@ -499,6 +499,12 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		AnswerSetAnswerNotCorrectedHandler: answer.SetAnswerNotCorrectedHandlerFunc(func(params answer.SetAnswerNotCorrectedParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation answer.SetAnswerNotCorrected has not yet been implemented")
 		}),
+		AnswerSetAnswerNotVisibleHandler: answer.SetAnswerNotVisibleHandlerFunc(func(params answer.SetAnswerNotVisibleParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation answer.SetAnswerNotVisible has not yet been implemented")
+		}),
+		AnswerSetAnswerVisibleHandler: answer.SetAnswerVisibleHandlerFunc(func(params answer.SetAnswerVisibleParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation answer.SetAnswerVisible has not yet been implemented")
+		}),
 		UserStartAnswerHandler: user.StartAnswerHandlerFunc(func(params user.StartAnswerParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation user.StartAnswer has not yet been implemented")
 		}),
@@ -897,6 +903,10 @@ type DevAPI struct {
 	AnswerSetAnswerCorrectedHandler answer.SetAnswerCorrectedHandler
 	// AnswerSetAnswerNotCorrectedHandler sets the operation handler for the set answer not corrected operation
 	AnswerSetAnswerNotCorrectedHandler answer.SetAnswerNotCorrectedHandler
+	// AnswerSetAnswerNotVisibleHandler sets the operation handler for the set answer not visible operation
+	AnswerSetAnswerNotVisibleHandler answer.SetAnswerNotVisibleHandler
+	// AnswerSetAnswerVisibleHandler sets the operation handler for the set answer visible operation
+	AnswerSetAnswerVisibleHandler answer.SetAnswerVisibleHandler
 	// UserStartAnswerHandler sets the operation handler for the start answer operation
 	UserStartAnswerHandler user.StartAnswerHandler
 	// AuthCloseSessionsHandler sets the operation handler for the close sessions operation
@@ -1455,6 +1465,12 @@ func (o *DevAPI) Validate() error {
 	}
 	if o.AnswerSetAnswerNotCorrectedHandler == nil {
 		unregistered = append(unregistered, "answer.SetAnswerNotCorrectedHandler")
+	}
+	if o.AnswerSetAnswerNotVisibleHandler == nil {
+		unregistered = append(unregistered, "answer.SetAnswerNotVisibleHandler")
+	}
+	if o.AnswerSetAnswerVisibleHandler == nil {
+		unregistered = append(unregistered, "answer.SetAnswerVisibleHandler")
 	}
 	if o.UserStartAnswerHandler == nil {
 		unregistered = append(unregistered, "user.StartAnswerHandler")
@@ -2199,6 +2215,14 @@ func (o *DevAPI) initHandlerCache() {
 		o.handlers["DELETE"] = make(map[string]http.Handler)
 	}
 	o.handlers["DELETE"]["/answers/{answerid}/corrected"] = answer.NewSetAnswerNotCorrected(o.context, o.AnswerSetAnswerNotCorrectedHandler)
+	if o.handlers["DELETE"] == nil {
+		o.handlers["DELETE"] = make(map[string]http.Handler)
+	}
+	o.handlers["DELETE"]["/answers/{answerid}/visible"] = answer.NewSetAnswerNotVisible(o.context, o.AnswerSetAnswerNotVisibleHandler)
+	if o.handlers["PUT"] == nil {
+		o.handlers["PUT"] = make(map[string]http.Handler)
+	}
+	o.handlers["PUT"]["/answers/{answerid}/visible"] = answer.NewSetAnswerVisible(o.context, o.AnswerSetAnswerVisibleHandler)
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}

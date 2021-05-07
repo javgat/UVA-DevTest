@@ -178,7 +178,53 @@ func autoCorrigeRespuestaPregunta(aid int64, dq *dao.Question) error {
 func marcarRespuestaComoCorregida(aid int64) error {
 	db, err := dbconnection.ConnectDb()
 	if err == nil {
-		err = dao.SetAnswerCorrected(db, aid)
+		var da *dao.Answer
+		var dt *dao.Test
+		da, err = dao.GetAnswer(db, aid)
+		if err == nil {
+			if da == nil {
+				return errors.New("respuesta no encontrada con el id")
+			}
+			dt, err = dao.GetTest(db, da.Testid)
+			if err == nil {
+				if dt == nil {
+					return errors.New("test no encontrado con el id")
+				}
+				err = dao.SetAnswerCorrected(db, aid)
+				if err == nil {
+					if strings.EqualFold(*dt.Visibilidad, models.TestVisibilidadAlCorregir) {
+						err = dao.SetAnswerVisible(db, aid)
+					}
+				}
+			}
+		}
+	}
+	return err
+}
+
+func marcarRespuestaComoNoCorregida(aid int64) error {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		var da *dao.Answer
+		var dt *dao.Test
+		da, err = dao.GetAnswer(db, aid)
+		if err == nil {
+			if da == nil {
+				return errors.New("respuesta no encontrada con el id")
+			}
+			dt, err = dao.GetTest(db, da.Testid)
+			if err == nil {
+				if dt == nil {
+					return errors.New("test no encontrado con el id")
+				}
+				err = dao.SetAnswerNotCorrected(db, aid)
+				if err == nil {
+					if strings.EqualFold(*dt.Visibilidad, models.TestVisibilidadAlCorregir) {
+						err = dao.SetAnswerNotVisible(db, aid)
+					}
+				}
+			}
+		}
 	}
 	return err
 }
@@ -260,17 +306,48 @@ func SetAnswerCorrected(params answer.SetAnswerCorrectedParams, u *models.User) 
 // Auth: Admin OR TestAdmin
 func SetAnswerNotCorrected(params answer.SetAnswerNotCorrectedParams, u *models.User) middleware.Responder {
 	if isAdmin(u) || isAnswerTestAdmin(u, params.Answerid) {
-		db, err := dbconnection.ConnectDb()
+		err := marcarRespuestaComoNoCorregida(params.Answerid)
 		if err == nil {
-			err = dao.SetAnswerNotCorrected(db, params.Answerid)
-			if err == nil {
-				return answer.NewSetAnswerNotCorrectedOK()
-			}
+			return answer.NewSetAnswerNotCorrectedOK()
 		}
 		log.Println("Error en answers_handler SetAnswerNotCorrected(): ", err)
 		return answer.NewSetAnswerNotCorrectedInternalServerError()
 	}
 	return answer.NewSetAnswerNotCorrectedForbidden()
+}
+
+// PUT /answers/{answerid}/visible
+// Auth: Admin OR TestAdmin
+func SetAnswerVisible(params answer.SetAnswerVisibleParams, u *models.User) middleware.Responder {
+	if isAdmin(u) || isAnswerTestAdmin(u, params.Answerid) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			err = dao.SetAnswerVisible(db, params.Answerid)
+			if err == nil {
+				return answer.NewSetAnswerVisibleOK()
+			}
+		}
+		log.Println("Error en answers_handler SetAnswerVisible(): ", err)
+		return answer.NewSetAnswerVisibleInternalServerError()
+	}
+	return answer.NewSetAnswerVisibleForbidden()
+}
+
+// DELETE /answers/{answerid}/visible
+// Auth: Admin OR TestAdmin
+func SetAnswerNotVisible(params answer.SetAnswerNotVisibleParams, u *models.User) middleware.Responder {
+	if isAdmin(u) || isAnswerTestAdmin(u, params.Answerid) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			err = dao.SetAnswerNotVisible(db, params.Answerid)
+			if err == nil {
+				return answer.NewSetAnswerNotVisibleOK()
+			}
+		}
+		log.Println("Error en answers_handler SetAnswerNotVisible(): ", err)
+		return answer.NewSetAnswerNotVisibleInternalServerError()
+	}
+	return answer.NewSetAnswerNotVisibleForbidden()
 }
 
 // GET /answers/{answerid}/qanswers

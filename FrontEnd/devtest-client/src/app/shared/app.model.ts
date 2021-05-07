@@ -184,9 +184,10 @@ export class Examen implements Test{
     cantidadRespuestasDelUsuario: number;
     notaMaxima: number;
     autoCorrect: boolean;
+    visibilidad: Test.VisibilidadEnum;
     constructor(title?: string, description?: string, accesoPublico?: boolean, editable?: boolean, maxMinutes?: number, 
         username?: string, id?: number, accesoPublicoNoPublicado?: boolean, horaCreacion?: Date, originalTestID?: number,
-        cantidadRespuestasDelUsuario?: number, notaMaxima?: number, autoCorrect?: boolean){
+        cantidadRespuestasDelUsuario?: number, notaMaxima?: number, autoCorrect?: boolean, visibilidad?: Test.VisibilidadEnum){
         this.title=title || ""
         this.description=description || ""
         this.maxMinutes=maxMinutes || 0
@@ -200,11 +201,26 @@ export class Examen implements Test{
         this.cantidadRespuestasDelUsuario = cantidadRespuestasDelUsuario || 0
         this.notaMaxima = notaMaxima || 0
         this.autoCorrect = autoCorrect || false
+        this.visibilidad = visibilidad || Test.VisibilidadEnum.Manual
     }
 
     static constructorFromTest(t: Test): Examen{
         return new Examen(t.title, t.description, t.accesoPublico, t.editable, t.maxMinutes, t.username, t.id,
-            t.accesoPublicoNoPublicado, t.horaCreacion, t.originalTestID, t.cantidadRespuestasDelUsuario, t.notaMaxima, t.autoCorrect)
+            t.accesoPublicoNoPublicado, t.horaCreacion, t.originalTestID, t.cantidadRespuestasDelUsuario, t.notaMaxima,
+            t.autoCorrect, t.visibilidad)
+    }
+
+    static visibilidadToString(vis: Test.VisibilidadEnum ) : string{
+        switch(vis){
+            case Test.VisibilidadEnum.Manual:
+                return "Manual"
+            case Test.VisibilidadEnum.AlEntregar:
+                return "Al entregar"
+            case Test.VisibilidadEnum.AlCorregir:
+                return "Al corregir"
+            default:
+                return ""
+        }
     }
 }
 
@@ -233,6 +249,7 @@ export class Respuesta implements Answer{
     username: string;
     puntuacion: number;
     corregida: boolean;
+    visibleParaUsuario: boolean;
     constructor(resp?: Answer){
         this.id = resp?.id || 0
         this.startTime = resp?.startTime
@@ -242,6 +259,7 @@ export class Respuesta implements Answer{
         this.username = resp?.username || ""
         this.puntuacion = resp?.puntuacion || 0
         this.corregida = resp?.corregida || false
+        this.visibleParaUsuario = resp?.visibleParaUsuario || false
     }
 }
 

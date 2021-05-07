@@ -18,6 +18,10 @@
     <p>Fecha de inicio: {{answer.startTime}}</p>
     <p>Fecha de entrega: {{answer.finishTime}}</p>
     <p>Puntuacion: {{answer.puntuacion || 0}}</p>
+    <p>Visible para el usuario: 
+        <span *ngIf="answer.visibleParaUsuario">Sí</span><span *ngIf="!answer.visibleParaUsuario">No</span>
+        <button type="button" class="mx-2 btn btn-sm btn-primary" (click)="clickHacerVisible()">Hacer <span *ngIf="answer.visibleParaUsuario">no </span>visible</button>
+    </p>
     <p>Corregida: <span class="badge bg-success" *ngIf="answer.corregida">Sí</span><span class="badge bg-danger" *ngIf="!answer.corregida">No</span></p>
     <div class="my-3" *ngIf="isModoTestAdmin()">
         <button *ngIf="!answer.corregida" type="button" class="btn btn-primary" data-bs-toggle="modal"
