@@ -33,6 +33,8 @@
         <p><b>Visionado público para profesores: </b> <span *ngIf="test.accesoPublicoNoPublicado">Sí</span><span
                 *ngIf="!test.accesoPublicoNoPublicado">No</span>
         </p>
+        <p><b>Publicación automática de corrección de respuestas: </b> <span *ngIf="test.autoCorrect">Sí</span><span
+                *ngIf="!test.autoCorrect">No</span></p>
         <p>Llevas {{test.cantidadRespuestasDelUsuario}} intentos.</p>
         <div *ngIf="isRespuestaIniciada">
             <p><button class="btn btn-success btn-lg" type="button" [routerLink]="['/pt', id, 'answering']">Continuar

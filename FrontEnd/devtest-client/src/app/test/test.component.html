@@ -51,6 +51,8 @@
         <p><b>Visionado público para profesores: </b> <span *ngIf="test.accesoPublicoNoPublicado">Sí</span><span
                 *ngIf="!test.accesoPublicoNoPublicado">No</span>
         </p>
+        <p><b>Publicación automática de corrección de respuestas: </b> <span *ngIf="test.autoCorrect">Sí</span><span
+                *ngIf="!test.autoCorrect">No</span></p>
         <p><button class="btn btn-primary" type="button" [routerLink]="['/et', test.id, 'teams']">Ver equipos
                 administradores</button></p>
         <p><button *ngIf="checkPermisosEdicion()" type="button" class="btn btn-primary" data-bs-toggle="modal"
@@ -165,6 +167,13 @@
                                 (change)="testEdit.accesoPublicoNoPublicado = !testEdit.accesoPublicoNoPublicado">
                             <label class="form-check-label" for="flexSwitchCheckLectura">Visionado público para
                                 profesores</label>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckAutoCorrect"
+                                [checked]="testEdit.autoCorrect"
+                                (change)="testEdit.autoCorrect = !testEdit.autoCorrect">
+                            <label class="form-check-label" for="flexSwitchCheckAutoCorrect">Publicación automática de
+                                corrección de respuestas</label>
                         </div>
                     </div>
                     <div class="modal-footer">
