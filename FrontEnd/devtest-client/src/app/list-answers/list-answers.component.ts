@@ -18,11 +18,13 @@ export class ListAnswersComponent extends LoggedInController implements OnInit {
   routeSub: Subscription
   editLikeUsername: string
   likeUsername?: string
+  buscarUsuario: boolean
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, protected ptestS : PublishedTestService, private route: ActivatedRoute) {
     super(session, router, data, userS)
     this.testid = 0
     this.answers = []
     this.editLikeUsername = ""
+    this.buscarUsuario = true
     this.routeSub = this.route.params.subscribe(params => {
       this.testid = params['testid']
       this.borrarMensaje()
@@ -87,6 +89,10 @@ export class ListAnswersComponent extends LoggedInController implements OnInit {
   clickBorrarUsername(){
     this.likeUsername = undefined
     this.getPTestAnswers()
+  }
+
+  modoUsuario(): boolean{
+    return this.getSessionUser().isStudent()
   }
 
 }

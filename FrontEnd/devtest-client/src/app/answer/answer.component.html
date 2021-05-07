@@ -10,6 +10,16 @@
         </svg>
         Ver todas las respuestas al test
     </button>
+    <button *ngIf="!isModoTestAdmin()" class="button btn btn-outline-primary m-3" [routerLink]="['/pt', test.id, 'myanswers']">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+            class="bi bi-chevron-double-left" viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+                d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+            <path fill-rule="evenodd"
+                d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+        </svg>
+        Ver todas tus respuestas al test
+    </button>
     <div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message" role="alert">
         {{getMensaje().texto}}</div>
     <h3>Respuesta al test <a [routerLink]="['/pt', testid]">{{test.title}}</a></h3>
@@ -17,8 +27,8 @@
     <p>Entregada: <span *ngIf="answer.entregado">Sí</span><span *ngIf="!answer.entregado">No</span></p>
     <p>Fecha de inicio: {{answer.startTime}}</p>
     <p>Fecha de entrega: {{answer.finishTime}}</p>
-    <p>Puntuacion: {{answer.puntuacion || 0}}</p>
-    <p>Visible para el usuario: 
+    <p>Puntuacion: {{answer.puntuacion || 0}} / {{test.notaMaxima}}</p>
+    <p *ngIf="isModoTestAdmin()">Visible para el usuario: 
         <span *ngIf="answer.visibleParaUsuario">Sí</span><span *ngIf="!answer.visibleParaUsuario">No</span>
         <button type="button" class="mx-2 btn btn-sm btn-primary" (click)="clickHacerVisible()">Hacer <span *ngIf="answer.visibleParaUsuario">no </span>visible</button>
     </p>

@@ -18,6 +18,7 @@ import { ProfileTeamsComponent } from './profile/profile-teams/profile-teams.com
 import { ProfileComponent } from './profile/profile.component';
 import { PtestAnswersComponent } from './ptest-answers/ptest-answers.component';
 import { PtestInvitesComponent } from './ptest-invites/ptest-invites.component';
+import { PtestUAnswersComponent } from './ptest-u-answers/ptest-u-answers.component';
 import { PtestComponent } from './ptest/ptest.component';
 import { PtestsInvitedUserComponent } from './ptests-invited-user/ptests-invited-user.component';
 import { PtestsSharedUserComponent } from './ptests-shared-user/ptests-shared-user.component';
@@ -83,6 +84,7 @@ const routes: Routes = [
   {path: 'pt/:testid/invite', component: PtestInvitesComponent},
   {path: 'pt/:testid/q/:id', component: QuestionComponent},
   {path: 'pt/:testid/q/:questionid/qanswers', component: PquestionQAnswersComponent},
+  {path: 'pt/:testid/myanswers', component: PtestUAnswersComponent},
   {path: 'pt/:testid/answers', component: PtestAnswersComponent},
   {path: 'pt/:testid/answers/:answerid', component: AnswerComponent},
   {path: 'pt/:testid/answers/:answerid/qanswers/:questionid', component: QanswerComponent},

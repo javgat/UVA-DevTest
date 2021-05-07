@@ -18,29 +18,31 @@
                     *ngIf="!qa.corregida">No</span></p>
             <p *ngIf="qa.corregida">Puntuación: {{qa.puntuacion}}% ({{calcValor(qa.puntuacion,
                 question.valorFinal)}}/{{question.valorFinal}})</p>
-            <p *ngIf="!qa.corregida">
-                <button *ngIf="!showCorregir" type="button" class="btn btn-primary"
-                    (click)="clickShowCorregir()">Corregir</button>
-                <button *ngIf="showCorregir" type="button" class="btn btn-primary"
-                    (click)="clickNotShowCorregir()">Cancelar</button>
-            </p>
-            <p *ngIf="qa.corregida"><a class="link-dark" role="button" data-bs-toggle="modal"
-                    data-bs-target="#modalBorrarCorreccion">Borrar corrección</a></p>
+            <div *ngIf="isModoTestAdmin()">
+                <p *ngIf="!qa.corregida">
+                    <button *ngIf="!showCorregir" type="button" class="btn btn-primary"
+                        (click)="clickShowCorregir()">Corregir</button>
+                    <button *ngIf="showCorregir" type="button" class="btn btn-primary"
+                        (click)="clickNotShowCorregir()">Cancelar</button>
+                </p>
+                <p *ngIf="qa.corregida"><a class="link-dark" role="button" data-bs-toggle="modal"
+                        data-bs-target="#modalBorrarCorreccion">Borrar corrección</a></p>
 
-            <p *ngIf="qa.corregida">
-                <button *ngIf="!showCorregir" type="button" class="btn btn-primary"
-                    (click)="clickShowCorregir()">Cambiar corrección</button>
-                <button *ngIf="showCorregir" type="button" class="btn btn-primary"
-                    (click)="clickNotShowCorregir()">Cancelar</button>
-            </p>
-            <form *ngIf="showCorregir" (ngSubmit)="submitUpdateCorrection()" ngNativeValidate>
-                <div class="mb-3">
-                    <label for="porcentajeCorreccion" class="form-label">Puntuacion [-100,100]:</label>
-                    <input type="number" required min=-100 max=100 class="form-control" id="porcentajeCorreccion"
-                        [(ngModel)]="editPuntuacion" name="editPuntuacion" />
-                </div>
-                <input type="submit" class="button btn btn-primary" value="Guardar" />
-            </form>
+                <p *ngIf="qa.corregida">
+                    <button *ngIf="!showCorregir" type="button" class="btn btn-primary"
+                        (click)="clickShowCorregir()">Cambiar corrección</button>
+                    <button *ngIf="showCorregir" type="button" class="btn btn-primary"
+                        (click)="clickNotShowCorregir()">Cancelar</button>
+                </p>
+                <form *ngIf="showCorregir" (ngSubmit)="submitUpdateCorrection()" ngNativeValidate>
+                    <div class="mb-3">
+                        <label for="porcentajeCorreccion" class="form-label">Puntuacion [-100,100]:</label>
+                        <input type="number" required min=-100 max=100 class="form-control" id="porcentajeCorreccion"
+                            [(ngModel)]="editPuntuacion" name="editPuntuacion" />
+                    </div>
+                    <input type="submit" class="button btn btn-primary" value="Guardar" />
+                </form>
+            </div>
             <hr />
             <p><span style="white-space: pre-line">{{question.question}}</span></p>
         </div>

@@ -1,12 +1,13 @@
 <div class="my-2">
-    <form (ngSubmit)='clickSearchUsername()' ngNativeValidate>
+    <form *ngIf="buscarUsuario" (ngSubmit)='clickSearchUsername()' ngNativeValidate>
         <div class="input-group my-3">
             <input class="button btn btn-primary" type="submit" value="Buscar por nombre de usuario" />
-            <input type="text" class="form-control" name="inputSearchUsername" [(ngModel)]="editLikeUsername" placeholder="Username"
-                required pattern="[^@]+" />
+            <input type="text" class="form-control" name="inputSearchUsername" [(ngModel)]="editLikeUsername"
+                placeholder="Username" required pattern="[^@]+" />
         </div>
         <div *ngIf="likeUsername!=undefined">
-            <button type="button" class="btn btn-secondary" (click)="clickBorrarUsername()">Borrar filtro de nombre de usuario</button>
+            <button type="button" class="btn btn-secondary" (click)="clickBorrarUsername()">Borrar filtro de nombre de
+                usuario</button>
         </div>
     </form>
     <table class="table table-striped table-hover table-primary my-3">
@@ -17,15 +18,38 @@
                 <th>Hora de inicio</th>
                 <th>Hora de entrega</th>
                 <th>Puntuación</th>
+                <th *ngIf="modoUsuario()">Visible</th>
             </tr>
         </thead>
-        <tbody>
-            <tr *ngFor="let ans of answers" role="button" [routerLink]="['/pt', testid, 'answers', ans.id]">
+        <tbody *ngFor="let ans of answers">
+            <tr *ngIf="!modoUsuario()" role="button"
+                [routerLink]="['/pt', testid, 'answers', ans.id]">
                 <td>{{ans.username || ""}}</td>
                 <td><span *ngIf="ans.entregado">Sí</span><span *ngIf="!ans.entregado">No</span></td>
                 <td>{{ans.startTime?.toLocaleString()}}</td>
                 <td><span *ngIf="ans.entregado">{{ans.finishTime}}</span></td>
-                <td>{{ans.puntuacion || 0}}</td>
+                <td>{{ans.puntuacion || "--"}}</td>
+                <td *ngIf="modoUsuario()"><span *ngIf="ans.visibleParaUsuario">Sí</span><span
+                        *ngIf="!ans.visibleParaUsuario">No</span></td>
+            </tr>
+            <tr *ngIf="modoUsuario() && ans.visibleParaUsuario" role="button"
+                [routerLink]="['/pt', testid, 'answers', ans.id]">
+                <td>{{ans.username || ""}}</td>
+                <td><span *ngIf="ans.entregado">Sí</span><span *ngIf="!ans.entregado">No</span></td>
+                <td>{{ans.startTime?.toLocaleString()}}</td>
+                <td><span *ngIf="ans.entregado">{{ans.finishTime}}</span></td>
+                <td>{{ans.puntuacion || "--"}}</td>
+                <td *ngIf="modoUsuario()"><span *ngIf="ans.visibleParaUsuario">Sí</span><span
+                        *ngIf="!ans.visibleParaUsuario">No</span></td>
+            </tr>
+            <tr *ngIf="modoUsuario() && !ans.visibleParaUsuario">
+                <td>{{ans.username || ""}}</td>
+                <td><span *ngIf="ans.entregado">Sí</span><span *ngIf="!ans.entregado">No</span></td>
+                <td>{{ans.startTime?.toLocaleString()}}</td>
+                <td><span *ngIf="ans.entregado">{{ans.finishTime}}</span></td>
+                <td>{{ans.puntuacion || "--"}}</td>
+                <td *ngIf="modoUsuario()"><span *ngIf="ans.visibleParaUsuario">Sí</span><span
+                        *ngIf="!ans.visibleParaUsuario">No</span></td>
             </tr>
         </tbody>
     </table>

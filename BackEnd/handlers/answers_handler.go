@@ -56,7 +56,7 @@ func isAnswerOwner(answerid int64, u *models.User) bool {
 }
 
 // GET /answers/{answerid}
-// Auth: Teacher or Admin OR AnswerOwner
+// Auth: Teacher or Admin OR (AnswerOwner && (Answer abierta || Answer visible))
 func GetAnswer(params answer.GetAnswerParams, u *models.User) middleware.Responder {
 	if isTeacherOrAdmin(u) || isAnswerOwner(params.Answerid, u) {
 		db, err := dbconnection.ConnectDb()
@@ -64,6 +64,14 @@ func GetAnswer(params answer.GetAnswerParams, u *models.User) middleware.Respond
 			var as *dao.Answer
 			as, err = dao.GetAnswer(db, params.Answerid)
 			if err == nil {
+				if as == nil {
+					return answer.NewGetAnswerGone()
+				}
+				if !isTeacherOrAdmin(u) {
+					if *as.Entregado && !as.VisibleParaUsuario {
+						return answer.NewGetAnswerForbidden()
+					}
+				}
 				var mas *models.Answer
 				mas, err = dao.ToModelAnswer(as)
 				if err == nil {
@@ -270,10 +278,21 @@ func autoCorregirLoPosible(aid int64) error {
 
 // PUT /answers/{answerid}
 // Auth: Admin OR AnswerOwner
+// Req: Answer not finished
 func FinishAnswer(params answer.FinishAnswerParams, u *models.User) middleware.Responder {
 	if isAdmin(u) || isAnswerOwner(params.Answerid, u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
+			var da *dao.Answer
+			da, err = dao.GetAnswer(db, params.Answerid)
+			if err == nil {
+				if da == nil {
+					return answer.NewFinishAnswerGone()
+				}
+				if *da.Entregado {
+					return answer.NewFinishAnswerForbidden()
+				}
+			}
 			err = dao.FinishAnswer(db, params.Answerid)
 			if err == nil {
 				err = autoCorregirLoPosible(params.Answerid)
@@ -351,7 +370,7 @@ func SetAnswerNotVisible(params answer.SetAnswerNotVisibleParams, u *models.User
 }
 
 // GET /answers/{answerid}/qanswers
-// Auth: Teacher or Admin OR AnswerOwner
+// Auth: Teacher or Admin OR (AnswerOwner && (Answer abierta || Answer visible))
 func GetQuestionAnswers(params answer.GetQuestionAnswersFromAnswerParams, u *models.User) middleware.Responder {
 	if isTeacherOrAdmin(u) || isAnswerOwner(params.Answerid, u) {
 		db, err := dbconnection.ConnectDb()
@@ -359,6 +378,20 @@ func GetQuestionAnswers(params answer.GetQuestionAnswersFromAnswerParams, u *mod
 			var qas []*dao.QuestionAnswer
 			qas, err = dao.GetQuestionAnswersFromAnswer(db, params.Answerid)
 			if err == nil {
+				if !isTeacherOrAdmin(u) {
+					var as *dao.Answer
+					as, err = dao.GetAnswer(db, params.Answerid)
+					if err != nil {
+						log.Println("Error en answers_handler GetQuestionAnswers(): ", err)
+						return answer.NewGetQuestionAnswerFromAnswerInternalServerError()
+					}
+					if as == nil {
+						return answer.NewGetAnswerGone()
+					}
+					if *as.Entregado && !as.VisibleParaUsuario {
+						return answer.NewGetAnswerForbidden()
+					}
+				}
 				mqas := dao.ToModelQuestionAnswers(qas)
 				return answer.NewGetQuestionAnswersFromAnswerOK().WithPayload(mqas)
 			}
@@ -422,7 +455,7 @@ func PostQuestionAnswer(params answer.PostQuestionAnswerParams, u *models.User) 
 }
 
 // GET /answers/{answerid}/qanswers/{questionid}
-// Auth: Teacher or Admin OR AnswerOwner
+// Auth: Teacher or Admin OR (AnswerOwner && (Answer abierta || Answer visible))
 func GetQuestionAnswer(params answer.GetQuestionAnswerFromAnswerParams, u *models.User) middleware.Responder {
 	if isTeacherOrAdmin(u) || isAnswerOwner(params.Answerid, u) {
 		db, err := dbconnection.ConnectDb()
@@ -430,6 +463,20 @@ func GetQuestionAnswer(params answer.GetQuestionAnswerFromAnswerParams, u *model
 			var qas *dao.QuestionAnswer
 			qas, err = dao.GetQuestionAnswerFromAnswer(db, params.Answerid, params.Questionid)
 			if err == nil {
+				if !isTeacherOrAdmin(u) {
+					var as *dao.Answer
+					as, err = dao.GetAnswer(db, params.Answerid)
+					if err != nil {
+						log.Println("Error en answers_handler GetQuestionAnswers(): ", err)
+						return answer.NewGetQuestionAnswerFromAnswerInternalServerError()
+					}
+					if as == nil {
+						return answer.NewGetQuestionAnswerFromAnswerGone()
+					}
+					if *as.Entregado && !as.VisibleParaUsuario {
+						return answer.NewGetQuestionAnswerFromAnswerForbidden()
+					}
+				}
 				if qas == nil {
 					return answer.NewGetQuestionAnswerFromAnswerGone()
 				}
@@ -543,7 +590,7 @@ func updateReview(aid int64, qid int64, review *models.Review) error {
 // PUT /answers/{answerid}/qanswers/{questionid}/review
 // Auth: TestAdmin or Admin
 func PutReview(params answer.PutReviewParams, u *models.User) middleware.Responder {
-	if isAnswerTestAdmin(u, params.Answerid) || isAnswerOwner(params.Answerid, u) {
+	if isAnswerTestAdmin(u, params.Answerid) || isAdmin(u) {
 		err := updateReview(params.Answerid, params.Questionid, params.Review)
 		if err == nil {
 			return answer.NewPutReviewOK()
@@ -558,7 +605,7 @@ func PutReview(params answer.PutReviewParams, u *models.User) middleware.Respond
 // DELETE /answers/{answerid}/qanswers/{questionid}/review
 // Auth: TestAdmin or Admin
 func DeleteReview(params answer.DeleteReviewParams, u *models.User) middleware.Responder {
-	if isAnswerTestAdmin(u, params.Answerid) || isAnswerOwner(params.Answerid, u) {
+	if isAnswerTestAdmin(u, params.Answerid) || isAdmin(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var qa *dao.QuestionAnswer

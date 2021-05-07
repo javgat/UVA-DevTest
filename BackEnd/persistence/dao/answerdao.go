@@ -236,6 +236,26 @@ func GetOpenAnswersFromUserTest(db *sql.DB, username string, testid int64) ([]*A
 	return nil, err
 }
 
+func GetVisibleAnswersFromUserTest(db *sql.DB, username string, testid int64) ([]*Answer, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	u, err := GetUserUsername(db, username)
+	if err == nil {
+		var a []*Answer
+		query, err := db.Prepare("SELECT * FROM RespuestaExamen WHERE usuarioid=? AND testid=? AND visibleParaUsuario=1")
+		if err == nil {
+			defer query.Close()
+			rows, err := query.Query(u.ID, testid)
+			if err == nil {
+				a, err = rowsToAnswers(rows)
+				return a, err
+			}
+		}
+	}
+	return nil, err
+}
+
 func GetAnswersFromUserAnsweredTest(db *sql.DB, username string, testid int64) ([]*Answer, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)

@@ -252,8 +252,29 @@ func isTestOpenByUserAuth(u *models.User, testid int64) bool {
 	return false
 }
 
+func hasAnswerVisible(u *models.User, testid int64) (bool, error) {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		var oa []*dao.Answer
+		oa, err = dao.GetVisibleAnswersFromUserTest(db, *u.Username, testid)
+		if err == nil {
+			isTestVisible := (oa != nil) && len(oa) > 0
+			return isTestVisible, nil
+		}
+	}
+	return false, err
+}
+
+func hasAnswerVisibleAuth(u *models.User, tid int64) bool {
+	b, e := hasAnswerVisible(u, tid)
+	if e == nil {
+		return b
+	}
+	return false
+}
+
 // GetQuestionsPTest GET /publishedTests/{testid}/questions
-// Auth: (TestAdmin or Admin) OR ((ALL AND accesoPublico OR TestInvited) AND TestOpenByThem)
+// Auth: (TestAdmin or Admin) OR ((ALL AND accesoPublico OR TestInvited) AND (TestOpenByThem||hasAnswerVisible))
 func GetQuestionsPTest(params published_test.GetQuestionsFromPublishedTestsParams, u *models.User) middleware.Responder {
 	db, err := dbconnection.ConnectDb()
 	if err == nil {
@@ -261,7 +282,7 @@ func GetQuestionsPTest(params published_test.GetQuestionsFromPublishedTestsParam
 		ts, err = dao.GetPublishedTest(db, params.Testid)
 		if err == nil && ts != nil {
 			if !(isAdmin(u) || isTestAdmin(u, params.Testid)) {
-				if !(isTestOpenByUserAuth(u, params.Testid) && (*ts.AccesoPublico || isTestInvited(u, params.Testid))) {
+				if !((isTestOpenByUserAuth(u, params.Testid) || hasAnswerVisibleAuth(u, params.Testid)) && (*ts.AccesoPublico || isTestInvited(u, params.Testid))) {
 					return published_test.NewGetQuestionsFromPublishedTestsForbidden()
 				}
 			}
@@ -280,7 +301,7 @@ func GetQuestionsPTest(params published_test.GetQuestionsFromPublishedTestsParam
 }
 
 // GetQuestionsPTest GET /publishedTests/{testid}/questions/{questionid}
-// Auth: (TestAdmin or Admin) OR ((ALL AND accesoPublico OR TestInvited) AND TestStartedByThem)
+// Auth: (TestAdmin or Admin) OR ((ALL AND accesoPublico OR TestInvited) AND (TestOpenByThem||hasAnswerVisible))
 func GetQuestionPTest(params published_test.GetQuestionFromPublishedTestsParams, u *models.User) middleware.Responder {
 	db, err := dbconnection.ConnectDb()
 	if err == nil {
@@ -288,7 +309,7 @@ func GetQuestionPTest(params published_test.GetQuestionFromPublishedTestsParams,
 		ts, err = dao.GetPublishedTest(db, params.Testid)
 		if err == nil && ts != nil {
 			if !(isAdmin(u) || isTestAdmin(u, params.Testid)) {
-				if !(isTestOpenByUserAuth(u, params.Testid) && (*ts.AccesoPublico || isTestInvited(u, params.Testid))) {
+				if !((isTestOpenByUserAuth(u, params.Testid) || hasAnswerVisibleAuth(u, params.Testid)) && (*ts.AccesoPublico || isTestInvited(u, params.Testid))) {
 					return published_test.NewGetQuestionFromPublishedTestsForbidden()
 				}
 			}
@@ -412,6 +433,7 @@ func GetQuestionAnswersPTest(params published_test.GetQuestionAnswersFromPublish
 
 // GetOptionsPQuestion GET /publishedTests/{testid}/questions/{questionid}/options
 // Auth: ALL if accesoPublico, else: TestInvited, TestAdmin or Admin
+// Info: If HasAnswerVisible -> Will know which options are correct. If not, all options as non correct
 func GetOptionsPQuestion(params published_test.GetOptionsFromPublishedQuestionParams, u *models.User) middleware.Responder {
 	db, err := dbconnection.ConnectDb()
 	if err == nil {
@@ -429,7 +451,12 @@ func GetOptionsPQuestion(params published_test.GetOptionsFromPublishedQuestionPa
 				var os []*dao.Option
 				os, err = dao.GetOptionsQuestion(db, params.Questionid)
 				if err == nil {
-					mos := dao.ToModelOptionsNoCorrect(os)
+					var mos []*models.Option
+					if hasAnswerVisibleAuth(u, params.Testid) {
+						mos = dao.ToModelOptions(os)
+					} else {
+						mos = dao.ToModelOptionsNoCorrect(os)
+					}
 					return published_test.NewGetOptionsFromPublishedQuestionOK().WithPayload(mos)
 				}
 			}

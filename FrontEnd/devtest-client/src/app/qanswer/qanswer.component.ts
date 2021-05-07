@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AnswerService, Option, PublishedTestService, Question, QuestionAnswer, QuestionService, Review, UserService } from '@javgat/devtest-api';
+import { AnswerService, Option, PublishedTestService, Question, QuestionAnswer, QuestionService, Review, Test, UserService } from '@javgat/devtest-api';
 import { Subscription } from 'rxjs';
 import { LoggedInController } from '../shared/app.controller';
-import { Pregunta, RespuestaPregunta, tipoPrint } from '../shared/app.model';
+import { Examen, Pregunta, RespuestaPregunta, tipoPrint } from '../shared/app.model';
 import { DataService } from '../shared/data.service';
 import { SessionService } from '../shared/session.service';
 
@@ -23,24 +23,30 @@ export class QanswerComponent extends LoggedInController implements OnInit {
   options: Option[]
   showCorregir: boolean
   editPuntuacion: number
+  isInAdminTeam: boolean
+  test: Test
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService,
     private route: ActivatedRoute, private answerS: AnswerService, private ptestS: PublishedTestService, private qS: QuestionService) {
     super(session, router, data, userS)
     this.questionid = 0
     this.testid = 0
     this.answerid = 0
+    this.isInAdminTeam = false
     this.options = []
     this.question = new Pregunta()
     this.editPuntuacion = 0
     this.qa = new RespuestaPregunta()
     this.showCorregir = false
+    this.test = new Examen()
     this.routeSub = this.route.params.subscribe(params => {
       this.questionid = params['questionid']
       this.testid = params['testid']
       this.answerid = params['answerid']
       if (this.getSessionUser().getUsername() != undefined && this.getSessionUser().getUsername() != "") {
+        this.getIsInAdminTeam(true)
         this.getQAnswer(true)
         this.getPregunta(true)
+        this.getPTest(true)
       }
     });
   }
@@ -57,6 +63,8 @@ export class QanswerComponent extends LoggedInController implements OnInit {
     if (this.isDefinido(this.testid) && this.isDefinido(this.answerid) && this.isDefinido(this.questionid)) {
       this.getQAnswer(true)
       this.getPregunta(true)
+      this.getIsInAdminTeam(true)
+      this.getPTest(true)
     }
   }
 
@@ -87,11 +95,50 @@ export class QanswerComponent extends LoggedInController implements OnInit {
   }
 
   getOptions(primera: boolean) {
+    if(this.getSessionUser().isTeacherOrAdmin())
+      this.getOptionsAsTeacher(primera)
+    else
+      this.getOptionsAsStudent(primera)
+  }
+
+  getOptionsAsTeacher(primera: boolean){
     this.qS.getOptionsFromQuestion(this.questionid).subscribe(
       resp => {
         this.options = resp
       },
-      err => this.handleErrRelog(err, "obtener opciones de respuesta de pregunta", primera, this.getOptions, this)
+      err => this.handleErrRelog(err, "obtener opciones de respuesta de pregunta como propietario", primera, this.getOptions, this)
+    )
+  }
+
+  getOptionsAsStudent(primera: boolean){
+    this.ptestS.getOptionsFromPublishedQuestion(this.testid, this.questionid).subscribe(
+      resp => {
+        this.options = resp
+      },
+      err => this.handleErrRelog(err, "obtener opciones de respuesta de pregunta como usuario", primera, this.getOptions, this)
+    )
+  }
+
+  getPTest(primera: boolean) {
+    this.userS.getSolvableTestFromUser(this.getSessionUser().getUsername(), this.testid).subscribe(
+      resp => {
+        this.test = Examen.constructorFromTest(resp)
+      },
+      err => {
+        this.handleErrRelog(err, "obtener test publicado", primera, this.getPTest, this)
+      }
+    )
+  }
+  
+  getIsInAdminTeam(primera: boolean) {
+    this.userS.getSharedTestFromUser(this.getSessionUser().getUsername(), this.testid).subscribe(
+      resp => {
+        this.isInAdminTeam = true
+      },
+      err => {
+        if (err.status != 410)
+          this.handleErrRelog(err, "saber si el usuario administra el test", primera, this.getIsInAdminTeam, this)
+      }
     )
   }
 
@@ -182,6 +229,10 @@ export class QanswerComponent extends LoggedInController implements OnInit {
   calcValor(porcentaje: number | undefined, valorFinal: number | undefined): number{
     if(porcentaje == undefined || valorFinal == undefined) return 0
     return (porcentaje * valorFinal)/100
+  }
+
+  isModoTestAdmin(): boolean {
+    return this.isInAdminTeam || this.test.username == this.getSessionUser().getUsername()
   }
 
 }
