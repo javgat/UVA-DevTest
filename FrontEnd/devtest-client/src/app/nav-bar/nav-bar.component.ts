@@ -25,4 +25,7 @@ export class NavBarComponent extends LoggedInController implements OnInit {
     super.onDestroy()
   }
 
+  // Para que no deslogee
+  doActionIsNotLoggedIn(){}
+
 }

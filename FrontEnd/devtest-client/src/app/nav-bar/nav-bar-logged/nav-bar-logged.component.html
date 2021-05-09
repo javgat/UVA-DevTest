@@ -1,0 +1,84 @@
+<div class="row m-3">
+    <div class="col-sm d-grid gap-2 dropdown" *ngIf="getSessionUser().isStudent()">
+      <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="testsMenuUserLink" data-bs-toggle="dropdown"
+        aria-expanded="false">Tests</a>
+      <ul class="dropdown-menu" aria-labelledby="testsMenuUserLink">
+        <li><a class="dropdown-item" [routerLink]="['/ptests']">Explorar Tests Públicos</a></li>
+        <li><a class="dropdown-item" [routerLink]="['/u', getSessionUser().getUsername(), 'invited']">Tests con
+            Invitación</a></li>
+        <li><a class="dropdown-item" [routerLink]="['/u', getSessionUser().getUsername(), 'solvable']">Tests
+            Disponibles</a></li>
+      </ul>
+    </div>
+    <div class="col-sm dropdown d-grid gap-2" *ngIf="!getSessionUser().isStudent()">
+      <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="testsMenuLink" data-bs-toggle="dropdown"
+        aria-expanded="false">Tests</a>
+      <ul class="dropdown-menu" aria-labelledby="testsMenuLink">
+        <li><a class="dropdown-item" [routerLink]="['/et']">Explorar Tests</a></li>
+        <li><a class="dropdown-item" [routerLink]="['/etCreate']">Crear Test</a></li>
+        <li><a class="dropdown-item" [routerLink]="['/u', getSessionUser().getUsername(), 'et' ]">Mis Tests</a></li>
+        <li><a class="dropdown-item" [routerLink]="['/u', getSessionUser().getUsername(), 'set' ]">Compartiendo
+            conmigo</a>
+        <li><a class="dropdown-item" [routerLink]="['/u', getSessionUser().getUsername(), 'fet' ]">Mis favoritos</a></li>
+        <li>
+          <hr class="dropdown-divider" />
+        </li>
+  
+        <li class="dropdown-submenu dropend">
+          <a class="dropdown-item" [routerLink]="['/ptests']">Tests Publicados</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" [routerLink]="['/ptests']">Explorar Tests Publicados</a></li>
+            <li><a class="dropdown-item" [routerLink]="['/u', getSessionUser().getUsername(), 'pt']">Mis Tests
+                Publicados</a>
+            </li>
+            <li><a class="dropdown-item" [routerLink]="['/u', getSessionUser().getUsername(), 'spt']">Compartidos
+                conmigo</a></li>
+          </ul>
+        </li>
+        <li>
+          <hr class="dropdown-divider" />
+        </li>
+        <li class="dropdown-submenu dropend">
+          <a class="dropdown-item" [routerLink]="['/ptests']">Responder Tests Publicados</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" [routerLink]="['/ptests']">Tests Públicos</a></li>
+            <li><a class="dropdown-item" [routerLink]="['/u', getSessionUser().getUsername(), 'invited']">Tests Con
+                Invitación</a></li>
+            <li><a class="dropdown-item" [routerLink]="['/u', getSessionUser().getUsername(), 'solvable']">Tests
+                Disponibles</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <div class="col-sm dropdown d-grid gap-2" *ngIf="!getSessionUser().isStudent()">
+      <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="questionsMenuLink" data-bs-toggle="dropdown"
+        aria-expanded="false">Preguntas</a>
+      <ul class="dropdown-menu" aria-labelledby="questionsMenuLink">
+        <li><a class="dropdown-item" [routerLink]="['/q']">Explorar Preguntas</a></li>
+        <li><a class="dropdown-item" [routerLink]="['/qCreate']">Crear Pregunta</a></li>
+        <li><a class="dropdown-item" [routerLink]="['/u', getSessionUser().getUsername(), 'q' ]">Mis Preguntas</a>
+        <li><a class="dropdown-item" [routerLink]="['/u', getSessionUser().getUsername(), 'sq' ]">Compartiendo conmigo</a>
+        </li>
+        <li><a class="dropdown-item" [routerLink]="['/u', getSessionUser().getUsername(), 'fq' ]">Mis favoritas</a></li>
+      </ul>
+    </div>
+    <div class="col-sm d-grid gap-2">
+      <a type="button" [routerLink]="['/teams']" class="btn btn-primary">Equipos</a>
+    </div>
+    <div class="col-sm d-grid gap-2" *ngIf="getSessionUser().isAdmin()">
+      <a type="button" [routerLink]="['/admin']" class="btn btn-primary">Administración</a>
+    </div>
+    <div class="col-sm dropdown d-grid gap-2">
+      <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
+        aria-expanded="false">
+        {{getSessionUser().getUsername()}}
+      </a>
+      <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+        <li><a class="dropdown-item" [routerLink]="['/profile', getSessionUser().getUsername()]">Ver perfil</a></li>
+        <li>
+          <hr class="dropdown-divider">
+        </li>
+        <li><a class="dropdown-item" href="#" (click)="logout()">Cerrar sesión</a></li>
+      </ul>
+    </div>
+  </div>

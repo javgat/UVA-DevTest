@@ -22,7 +22,7 @@ export class LoggedInController {
             valor => {
                 this.sessionLogin = valor
                 if (!this.sessionLogin.isLoggedIn()) {
-                    this.router.navigate(['/'])
+                    this.doActionIsNotLoggedIn()
                 }
             }
         )
@@ -42,6 +42,10 @@ export class LoggedInController {
         this.messageSubscription = this.data.mensajeActual.subscribe(
             valor => this.mensaje = valor
         )
+    }
+
+    doActionIsNotLoggedIn(){
+        this.router.navigate(['/'])
     }
 
     doInheritHasUserAction(){}

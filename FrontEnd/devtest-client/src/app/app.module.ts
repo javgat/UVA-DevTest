@@ -81,6 +81,8 @@ import { LqaAnswerComponent } from './list-qanswers/lqa-answer/lqa-answer.compon
 import { LqaQuestionComponent } from './list-qanswers/lqa-question/lqa-question.component';
 import { PtestUAnswersComponent } from './ptest-u-answers/ptest-u-answers.component';
 import { LaUserTestComponent } from './list-answers/la-user-test/la-user-test.component';
+import { NavBarLoggedComponent } from './nav-bar/nav-bar-logged/nav-bar-logged.component';
+import { NavBarNotLoggedComponent } from './nav-bar/nav-bar-not-logged/nav-bar-not-logged.component';
 
 export function apiConfigFactory (): Configuration {
   const params: ConfigurationParameters = {
@@ -164,7 +166,9 @@ export function apiConfigFactory (): Configuration {
     ListQAnswersComponent,
     LqaAnswerComponent,
     LqaQuestionComponent,
-    PtestUAnswersComponent
+    PtestUAnswersComponent,
+    NavBarLoggedComponent,
+    NavBarNotLoggedComponent
   ],
   imports: [
     BrowserModule,

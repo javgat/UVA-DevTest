@@ -49,7 +49,11 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
       if (!this.mantenerMensaje) {
         this.borrarMensaje()
       }
-      this.getTest(true)
+      if (!this.getSessionUser().isEmpty()) {
+        this.getTest(true)
+        this.getIsInAdminTeam(true)
+        this.getIsFavorita(true)
+      }
     });
     this.addQuestionById = false
   }
@@ -67,7 +71,8 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
   }
 
   doHasUserAction() {
-    if (this.id != undefined && this.id != 0){
+    if (this.id != undefined && this.id != 0) {
+      this.getTest(true)
       this.getIsInAdminTeam(true)
       this.getIsFavorita(true)
     }
@@ -136,6 +141,7 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
   }
 
   getIsInAdminTeam(primera: boolean) {
+    if (this.id == undefined || this.getSessionUser().isEmpty()) return
     this.userS.getSharedTestFromUser(this.getSessionUser().getUsername(), this.id).subscribe(
       resp => this.isInAdminTeam = true,
       err => {
@@ -262,6 +268,7 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
   }
 
   getIsFavorita(primera: boolean) {
+    if (this.id == undefined || this.getSessionUser().isEmpty()) return
     this.userS.getFavoriteTest(this.getSessionUser().getUsername(), this.id).subscribe(
       resp => this.isFavorita = true,
       err => {
@@ -319,19 +326,19 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
     )
   }
 
-  visibilidadToString(vis: Test.VisibilidadEnum): string{
+  visibilidadToString(vis: Test.VisibilidadEnum): string {
     return Examen.visibilidadToString(vis)
   }
 
-  printManual(): string{
+  printManual(): string {
     return this.visibilidadToString(Test.VisibilidadEnum.Manual)
   }
 
-  printCorregir(): string{
+  printCorregir(): string {
     return this.visibilidadToString(Test.VisibilidadEnum.AlCorregir)
   }
 
-  printEntregar(): string{
+  printEntregar(): string {
     return this.visibilidadToString(Test.VisibilidadEnum.AlEntregar)
   }
 
