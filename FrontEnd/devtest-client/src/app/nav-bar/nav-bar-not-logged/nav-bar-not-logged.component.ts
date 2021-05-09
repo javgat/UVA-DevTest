@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-nav-bar-not-logged',
   templateUrl: './nav-bar-not-logged.component.html',
-  styleUrls: ['./nav-bar-not-logged.component.css']
+  styleUrls: ['../nav-bar.component.css']
 })
 export class NavBarNotLoggedComponent implements OnInit {
 

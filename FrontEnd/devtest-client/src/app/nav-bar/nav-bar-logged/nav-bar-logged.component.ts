@@ -8,7 +8,7 @@ import { NavBarComponent } from '../nav-bar.component';
 @Component({
   selector: 'app-nav-bar-logged',
   templateUrl: './nav-bar-logged.component.html',
-  styleUrls: ['./nav-bar-logged.component.css']
+  styleUrls: ['../nav-bar.component.css']
 })
 export class NavBarLoggedComponent extends NavBarComponent implements OnInit {
 
