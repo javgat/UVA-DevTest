@@ -2,18 +2,31 @@
     <div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message" role="alert">
         {{getMensaje().texto}}</div>
     <div class="my-3">
-        <h4>Test #{{test.id}}</h4>
-        <h2>{{test.title}}</h2>
-        <p>Autor: <a [routerLink]="['/profile', test.username]">{{test.username}}</a></p>
-        <div *ngIf="checkCloneTest()">
-            <p><button type="button" class="btn btn-outline-primary" (click)="cloneTestClick()">Clonar</button></p>
-            <p>
-                <input type="checkbox" class="btn-check" id="btn-check-2" [checked]="isFavorita"
-                    (click)="changeFavorita()">
-                <label class="btn btn-outline-success" for="btn-check-2"><span *ngIf="!isFavorita">Guardar
-                        Favorito</span><span *ngIf="isFavorita">Guardado Favorito</span></label>
-            </p>
+        <div class="row">
+            <h4>Test #{{test.id}}</h4>
+            <h2 class="col">{{test.title}}</h2>
+            <div class="col-sm">
+                <div class="d-grid gap-2 d-flex justify-content-md-end" *ngIf="checkCloneTest()">
+                    <button type="button" class="btn btn-outline-primary mx-3 me-md-2" (click)="cloneTestClick()"
+                        data-bs-toggle="tooltip" data-bs-placement="top"
+                        title="Se creará un test nuevo, clonando también las preguntas">Clonar</button>
+                    <input type="checkbox" class="btn-check" id="btn-check-2" [checked]="isFavorita"
+                        (click)="changeFavorita()">
+                    <label class="btn btn-outline-success" for="btn-check-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 26" width="24px"
+                            fill="currentColor">
+                            <path d="M0 0h24v24H0z" fill="none" />
+                            <path d="M0 0h24v24H0z" fill="none" />
+                            <path
+                                d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                        </svg>
+                        <span *ngIf="!isFavorita">Guardar
+                            Favorito</span><span *ngIf="isFavorita">Guardado Favorito</span></label>
+                </div>
+            </div>
         </div>
+        <p>Autor: <a [routerLink]="['/profile', test.username]">{{test.username}}</a></p>
+
         <p *ngIf="checkPermisosEdicion()"><button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
                 data-bs-target="#modalPublishTest">Publicar</button></p>
         <p><button type="button" class="btn btn-primary" [routerLink]="['/et', test.id, 'ptests']">Ver
@@ -21,14 +34,14 @@
         <p>Etiquetas:
             <span *ngFor="let tag of tags">
                 <span *ngIf="checkPermisosEdicion()">
-                    <span class="badge bg-warning" role="button" id="{{tag.tag}}" data-bs-toggle="dropdown"
-                        aria-expanded="false">{{tag.tag}}</span>;
+                    <span class="badge bg-warning text-dark" role="button" id="{{tag.tag}}" data-bs-toggle="dropdown"
+                        aria-expanded="false">{{tag.tag}}</span>&nbsp;
                     <ul class="dropdown-menu" attr.aria-labelledby="{{tag.tag}}">
                         <li><a class="dropdown-item" role="button" (click)="deleteTagClick(tag.tag)">Eliminar</a></li>
                     </ul>
                 </span>
                 <span *ngIf="!checkPermisosEdicion()">
-                    <span class="badge bg-warning">{{tag.tag}}</span>;
+                    <span class="badge bg-warning text-dark">{{tag.tag}}</span>;
                 </span>
             </span>
         </p>

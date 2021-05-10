@@ -1,7 +1,7 @@
-<div class="mt-5">
+<div class="mt-3">
     <div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message" role="alert">
         {{getMensaje().texto}}</div>
-    <h2>Tests</h2>
-    <a class="button btn btn-primary" [routerLink]="['/etCreate']">Crear Test</a>
+    <h2 class="text-center fw-bold">Tests</h2>
+    <a class="button btn btn-primary btn-lg mb-3" [routerLink]="['/etCreate']">CREAR TEST</a>
     <app-list-tests></app-list-tests>
 </div>
