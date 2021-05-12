@@ -7,9 +7,8 @@
             <h2 class="col">{{test.title}}</h2>
             <div class="col-sm">
                 <div class="d-grid gap-2 d-flex justify-content-md-end" *ngIf="checkCloneTest()">
-                    <button type="button" class="btn btn-outline-primary mx-3 me-md-2" (click)="cloneTestClick()"
-                        data-bs-toggle="tooltip" data-bs-placement="top"
-                        title="Se creará un test nuevo, clonando también las preguntas">Clonar</button>
+                    <button type="button" class="btn btn-outline-primary mx-3 me-md-2" data-bs-toggle="modal"
+                        data-bs-target="#modalCloneTest">Clonar</button>
                     <input type="checkbox" class="btn-check" id="btn-check-2" [checked]="isFavorita"
                         (click)="changeFavorita()">
                     <label class="btn btn-outline-success" for="btn-check-2">
@@ -227,6 +226,28 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmacion clonar-->
+    <div class="modal fade" id="modalCloneTest" tabindex="-1" aria-labelledby="modalCloneTestLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <form ngNativeValidate>
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalCloneTestLabel">¿Clonar Test?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Se creará un test nuevo, clonando también las preguntas
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success" data-bs-dismiss="modal"
+                            (click)="cloneTestClick()">Clonar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

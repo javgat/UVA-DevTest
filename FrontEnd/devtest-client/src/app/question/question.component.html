@@ -17,7 +17,8 @@
             <h2>{{question.title}}</h2>
             <p>Autor: <a [routerLink]="['/profile', question.username]">{{question.username}}</a></p>
             <div *ngIf="checkCloneQuestion()">
-                <p><button type="button" class="btn btn-outline-primary" (click)="cloneQuestionClick()">Clonar</button>
+                <p><button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
+                        data-bs-target="#modalCloneQuestion">Clonar</button>
                 </p>
                 <p>
                     <input type="checkbox" class="btn-check" id="btn-check-2" [checked]="isFavorita"
@@ -223,6 +224,28 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                     <input type="submit" value="Guardar" (click)='putQuestionSubmit()' data-bs-dismiss="modal"
                         class="btn btn-primary" id="buttonChangeRol" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Confirmacion clonar-->
+<div class="modal fade" id="modalCloneQuestion" tabindex="-1" aria-labelledby="modalCloneQuestionLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form ngNativeValidate>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalCloneQuestionLabel">¿Clonar pregunta?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Se creará una pregunta nueva
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success" data-bs-dismiss="modal"
+                        (click)="cloneQuestionClick()">Clonar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                 </div>
             </form>
         </div>

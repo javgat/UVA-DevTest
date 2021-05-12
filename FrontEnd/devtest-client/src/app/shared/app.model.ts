@@ -153,13 +153,13 @@ export class Pregunta implements Question {
         this.question = question || ""
         this.estimatedTime = estT || 0
         this.autoCorrect = autoC || false
-        this.editable = edit || true
+        this.editable = edit || false
         this.username = username || ""
         this.eleccionUnica = eleUni
         this.solucion = solu
         this.tipoPregunta = tipo || Question.TipoPreguntaEnum.String
         this.valorFinal = valor
-        this.accesoPublicoNoPublicada = accesoPublicoNoPublicada || true
+        this.accesoPublicoNoPublicada = accesoPublicoNoPublicada || false
         this.isRespondida = isRespondida || false
         this.penalizacion = penalizacion || 0
     }
@@ -192,7 +192,7 @@ export class Examen implements Test{
         this.description=description || ""
         this.maxMinutes=maxMinutes || 0
         this.accesoPublico=accesoPublico || false
-        this.editable=editable || true
+        this.editable=editable || false
         this.username=username || ""
         this.id=id || 0
         this.accesoPublicoNoPublicado=accesoPublicoNoPublicado || false

@@ -105,4 +105,12 @@ export class AnsweringListPQuestionsComponent extends LoggedInController impleme
     )
   }
 
+  getNumeroPreguntasTotales(): number{
+    return this.preguntas.length
+  }
+
+  getNumeroPreguntasRespondidas(): number{
+    return this.preguntas.filter((val, i, quests) => val.isRespondida==true).length
+  }
+
 }
