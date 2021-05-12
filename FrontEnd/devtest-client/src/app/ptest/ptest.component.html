@@ -18,7 +18,7 @@
         <p>Autor: <a [routerLink]="['/profile', test.username]">{{test.username}}</a></p>
         <p>Etiquetas:
             <span *ngFor="let tag of tags">
-                <span class="badge bg-warning">{{tag.tag}}</span>;
+                <span class="badge bg-warning text-dark">{{tag.tag}}</span>&nbsp;
             </span>
         </p>
         <p><b>Descripción:</b>

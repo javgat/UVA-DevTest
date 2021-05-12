@@ -1,9 +1,27 @@
 <div class="my-3">
-    <p>Etiquetas filtradas:
+    <form (ngSubmit)='clickSearchTitle()' ngNativeValidate>
+        <div class="input-group my-3">
+            <input class="button btn btn-primary" type="submit" value="Buscar por título" />
+            <input type="text" class="form-control" name="inputSearchTitle" [(ngModel)]="editLikeTitle"
+                placeholder="Título" required pattern=".+" />
+        </div>
+        <div *ngIf="likeTitle!=undefined">
+            <button type="button" class="btn btn-secondary" (click)="clickBorrarTitle()">Borrar filtro de
+                título</button>
+        </div>
+    </form>
+    <form (ngSubmit)='addSearchTagSubmit()' ngNativeValidate>
+        <div class="input-group my-3">
+            <input class="button btn btn-primary" type="submit" value="Filtrar etiqueta" />
+            <input type="text" class="form-control" name="inputAddTag" [(ngModel)]="newSearchTag" placeholder="Etiqueta"
+                required pattern=".+" />
+        </div>
+    </form>
+    <p *ngIf="searchTags.length>0">Etiquetas filtradas:
         <span *ngFor="let tags of searchTags">
             <span *ngFor="let tag of tags">
-                <span class="bg-warning" role="button" id="{{tag}}" data-bs-toggle="dropdown"
-                    aria-expanded="false">{{tag}}</span>;
+                <span class="badge bg-warning text-dark" role="button" id="{{tag}}" data-bs-toggle="dropdown"
+                    aria-expanded="false">{{tag}}</span>&nbsp;
                 <ul class="dropdown-menu" attr.aria-labelledby="{{tag}}">
                     <li><a class="dropdown-item" role="button" (click)="deleteSearchTagClick(tag)">Eliminar</a>
                     </li>
@@ -12,28 +30,13 @@
         </span>
     </p>
     <form *ngIf="searchTags.length>0">
-        <input type="radio" class="btn-check" name="options" id="option1" autocomplete="off" [checked]="orOperation" (click)="swapOrAndTags()">
+        <input type="radio" class="btn-check" name="options" id="option1" autocomplete="off" [checked]="orOperation"
+            (click)="swapOrAndTags()">
         <label class="btn btn-outline-secondary" for="option1">Alguna de las etiquetas</label>
 
-        <input type="radio" class="btn-check" name="options" id="option2" autocomplete="off" [checked]="!orOperation" (click)="swapOrAndTags()">
+        <input type="radio" class="btn-check" name="options" id="option2" autocomplete="off" [checked]="!orOperation"
+            (click)="swapOrAndTags()">
         <label class="btn btn-outline-secondary mx-2" for="option2">Todas las etiquetas</label>
-    </form>
-    <form (ngSubmit)='addSearchTagSubmit()' ngNativeValidate>
-        <div class="input-group my-3">
-            <input class="button btn btn-primary" type="submit" value="Añadir etiqueta" />
-            <input type="text" class="form-control" name="inputAddTag" [(ngModel)]="newSearchTag" placeholder="Etiqueta"
-                required pattern=".+" />
-        </div>
-    </form>
-    <form (ngSubmit)='clickSearchTitle()' ngNativeValidate>
-        <div class="input-group my-3">
-            <input class="button btn btn-primary" type="submit" value="Buscar por título" />
-            <input type="text" class="form-control" name="inputSearchTitle" [(ngModel)]="editLikeTitle" placeholder="Título"
-                required pattern=".+" />
-        </div>
-        <div *ngIf="likeTitle!=undefined">
-            <button type="button" class="btn btn-secondary" (click)="clickBorrarTitle()">Borrar filtro de título</button>
-        </div>
     </form>
     <div class="form-check form-switch my-2" *ngIf="!hideSwitchInclude">
         <input class="form-check-input" type="checkbox" id="flexSwitchIncludeNonEdit" [checked]="includeNonEdit"
@@ -65,10 +68,14 @@
             <tr *ngFor="let question of questions">
                 <td role="button" (click)="selectQuestion(question.id)" data-bs-dismiss="modal">{{question.id}}</td>
                 <td role="button" (click)="selectQuestion(question.id)" data-bs-dismiss="modal">{{question.title}}</td>
-                <td><button type="button" class="btn btn-secondary" (click)="newTabQuestion(question.id)">Abrir</button></td>
-                <td role="button" (click)="selectQuestion(question.id)" data-bs-dismiss="modal">{{question.username}}</td>
-                <td role="button" (click)="selectQuestion(question.id)" data-bs-dismiss="modal">{{question.estimatedTime}} minutos</td>
-                <td role="button" (click)="selectQuestion(question.id)" data-bs-dismiss="modal">{{tipoPrint(question.tipoPregunta, question.eleccionUnica)}}</td>
+                <td><button type="button" class="btn btn-secondary" (click)="newTabQuestion(question.id)">Abrir</button>
+                </td>
+                <td role="button" (click)="selectQuestion(question.id)" data-bs-dismiss="modal">{{question.username}}
+                </td>
+                <td role="button" (click)="selectQuestion(question.id)" data-bs-dismiss="modal">
+                    {{question.estimatedTime}} minutos</td>
+                <td role="button" (click)="selectQuestion(question.id)" data-bs-dismiss="modal">
+                    {{tipoPrint(question.tipoPregunta, question.eleccionUnica)}}</td>
             </tr>
         </tbody>
     </table>

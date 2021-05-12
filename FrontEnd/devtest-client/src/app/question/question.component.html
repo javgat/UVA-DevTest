@@ -30,8 +30,8 @@
             <p>Etiquetas:
                 <span *ngFor="let tag of tags">
                     <span *ngIf="checkPermisosEdicion()">
-                        <span class="badge bg-warning" role="button" id="{{tag.tag}}" data-bs-toggle="dropdown"
-                            aria-expanded="false">{{tag.tag}}</span>;
+                        <span class="badge bg-warning text-dark" role="button" id="{{tag.tag}}" data-bs-toggle="dropdown"
+                            aria-expanded="false">{{tag.tag}}</span>&nbsp;
                         <ul class="dropdown-menu" attr.aria-labelledby="{{tag.tag}}">
                             <li><a class="dropdown-item" role="button" (click)="deleteTagClick(tag.tag)">Eliminar</a>
                             </li>
@@ -39,7 +39,7 @@
                     </span>
 
                     <span *ngIf="!checkPermisosEdicion()">
-                        <span class="badge bg-warning">{{tag.tag}}</span>;
+                        <span class="badge bg-warning text-dark">{{tag.tag}}</span>&nbsp;
                     </span>
                 </span>
             </p>
