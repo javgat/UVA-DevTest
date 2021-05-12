@@ -17,6 +17,7 @@ export class QuestionCreateComponent extends LoggedInTeacherController implement
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private qS : QuestionService) {
     super(session, router, data, userS)
     this.question = new Pregunta()
+    this.question.editable = true
   }
 
   doHasUserAction(){

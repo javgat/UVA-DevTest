@@ -292,7 +292,7 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
   addFavorita(primera: boolean) {
     this.userS.addTestFavorite(this.getSessionUser().getUsername(), this.id).subscribe(
       resp => {
-        this.getIsFavorita(true)
+        this.getTest(true)
       },
       err => {
         this.handleErrRelog(err, "marcar como favorito un test", primera, this.addFavorita, this)
@@ -302,7 +302,7 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
 
   removeFavorita(primera: boolean) {
     this.userS.removeTestFavorite(this.getSessionUser().getUsername(), this.id).subscribe(
-      resp => this.getIsFavorita(true),
+      resp => this.getTest(true),
       err => {
         this.handleErrRelog(err, "desmarcar como favorito un test", primera, this.removeFavorita, this)
       }

@@ -306,7 +306,7 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
   addFavorita(primera: boolean){
     this.userS.addQuestionFavorite(this.getSessionUser().getUsername(), this.id).subscribe(
       resp => {
-        this.getIsFavorita(true)
+        this.getPregunta(true)
       },
       err => {
         this.handleErrRelog(err, "marcar como favorita una pregunta", primera, this.addFavorita, this)
@@ -316,7 +316,7 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
 
   removeFavorita(primera: boolean){
     this.userS.removeQuestionFavorite(this.getSessionUser().getUsername(), this.id).subscribe(
-      resp => this.getIsFavorita(true),
+      resp => this.getPregunta(true),
       err => {
         this.handleErrRelog(err, "desmarcar como favorita una pregunta", primera, this.removeFavorita, this)
       }

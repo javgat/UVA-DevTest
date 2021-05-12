@@ -35,6 +35,10 @@ type Test struct {
 	// Required: true
 	AutoCorrect *bool `json:"autoCorrect"`
 
+	// cantidad favoritos
+	// Minimum: 0
+	CantidadFavoritos *int64 `json:"cantidadFavoritos,omitempty"`
+
 	// only present in GetSolvableTestFromUser
 	// Example: 1
 	CantidadRespuestasDelUsuario int64 `json:"cantidadRespuestasDelUsuario,omitempty"`
@@ -104,6 +108,10 @@ func (m *Test) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateCantidadFavoritos(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateDescription(formats); err != nil {
 		res = append(res, err)
 	}
@@ -159,6 +167,18 @@ func (m *Test) validateAccesoPublicoNoPublicado(formats strfmt.Registry) error {
 func (m *Test) validateAutoCorrect(formats strfmt.Registry) error {
 
 	if err := validate.Required("autoCorrect", "body", m.AutoCorrect); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Test) validateCantidadFavoritos(formats strfmt.Registry) error {
+	if swag.IsZero(m.CantidadFavoritos) { // not required
+		return nil
+	}
+
+	if err := validate.MinimumInt("cantidadFavoritos", "body", *m.CantidadFavoritos, 0, false); err != nil {
 		return err
 	}
 

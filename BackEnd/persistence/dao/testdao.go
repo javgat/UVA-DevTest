@@ -36,6 +36,7 @@ func ToModelTest(t *Test) (*models.Test, error) {
 				NotaMaxima:               t.NotaMaxima,
 				AutoCorrect:              t.AutoCorrect,
 				Visibilidad:              t.Visibilidad,
+				CantidadFavoritos:        t.CantidadFavoritos,
 			}
 			return mt, nil
 		}
@@ -65,7 +66,8 @@ func rowsToTests(rows *sql.Rows) ([]*Test, error) {
 		var t Test
 		var timeNull sql.NullTime
 		err := rows.Scan(&t.ID, &t.Title, &t.Description, &t.MaxMinutes, &t.AccesoPublico, &t.Editable, &t.Usuarioid,
-			&t.AccesoPublicoNoPublicado, &timeNull, &t.OriginalTestID, &t.NotaMaxima, &t.AutoCorrect, &t.Visibilidad)
+			&t.AccesoPublicoNoPublicado, &timeNull, &t.OriginalTestID, &t.NotaMaxima, &t.AutoCorrect, &t.Visibilidad,
+			&t.CantidadFavoritos)
 		if err != nil {
 			return tests, err
 		}

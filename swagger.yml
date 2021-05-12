@@ -5988,6 +5988,9 @@ definitions:
         type: integer
         minimum: 0
         maximum: 100
+      cantidadFavoritos:
+        type: integer
+        minimum: 0
   Test:
     type: object
     required:
@@ -6047,6 +6050,9 @@ definitions:
       visibilidad:
         type: string
         enum: [alEntregar, alCorregir, manual]
+      cantidadFavoritos:
+        type: integer
+        minimum: 0
   Answer:
     type: object
     required:

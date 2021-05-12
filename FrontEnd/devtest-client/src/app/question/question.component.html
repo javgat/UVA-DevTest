@@ -16,6 +16,7 @@
             <h4>Pregunta #{{question.id}}</h4>
             <h2>{{question.title}}</h2>
             <p>Autor: <a [routerLink]="['/profile', question.username]">{{question.username}}</a></p>
+            <p>Favoritos: {{question.cantidadFavoritos}}</p>
             <div *ngIf="checkCloneQuestion()">
                 <p><button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
                         data-bs-target="#modalCloneQuestion">Clonar</button>

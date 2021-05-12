@@ -50,6 +50,7 @@
                 <th>Título</th>
                 <th>Autor</th>
                 <th>Tiempo Disponible</th>
+                <th>Favoritos</th>
             </tr>
         </thead>
         <tbody *ngIf="!arePublished">
@@ -57,6 +58,7 @@
                 <td>{{test.title}}</td>
                 <td>{{test.username}}</td>
                 <td>{{test.maxMinutes}} minutos</td>
+                <td>{{test.cantidadFavoritos}}</td>
             </tr>
         </tbody>
         <tbody *ngIf="arePublished">

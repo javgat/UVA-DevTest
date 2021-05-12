@@ -144,10 +144,12 @@ export class Pregunta implements Question {
     accesoPublicoNoPublicada: boolean;
     isRespondida: boolean;
     penalizacion: number;
+    cantidadFavoritos: number;
 
     constructor(id?: number | undefined, title?: string, question?: string, estT?: number, autoC?: boolean,
         edit?: boolean, username?: string, accesoPublicoNoPublicada?: boolean, eleUni?: boolean | undefined, solu?: string | undefined,
-        tipo?: Question.TipoPreguntaEnum, valor?: number | undefined, isRespondida?: boolean, penalizacion?: number) {
+        tipo?: Question.TipoPreguntaEnum, valor?: number | undefined, isRespondida?: boolean, penalizacion?: number,
+        cantidadFavoritos?: number) {
         this.id = id || 0
         this.title = title || ""
         this.question = question || ""
@@ -162,11 +164,13 @@ export class Pregunta implements Question {
         this.accesoPublicoNoPublicada = accesoPublicoNoPublicada || false
         this.isRespondida = isRespondida || false
         this.penalizacion = penalizacion || 0
+        this.cantidadFavoritos = cantidadFavoritos || 0
     }
 
     static constructorFromQuestion(q: Question): Pregunta{
         return new Pregunta(q.id, q.title, q.question, q.estimatedTime, q.autoCorrect, q.editable, q.username,
-        q.accesoPublicoNoPublicada, q.eleccionUnica, q.solucion, q.tipoPregunta, q.valorFinal, q.isRespondida, q.penalizacion)
+        q.accesoPublicoNoPublicada, q.eleccionUnica, q.solucion, q.tipoPregunta, q.valorFinal, q.isRespondida,
+        q.penalizacion, q.cantidadFavoritos)
     }
 }
 
@@ -185,9 +189,11 @@ export class Examen implements Test{
     notaMaxima: number;
     autoCorrect: boolean;
     visibilidad: Test.VisibilidadEnum;
+    cantidadFavoritos: number;
     constructor(title?: string, description?: string, accesoPublico?: boolean, editable?: boolean, maxMinutes?: number, 
         username?: string, id?: number, accesoPublicoNoPublicado?: boolean, horaCreacion?: Date, originalTestID?: number,
-        cantidadRespuestasDelUsuario?: number, notaMaxima?: number, autoCorrect?: boolean, visibilidad?: Test.VisibilidadEnum){
+        cantidadRespuestasDelUsuario?: number, notaMaxima?: number, autoCorrect?: boolean, visibilidad?: Test.VisibilidadEnum,
+        cantidadFavoritos?: number){
         this.title=title || ""
         this.description=description || ""
         this.maxMinutes=maxMinutes || 0
@@ -202,12 +208,13 @@ export class Examen implements Test{
         this.notaMaxima = notaMaxima || 0
         this.autoCorrect = autoCorrect || false
         this.visibilidad = visibilidad || Test.VisibilidadEnum.Manual
+        this.cantidadFavoritos = cantidadFavoritos || 0
     }
 
     static constructorFromTest(t: Test): Examen{
         return new Examen(t.title, t.description, t.accesoPublico, t.editable, t.maxMinutes, t.username, t.id,
             t.accesoPublicoNoPublicado, t.horaCreacion, t.originalTestID, t.cantidadRespuestasDelUsuario, t.notaMaxima,
-            t.autoCorrect, t.visibilidad)
+            t.autoCorrect, t.visibilidad, t.cantidadFavoritos)
     }
 
     static visibilidadToString(vis: Test.VisibilidadEnum ) : string{

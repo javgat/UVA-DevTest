@@ -53,6 +53,7 @@
                 <th>Autor</th>
                 <th>Tiempo Estimado</th>
                 <th>Tipo</th>
+                <th>Favoritos</th>
             </tr>
         </thead>
         <tbody *ngIf="!selectAddQuestion">
@@ -62,6 +63,7 @@
                 <td>{{question.username}}</td>
                 <td>{{question.estimatedTime}} minutos</td>
                 <td>{{tipoPrint(question.tipoPregunta, question.eleccionUnica)}}</td>
+                <td>{{question.cantidadFavoritos}}</td>
             </tr>
         </tbody>
         <tbody *ngIf="selectAddQuestion">

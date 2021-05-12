@@ -30,6 +30,10 @@ type Question struct {
 	// Required: true
 	AutoCorrect *bool `json:"autoCorrect"`
 
+	// cantidad favoritos
+	// Minimum: 0
+	CantidadFavoritos *int64 `json:"cantidadFavoritos,omitempty"`
+
 	// editable
 	// Example: false
 	// Required: true
@@ -100,6 +104,10 @@ func (m *Question) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateCantidadFavoritos(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateEditable(formats); err != nil {
 		res = append(res, err)
 	}
@@ -150,6 +158,18 @@ func (m *Question) validateAccesoPublicoNoPublicada(formats strfmt.Registry) err
 func (m *Question) validateAutoCorrect(formats strfmt.Registry) error {
 
 	if err := validate.Required("autoCorrect", "body", m.AutoCorrect); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Question) validateCantidadFavoritos(formats strfmt.Registry) error {
+	if swag.IsZero(m.CantidadFavoritos) { // not required
+		return nil
+	}
+
+	if err := validate.MinimumInt("cantidadFavoritos", "body", *m.CantidadFavoritos, 0, false); err != nil {
 		return err
 	}
 

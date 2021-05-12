@@ -24,8 +24,8 @@
                 </div>
             </div>
         </div>
-        <p>Autor: <a [routerLink]="['/profile', test.username]">{{test.username}}</a></p>
-
+        <p *ngIf="checkPermisosEdicion()">Autor: <a [routerLink]="['/profile', test.username]">{{test.username}}</a></p>
+        <p>Favoritos: {{test.cantidadFavoritos}}</p>
         <p *ngIf="checkPermisosEdicion()"><button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
                 data-bs-target="#modalPublishTest">Publicar</button></p>
         <p><button type="button" class="btn btn-primary" [routerLink]="['/et', test.id, 'ptests']">Ver

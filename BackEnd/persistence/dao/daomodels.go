@@ -90,6 +90,10 @@ type Question struct {
 	// Required: true
 	AutoCorrect *bool `json:"autoCorrect"`
 
+	// cantidad favoritos
+	// Minimum: 0
+	CantidadFavoritos *int64 `json:"cantidadFavoritos,omitempty"`
+
 	// editable
 	// Example: false
 	// Required: true
@@ -164,6 +168,10 @@ type Test struct {
 	// Example: true
 	// Required: true
 	AutoCorrect *bool `json:"autoCorrect"`
+
+	// cantidad favoritos
+	// Minimum: 0
+	CantidadFavoritos *int64 `json:"cantidadFavoritos,omitempty"`
 
 	// description
 	// Example: En este test se evaluaran los conocimientos respecto al lenguaje de programación Java

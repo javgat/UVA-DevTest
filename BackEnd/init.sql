@@ -75,6 +75,7 @@ CREATE TABLE Test(
   notaMaxima int(11) NOT NULL,
   autoCorrect boolean NOT NULL,
   visibilidad ENUM('alEntregar', 'alCorregir', 'manual') NOT NULL,
+  cantidadFavoritos int(11) DEFAULT 0,
   FOREIGN KEY(usuarioid) REFERENCES Usuario(id),
   FOREIGN KEY(origenTestid) REFERENCES Test(id),
   PRIMARY KEY(id)
@@ -104,10 +105,36 @@ CREATE TABLE InvitacionTestUsuario(
 CREATE TABLE TestFavorito(
   usuarioid int(11) NOT NULL,
   testid int(11) NOT NULL,
-  FOREIGN KEY(usuarioid) REFERENCES Usuario(id) ON DELETE CASCADE,
-  FOREIGN KEY(testid) REFERENCES Test(id) ON DELETE CASCADE,
+  FOREIGN KEY(usuarioid) REFERENCES Usuario(id),
+  FOREIGN KEY(testid) REFERENCES Test(id),
   CONSTRAINT PRIMARY KEY(usuarioid, testid)
 );
+
+DELIMITER //
+/* ON DELETE CASCADE de FOREIGN KEY Test */
+CREATE TRIGGER testfavorito_testdelete AFTER DELETE ON Test
+  FOR EACH ROW BEGIN
+    DELETE FROM TestFavorito WHERE testid = OLD.id;
+  END //
+/* ON DELETE CASCADE de FOREIGN KEY Usuario */
+CREATE TRIGGER testfavorito_usuariodelete AFTER DELETE ON Usuario
+  FOR EACH ROW BEGIN
+    DELETE FROM TestFavorito WHERE usuarioid = OLD.id;
+  END //
+
+/* Modifica cantidad favoritos al añadir y quitar*/
+CREATE TRIGGER testfavorito_added AFTER INSERT ON TestFavorito
+  FOR EACH ROW BEGIN
+    UPDATE Test SET cantidadFavoritos=cantidadFavoritos+1 WHERE id=NEW.testid;
+  END //
+
+CREATE TRIGGER testfavorito_removed AFTER DELETE ON TestFavorito
+  FOR EACH ROW BEGIN
+    UPDATE Test SET cantidadFavoritos=cantidadFavoritos-1 WHERE id=OLD.testid;
+  END //
+
+DELIMITER ;
+
 
 CREATE TABLE Pregunta(
   id int(11) NOT NULL AUTO_INCREMENT,
@@ -121,6 +148,7 @@ CREATE TABLE Pregunta(
   solucion varchar(100) COLLATE utf8_unicode_ci,
   accesoPublicoNoPublicada boolean NOT NULL,
   penalizacion int(11) NOT NULL,
+  cantidadFavoritos int(11) DEFAULT 0,
   CONSTRAINT CHK_penalizacion CHECK (penalizacion>=0 AND penalizacion<=100),
   FOREIGN KEY(usuarioid) REFERENCES Usuario(id) ON DELETE CASCADE,
   PRIMARY KEY(id)
@@ -128,10 +156,35 @@ CREATE TABLE Pregunta(
 CREATE TABLE PreguntaFavorita(
   usuarioid int(11) NOT NULL,
   preguntaid int(11) NOT NULL,
-  FOREIGN KEY(usuarioid) REFERENCES Usuario(id) ON DELETE CASCADE,
-  FOREIGN KEY(preguntaid) REFERENCES Pregunta(id) ON DELETE CASCADE,
+  FOREIGN KEY(usuarioid) REFERENCES Usuario(id),
+  FOREIGN KEY(preguntaid) REFERENCES Pregunta(id),
   CONSTRAINT PRIMARY KEY(usuarioid, preguntaid)
 );
+
+DELIMITER //
+/* ON DELETE CASCADE de FOREIGN KEY Pregunta */
+CREATE TRIGGER preguntafavorita_preguntadelete AFTER DELETE ON Pregunta
+  FOR EACH ROW BEGIN
+    DELETE FROM PreguntaFavorita WHERE preguntaid = OLD.id;
+  END //
+/* ON DELETE CASCADE de FOREIGN KEY Usuario */
+CREATE TRIGGER preguntafavorita_usuariodelete AFTER DELETE ON Usuario
+  FOR EACH ROW BEGIN
+    DELETE FROM PreguntaFavorita WHERE usuarioid = OLD.id;
+  END //
+
+/* Modifica cantidad favoritos al añadir y quitar*/
+CREATE TRIGGER preguntadfavorita_added AFTER INSERT ON PreguntaFavorita
+  FOR EACH ROW BEGIN
+    UPDATE Pregunta SET cantidadFavoritos=cantidadFavoritos+1 WHERE id=NEW.preguntaid;
+  END //
+
+CREATE TRIGGER preguntadfavorita_removed AFTER DELETE ON PreguntaFavorita
+  FOR EACH ROW BEGIN
+    UPDATE Pregunta SET cantidadFavoritos=cantidadFavoritos-1 WHERE id=OLD.preguntaid;
+  END //
+
+DELIMITER ;
 
 CREATE TABLE TestPregunta(
   testid int(11) NOT NULL,

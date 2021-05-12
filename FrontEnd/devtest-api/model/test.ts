@@ -29,6 +29,7 @@ export interface Test {
     cantidadRespuestasDelUsuario?: number;
     autoCorrect: boolean;
     visibilidad: Test.VisibilidadEnum;
+    cantidadFavoritos?: number;
 }
 export namespace Test {
     export type VisibilidadEnum = 'alEntregar' | 'alCorregir' | 'manual';

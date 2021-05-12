@@ -9040,6 +9040,9 @@ func init() {
           "type": "boolean",
           "example": true
         },
+        "cantidadFavoritos": {
+          "type": "integer"
+        },
         "editable": {
           "type": "boolean",
           "example": false
@@ -9252,6 +9255,9 @@ func init() {
         "autoCorrect": {
           "type": "boolean",
           "example": true
+        },
+        "cantidadFavoritos": {
+          "type": "integer"
         },
         "cantidadRespuestasDelUsuario": {
           "description": "only present in GetSolvableTestFromUser",
@@ -19915,6 +19921,10 @@ func init() {
           "type": "boolean",
           "example": true
         },
+        "cantidadFavoritos": {
+          "type": "integer",
+          "minimum": 0
+        },
         "editable": {
           "type": "boolean",
           "example": false
@@ -20130,6 +20140,10 @@ func init() {
         "autoCorrect": {
           "type": "boolean",
           "example": true
+        },
+        "cantidadFavoritos": {
+          "type": "integer",
+          "minimum": 0
         },
         "cantidadRespuestasDelUsuario": {
           "description": "only present in GetSolvableTestFromUser",

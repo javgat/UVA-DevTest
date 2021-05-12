@@ -18,6 +18,7 @@ export class TestCreateComponent extends LoggedInTeacherController implements On
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService) {
     super(session, router, data, userS)
     this.test = new Examen()
+    this.test.editable = true
     if(this.hasUser!=undefined){
       this.doHasUserAction()
     }

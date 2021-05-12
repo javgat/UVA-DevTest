@@ -36,6 +36,7 @@ func ToModelQuestion(q *Question) (*models.Question, error) {
 				ValorFinal:               q.ValorFinal,
 				AccesoPublicoNoPublicada: q.AccesoPublicoNoPublicada,
 				Penalizacion:             q.Penalizacion,
+				CantidadFavoritos:        q.CantidadFavoritos,
 			}
 			return mq, nil
 		}
@@ -66,7 +67,7 @@ func rowsToQuestions(rows *sql.Rows) ([]*Question, error) {
 		var eleUni sql.NullBool
 		var solu sql.NullString
 		err := rows.Scan(&q.ID, &q.Title, &q.Question, &q.EstimatedTime, &q.AutoCorrect, &q.Editable, &q.Usuarioid, &eleUni,
-			&solu, &q.AccesoPublicoNoPublicada, &q.Penalizacion)
+			&solu, &q.AccesoPublicoNoPublicada, &q.Penalizacion, &q.CantidadFavoritos)
 		var tipo string
 		if eleUni.Valid {
 			q.EleccionUnica = eleUni.Bool
