@@ -358,7 +358,7 @@ bg=cyan</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>760</x>
+      <x>730</x>
       <y>260</y>
       <w>230</w>
       <h>40</h>
@@ -595,13 +595,13 @@ bg=yellow</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>810</x>
+      <x>780</x>
       <y>220</y>
-      <w>70</w>
+      <w>100</w>
       <h>60</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>50.0;10.0;10.0;40.0</additional_attributes>
+    <additional_attributes>80.0;10.0;10.0;40.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -864,9 +864,9 @@ bg=cyan</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>740</x>
+      <x>730</x>
       <y>310</y>
-      <w>240</w>
+      <w>210</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>context Test inv:
@@ -878,13 +878,13 @@ bg=cyan</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>900</x>
+      <x>890</x>
       <y>340</y>
-      <w>70</w>
+      <w>80</w>
       <h>60</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;50.0;40.0</additional_attributes>
+    <additional_attributes>10.0;10.0;60.0;40.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
@@ -1244,5 +1244,57 @@ bg=cyan</panel_attributes>
 - Manual
 bg=yellow</panel_attributes>
     <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>520</x>
+      <y>820</y>
+      <w>240</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>context Pregunta inv:
+self.cantidadFavoritos = 
+self.preguntaFavoritas -&gt; size()
+fontsize=11
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>750</x>
+      <y>740</y>
+      <w>260</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;110.0;240.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1210</x>
+      <y>530</y>
+      <w>240</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>context Test inv:
+self.cantidadFavoritos = 
+self.testFavoritos -&gt; size()
+fontsize=11
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1160</x>
+      <y>520</y>
+      <w>70</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;50.0;30.0</additional_attributes>
   </element>
 </diagram>
