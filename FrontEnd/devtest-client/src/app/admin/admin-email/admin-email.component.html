@@ -11,3 +11,58 @@
     Volver
 </button>
 <h2>Administración: Correo Electrónico</h2>
+<p>Dirección de correo electrónico de la web: {{emailConfig.from}}</p>
+<p>Host del servidor de correo: {{emailConfig.serverhost}}</p>
+<p>Puerto del servidor de correo: {{emailConfig.serverport}}</p>
+<p>Dirección de la web que se incluirá en los correos: {{emailConfig.frontendurl}}</p>
+<button class="btn btn-primary btn-lg" type="button" data-bs-toggle="modal" data-bs-target="#editConfigModal"
+    (click)="copyOriginalConfigInEdit()">Editar
+    configuración</button>
+
+<!-- Modal -->
+<div class="modal fade" id="editConfigModal" tabindex="-1" aria-labelledby="editConfigModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form ngNativeValidate>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editConfigModalLabel">Editar configuración de correo electrónico</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Dirección de correo electrónico de la
+                            web</label>
+                        <input type="email" class="form-control" id="inputEmailFrom" name="inputEmailFrom"
+                            [(ngModel)]="emailConfigEdit.from" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputPassword" class="form-label">Contraseña</label>
+                        <input type="password" class="form-control" id="inputPassword" name="inputPassword"
+                            [(ngModel)]="emailConfigEdit.password" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputHost" class="form-label">Host del servidor de correo</label>
+                        <input type="text" class="form-control" id="inputHost" name="inputHost"
+                            [(ngModel)]="emailConfigEdit.serverhost" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputPort" class="form-label">Puerto del servidor de correo</label>
+                        <input type="number" class="form-control" id="inputPort" min=1 name="inputPort"
+                            [(ngModel)]="emailConfigEdit.serverport" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputFrontendurl" class="form-label">Dirección de la web que se incluirá en los
+                            correos</label>
+                        <input type="text" class="form-control" id="inputFrontendurl" name="inputFrontendurl"
+                            [(ngModel)]="emailConfigEdit.frontendurl" required />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary button" data-bs-dismiss="modal"
+                        (click)="submitEditChangesConfiguration()">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
