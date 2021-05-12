@@ -341,17 +341,23 @@ func GetTestFromUser(db *sql.DB, username string, testid int64) (*Test, error) {
 	return nil, err
 }
 
-func GetTestsFromTeam(db *sql.DB, teamname string) ([]*Test, error) {
+func GetTestsFromTeam(db *sql.DB, teamname string, tags [][]string, likeTitle *string) ([]*Test, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
 	u, err := GetTeam(db, teamname)
 	if err == nil {
 		var t []*Test
-		query, err := db.Prepare("SELECT T.* FROM Test T JOIN GestionTestEquipo G ON T.id=G.testid WHERE G.equipoid=?")
+		stPrepare := "SELECT T.* FROM Test T JOIN GestionTestEquipo G ON T.id=G.testid WHERE G.equipoid=? "
+		stPrepare = addFiltersToQueryTest(true, stPrepare, tags, likeTitle)
+		query, err := db.Prepare(stPrepare)
 		if err == nil {
 			defer query.Close()
-			rows, err := query.Query(u.ID)
+			interfaceParams := FilterParamsSlicesToInterfaceArr(tags, likeTitle)
+			var paramsSlice []interface{}
+			paramsSlice = append(paramsSlice, u.ID)
+			interfaceParams = append(paramsSlice, interfaceParams...)
+			rows, err := query.Query(interfaceParams...)
 			if err == nil {
 				t, err = rowsToTests(rows)
 				return t, err

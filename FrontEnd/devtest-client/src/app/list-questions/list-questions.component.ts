@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Question, QuestionService, TagService, UserService } from '@javgat/devtest-api';
+import { Question, QuestionService, TagService, TeamService, UserService } from '@javgat/devtest-api';
 import { LoggedInController } from '../shared/app.controller';
 import { tipoPrint } from '../shared/app.model';
 import { DataService } from '../shared/data.service';
@@ -23,7 +23,8 @@ export class ListQuestionsComponent extends LoggedInController implements OnInit
   hideSwitchInclude: boolean
   scrollable: boolean
   selectAddQuestion: boolean
-  constructor(session: SessionService, router: Router, data: DataService, userS: UserService, protected qS: QuestionService, protected tagS: TagService) {
+  constructor(session: SessionService, router: Router, data: DataService, userS: UserService,
+     protected qS: QuestionService, protected tagS: TagService, protected teamS?: TeamService) {
     super(session, router, data, userS)
     this.includeNonEdit = false
     this.searchTags = []

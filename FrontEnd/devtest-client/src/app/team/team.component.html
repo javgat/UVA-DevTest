@@ -5,11 +5,19 @@
     <h4 *ngIf="!equipo.isSoloProfesores()">Equipo de estudiantes</h4>
     <h2>{{equipo.getTeamname()}}</h2>
     <h3><small class="text-muted">{{equipo.getDescription()}}</small></h3>
-    <button data-bs-toggle="modal" data-bs-target="#updateTeamModal" class="button btn btn-primary mx-1"
-        *ngIf="checkTeamAdmin()">Modificar Datos</button>
-    <button class="button btn btn-danger mx-1" data-bs-toggle="modal" *ngIf="checkTeamMember()"
-        data-bs-target="#leaveModal"><span *ngIf="!lastMember()">Abandonar</span><span *ngIf="lastMember()">Abandonar y
-            eliminar</span></button>
+    <div class="my-1">
+        <button data-bs-toggle="modal" data-bs-target="#updateTeamModal" class="button btn btn-primary"
+            *ngIf="checkTeamAdmin()">Modificar Datos</button>
+        <button class="button btn btn-danger mx-2" data-bs-toggle="modal" *ngIf="checkTeamMember()"
+            data-bs-target="#leaveModal"><span *ngIf="!lastMember()">Abandonar</span><span
+                *ngIf="lastMember()">Abandonar y
+                eliminar</span></button>
+    </div>
+    <div class="my-1">
+        <button class="button btn btn-primary" [routerLink]="['/teams', equipo.getTeamname(), 'invitedTests']">Ver tests a los que está invitado</button>
+        <button class="button btn btn-primary mx-2" *ngIf="equipo.isSoloProfesores()" [routerLink]="['/teams', equipo.getTeamname(), 'adminTests']">Ver tests administrados</button>
+        <button class="button btn btn-primary" *ngIf="equipo.isSoloProfesores()" [routerLink]="['/teams', equipo.getTeamname(), 'adminQuestions']">Ver preguntas administrados</button>
+    </div>
     <hr />
     <!-- Modal modificar -->
     <div *ngIf="checkTeamAdmin()" class="modal fade" id="updateTeamModal" tabindex="-1"
@@ -115,13 +123,14 @@
                     <input type="text" class="form-control" name="inputAddMember" aria-describedby="inputAddMemberHelp"
                         [(ngModel)]="addMiembroUsername" placeholder="Nombre de usuario" required pattern="[^@]+" />
                 </div>
-                <p><a class="link-dark m-3" role="button" (click)="changeAddUser()">Crear cuenta de usuario por correo electronico</a></p>
+                <p><a class="link-dark m-3" role="button" (click)="changeAddUser()">Crear cuenta de usuario por correo
+                        electronico</a></p>
             </form>
             <form *ngIf="createUser" (ngSubmit)='createAddMemberSubmit()' ngNativeValidate>
                 <div class="input-group my-3">
                     <input class="button btn btn-primary" type="submit" value="Crear Usuario y Añadir miembro" />
                     <input type="text" class="form-control" name="inputAddMember" aria-describedby="inputAddMemberHelp"
-                        [(ngModel)]="addMiembroUsername" placeholder="Correo electrónico" required/>
+                        [(ngModel)]="addMiembroUsername" placeholder="Correo electrónico" required />
                 </div>
                 <p><a class="link-dark m-3" role="button" (click)="changeNotAddUser()">Añadir usuario existente</a></p>
             </form>

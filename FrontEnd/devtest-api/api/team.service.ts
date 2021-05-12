@@ -424,16 +424,28 @@ export class TeamService {
      * Returns all publishedTests that the team is invited to
      * Returns all publishedTests that the team is invited to
      * @param teamname Teamname of the team to get its publishedTests is invited to
+     * @param tags 
+     * @param likeTitle 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getInvitedTestsFromTeam(teamname: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
-    public getInvitedTestsFromTeam(teamname: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
-    public getInvitedTestsFromTeam(teamname: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
-    public getInvitedTestsFromTeam(teamname: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getInvitedTestsFromTeam(teamname: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
+    public getInvitedTestsFromTeam(teamname: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
+    public getInvitedTestsFromTeam(teamname: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
+    public getInvitedTestsFromTeam(teamname: string, tags?: Array<Array<string>>, likeTitle?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (teamname === null || teamname === undefined) {
             throw new Error('Required parameter teamname was null or undefined when calling getInvitedTestsFromTeam.');
+        }
+
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (tags) {
+            queryParameters = queryParameters.set('tags', tags.join(COLLECTION_FORMATS['pipes']));
+        }
+        if (likeTitle !== undefined && likeTitle !== null) {
+            queryParameters = queryParameters.set('likeTitle', <any>likeTitle);
         }
 
         let headers = this.defaultHeaders;
@@ -458,6 +470,7 @@ export class TeamService {
 
         return this.httpClient.get<Array<Test>>(`${this.basePath}/teams/${encodeURIComponent(String(teamname))}/invitedTests`,
             {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -912,16 +925,28 @@ export class TeamService {
      * Returns all tests that the team administers
      * Returns all tests that the team administers
      * @param teamname Teamname of the team to get its tests
+     * @param tags 
+     * @param likeTitle 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getTestsFromTeam(teamname: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
-    public getTestsFromTeam(teamname: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
-    public getTestsFromTeam(teamname: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
-    public getTestsFromTeam(teamname: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getTestsFromTeam(teamname: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
+    public getTestsFromTeam(teamname: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
+    public getTestsFromTeam(teamname: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
+    public getTestsFromTeam(teamname: string, tags?: Array<Array<string>>, likeTitle?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (teamname === null || teamname === undefined) {
             throw new Error('Required parameter teamname was null or undefined when calling getTestsFromTeam.');
+        }
+
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (tags) {
+            queryParameters = queryParameters.set('tags', tags.join(COLLECTION_FORMATS['pipes']));
+        }
+        if (likeTitle !== undefined && likeTitle !== null) {
+            queryParameters = queryParameters.set('likeTitle', <any>likeTitle);
         }
 
         let headers = this.defaultHeaders;
@@ -946,6 +971,7 @@ export class TeamService {
 
         return this.httpClient.get<Array<Test>>(`${this.basePath}/teams/${encodeURIComponent(String(teamname))}/tests`,
             {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

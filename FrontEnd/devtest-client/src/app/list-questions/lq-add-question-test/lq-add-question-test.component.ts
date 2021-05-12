@@ -14,7 +14,7 @@ export class LqAddQuestionTestComponent extends ListQuestionsComponent implement
 
   @Output() onQuestionPicked = new EventEmitter<number>();
   
-  constructor(session: SessionService, router: Router, data: DataService, userS: UserService, protected qS: QuestionService, protected tagS: TagService) {
+  constructor(session: SessionService, router: Router, data: DataService, userS: UserService, qS: QuestionService, tagS: TagService) {
     super(session, router, data, userS, qS, tagS)
     this.scrollable = true
     this.selectAddQuestion = true

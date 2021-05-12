@@ -83,6 +83,10 @@ import { PtestUAnswersComponent } from './ptest-u-answers/ptest-u-answers.compon
 import { LaUserTestComponent } from './list-answers/la-user-test/la-user-test.component';
 import { NavBarLoggedComponent } from './nav-bar/nav-bar-logged/nav-bar-logged.component';
 import { NavBarNotLoggedComponent } from './nav-bar/nav-bar-not-logged/nav-bar-not-logged.component';
+import { TeamResourcesComponent } from './team-resources/team-resources.component';
+import { LtAdminTeamComponent } from './list-tests/lt-admin-team/lt-admin-team.component';
+import { LptInvitedTeamComponent } from './list-tests/lpt-invited-team/lpt-invited-team.component';
+import { LqAdminTeamComponent } from './list-questions/lq-admin-team/lq-admin-team.component';
 
 export function apiConfigFactory (): Configuration {
   const params: ConfigurationParameters = {
@@ -168,7 +172,11 @@ export function apiConfigFactory (): Configuration {
     LqaQuestionComponent,
     PtestUAnswersComponent,
     NavBarLoggedComponent,
-    NavBarNotLoggedComponent
+    NavBarNotLoggedComponent,
+    TeamResourcesComponent,
+    LtAdminTeamComponent,
+    LptInvitedTeamComponent,
+    LqAdminTeamComponent
   ],
   imports: [
     BrowserModule,

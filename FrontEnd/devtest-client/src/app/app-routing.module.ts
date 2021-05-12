@@ -35,6 +35,7 @@ import { QuestionsUserComponent } from './questions-user/questions-user.componen
 import { QuestionsComponent } from './questions/questions.component';
 import { RecoverPasswordComponent } from './recover-password/recover-password.component';
 import { SigninComponent } from './signin/signin.component';
+import { TeamResourcesComponent } from './team-resources/team-resources.component';
 import { TeamComponent } from './team/team.component';
 import { TeamsComponent } from './teams/teams.component';
 import { TestCreateComponent } from './test-create/test-create.component';
@@ -70,6 +71,9 @@ const routes: Routes = [
   {path: 'ptests', component: PtestsComponent},
   {path: 'teams', component: TeamsComponent},
   {path: 'teams/:id', component: TeamComponent},
+  {path: 'teams/:id/invitedTests', component: TeamResourcesComponent},
+  {path: 'teams/:id/adminTests', component: TeamResourcesComponent},
+  {path: 'teams/:id/adminQuestions', component: TeamResourcesComponent},
   {path: 'createTeam', component: CreateTeamComponent},
   {path: 'q', component: QuestionsComponent},
   {path: 'q/:id', component: QuestionComponent},

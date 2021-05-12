@@ -1,0 +1,28 @@
+<div class="mt-5">
+    <div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message" role="alert">
+        {{getMensaje().texto}}</div>
+    <div *ngIf="id!=undefined && id!=''">
+        <button class="button btn btn-outline-primary m-3" [routerLink]="['/teams', id]">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-chevron-double-left" viewBox="0 0 16 16">
+                <path fill-rule="evenodd"
+                    d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+                <path fill-rule="evenodd"
+                    d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+            </svg>
+            Volver
+        </button>
+        <div *ngIf="isResourceInvitedTests()">
+            <h3>Tests a los que está invitado el equipo</h3>
+            <app-lpt-invited-team [teamname]="id"></app-lpt-invited-team>
+        </div>
+        <div *ngIf="isResourceAdminTests()">
+            <h3>Tests que administra el equipo</h3>
+            <app-lt-admin-team [teamname]="id"></app-lt-admin-team>
+        </div>
+        <div *ngIf="isResourceAdminQuestions()">
+            <h3>Preguntas que administra el equipo</h3>
+            <app-lq-admin-team [teamname]="id"></app-lq-admin-team>
+        </div>
+    </div>
+</div>

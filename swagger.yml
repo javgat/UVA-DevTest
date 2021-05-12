@@ -2877,6 +2877,18 @@ paths:
         description: Teamname of the team to get its tests
         required: true
         type: string
+      - in: query
+        name: tags
+        type: array
+        collectionFormat: pipes
+        items:
+          type: array
+          collectionFormat: csv
+          items:
+            type: string
+      - in: query
+        name: likeTitle
+        type: string
       responses:
         200:
           description: tests found
@@ -3011,6 +3023,18 @@ paths:
         name: teamname
         description: Teamname of the team to get its publishedTests is invited to
         required: true
+        type: string
+      - in: query
+        name: tags
+        type: array
+        collectionFormat: pipes
+        items:
+          type: array
+          collectionFormat: csv
+          items:
+            type: string
+      - in: query
+        name: likeTitle
         type: string
       responses:
         200:
