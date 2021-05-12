@@ -22,6 +22,7 @@ import (
 	"uva-devtest/models"
 	"uva-devtest/restapi/operations/answer"
 	"uva-devtest/restapi/operations/auth"
+	"uva-devtest/restapi/operations/configuration"
 	"uva-devtest/restapi/operations/published_test"
 	"uva-devtest/restapi/operations/question"
 	"uva-devtest/restapi/operations/tag"
@@ -177,6 +178,9 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		}),
 		UserGetEditTestsFromUserHandler: user.GetEditTestsFromUserHandlerFunc(func(params user.GetEditTestsFromUserParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation user.GetEditTestsFromUser has not yet been implemented")
+		}),
+		ConfigurationGetEmailConfigurationHandler: configuration.GetEmailConfigurationHandlerFunc(func(params configuration.GetEmailConfigurationParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation configuration.GetEmailConfiguration has not yet been implemented")
 		}),
 		UserGetFavoriteEditQuestionsHandler: user.GetFavoriteEditQuestionsHandlerFunc(func(params user.GetFavoriteEditQuestionsParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation user.GetFavoriteEditQuestions has not yet been implemented")
@@ -448,6 +452,9 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		UserPostTestHandler: user.PostTestHandlerFunc(func(params user.PostTestParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation user.PostTest has not yet been implemented")
 		}),
+		ConfigurationPutEmailConfigurationHandler: configuration.PutEmailConfigurationHandlerFunc(func(params configuration.PutEmailConfigurationParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation configuration.PutEmailConfiguration has not yet been implemented")
+		}),
 		QuestionPutOptionHandler: question.PutOptionHandlerFunc(func(params question.PutOptionParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation question.PutOption has not yet been implemented")
 		}),
@@ -689,6 +696,8 @@ type DevAPI struct {
 	TagGetEditTestsFromTagHandler tag.GetEditTestsFromTagHandler
 	// UserGetEditTestsFromUserHandler sets the operation handler for the get edit tests from user operation
 	UserGetEditTestsFromUserHandler user.GetEditTestsFromUserHandler
+	// ConfigurationGetEmailConfigurationHandler sets the operation handler for the get email configuration operation
+	ConfigurationGetEmailConfigurationHandler configuration.GetEmailConfigurationHandler
 	// UserGetFavoriteEditQuestionsHandler sets the operation handler for the get favorite edit questions operation
 	UserGetFavoriteEditQuestionsHandler user.GetFavoriteEditQuestionsHandler
 	// UserGetFavoriteEditTestsHandler sets the operation handler for the get favorite edit tests operation
@@ -869,6 +878,8 @@ type DevAPI struct {
 	TeamPostTeamHandler team.PostTeamHandler
 	// UserPostTestHandler sets the operation handler for the post test operation
 	UserPostTestHandler user.PostTestHandler
+	// ConfigurationPutEmailConfigurationHandler sets the operation handler for the put email configuration operation
+	ConfigurationPutEmailConfigurationHandler configuration.PutEmailConfigurationHandler
 	// QuestionPutOptionHandler sets the operation handler for the put option operation
 	QuestionPutOptionHandler question.PutOptionHandler
 	// QuestionPutQuestionHandler sets the operation handler for the put question operation
@@ -1145,6 +1156,9 @@ func (o *DevAPI) Validate() error {
 	if o.UserGetEditTestsFromUserHandler == nil {
 		unregistered = append(unregistered, "user.GetEditTestsFromUserHandler")
 	}
+	if o.ConfigurationGetEmailConfigurationHandler == nil {
+		unregistered = append(unregistered, "configuration.GetEmailConfigurationHandler")
+	}
 	if o.UserGetFavoriteEditQuestionsHandler == nil {
 		unregistered = append(unregistered, "user.GetFavoriteEditQuestionsHandler")
 	}
@@ -1414,6 +1428,9 @@ func (o *DevAPI) Validate() error {
 	}
 	if o.UserPostTestHandler == nil {
 		unregistered = append(unregistered, "user.PostTestHandler")
+	}
+	if o.ConfigurationPutEmailConfigurationHandler == nil {
+		unregistered = append(unregistered, "configuration.PutEmailConfigurationHandler")
 	}
 	if o.QuestionPutOptionHandler == nil {
 		unregistered = append(unregistered, "question.PutOptionHandler")
@@ -1790,6 +1807,10 @@ func (o *DevAPI) initHandlerCache() {
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
+	o.handlers["GET"]["/emailConfiguration"] = configuration.NewGetEmailConfiguration(o.context, o.ConfigurationGetEmailConfigurationHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
 	o.handlers["GET"]["/users/{username}/favoriteEditQuestions"] = user.NewGetFavoriteEditQuestions(o.context, o.UserGetFavoriteEditQuestionsHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
@@ -2147,6 +2168,10 @@ func (o *DevAPI) initHandlerCache() {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
 	o.handlers["POST"]["/users/{username}/tests"] = user.NewPostTest(o.context, o.UserPostTestHandler)
+	if o.handlers["PUT"] == nil {
+		o.handlers["PUT"] = make(map[string]http.Handler)
+	}
+	o.handlers["PUT"]["/emailConfiguration"] = configuration.NewPutEmailConfiguration(o.context, o.ConfigurationPutEmailConfigurationHandler)
 	if o.handlers["PUT"] == nil {
 		o.handlers["PUT"] = make(map[string]http.Handler)
 	}

@@ -87,6 +87,7 @@ import { TeamResourcesComponent } from './team-resources/team-resources.componen
 import { LtAdminTeamComponent } from './list-tests/lt-admin-team/lt-admin-team.component';
 import { LptInvitedTeamComponent } from './list-tests/lpt-invited-team/lpt-invited-team.component';
 import { LqAdminTeamComponent } from './list-questions/lq-admin-team/lq-admin-team.component';
+import { AdminEmailComponent } from './admin/admin-email/admin-email.component';
 
 export function apiConfigFactory (): Configuration {
   const params: ConfigurationParameters = {
@@ -176,7 +177,8 @@ export function apiConfigFactory (): Configuration {
     TeamResourcesComponent,
     LtAdminTeamComponent,
     LptInvitedTeamComponent,
-    LqAdminTeamComponent
+    LqAdminTeamComponent,
+    AdminEmailComponent
   ],
   imports: [
     BrowserModule,

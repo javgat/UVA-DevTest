@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AdminEmailComponent } from './admin/admin-email/admin-email.component';
 import { AdminTeamsComponent } from './admin/admin-teams/admin-teams.component';
 import { AdminUsersComponent } from './admin/admin-users/admin-users.component';
 import { AdminComponent } from './admin/admin.component';
@@ -68,6 +69,7 @@ const routes: Routes = [
   {path: 'admin', component: AdminComponent},
   {path: 'admin/users', component: AdminUsersComponent},
   {path: 'admin/teams', component: AdminTeamsComponent},
+  {path: 'admin/email', component: AdminEmailComponent},
   {path: 'ptests', component: PtestsComponent},
   {path: 'teams', component: TeamsComponent},
   {path: 'teams/:id', component: TeamComponent},

@@ -39,7 +39,7 @@ func generateEmailBodyUserInvitedTest(username string, testid int64, address str
 func SendEmailUserInvitedToTest(username string, testid int64, m *models.Message) {
 	address, err := getEmailFromUsername(username)
 	if err == nil {
-		emailInfo, err := getOwnEmailInfo()
+		emailInfo, err := GetOwnEmailInfo()
 		if err == nil {
 			emailBody, err := generateEmailBodyUserInvitedTest(username, testid, address, emailInfo.FrontEndUrl, m)
 			if err == nil {
@@ -77,7 +77,7 @@ func generateEmailBodyUserTeamInvitedTest(username string, testid int64, address
 func SendEmailUserTeamInvitedToTest(username string, testid int64, teamname string, m *models.Message) {
 	address, err := getEmailFromUsername(username)
 	if err == nil {
-		emailInfo, err := getOwnEmailInfo()
+		emailInfo, err := GetOwnEmailInfo()
 		if err == nil {
 			emailBody, err := generateEmailBodyUserTeamInvitedTest(username, testid, address, emailInfo.FrontEndUrl, teamname, m)
 			if err == nil {
@@ -132,7 +132,7 @@ func generateEmailBodyUserChangedToTeamAdmin(username string, address string, fr
 func SendEmailUserAddedToTeamAsMember(username string, teamname string, m *models.Message) {
 	address, err := getEmailFromUsername(username)
 	if err == nil {
-		emailInfo, err := getOwnEmailInfo()
+		emailInfo, err := GetOwnEmailInfo()
 		if err == nil {
 			emailBody := generateEmailBodyUserAddedToTeamAsMember(username, address, emailInfo.FrontEndUrl, teamname, m)
 			sendEmail(emailBody, address)
@@ -143,7 +143,7 @@ func SendEmailUserAddedToTeamAsMember(username string, teamname string, m *model
 func SendEmailUserChangedToTeamMember(username string, teamname string, m *models.Message) {
 	address, err := getEmailFromUsername(username)
 	if err == nil {
-		emailInfo, err := getOwnEmailInfo()
+		emailInfo, err := GetOwnEmailInfo()
 		if err == nil {
 			emailBody := generateEmailBodyUserChangedToTeamMember(username, address, emailInfo.FrontEndUrl, teamname, m)
 			sendEmail(emailBody, address)
@@ -154,7 +154,7 @@ func SendEmailUserChangedToTeamMember(username string, teamname string, m *model
 func SendEmailUserAddedToTeamAsAdmin(username string, teamname string, m *models.Message) {
 	address, err := getEmailFromUsername(username)
 	if err == nil {
-		emailInfo, err := getOwnEmailInfo()
+		emailInfo, err := GetOwnEmailInfo()
 		if err == nil {
 			emailBody := generateEmailBodyUserAddedToTeamAsAdmin(username, address, emailInfo.FrontEndUrl, teamname, m)
 			sendEmail(emailBody, address)
@@ -165,7 +165,7 @@ func SendEmailUserAddedToTeamAsAdmin(username string, teamname string, m *models
 func SendEmailUserChangedToTeamAdmin(username string, teamname string, m *models.Message) {
 	address, err := getEmailFromUsername(username)
 	if err == nil {
-		emailInfo, err := getOwnEmailInfo()
+		emailInfo, err := GetOwnEmailInfo()
 		if err == nil {
 			emailBody := generateEmailBodyUserChangedToTeamAdmin(username, address, emailInfo.FrontEndUrl, teamname, m)
 			sendEmail(emailBody, address)

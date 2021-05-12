@@ -24,7 +24,7 @@ func generateEmailBodyUserCreated(username string, pass string, address string, 
 func SendEmailUserCreated(username string, pass string) {
 	address, err := getEmailFromUsername(username)
 	if err == nil {
-		emailInfo, err := getOwnEmailInfo()
+		emailInfo, err := GetOwnEmailInfo()
 		if err == nil {
 			emailBody := generateEmailBodyUserCreated(username, pass, address, emailInfo.FrontEndUrl)
 			sendEmail(emailBody, address)

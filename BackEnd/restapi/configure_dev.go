@@ -14,6 +14,7 @@ import (
 	"uva-devtest/restapi/operations"
 	"uva-devtest/restapi/operations/answer"
 	"uva-devtest/restapi/operations/auth"
+	"uva-devtest/restapi/operations/configuration"
 	"uva-devtest/restapi/operations/published_test"
 	"uva-devtest/restapi/operations/question"
 	"uva-devtest/restapi/operations/tag"
@@ -68,6 +69,11 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 	api.AuthCloseSessionsHandler = auth.CloseSessionsHandlerFunc(handlers.CloseSessions) // DELETE /accesstokens/{username}
 
 	api.AuthLogoutHandler = auth.LogoutHandlerFunc(handlers.Logout) // GET /logout
+
+	// Configuration
+
+	api.ConfigurationGetEmailConfigurationHandler = configuration.GetEmailConfigurationHandlerFunc(handlers.GetEmailConfiguration) // GET /emailConfiguration
+	api.ConfigurationPutEmailConfigurationHandler = configuration.PutEmailConfigurationHandlerFunc(handlers.PutEmailConfiguration) // PUT /emailConfiguration
 
 	// /users
 

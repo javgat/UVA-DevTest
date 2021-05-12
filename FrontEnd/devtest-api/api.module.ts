@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { AnswerService } from './api/answer.service';
 import { AuthService } from './api/auth.service';
+import { ConfigurationService } from './api/configuration.service';
 import { PublishedTestService } from './api/publishedTest.service';
 import { QuestionService } from './api/question.service';
 import { TagService } from './api/tag.service';
@@ -19,6 +20,7 @@ import { UserService } from './api/user.service';
   providers: [
     AnswerService,
     AuthService,
+    ConfigurationService,
     PublishedTestService,
     QuestionService,
     TagService,

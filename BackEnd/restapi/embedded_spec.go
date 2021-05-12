@@ -1104,6 +1104,76 @@ func init() {
         }
       }
     },
+    "/emailConfiguration": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns the information about the current configuration related to email service",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "configuration"
+        ],
+        "summary": "Returns the information about the current configuration related to email service",
+        "operationId": "GetEmailConfiguration",
+        "responses": {
+          "200": {
+            "description": "Email configuration found successfully",
+            "schema": {
+              "$ref": "#/definitions/EmailConfiguration"
+            }
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Modifies the information related to the configuration of the email service",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "configuration"
+        ],
+        "summary": "Modifies the information related to the configuration of the email service",
+        "operationId": "PutEmailConfiguration",
+        "parameters": [
+          {
+            "description": "New email configuration",
+            "name": "emailConfiguration",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/EmailConfiguration"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Email configuration updated"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
     "/emailUsers": {
       "post": {
         "security": [
@@ -8767,6 +8837,40 @@ func init() {
         }
       }
     },
+    "EmailConfiguration": {
+      "type": "object",
+      "required": [
+        "from",
+        "password",
+        "serverhost",
+        "serverport",
+        "frontendurl"
+      ],
+      "properties": {
+        "from": {
+          "type": "string",
+          "format": "email",
+          "pattern": "^[^@ \\t\\r\\n]+@[^@ \\t\\r\\n]+\\.[^@ \\t\\r\\n]+$",
+          "example": "carlos@mail.com"
+        },
+        "frontendurl": {
+          "type": "string",
+          "example": "https://devtest.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "password"
+        },
+        "serverhost": {
+          "type": "string",
+          "example": "smtp.gmail.com"
+        },
+        "serverport": {
+          "type": "integer",
+          "example": 587
+        }
+      }
+    },
     "EmailUser": {
       "type": "object",
       "required": [
@@ -9350,6 +9454,10 @@ func init() {
     {
       "description": "Operations that start with answers",
       "name": "answer"
+    },
+    {
+      "description": "Operations related to general settings of the application",
+      "name": "configuration"
     }
   ]
 }`))
@@ -10608,6 +10716,82 @@ func init() {
         }
       }
     },
+    "/emailConfiguration": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns the information about the current configuration related to email service",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "configuration"
+        ],
+        "summary": "Returns the information about the current configuration related to email service",
+        "operationId": "GetEmailConfiguration",
+        "responses": {
+          "200": {
+            "description": "Email configuration found successfully",
+            "schema": {
+              "$ref": "#/definitions/EmailConfiguration"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Modifies the information related to the configuration of the email service",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "configuration"
+        ],
+        "summary": "Modifies the information related to the configuration of the email service",
+        "operationId": "PutEmailConfiguration",
+        "parameters": [
+          {
+            "description": "New email configuration",
+            "name": "emailConfiguration",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/EmailConfiguration"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Email configuration updated"
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
     "/emailUsers": {
       "post": {
         "security": [
@@ -19528,6 +19712,40 @@ func init() {
         }
       }
     },
+    "EmailConfiguration": {
+      "type": "object",
+      "required": [
+        "from",
+        "password",
+        "serverhost",
+        "serverport",
+        "frontendurl"
+      ],
+      "properties": {
+        "from": {
+          "type": "string",
+          "format": "email",
+          "pattern": "^[^@ \\t\\r\\n]+@[^@ \\t\\r\\n]+\\.[^@ \\t\\r\\n]+$",
+          "example": "carlos@mail.com"
+        },
+        "frontendurl": {
+          "type": "string",
+          "example": "https://devtest.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "password"
+        },
+        "serverhost": {
+          "type": "string",
+          "example": "smtp.gmail.com"
+        },
+        "serverport": {
+          "type": "integer",
+          "example": 587
+        }
+      }
+    },
     "EmailUser": {
       "type": "object",
       "required": [
@@ -20116,6 +20334,10 @@ func init() {
     {
       "description": "Operations that start with answers",
       "name": "answer"
+    },
+    {
+      "description": "Operations related to general settings of the application",
+      "name": "configuration"
     }
   ]
 }`))

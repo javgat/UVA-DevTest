@@ -5,56 +5,16 @@
 package emailHelper
 
 import (
-	"encoding/json"
 	"errors"
-	"io/ioutil"
 	"log"
 	"net/smtp"
 	"uva-devtest/persistence/dao"
 	"uva-devtest/persistence/dbconnection"
 )
 
-const errorResourceNotFound = "no se encontro el recurso"
-
-type EmailInfo struct {
-	From        string `json:"from"`
-	Password    string `json:"password"`
-	Serverhost  string `json:"serverhost"`
-	Serverport  string `json:"serverport"`
-	FrontEndUrl string `json:"frontendurl"`
-}
-
-// smtpServer data to smtp server
-type smtpServer struct {
-	host string
-	port string
-}
-
-// Address URI to smtp server
-func (s *smtpServer) Address() string {
-	return s.host + ":" + s.port
-}
-
-// Opens the email information file and returns a EmailInfo struct
-// Param filename: String containing the route to dbinfo file.
-// Returns DbInfo struct, or err if something failed.
-func getEmailInfo(filename string) (*EmailInfo, error) {
-	data, err := ioutil.ReadFile(filename)
-	var emailInfo *EmailInfo
-	if err != nil {
-		return emailInfo, err
-	}
-	err = json.Unmarshal(data, &emailInfo)
-	return emailInfo, err
-}
-
-func getOwnEmailInfo() (*EmailInfo, error) {
-	return getEmailInfo("./config/emailinfo.json")
-}
-
 // sendEmail sends content "emailBody" to the address
 func sendEmail(emailBody []byte, emailAddress string) {
-	emailInfo, err := getOwnEmailInfo()
+	emailInfo, err := GetOwnEmailInfo()
 	if err == nil {
 		smtpServer := smtpServer{host: emailInfo.Serverhost, port: emailInfo.Serverport}
 		auth := smtp.PlainAuth("", emailInfo.From, emailInfo.Password, smtpServer.host)
@@ -93,7 +53,7 @@ func generateEmailBodyRecoveryPassword(username string, token string, email stri
 func SendPasswordRecoveryMail(username string, token string) {
 	email, err := getEmailFromUsername(username)
 	if err == nil {
-		emailInfo, err := getOwnEmailInfo()
+		emailInfo, err := GetOwnEmailInfo()
 		if err == nil {
 			emailBody := generateEmailBodyRecoveryPassword(username, token, email, emailInfo.FrontEndUrl)
 			sendEmail(emailBody, email)

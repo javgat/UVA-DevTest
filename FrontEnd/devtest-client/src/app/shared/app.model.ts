@@ -1,4 +1,4 @@
-import { User, Team, Question, Test, Answer, QuestionAnswer } from "@javgat/devtest-api";
+import { User, Team, Question, Test, Answer, QuestionAnswer, EmailConfiguration } from "@javgat/devtest-api";
 
 export enum Tipo {
     SUCCESS = "success",
@@ -281,4 +281,19 @@ export class RespuestaPregunta implements QuestionAnswer{
         this.username = qa?.username || ""
     }
 
+}
+
+export class ConfiguracionCorreo implements EmailConfiguration{
+    from: string;
+    password: string;
+    serverhost: string;
+    serverport: number;
+    frontendurl: string;
+    constructor(c?: ConfiguracionCorreo){
+        this.from = c?.from || ""
+        this.password = c?.from || ""
+        this.serverhost = c?.serverhost || ""
+        this.serverport = c?.serverport || 0
+        this.frontendurl = c?.frontendurl || ""
+    }
 }
