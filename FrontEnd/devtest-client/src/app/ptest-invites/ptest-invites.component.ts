@@ -28,6 +28,7 @@ export class PtestInvitesComponent extends LoggedInTeacherController implements 
   customMessageNotification: string
   enviaMensaje: boolean
   createUser: boolean
+  checkedSendEmail: boolean
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, 
       private tS: TestService, private route: ActivatedRoute, private ptS: PublishedTestService) {
     super(session, router, data, userS)
@@ -44,6 +45,7 @@ export class PtestInvitesComponent extends LoggedInTeacherController implements 
     this.lookingForTeams = true
     this.enviaMensaje = false
     this.createUser = false
+    this.checkedSendEmail = true
     this.routeSub = this.route.params.subscribe(params => {
       this.id = params['testid']
       this.borrarMensaje()
@@ -148,7 +150,8 @@ export class PtestInvitesComponent extends LoggedInTeacherController implements 
   inviteTeamMessage(primera: boolean){
     var message: Message
     message = {
-      body: this.customMessageNotification
+      body: this.customMessageNotification,
+      sendEmail: this.checkedSendEmail
     }
     this.ptS.inviteTeamToPublishedTest(this.addTeamTeamname, this.id, message).subscribe(
       resp =>{
@@ -167,19 +170,14 @@ export class PtestInvitesComponent extends LoggedInTeacherController implements 
   }
 
   inviteUser(primera: boolean){
-    this.ptS.inviteUserToPublishedTest(this.addUserUsername, this.id).subscribe(
-      resp=>{
-        this.cambiarMensaje(new Mensaje("Usuario invitado con éxito", Tipo.SUCCESS, true))
-        this.getUsersTest(true)
-      },
-      err => this.handleErrRelog(err, "invitar usuario a realizar un test", primera, this.inviteUser, this)
-    )
+    this.inviteUserMessage(primera)
   }
 
   inviteUserMessage(primera: boolean){
     var message: Message
     message = {
-      body: this.customMessageNotification
+      body: this.customMessageNotification,
+      sendEmail: this.checkedSendEmail
     }
     this.ptS.inviteUserToPublishedTest(this.addUserUsername, this.id, message).subscribe(
       resp=>{
@@ -252,6 +250,10 @@ export class PtestInvitesComponent extends LoggedInTeacherController implements 
       },
       err => this.handleErrRelog(err, "crear usuario para añadir a test", primera, this.createInviteUser, this)
     )
+  }
+
+  changeFlexSendEmail(){
+    this.checkedSendEmail = !this.checkedSendEmail
   }
 
 }

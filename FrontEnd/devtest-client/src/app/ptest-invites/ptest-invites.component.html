@@ -27,7 +27,7 @@
                 <div class="input-group">
                     <input class="button btn btn-primary" type="submit" value="Añadir usuario" />
                     <input type="text" class="form-control" name="inputAddUser" aria-describedby="inputAddUserHelp"
-                        [(ngModel)]="addUserUsername" placeholder="Nombre de usuario" required pattern="[^@]+" />
+                        [(ngModel)]="addUserUsername" placeholder="Nombre de usuario" required />
                 </div>
                 <div id="inputAddUserHelp" class="form-text text-muted">Invita a un usuario a realizar un test</div>
             </div>
@@ -42,10 +42,16 @@
                 </div>
                 <div id="inputAddUserHelp" class="form-text text-muted">Crea una nueva cuenta e invitala a realizar un test</div>
             </div>
-            <p><a class="link-dark m-3" role="button" (click)="changeAddUser()">Crear cuenta de usuario por correo electronico</a></p>
+            <p><a class="link-dark m-3" role="button" (click)="changeNotAddUser()">Añadir usuario existente</a></p>
         </form>
-        <p *ngIf="!enviaMensaje"><a class="link-dark mx-3" role="button" (click)="changeEnviaMensaje()">Enviar mensaje personalizado en la notificación</a></p>
-        <p *ngIf="enviaMensaje"><a class="link-dark mx-3" role="button" (click)="changeNoEnviaMensaje()">No enviar mensaje personalizado en la notificación</a></p>
+        <div class="form-check form-switch my-2">
+            <input class="form-check-input" type="checkbox" id="flexSwitchSendEmail" [checked]="checkedSendEmail"
+                (change)="changeFlexSendEmail()">
+            <label class="form-check-label" for="flexSwitchSendEmail">Enviar notificación por correo</label>
+        </div>
+        <p *ngIf="!enviaMensaje && checkedSendEmail"><a class="link-dark mx-3" role="button" (click)="changeEnviaMensaje()">Enviar mensaje personalizado en la notificación</a></p>
+        <p *ngIf="enviaMensaje && checkedSendEmail"><a class="link-dark mx-3" role="button" (click)="changeNoEnviaMensaje()">No enviar mensaje personalizado en la notificación</a></p>
+
 
         <div *ngIf="enviaMensaje" class="input-group my-3">
             <textarea class="form-control" name="inputAddQuestion" [(ngModel)]="customMessageNotification"

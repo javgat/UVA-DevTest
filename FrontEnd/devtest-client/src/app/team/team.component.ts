@@ -26,6 +26,7 @@ export class TeamComponent extends LoggedInController implements OnInit {
   mightKickUsername: string
   teamEdit: Team
   createUser: boolean
+  checkedSendEmail: boolean
 
   customMessageNotification: string
   enviaMensaje: boolean
@@ -39,6 +40,7 @@ export class TeamComponent extends LoggedInController implements OnInit {
     this.customMessageNotification = ""
     this.enviaMensaje = false
     this.createUser = false
+    this.checkedSendEmail = true
     this.id = this.addMiembroUsername = this.usernamePutAdmin = this.kickingUsername = this.mightKickUsername = ""
     this.routeSub = this.route.params.subscribe(params => {
       this.id = params['id']
@@ -117,14 +119,7 @@ export class TeamComponent extends LoggedInController implements OnInit {
   }
 
   addMember(primera: boolean) {
-    if (this.isTeamAdmin(this.addMiembroUsername) || this.isTeamMiembro(this.addMiembroUsername)) {
-      this.cambiarMensaje(new Mensaje("Ese usuario ya pertenece al equipo", Tipo.ERROR, true))
-    } else {
-      this.teamService.addMember(this.id, this.addMiembroUsername).subscribe(
-        resp => this.getMiembros(true),
-        err => this.handleErrRelog(err, "añadir miembro a equipo", primera, this.addMember, this)
-      )
-    }
+    this.addMemberMessage(primera)
   }
 
   addMemberMessage(primera: boolean) {
@@ -133,7 +128,8 @@ export class TeamComponent extends LoggedInController implements OnInit {
     } else {
       var message: Message
       message = {
-        body: this.customMessageNotification
+        body: this.customMessageNotification,
+        sendEmail: this.checkedSendEmail
       }
       this.teamService.addMember(this.id, this.addMiembroUsername, message).subscribe(
         resp => this.getMiembros(true),
@@ -279,6 +275,10 @@ export class TeamComponent extends LoggedInController implements OnInit {
       },
       err => this.handleErrRelog(err, "crear usuario para añadir a equipo", primera, this.createAddMember, this)
     )
+  }
+
+  changeFlexSendEmail(){
+    this.checkedSendEmail = !this.checkedSendEmail
   }
 
 }

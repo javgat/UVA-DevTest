@@ -13,4 +13,8 @@
 
 export interface Message { 
     body: string;
+    /**
+     * True if you want to send an email, false if not.
+     */
+    sendEmail: boolean;
 }

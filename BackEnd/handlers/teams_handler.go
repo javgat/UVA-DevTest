@@ -151,10 +151,12 @@ func AddAdminToTeam(params team.AddAdminParams, u *models.User) middleware.Respo
 					newAdmin := us == nil
 					err = dao.AddUserTeamAdmin(db, params.Username, params.Teamname)
 					if err == nil {
-						if newAdmin {
-							emailHelper.SendEmailUserAddedToTeamAsAdmin(params.Username, params.Teamname, params.Message)
-						} else {
-							emailHelper.SendEmailUserChangedToTeamAdmin(params.Username, params.Teamname, params.Message)
+						if params.Message == nil || *params.Message.SendEmail {
+							if newAdmin {
+								emailHelper.SendEmailUserAddedToTeamAsAdmin(params.Username, params.Teamname, params.Message)
+							} else {
+								emailHelper.SendEmailUserChangedToTeamAdmin(params.Username, params.Teamname, params.Message)
+							}
 						}
 						return team.NewAddAdminOK()
 					}
@@ -246,10 +248,12 @@ func AddMemberToTeam(params team.AddMemberParams, u *models.User) middleware.Res
 						newMember := us == nil
 						err = dao.AddUserTeamMember(db, params.Username, params.Teamname)
 						if err == nil {
-							if newMember {
-								emailHelper.SendEmailUserAddedToTeamAsMember(params.Username, params.Teamname, params.Message)
-							} else {
-								emailHelper.SendEmailUserChangedToTeamMember(params.Username, params.Teamname, params.Message)
+							if params.Message == nil || *params.Message.SendEmail {
+								if newMember {
+									emailHelper.SendEmailUserAddedToTeamAsMember(params.Username, params.Teamname, params.Message)
+								} else {
+									emailHelper.SendEmailUserChangedToTeamMember(params.Username, params.Teamname, params.Message)
+								}
 							}
 							return team.NewAddMemberOK()
 						}

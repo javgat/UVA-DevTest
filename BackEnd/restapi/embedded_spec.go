@@ -8919,12 +8919,18 @@ func init() {
     "Message": {
       "type": "object",
       "required": [
-        "body"
+        "body",
+        "sendEmail"
       ],
       "properties": {
         "body": {
           "type": "string",
           "example": "Este test es para que lo hagais en vuestra casa"
+        },
+        "sendEmail": {
+          "description": "True if you want to send an email, false if not.",
+          "type": "boolean",
+          "example": true
         }
       }
     },
@@ -19800,12 +19806,18 @@ func init() {
     "Message": {
       "type": "object",
       "required": [
-        "body"
+        "body",
+        "sendEmail"
       ],
       "properties": {
         "body": {
           "type": "string",
           "example": "Este test es para que lo hagais en vuestra casa"
+        },
+        "sendEmail": {
+          "description": "True if you want to send an email, false if not.",
+          "type": "boolean",
+          "example": true
         }
       }
     },

@@ -6210,10 +6210,15 @@ definitions:
     type: object
     required:
     - body
+    - sendEmail
     properties:
       body:
         type: string
         example: Este test es para que lo hagais en vuestra casa
+      sendEmail:
+        type: boolean
+        example: true
+        description: True if you want to send an email, false if not.
 securityDefinitions:
   BearerCookie:
     type: apiKey

@@ -23,6 +23,11 @@ type Message struct {
 	// Example: Este test es para que lo hagais en vuestra casa
 	// Required: true
 	Body *string `json:"body"`
+
+	// True if you want to send an email, false if not.
+	// Example: true
+	// Required: true
+	SendEmail *bool `json:"sendEmail"`
 }
 
 // Validate validates this message
@@ -30,6 +35,10 @@ func (m *Message) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateBody(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateSendEmail(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -42,6 +51,15 @@ func (m *Message) Validate(formats strfmt.Registry) error {
 func (m *Message) validateBody(formats strfmt.Registry) error {
 
 	if err := validate.Required("body", "body", m.Body); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Message) validateSendEmail(formats strfmt.Registry) error {
+
+	if err := validate.Required("sendEmail", "body", m.SendEmail); err != nil {
 		return err
 	}
 

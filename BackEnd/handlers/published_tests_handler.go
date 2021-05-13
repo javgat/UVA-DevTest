@@ -127,7 +127,9 @@ func InviteUserPTest(params published_test.InviteUserToPublishedTestParams, u *m
 		if err == nil {
 			err = dao.InviteUserPTest(db, params.Testid, params.Username)
 			if err == nil {
-				emailHelper.SendEmailUserInvitedToTest(params.Username, params.Testid, params.Message)
+				if params.Message == nil || *params.Message.SendEmail {
+					emailHelper.SendEmailUserInvitedToTest(params.Username, params.Testid, params.Message)
+				}
 				return published_test.NewInviteUserToPublishedTestOK()
 			}
 		}
@@ -189,7 +191,9 @@ func InviteTeamPTest(params published_test.InviteTeamToPublishedTestParams, u *m
 		if err == nil {
 			err = dao.InviteTeamPTest(db, params.Testid, params.Teamname)
 			if err == nil {
-				sendEmailInvitedTeamMembers(db, params.Teamname, params.Testid, params.Message)
+				if params.Message == nil || *params.Message.SendEmail {
+					sendEmailInvitedTeamMembers(db, params.Teamname, params.Testid, params.Message)
+				}
 				return published_test.NewInviteTeamToPublishedTestOK()
 			}
 		}

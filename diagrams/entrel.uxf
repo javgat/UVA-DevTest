@@ -85,29 +85,29 @@ bg=yellow
     <id>Relation</id>
     <coordinates>
       <x>570</x>
-      <y>400</y>
+      <y>430</y>
       <w>400</w>
-      <h>60</h>
+      <h>50</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=0..*
 m2=1
 testsEditables &gt;</panel_attributes>
-    <additional_attributes>380.0;10.0;10.0;30.0</additional_attributes>
+    <additional_attributes>380.0;20.0;10.0;20.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>450</x>
-      <y>520</y>
+      <y>510</y>
       <w>560</w>
-      <h>220</h>
+      <h>230</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=0..*
 m2=1
 preguntasEditables &gt;</panel_attributes>
-    <additional_attributes>540.0;190.0;10.0;190.0;10.0;10.0</additional_attributes>
+    <additional_attributes>540.0;200.0;10.0;200.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -172,7 +172,7 @@ m2=1</panel_attributes>
     <panel_attributes>lt=-
 m1=0..*
 m2=1</panel_attributes>
-    <additional_attributes>1130.0;350.0;1130.0;10.0;10.0;10.0;10.0;350.0</additional_attributes>
+    <additional_attributes>1130.0;350.0;1130.0;10.0;10.0;10.0;10.0;340.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -191,7 +191,7 @@ m2=0..*</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>350</x>
-      <y>410</y>
+      <y>400</y>
       <w>230</w>
       <h>120</h>
     </coordinates>
@@ -242,12 +242,12 @@ bg=yellow</panel_attributes>
       <x>440</x>
       <y>250</y>
       <w>60</w>
-      <h>180</h>
+      <h>170</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=0..*
 m2=0..*</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;160.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;150.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -273,7 +273,7 @@ m2=0..*</panel_attributes>
     <panel_attributes>lt=-
 m1=0..*
 m2=0..*</panel_attributes>
-    <additional_attributes>820.0;290.0;870.0;290.0;870.0;10.0;10.0;10.0;10.0;290.0</additional_attributes>
+    <additional_attributes>820.0;290.0;870.0;290.0;870.0;10.0;10.0;10.0;10.0;280.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
@@ -1103,14 +1103,14 @@ bg=yellow</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>410</x>
-      <y>520</y>
+      <y>510</y>
       <w>600</w>
-      <h>240</h>
+      <h>250</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=0..*
 m2=0..*</panel_attributes>
-    <additional_attributes>580.0;210.0;10.0;210.0;10.0;10.0</additional_attributes>
+    <additional_attributes>580.0;220.0;10.0;220.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
