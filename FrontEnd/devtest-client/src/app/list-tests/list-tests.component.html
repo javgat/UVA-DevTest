@@ -49,8 +49,18 @@
             <tr>
                 <th>Título</th>
                 <th>Autor</th>
-                <th>Tiempo Disponible</th>
-                <th>Favoritos</th>
+                <th role="button" (click)="clickOrderByTiempo()">
+                    Tiempo Disponible
+                    <span class="arrow-orderby" *ngIf="isMoreTimeSelected()"> &uarr;</span>
+                    <span class="arrow-orderby" *ngIf="isLessTimeSelected()"> &darr;</span>
+                    <span class="arrow-orderby" *ngIf="!isMoreTimeSelected() && !isLessTimeSelected()"> &#8597;</span>
+                </th>
+                <th role="button" (click)="clickOrderByFavoritos()">
+                    Favoritos
+                    <span class="arrow-orderby" *ngIf="isMoreFavSelected()"> &uarr;</span>
+                    <span class="arrow-orderby" *ngIf="isLessFavSelected()"> &darr;</span>
+                    <span class="arrow-orderby" *ngIf="!isMoreFavSelected() && !isLessFavSelected()"> &#8597;</span>
+                </th>
             </tr>
         </thead>
         <tbody *ngIf="!arePublished">

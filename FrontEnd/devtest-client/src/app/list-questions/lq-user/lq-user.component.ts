@@ -33,7 +33,7 @@ export class LqUserComponent extends ListQuestionsComponent implements OnInit {
 
   getQuestionsInclude(primera: boolean) {
     if(this.id==undefined) return
-    this.userS.getQuestionsOfUser(this.id, this.searchTags, this.likeTitle).subscribe(
+    this.userS.getQuestionsOfUser(this.id, this.searchTags, this.likeTitle, this.orderBy).subscribe(
       resp => this.questions = resp,
       err => this.handleErrRelog(err, "obtener preguntas de un usuario", primera, this.getQuestionsInclude, this)
     )
@@ -41,7 +41,7 @@ export class LqUserComponent extends ListQuestionsComponent implements OnInit {
 
   getQuestionsEdit(primera: boolean) {
     if(this.id==undefined) return
-    this.userS.getEditQuestionsOfUser(this.id, this.searchTags, this.likeTitle).subscribe(
+    this.userS.getEditQuestionsOfUser(this.id, this.searchTags, this.likeTitle, this.orderBy).subscribe(
       resp => this.questions = resp,
       err => this.handleErrRelog(err, "obtener preguntas editables de un usuario", primera, this.getQuestionsEdit, this)
     )

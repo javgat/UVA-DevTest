@@ -304,3 +304,12 @@ export class ConfiguracionCorreo implements EmailConfiguration{
         this.frontendurl = c?.frontendurl || ""
     }
 }
+
+export enum EnumOrderBy {
+    newDate = "newDate",
+    oldDate = "oldDate",
+    moreFav = "moreFav",
+    lessFav = "lessFav",
+    moreTime = "moreTime",
+    lessTime = "lessTime"
+}

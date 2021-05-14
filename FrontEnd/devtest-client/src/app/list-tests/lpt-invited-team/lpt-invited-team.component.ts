@@ -33,7 +33,7 @@ export class LptInvitedTeamComponent extends ListTestsComponent  implements OnIn
   // EN published tests testEdit es el testPublished
   getTestsEdit(primera: boolean) {
     if(this.teamname=="" || this.teamname==undefined || this.teamS == undefined) return
-    this.teamS.getInvitedTestsFromTeam(this.teamname, this.searchTags, this.likeTitle).subscribe(
+    this.teamS.getInvitedTestsFromTeam(this.teamname, this.searchTags, this.likeTitle, this.orderBy).subscribe(
       resp => this.tests = resp,
       err => this.handleErrRelog(err, "obtener tests publicados a los que el equipo esta invitado", primera, this.getTestsEdit, this)
     )

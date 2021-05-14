@@ -259,13 +259,15 @@ export class PublishedTestService {
      * Returns all public publishedTests
      * @param tags 
      * @param likeTitle 
+     * @param orderby Indicates which element is first returned. In case of tie it unties with newdate first
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getPublicPublishedTests(tags?: Array<Array<string>>, likeTitle?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
-    public getPublicPublishedTests(tags?: Array<Array<string>>, likeTitle?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
-    public getPublicPublishedTests(tags?: Array<Array<string>>, likeTitle?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
-    public getPublicPublishedTests(tags?: Array<Array<string>>, likeTitle?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getPublicPublishedTests(tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
+    public getPublicPublishedTests(tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
+    public getPublicPublishedTests(tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
+    public getPublicPublishedTests(tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
 
 
 
@@ -275,6 +277,9 @@ export class PublishedTestService {
         }
         if (likeTitle !== undefined && likeTitle !== null) {
             queryParameters = queryParameters.set('likeTitle', <any>likeTitle);
+        }
+        if (orderby !== undefined && orderby !== null) {
+            queryParameters = queryParameters.set('orderby', <any>orderby);
         }
 
         let headers = this.defaultHeaders;

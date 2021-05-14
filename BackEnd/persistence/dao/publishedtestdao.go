@@ -12,13 +12,13 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-func GetPublicPublishedTests(db *sql.DB, tags [][]string, likeTitle *string) ([]*Test, error) {
+func GetPublicPublishedTests(db *sql.DB, tags [][]string, likeTitle *string, orderBy *string) ([]*Test, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
 	var ts []*Test
 	stPrepare := "SELECT * FROM Test WHERE editable=0 AND accesoPublico=1"
-	stPrepare = addFiltersToQueryTest(true, stPrepare, tags, likeTitle)
+	stPrepare = addFiltersToQueryTest(true, stPrepare, tags, likeTitle, orderBy)
 	query, err := db.Prepare(stPrepare)
 	if err == nil {
 		defer query.Close()
@@ -236,7 +236,7 @@ func GetUncorrectedAnswersFromPTest(db *sql.DB, testid int64) ([]*Answer, error)
 	return nil, err
 }
 
-func GetInvitedTestsFromTeam(db *sql.DB, teamname string, tags [][]string, likeTitle *string) ([]*Test, error) {
+func GetInvitedTestsFromTeam(db *sql.DB, teamname string, tags [][]string, likeTitle *string, orderBy *string) ([]*Test, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
@@ -244,7 +244,7 @@ func GetInvitedTestsFromTeam(db *sql.DB, teamname string, tags [][]string, likeT
 	if err == nil {
 		var t []*Test
 		stPrepare := "SELECT T.* FROM Test T JOIN InvitacionTestEquipo I ON T.id=I.testid WHERE I.equipoid=? AND T.editable=0 "
-		stPrepare = addFiltersToQueryTest(true, stPrepare, tags, likeTitle)
+		stPrepare = addFiltersToQueryTest(true, stPrepare, tags, likeTitle, orderBy)
 		query, err := db.Prepare(stPrepare)
 		if err == nil {
 			defer query.Close()
@@ -284,7 +284,7 @@ func GetInvitedTestFromTeam(db *sql.DB, teamname string, testid int64) (*Test, e
 
 // InvitedTests
 
-func GetInvitedPTestsByTeamsAndUser(db *sql.DB, username string, tags [][]string, likeTitle *string) ([]*Test, error) {
+func GetInvitedPTestsByTeamsAndUser(db *sql.DB, username string, tags [][]string, likeTitle *string, orderBy *string) ([]*Test, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
@@ -295,7 +295,7 @@ func GetInvitedPTestsByTeamsAndUser(db *sql.DB, username string, tags [][]string
 			"SELECT DISTINCT T.* FROM Test T LEFT JOIN TestsUserInvited U ON T.id=U.id " +
 			"LEFT JOIN TestsUserTeamInvited E ON E.id=T.id " +
 			"WHERE T.editable=0 AND ( U.id IS NOT NULL OR E.accesoPublico IS NOT NULL ) "
-	stPrepare = addFiltersToQueryTestLong(true, stPrepare, tags, likeTitle)
+	stPrepare = addFiltersToQueryTestLong(true, stPrepare, tags, likeTitle, orderBy)
 	query, err := db.Prepare(stPrepare)
 	if err == nil {
 		defer query.Close()
@@ -313,7 +313,7 @@ func GetInvitedPTestsByTeamsAndUser(db *sql.DB, username string, tags [][]string
 	return nil, err
 }
 
-func GetInvitedPTestsFromUser(db *sql.DB, username string, tags [][]string, likeTitle *string) ([]*Test, error) {
+func GetInvitedPTestsFromUser(db *sql.DB, username string, tags [][]string, likeTitle *string, orderBy *string) ([]*Test, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
@@ -321,7 +321,7 @@ func GetInvitedPTestsFromUser(db *sql.DB, username string, tags [][]string, like
 	if err == nil {
 		var ts []*Test
 		stPrepare := "SELECT T.* FROM Test T JOIN InvitacionTestUsuario I ON T.id=I.testid WHERE I.usuarioid=? AND T.editable=0 "
-		stPrepare = addFiltersToQueryTestLong(true, stPrepare, tags, likeTitle)
+		stPrepare = addFiltersToQueryTestLong(true, stPrepare, tags, likeTitle, orderBy)
 		query, err := db.Prepare(stPrepare)
 		if err == nil {
 			defer query.Close()
@@ -361,13 +361,13 @@ func GetInvitedPTestFromUser(db *sql.DB, username string, testid int64) (*Test, 
 
 // PublishedTests
 
-func GetPublishedTestsFromUser(db *sql.DB, username string, tags [][]string, likeTitle *string) ([]*Test, error) {
+func GetPublishedTestsFromUser(db *sql.DB, username string, tags [][]string, likeTitle *string, orderBy *string) ([]*Test, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
 	var ts []*Test
 	stPrepare := "SELECT T.* FROM Test T JOIN Usuario U ON T.usuarioid=U.id WHERE U.username=? AND T.editable=0 "
-	stPrepare = addFiltersToQueryTestLong(true, stPrepare, tags, likeTitle)
+	stPrepare = addFiltersToQueryTestLong(true, stPrepare, tags, likeTitle, orderBy)
 	query, err := db.Prepare(stPrepare)
 	if err == nil {
 		defer query.Close()
@@ -384,13 +384,13 @@ func GetPublishedTestsFromUser(db *sql.DB, username string, tags [][]string, lik
 	return nil, err
 }
 
-func GetPublicPublishedTestsFromUser(db *sql.DB, username string, tags [][]string, likeTitle *string) ([]*Test, error) {
+func GetPublicPublishedTestsFromUser(db *sql.DB, username string, tags [][]string, likeTitle *string, orderBy *string) ([]*Test, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
 	var ts []*Test
 	stPrepare := "SELECT T.* FROM Test T JOIN Usuario U ON T.usuarioid=U.id WHERE U.username=? AND T.editable=0 AND T.accesoPublico=1 "
-	stPrepare = addFiltersToQueryTestLong(true, stPrepare, tags, likeTitle)
+	stPrepare = addFiltersToQueryTestLong(true, stPrepare, tags, likeTitle, orderBy)
 	query, err := db.Prepare(stPrepare)
 	if err == nil {
 		defer query.Close()
@@ -407,7 +407,7 @@ func GetPublicPublishedTestsFromUser(db *sql.DB, username string, tags [][]strin
 	return nil, err
 }
 
-func GetSolvableTestsFromUser(db *sql.DB, username string, tags [][]string, likeTitle *string) ([]*Test, error) {
+func GetSolvableTestsFromUser(db *sql.DB, username string, tags [][]string, likeTitle *string, orderBy *string) ([]*Test, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
@@ -421,7 +421,7 @@ func GetSolvableTestsFromUser(db *sql.DB, username string, tags [][]string, like
 			"UNION SELECT T.* FROM Test T JOIN Usuario U ON T.usuarioid=U.id WHERE U.username=? " +
 			"UNION SELECT T.* FROM Test T JOIN GestionTestEquipo G ON T.id=G.testid JOIN EquipoUsuario E ON E.equipoid=G.equipoid " +
 			"JOIN Usuario U ON E.usuarioid=U.id WHERE U.username=? "
-	stPrepare = addFiltersToQueryTestLong(true, stPrepare, tags, likeTitle)
+	stPrepare = addFiltersToQueryTestLong(true, stPrepare, tags, likeTitle, orderBy)
 	query, err := db.Prepare(stPrepare)
 	if err == nil {
 		defer query.Close()

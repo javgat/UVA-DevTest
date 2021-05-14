@@ -315,13 +315,15 @@ export class QuestionService {
      * Returns all non-published questions
      * @param tags 
      * @param likeTitle 
+     * @param orderby Indicates which element is first returned. In case of tie it unties with newdate first
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAllEditQuestions(tags?: Array<Array<string>>, likeTitle?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Question>>;
-    public getAllEditQuestions(tags?: Array<Array<string>>, likeTitle?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Question>>>;
-    public getAllEditQuestions(tags?: Array<Array<string>>, likeTitle?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Question>>>;
-    public getAllEditQuestions(tags?: Array<Array<string>>, likeTitle?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getAllEditQuestions(tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'body', reportProgress?: boolean): Observable<Array<Question>>;
+    public getAllEditQuestions(tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Question>>>;
+    public getAllEditQuestions(tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Question>>>;
+    public getAllEditQuestions(tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
 
 
 
@@ -331,6 +333,9 @@ export class QuestionService {
         }
         if (likeTitle !== undefined && likeTitle !== null) {
             queryParameters = queryParameters.set('likeTitle', <any>likeTitle);
+        }
+        if (orderby !== undefined && orderby !== null) {
+            queryParameters = queryParameters.set('orderby', <any>orderby);
         }
 
         let headers = this.defaultHeaders;
@@ -369,13 +374,15 @@ export class QuestionService {
      * Returns all questions
      * @param tags 
      * @param likeTitle 
+     * @param orderby Indicates which element is first returned. In case of tie it unties with newdate first
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAllQuestions(tags?: Array<Array<string>>, likeTitle?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Question>>;
-    public getAllQuestions(tags?: Array<Array<string>>, likeTitle?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Question>>>;
-    public getAllQuestions(tags?: Array<Array<string>>, likeTitle?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Question>>>;
-    public getAllQuestions(tags?: Array<Array<string>>, likeTitle?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getAllQuestions(tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'body', reportProgress?: boolean): Observable<Array<Question>>;
+    public getAllQuestions(tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Question>>>;
+    public getAllQuestions(tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Question>>>;
+    public getAllQuestions(tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
 
 
 
@@ -385,6 +392,9 @@ export class QuestionService {
         }
         if (likeTitle !== undefined && likeTitle !== null) {
             queryParameters = queryParameters.set('likeTitle', <any>likeTitle);
+        }
+        if (orderby !== undefined && orderby !== null) {
+            queryParameters = queryParameters.set('orderby', <any>orderby);
         }
 
         let headers = this.defaultHeaders;
@@ -423,13 +433,15 @@ export class QuestionService {
      * Returns all public non-published questions
      * @param tags 
      * @param likeTitle 
+     * @param orderby Indicates which element is first returned. In case of tie it unties with newdate first
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getEditQuestions(tags?: Array<Array<string>>, likeTitle?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Question>>;
-    public getEditQuestions(tags?: Array<Array<string>>, likeTitle?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Question>>>;
-    public getEditQuestions(tags?: Array<Array<string>>, likeTitle?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Question>>>;
-    public getEditQuestions(tags?: Array<Array<string>>, likeTitle?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getEditQuestions(tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'body', reportProgress?: boolean): Observable<Array<Question>>;
+    public getEditQuestions(tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Question>>>;
+    public getEditQuestions(tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Question>>>;
+    public getEditQuestions(tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
 
 
 
@@ -439,6 +451,9 @@ export class QuestionService {
         }
         if (likeTitle !== undefined && likeTitle !== null) {
             queryParameters = queryParameters.set('likeTitle', <any>likeTitle);
+        }
+        if (orderby !== undefined && orderby !== null) {
+            queryParameters = queryParameters.set('orderby', <any>orderby);
         }
 
         let headers = this.defaultHeaders;
@@ -620,13 +635,15 @@ export class QuestionService {
      * Returns all public questions
      * @param tags 
      * @param likeTitle 
+     * @param orderby Indicates which element is first returned. In case of tie it unties with newdate first
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getQuestions(tags?: Array<Array<string>>, likeTitle?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Question>>;
-    public getQuestions(tags?: Array<Array<string>>, likeTitle?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Question>>>;
-    public getQuestions(tags?: Array<Array<string>>, likeTitle?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Question>>>;
-    public getQuestions(tags?: Array<Array<string>>, likeTitle?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getQuestions(tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'body', reportProgress?: boolean): Observable<Array<Question>>;
+    public getQuestions(tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Question>>>;
+    public getQuestions(tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Question>>>;
+    public getQuestions(tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
 
 
 
@@ -636,6 +653,9 @@ export class QuestionService {
         }
         if (likeTitle !== undefined && likeTitle !== null) {
             queryParameters = queryParameters.set('likeTitle', <any>likeTitle);
+        }
+        if (orderby !== undefined && orderby !== null) {
+            queryParameters = queryParameters.set('orderby', <any>orderby);
         }
 
         let headers = this.defaultHeaders;

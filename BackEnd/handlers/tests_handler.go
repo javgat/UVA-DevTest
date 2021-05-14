@@ -91,7 +91,7 @@ func GetPublicEditTests(params test.GetPublicEditTestsParams, u *models.User) mi
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var ts []*dao.Test
-			ts, err = dao.GetPublicEditTests(db, params.Tags, params.LikeTitle)
+			ts, err = dao.GetPublicEditTests(db, params.Tags, params.LikeTitle, params.Orderby)
 			if err == nil {
 				var mts []*models.Test
 				mts, err = dao.ToModelTests(ts)
@@ -713,7 +713,7 @@ func GetFavoriteEditTests(params user.GetFavoriteEditTestsParams, u *models.User
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var qs []*dao.Test
-			qs, err = dao.GetFavoriteEditTests(db, params.Username, params.Tags, params.LikeTitle)
+			qs, err = dao.GetFavoriteEditTests(db, params.Username, params.Tags, params.LikeTitle, params.Orderby)
 			if err == nil {
 				var mqs []*models.Test
 				mqs, err = dao.ToModelTests(qs)
@@ -735,7 +735,7 @@ func GetFavoriteTests(params user.GetFavoriteTestsParams, u *models.User) middle
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var qs []*dao.Test
-			qs, err = dao.GetFavoriteTests(db, params.Username, params.Tags, params.LikeTitle)
+			qs, err = dao.GetFavoriteTests(db, params.Username, params.Tags, params.LikeTitle, params.Orderby)
 			if err == nil {
 				var mqs []*models.Test
 				mqs, err = dao.ToModelTests(qs)

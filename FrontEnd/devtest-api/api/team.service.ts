@@ -426,17 +426,19 @@ export class TeamService {
      * @param teamname Teamname of the team to get its publishedTests is invited to
      * @param tags 
      * @param likeTitle 
+     * @param orderby Indicates which element is first returned. In case of tie it unties with newdate first
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getInvitedTestsFromTeam(teamname: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
-    public getInvitedTestsFromTeam(teamname: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
-    public getInvitedTestsFromTeam(teamname: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
-    public getInvitedTestsFromTeam(teamname: string, tags?: Array<Array<string>>, likeTitle?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getInvitedTestsFromTeam(teamname: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
+    public getInvitedTestsFromTeam(teamname: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
+    public getInvitedTestsFromTeam(teamname: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
+    public getInvitedTestsFromTeam(teamname: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (teamname === null || teamname === undefined) {
             throw new Error('Required parameter teamname was null or undefined when calling getInvitedTestsFromTeam.');
         }
+
 
 
 
@@ -446,6 +448,9 @@ export class TeamService {
         }
         if (likeTitle !== undefined && likeTitle !== null) {
             queryParameters = queryParameters.set('likeTitle', <any>likeTitle);
+        }
+        if (orderby !== undefined && orderby !== null) {
+            queryParameters = queryParameters.set('orderby', <any>orderby);
         }
 
         let headers = this.defaultHeaders;
@@ -730,17 +735,19 @@ export class TeamService {
      * @param teamname Teamname of the team to get its questions
      * @param tags 
      * @param likeTitle 
+     * @param orderby Indicates which element is first returned. In case of tie it unties with newdate first
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getQuestionsFromTeam(teamname: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Question>>;
-    public getQuestionsFromTeam(teamname: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Question>>>;
-    public getQuestionsFromTeam(teamname: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Question>>>;
-    public getQuestionsFromTeam(teamname: string, tags?: Array<Array<string>>, likeTitle?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getQuestionsFromTeam(teamname: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'body', reportProgress?: boolean): Observable<Array<Question>>;
+    public getQuestionsFromTeam(teamname: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Question>>>;
+    public getQuestionsFromTeam(teamname: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Question>>>;
+    public getQuestionsFromTeam(teamname: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (teamname === null || teamname === undefined) {
             throw new Error('Required parameter teamname was null or undefined when calling getQuestionsFromTeam.');
         }
+
 
 
 
@@ -750,6 +757,9 @@ export class TeamService {
         }
         if (likeTitle !== undefined && likeTitle !== null) {
             queryParameters = queryParameters.set('likeTitle', <any>likeTitle);
+        }
+        if (orderby !== undefined && orderby !== null) {
+            queryParameters = queryParameters.set('orderby', <any>orderby);
         }
 
         let headers = this.defaultHeaders;
@@ -927,17 +937,19 @@ export class TeamService {
      * @param teamname Teamname of the team to get its tests
      * @param tags 
      * @param likeTitle 
+     * @param orderby Indicates which element is first returned. In case of tie it unties with newdate first
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getTestsFromTeam(teamname: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
-    public getTestsFromTeam(teamname: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
-    public getTestsFromTeam(teamname: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
-    public getTestsFromTeam(teamname: string, tags?: Array<Array<string>>, likeTitle?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getTestsFromTeam(teamname: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
+    public getTestsFromTeam(teamname: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
+    public getTestsFromTeam(teamname: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
+    public getTestsFromTeam(teamname: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (teamname === null || teamname === undefined) {
             throw new Error('Required parameter teamname was null or undefined when calling getTestsFromTeam.');
         }
+
 
 
 
@@ -947,6 +959,9 @@ export class TeamService {
         }
         if (likeTitle !== undefined && likeTitle !== null) {
             queryParameters = queryParameters.set('likeTitle', <any>likeTitle);
+        }
+        if (orderby !== undefined && orderby !== null) {
+            queryParameters = queryParameters.set('orderby', <any>orderby);
         }
 
         let headers = this.defaultHeaders;

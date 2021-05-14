@@ -570,17 +570,19 @@ export class UserService {
      * @param username Username of the user who is allowed to use the questions
      * @param tags 
      * @param likeTitle 
+     * @param orderby Indicates which element is first returned. In case of tie it unties with newdate first
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAvailableEditQuestionsOfUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Question>>;
-    public getAvailableEditQuestionsOfUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Question>>>;
-    public getAvailableEditQuestionsOfUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Question>>>;
-    public getAvailableEditQuestionsOfUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getAvailableEditQuestionsOfUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'body', reportProgress?: boolean): Observable<Array<Question>>;
+    public getAvailableEditQuestionsOfUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Question>>>;
+    public getAvailableEditQuestionsOfUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Question>>>;
+    public getAvailableEditQuestionsOfUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (username === null || username === undefined) {
             throw new Error('Required parameter username was null or undefined when calling getAvailableEditQuestionsOfUser.');
         }
+
 
 
 
@@ -590,6 +592,9 @@ export class UserService {
         }
         if (likeTitle !== undefined && likeTitle !== null) {
             queryParameters = queryParameters.set('likeTitle', <any>likeTitle);
+        }
+        if (orderby !== undefined && orderby !== null) {
+            queryParameters = queryParameters.set('orderby', <any>orderby);
         }
 
         let headers = this.defaultHeaders;
@@ -629,17 +634,19 @@ export class UserService {
      * @param username Username of the user who is allowed to use the questions
      * @param tags 
      * @param likeTitle 
+     * @param orderby Indicates which element is first returned. In case of tie it unties with newdate first
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAvailableQuestionsOfUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Question>>;
-    public getAvailableQuestionsOfUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Question>>>;
-    public getAvailableQuestionsOfUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Question>>>;
-    public getAvailableQuestionsOfUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getAvailableQuestionsOfUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'body', reportProgress?: boolean): Observable<Array<Question>>;
+    public getAvailableQuestionsOfUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Question>>>;
+    public getAvailableQuestionsOfUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Question>>>;
+    public getAvailableQuestionsOfUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (username === null || username === undefined) {
             throw new Error('Required parameter username was null or undefined when calling getAvailableQuestionsOfUser.');
         }
+
 
 
 
@@ -649,6 +656,9 @@ export class UserService {
         }
         if (likeTitle !== undefined && likeTitle !== null) {
             queryParameters = queryParameters.set('likeTitle', <any>likeTitle);
+        }
+        if (orderby !== undefined && orderby !== null) {
+            queryParameters = queryParameters.set('orderby', <any>orderby);
         }
 
         let headers = this.defaultHeaders;
@@ -739,17 +749,19 @@ export class UserService {
      * @param username Username of the user who owns the questions
      * @param tags 
      * @param likeTitle 
+     * @param orderby Indicates which element is first returned. In case of tie it unties with newdate first
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getEditQuestionsOfUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Question>>;
-    public getEditQuestionsOfUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Question>>>;
-    public getEditQuestionsOfUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Question>>>;
-    public getEditQuestionsOfUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getEditQuestionsOfUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'body', reportProgress?: boolean): Observable<Array<Question>>;
+    public getEditQuestionsOfUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Question>>>;
+    public getEditQuestionsOfUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Question>>>;
+    public getEditQuestionsOfUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (username === null || username === undefined) {
             throw new Error('Required parameter username was null or undefined when calling getEditQuestionsOfUser.');
         }
+
 
 
 
@@ -759,6 +771,9 @@ export class UserService {
         }
         if (likeTitle !== undefined && likeTitle !== null) {
             queryParameters = queryParameters.set('likeTitle', <any>likeTitle);
+        }
+        if (orderby !== undefined && orderby !== null) {
+            queryParameters = queryParameters.set('orderby', <any>orderby);
         }
 
         let headers = this.defaultHeaders;
@@ -798,17 +813,19 @@ export class UserService {
      * @param username Username of the teacher who owns the tests
      * @param tags 
      * @param likeTitle 
+     * @param orderby Indicates which element is first returned. In case of tie it unties with newdate first
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getEditTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
-    public getEditTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
-    public getEditTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
-    public getEditTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getEditTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
+    public getEditTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
+    public getEditTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
+    public getEditTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (username === null || username === undefined) {
             throw new Error('Required parameter username was null or undefined when calling getEditTestsFromUser.');
         }
+
 
 
 
@@ -818,6 +835,9 @@ export class UserService {
         }
         if (likeTitle !== undefined && likeTitle !== null) {
             queryParameters = queryParameters.set('likeTitle', <any>likeTitle);
+        }
+        if (orderby !== undefined && orderby !== null) {
+            queryParameters = queryParameters.set('orderby', <any>orderby);
         }
 
         let headers = this.defaultHeaders;
@@ -857,17 +877,19 @@ export class UserService {
      * @param username Username of the user who favorited the questions
      * @param tags 
      * @param likeTitle 
+     * @param orderby Indicates which element is first returned. In case of tie it unties with newdate first
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getFavoriteEditQuestions(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Question>>;
-    public getFavoriteEditQuestions(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Question>>>;
-    public getFavoriteEditQuestions(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Question>>>;
-    public getFavoriteEditQuestions(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getFavoriteEditQuestions(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'body', reportProgress?: boolean): Observable<Array<Question>>;
+    public getFavoriteEditQuestions(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Question>>>;
+    public getFavoriteEditQuestions(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Question>>>;
+    public getFavoriteEditQuestions(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (username === null || username === undefined) {
             throw new Error('Required parameter username was null or undefined when calling getFavoriteEditQuestions.');
         }
+
 
 
 
@@ -877,6 +899,9 @@ export class UserService {
         }
         if (likeTitle !== undefined && likeTitle !== null) {
             queryParameters = queryParameters.set('likeTitle', <any>likeTitle);
+        }
+        if (orderby !== undefined && orderby !== null) {
+            queryParameters = queryParameters.set('orderby', <any>orderby);
         }
 
         let headers = this.defaultHeaders;
@@ -916,17 +941,19 @@ export class UserService {
      * @param username Username of the user who favorited the tests
      * @param tags 
      * @param likeTitle 
+     * @param orderby Indicates which element is first returned. In case of tie it unties with newdate first
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getFavoriteEditTests(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
-    public getFavoriteEditTests(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
-    public getFavoriteEditTests(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
-    public getFavoriteEditTests(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getFavoriteEditTests(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
+    public getFavoriteEditTests(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
+    public getFavoriteEditTests(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
+    public getFavoriteEditTests(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (username === null || username === undefined) {
             throw new Error('Required parameter username was null or undefined when calling getFavoriteEditTests.');
         }
+
 
 
 
@@ -936,6 +963,9 @@ export class UserService {
         }
         if (likeTitle !== undefined && likeTitle !== null) {
             queryParameters = queryParameters.set('likeTitle', <any>likeTitle);
+        }
+        if (orderby !== undefined && orderby !== null) {
+            queryParameters = queryParameters.set('orderby', <any>orderby);
         }
 
         let headers = this.defaultHeaders;
@@ -1026,17 +1056,19 @@ export class UserService {
      * @param username Username of the user who favorited the questions
      * @param tags 
      * @param likeTitle 
+     * @param orderby Indicates which element is first returned. In case of tie it unties with newdate first
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getFavoriteQuestions(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Question>>;
-    public getFavoriteQuestions(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Question>>>;
-    public getFavoriteQuestions(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Question>>>;
-    public getFavoriteQuestions(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getFavoriteQuestions(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'body', reportProgress?: boolean): Observable<Array<Question>>;
+    public getFavoriteQuestions(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Question>>>;
+    public getFavoriteQuestions(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Question>>>;
+    public getFavoriteQuestions(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (username === null || username === undefined) {
             throw new Error('Required parameter username was null or undefined when calling getFavoriteQuestions.');
         }
+
 
 
 
@@ -1046,6 +1078,9 @@ export class UserService {
         }
         if (likeTitle !== undefined && likeTitle !== null) {
             queryParameters = queryParameters.set('likeTitle', <any>likeTitle);
+        }
+        if (orderby !== undefined && orderby !== null) {
+            queryParameters = queryParameters.set('orderby', <any>orderby);
         }
 
         let headers = this.defaultHeaders;
@@ -1136,17 +1171,19 @@ export class UserService {
      * @param username Username of the user who favorited the tests
      * @param tags 
      * @param likeTitle 
+     * @param orderby Indicates which element is first returned. In case of tie it unties with newdate first
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getFavoriteTests(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
-    public getFavoriteTests(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
-    public getFavoriteTests(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
-    public getFavoriteTests(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getFavoriteTests(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
+    public getFavoriteTests(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
+    public getFavoriteTests(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
+    public getFavoriteTests(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (username === null || username === undefined) {
             throw new Error('Required parameter username was null or undefined when calling getFavoriteTests.');
         }
+
 
 
 
@@ -1156,6 +1193,9 @@ export class UserService {
         }
         if (likeTitle !== undefined && likeTitle !== null) {
             queryParameters = queryParameters.set('likeTitle', <any>likeTitle);
+        }
+        if (orderby !== undefined && orderby !== null) {
+            queryParameters = queryParameters.set('orderby', <any>orderby);
         }
 
         let headers = this.defaultHeaders;
@@ -1246,17 +1286,19 @@ export class UserService {
      * @param username Username of the user who is invited
      * @param tags 
      * @param likeTitle 
+     * @param orderby Indicates which element is first returned. In case of tie it unties with newdate first
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getInvitedTestsByTeamsAndUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
-    public getInvitedTestsByTeamsAndUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
-    public getInvitedTestsByTeamsAndUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
-    public getInvitedTestsByTeamsAndUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getInvitedTestsByTeamsAndUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
+    public getInvitedTestsByTeamsAndUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
+    public getInvitedTestsByTeamsAndUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
+    public getInvitedTestsByTeamsAndUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (username === null || username === undefined) {
             throw new Error('Required parameter username was null or undefined when calling getInvitedTestsByTeamsAndUser.');
         }
+
 
 
 
@@ -1266,6 +1308,9 @@ export class UserService {
         }
         if (likeTitle !== undefined && likeTitle !== null) {
             queryParameters = queryParameters.set('likeTitle', <any>likeTitle);
+        }
+        if (orderby !== undefined && orderby !== null) {
+            queryParameters = queryParameters.set('orderby', <any>orderby);
         }
 
         let headers = this.defaultHeaders;
@@ -1305,17 +1350,19 @@ export class UserService {
      * @param username Username of the user who is invited
      * @param tags 
      * @param likeTitle 
+     * @param orderby Indicates which element is first returned. In case of tie it unties with newdate first
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getInvitedTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
-    public getInvitedTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
-    public getInvitedTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
-    public getInvitedTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getInvitedTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
+    public getInvitedTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
+    public getInvitedTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
+    public getInvitedTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (username === null || username === undefined) {
             throw new Error('Required parameter username was null or undefined when calling getInvitedTestsFromUser.');
         }
+
 
 
 
@@ -1325,6 +1372,9 @@ export class UserService {
         }
         if (likeTitle !== undefined && likeTitle !== null) {
             queryParameters = queryParameters.set('likeTitle', <any>likeTitle);
+        }
+        if (orderby !== undefined && orderby !== null) {
+            queryParameters = queryParameters.set('orderby', <any>orderby);
         }
 
         let headers = this.defaultHeaders;
@@ -1415,17 +1465,19 @@ export class UserService {
      * @param username Username of the user who owns the questions
      * @param tags 
      * @param likeTitle 
+     * @param orderby Indicates which element is first returned. In case of tie it unties with newdate first
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getPublicEditQuestionsOfUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Question>>;
-    public getPublicEditQuestionsOfUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Question>>>;
-    public getPublicEditQuestionsOfUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Question>>>;
-    public getPublicEditQuestionsOfUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getPublicEditQuestionsOfUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'body', reportProgress?: boolean): Observable<Array<Question>>;
+    public getPublicEditQuestionsOfUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Question>>>;
+    public getPublicEditQuestionsOfUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Question>>>;
+    public getPublicEditQuestionsOfUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (username === null || username === undefined) {
             throw new Error('Required parameter username was null or undefined when calling getPublicEditQuestionsOfUser.');
         }
+
 
 
 
@@ -1435,6 +1487,9 @@ export class UserService {
         }
         if (likeTitle !== undefined && likeTitle !== null) {
             queryParameters = queryParameters.set('likeTitle', <any>likeTitle);
+        }
+        if (orderby !== undefined && orderby !== null) {
+            queryParameters = queryParameters.set('orderby', <any>orderby);
         }
 
         let headers = this.defaultHeaders;
@@ -1474,17 +1529,19 @@ export class UserService {
      * @param username Username of the teacher who owns the tests
      * @param tags 
      * @param likeTitle 
+     * @param orderby Indicates which element is first returned. In case of tie it unties with newdate first
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getPublicEditTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
-    public getPublicEditTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
-    public getPublicEditTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
-    public getPublicEditTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getPublicEditTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
+    public getPublicEditTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
+    public getPublicEditTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
+    public getPublicEditTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (username === null || username === undefined) {
             throw new Error('Required parameter username was null or undefined when calling getPublicEditTestsFromUser.');
         }
+
 
 
 
@@ -1494,6 +1551,9 @@ export class UserService {
         }
         if (likeTitle !== undefined && likeTitle !== null) {
             queryParameters = queryParameters.set('likeTitle', <any>likeTitle);
+        }
+        if (orderby !== undefined && orderby !== null) {
+            queryParameters = queryParameters.set('orderby', <any>orderby);
         }
 
         let headers = this.defaultHeaders;
@@ -1533,17 +1593,19 @@ export class UserService {
      * @param username Username of the user who owns the publishedTests
      * @param tags 
      * @param likeTitle 
+     * @param orderby Indicates which element is first returned. In case of tie it unties with newdate first
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getPublicPublishedTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
-    public getPublicPublishedTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
-    public getPublicPublishedTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
-    public getPublicPublishedTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getPublicPublishedTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
+    public getPublicPublishedTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
+    public getPublicPublishedTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
+    public getPublicPublishedTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (username === null || username === undefined) {
             throw new Error('Required parameter username was null or undefined when calling getPublicPublishedTestsFromUser.');
         }
+
 
 
 
@@ -1553,6 +1615,9 @@ export class UserService {
         }
         if (likeTitle !== undefined && likeTitle !== null) {
             queryParameters = queryParameters.set('likeTitle', <any>likeTitle);
+        }
+        if (orderby !== undefined && orderby !== null) {
+            queryParameters = queryParameters.set('orderby', <any>orderby);
         }
 
         let headers = this.defaultHeaders;
@@ -1592,17 +1657,19 @@ export class UserService {
      * @param username Username of the user who owns the publishedTests
      * @param tags 
      * @param likeTitle 
+     * @param orderby Indicates which element is first returned. In case of tie it unties with newdate first
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getPublishedTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
-    public getPublishedTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
-    public getPublishedTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
-    public getPublishedTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getPublishedTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
+    public getPublishedTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
+    public getPublishedTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
+    public getPublishedTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (username === null || username === undefined) {
             throw new Error('Required parameter username was null or undefined when calling getPublishedTestsFromUser.');
         }
+
 
 
 
@@ -1612,6 +1679,9 @@ export class UserService {
         }
         if (likeTitle !== undefined && likeTitle !== null) {
             queryParameters = queryParameters.set('likeTitle', <any>likeTitle);
+        }
+        if (orderby !== undefined && orderby !== null) {
+            queryParameters = queryParameters.set('orderby', <any>orderby);
         }
 
         let headers = this.defaultHeaders;
@@ -1702,17 +1772,19 @@ export class UserService {
      * @param username Username of the user who owns the questions
      * @param tags 
      * @param likeTitle 
+     * @param orderby Indicates which element is first returned. In case of tie it unties with newdate first
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getQuestionsOfUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Question>>;
-    public getQuestionsOfUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Question>>>;
-    public getQuestionsOfUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Question>>>;
-    public getQuestionsOfUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getQuestionsOfUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'body', reportProgress?: boolean): Observable<Array<Question>>;
+    public getQuestionsOfUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Question>>>;
+    public getQuestionsOfUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Question>>>;
+    public getQuestionsOfUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (username === null || username === undefined) {
             throw new Error('Required parameter username was null or undefined when calling getQuestionsOfUser.');
         }
+
 
 
 
@@ -1722,6 +1794,9 @@ export class UserService {
         }
         if (likeTitle !== undefined && likeTitle !== null) {
             queryParameters = queryParameters.set('likeTitle', <any>likeTitle);
+        }
+        if (orderby !== undefined && orderby !== null) {
+            queryParameters = queryParameters.set('orderby', <any>orderby);
         }
 
         let headers = this.defaultHeaders;
@@ -1761,17 +1836,19 @@ export class UserService {
      * @param username Username of the teacher who is shared the non-published  tests
      * @param tags 
      * @param likeTitle 
+     * @param orderby Indicates which element is first returned. In case of tie it unties with newdate first
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getSharedEditTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
-    public getSharedEditTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
-    public getSharedEditTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
-    public getSharedEditTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getSharedEditTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
+    public getSharedEditTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
+    public getSharedEditTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
+    public getSharedEditTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (username === null || username === undefined) {
             throw new Error('Required parameter username was null or undefined when calling getSharedEditTestsFromUser.');
         }
+
 
 
 
@@ -1781,6 +1858,9 @@ export class UserService {
         }
         if (likeTitle !== undefined && likeTitle !== null) {
             queryParameters = queryParameters.set('likeTitle', <any>likeTitle);
+        }
+        if (orderby !== undefined && orderby !== null) {
+            queryParameters = queryParameters.set('orderby', <any>orderby);
         }
 
         let headers = this.defaultHeaders;
@@ -1820,17 +1900,19 @@ export class UserService {
      * @param username Username of the teacher who is shared the published tests
      * @param tags 
      * @param likeTitle 
+     * @param orderby Indicates which element is first returned. In case of tie it unties with newdate first
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getSharedPublishedTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
-    public getSharedPublishedTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
-    public getSharedPublishedTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
-    public getSharedPublishedTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getSharedPublishedTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
+    public getSharedPublishedTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
+    public getSharedPublishedTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
+    public getSharedPublishedTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (username === null || username === undefined) {
             throw new Error('Required parameter username was null or undefined when calling getSharedPublishedTestsFromUser.');
         }
+
 
 
 
@@ -1840,6 +1922,9 @@ export class UserService {
         }
         if (likeTitle !== undefined && likeTitle !== null) {
             queryParameters = queryParameters.set('likeTitle', <any>likeTitle);
+        }
+        if (orderby !== undefined && orderby !== null) {
+            queryParameters = queryParameters.set('orderby', <any>orderby);
         }
 
         let headers = this.defaultHeaders;
@@ -1930,17 +2015,19 @@ export class UserService {
      * @param username Username of the user who is shared the questions
      * @param tags 
      * @param likeTitle 
+     * @param orderby Indicates which element is first returned. In case of tie it unties with newdate first
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getSharedQuestionsOfUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Question>>;
-    public getSharedQuestionsOfUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Question>>>;
-    public getSharedQuestionsOfUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Question>>>;
-    public getSharedQuestionsOfUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getSharedQuestionsOfUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'body', reportProgress?: boolean): Observable<Array<Question>>;
+    public getSharedQuestionsOfUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Question>>>;
+    public getSharedQuestionsOfUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Question>>>;
+    public getSharedQuestionsOfUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (username === null || username === undefined) {
             throw new Error('Required parameter username was null or undefined when calling getSharedQuestionsOfUser.');
         }
+
 
 
 
@@ -1950,6 +2037,9 @@ export class UserService {
         }
         if (likeTitle !== undefined && likeTitle !== null) {
             queryParameters = queryParameters.set('likeTitle', <any>likeTitle);
+        }
+        if (orderby !== undefined && orderby !== null) {
+            queryParameters = queryParameters.set('orderby', <any>orderby);
         }
 
         let headers = this.defaultHeaders;
@@ -2137,17 +2227,19 @@ export class UserService {
      * @param username Username of the user who can answer the publishedTests
      * @param tags 
      * @param likeTitle 
+     * @param orderby Indicates which element is first returned. In case of tie it unties with newdate first
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getSolvableTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
-    public getSolvableTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
-    public getSolvableTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
-    public getSolvableTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getSolvableTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
+    public getSolvableTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
+    public getSolvableTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
+    public getSolvableTestsFromUser(username: string, tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (username === null || username === undefined) {
             throw new Error('Required parameter username was null or undefined when calling getSolvableTestsFromUser.');
         }
+
 
 
 
@@ -2157,6 +2249,9 @@ export class UserService {
         }
         if (likeTitle !== undefined && likeTitle !== null) {
             queryParameters = queryParameters.set('likeTitle', <any>likeTitle);
+        }
+        if (orderby !== undefined && orderby !== null) {
+            queryParameters = queryParameters.set('orderby', <any>orderby);
         }
 
         let headers = this.defaultHeaders;

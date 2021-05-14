@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Question, QuestionService, TagService, TeamService, UserService } from '@javgat/devtest-api';
 import { LoggedInController } from '../shared/app.controller';
-import { tipoPrint } from '../shared/app.model';
+import { EnumOrderBy, tipoPrint } from '../shared/app.model';
 import { DataService } from '../shared/data.service';
 import { SessionService } from '../shared/session.service';
 
@@ -23,6 +23,7 @@ export class ListQuestionsComponent extends LoggedInController implements OnInit
   hideSwitchInclude: boolean
   scrollable: boolean
   selectAddQuestion: boolean
+  orderBy: EnumOrderBy
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService,
      protected qS: QuestionService, protected tagS: TagService, protected teamS?: TeamService) {
     super(session, router, data, userS)
@@ -35,6 +36,7 @@ export class ListQuestionsComponent extends LoggedInController implements OnInit
     this.hideSwitchInclude = false
     this.scrollable = false
     this.selectAddQuestion = false
+    this.orderBy = EnumOrderBy.newDate
     this.getQuestionsFilters()
   }
 
@@ -47,7 +49,7 @@ export class ListQuestionsComponent extends LoggedInController implements OnInit
 
   // esta funcion se tiene que sobreescribir
   getQuestionsInclude(primera: boolean) {
-    this.qS.getQuestions(this.searchTags, this.likeTitle).subscribe(
+    this.qS.getQuestions(this.searchTags, this.likeTitle, this.orderBy).subscribe(
       resp => this.questions = resp,
       err => this.handleErrRelog(err, "obtener preguntas", primera, this.getQuestionsInclude, this)
     )
@@ -55,7 +57,7 @@ export class ListQuestionsComponent extends LoggedInController implements OnInit
 
   // esta funcion se tiene que sobreescribir
   getQuestionsEdit(primera: boolean) {
-    this.qS.getEditQuestions(this.searchTags, this.likeTitle).subscribe(
+    this.qS.getEditQuestions(this.searchTags, this.likeTitle, this.orderBy).subscribe(
       resp => this.questions = resp,
       err => this.handleErrRelog(err, "obtener preguntas no publicadas", primera, this.getQuestionsEdit, this)
     )
@@ -167,6 +169,44 @@ export class ListQuestionsComponent extends LoggedInController implements OnInit
     );
   
     window.open(url, '_blank');
+  }
+
+  clickOrderByTiempo(){
+    if(this.orderBy == EnumOrderBy.moreTime){
+      this.orderBy = EnumOrderBy.lessTime
+    }else if(this.orderBy == EnumOrderBy.lessTime){
+      this.orderBy = EnumOrderBy.newDate
+    }else{
+      this.orderBy = EnumOrderBy.moreTime
+    }
+    this.getQuestionsFilters()
+  }
+
+  clickOrderByFavoritos(){
+    if(this.orderBy == EnumOrderBy.moreFav){
+      this.orderBy = EnumOrderBy.lessFav
+    }else if(this.orderBy == EnumOrderBy.lessFav){
+      this.orderBy = EnumOrderBy.newDate
+    }else{
+      this.orderBy = EnumOrderBy.moreFav
+    }
+    this.getQuestionsFilters()
+  }
+
+  isMoreTimeSelected(): boolean{
+    return this.orderBy == EnumOrderBy.moreTime
+  }
+
+  isLessTimeSelected(): boolean{
+    return this.orderBy == EnumOrderBy.lessTime
+  }
+
+  isMoreFavSelected(): boolean{
+    return this.orderBy == EnumOrderBy.moreFav
+  }
+
+  isLessFavSelected(): boolean{
+    return this.orderBy == EnumOrderBy.lessFav
   }
 
 }

@@ -357,7 +357,7 @@ func GetQuestionsFromTeam(params team.GetQuestionsFromTeamParams, u *models.User
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var questions []*dao.Question
-			questions, err = dao.GetQuestionsFromTeam(db, params.Teamname, params.Tags, params.LikeTitle)
+			questions, err = dao.GetQuestionsFromTeam(db, params.Teamname, params.Tags, params.LikeTitle, params.Orderby)
 			if err == nil {
 				mq, err := dao.ToModelQuestions(questions)
 				if err == nil && mq != nil {
@@ -398,7 +398,7 @@ func GetTestsFromTeam(params team.GetTestsFromTeamParams, u *models.User) middle
 	if isTeamMember(params.Teamname, u) || isAdmin(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			tests, err := dao.GetTestsFromTeam(db, params.Teamname, params.Tags, params.LikeTitle)
+			tests, err := dao.GetTestsFromTeam(db, params.Teamname, params.Tags, params.LikeTitle, params.Orderby)
 			if err == nil {
 				mt, err := dao.ToModelTests(tests)
 				if err == nil && mt != nil {
@@ -478,7 +478,7 @@ func GetInvitedTestsFromTeam(params team.GetInvitedTestsFromTeamParams, u *model
 	if isTeamMember(params.Teamname, u) || isAdmin(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			tests, err := dao.GetInvitedTestsFromTeam(db, params.Teamname, params.Tags, params.LikeTitle)
+			tests, err := dao.GetInvitedTestsFromTeam(db, params.Teamname, params.Tags, params.LikeTitle, params.Orderby)
 			if err == nil {
 				mt, err := dao.ToModelTests(tests)
 				if err == nil && mt != nil {

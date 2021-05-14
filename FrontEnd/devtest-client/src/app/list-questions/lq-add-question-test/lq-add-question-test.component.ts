@@ -34,7 +34,7 @@ export class LqAddQuestionTestComponent extends ListQuestionsComponent implement
   getQuestionsInclude(primera: boolean) {
     if(this.getSessionUser().isEmpty()) return
     var username = this.getSessionUser().getUsername()
-    this.userS.getAvailableQuestionsOfUser(username, this.searchTags, this.likeTitle).subscribe(
+    this.userS.getAvailableQuestionsOfUser(username, this.searchTags, this.likeTitle, this.orderBy).subscribe(
       resp => this.questions = resp,
       err => this.handleErrRelog(err, "obtener preguntas disponibles para un usuario", primera, this.getQuestionsInclude, this)
     )
@@ -43,7 +43,7 @@ export class LqAddQuestionTestComponent extends ListQuestionsComponent implement
   getQuestionsEdit(primera: boolean) {
     if(this.getSessionUser().isEmpty()) return
     var username = this.getSessionUser().getUsername()
-    this.userS.getAvailableEditQuestionsOfUser(username, this.searchTags, this.likeTitle).subscribe(
+    this.userS.getAvailableEditQuestionsOfUser(username, this.searchTags, this.likeTitle, this.orderBy).subscribe(
       resp => this.questions = resp,
       err => this.handleErrRelog(err, "obtener preguntas editables disponibles para un usuario", primera, this.getQuestionsInclude, this)
     )

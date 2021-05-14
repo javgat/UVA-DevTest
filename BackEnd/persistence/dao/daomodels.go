@@ -359,3 +359,17 @@ type MailToken struct {
 
 	Caducidad time.Time
 }
+
+const (
+	OrderByNewDate string = "newDate"
+
+	OrderByOldDate string = "oldDate"
+
+	OrderByMoreFav string = "moreFav"
+
+	OrderByLessFav string = "lessFav"
+
+	OrderByMoreTime string = "moreTime"
+
+	OrderByLessTime string = "lessTime"
+)

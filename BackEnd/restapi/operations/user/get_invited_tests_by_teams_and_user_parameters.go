@@ -13,6 +13,7 @@ import (
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // NewGetInvitedTestsByTeamsAndUserParams creates a new GetInvitedTestsByTeamsAndUserParams object
@@ -36,6 +37,10 @@ type GetInvitedTestsByTeamsAndUserParams struct {
 	  In: query
 	*/
 	LikeTitle *string
+	/*Indicates which element is first returned. In case of tie it unties with newdate first
+	  In: query
+	*/
+	Orderby *string
 	/*
 	  In: query
 	  Collection Format: pipes
@@ -61,6 +66,11 @@ func (o *GetInvitedTestsByTeamsAndUserParams) BindRequest(r *http.Request, route
 
 	qLikeTitle, qhkLikeTitle, _ := qs.GetOK("likeTitle")
 	if err := o.bindLikeTitle(qLikeTitle, qhkLikeTitle, route.Formats); err != nil {
+		res = append(res, err)
+	}
+
+	qOrderby, qhkOrderby, _ := qs.GetOK("orderby")
+	if err := o.bindOrderby(qOrderby, qhkOrderby, route.Formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -93,6 +103,38 @@ func (o *GetInvitedTestsByTeamsAndUserParams) bindLikeTitle(rawData []string, ha
 		return nil
 	}
 	o.LikeTitle = &raw
+
+	return nil
+}
+
+// bindOrderby binds and validates parameter Orderby from query.
+func (o *GetInvitedTestsByTeamsAndUserParams) bindOrderby(rawData []string, hasKey bool, formats strfmt.Registry) error {
+	var raw string
+	if len(rawData) > 0 {
+		raw = rawData[len(rawData)-1]
+	}
+
+	// Required: false
+	// AllowEmptyValue: false
+
+	if raw == "" { // empty values pass all other validations
+		return nil
+	}
+	o.Orderby = &raw
+
+	if err := o.validateOrderby(formats); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// validateOrderby carries on validations for parameter Orderby
+func (o *GetInvitedTestsByTeamsAndUserParams) validateOrderby(formats strfmt.Registry) error {
+
+	if err := validate.EnumCase("orderby", "query", *o.Orderby, []interface{}{"newDate", "oldDate", "moreFav", "lessFav", "moreTime", "lessTime"}, true); err != nil {
+		return err
+	}
 
 	return nil
 }

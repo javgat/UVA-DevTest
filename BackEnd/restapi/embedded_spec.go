@@ -170,6 +170,20 @@ func init() {
             "type": "string",
             "name": "likeTitle",
             "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
+            "in": "query"
           }
         ],
         "responses": {
@@ -227,6 +241,20 @@ func init() {
           {
             "type": "string",
             "name": "likeTitle",
+            "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
             "in": "query"
           }
         ],
@@ -1042,6 +1070,20 @@ func init() {
             "type": "string",
             "name": "likeTitle",
             "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
+            "in": "query"
           }
         ],
         "responses": {
@@ -1295,6 +1337,20 @@ func init() {
             "type": "string",
             "name": "likeTitle",
             "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
+            "in": "query"
           }
         ],
         "responses": {
@@ -1352,6 +1408,20 @@ func init() {
           {
             "type": "string",
             "name": "likeTitle",
+            "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
             "in": "query"
           }
         ],
@@ -2425,6 +2495,20 @@ func init() {
           {
             "type": "string",
             "name": "likeTitle",
+            "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
             "in": "query"
           }
         ],
@@ -3903,6 +3987,20 @@ func init() {
             "type": "string",
             "name": "likeTitle",
             "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
+            "in": "query"
           }
         ],
         "responses": {
@@ -4293,6 +4391,20 @@ func init() {
             "type": "string",
             "name": "likeTitle",
             "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
+            "in": "query"
           }
         ],
         "responses": {
@@ -4414,6 +4526,20 @@ func init() {
           {
             "type": "string",
             "name": "likeTitle",
+            "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
             "in": "query"
           }
         ],
@@ -6119,6 +6245,20 @@ func init() {
             "type": "string",
             "name": "likeTitle",
             "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
+            "in": "query"
           }
         ],
         "responses": {
@@ -6186,6 +6326,20 @@ func init() {
           {
             "type": "string",
             "name": "likeTitle",
+            "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
             "in": "query"
           }
         ],
@@ -6255,6 +6409,20 @@ func init() {
             "type": "string",
             "name": "likeTitle",
             "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
+            "in": "query"
           }
         ],
         "responses": {
@@ -6322,6 +6490,20 @@ func init() {
           {
             "type": "string",
             "name": "likeTitle",
+            "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
             "in": "query"
           }
         ],
@@ -6391,6 +6573,20 @@ func init() {
             "type": "string",
             "name": "likeTitle",
             "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
+            "in": "query"
           }
         ],
         "responses": {
@@ -6459,6 +6655,20 @@ func init() {
             "type": "string",
             "name": "likeTitle",
             "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
+            "in": "query"
           }
         ],
         "responses": {
@@ -6526,6 +6736,20 @@ func init() {
           {
             "type": "string",
             "name": "likeTitle",
+            "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
             "in": "query"
           }
         ],
@@ -6747,6 +6971,20 @@ func init() {
             "type": "string",
             "name": "likeTitle",
             "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
+            "in": "query"
           }
         ],
         "responses": {
@@ -6967,6 +7205,20 @@ func init() {
             "type": "string",
             "name": "likeTitle",
             "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
+            "in": "query"
           }
         ],
         "responses": {
@@ -7088,6 +7340,20 @@ func init() {
           {
             "type": "string",
             "name": "likeTitle",
+            "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
             "in": "query"
           }
         ],
@@ -7250,6 +7516,20 @@ func init() {
             "type": "string",
             "name": "likeTitle",
             "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
+            "in": "query"
           }
         ],
         "responses": {
@@ -7317,6 +7597,20 @@ func init() {
           {
             "type": "string",
             "name": "likeTitle",
+            "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
             "in": "query"
           }
         ],
@@ -7386,6 +7680,20 @@ func init() {
             "type": "string",
             "name": "likeTitle",
             "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
+            "in": "query"
           }
         ],
         "responses": {
@@ -7454,6 +7762,20 @@ func init() {
             "type": "string",
             "name": "likeTitle",
             "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
+            "in": "query"
           }
         ],
         "responses": {
@@ -7521,6 +7843,20 @@ func init() {
           {
             "type": "string",
             "name": "likeTitle",
+            "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
             "in": "query"
           }
         ],
@@ -7858,6 +8194,20 @@ func init() {
             "type": "string",
             "name": "likeTitle",
             "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
+            "in": "query"
           }
         ],
         "responses": {
@@ -7926,6 +8276,20 @@ func init() {
             "type": "string",
             "name": "likeTitle",
             "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
+            "in": "query"
           }
         ],
         "responses": {
@@ -7993,6 +8357,20 @@ func init() {
           {
             "type": "string",
             "name": "likeTitle",
+            "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
             "in": "query"
           }
         ],
@@ -8219,6 +8597,20 @@ func init() {
           {
             "type": "string",
             "name": "likeTitle",
+            "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
             "in": "query"
           }
         ],
@@ -9641,6 +10033,20 @@ func init() {
             "type": "string",
             "name": "likeTitle",
             "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
+            "in": "query"
           }
         ],
         "responses": {
@@ -9704,6 +10110,20 @@ func init() {
           {
             "type": "string",
             "name": "likeTitle",
+            "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
             "in": "query"
           }
         ],
@@ -10654,6 +11074,20 @@ func init() {
             "type": "string",
             "name": "likeTitle",
             "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
+            "in": "query"
           }
         ],
         "responses": {
@@ -10943,6 +11377,20 @@ func init() {
             "type": "string",
             "name": "likeTitle",
             "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
+            "in": "query"
           }
         ],
         "responses": {
@@ -11006,6 +11454,20 @@ func init() {
           {
             "type": "string",
             "name": "likeTitle",
+            "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
             "in": "query"
           }
         ],
@@ -12259,6 +12721,20 @@ func init() {
           {
             "type": "string",
             "name": "likeTitle",
+            "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
             "in": "query"
           }
         ],
@@ -13998,6 +14474,20 @@ func init() {
             "type": "string",
             "name": "likeTitle",
             "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
+            "in": "query"
           }
         ],
         "responses": {
@@ -14454,6 +14944,20 @@ func init() {
             "type": "string",
             "name": "likeTitle",
             "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
+            "in": "query"
           }
         ],
         "responses": {
@@ -14593,6 +15097,20 @@ func init() {
           {
             "type": "string",
             "name": "likeTitle",
+            "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
             "in": "query"
           }
         ],
@@ -16595,6 +17113,20 @@ func init() {
             "type": "string",
             "name": "likeTitle",
             "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
+            "in": "query"
           }
         ],
         "responses": {
@@ -16671,6 +17203,20 @@ func init() {
           {
             "type": "string",
             "name": "likeTitle",
+            "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
             "in": "query"
           }
         ],
@@ -16749,6 +17295,20 @@ func init() {
             "type": "string",
             "name": "likeTitle",
             "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
+            "in": "query"
           }
         ],
         "responses": {
@@ -16825,6 +17385,20 @@ func init() {
           {
             "type": "string",
             "name": "likeTitle",
+            "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
             "in": "query"
           }
         ],
@@ -16903,6 +17477,20 @@ func init() {
             "type": "string",
             "name": "likeTitle",
             "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
+            "in": "query"
           }
         ],
         "responses": {
@@ -16980,6 +17568,20 @@ func init() {
             "type": "string",
             "name": "likeTitle",
             "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
+            "in": "query"
           }
         ],
         "responses": {
@@ -17056,6 +17658,20 @@ func init() {
           {
             "type": "string",
             "name": "likeTitle",
+            "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
             "in": "query"
           }
         ],
@@ -17313,6 +17929,20 @@ func init() {
             "type": "string",
             "name": "likeTitle",
             "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
+            "in": "query"
           }
         ],
         "responses": {
@@ -17569,6 +18199,20 @@ func init() {
             "type": "string",
             "name": "likeTitle",
             "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
+            "in": "query"
           }
         ],
         "responses": {
@@ -17708,6 +18352,20 @@ func init() {
           {
             "type": "string",
             "name": "likeTitle",
+            "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
             "in": "query"
           }
         ],
@@ -17897,6 +18555,20 @@ func init() {
             "type": "string",
             "name": "likeTitle",
             "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
+            "in": "query"
           }
         ],
         "responses": {
@@ -17973,6 +18645,20 @@ func init() {
           {
             "type": "string",
             "name": "likeTitle",
+            "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
             "in": "query"
           }
         ],
@@ -18051,6 +18737,20 @@ func init() {
             "type": "string",
             "name": "likeTitle",
             "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
+            "in": "query"
           }
         ],
         "responses": {
@@ -18128,6 +18828,20 @@ func init() {
             "type": "string",
             "name": "likeTitle",
             "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
+            "in": "query"
           }
         ],
         "responses": {
@@ -18204,6 +18918,20 @@ func init() {
           {
             "type": "string",
             "name": "likeTitle",
+            "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
             "in": "query"
           }
         ],
@@ -18595,6 +19323,20 @@ func init() {
             "type": "string",
             "name": "likeTitle",
             "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
+            "in": "query"
           }
         ],
         "responses": {
@@ -18672,6 +19414,20 @@ func init() {
             "type": "string",
             "name": "likeTitle",
             "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
+            "in": "query"
           }
         ],
         "responses": {
@@ -18748,6 +19504,20 @@ func init() {
           {
             "type": "string",
             "name": "likeTitle",
+            "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
             "in": "query"
           }
         ],
@@ -19010,6 +19780,20 @@ func init() {
           {
             "type": "string",
             "name": "likeTitle",
+            "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
             "in": "query"
           }
         ],

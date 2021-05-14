@@ -34,7 +34,7 @@ export class LqFavsUserComponent extends ListQuestionsComponent implements OnIni
 
   getQuestionsInclude(primera: boolean) {
     if(this.id==undefined) return
-    this.userS.getFavoriteQuestions(this.id, this.searchTags, this.likeTitle).subscribe(
+    this.userS.getFavoriteQuestions(this.id, this.searchTags, this.likeTitle, this.orderBy).subscribe(
       resp => this.questions = resp,
       err => this.handleErrRelog(err, "obtener preguntas favoritas de un usuario", primera, this.getQuestionsInclude, this)
     )
@@ -42,7 +42,7 @@ export class LqFavsUserComponent extends ListQuestionsComponent implements OnIni
 
   getQuestionsEdit(primera: boolean) {
     if(this.id==undefined) return
-    this.userS.getFavoriteEditQuestions(this.id, this.searchTags, this.likeTitle).subscribe(
+    this.userS.getFavoriteEditQuestions(this.id, this.searchTags, this.likeTitle, this.orderBy).subscribe(
       resp => this.questions = resp,
       err => this.handleErrRelog(err, "obtener preguntas favoritas editables de un usuario", primera, this.getQuestionsEdit, this)
     )

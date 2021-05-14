@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TagService, TeamService, Test, TestService, UserService } from '@javgat/devtest-api';
 import { LoggedInController } from '../shared/app.controller';
-import { tipoPrint } from '../shared/app.model';
+import { EnumOrderBy, tipoPrint } from '../shared/app.model';
 import { DataService } from '../shared/data.service';
 import { SessionService } from '../shared/session.service';
 @Component({
@@ -22,6 +22,7 @@ export class ListTestsComponent extends LoggedInController implements OnInit {
   hideSwitchInclude: boolean
   includeLabel: string
   arePublished: boolean
+  orderBy: EnumOrderBy
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, protected tS: TestService,
      protected tagS: TagService, protected teamS?: TeamService) {
     super(session, router, data, userS)
@@ -34,6 +35,7 @@ export class ListTestsComponent extends LoggedInController implements OnInit {
     this.hideSwitchInclude = true
     this.arePublished = false
     this.includeLabel = "Incluir tests publicados"
+    this.orderBy = EnumOrderBy.newDate
     this.getTestsFilters()
   }
 
@@ -51,7 +53,7 @@ export class ListTestsComponent extends LoggedInController implements OnInit {
 
   // esta funcion se tiene que sobreescribir
   getTestsEdit(primera: boolean) {
-    this.tS.getPublicEditTests(this.searchTags, this.likeTitle).subscribe(
+    this.tS.getPublicEditTests(this.searchTags, this.likeTitle, this.orderBy).subscribe(
       resp => this.tests = resp,
       err => this.handleErrRelog(err, "obtener preguntas no publicadas", primera, this.getTestsEdit, this)
     )
@@ -155,4 +157,41 @@ export class ListTestsComponent extends LoggedInController implements OnInit {
     this.getTestsFilters()
   }
 
+  clickOrderByTiempo(){
+    if(this.orderBy == EnumOrderBy.moreTime){
+      this.orderBy = EnumOrderBy.lessTime
+    }else if(this.orderBy == EnumOrderBy.lessTime){
+      this.orderBy = EnumOrderBy.newDate
+    }else{
+      this.orderBy = EnumOrderBy.moreTime
+    }
+    this.getTestsFilters()
+  }
+
+  clickOrderByFavoritos(){
+    if(this.orderBy == EnumOrderBy.moreFav){
+      this.orderBy = EnumOrderBy.lessFav
+    }else if(this.orderBy == EnumOrderBy.lessFav){
+      this.orderBy = EnumOrderBy.newDate
+    }else{
+      this.orderBy = EnumOrderBy.moreFav
+    }
+    this.getTestsFilters()
+  }
+
+  isMoreTimeSelected(): boolean{
+    return this.orderBy == EnumOrderBy.moreTime
+  }
+
+  isLessTimeSelected(): boolean{
+    return this.orderBy == EnumOrderBy.lessTime
+  }
+
+  isMoreFavSelected(): boolean{
+    return this.orderBy == EnumOrderBy.moreFav
+  }
+
+  isLessFavSelected(): boolean{
+    return this.orderBy == EnumOrderBy.lessFav
+  }
 }
