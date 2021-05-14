@@ -31,9 +31,9 @@
               <hr class="dropdown-divider" />
             </li>
 
-            <li class="dropdown-submenu dropend">
-              <a class="dropdown-item" [routerLink]="['/ptests']">Tests Publicados</a>
-              <ul class="dropdown-menu">
+            <li>
+              <a class="dropdown-item" [routerLink]="['/ptests']">Tests Publicados &raquo;</a>
+              <ul class="dropdown-menu submenu">
                 <li><a class="dropdown-item" [routerLink]="['/ptests']">Explorar Tests Publicados</a></li>
                 <li><a class="dropdown-item" [routerLink]="['/u', getSessionUser().getUsername(), 'pt']">Mis Tests
                     Publicados</a>
@@ -45,9 +45,9 @@
             <li>
               <hr class="dropdown-divider" />
             </li>
-            <li class="dropdown-submenu dropend">
-              <a class="dropdown-item" [routerLink]="['/ptests']">Responder Tests Publicados</a>
-              <ul class="dropdown-menu">
+            <li>
+              <a class="dropdown-item" [routerLink]="['/ptests']">Responder Tests Publicados &raquo;</a>
+              <ul class="dropdown-menu submenu">
                 <li><a class="dropdown-item" [routerLink]="['/ptests']">Tests Públicos</a></li>
                 <li><a class="dropdown-item" [routerLink]="['/u', getSessionUser().getUsername(), 'invited']">Tests Con
                     Invitación</a></li>
