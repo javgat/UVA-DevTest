@@ -148,7 +148,7 @@ func (o *GetOptionFromQuestionForbidden) WriteResponse(rw http.ResponseWriter, p
 // GetOptionFromQuestionGoneCode is the HTTP code returned for type GetOptionFromQuestionGone
 const GetOptionFromQuestionGoneCode int = 410
 
-/*GetOptionFromQuestionGone That user (password and name) does not exist
+/*GetOptionFromQuestionGone That resource does not exist
 
 swagger:response getOptionFromQuestionGone
 */

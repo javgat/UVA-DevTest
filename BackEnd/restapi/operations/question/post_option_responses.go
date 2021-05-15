@@ -148,7 +148,7 @@ func (o *PostOptionForbidden) WriteResponse(rw http.ResponseWriter, producer run
 // PostOptionGoneCode is the HTTP code returned for type PostOptionGone
 const PostOptionGoneCode int = 410
 
-/*PostOptionGone That user (password and name) does not exist
+/*PostOptionGone That resource does not exist
 
 swagger:response postOptionGone
 */

@@ -128,7 +128,7 @@ func (o *PutOptionForbidden) WriteResponse(rw http.ResponseWriter, producer runt
 // PutOptionGoneCode is the HTTP code returned for type PutOptionGone
 const PutOptionGoneCode int = 410
 
-/*PutOptionGone That user (password and name) does not exist
+/*PutOptionGone That resource does not exist
 
 swagger:response putOptionGone
 */

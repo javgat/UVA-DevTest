@@ -679,6 +679,11 @@ func AddTagToTest(params test.AddTagToTestParams, u *models.User) middleware.Res
 	if testEditable(params.Testid) && (isAdmin(u) || isTestAdmin(u, params.Testid)) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
+			var t *dao.Tag
+			t, _ = dao.GetTestTag(db, params.Testid, params.Tag)
+			if t != nil {
+				return test.NewAddTagToTestConflict()
+			}
 			err = dao.AddTestTag(db, params.Testid, params.Tag)
 			if err == nil {
 				return test.NewAddTagToTestOK()

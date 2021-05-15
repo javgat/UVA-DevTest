@@ -4212,6 +4212,8 @@ paths:
           $ref: '#/responses/BadRequestError'
         403:
           $ref: '#/responses/ForbiddenError'
+        409:
+          $ref: '#/responses/ConflictError'
         410:
           $ref: '#/responses/GoneError'
         500:
@@ -4651,6 +4653,8 @@ paths:
           $ref: '#/responses/BadRequestError'
         403:
           $ref: '#/responses/ForbiddenError'
+        409:
+          $ref: '#/responses/ConflictError'
         410:
           $ref: '#/responses/GoneError'
         500:

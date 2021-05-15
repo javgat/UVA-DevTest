@@ -125,10 +125,54 @@ func (o *AddTagToTestForbidden) WriteResponse(rw http.ResponseWriter, producer r
 	}
 }
 
+// AddTagToTestConflictCode is the HTTP code returned for type AddTagToTestConflict
+const AddTagToTestConflictCode int = 409
+
+/*AddTagToTestConflict A user with same username/email already exists
+
+swagger:response addTagToTestConflict
+*/
+type AddTagToTestConflict struct {
+
+	/*
+	  In: Body
+	*/
+	Payload *models.Error `json:"body,omitempty"`
+}
+
+// NewAddTagToTestConflict creates AddTagToTestConflict with default headers values
+func NewAddTagToTestConflict() *AddTagToTestConflict {
+
+	return &AddTagToTestConflict{}
+}
+
+// WithPayload adds the payload to the add tag to test conflict response
+func (o *AddTagToTestConflict) WithPayload(payload *models.Error) *AddTagToTestConflict {
+	o.Payload = payload
+	return o
+}
+
+// SetPayload sets the payload to the add tag to test conflict response
+func (o *AddTagToTestConflict) SetPayload(payload *models.Error) {
+	o.Payload = payload
+}
+
+// WriteResponse to the client
+func (o *AddTagToTestConflict) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	rw.WriteHeader(409)
+	if o.Payload != nil {
+		payload := o.Payload
+		if err := producer.Produce(rw, payload); err != nil {
+			panic(err) // let the recovery middleware deal with this
+		}
+	}
+}
+
 // AddTagToTestGoneCode is the HTTP code returned for type AddTagToTestGone
 const AddTagToTestGoneCode int = 410
 
-/*AddTagToTestGone That user (password and name) does not exist
+/*AddTagToTestGone That resource does not exist
 
 swagger:response addTagToTestGone
 */

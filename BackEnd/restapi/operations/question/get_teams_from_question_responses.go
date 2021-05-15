@@ -151,7 +151,7 @@ func (o *GetTeamsFromQuestionForbidden) WriteResponse(rw http.ResponseWriter, pr
 // GetTeamsFromQuestionGoneCode is the HTTP code returned for type GetTeamsFromQuestionGone
 const GetTeamsFromQuestionGoneCode int = 410
 
-/*GetTeamsFromQuestionGone That user (password and name) does not exist
+/*GetTeamsFromQuestionGone That resource does not exist
 
 swagger:response getTeamsFromQuestionGone
 */

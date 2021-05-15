@@ -201,7 +201,13 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
       resp => {
         this.getTags(true)
       },
-      err => this.handleErrRelog(err, "añadir una etiqueta a una pregunta", primera, this.addTag, this)
+      err =>{
+        if(err.status==409){
+          this.cambiarMensaje(new Mensaje("Esa etiqueta ya está añadida", Tipo.ERROR, true))
+        }else{
+          this.handleErrRelog(err, "añadir una etiqueta a una pregunta", primera, this.addTag, this)
+        }
+      }
     )
   }
 

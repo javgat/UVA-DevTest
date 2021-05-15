@@ -3146,6 +3146,9 @@ func init() {
           "403": {
             "$ref": "#/responses/ForbiddenError"
           },
+          "409": {
+            "$ref": "#/responses/ConflictError"
+          },
           "410": {
             "$ref": "#/responses/GoneError"
           },
@@ -5656,6 +5659,9 @@ func init() {
           },
           "403": {
             "$ref": "#/responses/ForbiddenError"
+          },
+          "409": {
+            "$ref": "#/responses/ConflictError"
           },
           "410": {
             "$ref": "#/responses/GoneError"
@@ -13816,6 +13822,12 @@ func init() {
               "$ref": "#/definitions/Error"
             }
           },
+          "409": {
+            "description": "A user with same username/email already exists",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
           "410": {
             "description": "That resource does not exist",
             "schema": {
@@ -16758,6 +16770,12 @@ func init() {
           },
           "403": {
             "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "409": {
+            "description": "A user with same username/email already exists",
             "schema": {
               "$ref": "#/definitions/Error"
             }

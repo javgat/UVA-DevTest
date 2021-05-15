@@ -128,7 +128,7 @@ func (o *DeleteOptionForbidden) WriteResponse(rw http.ResponseWriter, producer r
 // DeleteOptionGoneCode is the HTTP code returned for type DeleteOptionGone
 const DeleteOptionGoneCode int = 410
 
-/*DeleteOptionGone That user (password and name) does not exist
+/*DeleteOptionGone That resource does not exist
 
 swagger:response deleteOptionGone
 */

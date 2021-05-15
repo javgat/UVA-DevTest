@@ -148,7 +148,7 @@ func (o *GetQuestionForbidden) WriteResponse(rw http.ResponseWriter, producer ru
 // GetQuestionGoneCode is the HTTP code returned for type GetQuestionGone
 const GetQuestionGoneCode int = 410
 
-/*GetQuestionGone That user (password and name) does not exist
+/*GetQuestionGone That resource does not exist
 
 swagger:response getQuestionGone
 */

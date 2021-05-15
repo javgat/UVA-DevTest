@@ -115,7 +115,13 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
         this.getTags(true)
         this.newTag = ""
       },
-      err => this.handleErrRelog(err, "añadir etiqueta a test", primera, this.addTag, this)
+      err => {
+        if (err.status == 409) {
+          this.cambiarMensaje(new Mensaje("Esa etiqueta ya está añadida", Tipo.ERROR, true))
+        } else {
+          this.handleErrRelog(err, "añadir etiqueta a test", primera, this.addTag, this)
+        }
+      }
     )
   }
 

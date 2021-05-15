@@ -259,6 +259,11 @@ func AddQuestionTag(params question.AddTagToQuestionParams, u *models.User) midd
 	if isQuestionEditable(params.Questionid) && (isAdmin(u) || isQuestionAdmin(u, params.Questionid)) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
+			var t *dao.Tag
+			t, _ = dao.GetQuestionTag(db, params.Questionid, params.Tag)
+			if t != nil {
+				return question.NewAddTagToQuestionConflict()
+			}
 			err = dao.AddQuestionTag(db, params.Questionid, params.Tag)
 			if err == nil {
 				if err == nil {

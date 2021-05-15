@@ -128,7 +128,7 @@ func (o *RemoveTagFromQuestionForbidden) WriteResponse(rw http.ResponseWriter, p
 // RemoveTagFromQuestionGoneCode is the HTTP code returned for type RemoveTagFromQuestionGone
 const RemoveTagFromQuestionGoneCode int = 410
 
-/*RemoveTagFromQuestionGone That user (password and name) does not exist
+/*RemoveTagFromQuestionGone That resource does not exist
 
 swagger:response removeTagFromQuestionGone
 */
