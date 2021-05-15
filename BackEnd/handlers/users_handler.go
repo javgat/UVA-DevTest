@@ -293,7 +293,8 @@ func GetAvailableEditQuestions(params user.GetAvailableEditQuestionsOfUserParams
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var q []*dao.Question
-			q, err = dao.GetAvailableEditQuestionsOfUser(db, params.Username, params.Tags, params.LikeTitle, params.Orderby)
+			q, err = dao.GetAvailableEditQuestionsOfUser(db, params.Username, params.Tags, params.LikeTitle, params.Orderby,
+				params.Limit, params.Offset)
 			if err == nil {
 				if q != nil {
 					mq, err := dao.ToModelQuestions(q)
@@ -318,7 +319,8 @@ func GetAvailableQuestions(params user.GetAvailableQuestionsOfUserParams, u *mod
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var q []*dao.Question
-			q, err = dao.GetAvailableQuestionsOfUser(db, params.Username, params.Tags, params.LikeTitle, params.Orderby)
+			q, err = dao.GetAvailableQuestionsOfUser(db, params.Username, params.Tags, params.LikeTitle, params.Orderby,
+				params.Limit, params.Offset)
 			if err == nil {
 				if q != nil {
 					mq, err := dao.ToModelQuestions(q)
@@ -343,7 +345,8 @@ func GetSharedQuestions(params user.GetSharedQuestionsOfUserParams, u *models.Us
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var q []*dao.Question
-			q, err = dao.GetSharedQuestionsOfUser(db, params.Username, params.Tags, params.LikeTitle, params.Orderby)
+			q, err = dao.GetSharedQuestionsOfUser(db, params.Username, params.Tags, params.LikeTitle, params.Orderby,
+				params.Limit, params.Offset)
 			if err == nil {
 				if q != nil {
 					mq, err := dao.ToModelQuestions(q)
@@ -391,7 +394,8 @@ func GetPublicEditQuestionsOfUser(params user.GetPublicEditQuestionsOfUserParams
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var q []*dao.Question
-			q, err = dao.GetPublicEditQuestionsOfUser(db, params.Username, params.Tags, params.LikeTitle, params.Orderby)
+			q, err = dao.GetPublicEditQuestionsOfUser(db, params.Username, params.Tags, params.LikeTitle, params.Orderby,
+				params.Limit, params.Offset)
 			if err == nil {
 				if q != nil {
 					mq, err := dao.ToModelQuestions(q)
@@ -416,7 +420,8 @@ func GetEditQuestionsOfUser(params user.GetEditQuestionsOfUserParams, u *models.
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var q []*dao.Question
-			q, err = dao.GetEditQuestionsOfUser(db, params.Username, params.Tags, params.LikeTitle, params.Orderby)
+			q, err = dao.GetEditQuestionsOfUser(db, params.Username, params.Tags, params.LikeTitle, params.Orderby,
+				params.Limit, params.Offset)
 			if err == nil {
 				if q != nil {
 					mq, err := dao.ToModelQuestions(q)
@@ -441,7 +446,8 @@ func GetQuestionsOfUser(params user.GetQuestionsOfUserParams, u *models.User) mi
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var q []*dao.Question
-			q, err = dao.GetQuestionsOfUser(db, params.Username, params.Tags, params.LikeTitle, params.Orderby)
+			q, err = dao.GetQuestionsOfUser(db, params.Username, params.Tags, params.LikeTitle, params.Orderby,
+				params.Limit, params.Offset)
 			if err == nil {
 				if q != nil {
 					mq, err := dao.ToModelQuestions(q)
@@ -622,7 +628,8 @@ func GetSharedEditTests(params user.GetSharedEditTestsFromUserParams, u *models.
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var t []*dao.Test
-			t, err = dao.GetSharedEditTestsFromUser(db, params.Username, params.Tags, params.LikeTitle, params.Orderby)
+			t, err = dao.GetSharedEditTestsFromUser(db, params.Username, params.Tags, params.LikeTitle, params.Orderby,
+				params.Limit, params.Offset)
 			if err == nil {
 				var mt []*models.Test
 				mt, err = dao.ToModelTests(t)
@@ -644,7 +651,8 @@ func GetSharedPublishedTests(params user.GetSharedPublishedTestsFromUserParams, 
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var t []*dao.Test
-			t, err = dao.GetSharedPublishedTestsFromUser(db, params.Username, params.Tags, params.LikeTitle, params.Orderby)
+			t, err = dao.GetSharedPublishedTestsFromUser(db, params.Username, params.Tags, params.LikeTitle, params.Orderby,
+				params.Limit, params.Offset)
 			if err == nil {
 				var mt []*models.Test
 				mt, err = dao.ToModelTests(t)
@@ -710,7 +718,8 @@ func GetPublicETestsFromUser(params user.GetPublicEditTestsFromUserParams, u *mo
 	if isTeacherOrAdmin(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			t, err := dao.GetPublicEditTestsFromUser(db, params.Username, params.Tags, params.LikeTitle, params.Orderby)
+			t, err := dao.GetPublicEditTestsFromUser(db, params.Username, params.Tags, params.LikeTitle, params.Orderby,
+				params.Limit, params.Offset)
 			if err == nil {
 				mt, err := dao.ToModelTests(t)
 				if mt != nil && err == nil {
@@ -730,7 +739,8 @@ func GetEditTestsFromUser(params user.GetEditTestsFromUserParams, u *models.User
 	if userOrAdmin(params.Username, u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			t, err := dao.GetEditTestsFromUser(db, params.Username, params.Tags, params.LikeTitle, params.Orderby)
+			t, err := dao.GetEditTestsFromUser(db, params.Username, params.Tags, params.LikeTitle, params.Orderby,
+				params.Limit, params.Offset)
 			if err == nil {
 				mt, err := dao.ToModelTests(t)
 				if mt != nil && err == nil {
@@ -921,7 +931,8 @@ func GetInvitedTestsByTeamsAndUser(params user.GetInvitedTestsByTeamsAndUserPara
 	if userOrAdmin(params.Username, u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			t, err := dao.GetInvitedPTestsByTeamsAndUser(db, params.Username, params.Tags, params.LikeTitle, params.Orderby)
+			t, err := dao.GetInvitedPTestsByTeamsAndUser(db, params.Username, params.Tags, params.LikeTitle, params.Orderby,
+				params.Limit, params.Offset)
 			if err == nil {
 				mt, err := dao.ToModelTests(t)
 				if mt != nil && err == nil {
@@ -941,7 +952,8 @@ func GetInvitedTests(params user.GetInvitedTestsFromUserParams, u *models.User) 
 	if userOrAdmin(params.Username, u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			t, err := dao.GetInvitedPTestsFromUser(db, params.Username, params.Tags, params.LikeTitle, params.Orderby)
+			t, err := dao.GetInvitedPTestsFromUser(db, params.Username, params.Tags, params.LikeTitle, params.Orderby,
+				params.Limit, params.Offset)
 			if err == nil {
 				mt, err := dao.ToModelTests(t)
 				if mt != nil && err == nil {
@@ -981,7 +993,8 @@ func GetPublishedTestsFromUser(params user.GetPublishedTestsFromUserParams, u *m
 	if userOrAdmin(params.Username, u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			t, err := dao.GetPublishedTestsFromUser(db, params.Username, params.Tags, params.LikeTitle, params.Orderby)
+			t, err := dao.GetPublishedTestsFromUser(db, params.Username, params.Tags, params.LikeTitle, params.Orderby,
+				params.Limit, params.Offset)
 			if err == nil {
 				mt, err := dao.ToModelTests(t)
 				if mt != nil && err == nil {
@@ -1000,7 +1013,8 @@ func GetPublishedTestsFromUser(params user.GetPublishedTestsFromUserParams, u *m
 func GetPublicPublishedTestsFromUser(params user.GetPublicPublishedTestsFromUserParams, u *models.User) middleware.Responder {
 	db, err := dbconnection.ConnectDb()
 	if err == nil {
-		t, err := dao.GetPublicPublishedTestsFromUser(db, params.Username, params.Tags, params.LikeTitle, params.Orderby)
+		t, err := dao.GetPublicPublishedTestsFromUser(db, params.Username, params.Tags, params.LikeTitle, params.Orderby,
+			params.Limit, params.Offset)
 		if err == nil {
 			mt, err := dao.ToModelTests(t)
 			if mt != nil && err == nil {
@@ -1019,7 +1033,8 @@ func GetSolvableTestsFromUser(params user.GetSolvableTestsFromUserParams, u *mod
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var t []*dao.Test
-			t, err = dao.GetSolvableTestsFromUser(db, params.Username, params.Tags, params.LikeTitle, params.Orderby)
+			t, err = dao.GetSolvableTestsFromUser(db, params.Username, params.Tags, params.LikeTitle, params.Orderby,
+				params.Limit, params.Offset)
 			if err == nil {
 				mt, err := dao.ToModelTests(t)
 				if mt != nil && err == nil {

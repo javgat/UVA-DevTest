@@ -24,6 +24,8 @@ export class ListQuestionsComponent extends LoggedInController implements OnInit
   scrollable: boolean
   selectAddQuestion: boolean
   orderBy: EnumOrderBy
+  limit: number
+  offset: number
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService,
      protected qS: QuestionService, protected tagS: TagService, protected teamS?: TeamService) {
     super(session, router, data, userS)
@@ -37,6 +39,8 @@ export class ListQuestionsComponent extends LoggedInController implements OnInit
     this.scrollable = false
     this.selectAddQuestion = false
     this.orderBy = EnumOrderBy.newDate
+    this.limit = 20
+    this.offset = 0
     this.getQuestionsFilters()
   }
 
@@ -49,7 +53,7 @@ export class ListQuestionsComponent extends LoggedInController implements OnInit
 
   // esta funcion se tiene que sobreescribir
   getQuestionsInclude(primera: boolean) {
-    this.qS.getQuestions(this.searchTags, this.likeTitle, this.orderBy).subscribe(
+    this.qS.getQuestions(this.searchTags, this.likeTitle, this.orderBy, this.limit, this.offset).subscribe(
       resp => this.questions = resp,
       err => this.handleErrRelog(err, "obtener preguntas", primera, this.getQuestionsInclude, this)
     )
@@ -57,7 +61,7 @@ export class ListQuestionsComponent extends LoggedInController implements OnInit
 
   // esta funcion se tiene que sobreescribir
   getQuestionsEdit(primera: boolean) {
-    this.qS.getEditQuestions(this.searchTags, this.likeTitle, this.orderBy).subscribe(
+    this.qS.getEditQuestions(this.searchTags, this.likeTitle, this.orderBy, this.limit, this.offset).subscribe(
       resp => this.questions = resp,
       err => this.handleErrRelog(err, "obtener preguntas no publicadas", primera, this.getQuestionsEdit, this)
     )
@@ -207,6 +211,33 @@ export class ListQuestionsComponent extends LoggedInController implements OnInit
 
   isLessFavSelected(): boolean{
     return this.orderBy == EnumOrderBy.lessFav
+  }
+
+  getCurrentPage(): number{
+    return (this.offset/this.limit)+1
+  }
+
+  hasNextPage(): boolean{
+    return this.questions.length == this.limit
+  }
+
+  clickPreviousPage(){
+    this.offset = this.offset-this.limit
+    this.getQuestionsFilters()
+  }
+
+  clickNextPage(){
+    this.offset = this.offset-this.limit
+    this.getQuestionsFilters()
+  }
+
+  clickFirstPage(){
+    this.offset=0
+    this.getQuestionsFilters()
+  }
+
+  clickCurrentPage(){
+    this.getQuestionsFilters()
   }
 
 }

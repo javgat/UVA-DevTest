@@ -455,13 +455,17 @@ export class TestService {
      * @param tags 
      * @param likeTitle 
      * @param orderby Indicates which element is first returned. In case of tie it unties with newdate first
+     * @param limit max number of elements to be returned
+     * @param offset first elements to be skipped at being returned
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getPublicEditTests(tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
-    public getPublicEditTests(tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
-    public getPublicEditTests(tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
-    public getPublicEditTests(tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getPublicEditTests(tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', limit?: number, offset?: number, observe?: 'body', reportProgress?: boolean): Observable<Array<Test>>;
+    public getPublicEditTests(tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', limit?: number, offset?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Test>>>;
+    public getPublicEditTests(tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', limit?: number, offset?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Test>>>;
+    public getPublicEditTests(tags?: Array<Array<string>>, likeTitle?: string, orderby?: 'newDate' | 'oldDate' | 'moreFav' | 'lessFav' | 'moreTime' | 'lessTime', limit?: number, offset?: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+
 
 
 
@@ -475,6 +479,12 @@ export class TestService {
         }
         if (orderby !== undefined && orderby !== null) {
             queryParameters = queryParameters.set('orderby', <any>orderby);
+        }
+        if (limit !== undefined && limit !== null) {
+            queryParameters = queryParameters.set('limit', <any>limit);
+        }
+        if (offset !== undefined && offset !== null) {
+            queryParameters = queryParameters.set('offset', <any>offset);
         }
 
         let headers = this.defaultHeaders;

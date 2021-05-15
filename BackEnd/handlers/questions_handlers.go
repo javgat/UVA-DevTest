@@ -22,7 +22,8 @@ func GetAllEditQuestions(params question.GetAllEditQuestionsParams, u *models.Us
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var qs []*dao.Question
-			qs, err = dao.GetAllEditQuestions(db, params.Tags, params.LikeTitle, params.Orderby)
+			qs, err = dao.GetAllEditQuestions(db, params.Tags, params.LikeTitle, params.Orderby,
+				params.Limit, params.Offset)
 			if err == nil {
 				var mqs []*models.Question
 				mqs, err = dao.ToModelQuestions(qs)
@@ -44,7 +45,8 @@ func GetAllQuestions(params question.GetAllQuestionsParams, u *models.User) midd
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var qs []*dao.Question
-			qs, err = dao.GetAllQuestions(db, params.Tags, params.LikeTitle, params.Orderby)
+			qs, err = dao.GetAllQuestions(db, params.Tags, params.LikeTitle, params.Orderby,
+				params.Limit, params.Offset)
 			if err == nil {
 				var mqs []*models.Question
 				mqs, err = dao.ToModelQuestions(qs)
@@ -66,7 +68,8 @@ func GetEditQuestions(params question.GetEditQuestionsParams, u *models.User) mi
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var qs []*dao.Question
-			qs, err = dao.GetEditQuestions(db, params.Tags, params.LikeTitle, params.Orderby)
+			qs, err = dao.GetEditQuestions(db, params.Tags, params.LikeTitle, params.Orderby,
+				params.Limit, params.Offset)
 			if err == nil {
 				var mqs []*models.Question
 				mqs, err = dao.ToModelQuestions(qs)
@@ -88,7 +91,8 @@ func GetQuestions(params question.GetQuestionsParams, u *models.User) middleware
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var qs []*dao.Question
-			qs, err = dao.GetQuestions(db, params.Tags, params.LikeTitle, params.Orderby)
+			qs, err = dao.GetQuestions(db, params.Tags, params.LikeTitle, params.Orderby,
+				params.Limit, params.Offset)
 			if err == nil {
 				var mqs []*models.Question
 				mqs, err = dao.ToModelQuestions(qs)
@@ -468,7 +472,8 @@ func GetFavoriteEditQuestions(params user.GetFavoriteEditQuestionsParams, u *mod
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var qs []*dao.Question
-			qs, err = dao.GetFavoriteEditQuestions(db, params.Username, params.Tags, params.LikeTitle, params.Orderby)
+			qs, err = dao.GetFavoriteEditQuestions(db, params.Username, params.Tags, params.LikeTitle, params.Orderby,
+				params.Limit, params.Offset)
 			if err == nil {
 				var mqs []*models.Question
 				mqs, err = dao.ToModelQuestions(qs)
@@ -490,7 +495,8 @@ func GetFavoriteQuestions(params user.GetFavoriteQuestionsParams, u *models.User
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var qs []*dao.Question
-			qs, err = dao.GetFavoriteQuestions(db, params.Username, params.Tags, params.LikeTitle, params.Orderby)
+			qs, err = dao.GetFavoriteQuestions(db, params.Username, params.Tags, params.LikeTitle, params.Orderby,
+				params.Limit, params.Offset)
 			if err == nil {
 				var mqs []*models.Question
 				mqs, err = dao.ToModelQuestions(qs)

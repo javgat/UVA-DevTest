@@ -23,6 +23,8 @@ export class ListTestsComponent extends LoggedInController implements OnInit {
   includeLabel: string
   arePublished: boolean
   orderBy: EnumOrderBy
+  limit: number
+  offset: number
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, protected tS: TestService,
      protected tagS: TagService, protected teamS?: TeamService) {
     super(session, router, data, userS)
@@ -36,6 +38,8 @@ export class ListTestsComponent extends LoggedInController implements OnInit {
     this.arePublished = false
     this.includeLabel = "Incluir tests publicados"
     this.orderBy = EnumOrderBy.newDate
+    this.limit = 20
+    this.offset = 0
     this.getTestsFilters()
   }
 
@@ -53,7 +57,7 @@ export class ListTestsComponent extends LoggedInController implements OnInit {
 
   // esta funcion se tiene que sobreescribir
   getTestsEdit(primera: boolean) {
-    this.tS.getPublicEditTests(this.searchTags, this.likeTitle, this.orderBy).subscribe(
+    this.tS.getPublicEditTests(this.searchTags, this.likeTitle, this.orderBy, this.limit, this.offset).subscribe(
       resp => this.tests = resp,
       err => this.handleErrRelog(err, "obtener preguntas no publicadas", primera, this.getTestsEdit, this)
     )
@@ -193,5 +197,32 @@ export class ListTestsComponent extends LoggedInController implements OnInit {
 
   isLessFavSelected(): boolean{
     return this.orderBy == EnumOrderBy.lessFav
+  }
+
+  getCurrentPage(): number{
+    return (this.offset/this.limit)+1
+  }
+
+  hasNextPage(): boolean{
+    return this.tests.length == this.limit
+  }
+
+  clickPreviousPage(){
+    this.offset = this.offset-this.limit
+    this.getTestsFilters()
+  }
+
+  clickNextPage(){
+    this.offset = this.offset-this.limit
+    this.getTestsFilters()
+  }
+
+  clickFirstPage(){
+    this.offset=0
+    this.getTestsFilters()
+  }
+
+  clickCurrentPage(){
+    this.getTestsFilters()
   }
 }

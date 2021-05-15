@@ -42,7 +42,7 @@ export class LptUserComponent extends ListTestsComponent implements OnInit {
   // EN published tests testEdit es el testPublished
   getTestsEdit(primera: boolean) {
     if(this.id==undefined) return
-    this.userS.getPublishedTestsFromUser(this.id, this.searchTags, this.likeTitle, this.orderBy).subscribe(
+    this.userS.getPublishedTestsFromUser(this.id, this.searchTags, this.likeTitle, this.orderBy, this.limit, this.offset).subscribe(
       resp => this.tests = resp,
       err => this.handleErrRelog(err, "obtener tests publicados de un usuario", primera, this.getTestsEdit, this)
     )

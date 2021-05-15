@@ -79,4 +79,16 @@
             </tr>
         </tbody>
     </table>
+    <nav aria-label="Tests page navigation"> 
+        <ul class="pagination justify-content-center">
+            <li class="page-item" [ngClass]="{disabled: getCurrentPage()<=1}"><a class="page-link" role="button" (click)="clickPreviousPage()">Anterior</a></li>
+            <li *ngIf="getCurrentPage()>2" class="page-item"><a class="page-link" role="button" (click)="clickFirstPage()">1</a></li>
+            <li *ngIf="getCurrentPage()>2" class="page-item disabled"><a class="page-link">...</a></li>
+            <li *ngIf="getCurrentPage()>1" class="page-item"><a class="page-link" role="button" (click)="clickPreviousPage()" >{{getCurrentPage()-1}}</a></li>
+            <li class="page-item"><a class="page-link" role="button" (click)="clickCurrentPage()">{{getCurrentPage()}}</a></li>
+            <li *ngIf="hasNextPage()" class="page-item"><a class="page-link" role="button" (click)="clickNextPage()">{{getCurrentPage()+1}}</a></li>
+            <li *ngIf="hasNextPage()" class="page-item disabled"><a class="page-link">...</a></li>
+            <li class="page-item" [ngClass]="{disabled: !hasNextPage()}"><a class="page-link" role="button" (click)="clickNextPage()">Siguiente</a></li>
+        </ul>
+    </nav>
 </div>

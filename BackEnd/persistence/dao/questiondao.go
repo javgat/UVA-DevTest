@@ -9,6 +9,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"strconv"
 	"uva-devtest/models"
 	"uva-devtest/persistence/dbconnection"
 
@@ -181,9 +182,20 @@ func prepareQueryOrderBy(initQuery string, orderBy *string, idNombreConsulta str
 	return query
 }
 
+func prepareQueryLimit(initQuery string, limit *int64, offset *int64) string {
+	query := initQuery
+	if limit != nil {
+		query += " LIMIT " + strconv.FormatInt(*limit, 10) + " "
+	}
+	if offset != nil {
+		query += " OFFSET " + strconv.FormatInt(*offset, 10) + " "
+	}
+	return query
+}
+
 func AddFiltersToQuery(hayWhere bool, initQuery string, tags [][]string, likeTitle *string, orderBy *string,
-	idNombreConsulta string, idNombreSubconsulta string, tablaRelacionNombre string, titleConsulta string,
-	cantidadFavoritosConsulta string, tiempoConsulta string) string {
+	limit *int64, offset *int64, idNombreConsulta string, idNombreSubconsulta string, tablaRelacionNombre string,
+	titleConsulta string, cantidadFavoritosConsulta string, tiempoConsulta string) string {
 	stPrepare := initQuery
 	nexoString := " AND "
 	if !hayWhere {
@@ -199,26 +211,30 @@ func AddFiltersToQuery(hayWhere bool, initQuery string, tags [][]string, likeTit
 		stPrepare = prepareQueryLikeTitle(stPrepare, likeTitle, titleConsulta)
 	}
 	stPrepare = prepareQueryOrderBy(stPrepare, orderBy, idNombreConsulta, cantidadFavoritosConsulta, tiempoConsulta)
+	stPrepare = prepareQueryLimit(stPrepare, limit, offset)
 	return stPrepare
 }
 
-func addFiltersToQueryQuestion(hayWhere bool, initQuery string, tags [][]string, likeTitle *string, orderBy *string) string {
-	return AddFiltersToQuery(hayWhere, initQuery, tags, likeTitle, orderBy, "id", "preguntaid", "PreguntaEtiqueta",
+func addFiltersToQueryQuestion(hayWhere bool, initQuery string, tags [][]string, likeTitle *string, orderBy *string,
+	limit *int64, offset *int64) string {
+	return AddFiltersToQuery(hayWhere, initQuery, tags, likeTitle, orderBy, limit, offset, "id", "preguntaid", "PreguntaEtiqueta",
 		"title", "cantidadFavoritos", "estimatedTime")
 }
 
-func addFiltersToQueryQuestionLongNames(hayWhere bool, initQuery string, tags [][]string, likeTitle *string, orderBy *string) string {
-	return AddFiltersToQuery(hayWhere, initQuery, tags, likeTitle, orderBy, "P.id", "preguntaid", "PreguntaEtiqueta",
+func addFiltersToQueryQuestionLongNames(hayWhere bool, initQuery string, tags [][]string, likeTitle *string, orderBy *string,
+	limit *int64, offset *int64) string {
+	return AddFiltersToQuery(hayWhere, initQuery, tags, likeTitle, orderBy, limit, offset, "P.id", "preguntaid", "PreguntaEtiqueta",
 		"title", "P.cantidadFavoritos", "P.estimatedTime")
 }
 
-func GetAllEditQuestions(db *sql.DB, tags [][]string, likeTitle *string, orderBy *string) ([]*Question, error) {
+func GetAllEditQuestions(db *sql.DB, tags [][]string, likeTitle *string, orderBy *string,
+	limit *int64, offset *int64) ([]*Question, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
 	var qs []*Question
 	stPrepare := "SELECT * FROM Pregunta WHERE editable=1 "
-	stPrepare = addFiltersToQueryQuestion(true, stPrepare, tags, likeTitle, orderBy)
+	stPrepare = addFiltersToQueryQuestion(true, stPrepare, tags, likeTitle, orderBy, limit, offset)
 	query, err := db.Prepare(stPrepare)
 	if err == nil {
 		defer query.Close()
@@ -232,13 +248,14 @@ func GetAllEditQuestions(db *sql.DB, tags [][]string, likeTitle *string, orderBy
 	return nil, err
 }
 
-func GetEditQuestions(db *sql.DB, tags [][]string, likeTitle *string, orderBy *string) ([]*Question, error) {
+func GetEditQuestions(db *sql.DB, tags [][]string, likeTitle *string, orderBy *string,
+	limit *int64, offset *int64) ([]*Question, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
 	var qs []*Question
 	stPrepare := "SELECT * FROM Pregunta WHERE editable=1 AND accesoPublicoNoPublicada=1"
-	stPrepare = addFiltersToQueryQuestion(true, stPrepare, tags, likeTitle, orderBy)
+	stPrepare = addFiltersToQueryQuestion(true, stPrepare, tags, likeTitle, orderBy, limit, offset)
 	query, err := db.Prepare(stPrepare)
 	if err == nil {
 		defer query.Close()
@@ -252,13 +269,14 @@ func GetEditQuestions(db *sql.DB, tags [][]string, likeTitle *string, orderBy *s
 	return nil, err
 }
 
-func GetAllQuestions(db *sql.DB, tags [][]string, likeTitle *string, orderBy *string) ([]*Question, error) {
+func GetAllQuestions(db *sql.DB, tags [][]string, likeTitle *string, orderBy *string,
+	limit *int64, offset *int64) ([]*Question, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
 	var qs []*Question
 	stPrepare := "SELECT * FROM Pregunta"
-	stPrepare = addFiltersToQueryQuestion(false, stPrepare, tags, likeTitle, orderBy)
+	stPrepare = addFiltersToQueryQuestion(false, stPrepare, tags, likeTitle, orderBy, limit, offset)
 	query, err := db.Prepare(stPrepare)
 	if err == nil {
 		defer query.Close()
@@ -272,13 +290,14 @@ func GetAllQuestions(db *sql.DB, tags [][]string, likeTitle *string, orderBy *st
 	return nil, err
 }
 
-func GetQuestions(db *sql.DB, tags [][]string, likeTitle *string, orderBy *string) ([]*Question, error) {
+func GetQuestions(db *sql.DB, tags [][]string, likeTitle *string, orderBy *string,
+	limit *int64, offset *int64) ([]*Question, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
 	var qs []*Question
 	stPrepare := "SELECT * FROM Pregunta WHERE accesoPublicoNoPublicada=1"
-	stPrepare = addFiltersToQueryQuestion(true, stPrepare, tags, likeTitle, orderBy)
+	stPrepare = addFiltersToQueryQuestion(true, stPrepare, tags, likeTitle, orderBy, limit, offset)
 	query, err := db.Prepare(stPrepare)
 	if err == nil {
 		defer query.Close()
@@ -347,7 +366,8 @@ func DeleteQuestion(db *sql.DB, questionid int64) error {
 	return err
 }
 
-func GetQuestionsOfUser(db *sql.DB, username string, tags [][]string, likeTitle *string, orderBy *string) ([]*Question, error) {
+func GetQuestionsOfUser(db *sql.DB, username string, tags [][]string, likeTitle *string, orderBy *string,
+	limit *int64, offset *int64) ([]*Question, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
@@ -355,7 +375,7 @@ func GetQuestionsOfUser(db *sql.DB, username string, tags [][]string, likeTitle 
 	if err == nil && u != nil {
 		var qs []*Question
 		stPrepare := "SELECT * FROM Pregunta WHERE usuarioid=?"
-		stPrepare = addFiltersToQueryQuestion(true, stPrepare, tags, likeTitle, orderBy)
+		stPrepare = addFiltersToQueryQuestion(true, stPrepare, tags, likeTitle, orderBy, limit, offset)
 		query, err := db.Prepare(stPrepare)
 		if err == nil {
 			defer query.Close()
@@ -373,7 +393,8 @@ func GetQuestionsOfUser(db *sql.DB, username string, tags [][]string, likeTitle 
 	return nil, err
 }
 
-func GetPublicEditQuestionsOfUser(db *sql.DB, username string, tags [][]string, likeTitle *string, orderBy *string) ([]*Question, error) {
+func GetPublicEditQuestionsOfUser(db *sql.DB, username string, tags [][]string, likeTitle *string, orderBy *string,
+	limit *int64, offset *int64) ([]*Question, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
@@ -381,7 +402,7 @@ func GetPublicEditQuestionsOfUser(db *sql.DB, username string, tags [][]string, 
 	if err == nil && u != nil {
 		var qs []*Question
 		stPrepare := "SELECT * FROM Pregunta WHERE usuarioid=? AND editable=1 AND accesoPublicoNoPublicada=1"
-		stPrepare = addFiltersToQueryQuestion(true, stPrepare, tags, likeTitle, orderBy)
+		stPrepare = addFiltersToQueryQuestion(true, stPrepare, tags, likeTitle, orderBy, limit, offset)
 		query, err := db.Prepare(stPrepare)
 		if err == nil {
 			defer query.Close()
@@ -399,7 +420,8 @@ func GetPublicEditQuestionsOfUser(db *sql.DB, username string, tags [][]string, 
 	return nil, err
 }
 
-func GetEditQuestionsOfUser(db *sql.DB, username string, tags [][]string, likeTitle *string, orderBy *string) ([]*Question, error) {
+func GetEditQuestionsOfUser(db *sql.DB, username string, tags [][]string, likeTitle *string, orderBy *string,
+	limit *int64, offset *int64) ([]*Question, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
@@ -407,7 +429,7 @@ func GetEditQuestionsOfUser(db *sql.DB, username string, tags [][]string, likeTi
 	if err == nil && u != nil {
 		var qs []*Question
 		stPrepare := "SELECT * FROM Pregunta WHERE usuarioid=? AND editable=1"
-		stPrepare = addFiltersToQueryQuestion(true, stPrepare, tags, likeTitle, orderBy)
+		stPrepare = addFiltersToQueryQuestion(true, stPrepare, tags, likeTitle, orderBy, limit, offset)
 		query, err := db.Prepare(stPrepare)
 		if err == nil {
 			defer query.Close()
@@ -478,7 +500,8 @@ func PostQuestion(db *sql.DB, q *models.Question, username string) (*models.Ques
 	return nil, err
 }
 
-func GetQuestionsFromTeam(db *sql.DB, teamname string, tags [][]string, likeTitle *string, orderBy *string) ([]*Question, error) {
+func GetQuestionsFromTeam(db *sql.DB, teamname string, tags [][]string, likeTitle *string, orderBy *string,
+	limit *int64, offset *int64) ([]*Question, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
@@ -486,7 +509,7 @@ func GetQuestionsFromTeam(db *sql.DB, teamname string, tags [][]string, likeTitl
 	if err == nil && u != nil {
 		var qs []*Question
 		stPrepare := "SELECT P.* FROM Pregunta P JOIN PreguntaEquipo E ON P.id=E.preguntaid WHERE E.equipoid=?"
-		stPrepare = addFiltersToQueryQuestionLongNames(true, stPrepare, tags, likeTitle, orderBy)
+		stPrepare = addFiltersToQueryQuestionLongNames(true, stPrepare, tags, likeTitle, orderBy, limit, offset)
 		query, err := db.Prepare(stPrepare)
 		if err == nil {
 			defer query.Close()
@@ -735,7 +758,8 @@ func GetValorFinal(db *sql.DB, questionid int64, testid int64) (*int64, error) {
 	return nil, err
 }
 
-func GetFavoriteEditQuestions(db *sql.DB, username string, tags [][]string, likeTitle *string, orderBy *string) ([]*Question, error) {
+func GetFavoriteEditQuestions(db *sql.DB, username string, tags [][]string, likeTitle *string, orderBy *string,
+	limit *int64, offset *int64) ([]*Question, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
@@ -743,7 +767,7 @@ func GetFavoriteEditQuestions(db *sql.DB, username string, tags [][]string, like
 	stPrepare := "SELECT DISTINCT P.* FROM Pregunta P LEFT JOIN PreguntaEquipo E ON P.id=E.preguntaid LEFT JOIN EquipoUsuario U ON U.equipoid=E.equipoid " +
 		" LEFT JOIN Usuario V ON V.id=U.usuarioid LEFT JOIN Usuario W ON W.id=P.usuarioid JOIN PreguntaFavorita F ON P.id=F.preguntaid JOIN Usuario Y ON Y.id=F.usuarioid " +
 		" WHERE P.editable=1 AND Y.username=? AND (V.username=? OR P.accesoPublicoNoPublicada=1 OR W.username=?) "
-	stPrepare = addFiltersToQueryQuestionLongNames(true, stPrepare, tags, likeTitle, orderBy)
+	stPrepare = addFiltersToQueryQuestionLongNames(true, stPrepare, tags, likeTitle, orderBy, limit, offset)
 	query, err := db.Prepare(stPrepare)
 	if err == nil {
 		defer query.Close()
@@ -764,7 +788,8 @@ func GetFavoriteEditQuestions(db *sql.DB, username string, tags [][]string, like
 	return nil, err
 }
 
-func GetFavoriteQuestions(db *sql.DB, username string, tags [][]string, likeTitle *string, orderBy *string) ([]*Question, error) {
+func GetFavoriteQuestions(db *sql.DB, username string, tags [][]string, likeTitle *string, orderBy *string,
+	limit *int64, offset *int64) ([]*Question, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
@@ -772,7 +797,7 @@ func GetFavoriteQuestions(db *sql.DB, username string, tags [][]string, likeTitl
 	stPrepare := "SELECT DISTINCT P.* FROM Pregunta P LEFT JOIN PreguntaEquipo E ON P.id=E.preguntaid LEFT JOIN EquipoUsuario U ON U.equipoid=E.equipoid " +
 		" LEFT JOIN Usuario V ON V.id=U.usuarioid LEFT JOIN Usuario W ON W.id=P.usuarioid JOIN PreguntaFavorita F ON P.id=F.preguntaid JOIN Usuario Y ON Y.id=F.usuarioid " +
 		" WHERE Y.username=? AND (V.username=? OR P.accesoPublicoNoPublicada=1 OR W.username=?) "
-	stPrepare = addFiltersToQueryQuestionLongNames(true, stPrepare, tags, likeTitle, orderBy)
+	stPrepare = addFiltersToQueryQuestionLongNames(true, stPrepare, tags, likeTitle, orderBy, limit, offset)
 	query, err := db.Prepare(stPrepare)
 	if err == nil {
 		defer query.Close()
@@ -862,14 +887,15 @@ func RemoveFavoriteQuestion(db *sql.DB, username string, questionid int64) error
 	return err
 }
 
-func GetAvailableEditQuestionsOfUser(db *sql.DB, username string, tags [][]string, likeTitle *string, orderBy *string) ([]*Question, error) {
+func GetAvailableEditQuestionsOfUser(db *sql.DB, username string, tags [][]string, likeTitle *string, orderBy *string,
+	limit *int64, offset *int64) ([]*Question, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
 	var qs []*Question
 	stPrepare := "SELECT DISTINCT P.* FROM Pregunta P LEFT JOIN PreguntaEquipo E ON P.id=E.preguntaid LEFT JOIN EquipoUsuario U ON U.equipoid=E.equipoid " +
 		" LEFT JOIN Usuario V ON V.id=U.usuarioid LEFT JOIN Usuario W ON W.id=P.usuarioid WHERE P.editable=1 AND (V.username=? OR P.accesoPublicoNoPublicada=1 OR W.username=?) "
-	stPrepare = addFiltersToQueryQuestionLongNames(true, stPrepare, tags, likeTitle, orderBy)
+	stPrepare = addFiltersToQueryQuestionLongNames(true, stPrepare, tags, likeTitle, orderBy, limit, offset)
 	query, err := db.Prepare(stPrepare)
 	if err == nil {
 		defer query.Close()
@@ -889,14 +915,15 @@ func GetAvailableEditQuestionsOfUser(db *sql.DB, username string, tags [][]strin
 	return nil, err
 }
 
-func GetAvailableQuestionsOfUser(db *sql.DB, username string, tags [][]string, likeTitle *string, orderBy *string) ([]*Question, error) {
+func GetAvailableQuestionsOfUser(db *sql.DB, username string, tags [][]string, likeTitle *string, orderBy *string,
+	limit *int64, offset *int64) ([]*Question, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
 	var qs []*Question
 	stPrepare := "SELECT DISTINCT P.* FROM Pregunta P LEFT JOIN PreguntaEquipo E ON P.id=E.preguntaid LEFT JOIN EquipoUsuario U ON U.equipoid=E.equipoid " +
 		" LEFT JOIN Usuario V ON V.id=U.usuarioid LEFT JOIN Usuario W ON W.id=P.usuarioid WHERE (V.username=? OR P.accesoPublicoNoPublicada=1 OR W.username=?) "
-	stPrepare = addFiltersToQueryQuestionLongNames(true, stPrepare, tags, likeTitle, orderBy)
+	stPrepare = addFiltersToQueryQuestionLongNames(true, stPrepare, tags, likeTitle, orderBy, limit, offset)
 	query, err := db.Prepare(stPrepare)
 	if err == nil {
 		defer query.Close()
@@ -916,13 +943,14 @@ func GetAvailableQuestionsOfUser(db *sql.DB, username string, tags [][]string, l
 	return nil, err
 }
 
-func GetSharedQuestionsOfUser(db *sql.DB, username string, tags [][]string, likeTitle *string, orderBy *string) ([]*Question, error) {
+func GetSharedQuestionsOfUser(db *sql.DB, username string, tags [][]string, likeTitle *string, orderBy *string,
+	limit *int64, offset *int64) ([]*Question, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
 	var qs []*Question
 	stPrepare := "SELECT DISTINCT P.* FROM Pregunta P JOIN PreguntaEquipo E ON P.id=E.preguntaid JOIN EquipoUsuario U ON U.equipoid=E.equipoid JOIN Usuario V ON V.id=U.usuarioid WHERE V.username=?"
-	stPrepare = addFiltersToQueryQuestionLongNames(true, stPrepare, tags, likeTitle, orderBy)
+	stPrepare = addFiltersToQueryQuestionLongNames(true, stPrepare, tags, likeTitle, orderBy, limit, offset)
 	query, err := db.Prepare(stPrepare)
 	if err == nil {
 		defer query.Close()

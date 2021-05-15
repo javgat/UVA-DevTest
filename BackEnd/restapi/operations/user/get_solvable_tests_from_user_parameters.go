@@ -37,6 +37,16 @@ type GetSolvableTestsFromUserParams struct {
 	  In: query
 	*/
 	LikeTitle *string
+	/*max number of elements to be returned
+	  Minimum: 0
+	  In: query
+	*/
+	Limit *int64
+	/*first elements to be skipped at being returned
+	  Minimum: 0
+	  In: query
+	*/
+	Offset *int64
 	/*Indicates which element is first returned. In case of tie it unties with newdate first
 	  In: query
 	*/
@@ -66,6 +76,16 @@ func (o *GetSolvableTestsFromUserParams) BindRequest(r *http.Request, route *mid
 
 	qLikeTitle, qhkLikeTitle, _ := qs.GetOK("likeTitle")
 	if err := o.bindLikeTitle(qLikeTitle, qhkLikeTitle, route.Formats); err != nil {
+		res = append(res, err)
+	}
+
+	qLimit, qhkLimit, _ := qs.GetOK("limit")
+	if err := o.bindLimit(qLimit, qhkLimit, route.Formats); err != nil {
+		res = append(res, err)
+	}
+
+	qOffset, qhkOffset, _ := qs.GetOK("offset")
+	if err := o.bindOffset(qOffset, qhkOffset, route.Formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -103,6 +123,80 @@ func (o *GetSolvableTestsFromUserParams) bindLikeTitle(rawData []string, hasKey 
 		return nil
 	}
 	o.LikeTitle = &raw
+
+	return nil
+}
+
+// bindLimit binds and validates parameter Limit from query.
+func (o *GetSolvableTestsFromUserParams) bindLimit(rawData []string, hasKey bool, formats strfmt.Registry) error {
+	var raw string
+	if len(rawData) > 0 {
+		raw = rawData[len(rawData)-1]
+	}
+
+	// Required: false
+	// AllowEmptyValue: false
+
+	if raw == "" { // empty values pass all other validations
+		return nil
+	}
+
+	value, err := swag.ConvertInt64(raw)
+	if err != nil {
+		return errors.InvalidType("limit", "query", "int64", raw)
+	}
+	o.Limit = &value
+
+	if err := o.validateLimit(formats); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// validateLimit carries on validations for parameter Limit
+func (o *GetSolvableTestsFromUserParams) validateLimit(formats strfmt.Registry) error {
+
+	if err := validate.MinimumInt("limit", "query", *o.Limit, 0, false); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// bindOffset binds and validates parameter Offset from query.
+func (o *GetSolvableTestsFromUserParams) bindOffset(rawData []string, hasKey bool, formats strfmt.Registry) error {
+	var raw string
+	if len(rawData) > 0 {
+		raw = rawData[len(rawData)-1]
+	}
+
+	// Required: false
+	// AllowEmptyValue: false
+
+	if raw == "" { // empty values pass all other validations
+		return nil
+	}
+
+	value, err := swag.ConvertInt64(raw)
+	if err != nil {
+		return errors.InvalidType("offset", "query", "int64", raw)
+	}
+	o.Offset = &value
+
+	if err := o.validateOffset(formats); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// validateOffset carries on validations for parameter Offset
+func (o *GetSolvableTestsFromUserParams) validateOffset(formats strfmt.Registry) error {
+
+	if err := validate.MinimumInt("offset", "query", *o.Offset, 0, false); err != nil {
+		return err
+	}
 
 	return nil
 }

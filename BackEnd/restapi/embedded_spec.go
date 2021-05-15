@@ -184,6 +184,18 @@ func init() {
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
             "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
+            "in": "query"
           }
         ],
         "responses": {
@@ -255,6 +267,18 @@ func init() {
             "type": "string",
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
             "in": "query"
           }
         ],
@@ -1084,6 +1108,18 @@ func init() {
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
             "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
+            "in": "query"
           }
         ],
         "responses": {
@@ -1351,6 +1387,18 @@ func init() {
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
             "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
+            "in": "query"
           }
         ],
         "responses": {
@@ -1422,6 +1470,18 @@ func init() {
             "type": "string",
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
             "in": "query"
           }
         ],
@@ -2509,6 +2569,18 @@ func init() {
             "type": "string",
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
             "in": "query"
           }
         ],
@@ -4001,6 +4073,18 @@ func init() {
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
             "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
+            "in": "query"
           }
         ],
         "responses": {
@@ -4405,6 +4489,18 @@ func init() {
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
             "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
+            "in": "query"
           }
         ],
         "responses": {
@@ -4540,6 +4636,18 @@ func init() {
             "type": "string",
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
             "in": "query"
           }
         ],
@@ -6259,6 +6367,18 @@ func init() {
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
             "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
+            "in": "query"
           }
         ],
         "responses": {
@@ -6340,6 +6460,18 @@ func init() {
             "type": "string",
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
             "in": "query"
           }
         ],
@@ -6423,6 +6555,18 @@ func init() {
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
             "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
+            "in": "query"
           }
         ],
         "responses": {
@@ -6504,6 +6648,18 @@ func init() {
             "type": "string",
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
             "in": "query"
           }
         ],
@@ -6587,6 +6743,18 @@ func init() {
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
             "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
+            "in": "query"
           }
         ],
         "responses": {
@@ -6669,6 +6837,18 @@ func init() {
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
             "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
+            "in": "query"
           }
         ],
         "responses": {
@@ -6750,6 +6930,18 @@ func init() {
             "type": "string",
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
             "in": "query"
           }
         ],
@@ -6985,6 +7177,18 @@ func init() {
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
             "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
+            "in": "query"
           }
         ],
         "responses": {
@@ -7219,6 +7423,18 @@ func init() {
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
             "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
+            "in": "query"
           }
         ],
         "responses": {
@@ -7354,6 +7570,18 @@ func init() {
             "type": "string",
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
             "in": "query"
           }
         ],
@@ -7530,6 +7758,18 @@ func init() {
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
             "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
+            "in": "query"
           }
         ],
         "responses": {
@@ -7611,6 +7851,18 @@ func init() {
             "type": "string",
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
             "in": "query"
           }
         ],
@@ -7694,6 +7946,18 @@ func init() {
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
             "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
+            "in": "query"
           }
         ],
         "responses": {
@@ -7776,6 +8040,18 @@ func init() {
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
             "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
+            "in": "query"
           }
         ],
         "responses": {
@@ -7857,6 +8133,18 @@ func init() {
             "type": "string",
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
             "in": "query"
           }
         ],
@@ -8208,6 +8496,18 @@ func init() {
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
             "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
+            "in": "query"
           }
         ],
         "responses": {
@@ -8290,6 +8590,18 @@ func init() {
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
             "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
+            "in": "query"
           }
         ],
         "responses": {
@@ -8371,6 +8683,18 @@ func init() {
             "type": "string",
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
             "in": "query"
           }
         ],
@@ -8611,6 +8935,18 @@ func init() {
             "type": "string",
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
             "in": "query"
           }
         ],
@@ -10047,6 +10383,20 @@ func init() {
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
             "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
+            "in": "query"
           }
         ],
         "responses": {
@@ -10124,6 +10474,20 @@ func init() {
             "type": "string",
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
             "in": "query"
           }
         ],
@@ -11088,6 +11452,20 @@ func init() {
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
             "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
+            "in": "query"
           }
         ],
         "responses": {
@@ -11391,6 +11769,20 @@ func init() {
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
             "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
+            "in": "query"
           }
         ],
         "responses": {
@@ -11468,6 +11860,20 @@ func init() {
             "type": "string",
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
             "in": "query"
           }
         ],
@@ -12735,6 +13141,20 @@ func init() {
             "type": "string",
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
             "in": "query"
           }
         ],
@@ -14488,6 +14908,20 @@ func init() {
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
             "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
+            "in": "query"
           }
         ],
         "responses": {
@@ -14958,6 +15392,20 @@ func init() {
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
             "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
+            "in": "query"
           }
         ],
         "responses": {
@@ -15111,6 +15559,20 @@ func init() {
             "type": "string",
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
             "in": "query"
           }
         ],
@@ -17127,6 +17589,20 @@ func init() {
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
             "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
+            "in": "query"
           }
         ],
         "responses": {
@@ -17217,6 +17693,20 @@ func init() {
             "type": "string",
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
             "in": "query"
           }
         ],
@@ -17309,6 +17799,20 @@ func init() {
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
             "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
+            "in": "query"
           }
         ],
         "responses": {
@@ -17399,6 +17903,20 @@ func init() {
             "type": "string",
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
             "in": "query"
           }
         ],
@@ -17491,6 +18009,20 @@ func init() {
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
             "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
+            "in": "query"
           }
         ],
         "responses": {
@@ -17582,6 +18114,20 @@ func init() {
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
             "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
+            "in": "query"
           }
         ],
         "responses": {
@@ -17672,6 +18218,20 @@ func init() {
             "type": "string",
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
             "in": "query"
           }
         ],
@@ -17943,6 +18503,20 @@ func init() {
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
             "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
+            "in": "query"
           }
         ],
         "responses": {
@@ -18213,6 +18787,20 @@ func init() {
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
             "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
+            "in": "query"
           }
         ],
         "responses": {
@@ -18366,6 +18954,20 @@ func init() {
             "type": "string",
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
             "in": "query"
           }
         ],
@@ -18569,6 +19171,20 @@ func init() {
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
             "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
+            "in": "query"
           }
         ],
         "responses": {
@@ -18659,6 +19275,20 @@ func init() {
             "type": "string",
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
             "in": "query"
           }
         ],
@@ -18751,6 +19381,20 @@ func init() {
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
             "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
+            "in": "query"
           }
         ],
         "responses": {
@@ -18842,6 +19486,20 @@ func init() {
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
             "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
+            "in": "query"
           }
         ],
         "responses": {
@@ -18932,6 +19590,20 @@ func init() {
             "type": "string",
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
             "in": "query"
           }
         ],
@@ -19337,6 +20009,20 @@ func init() {
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
             "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
+            "in": "query"
           }
         ],
         "responses": {
@@ -19428,6 +20114,20 @@ func init() {
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
             "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
+            "in": "query"
           }
         ],
         "responses": {
@@ -19518,6 +20218,20 @@ func init() {
             "type": "string",
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
             "in": "query"
           }
         ],
@@ -19794,6 +20508,20 @@ func init() {
             "type": "string",
             "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
             "name": "orderby",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
             "in": "query"
           }
         ],

@@ -22,7 +22,8 @@ func GetPublicPTests(params published_test.GetPublicPublishedTestsParams, u *mod
 	db, err := dbconnection.ConnectDb()
 	if err == nil {
 		var ts []*dao.Test
-		ts, err = dao.GetPublicPublishedTests(db, params.Tags, params.LikeTitle, params.Orderby)
+		ts, err = dao.GetPublicPublishedTests(db, params.Tags, params.LikeTitle, params.Orderby,
+			params.Limit, params.Offset)
 		if err == nil {
 			var mts []*models.Test
 			mts, err = dao.ToModelTests(ts)

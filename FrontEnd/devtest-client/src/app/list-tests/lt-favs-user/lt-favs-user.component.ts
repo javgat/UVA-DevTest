@@ -36,7 +36,7 @@ export class LtFavsUserComponent extends ListTestsComponent implements OnInit {
 
   getTestsInclude(primera: boolean) {
     if(this.id==undefined) return
-    this.userS.getFavoriteTests(this.id, this.searchTags, this.likeTitle, this.orderBy).subscribe(
+    this.userS.getFavoriteTests(this.id, this.searchTags, this.likeTitle, this.orderBy, this.limit, this.offset).subscribe(
       resp => this.tests = resp,
       err => this.handleErrRelog(err, "obtener tests favoritos de un usuario", primera, this.getTestsEdit, this)
     )
@@ -44,7 +44,7 @@ export class LtFavsUserComponent extends ListTestsComponent implements OnInit {
 
   getTestsEdit(primera: boolean) {
     if(this.id==undefined) return
-    this.userS.getFavoriteEditTests(this.id, this.searchTags, this.likeTitle, this.orderBy).subscribe(
+    this.userS.getFavoriteEditTests(this.id, this.searchTags, this.likeTitle, this.orderBy, this.limit, this.offset).subscribe(
       resp => this.tests = resp,
       err => this.handleErrRelog(err, "obtener tests favoritos no publicados de un usuario", primera, this.getTestsEdit, this)
     )

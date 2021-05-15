@@ -40,7 +40,7 @@ export class LtProfilePublicComponent extends ListTestsComponent implements OnIn
 
   getTestsEdit(primera: boolean) {
     if(this.id==undefined) return
-    this.userS.getPublicEditTestsFromUser(this.id, this.searchTags, this.likeTitle, this.orderBy).subscribe(
+    this.userS.getPublicEditTestsFromUser(this.id, this.searchTags, this.likeTitle, this.orderBy, this.limit, this.offset).subscribe(
       resp => this.tests = resp,
       err => this.handleErrRelog(err, "obtener tests no publicados publicos de un usuario", primera, this.getTestsEdit, this)
     )

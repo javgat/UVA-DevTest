@@ -34,7 +34,7 @@ export class ListPtestsComponent extends ListTestsComponent implements OnInit {
   // EN published tests testEdit es el testPublished
   getTestsEdit(primera: boolean) {
     if (this.pS == undefined) return
-    this.pS.getPublicPublishedTests(this.searchTags, this.likeTitle, this.orderBy).subscribe(
+    this.pS.getPublicPublishedTests(this.searchTags, this.likeTitle, this.orderBy, this.limit, this.offset).subscribe(
       resp => this.tests = resp,
       err => this.handleErrRelog(err, "obtener tests publicados publicos", primera, this.getTestsEdit, this)
     )
