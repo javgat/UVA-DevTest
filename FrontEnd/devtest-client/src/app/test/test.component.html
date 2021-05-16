@@ -1,91 +1,115 @@
-<div class="mt-5">
+<div class="">
     <div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message" role="alert">
         {{getMensaje().texto}}</div>
     <div class="my-3">
-        <div class="row">
-            <h4>Test #{{test.id}}</h4>
-            <h2 class="col">{{test.title}}</h2>
-            <div class="col-sm">
-                <div class="d-grid gap-2 d-flex justify-content-md-end" *ngIf="checkCloneTest()">
-                    <button type="button" class="btn btn-outline-primary mx-3 me-md-2" data-bs-toggle="modal"
-                        data-bs-target="#modalCloneTest">Clonar</button>
-                    <input type="checkbox" class="btn-check" id="btn-check-2" [checked]="isFavorita"
-                        (click)="changeFavorita()">
-                    <label class="btn btn-outline-success" for="btn-check-2">
+        <div class=" card">
+            <div class="card-body">
+                <div class="row">
+                    <h2 class="col">Test: {{test.title}}</h2>
+                    <div class="col-sm">
+                        <div class="d-grid gap-2 d-flex justify-content-md-end" *ngIf="checkCloneTest()">
+                            <button type="button" class="btn btn-outline-primary mx-3 me-md-2" data-bs-toggle="modal"
+                                data-bs-target="#modalCloneTest">Clonar</button>
+                            <input type="checkbox" class="btn-check" id="btn-check-2" [checked]="isFavorita"
+                                (click)="changeFavorita()">
+                            <label class="btn btn-outline-success" for="btn-check-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 26" width="24px"
+                                    fill="currentColor">
+                                    <path d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M0 0h24v24H0z" fill="none" />
+                                    <path
+                                        d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                </svg>
+                                <span *ngIf="!isFavorita">Guardar
+                                    Favorito</span><span *ngIf="isFavorita">Guardado Favorito</span>
+                                | {{test.cantidadFavoritos}}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <p *ngIf="checkPermisosEdicion()">Autor: <a
+                        [routerLink]="['/profile', test.username]">{{test.username}}</a>
+                </p>
+                <p><button class="btn btn-primary" type="button" [routerLink]="['/et', test.id, 'teams']">Ver equipos
+                        administradores</button></p>
+                <p>Etiquetas:
+                    <span *ngFor="let tag of tags">
+                        <span *ngIf="checkPermisosEdicion()">
+                            <span class="badge bg-warning text-dark" role="button" id="{{tag.tag}}"
+                                data-bs-toggle="dropdown" aria-expanded="false">{{tag.tag}}</span>&nbsp;
+                            <ul class="dropdown-menu" attr.aria-labelledby="{{tag.tag}}">
+                                <li><a class="dropdown-item" role="button"
+                                        (click)="deleteTagClick(tag.tag)">Eliminar</a>
+                                </li>
+                            </ul>
+                        </span>
+                        <span *ngIf="!checkPermisosEdicion()">
+                            <span class="badge bg-warning text-dark">{{tag.tag}}</span>&nbsp;
+                        </span>
+                    </span>
+                </p>
+                <form *ngIf="checkPermisosEdicion()" (ngSubmit)='addTagSubmit()' ngNativeValidate>
+                    <div class="input-group my-3">
+                        <input class="button btn btn-primary" type="submit" value="Añadir etiqueta" />
+                        <input type="text" class="form-control" name="inputAddTag" [(ngModel)]="newTag"
+                            placeholder="Etiqueta" required pattern=".+" />
+                    </div>
+                </form>
+                <hr />
+                <div class="d-grid gap-2 my-3">
+                    <button *ngIf="checkPermisosEdicion()" type="button" class="btn btn-lg btn-primary"
+                        data-bs-toggle="modal" data-bs-target="#editTestModal">
                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 26" width="24px"
                             fill="currentColor">
                             <path d="M0 0h24v24H0z" fill="none" />
-                            <path d="M0 0h24v24H0z" fill="none" />
                             <path
-                                d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
                         </svg>
-                        <span *ngIf="!isFavorita">Guardar
-                            Favorito</span><span *ngIf="isFavorita">Guardado Favorito</span></label>
+                        Editar Test
+                    </button>
+                </div>
+                <p><b>Descripción:</b>
+                <p>
+                <div class="mb-4">
+                    <span style="white-space: pre-line">{{test.description}}</span>
+                </div>
+                <p><b>Tiempo disponible:</b> {{test.maxMinutes}}
+                    minutos</p>
+                <p><b>Nota máxima: </b> {{test.notaMaxima}}</p>
+                <p><b>Realización pública una vez publicado: </b> <span *ngIf="test.accesoPublico">Sí</span><span
+                        *ngIf="!test.accesoPublico">No</span></p>
+                <p><b>Acceso público para profesores: </b> <span *ngIf="test.accesoPublicoNoPublicado">Sí</span><span
+                        *ngIf="!test.accesoPublicoNoPublicado">No</span>
+                </p>
+                <p><b>Publicación automática de corrección de respuestas: </b> <span
+                        *ngIf="test.autoCorrect">Sí</span><span *ngIf="!test.autoCorrect">No</span></p>
+                <p><b>Visibilidad de la respuesta: </b>{{visibilidadToString(test.visibilidad)}}</p>
+
+                <div class="d-grid gap-2">
+                    <button *ngIf="checkPermisosEdicion()" type="button" class="btn btn-lg btn-outline-success"
+                        data-bs-toggle="modal" data-bs-target="#modalPublishTest">Publicar</button>
+                    <button type="button" class="btn btn-lg btn-primary" [routerLink]="['/et', test.id, 'ptests']">Ver
+                        Publicaciones</button>
                 </div>
             </div>
         </div>
-        <p *ngIf="checkPermisosEdicion()">Autor: <a [routerLink]="['/profile', test.username]">{{test.username}}</a></p>
-        <p>Favoritos: {{test.cantidadFavoritos}}</p>
-        <p *ngIf="checkPermisosEdicion()"><button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
-                data-bs-target="#modalPublishTest">Publicar</button></p>
-        <p><button type="button" class="btn btn-primary" [routerLink]="['/et', test.id, 'ptests']">Ver
-                Publicaciones</button></p>
-        <p>Etiquetas:
-            <span *ngFor="let tag of tags">
-                <span *ngIf="checkPermisosEdicion()">
-                    <span class="badge bg-warning text-dark" role="button" id="{{tag.tag}}" data-bs-toggle="dropdown"
-                        aria-expanded="false">{{tag.tag}}</span>&nbsp;
-                    <ul class="dropdown-menu" attr.aria-labelledby="{{tag.tag}}">
-                        <li><a class="dropdown-item" role="button" (click)="deleteTagClick(tag.tag)">Eliminar</a></li>
-                    </ul>
-                </span>
-                <span *ngIf="!checkPermisosEdicion()">
-                    <span class="badge bg-warning text-dark">{{tag.tag}}</span>&nbsp;
-                </span>
-            </span>
-        </p>
-        <form *ngIf="checkPermisosEdicion()" (ngSubmit)='addTagSubmit()' ngNativeValidate>
-            <div class="input-group my-3">
-                <input class="button btn btn-primary" type="submit" value="Añadir etiqueta" />
-                <input type="text" class="form-control" name="inputAddTag" [(ngModel)]="newTag" placeholder="Etiqueta"
-                    required pattern=".+" />
-            </div>
-        </form>
-        <p><b>Descripción:</b>
-        <p>
-        <div class="mb-4">
-            <span style="white-space: pre-line">{{test.description}}</span>
-        </div>
-        <p><b>Tiempo disponible:</b> {{test.maxMinutes}} minutos</p>
-        <p><b>Nota máxima: </b> {{test.notaMaxima}}</p>
-        <p><b>Acceso público a realización: </b> <span *ngIf="test.accesoPublico">Sí</span><span
-                *ngIf="!test.accesoPublico">No</span>
-        <p><b>Visionado público para profesores: </b> <span *ngIf="test.accesoPublicoNoPublicado">Sí</span><span
-                *ngIf="!test.accesoPublicoNoPublicado">No</span>
-        </p>
-        <p><b>Publicación automática de corrección de respuestas: </b> <span *ngIf="test.autoCorrect">Sí</span><span
-                *ngIf="!test.autoCorrect">No</span></p>
-        <p><b>Visibilidad de la respuesta: </b>{{visibilidadToString(test.visibilidad)}}</p>
-        <p><button class="btn btn-primary" type="button" [routerLink]="['/et', test.id, 'teams']">Ver equipos
-                administradores</button></p>
-        <p><button *ngIf="checkPermisosEdicion()" type="button" class="btn btn-primary" data-bs-toggle="modal"
-                data-bs-target="#editTestModal">Editar Test</button></p>
-        <hr />
-        <h4>Preguntas:</h4>
+        <h3 class="mt-3">Preguntas:</h3>
         <form *ngIf="checkPermisosEdicion()" (ngSubmit)='addQuestionSubmit()' ngNativeValidate>
             <div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message" role="alert">
                 {{getMensaje().texto}}</div>
             <div *ngIf="addQuestionById">
                 <div class="input-group my-3">
-                    <input class="button btn btn-primary" type="submit" value="Añadir pregunta por ID" />
+                    <input class="button btn btn-lg btn-primary" type="submit" value="Añadir pregunta por ID" />
                     <input type="number" class="form-control" name="inputAddQuestion" [(ngModel)]="addQuestionId"
                         placeholder="Id de la pregunta" required min=1 />
                 </div>
                 <p><a class="link-dark m-3" role="button" (click)="changeNotAddByID()">Añadir con buscador</a></p>
             </div>
             <div class="my-3" *ngIf="!addQuestionById">
-                <p><button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal"
-                        data-bs-target="#modalSearchQuestion" (click)="borrarMensaje()">Añadir pregunta</button></p>
+                <div class="d-grid gap-2 mb-3">
+                    <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal"
+                        data-bs-target="#modalSearchQuestion" (click)="borrarMensaje()">Añadir pregunta</button>
+                </div>
                 <p><a class="link-dark mx-3" role="button" (click)="changeAddByID()">Añadir por id</a></p>
             </div>
         </form>
@@ -125,10 +149,11 @@
                     <td *ngIf="checkPermisosEdicion()">
                         <div class="btn-group dropstart" role="button">
                             <a data-bs-toggle="dropdown" class="link-dark" aria-expanded="false">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                    class="bi bi-list" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd"
-                                        d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z" />
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
+                                    fill="currentColor">
+                                    <path d="M0 0h24v24H0z" fill="none" />
+                                    <path
+                                        d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
                                 </svg>
                             </a>
                             <ul class="dropdown-menu">
@@ -144,7 +169,7 @@
     </div>
     <div class="modal fade" id="editTestModal" *ngIf="checkPermisosEdicion()" tabindex="-1"
         aria-labelledby="editTestModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <form ngNativeValidate>
                     <div class="modal-header">
