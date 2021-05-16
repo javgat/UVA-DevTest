@@ -55,7 +55,7 @@
                     <span class="arrow-orderby" *ngIf="isLessTimeSelected()"> &darr;</span>
                     <span class="arrow-orderby" *ngIf="!isMoreTimeSelected() && !isLessTimeSelected()"> &#8597;</span>
                 </th>
-                <th role="button" (click)="clickOrderByFavoritos()">
+                <th *ngIf="!arePublished" role="button" (click)="clickOrderByFavoritos()">
                     Favoritos
                     <span class="arrow-orderby" *ngIf="isMoreFavSelected()"> &uarr;</span>
                     <span class="arrow-orderby" *ngIf="isLessFavSelected()"> &darr;</span>
