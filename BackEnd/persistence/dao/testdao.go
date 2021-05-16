@@ -690,7 +690,7 @@ func GetTestsByOrigenTestid(db *sql.DB, testid int64) ([]*Test, error) {
 		return nil, errors.New(errorDBNil)
 	}
 	var ts []*Test
-	stPrepare := "SELECT * FROM Test WHERE origenTestid=?"
+	stPrepare := "SELECT * FROM Test WHERE origenTestid=? ORDER BY id DESC"
 	query, err := db.Prepare(stPrepare)
 	if err == nil {
 		defer query.Close()

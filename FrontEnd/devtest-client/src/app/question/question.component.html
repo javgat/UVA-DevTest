@@ -1,4 +1,4 @@
-<div class="mt-3">
+<div class="mt-2">
     <div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message" role="alert">
         {{getMensaje().texto}}</div>
     <button *ngIf="testid!=undefined" class="button btn btn-outline-primary m-3" [routerLink]="['/pt', testid]">
@@ -144,16 +144,15 @@
                             <div class="row">
                                 <div class="col-sm">
                                     <div class="form-check">
-                                        <input [ngClass]="{disabled: checkPermisosEdicion()}" class="form-check-input"
-                                            type="radio" id="radioCorrecta{{opc.indice}}" role="button"
-                                            [checked]="opc.correcta" (change)="changeCorrectaOpc(opc)">
+                                        <input class="form-check-input" type="radio" id="radioCorrecta{{opc.indice}}"
+                                            role="button" [checked]="opc.correcta" (change)="changeCorrectaOpc(opc)"
+                                            [disabled]="!checkPermisosEdicion()">
                                         <label class="form-check-label" role="button"
                                             for="radioCorrecta{{opc.indice}}">Respuesta correcta</label>
                                     </div>
                                     <div class="form-check">
-                                        <input [ngClass]="{disabled: checkPermisosEdicion()}" class="form-check-input"
-                                            type="radio" id="radioIncorrecta{{opc.indice}}" role="button"
-                                            [checked]="!opc.correcta" (change)="changeCorrectaOpc(opc)">
+                                        <input class="form-check-input" type="radio" id="radioIncorrecta{{opc.indice}}" role="button"
+                                            [checked]="!opc.correcta" (change)="changeCorrectaOpc(opc)" [disabled]="!checkPermisosEdicion()">
                                         <label class="form-check-label" role="button"
                                             for="radioIncorrecta{{opc.indice}}">Respuesta incorrecta</label>
                                     </div>
