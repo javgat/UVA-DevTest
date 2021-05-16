@@ -1,4 +1,4 @@
-<div class="mt-5">
+<div class="mt-2">
     <button *ngIf="isModoTestAdmin()" class="button btn btn-outline-primary m-3" [routerLink]="['/pt', test.id, 'answers']">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
             class="bi bi-chevron-double-left" viewBox="0 0 16 16">
@@ -24,8 +24,8 @@
     <h3>Respuesta al test <a [routerLink]="['/pt', testid]">{{test.title}}</a></h3>
     <p>Autor: <a [routerLink]="['/profile', answer.username]">{{answer.username}}</a></p>
     <p>Entregada: <span *ngIf="answer.entregado">Sí</span><span *ngIf="!answer.entregado">No</span></p>
-    <p>Fecha de inicio: {{answer.startTime}}</p>
-    <p>Fecha de entrega: {{answer.finishTime}}</p>
+    <p>Fecha de inicio: {{printDate(answer.startTime)}}</p>
+    <p>Fecha de entrega: {{printDate(answer.finishTime)}}</p>
     <p>Puntuacion: {{answer.puntuacion || 0}} / {{test.notaMaxima}}</p>
     <p *ngIf="isModoTestAdmin()">Visible para el usuario: 
         <span *ngIf="answer.visibleParaUsuario">Sí</span><span *ngIf="!answer.visibleParaUsuario">No</span>

@@ -1,21 +1,27 @@
-<div class="mt-5">
+<div class="mt-2">
     <div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message" role="alert">
         {{getMensaje().texto}}</div>
-    <p><button type="button" class="btn btn-outline-primary" [routerLink]="['/pt', testid, 'answers', answerid]">Ver
-            respuesta completa del examen</button></p>
+    <button type="button" class="btn btn-outline-primary m-3" [routerLink]="['/pt', testid, 'answers', answerid]">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+            class="bi bi-chevron-double-left" viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+                d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+            <path fill-rule="evenodd"
+                d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+        </svg>
+        Ver respuesta completa del examen</button>
     <div class="card">
         <div class="card-body">
-            <h4>Pregunta #{{question.id}}</h4>
-            <h2> <a class="link-dark" [routerLink]="['/pt', testid, 'q', questionid]">{{question.title}}</a></h2>
-            <p>Autor: <a [routerLink]="['/profile', question.username]">{{question.username}}</a></p>
-            <p>Tiempo estimado: {{question.estimatedTime}} minutos</p>
-            <p>Valor: {{question.valorFinal}} puntos</p>
-            <p>Penalización por fallo: {{question.penalizacion}} %</p>
-            <p>Corrección automática: <span *ngIf="question.autoCorrect">Sí</span><span
+            <h2>Pregunta <a class="link-dark" [routerLink]="['/pt', testid, 'q', questionid]">{{question.title}}</a></h2>
+            <p><b>Usuario: </b> <a [routerLink]="['/profile', question.username]">{{question.username}}</a></p>
+            <p><b>Tiempo estimado:</b> {{question.estimatedTime}} minutos</p>
+            <p><b>Valor:</b> {{question.valorFinal}} puntos</p>
+            <p><b>Penalización por fallo: </b> {{question.penalizacion}} %</p>
+            <p><b>Corrección automática: </b> <span *ngIf="question.autoCorrect">Sí</span><span
                     *ngIf="!question.autoCorrect">No</span></p>
-            <p>Corregida: <span class="badge bg-success" *ngIf="qa.corregida">Sí</span><span class="badge bg-danger"
+            <p><b>Corregida: </b><span class="badge bg-success" *ngIf="qa.corregida">Sí</span><span class="badge bg-danger"
                     *ngIf="!qa.corregida">No</span></p>
-            <p *ngIf="qa.corregida">Puntuación: {{qa.puntuacion}}% ({{calcValor(qa.puntuacion,
+            <p *ngIf="qa.corregida"><b>Puntuación:</b> {{qa.puntuacion}}% ({{calcValor(qa.puntuacion,
                 question.valorFinal)}}/{{question.valorFinal}})</p>
             <div *ngIf="isModoTestAdmin()">
                 <p *ngIf="!qa.corregida">
@@ -43,6 +49,7 @@
                 </form>
             </div>
             <hr />
+            <h4>Enunciado:</h4>
             <p><span style="white-space: pre-line">{{question.question}}</span></p>
         </div>
     </div>
@@ -56,7 +63,7 @@
         <div class="m-3" *ngIf="question.tipoPregunta=='opciones'">
             <p>Opciones:</p>
             <div *ngFor="let opc of options">
-                <div class="my-4 card" *ngIf="isRadioQuestion()"
+                <div class="my-1 card" *ngIf="isRadioQuestion()"
                     [ngClass]="{'border-success': radioEsCorrecta(opc), 'border-danger': radioEsIncorrecta(opc)}">
                     <div class="card-body">
                         <div class="form-check">
@@ -87,7 +94,7 @@
                     </div>
                 </div>
                 <!-- CHECKBOX -->
-                <div class="my-4 card" *ngIf="isCheckQuestion()"
+                <div class="my-1 card" *ngIf="isCheckQuestion()"
                     [ngClass]="{'border-success': checkEsCorrecta(opc), 'border-danger': checkEsIncorrecta(opc)}">
                     <div class="card-body">
                         <div class="form-check">

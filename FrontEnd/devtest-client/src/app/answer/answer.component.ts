@@ -134,4 +134,10 @@ export class AnswerComponent extends LoggedInController implements OnInit {
     )
   }
 
+  printDate(d: Date | undefined): string{
+    if(d==undefined) return ""
+    var date = new Date(d)
+    return date.toLocaleString()
+  }
+
 }
