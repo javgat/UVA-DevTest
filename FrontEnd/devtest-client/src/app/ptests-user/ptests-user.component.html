@@ -1,6 +1,6 @@
 <div class="mt-5">
     <div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message" role="alert">
         {{getMensaje().texto}}</div>
-    <h2>Tests Publicados de <a class="link-dark" [routerLink]="['/profile', username]">{{username}}</a></h2>
+    <h2 class="text-center fw-bold">Tests Publicados de <a class="link-dark" [routerLink]="['/profile', username]">{{username}}</a></h2>
     <app-lpt-user></app-lpt-user>
 </div>

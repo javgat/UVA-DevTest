@@ -1,5 +1,5 @@
 <div class="mt-5">
-    <h2>Tus Equipos</h2>
+    <h2 class="text-center fw-bold">Tus Equipos</h2>
     <div *ngIf="getSessionUser().isTeacherOrAdmin()">
         <a class="button btn btn-primary" [routerLink]="['/createTeam']">Crear equipo</a>
     </div>
