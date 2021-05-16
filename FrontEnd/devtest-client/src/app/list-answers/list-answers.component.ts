@@ -95,4 +95,9 @@ export class ListAnswersComponent extends LoggedInController implements OnInit {
     return this.getSessionUser().isStudent()
   }
 
+  printDate(d: Date | undefined): string{
+    if(d==undefined) return ""
+    var date = new Date(d)
+    return date.toLocaleString()
+  }
 }

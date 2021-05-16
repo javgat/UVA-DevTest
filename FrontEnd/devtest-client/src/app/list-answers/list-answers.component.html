@@ -26,8 +26,8 @@
                 [routerLink]="['/pt', testid, 'answers', ans.id]">
                 <td>{{ans.username || ""}}</td>
                 <td><span *ngIf="ans.entregado">Sí</span><span *ngIf="!ans.entregado">No</span></td>
-                <td>{{ans.startTime?.toLocaleString()}}</td>
-                <td><span *ngIf="ans.entregado">{{ans.finishTime}}</span></td>
+                <td>{{printDate(ans.startTime)}}</td>
+                <td><span *ngIf="ans.entregado">{{printDate(ans.finishTime)}}</span></td>
                 <td>{{ans.puntuacion || "--"}}</td>
                 <td *ngIf="modoUsuario()"><span *ngIf="ans.visibleParaUsuario">Sí</span><span
                         *ngIf="!ans.visibleParaUsuario">No</span></td>
@@ -36,8 +36,8 @@
                 [routerLink]="['/pt', testid, 'answers', ans.id]">
                 <td>{{ans.username || ""}}</td>
                 <td><span *ngIf="ans.entregado">Sí</span><span *ngIf="!ans.entregado">No</span></td>
-                <td>{{ans.startTime?.toLocaleString()}}</td>
-                <td><span *ngIf="ans.entregado">{{ans.finishTime}}</span></td>
+                <td>{{printDate(ans.startTime)}</td>
+                <td><span *ngIf="ans.entregado">{{printDate(ans.finishTime)}}</span></td>
                 <td>{{ans.puntuacion || "--"}}</td>
                 <td *ngIf="modoUsuario()"><span *ngIf="ans.visibleParaUsuario">Sí</span><span
                         *ngIf="!ans.visibleParaUsuario">No</span></td>
@@ -45,8 +45,8 @@
             <tr *ngIf="modoUsuario() && !ans.visibleParaUsuario">
                 <td>{{ans.username || ""}}</td>
                 <td><span *ngIf="ans.entregado">Sí</span><span *ngIf="!ans.entregado">No</span></td>
-                <td>{{ans.startTime?.toLocaleString()}}</td>
-                <td><span *ngIf="ans.entregado">{{ans.finishTime}}</span></td>
+                <td>{{printDate(ans.startTime)}}</td>
+                <td><span *ngIf="ans.entregado">{{printDate(ans.finishTime)}}</span></td>
                 <td>{{ans.puntuacion || "--"}}</td>
                 <td *ngIf="modoUsuario()"><span *ngIf="ans.visibleParaUsuario">Sí</span><span
                         *ngIf="!ans.visibleParaUsuario">No</span></td>

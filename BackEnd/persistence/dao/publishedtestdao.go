@@ -420,15 +420,18 @@ func GetSolvableTestsFromUser(db *sql.DB, username string, tags [][]string, like
 	}
 	var ts []*Test
 	stPrepare :=
-		"WITH TestsUserInvited AS ( SELECT T.* FROM Test T JOIN InvitacionTestUsuario I ON T.id=I.testid JOIN Usuario U ON U.id=I.usuarioid WHERE U.username=? AND T.editable=0)," +
-			"TestsUserTeamInvited AS ( SELECT T.* FROM Test T JOIN InvitacionTestEquipo I ON T.id=I.testid JOIN EquipoUsuario E ON E.equipoid=I.equipoid JOIN Usuario U ON U.id=E.usuarioid WHERE U.username=? AND T.editable=0) " +
-			"SELECT DISTINCT T.* FROM Test T LEFT JOIN TestsUserInvited U ON T.id=U.id " +
+		"WITH TestsUserInvited AS ( SELECT T.* FROM Test T JOIN InvitacionTestUsuario I ON T.id=I.testid JOIN Usuario U ON U.id=I.usuarioid " +
+			" WHERE U.username=? AND T.editable=0)," +
+			"TestsUserTeamInvited AS ( SELECT T.* FROM Test T JOIN InvitacionTestEquipo I ON T.id=I.testid JOIN EquipoUsuario E ON " +
+			" E.equipoid=I.equipoid JOIN Usuario U ON U.id=E.usuarioid WHERE U.username=? AND T.editable=0), " +
+			"SolvableTests AS (SELECT DISTINCT T.* FROM Test T LEFT JOIN TestsUserInvited U ON T.id=U.id " +
 			"LEFT JOIN TestsUserTeamInvited E ON E.id=T.id " +
 			"WHERE T.editable=0 AND ( T.accesoPublico=1 OR U.accesoPublico=0 OR E.accesoPublico=0 ) " +
-			"UNION SELECT T.* FROM Test T JOIN Usuario U ON T.usuarioid=U.id WHERE U.username=? " +
-			"UNION SELECT T.* FROM Test T JOIN GestionTestEquipo G ON T.id=G.testid JOIN EquipoUsuario E ON E.equipoid=G.equipoid " +
-			"JOIN Usuario U ON E.usuarioid=U.id WHERE U.username=? "
-	stPrepare = addFiltersToQueryTestLong(true, stPrepare, tags, likeTitle, orderBy, limit, offset)
+			"UNION SELECT DISTINCT T.* FROM Test T JOIN Usuario U ON T.usuarioid=U.id WHERE U.username=? " +
+			"UNION SELECT DISTINCT T.* FROM Test T JOIN GestionTestEquipo G ON T.id=G.testid JOIN EquipoUsuario E ON E.equipoid=G.equipoid " +
+			"JOIN Usuario U ON E.usuarioid=U.id WHERE U.username=? )" +
+			"SELECT T.* FROM SolvableTests T "
+	stPrepare = addFiltersToQueryTestLong(false, stPrepare, tags, likeTitle, orderBy, limit, offset)
 	query, err := db.Prepare(stPrepare)
 	if err == nil {
 		defer query.Close()

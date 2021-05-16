@@ -87,4 +87,10 @@ export class TestPTestsComponent extends LoggedInTeacherController implements On
     )
   }
 
+  printDate(d: Date | undefined): string{
+    if(d==undefined) return ""
+    var date = new Date(d)
+    return date.toLocaleString()
+  }
+
 }

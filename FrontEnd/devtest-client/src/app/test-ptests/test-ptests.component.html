@@ -25,7 +25,7 @@
         <tbody >
             <tr *ngFor="let ptest of ptests" role="button" [routerLink]="['/pt', ptest.id]">
                 <td>{{ptest.title}}</td>
-                <td>{{ptest.horaCreacion}}</td>
+                <td>{{printDate(ptest.horaCreacion)}}</td>
             </tr>
         </tbody>
     </table>
