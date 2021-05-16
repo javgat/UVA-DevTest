@@ -112,6 +112,7 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
       err => {
         if (err.status == 410) {
           this.pregunta.isRespondida = false
+          this.questionAnswer.respuesta = ""
         } else {
           this.handleErrRelog(err, "obtener respuestas de una pregunta del test realizandose", primera, this.getQuestionAnswersQuestion, this)
         }

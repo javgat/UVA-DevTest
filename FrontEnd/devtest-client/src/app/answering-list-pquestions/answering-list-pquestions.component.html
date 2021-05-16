@@ -1,4 +1,4 @@
-<div class="mt-5">
+<div class="mt-3">
     <div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message" role="alert">
         {{getMensaje().texto}}</div>
     <h3>Respondiendo al test {{test.title}}</h3>
@@ -15,8 +15,11 @@
                     *ngIf="(pregunta.isRespondida || false)">Respondida</span></p>
         </div>
     </div>
-    <p><button class="btn btn-success btn-lg" type="button" data-bs-toggle="modal"
-            data-bs-target="#finnishAnswerModal">Enviar todo y terminar</button></p>
+
+    <div class="d-grid gap-2 my-3">
+        <button class="btn btn-success btn-lg" type="button" data-bs-toggle="modal"
+            data-bs-target="#finnishAnswerModal">Enviar todo y terminar</button>
+    </div>
     <!-- Modal iniciar respuesta -->
     <div class="modal fade" id="finnishAnswerModal" tabindex="-1" aria-labelledby="finnishAnswerModalLabel"
         aria-hidden="true">
@@ -27,7 +30,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Has respondido {{getNumeroPreguntasRespondidas()}} preguntas de {{getNumeroPreguntasTotales()}}.</p>
+                    <p>Has respondido {{getNumeroPreguntasRespondidas()}} preguntas de {{getNumeroPreguntasTotales()}}.
+                    </p>
                     <p>Una vez finalices la respuesta no podrás modificar los datos enviados.</p>
                 </div>
                 <div class="modal-footer">
