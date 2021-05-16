@@ -19,10 +19,12 @@ export class AnsweringListPQuestionsComponent extends LoggedInController impleme
   openAnswer?: Answer
   test: Test
   preguntas: Question[]
+  mostrarDescripcion: boolean
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private route: ActivatedRoute, private ptestS: PublishedTestService, private answerS: AnswerService) {
     super(session, router, data, userS);
     this.testid = 0
     this.preguntas = []
+    this.mostrarDescripcion = false
     this.test = new Examen()
     this.routeSub = this.route.params.subscribe(params => {
       this.testid = params['testid']
@@ -111,6 +113,10 @@ export class AnsweringListPQuestionsComponent extends LoggedInController impleme
 
   getNumeroPreguntasRespondidas(): number{
     return this.preguntas.filter((val, i, quests) => val.isRespondida==true).length
+  }
+
+  switchMostrarDescripcion(){
+    this.mostrarDescripcion = !this.mostrarDescripcion
   }
 
 }

@@ -2,7 +2,27 @@
     <div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message" role="alert">
         {{getMensaje().texto}}</div>
     <h3>Respondiendo al test {{test.title}}</h3>
-    <h4>Preguntas: </h4>
+    <button type="button" class="btn btn-primary" (click)="switchMostrarDescripcion()">
+        <span *ngIf="mostrarDescripcion">Ocultar descripción del test</span>
+        <span *ngIf="!mostrarDescripcion">Mostrar descripción del test</span>
+    </button>
+    <div class="m-3" *ngIf="mostrarDescripcion">
+        <p><b>Descripción:</b>
+            <p>
+            <div class="mb-4">
+                <span style="white-space: pre-line">{{test.description}}</span>
+            </div>
+            <p><b>Tiempo disponible:</b> {{test.maxMinutes}} minutos</p>
+            <p><b>Nota máxima: </b> {{test.notaMaxima}}</p>
+            <p><b>Realización pública una vez publicado: </b> <span *ngIf="test.accesoPublico">Sí</span><span
+                    *ngIf="!test.accesoPublico">No</span></p>
+            <p><b>Acceso público para profesores: </b> <span *ngIf="test.accesoPublicoNoPublicado">Sí</span><span
+                    *ngIf="!test.accesoPublicoNoPublicado">No</span>
+            </p>
+            <p><b>Publicación automática de corrección de respuestas: </b> <span
+                    *ngIf="test.autoCorrect">Sí</span><span *ngIf="!test.autoCorrect">No</span></p>
+    </div>
+    <h4 class="mt-3">Preguntas: </h4>
     <div *ngFor="let pregunta of preguntas" class="card my-3">
         <div class="card-body" role="button" [routerLink]="['/pt', testid, 'answering', 'pq', pregunta.id]">
             <h5 class="card-title">{{pregunta.title}}</h5>
