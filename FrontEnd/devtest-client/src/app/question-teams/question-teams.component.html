@@ -1,4 +1,4 @@
-<div class="mt-5">
+<div class="mt-2">
     <div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message" role="alert">
         {{getMensaje().texto}}</div>
     <button class="button btn btn-outline-primary m-3" [routerLink]="['/q', question.id]">
@@ -11,7 +11,7 @@
         </svg>
         Volver
     </button>
-    <h2>Equipos que administran la pregunta {{question.id}}</h2>
+    <h2>Equipos que administran la pregunta {{question.title}}</h2>
     <div *ngIf="checkPermisosAdministracion()">
         <form (ngSubmit)='addTeamSubmit()' ngNativeValidate>
             <div class="my-3">
