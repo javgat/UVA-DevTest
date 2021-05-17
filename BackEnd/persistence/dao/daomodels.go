@@ -373,3 +373,17 @@ const (
 
 	OrderByLessTime string = "lessTime"
 )
+
+const (
+	TagOrderByFirstAlpha string = "firstAlpha"
+
+	TagOrderByLastAlpha string = "lastAlpha"
+
+	TagOrderByMoreQuestion string = "moreQuestion"
+
+	TagOrderByLessQuestion string = "lessQuestion"
+
+	TagOrderByMoreTest string = "moreTest"
+
+	TagOrderByLessTest string = "lessTest"
+)

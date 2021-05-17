@@ -52,7 +52,11 @@
                     <div class="input-group my-3">
                         <input class="button btn btn-primary" type="submit" value="Añadir etiqueta" />
                         <input type="text" class="form-control" name="inputAddTag" [(ngModel)]="newTag"
-                            placeholder="Etiqueta" required pattern=".+" />
+                            placeholder="Etiqueta" required pattern=".+" list="auto_tags" autocomplete="off"
+                            (ngModelChange)="changeGetAutoTags()" />
+                        <datalist id="auto_tags">
+                            <option *ngFor="let autotag of autotags" value="{{autotag.tag}}">
+                        </datalist>
                     </div>
                 </form>
                 <hr />

@@ -3410,6 +3410,40 @@ func init() {
         ],
         "summary": "Returns all tags.",
         "operationId": "GetTags",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Partial name of the tag to find autocompletion of",
+            "name": "likeTag",
+            "in": "query"
+          },
+          {
+            "enum": [
+              "firstAlpha",
+              "lastAlpha",
+              "moreQuestion",
+              "lessQuestion",
+              "moreTest",
+              "lessTest"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with firstAlpha",
+            "name": "orderby",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
+            "in": "query"
+          }
+        ],
         "responses": {
           "200": {
             "description": "tags found",
@@ -14137,6 +14171,42 @@ func init() {
         ],
         "summary": "Returns all tags.",
         "operationId": "GetTags",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Partial name of the tag to find autocompletion of",
+            "name": "likeTag",
+            "in": "query"
+          },
+          {
+            "enum": [
+              "firstAlpha",
+              "lastAlpha",
+              "moreQuestion",
+              "lessQuestion",
+              "moreTest",
+              "lessTest"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with firstAlpha",
+            "name": "orderby",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
+            "in": "query"
+          }
+        ],
         "responses": {
           "200": {
             "description": "tags found",

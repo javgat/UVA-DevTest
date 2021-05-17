@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { TagService, TeamService, Test, TestService, UserService } from '@javgat/devtest-api';
+import { Tag, TagService, TeamService, Test, TestService, UserService } from '@javgat/devtest-api';
 import { LoggedInController } from '../shared/app.controller';
 import { EnumOrderBy, tipoPrint } from '../shared/app.model';
 import { DataService } from '../shared/data.service';
@@ -25,6 +25,7 @@ export class ListTestsComponent extends LoggedInController implements OnInit {
   orderBy: EnumOrderBy
   limit: number
   offset: number
+  autotags: Tag[]
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, protected tS: TestService,
      protected tagS: TagService, protected teamS?: TeamService) {
     super(session, router, data, userS)
@@ -40,7 +41,9 @@ export class ListTestsComponent extends LoggedInController implements OnInit {
     this.orderBy = EnumOrderBy.newDate
     this.limit = 20
     this.offset = 0
+    this.autotags = []
     this.getTestsFilters()
+    this.changeGetAutoTags()
   }
 
   ngOnInit(): void {
@@ -224,5 +227,18 @@ export class ListTestsComponent extends LoggedInController implements OnInit {
 
   clickCurrentPage(){
     this.getTestsFilters()
+  }
+
+  changeGetAutoTags(){
+    this.getAutoTags(true)
+  }
+
+  getAutoTags(primera: boolean){
+    this.tagS.getTags(this.newSearchTag ,"moreTest", 20).subscribe(
+      resp=>{
+        this.autotags=resp
+      },
+      err => this.handleErrRelog(err, "obtener tags de tests mas comunes", primera, this.getAutoTags, this)
+    )
   }
 }

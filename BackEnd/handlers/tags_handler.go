@@ -20,7 +20,7 @@ func GetTags(params tag.GetTagsParams, u *models.User) middleware.Responder {
 	db, err := dbconnection.ConnectDb()
 	if err == nil {
 		var ts []*dao.Tag
-		ts, err = dao.GetTags(db)
+		ts, err = dao.GetTags(db, params.LikeTag, params.Orderby, params.Limit, params.Offset)
 		if err == nil {
 			mts := dao.ToModelTags(ts)
 			return tag.NewGetTagsOK().WithPayload(mts)

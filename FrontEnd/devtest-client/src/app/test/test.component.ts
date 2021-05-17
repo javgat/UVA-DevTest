@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PublishTestParams, Question, Tag, Test, TestService, UserService, ValorFinal } from '@javgat/devtest-api';
+import { PublishTestParams, Question, Tag, TagService, Test, TestService, UserService, ValorFinal } from '@javgat/devtest-api';
 import { Subscription } from 'rxjs';
 import { LoggedInTeacherController } from '../shared/app.controller';
 import { Examen, Mensaje, Tipo, tipoPrint } from '../shared/app.model';
@@ -29,7 +29,9 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
   preguntaQuitando: number
   isFavorita: boolean
   publishedTitle: string
-  constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private route: ActivatedRoute, private testS: TestService) {
+  autotags: Tag[]
+  constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private route: ActivatedRoute,
+      private testS: TestService, private tagS: TagService) {
     super(session, router, data, userS)
     this.isInAdminTeam = false
     this.id = 0
@@ -56,6 +58,8 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
       }
     });
     this.addQuestionById = false
+    this.autotags = []
+    this.changeGetAutoTags()
   }
 
   ngOnInit(): void {
@@ -359,4 +363,18 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
   getValueEntregar(): Test.VisibilidadEnum {
     return Test.VisibilidadEnum.AlEntregar
   }
+
+  changeGetAutoTags(){
+    this.getAutoTags(true)
+  }
+
+  getAutoTags(primera: boolean){
+    this.tagS.getTags(this.newTag, "moreTest", 20).subscribe(
+      resp=>{
+        this.autotags=resp
+      },
+      err => this.handleErrRelog(err, "obtener tags de tests mas comunes", primera, this.getAutoTags, this)
+    )
+  }
+
 }

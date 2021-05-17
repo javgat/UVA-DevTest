@@ -3475,6 +3475,26 @@ paths:
       description: Returns all tags.
       produces:
       - application/json
+      parameters:
+      - in: query
+        name: likeTag
+        type: string
+        description: Partial name of the tag to find autocompletion of
+      - in: query
+        name: orderby
+        type: string
+        enum: [firstAlpha, lastAlpha, moreQuestion, lessQuestion, moreTest, lessTest]
+        description: Indicates which element is first returned. In case of tie it unties with firstAlpha
+      - in: query
+        name: limit
+        type: integer
+        description: max number of elements to be returned
+        minimum: 0
+      - in: query
+        name: offset
+        type: integer
+        description: first elements to be skipped at being returned
+        minimum: 0
       responses:
         200:
           description: tags found

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Option, Question, QuestionService, Tag, Team, UserService } from '@javgat/devtest-api';
+import { Option, Question, QuestionService, Tag, TagService, Team, UserService } from '@javgat/devtest-api';
 import { Subscription } from 'rxjs';
 import { LoggedInTeacherController } from '../shared/app.controller';
 import { Mensaje, Pregunta, Tipo, tipoPrint } from '../shared/app.model';
@@ -31,7 +31,9 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
   mantenerMensaje: boolean
   isFavorita: boolean
   testid?: number
-  constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private qS: QuestionService, private route: ActivatedRoute) {
+  autotags: Tag[]
+  constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private qS: QuestionService,
+      private route: ActivatedRoute, private tagS: TagService) {
     super(session, router, data, userS)
     this.isInAdminTeam = false
     this.newTag = {
@@ -60,6 +62,8 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
       }
       this.getPregunta(true)
     });
+    this.autotags = []
+    this.changeGetAutoTags()
   }
 
   ngOnInit(): void {
@@ -326,6 +330,19 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
       err => {
         this.handleErrRelog(err, "desmarcar como favorita una pregunta", primera, this.removeFavorita, this)
       }
+    )
+  }
+
+  changeGetAutoTags(){
+    this.getAutoTags(true)
+  }
+
+  getAutoTags(primera: boolean){
+    this.tagS.getTags(this.newTag.tag, "moreQuestion", 20).subscribe(
+      resp=>{
+        this.autotags=resp
+      },
+      err => this.handleErrRelog(err, "obtener tags de preguntas mas comunes", primera, this.getAutoTags, this)
     )
   }
 

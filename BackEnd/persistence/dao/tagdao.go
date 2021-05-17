@@ -8,6 +8,7 @@ import (
 	"database/sql"
 	"errors"
 	"log"
+	"strconv"
 	"strings"
 	"uva-devtest/models"
 )
@@ -59,15 +60,54 @@ func rowsToTag(rows *sql.Rows) (*Tag, error) {
 	return tag, err
 }
 
-func GetTags(db *sql.DB) ([]*Tag, error) {
+func getTagsQuery(orderBy *string, limit *int64, offset *int64) string {
+	var order, orderComp string
+	if orderBy == nil {
+		orderComp = ""
+	} else {
+		orderComp = *orderBy
+	}
+	switch orderComp {
+	case TagOrderByLastAlpha:
+		order = " nombre ASC "
+	case TagOrderByMoreQuestion:
+		order = " countpreg DESC "
+	case TagOrderByLessQuestion:
+		order = " countpreg ASC "
+	case TagOrderByMoreTest:
+		order = " counttest DESC "
+	case TagOrderByLessTest:
+		order = " counttest ASC "
+	default: //case TagOrderByFirstAlpha:
+		order = " nombre DESC "
+	}
+	withs := "WITH ECountPregunta AS ( SELECT etiquetanombre, COUNT(*) AS countpreg FROM PreguntaEtiqueta GROUP BY etiquetanombre), " +
+		"ECountTest AS ( SELECT etiquetanombre, COUNT(*) AS counttest FROM TestEtiqueta GROUP BY etiquetanombre) "
+	stPrepare := withs + " SELECT E.* FROM Etiqueta E LEFT JOIN ECountPregunta P ON P.etiquetanombre=E.nombre LEFT JOIN " +
+		" ECountTest T ON T.etiquetanombre=E.nombre WHERE E.nombre LIKE ? ORDER BY " + order
+	if limit != nil {
+		stPrepare = stPrepare + " LIMIT " + strconv.FormatInt(*limit, 10)
+	}
+	if offset != nil {
+		stPrepare = stPrepare + " OFFSET " + strconv.FormatInt(*offset, 10)
+	}
+	return stPrepare
+}
+
+func GetTags(db *sql.DB, likeTag *string, orderBy *string, limit *int64, offset *int64) ([]*Tag, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
 	var ts []*Tag
-	query, err := db.Prepare("SELECT * FROM Etiqueta")
+	stPrepare := getTagsQuery(orderBy, limit, offset)
+	query, err := db.Prepare(stPrepare)
+	likeCom := "%"
+	if likeTag != nil {
+		likeCom = likeCom + *likeTag + likeCom
+	}
 	if err == nil {
 		defer query.Close()
-		rows, err := query.Query()
+		rows, err := query.Query(likeCom)
 		if err == nil {
 			ts, err = rowsToTags(rows)
 			return ts, err

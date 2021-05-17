@@ -9,7 +9,11 @@ import (
 	"net/http"
 
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
+	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // NewGetTagsParams creates a new GetTagsParams object
@@ -28,6 +32,25 @@ type GetTagsParams struct {
 
 	// HTTP Request Object
 	HTTPRequest *http.Request `json:"-"`
+
+	/*Partial name of the tag to find autocompletion of
+	  In: query
+	*/
+	LikeTag *string
+	/*max number of elements to be returned
+	  Minimum: 0
+	  In: query
+	*/
+	Limit *int64
+	/*first elements to be skipped at being returned
+	  Minimum: 0
+	  In: query
+	*/
+	Offset *int64
+	/*Indicates which element is first returned. In case of tie it unties with firstAlpha
+	  In: query
+	*/
+	Orderby *string
 }
 
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
@@ -39,8 +62,153 @@ func (o *GetTagsParams) BindRequest(r *http.Request, route *middleware.MatchedRo
 
 	o.HTTPRequest = r
 
+	qs := runtime.Values(r.URL.Query())
+
+	qLikeTag, qhkLikeTag, _ := qs.GetOK("likeTag")
+	if err := o.bindLikeTag(qLikeTag, qhkLikeTag, route.Formats); err != nil {
+		res = append(res, err)
+	}
+
+	qLimit, qhkLimit, _ := qs.GetOK("limit")
+	if err := o.bindLimit(qLimit, qhkLimit, route.Formats); err != nil {
+		res = append(res, err)
+	}
+
+	qOffset, qhkOffset, _ := qs.GetOK("offset")
+	if err := o.bindOffset(qOffset, qhkOffset, route.Formats); err != nil {
+		res = append(res, err)
+	}
+
+	qOrderby, qhkOrderby, _ := qs.GetOK("orderby")
+	if err := o.bindOrderby(qOrderby, qhkOrderby, route.Formats); err != nil {
+		res = append(res, err)
+	}
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// bindLikeTag binds and validates parameter LikeTag from query.
+func (o *GetTagsParams) bindLikeTag(rawData []string, hasKey bool, formats strfmt.Registry) error {
+	var raw string
+	if len(rawData) > 0 {
+		raw = rawData[len(rawData)-1]
+	}
+
+	// Required: false
+	// AllowEmptyValue: false
+
+	if raw == "" { // empty values pass all other validations
+		return nil
+	}
+	o.LikeTag = &raw
+
+	return nil
+}
+
+// bindLimit binds and validates parameter Limit from query.
+func (o *GetTagsParams) bindLimit(rawData []string, hasKey bool, formats strfmt.Registry) error {
+	var raw string
+	if len(rawData) > 0 {
+		raw = rawData[len(rawData)-1]
+	}
+
+	// Required: false
+	// AllowEmptyValue: false
+
+	if raw == "" { // empty values pass all other validations
+		return nil
+	}
+
+	value, err := swag.ConvertInt64(raw)
+	if err != nil {
+		return errors.InvalidType("limit", "query", "int64", raw)
+	}
+	o.Limit = &value
+
+	if err := o.validateLimit(formats); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// validateLimit carries on validations for parameter Limit
+func (o *GetTagsParams) validateLimit(formats strfmt.Registry) error {
+
+	if err := validate.MinimumInt("limit", "query", *o.Limit, 0, false); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// bindOffset binds and validates parameter Offset from query.
+func (o *GetTagsParams) bindOffset(rawData []string, hasKey bool, formats strfmt.Registry) error {
+	var raw string
+	if len(rawData) > 0 {
+		raw = rawData[len(rawData)-1]
+	}
+
+	// Required: false
+	// AllowEmptyValue: false
+
+	if raw == "" { // empty values pass all other validations
+		return nil
+	}
+
+	value, err := swag.ConvertInt64(raw)
+	if err != nil {
+		return errors.InvalidType("offset", "query", "int64", raw)
+	}
+	o.Offset = &value
+
+	if err := o.validateOffset(formats); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// validateOffset carries on validations for parameter Offset
+func (o *GetTagsParams) validateOffset(formats strfmt.Registry) error {
+
+	if err := validate.MinimumInt("offset", "query", *o.Offset, 0, false); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// bindOrderby binds and validates parameter Orderby from query.
+func (o *GetTagsParams) bindOrderby(rawData []string, hasKey bool, formats strfmt.Registry) error {
+	var raw string
+	if len(rawData) > 0 {
+		raw = rawData[len(rawData)-1]
+	}
+
+	// Required: false
+	// AllowEmptyValue: false
+
+	if raw == "" { // empty values pass all other validations
+		return nil
+	}
+	o.Orderby = &raw
+
+	if err := o.validateOrderby(formats); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// validateOrderby carries on validations for parameter Orderby
+func (o *GetTagsParams) validateOrderby(formats strfmt.Registry) error {
+
+	if err := validate.EnumCase("orderby", "query", *o.Orderby, []interface{}{"firstAlpha", "lastAlpha", "moreQuestion", "lessQuestion", "moreTest", "lessTest"}, true); err != nil {
+		return err
+	}
+
 	return nil
 }

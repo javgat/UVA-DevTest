@@ -13,9 +13,11 @@
     <form (ngSubmit)='addSearchTagSubmit()' ngNativeValidate>
         <div class="input-group my-3">
             <input class="button btn btn-primary" type="submit" value="Filtrar etiqueta" />
-            
             <input type="text" class="form-control" name="inputAddTag" [(ngModel)]="newSearchTag" placeholder="Etiqueta"
-                required pattern=".+" />
+                required pattern=".+" list="auto_tags" autocomplete="off" (ngModelChange)="changeGetAutoTags()" />
+            <datalist id="auto_tags">
+                <option *ngFor="let autotag of autotags" value="{{autotag.tag}}">
+            </datalist>
         </div>
     </form>
     <p *ngIf="searchTags.length>0">Etiquetas filtradas:
@@ -79,16 +81,22 @@
             </tr>
         </tbody>
     </table>
-    <nav aria-label="Tests page navigation"> 
+    <nav aria-label="Tests page navigation">
         <ul class="pagination justify-content-center">
-            <li class="page-item" [ngClass]="{disabled: getCurrentPage()<=1}"><a class="page-link" role="button" (click)="clickPreviousPage()">Anterior</a></li>
-            <li *ngIf="getCurrentPage()>2" class="page-item"><a class="page-link" role="button" (click)="clickFirstPage()">1</a></li>
+            <li class="page-item" [ngClass]="{disabled: getCurrentPage()<=1}"><a class="page-link" role="button"
+                    (click)="clickPreviousPage()">Anterior</a></li>
+            <li *ngIf="getCurrentPage()>2" class="page-item"><a class="page-link" role="button"
+                    (click)="clickFirstPage()">1</a></li>
             <li *ngIf="getCurrentPage()>2" class="page-item disabled"><a class="page-link">...</a></li>
-            <li *ngIf="getCurrentPage()>1" class="page-item"><a class="page-link" role="button" (click)="clickPreviousPage()" >{{getCurrentPage()-1}}</a></li>
-            <li class="page-item"><a class="page-link" role="button" (click)="clickCurrentPage()">{{getCurrentPage()}}</a></li>
-            <li *ngIf="hasNextPage()" class="page-item"><a class="page-link" role="button" (click)="clickNextPage()">{{getCurrentPage()+1}}</a></li>
+            <li *ngIf="getCurrentPage()>1" class="page-item"><a class="page-link" role="button"
+                    (click)="clickPreviousPage()">{{getCurrentPage()-1}}</a></li>
+            <li class="page-item"><a class="page-link" role="button"
+                    (click)="clickCurrentPage()">{{getCurrentPage()}}</a></li>
+            <li *ngIf="hasNextPage()" class="page-item"><a class="page-link" role="button"
+                    (click)="clickNextPage()">{{getCurrentPage()+1}}</a></li>
             <li *ngIf="hasNextPage()" class="page-item disabled"><a class="page-link">...</a></li>
-            <li class="page-item" [ngClass]="{disabled: !hasNextPage()}"><a class="page-link" role="button" (click)="clickNextPage()">Siguiente</a></li>
+            <li class="page-item" [ngClass]="{disabled: !hasNextPage()}"><a class="page-link" role="button"
+                    (click)="clickNextPage()">Siguiente</a></li>
         </ul>
     </nav>
 </div>
