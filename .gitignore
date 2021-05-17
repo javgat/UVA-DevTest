@@ -1,3 +1,4 @@
 /BackEnd/bin/
 /BackEnd/config/
 **/dist/
+**/logs/

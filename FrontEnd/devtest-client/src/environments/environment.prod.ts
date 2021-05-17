@@ -1,4 +1,4 @@
 export const environment = {
-  API_BASE_PATH: 'https://localhost:8080/DevTest',
+  API_BASE_PATH: 'https://virtual.lab.inf.uva.es:20173/DevTest',
   production: true
 };
