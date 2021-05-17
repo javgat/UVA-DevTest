@@ -88,6 +88,8 @@ import { LtAdminTeamComponent } from './list-tests/lt-admin-team/lt-admin-team.c
 import { LptInvitedTeamComponent } from './list-tests/lpt-invited-team/lpt-invited-team.component';
 import { LqAdminTeamComponent } from './list-questions/lq-admin-team/lq-admin-team.component';
 import { AdminEmailComponent } from './admin/admin-email/admin-email.component';
+import { LgiStudentComponent } from './main/logged-in/lgi-student/lgi-student.component';
+import { LgiTeacherComponent } from './main/logged-in/lgi-teacher/lgi-teacher.component';
 
 export function apiConfigFactory (): Configuration {
   const params: ConfigurationParameters = {
@@ -178,7 +180,9 @@ export function apiConfigFactory (): Configuration {
     LtAdminTeamComponent,
     LptInvitedTeamComponent,
     LqAdminTeamComponent,
-    AdminEmailComponent
+    AdminEmailComponent,
+    LgiStudentComponent,
+    LgiTeacherComponent
   ],
   imports: [
     BrowserModule,

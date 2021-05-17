@@ -1,3 +1,5 @@
 <div class="container my-5">
     <h1 class="my-5 text-center fw-bold">¡Bienvenido a DevTest!</h1>
+    <app-lgi-student *ngIf="isStudent()"></app-lgi-student>
+    <app-lgi-teacher *ngIf="isTeacherOrAdmin()"></app-lgi-teacher>
 </div>

@@ -25,4 +25,12 @@ export class MainComponent extends LoggedInController implements OnInit {
     
   }
 
+  isStudent(): boolean{
+    return this.getSessionUser().isStudent()
+  }
+
+  isTeacherOrAdmin(): boolean{
+    return !this.isStudent()
+  }
+
 }
