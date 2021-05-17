@@ -22,16 +22,16 @@
     <div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message" role="alert">
         {{getMensaje().texto}}</div>
     <h3>Respuesta al test <a [routerLink]="['/pt', testid]">{{test.title}}</a></h3>
-    <p>Autor: <a [routerLink]="['/profile', answer.username]">{{answer.username}}</a></p>
-    <p>Entregada: <span *ngIf="answer.entregado">Sí</span><span *ngIf="!answer.entregado">No</span></p>
-    <p>Fecha de inicio: {{printDate(answer.startTime)}}</p>
-    <p>Fecha de entrega: {{printDate(answer.finishTime)}}</p>
-    <p>Puntuacion: {{answer.puntuacion || 0}} / {{test.notaMaxima}}</p>
-    <p *ngIf="isModoTestAdmin()">Visible para el usuario: 
+    <p><b>Autor: </b><a [routerLink]="['/profile', answer.username]">{{answer.username}}</a></p>
+    <p><b>Entregada: </b><span *ngIf="answer.entregado">Sí</span><span *ngIf="!answer.entregado">No</span></p>
+    <p><b>Fecha de inicio: </b>{{printDate(answer.startTime)}}</p>
+    <p><b>Fecha de entrega: </b>{{printDate(answer.finishTime)}}</p>
+    <p><b>Puntuacion: </b>{{answer.puntuacion || 0}} / {{test.notaMaxima}}</p>
+    <p *ngIf="isModoTestAdmin()"><b>Visible para el usuario: </b>
         <span *ngIf="answer.visibleParaUsuario">Sí</span><span *ngIf="!answer.visibleParaUsuario">No</span>
         <button type="button" class="mx-2 btn btn-sm btn-primary" (click)="clickHacerVisible()">Hacer <span *ngIf="answer.visibleParaUsuario">no </span>visible</button>
     </p>
-    <p>Corregida: <span class="badge bg-success" *ngIf="answer.corregida">Sí</span><span class="badge bg-danger" *ngIf="!answer.corregida">No</span></p>
+    <p><b>Corregida: </b><span class="badge bg-success" *ngIf="answer.corregida">Sí</span><span class="badge bg-danger" *ngIf="!answer.corregida">No</span></p>
     <div class="my-3" *ngIf="isModoTestAdmin()">
         <button *ngIf="!answer.corregida" type="button" class="btn btn-primary" data-bs-toggle="modal"
             data-bs-target="#modalCorregida">Marcar como corregida</button>
