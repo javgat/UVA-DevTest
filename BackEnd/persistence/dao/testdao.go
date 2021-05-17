@@ -565,7 +565,7 @@ func GetFavoriteEditTests(db *sql.DB, username string, tags [][]string, likeTitl
 	stPrepare := "SELECT DISTINCT T.* FROM Test T LEFT JOIN GestionTestEquipo E ON T.id=E.testid LEFT JOIN EquipoUsuario U ON U.equipoid=E.equipoid " +
 		" LEFT JOIN Usuario V ON V.id=U.usuarioid LEFT JOIN Usuario W ON W.id=T.usuarioid JOIN TestFavorito F ON T.id=F.testid JOIN Usuario Y ON Y.id=F.usuarioid " +
 		" WHERE Y.username=? AND T.editable=1 AND (V.username=? OR T.accesoPublicoNoPublicado=1 OR W.username=?) "
-	stPrepare = addFiltersToQueryQuestionLongNames(true, stPrepare, tags, likeTitle, orderBy, limit, offset)
+	stPrepare = addFiltersToQueryTestLong(true, stPrepare, tags, likeTitle, orderBy, limit, offset)
 	query, err := db.Prepare(stPrepare)
 	if err == nil {
 		defer query.Close()
@@ -595,7 +595,7 @@ func GetFavoriteTests(db *sql.DB, username string, tags [][]string, likeTitle *s
 	stPrepare := "SELECT DISTINCT T.* FROM Test T LEFT JOIN GestionTestEquipo E ON T.id=E.testid LEFT JOIN EquipoUsuario U ON U.equipoid=E.equipoid " +
 		" LEFT JOIN Usuario V ON V.id=U.usuarioid LEFT JOIN Usuario W ON W.id=T.usuarioid JOIN TestFavorito F ON T.id=F.testid JOIN Usuario Y ON Y.id=F.usuarioid " +
 		" WHERE Y.username=? AND (V.username=? OR T.accesoPublicoNoPublicado=1 OR (T.editable=0 AND T.accesoPublico=1) OR W.username=?) "
-	stPrepare = addFiltersToQueryQuestionLongNames(true, stPrepare, tags, likeTitle, orderBy, limit, offset)
+	stPrepare = addFiltersToQueryTestLong(true, stPrepare, tags, likeTitle, orderBy, limit, offset)
 	query, err := db.Prepare(stPrepare)
 	if err == nil {
 		defer query.Close()
