@@ -2434,6 +2434,65 @@ paths:
           $ref: '#/responses/GoneError'
         500:
           $ref: '#/responses/InternalServerError'
+  /users/{username}/pendingTests:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - user
+      summary: Returns all publishedTests that the user is invited to and hasn't answered yet
+      operationId: GetPendingTestsFromUser
+      description: Returns all publishedTests that the user is invited to and hasn't answered yet
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the user who is invited to the publishedTests
+        required: true
+        type: string
+      - in: query
+        name: tags
+        type: array
+        collectionFormat: pipes
+        items:
+          type: array
+          collectionFormat: csv
+          items:
+            type: string
+      - in: query
+        name: likeTitle
+        type: string
+      - in: query
+        name: orderby
+        type: string
+        enum: [newDate, oldDate, moreFav, lessFav, moreTime, lessTime]
+        description: Indicates which element is first returned. In case of tie it unties with newdate first
+      - in: query
+        name: limit
+        type: integer
+        description: max number of elements to be returned
+        minimum: 0
+      - in: query
+        name: offset
+        type: integer
+        description: first elements to be skipped at being returned
+        minimum: 0
+      responses:
+        200:
+          description: publishedTests found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Test'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
 
   /users/{username}/answeredTests:
     get:
@@ -2452,6 +2511,33 @@ paths:
         description: Username of the user who has answered the publishedTests
         required: true
         type: string
+      - in: query
+        name: tags
+        type: array
+        collectionFormat: pipes
+        items:
+          type: array
+          collectionFormat: csv
+          items:
+            type: string
+      - in: query
+        name: likeTitle
+        type: string
+      - in: query
+        name: orderby
+        type: string
+        enum: [newDate, oldDate, moreFav, lessFav, moreTime, lessTime]
+        description: Indicates which element is first returned. In case of tie it unties with newdate first
+      - in: query
+        name: limit
+        type: integer
+        description: max number of elements to be returned
+        minimum: 0
+      - in: query
+        name: offset
+        type: integer
+        description: first elements to be skipped at being returned
+        minimum: 0
       responses:
         200:
           description: publishedTests found

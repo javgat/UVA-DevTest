@@ -477,20 +477,63 @@ func GetSolvableTestFromUser(db *sql.DB, username string, testid int64) (*Test, 
 	return nil, err
 }
 
+// PendingTests
+
+func GetPendingTestsFromUser(db *sql.DB, username string, tags [][]string, likeTitle *string, orderBy *string,
+	limit *int64, offset *int64) ([]*Test, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var ts []*Test
+	stPrepare :=
+		"WITH TestsUserInvited AS ( SELECT T.* FROM Test T JOIN InvitacionTestUsuario I ON T.id=I.testid JOIN Usuario U ON U.id=I.usuarioid " +
+			" WHERE U.username=?), " +
+			"TestsUserTeamInvited AS ( SELECT T.* FROM Test T JOIN InvitacionTestEquipo I ON T.id=I.testid JOIN EquipoUsuario E ON " +
+			" E.equipoid=I.equipoid JOIN Usuario U ON U.id=E.usuarioid WHERE U.username=?), " +
+			"TestsJoinedInvited AS ( SELECT DISTINCT T.* FROM Test T LEFT JOIN TestsUserInvited U ON T.id=U.id " +
+			" LEFT JOIN TestsUserTeamInvited E ON E.id=T.id " +
+			" WHERE T.editable=0 AND ( U.id IS NOT NULL OR E.accesoPublico IS NOT NULL )), " +
+			"AnsweredTests AS (SELECT T.* FROM Test T JOIN RespuestaExamen R ON T.id=R.testid JOIN Usuario U ON U.id=R.usuarioid WHERE U.username=?) " +
+			"SELECT T.* FROM TestsJoinedInvited T WHERE T.id NOT IN (SELECT A.id FROM AnsweredTests A)"
+	stPrepare = addFiltersToQueryTestLong(true, stPrepare, tags, likeTitle, orderBy, limit, offset)
+	query, err := db.Prepare(stPrepare)
+	if err == nil {
+		defer query.Close()
+		interfaceParams := FilterParamsSlicesToInterfaceArr(tags, likeTitle)
+		var paramsSlice []interface{}
+		paramsSlice = append(paramsSlice, username)
+		paramsSlice = append(paramsSlice, username)
+		paramsSlice = append(paramsSlice, username)
+		interfaceParams = append(paramsSlice, interfaceParams...)
+		rows, err := query.Query(interfaceParams...)
+		if err == nil {
+			ts, err = rowsToTests(rows)
+			return ts, err
+		}
+	}
+	return nil, err
+}
+
 // AnsweredTests
 
-func GetATestsFromUser(db *sql.DB, username string) ([]*Test, error) {
+func GetATestsFromUser(db *sql.DB, username string, tags [][]string, likeTitle *string, orderBy *string,
+	limit *int64, offset *int64) ([]*Test, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
 	u, err := GetUserUsername(db, username)
 	if err == nil {
 		var ts []*Test
-		query, err := db.Prepare("SELECT T.* FROM Test T JOIN RespuestaExamen R ON T.id=R.testid WHERE R.usuarioid=?")
-
+		stPrepare := "SELECT T.* FROM Test T JOIN RespuestaExamen R ON T.id=R.testid WHERE R.usuarioid=? "
+		stPrepare = addFiltersToQueryTestLong(false, stPrepare, tags, likeTitle, orderBy, limit, offset)
+		query, err := db.Prepare(stPrepare)
 		if err == nil {
 			defer query.Close()
-			rows, err := query.Query(u.ID)
+			interfaceParams := FilterParamsSlicesToInterfaceArr(tags, likeTitle)
+			var paramsSlice []interface{}
+			paramsSlice = append(paramsSlice, u.ID)
+			interfaceParams = append(paramsSlice, interfaceParams...)
+			rows, err := query.Query(interfaceParams...)
 			if err == nil {
 				ts, err = rowsToTests(rows)
 				return ts, err

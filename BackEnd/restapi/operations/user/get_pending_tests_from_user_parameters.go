@@ -16,19 +16,19 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// NewGetAnsweredTestsFromUserParams creates a new GetAnsweredTestsFromUserParams object
+// NewGetPendingTestsFromUserParams creates a new GetPendingTestsFromUserParams object
 //
 // There are no default values defined in the spec.
-func NewGetAnsweredTestsFromUserParams() GetAnsweredTestsFromUserParams {
+func NewGetPendingTestsFromUserParams() GetPendingTestsFromUserParams {
 
-	return GetAnsweredTestsFromUserParams{}
+	return GetPendingTestsFromUserParams{}
 }
 
-// GetAnsweredTestsFromUserParams contains all the bound params for the get answered tests from user operation
+// GetPendingTestsFromUserParams contains all the bound params for the get pending tests from user operation
 // typically these are obtained from a http.Request
 //
-// swagger:parameters GetAnsweredTestsFromUser
-type GetAnsweredTestsFromUserParams struct {
+// swagger:parameters GetPendingTestsFromUser
+type GetPendingTestsFromUserParams struct {
 
 	// HTTP Request Object
 	HTTPRequest *http.Request `json:"-"`
@@ -56,7 +56,7 @@ type GetAnsweredTestsFromUserParams struct {
 	  Collection Format: pipes
 	*/
 	Tags [][]string
-	/*Username of the user who has answered the publishedTests
+	/*Username of the user who is invited to the publishedTests
 	  Required: true
 	  In: path
 	*/
@@ -66,8 +66,8 @@ type GetAnsweredTestsFromUserParams struct {
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
 // for simple values it will use straight method calls.
 //
-// To ensure default values, the struct must have been initialized with NewGetAnsweredTestsFromUserParams() beforehand.
-func (o *GetAnsweredTestsFromUserParams) BindRequest(r *http.Request, route *middleware.MatchedRoute) error {
+// To ensure default values, the struct must have been initialized with NewGetPendingTestsFromUserParams() beforehand.
+func (o *GetPendingTestsFromUserParams) BindRequest(r *http.Request, route *middleware.MatchedRoute) error {
 	var res []error
 
 	o.HTTPRequest = r
@@ -110,7 +110,7 @@ func (o *GetAnsweredTestsFromUserParams) BindRequest(r *http.Request, route *mid
 }
 
 // bindLikeTitle binds and validates parameter LikeTitle from query.
-func (o *GetAnsweredTestsFromUserParams) bindLikeTitle(rawData []string, hasKey bool, formats strfmt.Registry) error {
+func (o *GetPendingTestsFromUserParams) bindLikeTitle(rawData []string, hasKey bool, formats strfmt.Registry) error {
 	var raw string
 	if len(rawData) > 0 {
 		raw = rawData[len(rawData)-1]
@@ -128,7 +128,7 @@ func (o *GetAnsweredTestsFromUserParams) bindLikeTitle(rawData []string, hasKey 
 }
 
 // bindLimit binds and validates parameter Limit from query.
-func (o *GetAnsweredTestsFromUserParams) bindLimit(rawData []string, hasKey bool, formats strfmt.Registry) error {
+func (o *GetPendingTestsFromUserParams) bindLimit(rawData []string, hasKey bool, formats strfmt.Registry) error {
 	var raw string
 	if len(rawData) > 0 {
 		raw = rawData[len(rawData)-1]
@@ -155,7 +155,7 @@ func (o *GetAnsweredTestsFromUserParams) bindLimit(rawData []string, hasKey bool
 }
 
 // validateLimit carries on validations for parameter Limit
-func (o *GetAnsweredTestsFromUserParams) validateLimit(formats strfmt.Registry) error {
+func (o *GetPendingTestsFromUserParams) validateLimit(formats strfmt.Registry) error {
 
 	if err := validate.MinimumInt("limit", "query", *o.Limit, 0, false); err != nil {
 		return err
@@ -165,7 +165,7 @@ func (o *GetAnsweredTestsFromUserParams) validateLimit(formats strfmt.Registry) 
 }
 
 // bindOffset binds and validates parameter Offset from query.
-func (o *GetAnsweredTestsFromUserParams) bindOffset(rawData []string, hasKey bool, formats strfmt.Registry) error {
+func (o *GetPendingTestsFromUserParams) bindOffset(rawData []string, hasKey bool, formats strfmt.Registry) error {
 	var raw string
 	if len(rawData) > 0 {
 		raw = rawData[len(rawData)-1]
@@ -192,7 +192,7 @@ func (o *GetAnsweredTestsFromUserParams) bindOffset(rawData []string, hasKey boo
 }
 
 // validateOffset carries on validations for parameter Offset
-func (o *GetAnsweredTestsFromUserParams) validateOffset(formats strfmt.Registry) error {
+func (o *GetPendingTestsFromUserParams) validateOffset(formats strfmt.Registry) error {
 
 	if err := validate.MinimumInt("offset", "query", *o.Offset, 0, false); err != nil {
 		return err
@@ -202,7 +202,7 @@ func (o *GetAnsweredTestsFromUserParams) validateOffset(formats strfmt.Registry)
 }
 
 // bindOrderby binds and validates parameter Orderby from query.
-func (o *GetAnsweredTestsFromUserParams) bindOrderby(rawData []string, hasKey bool, formats strfmt.Registry) error {
+func (o *GetPendingTestsFromUserParams) bindOrderby(rawData []string, hasKey bool, formats strfmt.Registry) error {
 	var raw string
 	if len(rawData) > 0 {
 		raw = rawData[len(rawData)-1]
@@ -224,7 +224,7 @@ func (o *GetAnsweredTestsFromUserParams) bindOrderby(rawData []string, hasKey bo
 }
 
 // validateOrderby carries on validations for parameter Orderby
-func (o *GetAnsweredTestsFromUserParams) validateOrderby(formats strfmt.Registry) error {
+func (o *GetPendingTestsFromUserParams) validateOrderby(formats strfmt.Registry) error {
 
 	if err := validate.EnumCase("orderby", "query", *o.Orderby, []interface{}{"newDate", "oldDate", "moreFav", "lessFav", "moreTime", "lessTime"}, true); err != nil {
 		return err
@@ -236,7 +236,7 @@ func (o *GetAnsweredTestsFromUserParams) validateOrderby(formats strfmt.Registry
 // bindTags binds and validates array parameter Tags from query.
 //
 // Arrays are parsed according to CollectionFormat: "pipes" (defaults to "csv" when empty).
-func (o *GetAnsweredTestsFromUserParams) bindTags(rawData []string, hasKey bool, formats strfmt.Registry) error {
+func (o *GetPendingTestsFromUserParams) bindTags(rawData []string, hasKey bool, formats strfmt.Registry) error {
 	var qvTags string
 	if len(rawData) > 0 {
 		qvTags = rawData[len(rawData)-1]
@@ -271,7 +271,7 @@ func (o *GetAnsweredTestsFromUserParams) bindTags(rawData []string, hasKey bool,
 }
 
 // bindUsername binds and validates parameter Username from path.
-func (o *GetAnsweredTestsFromUserParams) bindUsername(rawData []string, hasKey bool, formats strfmt.Registry) error {
+func (o *GetPendingTestsFromUserParams) bindUsername(rawData []string, hasKey bool, formats strfmt.Registry) error {
 	var raw string
 	if len(rawData) > 0 {
 		raw = rawData[len(rawData)-1]

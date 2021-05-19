@@ -5996,6 +5996,50 @@ func init() {
             "name": "username",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "collectionFormat": "csv"
+            },
+            "collectionFormat": "pipes",
+            "name": "tags",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "likeTitle",
+            "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
+            "in": "query"
           }
         ],
         "responses": {
@@ -7727,6 +7771,100 @@ func init() {
         "responses": {
           "200": {
             "description": "Resource password modified correctly"
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/users/{username}/pendingTests": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all publishedTests that the user is invited to and hasn't answered yet",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns all publishedTests that the user is invited to and hasn't answered yet",
+        "operationId": "GetPendingTestsFromUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who is invited to the publishedTests",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "collectionFormat": "csv"
+            },
+            "collectionFormat": "pipes",
+            "name": "tags",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "likeTitle",
+            "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "publishedTests found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Test"
+              }
+            }
           },
           "400": {
             "$ref": "#/responses/BadRequestError"
@@ -17203,6 +17341,52 @@ func init() {
             "name": "username",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "collectionFormat": "csv"
+            },
+            "collectionFormat": "pipes",
+            "name": "tags",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "likeTitle",
+            "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
+            "in": "query"
           }
         ],
         "responses": {
@@ -19179,6 +19363,111 @@ func init() {
         "responses": {
           "200": {
             "description": "Resource password modified correctly"
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/users/{username}/pendingTests": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all publishedTests that the user is invited to and hasn't answered yet",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns all publishedTests that the user is invited to and hasn't answered yet",
+        "operationId": "GetPendingTestsFromUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Username of the user who is invited to the publishedTests",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "collectionFormat": "csv"
+            },
+            "collectionFormat": "pipes",
+            "name": "tags",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "likeTitle",
+            "in": "query"
+          },
+          {
+            "enum": [
+              "newDate",
+              "oldDate",
+              "moreFav",
+              "lessFav",
+              "moreTime",
+              "lessTime"
+            ],
+            "type": "string",
+            "description": "Indicates which element is first returned. In case of tie it unties with newdate first",
+            "name": "orderby",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "publishedTests found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Test"
+              }
+            }
           },
           "400": {
             "description": "Incorrect Request, or invalida data",

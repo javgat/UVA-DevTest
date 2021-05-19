@@ -233,6 +233,9 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		QuestionGetOptionsFromQuestionHandler: question.GetOptionsFromQuestionHandlerFunc(func(params question.GetOptionsFromQuestionParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation question.GetOptionsFromQuestion has not yet been implemented")
 		}),
+		UserGetPendingTestsFromUserHandler: user.GetPendingTestsFromUserHandlerFunc(func(params user.GetPendingTestsFromUserParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation user.GetPendingTestsFromUser has not yet been implemented")
+		}),
 		UserGetPublicEditQuestionsOfUserHandler: user.GetPublicEditQuestionsOfUserHandlerFunc(func(params user.GetPublicEditQuestionsOfUserParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation user.GetPublicEditQuestionsOfUser has not yet been implemented")
 		}),
@@ -732,6 +735,8 @@ type DevAPI struct {
 	PublishedTestGetOptionsFromPublishedQuestionHandler published_test.GetOptionsFromPublishedQuestionHandler
 	// QuestionGetOptionsFromQuestionHandler sets the operation handler for the get options from question operation
 	QuestionGetOptionsFromQuestionHandler question.GetOptionsFromQuestionHandler
+	// UserGetPendingTestsFromUserHandler sets the operation handler for the get pending tests from user operation
+	UserGetPendingTestsFromUserHandler user.GetPendingTestsFromUserHandler
 	// UserGetPublicEditQuestionsOfUserHandler sets the operation handler for the get public edit questions of user operation
 	UserGetPublicEditQuestionsOfUserHandler user.GetPublicEditQuestionsOfUserHandler
 	// TestGetPublicEditTestsHandler sets the operation handler for the get public edit tests operation
@@ -1209,6 +1214,9 @@ func (o *DevAPI) Validate() error {
 	}
 	if o.QuestionGetOptionsFromQuestionHandler == nil {
 		unregistered = append(unregistered, "question.GetOptionsFromQuestionHandler")
+	}
+	if o.UserGetPendingTestsFromUserHandler == nil {
+		unregistered = append(unregistered, "user.GetPendingTestsFromUserHandler")
 	}
 	if o.UserGetPublicEditQuestionsOfUserHandler == nil {
 		unregistered = append(unregistered, "user.GetPublicEditQuestionsOfUserHandler")
@@ -1876,6 +1884,10 @@ func (o *DevAPI) initHandlerCache() {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
 	o.handlers["GET"]["/questions/{questionid}/options"] = question.NewGetOptionsFromQuestion(o.context, o.QuestionGetOptionsFromQuestionHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/users/{username}/pendingTests"] = user.NewGetPendingTestsFromUser(o.context, o.UserGetPendingTestsFromUserHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}

@@ -21,7 +21,9 @@ import { PtestAnswersComponent } from './ptest-answers/ptest-answers.component';
 import { PtestInvitesComponent } from './ptest-invites/ptest-invites.component';
 import { PtestUAnswersComponent } from './ptest-u-answers/ptest-u-answers.component';
 import { PtestComponent } from './ptest/ptest.component';
+import { PtestsAnsweredUserComponent } from './ptests-answered-user/ptests-answered-user.component';
 import { PtestsInvitedUserComponent } from './ptests-invited-user/ptests-invited-user.component';
+import { PtestsPendingUserComponent } from './ptests-pending-user/ptests-pending-user.component';
 import { PtestsSharedUserComponent } from './ptests-shared-user/ptests-shared-user.component';
 import { PtestsSolvableUserComponent } from './ptests-solvable-user/ptests-solvable-user.component';
 import { PtestsUserComponent } from './ptests-user/ptests-user.component';
@@ -66,6 +68,8 @@ const routes: Routes = [
   {path: 'u/:username/spt', component: PtestsSharedUserComponent},
   {path: 'u/:username/invited', component: PtestsInvitedUserComponent},
   {path: 'u/:username/solvable', component: PtestsSolvableUserComponent},
+  {path: 'u/:username/answered', component: PtestsAnsweredUserComponent},
+  {path: 'u/:username/pending', component: PtestsPendingUserComponent},
   {path: 'admin', component: AdminComponent},
   {path: 'admin/users', component: AdminUsersComponent},
   {path: 'admin/teams', component: AdminTeamsComponent},

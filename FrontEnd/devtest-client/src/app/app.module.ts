@@ -92,6 +92,10 @@ import { LgiStudentComponent } from './main/logged-in/lgi-student/lgi-student.co
 import { LgiTeacherComponent } from './main/logged-in/lgi-teacher/lgi-teacher.component';
 import { NvStudentComponent } from './nav-bar/nav-bar-logged/nv-student/nv-student.component';
 import { NvTeacherAdminComponent } from './nav-bar/nav-bar-logged/nv-teacher-admin/nv-teacher-admin.component';
+import { LptAnsweredComponent } from './list-tests/lpt-answered/lpt-answered.component';
+import { LptPendingComponent } from './list-tests/lpt-pending/lpt-pending.component';
+import { PtestsAnsweredUserComponent } from './ptests-answered-user/ptests-answered-user.component';
+import { PtestsPendingUserComponent } from './ptests-pending-user/ptests-pending-user.component';
 
 export function apiConfigFactory (): Configuration {
   const params: ConfigurationParameters = {
@@ -186,7 +190,11 @@ export function apiConfigFactory (): Configuration {
     LgiStudentComponent,
     LgiTeacherComponent,
     NvStudentComponent,
-    NvTeacherAdminComponent
+    NvTeacherAdminComponent,
+    LptAnsweredComponent,
+    LptPendingComponent,
+    PtestsAnsweredUserComponent,
+    PtestsPendingUserComponent
   ],
   imports: [
     BrowserModule,

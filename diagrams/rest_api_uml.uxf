@@ -2664,4 +2664,17 @@ bg=yellow
 /logout</panel_attributes>
     <additional_attributes>10.0;120.0;10.0;60.0;120.0;10.0;200.0;10.0</additional_attributes>
   </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>4368</x>
+      <y>296</y>
+      <w>160</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/pendingTests</panel_attributes>
+    <additional_attributes>180.0;10.0;40.0;110.0;40.0;40.0;10.0;40.0</additional_attributes>
+  </element>
 </diagram>

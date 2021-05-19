@@ -1105,13 +1105,38 @@ func StartAnswer(params user.StartAnswerParams, u *models.User) middleware.Respo
 	return user.NewStartAnswerForbidden()
 }
 
+// GET /users/{username}/pendingTests
+// Auth: Current User or Admin
+func GetPendingTestsFromUser(params user.GetPendingTestsFromUserParams, u *models.User) middleware.Responder {
+	if userOrAdmin(params.Username, u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			var t []*dao.Test
+			t, err = dao.GetPendingTestsFromUser(db, params.Username, params.Tags, params.LikeTitle, params.Orderby,
+				params.Limit, params.Offset)
+			if err == nil {
+				mt, err := dao.ToModelTests(t)
+				if mt != nil && err == nil {
+					return user.NewGetPendingTestsFromUserOK().WithPayload(mt)
+				}
+				return user.NewGetPendingTestsFromUserGone()
+			}
+		}
+		log.Println("Error en GetPendingTestsUser(): ", err)
+		return user.NewGetPendingTestsFromUserInternalServerError()
+	}
+	return user.NewGetPendingTestsFromUserForbidden()
+}
+
 // GET /users/{username}/answeredTests
 // Auth: Current User or Admin
 func GetATestsFromUser(params user.GetAnsweredTestsFromUserParams, u *models.User) middleware.Responder {
 	if userOrAdmin(params.Username, u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			t, err := dao.GetATestsFromUser(db, params.Username)
+			var t []*dao.Test
+			t, err = dao.GetATestsFromUser(db, params.Username, params.Tags, params.LikeTitle, params.Orderby,
+				params.Limit, params.Offset)
 			if err == nil {
 				mt, err := dao.ToModelTests(t)
 				if mt != nil && err == nil {
@@ -1120,6 +1145,7 @@ func GetATestsFromUser(params user.GetAnsweredTestsFromUserParams, u *models.Use
 				return user.NewGetAnsweredTestsFromUserGone()
 			}
 		}
+		log.Println("Error en GetATestsFromUser(): ", err)
 		return user.NewGetAnsweredTestsFromUserInternalServerError()
 	}
 	return user.NewGetAnsweredTestsFromUserForbidden()
