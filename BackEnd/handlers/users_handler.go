@@ -1254,14 +1254,59 @@ func GetUCAnswersFromUserATest(params user.GetUncorrectedAnswersFromUserAnswered
 	return user.NewGetUncorrectedAnswersFromUserAnsweredTestForbidden()
 }
 
+// GET /users/{username}/correctedAnswers
+// Auth: Current User or Admin
+func GetCorrectedAnswersFromUser(params user.GetCorrectedAnswersFromUserParams, u *models.User) middleware.Responder {
+	if userOrAdmin(params.Username, u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			var a []*dao.Answer
+			a, err = dao.GetCorrectedAnswersFromUser(db, params.Username)
+			if err == nil {
+				ma, err := dao.ToModelAnswers(a)
+				if ma != nil && err == nil {
+					return user.NewGetCorrectedAnswersFromUserOK().WithPayload(ma)
+				}
+				return user.NewGetCorrectedAnswersFromUserGone()
+			}
+		}
+		log.Println("Error en GetCorrectedAnswersFromUser(): ", err)
+		return user.NewGetCorrectedAnswersFromUserInternalServerError()
+	}
+	return user.NewGetCorrectedAnswersFromUserForbidden()
+}
+
+// GET /users/{username}/uncorrectedAnswers
+// Auth: Current User or Admin
+func GetUncorrectedAnswersFromUser(params user.GetUncorrectedAnswersFromUserParams, u *models.User) middleware.Responder {
+	if userOrAdmin(params.Username, u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			var a []*dao.Answer
+			a, err = dao.GetUncorrectedAnswersFromUser(db, params.Username)
+			if err == nil {
+				ma, err := dao.ToModelAnswers(a)
+				if ma != nil && err == nil {
+					return user.NewGetUncorrectedAnswersFromUserOK().WithPayload(ma)
+				}
+				return user.NewGetUncorrectedAnswersFromUserGone()
+			}
+		}
+		log.Println("Error en GetUncorrectedAnswersFromUser(): ", err)
+		return user.NewGetUncorrectedAnswersFromUserInternalServerError()
+	}
+	return user.NewGetAnswersFromUserForbidden()
+}
+
 // GET /users/{username}/answers
 // Auth: Current User or Admin
 func GetAnswersFromUser(params user.GetAnswersFromUserParams, u *models.User) middleware.Responder {
 	if userOrAdmin(params.Username, u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			a, err := dao.GetAnswersFromUser(db, params.Username)
-			if err == nil && a != nil {
+			var a []*dao.Answer
+			a, err = dao.GetAnswersFromUser(db, params.Username)
+			if err == nil {
 				ma, err := dao.ToModelAnswers(a)
 				if ma != nil && err == nil {
 					return user.NewGetAnswersFromUserOK().WithPayload(ma)
@@ -1269,6 +1314,7 @@ func GetAnswersFromUser(params user.GetAnswersFromUserParams, u *models.User) mi
 				return user.NewGetAnswersFromUserGone()
 			}
 		}
+		log.Println("Error en GetAnswersFromUser(): ", err)
 		return user.NewGetAnswersFromUserInternalServerError()
 	}
 	return user.NewGetAnswersFromUserForbidden()

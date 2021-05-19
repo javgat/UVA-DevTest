@@ -345,6 +345,46 @@ func GetNumberAnswersUserTest(db *sql.DB, username string, testid int64) (int64,
 	return 0, err
 }
 
+func GetUncorrectedAnswersFromUser(db *sql.DB, username string) ([]*Answer, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	u, err := GetUserUsername(db, username)
+	if err == nil {
+		var a []*Answer
+		query, err := db.Prepare("SELECT * FROM RespuestaExamen WHERE usuarioid=? AND corregida=0 ")
+		if err == nil {
+			defer query.Close()
+			rows, err := query.Query(u.ID)
+			if err == nil {
+				a, err = rowsToAnswers(rows)
+				return a, err
+			}
+		}
+	}
+	return nil, err
+}
+
+func GetCorrectedAnswersFromUser(db *sql.DB, username string) ([]*Answer, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	u, err := GetUserUsername(db, username)
+	if err == nil {
+		var a []*Answer
+		query, err := db.Prepare("SELECT * FROM RespuestaExamen WHERE usuarioid=? AND corregida=1 ")
+		if err == nil {
+			defer query.Close()
+			rows, err := query.Query(u.ID)
+			if err == nil {
+				a, err = rowsToAnswers(rows)
+				return a, err
+			}
+		}
+	}
+	return nil, err
+}
+
 func GetAnswersFromUser(db *sql.DB, username string) ([]*Answer, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)

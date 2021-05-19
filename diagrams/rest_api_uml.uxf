@@ -2677,4 +2677,30 @@ bg=yellow
 /pendingTests</panel_attributes>
     <additional_attributes>180.0;10.0;40.0;110.0;40.0;40.0;10.0;40.0</additional_attributes>
   </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>5384</x>
+      <y>256</y>
+      <w>264</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/correctedAnswers</panel_attributes>
+    <additional_attributes>310.0;20.0;70.0;20.0;10.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>5360</x>
+      <y>232</y>
+      <w>288</w>
+      <h>112</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/uncorrectedAnswers</panel_attributes>
+    <additional_attributes>340.0;20.0;90.0;20.0;10.0;120.0</additional_attributes>
+  </element>
 </diagram>

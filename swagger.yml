@@ -2701,6 +2701,70 @@ paths:
         500:
           $ref: '#/responses/InternalServerError'
 
+  /users/{username}/correctedAnswers:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - user
+      summary: Returns all answers that the user has answered and are corrected
+      operationId: GetCorrectedAnswersFromUser
+      description: Returns all answers that the user has answered and are corrected
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the user who is the author of the answers
+        required: true
+        type: string
+      responses:
+        200:
+          description: answers found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Answer'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  /users/{username}/UncorrectedAnswers:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - user
+      summary: Returns all answers that the user has answered and are not corrected
+      operationId: GetUncorrectedAnswersFromUser
+      description: Returns all answers that the user has answered and are not corrected
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: username
+        description: Username of the user who is the author of the answers
+        required: true
+        type: string
+      responses:
+        200:
+          description: answers found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Answer'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
   /users/{username}/answers:
     get:
       security:

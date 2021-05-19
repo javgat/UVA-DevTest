@@ -159,11 +159,15 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 
 	api.UserGetAnsweredTestsFromUserHandler = user.GetAnsweredTestsFromUserHandlerFunc(handlers.GetATestsFromUser) // GET /users/{username}/answeredTests
 	api.UserGetAnsweredTestFromUserHandler = user.GetAnsweredTestFromUserHandlerFunc(handlers.GetATestFromUser)    // GET /users/{username}/answeredTests/{testid}
+
 	api.UserGetAnswersFromUserAnsweredTestHandler =
 		user.GetAnswersFromUserAnsweredTestHandlerFunc(handlers.GetAnswersFromUserATest) // GET /users/{username}/answeredTests/{testid}/answers
 
 	api.UserGetCorrectedAnswersFromUserAnsweredTestHandler = user.GetCorrectedAnswersFromUserAnsweredTestHandlerFunc(handlers.GetCAnswersFromUserATest)      // GET /users/{username}/answeredTests/{testid}/finishedAnswers
 	api.UserGetUncorrectedAnswersFromUserAnsweredTestHandler = user.GetUncorrectedAnswersFromUserAnsweredTestHandlerFunc(handlers.GetUCAnswersFromUserATest) // GET /users/{username}/answeredTests/{testid}/unfinishedAnswers
+
+	api.UserGetCorrectedAnswersFromUserHandler = user.GetCorrectedAnswersFromUserHandlerFunc(handlers.GetCorrectedAnswersFromUser)       // GET /users/{username}/correctedAnswers
+	api.UserGetUncorrectedAnswersFromUserHandler = user.GetUncorrectedAnswersFromUserHandlerFunc(handlers.GetUncorrectedAnswersFromUser) // GET /users/{username}/uncorrectedAnswers
 
 	api.UserGetAnswersFromUserHandler = user.GetAnswersFromUserHandlerFunc(handlers.GetAnswersFromUser) // GET /users/{username}/answers
 	api.UserGetAnswerFromUserHandler = user.GetAnswerFromUserHandlerFunc(handlers.GetAnswerFromUser)    // GET /users/{username}/answers/{answerid}

@@ -7,6 +7,7 @@ import { AdminComponent } from './admin/admin.component';
 import { AnswerComponent } from './answer/answer.component';
 import { AnsweringListPQuestionsComponent } from './answering-list-pquestions/answering-list-pquestions.component';
 import { AnsweringPQuestionComponent } from './answering-pquestion/answering-pquestion.component';
+import { AnswersUserComponent } from './answers-user/answers-user.component';
 import { CreateTeamComponent } from './create-team/create-team.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { LoginComponent } from './login/login.component';
@@ -70,6 +71,7 @@ const routes: Routes = [
   {path: 'u/:username/solvable', component: PtestsSolvableUserComponent},
   {path: 'u/:username/answered', component: PtestsAnsweredUserComponent},
   {path: 'u/:username/pending', component: PtestsPendingUserComponent},
+  {path: 'u/:username/answers', component: AnswersUserComponent},
   {path: 'admin', component: AdminComponent},
   {path: 'admin/users', component: AdminUsersComponent},
   {path: 'admin/teams', component: AdminTeamsComponent},

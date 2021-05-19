@@ -96,6 +96,9 @@ import { LptAnsweredComponent } from './list-tests/lpt-answered/lpt-answered.com
 import { LptPendingComponent } from './list-tests/lpt-pending/lpt-pending.component';
 import { PtestsAnsweredUserComponent } from './ptests-answered-user/ptests-answered-user.component';
 import { PtestsPendingUserComponent } from './ptests-pending-user/ptests-pending-user.component';
+import { AnswersUserComponent } from './answers-user/answers-user.component';
+import { LaUCorrectedComponent } from './list-answers/la-u-corrected/la-u-corrected.component';
+import { LaUUncorrectedComponent } from './list-answers/la-u-uncorrected/la-u-uncorrected.component';
 
 export function apiConfigFactory (): Configuration {
   const params: ConfigurationParameters = {
@@ -194,7 +197,10 @@ export function apiConfigFactory (): Configuration {
     LptAnsweredComponent,
     LptPendingComponent,
     PtestsAnsweredUserComponent,
-    PtestsPendingUserComponent
+    PtestsPendingUserComponent,
+    AnswersUserComponent,
+    LaUCorrectedComponent,
+    LaUUncorrectedComponent
   ],
   imports: [
     BrowserModule,

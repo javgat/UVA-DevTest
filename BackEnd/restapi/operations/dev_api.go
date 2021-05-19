@@ -161,6 +161,9 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		PublishedTestGetCorrectedAnswersFromPublishedTestsHandler: published_test.GetCorrectedAnswersFromPublishedTestsHandlerFunc(func(params published_test.GetCorrectedAnswersFromPublishedTestsParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation published_test.GetCorrectedAnswersFromPublishedTests has not yet been implemented")
 		}),
+		UserGetCorrectedAnswersFromUserHandler: user.GetCorrectedAnswersFromUserHandlerFunc(func(params user.GetCorrectedAnswersFromUserParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation user.GetCorrectedAnswersFromUser has not yet been implemented")
+		}),
 		UserGetCorrectedAnswersFromUserAnsweredTestHandler: user.GetCorrectedAnswersFromUserAnsweredTestHandlerFunc(func(params user.GetCorrectedAnswersFromUserAnsweredTestParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation user.GetCorrectedAnswersFromUserAnsweredTest has not yet been implemented")
 		}),
@@ -406,6 +409,9 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		}),
 		PublishedTestGetUncorrectedAnswersFromPublishedTestsHandler: published_test.GetUncorrectedAnswersFromPublishedTestsHandlerFunc(func(params published_test.GetUncorrectedAnswersFromPublishedTestsParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation published_test.GetUncorrectedAnswersFromPublishedTests has not yet been implemented")
+		}),
+		UserGetUncorrectedAnswersFromUserHandler: user.GetUncorrectedAnswersFromUserHandlerFunc(func(params user.GetUncorrectedAnswersFromUserParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation user.GetUncorrectedAnswersFromUser has not yet been implemented")
 		}),
 		UserGetUncorrectedAnswersFromUserAnsweredTestHandler: user.GetUncorrectedAnswersFromUserAnsweredTestHandlerFunc(func(params user.GetUncorrectedAnswersFromUserAnsweredTestParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation user.GetUncorrectedAnswersFromUserAnsweredTest has not yet been implemented")
@@ -687,6 +693,8 @@ type DevAPI struct {
 	UserGetAvailableQuestionsOfUserHandler user.GetAvailableQuestionsOfUserHandler
 	// PublishedTestGetCorrectedAnswersFromPublishedTestsHandler sets the operation handler for the get corrected answers from published tests operation
 	PublishedTestGetCorrectedAnswersFromPublishedTestsHandler published_test.GetCorrectedAnswersFromPublishedTestsHandler
+	// UserGetCorrectedAnswersFromUserHandler sets the operation handler for the get corrected answers from user operation
+	UserGetCorrectedAnswersFromUserHandler user.GetCorrectedAnswersFromUserHandler
 	// UserGetCorrectedAnswersFromUserAnsweredTestHandler sets the operation handler for the get corrected answers from user answered test operation
 	UserGetCorrectedAnswersFromUserAnsweredTestHandler user.GetCorrectedAnswersFromUserAnsweredTestHandler
 	// QuestionGetEditQuestionsHandler sets the operation handler for the get edit questions operation
@@ -851,6 +859,8 @@ type DevAPI struct {
 	UserGetTestsFromUserHandler user.GetTestsFromUserHandler
 	// PublishedTestGetUncorrectedAnswersFromPublishedTestsHandler sets the operation handler for the get uncorrected answers from published tests operation
 	PublishedTestGetUncorrectedAnswersFromPublishedTestsHandler published_test.GetUncorrectedAnswersFromPublishedTestsHandler
+	// UserGetUncorrectedAnswersFromUserHandler sets the operation handler for the get uncorrected answers from user operation
+	UserGetUncorrectedAnswersFromUserHandler user.GetUncorrectedAnswersFromUserHandler
 	// UserGetUncorrectedAnswersFromUserAnsweredTestHandler sets the operation handler for the get uncorrected answers from user answered test operation
 	UserGetUncorrectedAnswersFromUserAnsweredTestHandler user.GetUncorrectedAnswersFromUserAnsweredTestHandler
 	// TeamGetUserFromTeamHandler sets the operation handler for the get user from team operation
@@ -1143,6 +1153,9 @@ func (o *DevAPI) Validate() error {
 	if o.PublishedTestGetCorrectedAnswersFromPublishedTestsHandler == nil {
 		unregistered = append(unregistered, "published_test.GetCorrectedAnswersFromPublishedTestsHandler")
 	}
+	if o.UserGetCorrectedAnswersFromUserHandler == nil {
+		unregistered = append(unregistered, "user.GetCorrectedAnswersFromUserHandler")
+	}
 	if o.UserGetCorrectedAnswersFromUserAnsweredTestHandler == nil {
 		unregistered = append(unregistered, "user.GetCorrectedAnswersFromUserAnsweredTestHandler")
 	}
@@ -1388,6 +1401,9 @@ func (o *DevAPI) Validate() error {
 	}
 	if o.PublishedTestGetUncorrectedAnswersFromPublishedTestsHandler == nil {
 		unregistered = append(unregistered, "published_test.GetUncorrectedAnswersFromPublishedTestsHandler")
+	}
+	if o.UserGetUncorrectedAnswersFromUserHandler == nil {
+		unregistered = append(unregistered, "user.GetUncorrectedAnswersFromUserHandler")
 	}
 	if o.UserGetUncorrectedAnswersFromUserAnsweredTestHandler == nil {
 		unregistered = append(unregistered, "user.GetUncorrectedAnswersFromUserAnsweredTestHandler")
@@ -1791,6 +1807,10 @@ func (o *DevAPI) initHandlerCache() {
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
+	o.handlers["GET"]["/users/{username}/correctedAnswers"] = user.NewGetCorrectedAnswersFromUser(o.context, o.UserGetCorrectedAnswersFromUserHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
 	o.handlers["GET"]["/users/{username}/answeredTests/{testid}/finishedAnswers"] = user.NewGetCorrectedAnswersFromUserAnsweredTest(o.context, o.UserGetCorrectedAnswersFromUserAnsweredTestHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
@@ -2116,6 +2136,10 @@ func (o *DevAPI) initHandlerCache() {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
 	o.handlers["GET"]["/publishedTests/{testid}/uncorrectedAnswers"] = published_test.NewGetUncorrectedAnswersFromPublishedTests(o.context, o.PublishedTestGetUncorrectedAnswersFromPublishedTestsHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/users/{username}/UncorrectedAnswers"] = user.NewGetUncorrectedAnswersFromUser(o.context, o.UserGetUncorrectedAnswersFromUserHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}

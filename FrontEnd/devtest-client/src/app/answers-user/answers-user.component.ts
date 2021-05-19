@@ -2,19 +2,19 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Answer, PublishedTestService, Test, UserService } from '@javgat/devtest-api';
 import { Subscription } from 'rxjs';
-import { LoggedInTeacherController } from '../shared/app.controller';
+import { LoggedInController } from '../shared/app.controller';
 import { Examen } from '../shared/app.model';
 import { DataService } from '../shared/data.service';
 import { SessionService } from '../shared/session.service';
 
 @Component({
-  selector: 'app-ptest-answers',
-  templateUrl: './ptest-answers.component.html',
-  styleUrls: ['./ptest-answers.component.css']
+  selector: 'app-answers-user',
+  templateUrl: './answers-user.component.html',
+  styleUrls: ['./answers-user.component.css']
 })
-export class PtestAnswersComponent extends LoggedInTeacherController implements OnInit {
+export class AnswersUserComponent extends LoggedInController implements OnInit {
 
-  testid : number
+  username : string
   routeSub: Subscription
   answers: Answer[]
   test: Test
@@ -22,15 +22,12 @@ export class PtestAnswersComponent extends LoggedInTeacherController implements 
 
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private ptestS : PublishedTestService, private route: ActivatedRoute) {
     super(session, router, data, userS)
-    this.testid = 0
+    this.username = ""
     this.test = new Examen()
     this.answers = []
     this.routeSub = this.route.params.subscribe(params => {
-      this.testid = params['testid']
+      this.username = params['username']
       this.borrarMensaje()
-      if (this.getSessionUser().getUsername() != undefined && this.getSessionUser().getUsername() != "") {
-        this.getPTest(true)
-      }
     });
     this.lookCorregidas = true
   }
@@ -41,23 +38,6 @@ export class PtestAnswersComponent extends LoggedInTeacherController implements 
   ngOnDestroy(): void{
     this.routeSub.unsubscribe()
     super.onDestroy()
-  }
-
-  doHasUserAction() {
-    if (this.testid != undefined && this.testid != 0) {
-      this.getPTest(true)
-    }
-  }
-
-  getPTest(primera: boolean) {
-    this.userS.getSolvableTestFromUser(this.getSessionUser().getUsername(), this.testid).subscribe(
-      resp => {
-        this.test = Examen.constructorFromTest(resp)
-      },
-      err => {
-        this.handleErrRelog(err, "obtener test publicado", primera, this.getPTest, this)
-      }
-    )
   }
 
   isLookingCorregidas() : boolean{
@@ -75,4 +55,5 @@ export class PtestAnswersComponent extends LoggedInTeacherController implements 
   lookForNoCorregidas(){
     this.lookCorregidas = false
   }
+
 }
