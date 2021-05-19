@@ -13,32 +13,21 @@ import { AdminComponent } from '../admin.component';
 })
 export class AdminUsersComponent extends AdminComponent implements OnInit {
 
-  users: User[]
   addUser: boolean
   addUserEmail: string
+  updateChild: boolean
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, teamS: TeamService) {
     super(session, router, data, userS, teamS)
-    this.users = []
     this.addUser = false
     this.addUserEmail = ""
+    this.updateChild = false
   }
 
   ngOnInit(): void {
   }
-  
-  getUsers(primera: boolean) {
-    this.userS.getUsers().subscribe(
-      resp => {
-        this.users = resp
-      },
-      err => {
-        this.handleErrRelog(err, "Obtener usuarios del panel de administración", primera, this.getUsers, this)
-      }
-    )
-  }
 
   doAdminAction(){
-    this.getUsers(true)
+
   }
 
   changeNotAddUser(){
@@ -61,10 +50,14 @@ export class AdminUsersComponent extends AdminComponent implements OnInit {
     this.userS.postEmailUser(eu).subscribe(
       resp =>{
         this.cambiarMensaje(new Mensaje("Usuario creado con éxito", Tipo.SUCCESS, true))
-        this.getUsers(true)
+        this.updateUserList()
       },
       err => this.handleErrRelog(err, "Crear usuario por correo", primera, this.crearUsuario, this)
     )
+  }
+
+  updateUserList(){
+    this.updateChild = !this.updateChild
   }
 
 }

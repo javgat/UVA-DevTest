@@ -9,7 +9,9 @@ import (
 	"net/http"
 
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
+	"github.com/go-openapi/strfmt"
 )
 
 // NewGetUsersParams creates a new GetUsersParams object
@@ -28,6 +30,11 @@ type GetUsersParams struct {
 
 	// HTTP Request Object
 	HTTPRequest *http.Request `json:"-"`
+
+	/*
+	  In: query
+	*/
+	LikeUsername *string
 }
 
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
@@ -39,8 +46,32 @@ func (o *GetUsersParams) BindRequest(r *http.Request, route *middleware.MatchedR
 
 	o.HTTPRequest = r
 
+	qs := runtime.Values(r.URL.Query())
+
+	qLikeUsername, qhkLikeUsername, _ := qs.GetOK("likeUsername")
+	if err := o.bindLikeUsername(qLikeUsername, qhkLikeUsername, route.Formats); err != nil {
+		res = append(res, err)
+	}
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// bindLikeUsername binds and validates parameter LikeUsername from query.
+func (o *GetUsersParams) bindLikeUsername(rawData []string, hasKey bool, formats strfmt.Registry) error {
+	var raw string
+	if len(rawData) > 0 {
+		raw = rawData[len(rawData)-1]
+	}
+
+	// Required: false
+	// AllowEmptyValue: false
+
+	if raw == "" { // empty values pass all other validations
+		return nil
+	}
+	o.LikeUsername = &raw
+
 	return nil
 }

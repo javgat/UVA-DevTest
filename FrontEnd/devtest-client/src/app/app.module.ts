@@ -99,6 +99,8 @@ import { PtestsPendingUserComponent } from './ptests-pending-user/ptests-pending
 import { AnswersUserComponent } from './answers-user/answers-user.component';
 import { LaUCorrectedComponent } from './list-answers/la-u-corrected/la-u-corrected.component';
 import { LaUUncorrectedComponent } from './list-answers/la-u-uncorrected/la-u-uncorrected.component';
+import { ListUsersComponent } from './list-users/list-users.component';
+import { UsersComponent } from './users/users.component';
 
 export function apiConfigFactory (): Configuration {
   const params: ConfigurationParameters = {
@@ -200,7 +202,9 @@ export function apiConfigFactory (): Configuration {
     PtestsPendingUserComponent,
     AnswersUserComponent,
     LaUCorrectedComponent,
-    LaUUncorrectedComponent
+    LaUUncorrectedComponent,
+    ListUsersComponent,
+    UsersComponent
   ],
   imports: [
     BrowserModule,

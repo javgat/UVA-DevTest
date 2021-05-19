@@ -2961,15 +2961,22 @@ export class UserService {
     }
 
     /**
-     * Returns all users. Only for admins
-     * Returns all users. Only for admins
+     * Returns all users.
+     * Returns all users.
+     * @param likeUsername 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getUsers(observe?: 'body', reportProgress?: boolean): Observable<Array<User>>;
-    public getUsers(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<User>>>;
-    public getUsers(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<User>>>;
-    public getUsers(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getUsers(likeUsername?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<User>>;
+    public getUsers(likeUsername?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<User>>>;
+    public getUsers(likeUsername?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<User>>>;
+    public getUsers(likeUsername?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (likeUsername !== undefined && likeUsername !== null) {
+            queryParameters = queryParameters.set('likeUsername', <any>likeUsername);
+        }
 
         let headers = this.defaultHeaders;
 
@@ -2993,6 +3000,7 @@ export class UserService {
 
         return this.httpClient.get<Array<User>>(`${this.basePath}/users`,
             {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

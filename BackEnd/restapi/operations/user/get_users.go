@@ -33,9 +33,9 @@ func NewGetUsers(ctx *middleware.Context, handler GetUsersHandler) *GetUsers {
 
 /* GetUsers swagger:route GET /users user getUsers
 
-Returns all users. Only for admins
+Returns all users.
 
-Returns all users. Only for admins
+Returns all users.
 
 */
 type GetUsers struct {

@@ -224,11 +224,15 @@ paths:
         - BearerCookie: []
       tags:
       - user
-      summary: Returns all users. Only for admins
+      summary: Returns all users.
       operationId: GetUsers
-      description: Returns all users. Only for admins
+      description: Returns all users.
       produces:
       - application/json
+      parameters:
+      - in: query
+        name: likeUsername
+        type: string
       responses:
         200:
           description: users found

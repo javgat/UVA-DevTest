@@ -5759,15 +5759,22 @@ func init() {
             "BearerCookie": []
           }
         ],
-        "description": "Returns all users. Only for admins",
+        "description": "Returns all users.",
         "produces": [
           "application/json"
         ],
         "tags": [
           "user"
         ],
-        "summary": "Returns all users. Only for admins",
+        "summary": "Returns all users.",
         "operationId": "GetUsers",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "likeUsername",
+            "in": "query"
+          }
+        ],
         "responses": {
           "200": {
             "description": "users found",
@@ -17162,15 +17169,22 @@ func init() {
             "BearerCookie": []
           }
         ],
-        "description": "Returns all users. Only for admins",
+        "description": "Returns all users.",
         "produces": [
           "application/json"
         ],
         "tags": [
           "user"
         ],
-        "summary": "Returns all users. Only for admins",
+        "summary": "Returns all users.",
         "operationId": "GetUsers",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "likeUsername",
+            "in": "query"
+          }
+        ],
         "responses": {
           "200": {
             "description": "users found",

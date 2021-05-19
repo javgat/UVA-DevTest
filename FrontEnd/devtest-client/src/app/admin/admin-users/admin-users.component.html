@@ -18,25 +18,10 @@
     <form (ngSubmit)="crearUsuarioSubmit()" ngNativeValidate>
         <div class="input-group my-3">
             <input class="button btn btn-primary" type="submit" value="Crear usuario y enviar correo" />
-            <input type="text" class="form-control" name="inputAddQuestion" [(ngModel)]="addUserEmail"
-                placeholder="Correo electrónico" required />
+            <input type="email" class="form-control" name="inputAddQuestion" [(ngModel)]="addUserEmail"
+                placeholder="Correo electrónico" required/>
         </div>
     </form>
     <p><a class="link-dark m-3" role="button" (click)="changeNotAddUser()">Ocultar</a></p>
 </div>
-<table class="table table-striped table-hover table-primary">
-    <thead>
-        <tr>
-            <th>Nombre de usuario</th>
-            <th>Correo electrónico</th>
-            <th>Rol</th>
-        </tr>
-    </thead>
-    <tbody *ngFor="let user of users">
-        <tr role="button" [routerLink]="['/profile', user.username]">
-            <td>{{user.username}}</td>
-            <td>{{user.email}}</td>
-            <td>{{user.rol}}</td>
-        </tr>
-    </tbody>
-</table>
+<app-list-users [update]="updateChild"></app-list-users>

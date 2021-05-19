@@ -50,10 +50,12 @@ import { TestsFavUserComponent } from './tests-fav-user/tests-fav-user.component
 import { TestsSharedUserComponent } from './tests-shared-user/tests-shared-user.component';
 import { TestsUserComponent } from './tests-user/tests-user.component';
 import { TestsComponent } from './tests/tests.component';
+import { UsersComponent } from './users/users.component';
 
 const routes: Routes = [
   {path: 'signin', component: SigninComponent},
   {path: 'login', component: LoginComponent},
+  {path: 'users', component: UsersComponent},
   {path: 'profile/:id', component: ProfileComponent}, //Profile: Lo ven todos
   {path: 'profile/:id/teams', component: ProfileTeamsComponent},
   {path: 'profile/:id/et', component: ProfilePublicTestsComponent},
@@ -108,7 +110,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {onSameUrlNavigation: 'reload'})],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

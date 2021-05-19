@@ -32,7 +32,7 @@ export class LoggedInController {
                 this.sessionUser = valor
                 if (this.sessionLogin.isLoggedIn() && this.sessionUser.isEmpty()) {
                     this.downloadUser(true)
-                }else{
+                } else {
                     this.doInheritHasUserAction()
                     this.doHasUserAction()
                 }
@@ -44,12 +44,12 @@ export class LoggedInController {
         )
     }
 
-    doActionIsNotLoggedIn(){
+    doActionIsNotLoggedIn() {
         this.router.navigate(['/'])
     }
 
-    doInheritHasUserAction(){}
-    doHasUserAction(){}
+    doInheritHasUserAction() { }
+    doHasUserAction() { }
 
     getSessionLogin(): SessionLogin {
         return this.sessionLogin
@@ -100,17 +100,21 @@ export class LoggedInController {
         this.session.handleErrRelog(err, action, primera, callbackFn, that)
     }
 
+    reLoad() {
+        this.router.navigate([this.router.url])
+    }
+
 }
 
-export class LoggedInTeacherController extends LoggedInController{
+export class LoggedInTeacherController extends LoggedInController {
 
     constructor(session: SessionService, router: Router, data: DataService, userS: UserService) {
         super(session, router, data, userS)
     }
 
-    doInheritHasUserAction(){
+    doInheritHasUserAction() {
         super.doInheritHasUserAction()
-        if(this.getSessionUser().isStudent()){
+        if (this.getSessionUser().isStudent()) {
             this.router.navigate(['/'])
         }
     }

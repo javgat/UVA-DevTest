@@ -145,18 +145,45 @@ func GetUserByID(db *sql.DB, ID int64) (*User, error) {
 	return u, err
 }
 
+func addFiltersUsers(hayWhere bool, initQuery string, likeUsername *string) string {
+	query := initQuery
+	nexoQuery := " WHERE "
+	if hayWhere {
+		nexoQuery = " AND "
+	}
+	if likeUsername != nil && *likeUsername != "" {
+		query = query + nexoQuery + " username LIKE ? "
+	}
+	return query
+}
+
+func FilterUserParamsToInterfaceArr(likeUsername *string) []interface{} {
+	hayTitle := 0
+	if likeUsername != nil && *likeUsername != "" {
+		hayTitle = 1
+	}
+	interfaceParams := make([]interface{}, hayTitle)
+	if hayTitle == 1 {
+		interfaceParams[0] = "%" + *likeUsername + "%"
+	}
+	return interfaceParams
+}
+
 // GetUsers returns all users
-func GetUsers(db *sql.DB) ([]*User, error) {
+func GetUsers(db *sql.DB, likeUsername *string) ([]*User, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
-	query, err := db.Prepare("SELECT * FROM Usuario")
+	stPrepare := "SELECT * FROM Usuario "
+	stPrepare = addFiltersUsers(false, stPrepare, likeUsername)
+	query, err := db.Prepare(stPrepare)
 	var us []*User
 	if err != nil {
 		return us, err
 	}
 	defer query.Close()
-	rows, err := query.Query()
+	interfaceParams := FilterUserParamsToInterfaceArr(likeUsername)
+	rows, err := query.Query(interfaceParams...)
 	if err == nil {
 		us, err = rowsToUsers(rows)
 	}
