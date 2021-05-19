@@ -1,0 +1,46 @@
+<nav class="navbar navbar-dark navbar-expand-lg bg-primary">
+    <div class="container text-center">
+      <a class="navbar-brand" href="/">
+        <h2 class="m-0"><b>DevTest</b></h2>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 container align-items-center">
+          <li class="col-sm nav-item">
+              <a [routerLink]="['/ptests']" class="nav-link fw-bold">TESTS PÚBLICOS</a>
+          </li>
+          <li class="col-sm nav-item">
+              <a [routerLink]="['/u', getSessionUser().getUsername(), 'pending']" class="nav-link fw-bold">TESTS PENDIENTES</a>
+          </li>
+          <li class="col-sm nav-item">
+              <a [routerLink]="['/u', getSessionUser().getUsername(), 'answered']" class="nav-link fw-bold">TESTS RESPONDIDOS</a>
+          </li>
+          <li class="col-sm nav-item">
+              <a [routerLink]="['/u', getSessionUser().getUsername(), 'answers']" class="nav-link fw-bold">RESPUESTAS</a>
+          </li>
+          <li class="col-sm nav-item">
+            <a [routerLink]="['/teams']" class="nav-link fw-bold">EQUIPOS</a>
+          </li>
+          <li class="col-sm nav-item">
+            <a [routerLink]="['/users']" class="nav-link fw-bold">USUARIOS</a>
+          </li>
+          <li class="col-sm nav-item dropdown">
+            <a class="nav-link dropdown-toggle fw-bold" href="#" role="button" id="dropdownMenuLink"
+              data-bs-toggle="dropdown" aria-expanded="false">
+              {{getSessionUser().getUsername()}}
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+              <li><a class="dropdown-item" [routerLink]="['/profile', getSessionUser().getUsername()]">Ver perfil</a></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li><a class="dropdown-item" href="#" (click)="logout()">Cerrar sesión</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
