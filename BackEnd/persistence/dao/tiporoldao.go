@@ -8,6 +8,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"strings"
 	"sync"
 	"uva-devtest/models"
 )
@@ -107,44 +108,7 @@ func ToModelTipoRol(t *TipoRol) *models.TipoRol {
 	return mt
 }
 
-func GetTipoRolByID(db *sql.DB, id *int64) (*TipoRol, error) {
-	if db == nil {
-		return nil, errors.New(errorDBNil)
-	}
-	trs, err := getTRSInstance(db)
-	if err == nil {
-		for _, tr := range trs {
-			if *tr.ID == *id {
-				return tr, nil
-			}
-		}
-		return nil, nil
-	}
-	return nil, err
-}
-
-func getTipoRoles(db *sql.DB) ([]*TipoRol, error) {
-	if db == nil {
-		return nil, errors.New(errorDBNil)
-	}
-	var trs []*TipoRol
-	query, err := db.Prepare("SELECT * FROM TipoRol")
-	if err != nil {
-		return trs, err
-	}
-	defer query.Close()
-	rows, err := query.Query()
-	if err == nil {
-		trs, err = rowsToTipoRoles(rows)
-	}
-	return trs, err
-}
-
-func GetTipoRoles(db *sql.DB) ([]*TipoRol, error) {
-	return getTRSInstance(db)
-}
-
-func getDefaultTipoRolStudent() *TipoRol {
+func GetDefaultTipoRolStudent() *TipoRol {
 	var uno int64 = 1
 	var tipoEst string = models.TipoRolRolBaseEstudiante
 	var btrue bool = true
@@ -176,6 +140,106 @@ func getDefaultTipoRolStudent() *TipoRol {
 	}
 }
 
+func GetDefaultTipoRolNoRegistrado() *TipoRol {
+	var uno int64 = 1
+	var tipoNR string = models.TipoRolRolBaseNoRegistrado
+	var bfalse bool = false
+	return &TipoRol{
+		ID:                 &uno,
+		RolBase:            &tipoNR,
+		Nombre:             &tipoNR,
+		Prioridad:          &uno,
+		VerPTests:          &bfalse,
+		VerETests:          &bfalse,
+		VerEQuestions:      &bfalse,
+		VerPQuestions:      &bfalse,
+		VerAnswers:         &bfalse,
+		ChangeRoles:        &bfalse,
+		TenerTeams:         &bfalse,
+		TenerEQuestions:    &bfalse,
+		TenerETests:        &bfalse,
+		TenerPTests:        &bfalse,
+		AdminPTests:        &bfalse,
+		AdminETests:        &bfalse,
+		AdminEQuestions:    &bfalse,
+		AdminAnswers:       &bfalse,
+		AdminUsers:         &bfalse,
+		AdminTeams:         &bfalse,
+		AdminConfiguration: &bfalse,
+		AdminPermissions:   &bfalse,
+		TipoInicial:        &bfalse,
+	}
+}
+
+func getTipoRoles(db *sql.DB) ([]*TipoRol, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var trs []*TipoRol
+	query, err := db.Prepare("SELECT * FROM TipoRol")
+	if err != nil {
+		return trs, err
+	}
+	defer query.Close()
+	rows, err := query.Query()
+	if err == nil {
+		trs, err = rowsToTipoRoles(rows)
+	}
+	return trs, err
+}
+
+func GetTipoRolByID(db *sql.DB, id *int64) (*TipoRol, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	trs, err := getTRSInstance(db)
+	if err == nil {
+		for _, tr := range trs {
+			if *tr.ID == *id {
+				return tr, nil
+			}
+		}
+		return nil, nil
+	}
+	return nil, err
+}
+
+func GetTipoRolByNombre(db *sql.DB, nombre *string) (*TipoRol, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	trs, err := getTRSInstance(db)
+	if err == nil {
+		for _, tr := range trs {
+			if *tr.Nombre == *nombre {
+				return tr, nil
+			}
+		}
+		return nil, nil
+	}
+	return nil, err
+}
+
+func GetTipoRoles(db *sql.DB) ([]*TipoRol, error) {
+	return getTRSInstance(db)
+}
+
+func GetTipoRolNoRegistrado(db *sql.DB) (*TipoRol, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	trs, err := getTRSInstance(db)
+	if err == nil {
+		for _, tr := range trs {
+			if strings.EqualFold(*tr.RolBase, models.TipoRolRolBaseNoRegistrado) {
+				return tr, nil
+			}
+		}
+		return nil, nil
+	}
+	return nil, err
+}
+
 func GetTipoRolNewUser(db *sql.DB) (*TipoRol, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
@@ -187,7 +251,7 @@ func GetTipoRolNewUser(db *sql.DB) (*TipoRol, error) {
 				return tr, nil
 			}
 		}
-		trdef := getDefaultTipoRolStudent()
+		trdef := GetDefaultTipoRolStudent()
 		_, err = PostTipoRol(db, ToModelTipoRol(trdef))
 		if err == nil {
 			return trdef, nil

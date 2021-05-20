@@ -4,7 +4,11 @@
 // Package handlers provides functions that handle http requests
 package permissions
 
-import "uva-devtest/models"
+import (
+	"uva-devtest/models"
+	"uva-devtest/persistence/dao"
+	"uva-devtest/persistence/dbconnection"
+)
 
 func isAdmin(u *models.User) bool {
 	if u == nil {
@@ -24,14 +28,33 @@ func isTeacherOrAdmin(u *models.User) bool {
 	return isAdmin(u) || isTeacher(u)
 }
 
+func getUserTipoRol(u *models.User) *dao.TipoRol {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		var tr *dao.TipoRol
+		if u == nil {
+			tr, err = dao.GetTipoRolNoRegistrado(db)
+			if err == nil && tr != nil {
+				return tr
+			}
+			return dao.GetDefaultTipoRolNoRegistrado()
+		}
+		tr, err = dao.GetTipoRolByNombre(db, &u.Tiporol)
+		if err == nil && tr != nil {
+			return tr
+		}
+	}
+	return dao.GetDefaultTipoRolStudent()
+}
+
 // CanVerPTests indica si el usuario puede ver tests publicados públicos
 func CanVerPTests(u *models.User) bool {
-	return u != nil
+	return *getUserTipoRol(u).VerPTests
 }
 
 // CanVerETests indica si el usuario puede ver tests editables públicos
 func CanVerETests(u *models.User) bool {
-	return isTeacherOrAdmin(u)
+	return *getUserTipoRol(u).VerETests
 }
 
 // CanVerTests
@@ -41,12 +64,12 @@ func CanVerTests(u *models.User) bool {
 
 // CanVerEQuestions indica si el usuario puede ver preguntas editables públicos
 func CanVerEQuestions(u *models.User) bool {
-	return isTeacherOrAdmin(u)
+	return *getUserTipoRol(u).VerEQuestions
 }
 
 // CanVerPQuestions indica si el usuario puede ver preguntas publicadas públicos
 func CanVerPQuestions(u *models.User) bool {
-	return isTeacherOrAdmin(u)
+	return *getUserTipoRol(u).VerPQuestions
 }
 
 func CanVerQuestions(u *models.User) bool {
@@ -55,42 +78,43 @@ func CanVerQuestions(u *models.User) bool {
 
 // CanVerPQuestions indica si el usuario puede ver respuestas de otros usuarios
 func CanVerAnswers(u *models.User) bool {
-	return isTeacherOrAdmin(u)
+	return *getUserTipoRol(u).VerAnswers
 }
 
 // CanChangeRoles indica si el usuario puede modificar el rol de otro, de oldpriority a newpriority
 // Usa parametro change roles, y que el old rol sea de prioridad menor que el del usuario, y el new como maximo igual (la prioridad tiene orden inverso, mayor es 0)
 func CanChangeRoles(u *models.User, otherRolPriorityOld int64, otherRolPriorityNew int64) bool {
-	return isAdmin(u)
+	tipo := *getUserTipoRol(u)
+	return *tipo.ChangeRoles && (otherRolPriorityOld > *tipo.Prioridad) && (otherRolPriorityNew >= *tipo.Prioridad)
 }
 
 // CanTenerTeams indica si el usuario puede crear o ser administrador de un equipo
 func CanTenerTeams(u *models.User) bool {
-	return isTeacherOrAdmin(u)
+	return *getUserTipoRol(u).TenerTeams
 }
 
 func CanTenerEQuestions(u *models.User) bool {
-	return isTeacherOrAdmin(u)
+	return *getUserTipoRol(u).TenerEQuestions
 }
 
 func CanTenerETests(u *models.User) bool {
-	return isTeacherOrAdmin(u)
+	return *getUserTipoRol(u).TenerETests
 }
 
 func CanTenerPTests(u *models.User) bool {
-	return isTeacherOrAdmin(u)
+	return *getUserTipoRol(u).TenerPTests
 }
 
 // ADMIN
 
 // CanAdminPTests indica si el usuario puede ver y editar tests publicados públicos y privados (y sus preguntas)
 func CanAdminPTests(u *models.User) bool {
-	return isAdmin(u)
+	return *getUserTipoRol(u).AdminPTests
 }
 
 // CanAdminETests indica si el usuario puede ver y editar tests editables públicos y privados
 func CanAdminETests(u *models.User) bool {
-	return isAdmin(u)
+	return *getUserTipoRol(u).AdminETests
 }
 
 func CanAdminTests(u *models.User) bool {
@@ -99,7 +123,7 @@ func CanAdminTests(u *models.User) bool {
 
 // CanAdminQuestions indica si el usuario puede ver y editar preguntas editables públicos y privados
 func CanAdminEQuestions(u *models.User) bool {
-	return isAdmin(u)
+	return *getUserTipoRol(u).AdminEQuestions
 }
 
 func CanAdminQuestions(u *models.User) bool {
@@ -108,25 +132,25 @@ func CanAdminQuestions(u *models.User) bool {
 
 // CanAdminAnswers indica si el usuario puede ver y corregir respuestas a cualquier test
 func CanAdminAnswers(u *models.User) bool {
-	return isAdmin(u)
+	return *getUserTipoRol(u).AdminAnswers
 }
 
 // CanAdminUsers indica si el usuario puede modificar datos del usuario
 func CanAdminUsers(u *models.User) bool {
-	return isAdmin(u)
+	return *getUserTipoRol(u).AdminUsers
 }
 
 // CanAdminUsers indica si el usuario puede modificar datos de equipos
 func CanAdminTeams(u *models.User) bool {
-	return isAdmin(u)
+	return *getUserTipoRol(u).AdminUsers
 }
 
 // CanAdminConfiguration indica si el usuario puede modificar otras configuraciones del servidor
 func CanAdminConfiguration(u *models.User) bool {
-	return isAdmin(u)
+	return *getUserTipoRol(u).AdminConfiguration
 }
 
 // CanAdminPermissions indica si el usuario puede modificar los roles existentes y sus privilegios
 func CanAdminPermissions(u *models.User) bool {
-	return isAdmin(u)
+	return *getUserTipoRol(u).AdminPermissions
 }
