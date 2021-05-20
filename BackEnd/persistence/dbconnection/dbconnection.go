@@ -9,11 +9,31 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"sync"
 
 	_ "github.com/go-sql-driver/mysql"
 )
 
+var lockDB = &sync.Mutex{}
+
 var db *sql.DB
+
+func getDBInstance() (*sql.DB, error) {
+	var err error
+	if db == nil {
+		lockDB.Lock()
+		defer lockDB.Unlock()
+		if db == nil {
+			fmt.Println("Creating New DB Connection")
+			var dbnew *sql.DB
+			dbnew, err = connectDb("./config/dbinfo.json")
+			if err == nil && dbnew != nil {
+				db = dbnew
+			}
+		}
+	}
+	return db, err
+}
 
 // Opens the database information file and returns a DbInfo struct
 // Param filename: String containing the route to dbinfo file.
@@ -41,13 +61,5 @@ func connectDb(filename string) (*sql.DB, error) {
 // Connects with the database and returns its sql.DB representation
 // Returns *sql.DB pointing to the MySQL/MariaDB database.
 func ConnectDb() (*sql.DB, error) {
-	if db != nil {
-		return db, nil
-	}
-	dbnew, err := connectDb("./config/dbinfo.json")
-	if err == nil && dbnew != nil {
-		db = dbnew
-		return db, nil
-	}
-	return dbnew, err
+	return getDBInstance()
 }

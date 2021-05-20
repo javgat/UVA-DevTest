@@ -59,6 +59,7 @@ func CanVerAnswers(u *models.User) bool {
 }
 
 // CanChangeRoles indica si el usuario puede modificar el rol de otro, de oldpriority a newpriority
+// Usa parametro change roles, y que el old rol sea de prioridad menor que el del usuario, y el new como maximo igual (la prioridad tiene orden inverso, mayor es 0)
 func CanChangeRoles(u *models.User, otherRolPriorityOld int64, otherRolPriorityNew int64) bool {
 	return isAdmin(u)
 }

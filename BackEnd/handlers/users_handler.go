@@ -1448,7 +1448,6 @@ func PostEmailUser(params user.PostEmailUserParams, u *models.User) middleware.R
 	if err == nil {
 		eu := params.EmailUser
 		username := eu.Email.String()
-		studentRol := models.UserRolEstudiante
 		pass := RandomString(40)
 		var bytes []byte
 		var du *dao.User
@@ -1460,19 +1459,24 @@ func PostEmailUser(params user.PostEmailUserParams, u *models.User) middleware.R
 			bytes, err = bcrypt.GenerateFromPassword([]byte(pass), Cost)
 			if err == nil {
 				pwhashstring := string(bytes)
-				du := &dao.User{
-					Username: &username,
-					Email:    eu.Email,
-					Pwhash:   &pwhashstring,
-					Rol:      &studentRol,
-					Fullname: &username,
-				}
-				err = dao.InsertUser(db, du)
+				var tr *dao.TipoRol
+				tr, err = dao.GetTipoRolNewUser(db)
 				if err == nil {
-					mu := dao.ToModelUser(du)
-					// ENVIAR MAIL
-					emailHelper.SendEmailUserCreated(username, pass)
-					return user.NewPostEmailUserCreated().WithPayload(mu)
+					newUserRolId := tr.ID
+					du := &dao.User{
+						Username:  &username,
+						Email:     eu.Email,
+						Pwhash:    &pwhashstring,
+						TipoRolId: newUserRolId,
+						Fullname:  &username,
+					}
+					err = dao.InsertUser(db, du)
+					if err == nil {
+						mu := dao.ToModelUser(du)
+						// ENVIAR MAIL
+						emailHelper.SendEmailUserCreated(username, pass)
+						return user.NewPostEmailUserCreated().WithPayload(mu)
+					}
 				}
 			}
 		}

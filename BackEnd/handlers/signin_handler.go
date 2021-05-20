@@ -64,18 +64,23 @@ func RegisterUser(params user.RegisterUserParams) middleware.Responder {
 		return serverErrorSignin(err)
 	}
 	pwhashstring := string(bytes)
-	studentRol := models.UserRolEstudiante
-	u := &dao.User{
-		Username: lu.Username,
-		Email:    lu.Email,
-		Pwhash:   &pwhashstring,
-		Rol:      &studentRol,
-		Fullname: lu.Username,
-	}
-	db, err := dbconnection.ConnectDb()
 
+	db, err := dbconnection.ConnectDb()
 	if err != nil {
 		return serverErrorSignin(err)
+	}
+	var tr *dao.TipoRol
+	tr, err = dao.GetTipoRolNewUser(db)
+	if err != nil {
+		return serverErrorSignin(err)
+	}
+	newUserRolId := tr.ID
+	u := &dao.User{
+		Username:  lu.Username,
+		Email:     lu.Email,
+		Pwhash:    &pwhashstring,
+		TipoRolId: newUserRolId,
+		Fullname:  lu.Username,
 	}
 	log.Println("Conectado a la base de datos")
 	err = dao.InsertUser(db, u)

@@ -8,6 +8,7 @@ import (
 	"database/sql"
 	"errors"
 	"uva-devtest/models"
+	"uva-devtest/persistence/dbconnection"
 
 	// Blank import of mysql driver
 	_ "github.com/go-sql-driver/mysql"
@@ -16,10 +17,22 @@ import (
 // ToModelUser converts a dao.User into a models.User
 // Param u: dao.User to convert
 func ToModelUser(u *User) *models.User {
+	db, err := dbconnection.ConnectDb()
+	tipoRolNombre := "Error"
+	rolNombre := models.UserRolEstudiante
+	if err == nil {
+		var tipoRol *TipoRol
+		tipoRol, err = GetTipoRolByID(db, u.TipoRolId)
+		if err == nil && tipoRol != nil {
+			tipoRolNombre = *tipoRol.Nombre
+			rolNombre = *tipoRol.RolBase
+		}
+	}
 	mu := &models.User{
 		Username: u.Username,
 		Email:    u.Email,
-		Rol:      u.Rol,
+		Rol:      &rolNombre,
+		Tiporol:  tipoRolNombre,
 		Fullname: u.Fullname,
 	}
 	return mu
@@ -43,14 +56,14 @@ func InsertUser(db *sql.DB, u *User) error {
 	if db == nil || u == nil {
 		return errors.New(errorDBNil)
 	}
-	query, err := db.Prepare("INSERT INTO Usuario(username, email, pwhash, rol, fullname) VALUES (?,?,?,?,?)")
+	query, err := db.Prepare("INSERT INTO Usuario(username, email, pwhash, tipoRolId, fullname) VALUES (?,?,?,?,?)")
 
 	if err != nil {
 		return err
 	}
 	defer query.Close()
 
-	_, err = query.Exec(u.Username, u.Email, u.Pwhash, u.Rol, u.Fullname)
+	_, err = query.Exec(u.Username, u.Email, u.Pwhash, u.TipoRolId, u.Fullname)
 	return err
 }
 
@@ -62,7 +75,7 @@ func rowsToUsers(rows *sql.Rows) ([]*User, error) {
 	var users []*User
 	for rows.Next() {
 		var us User
-		err := rows.Scan(&us.ID, &us.Username, &us.Email, &us.Pwhash, &us.Rol, &us.Fullname)
+		err := rows.Scan(&us.ID, &us.Username, &us.Email, &us.Pwhash, &us.TipoRolId, &us.Fullname)
 		if err != nil {
 			return users, err
 		}
@@ -261,12 +274,12 @@ func PutRole(db *sql.DB, username string, r *models.Role) error {
 	if db == nil {
 		return errors.New(errorDBNil)
 	}
-	query, err := db.Prepare("UPDATE Usuario SET rol=? WHERE username = ? ")
+	query, err := db.Prepare("UPDATE Usuario SET tipoRolId=? WHERE username = ? ")
 	if err != nil {
 		return err
 	}
 	defer query.Close()
-	_, err = query.Exec(r.Rol, username)
+	_, err = query.Exec(r.RolID, username)
 	return err
 }
 

@@ -229,8 +229,12 @@ func canBeAddedTeam(username string, teamname string) bool {
 				return true
 			}
 			user, err := dao.GetUserUsername(db, username)
+			var muser *models.User
 			if err == nil && user != nil {
-				return *user.Rol != models.UserRolEstudiante
+				muser = dao.ToModelUser(user)
+				if muser != nil {
+					return *muser.Rol != models.UserRolEstudiante
+				}
 			}
 		}
 	}

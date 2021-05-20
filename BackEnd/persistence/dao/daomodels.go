@@ -45,10 +45,9 @@ type User struct {
 	// Required: true
 	Fullname *string `json:"fullname"`
 
-	// rol
-	// Required: true
-	// Enum: [estudiante profesor administrador]
-	Rol *string `json:"rol"`
+	// tiporoidl
+	// Example: 2
+	TipoRolId *int64
 }
 
 // Team team
@@ -358,6 +357,107 @@ type MailToken struct {
 	Userid int64
 
 	Caducidad time.Time
+}
+
+// TipoRol tipo rol
+//
+// swagger:model TipoRol
+type TipoRol struct {
+
+	// true if the users can administrate Answers
+	// Required: true
+	AdminAnswers *bool `json:"adminAnswers"`
+
+	// true if the users can administrate Server Configuration parameters
+	// Required: true
+	AdminConfiguration *bool `json:"adminConfiguration"`
+
+	// true if the users can administrate Non Published Questions
+	// Required: true
+	AdminEQuestions *bool `json:"adminEQuestions"`
+
+	// true if the users can administrate Non Published Tests
+	// Required: true
+	AdminETests *bool `json:"adminETests"`
+
+	// true if the users can administrate PublishedTests
+	// Required: true
+	AdminPTests *bool `json:"adminPTests"`
+
+	// true if the users can administrate TipoRol permissions
+	// Required: true
+	AdminPermissions *bool `json:"adminPermissions"`
+
+	// true if the users can administrate Teams
+	// Required: true
+	AdminTeams *bool `json:"adminTeams"`
+
+	// true if the users can administrate Users
+	// Required: true
+	AdminUsers *bool `json:"adminUsers"`
+
+	// true if the users can change anothers user TipoRol if its source priority is less important and target is at most equal
+	// Required: true
+	ChangeRoles *bool `json:"changeRoles"`
+
+	// id
+	// Required: true
+	ID *int64 `json:"id"`
+
+	// nombre
+	// Example: Moderador
+	// Required: true
+	Nombre *string `json:"nombre"`
+
+	// Maximum priority is 0, any greater value represents less priority
+	// Required: true
+	// Minimum: 0
+	Prioridad *int64 `json:"prioridad"`
+
+	// rol base
+	// Required: true
+	// Enum: [administrador profesor estudiante noRegistrado]
+	RolBase *string `json:"rolBase"`
+
+	// true if the users can have non published questions
+	// Required: true
+	TenerEQuestions *bool `json:"tenerEQuestions"`
+
+	// true if the users can have non published questions
+	// Required: true
+	TenerETests *bool `json:"tenerETests"`
+
+	// true if the users can have published tests
+	// Required: true
+	TenerPTests *bool `json:"tenerPTests"`
+
+	// true if the users can have teams
+	// Required: true
+	TenerTeams *bool `json:"tenerTeams"`
+
+	// true if new users will be this TipoRol at first
+	// Required: true
+	TipoInicial *bool `json:"tipoInicial"`
+
+	// true if the users can see Answers
+	// Required: true
+	VerAnswers *bool `json:"verAnswers"`
+
+	// true if the users can see Non Published Questions
+	// Required: true
+	VerEQuestions *bool `json:"verEQuestions"`
+
+	// true if the users can see Non Published Tests
+	// Required: true
+	VerETests *bool `json:"verETests"`
+
+	// true if the users can see Published Questions
+	// Required: true
+	VerPQuestions *bool `json:"verPQuestions"`
+
+	// true if the users can see PublishedTests
+	// Required: true
+	VerPTests *bool `json:"verPTests"`
 }
 
 const (

@@ -6464,6 +6464,9 @@ definitions:
       rol:
         type: string
         enum: [estudiante, profesor, administrador]
+      tiporol:
+        type: string
+        example: estudiante
   UserUpdate:
     type: object
     required:
@@ -6489,14 +6492,110 @@ definitions:
         example: password
         format: password
         pattern: '^.{6,}$'
+  TipoRol:
+    type: object
+    required:
+    - id
+    - rolBase
+    - nombre
+    - prioridad
+    - verPTests
+    - verETests
+    - verEQuestions
+    - verPQuestions
+    - verAnswers
+    - changeRoles
+    - tenerTeams
+    - tenerEQuestions
+    - tenerETests
+    - tenerPTests
+    - adminPTests
+    - adminETests
+    - adminEQuestions
+    - adminAnswers
+    - adminUsers
+    - adminTeams
+    - adminConfiguration
+    - adminPermissions
+    - tipoInicial
+    properties:
+      id:
+        type: integer
+      rolBase:
+        type: string
+        enum: [administrador, profesor, estudiante, noRegistrado]
+      nombre:
+        type: string
+        example: Moderador
+      prioridad:
+        type: integer
+        minimum: 0
+        description: Maximum priority is 0, any greater value represents less priority
+      verPTests:
+        type: boolean
+        description: true if the users can see PublishedTests
+      verETests:
+        type: boolean
+        description: true if the users can see Non Published Tests
+      verEQuestions:
+        type: boolean
+        description: true if the users can see Non Published Questions
+      verPQuestions:
+        type: boolean
+        description: true if the users can see Published Questions
+      verAnswers:
+        type: boolean
+        description: true if the users can see Answers
+      changeRoles:
+        type: boolean
+        description: true if the users can change anothers user TipoRol if its source priority is less important and target is at most equal
+      tenerTeams:
+        type: boolean
+        description: true if the users can have teams
+      tenerEQuestions:
+        type: boolean
+        description: true if the users can have non published questions
+      tenerETests:
+        type: boolean
+        description: true if the users can have non published questions
+      tenerPTests:
+        type: boolean
+        description: true if the users can have published tests
+      adminPTests:
+        type: boolean
+        description: true if the users can administrate PublishedTests
+      adminETests:
+        type: boolean
+        description: true if the users can administrate Non Published Tests
+      adminEQuestions:
+        type: boolean
+        description: true if the users can administrate Non Published Questions
+      adminAnswers:
+        type: boolean
+        description: true if the users can administrate Answers
+      adminUsers:
+        type: boolean
+        description: true if the users can administrate Users
+      adminTeams:
+        type: boolean
+        description: true if the users can administrate Teams
+      adminConfiguration:
+        type: boolean
+        description: true if the users can administrate Server Configuration parameters
+      adminPermissions:
+        type: boolean
+        description: true if the users can administrate TipoRol permissions
+      tipoInicial:
+        type: boolean
+        description: true if new users will be this TipoRol at first
   Role:
     type: object
     required:
-    - rol
+    - rolId
     properties:
-      rol:
-        type: string
-        enum: [estudiante, profesor, administrador]
+      rolId:
+        type: integer
+        example: 2
   Team:
     type: object
     required:

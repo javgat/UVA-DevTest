@@ -10247,16 +10247,12 @@ func init() {
     "Role": {
       "type": "object",
       "required": [
-        "rol"
+        "rolId"
       ],
       "properties": {
-        "rol": {
-          "type": "string",
-          "enum": [
-            "estudiante",
-            "profesor",
-            "administrador"
-          ]
+        "rolId": {
+          "type": "integer",
+          "example": 2
         }
       }
     },
@@ -10403,6 +10399,132 @@ func init() {
         }
       }
     },
+    "TipoRol": {
+      "type": "object",
+      "required": [
+        "id",
+        "rolBase",
+        "nombre",
+        "prioridad",
+        "verPTests",
+        "verETests",
+        "verEQuestions",
+        "verPQuestions",
+        "verAnswers",
+        "changeRoles",
+        "tenerTeams",
+        "tenerEQuestions",
+        "tenerETests",
+        "tenerPTests",
+        "adminPTests",
+        "adminETests",
+        "adminEQuestions",
+        "adminAnswers",
+        "adminUsers",
+        "adminTeams",
+        "adminConfiguration",
+        "adminPermissions",
+        "tipoInicial"
+      ],
+      "properties": {
+        "adminAnswers": {
+          "description": "true if the users can administrate Answers",
+          "type": "boolean"
+        },
+        "adminConfiguration": {
+          "description": "true if the users can administrate Server Configuration parameters",
+          "type": "boolean"
+        },
+        "adminEQuestions": {
+          "description": "true if the users can administrate Non Published Questions",
+          "type": "boolean"
+        },
+        "adminETests": {
+          "description": "true if the users can administrate Non Published Tests",
+          "type": "boolean"
+        },
+        "adminPTests": {
+          "description": "true if the users can administrate PublishedTests",
+          "type": "boolean"
+        },
+        "adminPermissions": {
+          "description": "true if the users can administrate TipoRol permissions",
+          "type": "boolean"
+        },
+        "adminTeams": {
+          "description": "true if the users can administrate Teams",
+          "type": "boolean"
+        },
+        "adminUsers": {
+          "description": "true if the users can administrate Users",
+          "type": "boolean"
+        },
+        "changeRoles": {
+          "description": "true if the users can change anothers user TipoRol if its source priority is less important and target is at most equal",
+          "type": "boolean"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "nombre": {
+          "type": "string",
+          "example": "Moderador"
+        },
+        "prioridad": {
+          "description": "Maximum priority is 0, any greater value represents less priority",
+          "type": "integer"
+        },
+        "rolBase": {
+          "type": "string",
+          "enum": [
+            "administrador",
+            "profesor",
+            "estudiante",
+            "noRegistrado"
+          ]
+        },
+        "tenerEQuestions": {
+          "description": "true if the users can have non published questions",
+          "type": "boolean"
+        },
+        "tenerETests": {
+          "description": "true if the users can have non published questions",
+          "type": "boolean"
+        },
+        "tenerPTests": {
+          "description": "true if the users can have published tests",
+          "type": "boolean"
+        },
+        "tenerTeams": {
+          "description": "true if the users can have teams",
+          "type": "boolean"
+        },
+        "tipoInicial": {
+          "description": "true if new users will be this TipoRol at first",
+          "type": "boolean"
+        },
+        "verAnswers": {
+          "description": "true if the users can see Answers",
+          "type": "boolean"
+        },
+        "verEQuestions": {
+          "description": "true if the users can see Non Published Questions",
+          "type": "boolean"
+        },
+        "verETests": {
+          "description": "true if the users can see Non Published Tests",
+          "type": "boolean"
+        },
+        "verPQuestions": {
+          "description": "true if the users can see Published Questions",
+          "type": "boolean"
+        },
+        "verPTests": {
+          "description": "true if the users can see PublishedTests",
+          "type": "boolean"
+        }
+      }
+    },
     "User": {
       "type": "object",
       "required": [
@@ -10429,6 +10551,10 @@ func init() {
             "profesor",
             "administrador"
           ]
+        },
+        "tiporol": {
+          "type": "string",
+          "example": "estudiante"
         },
         "username": {
           "type": "string",
@@ -22323,16 +22449,12 @@ func init() {
     "Role": {
       "type": "object",
       "required": [
-        "rol"
+        "rolId"
       ],
       "properties": {
-        "rol": {
-          "type": "string",
-          "enum": [
-            "estudiante",
-            "profesor",
-            "administrador"
-          ]
+        "rolId": {
+          "type": "integer",
+          "example": 2
         }
       }
     },
@@ -22481,6 +22603,133 @@ func init() {
         }
       }
     },
+    "TipoRol": {
+      "type": "object",
+      "required": [
+        "id",
+        "rolBase",
+        "nombre",
+        "prioridad",
+        "verPTests",
+        "verETests",
+        "verEQuestions",
+        "verPQuestions",
+        "verAnswers",
+        "changeRoles",
+        "tenerTeams",
+        "tenerEQuestions",
+        "tenerETests",
+        "tenerPTests",
+        "adminPTests",
+        "adminETests",
+        "adminEQuestions",
+        "adminAnswers",
+        "adminUsers",
+        "adminTeams",
+        "adminConfiguration",
+        "adminPermissions",
+        "tipoInicial"
+      ],
+      "properties": {
+        "adminAnswers": {
+          "description": "true if the users can administrate Answers",
+          "type": "boolean"
+        },
+        "adminConfiguration": {
+          "description": "true if the users can administrate Server Configuration parameters",
+          "type": "boolean"
+        },
+        "adminEQuestions": {
+          "description": "true if the users can administrate Non Published Questions",
+          "type": "boolean"
+        },
+        "adminETests": {
+          "description": "true if the users can administrate Non Published Tests",
+          "type": "boolean"
+        },
+        "adminPTests": {
+          "description": "true if the users can administrate PublishedTests",
+          "type": "boolean"
+        },
+        "adminPermissions": {
+          "description": "true if the users can administrate TipoRol permissions",
+          "type": "boolean"
+        },
+        "adminTeams": {
+          "description": "true if the users can administrate Teams",
+          "type": "boolean"
+        },
+        "adminUsers": {
+          "description": "true if the users can administrate Users",
+          "type": "boolean"
+        },
+        "changeRoles": {
+          "description": "true if the users can change anothers user TipoRol if its source priority is less important and target is at most equal",
+          "type": "boolean"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "nombre": {
+          "type": "string",
+          "example": "Moderador"
+        },
+        "prioridad": {
+          "description": "Maximum priority is 0, any greater value represents less priority",
+          "type": "integer",
+          "minimum": 0
+        },
+        "rolBase": {
+          "type": "string",
+          "enum": [
+            "administrador",
+            "profesor",
+            "estudiante",
+            "noRegistrado"
+          ]
+        },
+        "tenerEQuestions": {
+          "description": "true if the users can have non published questions",
+          "type": "boolean"
+        },
+        "tenerETests": {
+          "description": "true if the users can have non published questions",
+          "type": "boolean"
+        },
+        "tenerPTests": {
+          "description": "true if the users can have published tests",
+          "type": "boolean"
+        },
+        "tenerTeams": {
+          "description": "true if the users can have teams",
+          "type": "boolean"
+        },
+        "tipoInicial": {
+          "description": "true if new users will be this TipoRol at first",
+          "type": "boolean"
+        },
+        "verAnswers": {
+          "description": "true if the users can see Answers",
+          "type": "boolean"
+        },
+        "verEQuestions": {
+          "description": "true if the users can see Non Published Questions",
+          "type": "boolean"
+        },
+        "verETests": {
+          "description": "true if the users can see Non Published Tests",
+          "type": "boolean"
+        },
+        "verPQuestions": {
+          "description": "true if the users can see Published Questions",
+          "type": "boolean"
+        },
+        "verPTests": {
+          "description": "true if the users can see PublishedTests",
+          "type": "boolean"
+        }
+      }
+    },
     "User": {
       "type": "object",
       "required": [
@@ -22507,6 +22756,10 @@ func init() {
             "profesor",
             "administrador"
           ]
+        },
+        "tiporol": {
+          "type": "string",
+          "example": "estudiante"
         },
         "username": {
           "type": "string",

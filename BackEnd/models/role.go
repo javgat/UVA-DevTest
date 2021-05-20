@@ -7,7 +7,6 @@ package models
 
 import (
 	"context"
-	"encoding/json"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -20,17 +19,17 @@ import (
 // swagger:model Role
 type Role struct {
 
-	// rol
+	// rol Id
+	// Example: 2
 	// Required: true
-	// Enum: [estudiante profesor administrador]
-	Rol *string `json:"rol"`
+	RolID *int64 `json:"rolId"`
 }
 
 // Validate validates this role
 func (m *Role) Validate(formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.validateRol(formats); err != nil {
+	if err := m.validateRolID(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -40,46 +39,9 @@ func (m *Role) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-var roleTypeRolPropEnum []interface{}
+func (m *Role) validateRolID(formats strfmt.Registry) error {
 
-func init() {
-	var res []string
-	if err := json.Unmarshal([]byte(`["estudiante","profesor","administrador"]`), &res); err != nil {
-		panic(err)
-	}
-	for _, v := range res {
-		roleTypeRolPropEnum = append(roleTypeRolPropEnum, v)
-	}
-}
-
-const (
-
-	// RoleRolEstudiante captures enum value "estudiante"
-	RoleRolEstudiante string = "estudiante"
-
-	// RoleRolProfesor captures enum value "profesor"
-	RoleRolProfesor string = "profesor"
-
-	// RoleRolAdministrador captures enum value "administrador"
-	RoleRolAdministrador string = "administrador"
-)
-
-// prop value enum
-func (m *Role) validateRolEnum(path, location string, value string) error {
-	if err := validate.EnumCase(path, location, value, roleTypeRolPropEnum, true); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (m *Role) validateRol(formats strfmt.Registry) error {
-
-	if err := validate.Required("rol", "body", m.Rol); err != nil {
-		return err
-	}
-
-	// value enum
-	if err := m.validateRolEnum("rol", "body", *m.Rol); err != nil {
+	if err := validate.Required("rolId", "body", m.RolID); err != nil {
 		return err
 	}
 

@@ -16,6 +16,8 @@ import (
 
 // Testing InsertUser
 
+var zero int64 = 0
+
 func signinUserToInsert() *models.SigninUser {
 	uname := "Test"
 	var email strfmt.Email = "Test@mail.com"
@@ -32,20 +34,19 @@ func userToInsert() *User {
 	su := signinUserToInsert()
 	bytes, _ := bcrypt.GenerateFromPassword([]byte(*su.Pass), 14)
 	pwhashstring := string(bytes)
-	studentRol := models.UserRolEstudiante
 	u := &User{
-		Username: su.Username,
-		Email:    su.Email,
-		Pwhash:   &pwhashstring,
-		Rol:      &studentRol,
-		Fullname: su.Username,
+		Username:  su.Username,
+		Email:     su.Email,
+		Pwhash:    &pwhashstring,
+		TipoRolId: &zero,
+		Fullname:  su.Username,
 	}
 	return u
 }
 
 func expectInsert(mock sqlmock.Sqlmock, u *User) {
 	mock.ExpectPrepare("INSERT INTO Usuario").ExpectExec().
-		WithArgs(u.Username, u.Email, u.Pwhash, u.Rol, u.Fullname).WillReturnResult(sqlmock.NewResult(1, 1))
+		WithArgs(u.Username, u.Email, u.Pwhash, u.TipoRolId, u.Fullname).WillReturnResult(sqlmock.NewResult(1, 1))
 }
 
 func TestInsertUserNilDB(t *testing.T) {
@@ -131,7 +132,7 @@ func rowsUsers(us []*User) *sqlmock.Rows {
 	columns := []string{"id", "username", "email", "pwhash", "rol", "fullname"}
 	sqlcols := sqlmock.NewRows(columns)
 	for _, user := range us {
-		sqlcols.AddRow(user.ID, *user.Username, user.Email.String(), *user.Pwhash, user.Rol, user.Fullname)
+		sqlcols.AddRow(user.ID, *user.Username, user.Email.String(), *user.Pwhash, user.TipoRolId, user.Fullname)
 	}
 	return sqlcols
 }
@@ -149,12 +150,12 @@ func expectGetUser(mock sqlmock.Sqlmock, arg driver.Value, user *User) {
 
 func defaultUser() *User {
 	return &User{
-		ID:       1,
-		Username: &username,
-		Email:    &email,
-		Pwhash:   &pwhash,
-		Rol:      &rolTeacher,
-		Fullname: &username,
+		ID:        1,
+		Username:  &username,
+		Email:     &email,
+		Pwhash:    &pwhash,
+		TipoRolId: &zero,
+		Fullname:  &username,
 	}
 }
 
@@ -517,11 +518,11 @@ var rolAdmin string = models.UserRolAdministrador
 
 func defaultAdmin1() *User {
 	u := &User{
-		ID:       2,
-		Username: &username2,
-		Email:    &email2,
-		Pwhash:   &pwhash2,
-		Rol:      &rolAdmin,
+		ID:        2,
+		Username:  &username2,
+		Email:     &email2,
+		Pwhash:    &pwhash2,
+		TipoRolId: &zero,
 	}
 	return u
 }
@@ -529,11 +530,11 @@ func defaultAdmin1() *User {
 func defaultUsers() []*User {
 	us := []*User{}
 	u1 := &User{
-		ID:       1,
-		Username: &username,
-		Email:    &email,
-		Pwhash:   &pwhash,
-		Rol:      &rolTeacher,
+		ID:        1,
+		Username:  &username,
+		Email:     &email,
+		Pwhash:    &pwhash,
+		TipoRolId: &zero,
 	}
 	u2 := defaultAdmin1()
 	us = append(us, u1)
@@ -686,7 +687,7 @@ func TestGetUsersFound(t *testing.T) {
 func expectGetAdmins(mock sqlmock.Sqlmock, us []*User) {
 	rows := rowsUsers(us)
 	for _, u := range us {
-		rows.AddRow(u.ID, u.Username, u.Email, u.Pwhash, u.Rol, u.Fullname)
+		rows.AddRow(u.ID, u.Username, u.Email, u.Pwhash, u.TipoRolId, u.Fullname)
 	}
 	mock.ExpectPrepare("SELECT (.+) FROM Usuario WHERE rol='Admin'").ExpectQuery().WillReturnRows(rows)
 }
@@ -893,7 +894,7 @@ func TestPutPasswordCorrect(t *testing.T) {
 
 func expectUpdateUser(mock sqlmock.Sqlmock, u *User) {
 	mock.ExpectPrepare("UPDATE Users").ExpectExec().
-		WithArgs(u.Username, u.Email, u.Fullname, u.Rol, u.Username).WillReturnResult(sqlmock.NewResult(1, 1))
+		WithArgs(u.Username, u.Email, u.Fullname, u.TipoRolId, u.Username).WillReturnResult(sqlmock.NewResult(1, 1))
 }
 
 func expectUpdateUserDefault(mock sqlmock.Sqlmock) {

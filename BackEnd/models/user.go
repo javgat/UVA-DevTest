@@ -37,6 +37,10 @@ type User struct {
 	// Enum: [estudiante profesor administrador]
 	Rol *string `json:"rol"`
 
+	// tiporol
+	// Example: estudiante
+	Tiporol string `json:"tiporol,omitempty"`
+
 	// username
 	// Example: carlosg72
 	// Required: true

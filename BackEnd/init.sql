@@ -21,15 +21,48 @@ DROP TABLE IF EXISTS EquipoUsuario;
 DROP TABLE IF EXISTS Equipo;
 DROP TABLE IF EXISTS TokenCorreo;
 DROP TABLE IF EXISTS Usuario;
+DROP TABLE IF EXISTS TipoRol;
 
+CREATE TABLE TipoRol (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  rolBase ENUM('administrador', 'profesor', 'estudiante', 'noRegistrado') NOT NULL,
+  nombre varchar(40) COLLATE utf8_unicode_ci NOT NULL,
+  prioridad int(11) DEFAULT 1,
+  verPTests boolean DEFAULT 1,
+  verETests boolean DEFAULT 0,
+  verEQuestions boolean DEFAULT 0,
+  verPQuestions boolean DEFAULT 0,
+  verAnswers boolean DEFAULT 0,
+  changeRoles boolean DEFAULT 0,
+  tenerTeams boolean DEFAULT 0,
+  tenerEQuestions boolean DEFAULT 0,
+  tenerETests boolean DEFAULT 0,
+  tenerPTests boolean DEFAULT 0,
+  adminPTests boolean DEFAULT 0,
+  adminETests boolean DEFAULT 0,
+  adminEQuestions boolean DEFAULT 0,
+  adminAnswers boolean DEFAULT 0,
+  adminUsers boolean DEFAULT 0,
+  adminTeams boolean DEFAULT 0,
+  adminConfiguration boolean DEFAULT 0,
+  adminPermissions boolean DEFAULT 0,
+  tipoInicial boolean DEFAULT 0,
+  CONSTRAINT CHK_TipoRolAdminNoAdmin CHECK (rolBase='administrador' OR (adminPTests=0 AND
+    adminETests=0 AND adminEQuestions=0 AND adminAnswers=0 AND adminUsers=0 AND adminTeams=0 AND
+    adminConfiguration=0 AND adminPermissions=0)),
+  CONSTRAINT CHK_PositivePrioridad CHECK (prioridad >=0),
+  UNIQUE(nombre),
+  PRIMARY KEY (id)
+);
 
 CREATE TABLE Usuario (
   id int(11) NOT NULL AUTO_INCREMENT,
   username varchar(40) COLLATE utf8_unicode_ci NOT NULL,
   email varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   pwhash longtext COLLATE utf8_unicode_ci NOT NULL,
-  rol ENUM('administrador', 'profesor', 'estudiante') NOT NULL,
+  tipoRolId int(11) NOT NULL,
   fullname varchar(200) COLLATE utf8_unicode_ci,
+  FOREIGN KEY(tipoRolId) REFERENCES TipoRol(id),
   UNIQUE(username),
   UNIQUE(email),
   PRIMARY KEY (id)
@@ -276,5 +309,17 @@ CREATE TABLE OpcionRespuesta(
 
 /* DATOS INICIALES */
 
+INSERT INTO TipoRol(id, rolBase, nombre, prioridad, verPTests, verETests, verEQuestions, verPQuestions,
+    verAnswers, changeRoles, tenerTeams, tenerEQuestions, tenerETests, tenerPTests, adminPTests, 
+    adminETests, adminEQuestions, adminAnswers, adminUsers, adminTeams, adminConfiguration, adminPermissions,
+    tipoInicial) VALUES(1, 'administrador', 'administrador', 0, 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0);
+
+INSERT INTO TipoRol(rolBase, nombre, prioridad, verPTests, verETests, verEQuestions, verPQuestions,
+    verAnswers, tenerTeams, tenerEQuestions, tenerETests, tenerPTests) VALUES('profesor', 'profesor', 1, 1,1,1,1,1,1,1,1,1);
+
+INSERT INTO TipoRol(rolBase, nombre, prioridad, verPTests, tipoInicial) VALUES('estudiante', 'estudiante', 10, 1, 1);
+
+INSERT INTO TipoRol(rolBase, nombre, prioridad, verPTests) VALUES('noRegistrado', 'noRegistrado', 100, 1);
+
 /* admin pass = admin1 */
-INSERT INTO Usuario(username, email, pwhash, rol, fullname) VALUES('admin', 'admin@mail.com', '$2a$14$C0gTluZGQVbau5vcsaB72e0iwiECRIJvCgwNk4cn7IFlEJEMFwuVC', 'administrador', 'admin');
+INSERT INTO Usuario(username, email, pwhash, tipoRolId, fullname) VALUES('admin', 'admin@mail.com', '$2a$14$C0gTluZGQVbau5vcsaB72e0iwiECRIJvCgwNk4cn7IFlEJEMFwuVC', 1, 'admin');
