@@ -9,6 +9,7 @@ import (
 	"strconv"
 	"uva-devtest/emailHelper"
 	"uva-devtest/models"
+	"uva-devtest/permissions"
 	"uva-devtest/restapi/operations/configuration"
 
 	"github.com/go-openapi/runtime/middleware"
@@ -16,9 +17,9 @@ import (
 )
 
 // GetEmailConfiguration GET /emailConfiguration
-// Auth: Admin
+// Auth: CanAdminConfiguration
 func GetEmailConfiguration(params configuration.GetEmailConfigurationParams, u *models.User) middleware.Responder {
-	if !isAdmin(u) {
+	if !permissions.CanAdminConfiguration(u) {
 		return configuration.NewGetEmailConfigurationForbidden()
 	}
 	emailInfo, err := emailHelper.GetOwnEmailInfo()
@@ -41,9 +42,9 @@ func GetEmailConfiguration(params configuration.GetEmailConfigurationParams, u *
 }
 
 // PutEmailConfiguration PUT /emailConfiguration
-// Auth: Admin
+// Auth: CanAdminConfiguration
 func PutEmailConfiguration(params configuration.PutEmailConfigurationParams, u *models.User) middleware.Responder {
-	if !isAdmin(u) {
+	if !permissions.CanAdminConfiguration(u) {
 		return configuration.NewPutEmailConfigurationForbidden()
 	}
 	emailConfig := params.EmailConfiguration

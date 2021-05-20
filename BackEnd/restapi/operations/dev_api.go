@@ -568,6 +568,10 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		BearerCookieAuth: func(token string) (*models.User, error) {
 			return nil, errors.NotImplemented("api key auth (BearerCookie) Cookie from header param [Cookie] has not yet been implemented")
 		},
+		// Applies when the "NotLoggedIn" header is set
+		NoRegisteredAuth: func(token string) (*models.User, error) {
+			return nil, errors.NotImplemented("api key auth (NoRegistered) NotLoggedIn from header param [NotLoggedIn] has not yet been implemented")
+		},
 		// Applies when the "Cookie" header is set
 		ReAuthCookieAuth: func(token string) (*models.User, error) {
 			return nil, errors.NotImplemented("api key auth (ReAuthCookie) Cookie from header param [Cookie] has not yet been implemented")
@@ -613,6 +617,10 @@ type DevAPI struct {
 	// BearerCookieAuth registers a function that takes a token and returns a principal
 	// it performs authentication based on an api key Cookie provided in the header
 	BearerCookieAuth func(string) (*models.User, error)
+
+	// NoRegisteredAuth registers a function that takes a token and returns a principal
+	// it performs authentication based on an api key NotLoggedIn provided in the header
+	NoRegisteredAuth func(string) (*models.User, error)
 
 	// ReAuthCookieAuth registers a function that takes a token and returns a principal
 	// it performs authentication based on an api key Cookie provided in the header
@@ -1040,6 +1048,9 @@ func (o *DevAPI) Validate() error {
 
 	if o.BearerCookieAuth == nil {
 		unregistered = append(unregistered, "CookieAuth")
+	}
+	if o.NoRegisteredAuth == nil {
+		unregistered = append(unregistered, "NotLoggedInAuth")
 	}
 	if o.ReAuthCookieAuth == nil {
 		unregistered = append(unregistered, "CookieAuth")
@@ -1577,6 +1588,12 @@ func (o *DevAPI) AuthenticatorsFor(schemes map[string]spec.SecurityScheme) map[s
 			scheme := schemes[name]
 			result[name] = o.APIKeyAuthenticator(scheme.Name, scheme.In, func(token string) (interface{}, error) {
 				return o.BearerCookieAuth(token)
+			})
+
+		case "NoRegistered":
+			scheme := schemes[name]
+			result[name] = o.APIKeyAuthenticator(scheme.Name, scheme.In, func(token string) (interface{}, error) {
+				return o.NoRegisteredAuth(token)
 			})
 
 		case "ReAuthCookie":

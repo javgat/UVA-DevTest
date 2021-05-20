@@ -10,6 +10,7 @@ import (
 	"log"
 	"time"
 	"uva-devtest/models"
+	"uva-devtest/permissions"
 	"uva-devtest/persistence/dao"
 	"uva-devtest/persistence/dbconnection"
 	"uva-devtest/restapi/operations/test"
@@ -19,9 +20,9 @@ import (
 )
 
 // GetAllTests GET /tests. Returns all tests.
-// Auth: Admin
+// Auth: CanAdminTests
 func GetAllTests(params test.GetAllTestsParams, u *models.User) middleware.Responder {
-	if isTeacherOrAdmin(u) {
+	if permissions.CanAdminTests(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var ts []*dao.Test
@@ -41,9 +42,9 @@ func GetAllTests(params test.GetAllTestsParams, u *models.User) middleware.Respo
 }
 
 // GetAllEditTests GET /editTests. Returns all non-published tests.
-// Auth: Admin
+// Auth: CanAdminETests
 func GetAllEditTests(params test.GetAllEditTestsParams, u *models.User) middleware.Responder {
-	if isTeacherOrAdmin(u) {
+	if permissions.CanAdminETests(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var ts []*dao.Test
@@ -63,9 +64,9 @@ func GetAllEditTests(params test.GetAllEditTestsParams, u *models.User) middlewa
 }
 
 // GetPublicTests GET /publicTests. Returns all public tests.
-// Auth: Teacher or Admin
+// Auth: CanVerTests
 func GetPublicTests(params test.GetPublicTestsParams, u *models.User) middleware.Responder {
-	if isTeacherOrAdmin(u) {
+	if permissions.CanVerTests(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var ts []*dao.Test
@@ -85,9 +86,9 @@ func GetPublicTests(params test.GetPublicTestsParams, u *models.User) middleware
 }
 
 // GetPublicEditTests GET /publicEditTests. Returns all public non-published tests.
-// Auth: Teacher or Admin
+// Auth: CanVerETests
 func GetPublicEditTests(params test.GetPublicEditTestsParams, u *models.User) middleware.Responder {
-	if isTeacherOrAdmin(u) {
+	if permissions.CanVerETests(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var ts []*dao.Test
@@ -108,16 +109,16 @@ func GetPublicEditTests(params test.GetPublicEditTestsParams, u *models.User) mi
 }
 
 // GetTest GET /tests/{testid}. Returns a test.
-// Auth: Teacher or Admin si accesoPublicoNoPublicada=true, admin o testAdmin si false
+// Auth: CanVerTests si accesoPublicoNoPublicada=true, CanAdminTests o testAdmin si false
 func GetTest(params test.GetTestParams, u *models.User) middleware.Responder {
-	if isTeacherOrAdmin(u) {
+	if permissions.CanVerTests(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var ts *dao.Test
 			ts, err = dao.GetTest(db, params.Testid)
 			if err == nil && ts != nil {
 				if !*ts.AccesoPublicoNoPublicado {
-					if !(isAdmin(u) || isTestAdmin(u, params.Testid)) {
+					if !(permissions.CanAdminTests(u) || isTestAdmin(u, params.Testid)) {
 						return test.NewGetTestForbidden()
 					}
 				}
@@ -137,6 +138,9 @@ func GetTest(params test.GetTestParams, u *models.User) middleware.Responder {
 }
 
 func isTestAdmin(u *models.User, testid int64) bool {
+	if u == nil {
+		return false
+	}
 	db, err := dbconnection.ConnectDb()
 	if err == nil {
 		var t *dao.Test
@@ -159,10 +163,10 @@ func isTestAdmin(u *models.User, testid int64) bool {
 }
 
 // PutTest PUT /tests/{testid}. Updates a test.
-// Auth: TestAdmin or Admin
+// Auth: TestAdmin or CanAdminTests
 // Req: !Test.editable -> en SQL
 func PutTest(params test.PutTestParams, u *models.User) middleware.Responder {
-	if isAdmin(u) || isTestAdmin(u, params.Testid) {
+	if permissions.CanAdminTests(u) || isTestAdmin(u, params.Testid) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			err = dao.PutTest(db, params.Testid, params.Test)
@@ -177,9 +181,9 @@ func PutTest(params test.PutTestParams, u *models.User) middleware.Responder {
 }
 
 // DeleteTest DELETE /tests/{testid}. Deletes a test.
-// Auth: TestAdmin or Admin
+// Auth: TestAdmin or CanAdminTests
 func DeleteTest(params test.DeleteTestParams, u *models.User) middleware.Responder {
-	if isAdmin(u) || isTestAdmin(u, params.Testid) {
+	if permissions.CanAdminTests(u) || isTestAdmin(u, params.Testid) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			err = dao.DeleteTest(db, params.Testid)
@@ -194,9 +198,9 @@ func DeleteTest(params test.DeleteTestParams, u *models.User) middleware.Respond
 }
 
 // GetAdminTeamsFromTest GET /tests/{testid}/adminTeams. Get teams that admin a test
-// Auth: Teacher or Admin
+// Auth: CanVerTests
 func GetAdminTeamsFromTest(params test.GetAdminTeamsFromTestParams, u *models.User) middleware.Responder {
-	if isTeacherOrAdmin(u) {
+	if permissions.CanVerTests(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var ts []*dao.Team
@@ -214,9 +218,9 @@ func GetAdminTeamsFromTest(params test.GetAdminTeamsFromTestParams, u *models.Us
 }
 
 // AddAdminTeamToTest PUT /tests/{testid}/adminTeams/{teamname}. Adds team to admin a test
-// Auth: TestAdmin or Admin
+// Auth: TestAdmin or CanAdminTests
 func AddAdminTeamToTest(params test.AddAdminTeamToTestParams, u *models.User) middleware.Responder {
-	if isAdmin(u) || isTestAdmin(u, params.Testid) {
+	if permissions.CanAdminTests(u) || isTestAdmin(u, params.Testid) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			if isTeamSoloProfesores(params.Teamname) {
@@ -244,9 +248,9 @@ func AddAdminTeamToTest(params test.AddAdminTeamToTestParams, u *models.User) mi
 }
 
 // RemoveAdminTeamTest DELETE /tests/{testid}/adminTeams/{teamname}. Removes team from admin a test
-// Auth: TestAdmin or Admin
+// Auth: TestAdmin or CanAdminTests
 func RemoveAdminTeamTest(params test.RemoveAdminTeamToTestParams, u *models.User) middleware.Responder {
-	if isAdmin(u) || isTestAdmin(u, params.Testid) {
+	if permissions.CanAdminTests(u) || isTestAdmin(u, params.Testid) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			err = dao.RemoveAdminTeamFromTest(db, params.Testid, params.Teamname)
@@ -336,9 +340,9 @@ func addTagsToTest(db *sql.DB, tags []*dao.Tag, testid int64) error {
 }
 
 // PublishTest POST /tests/{testid}/publishedTests. Copies test and questions to published version
-// Auth: TestAdmin or Admin
+// Auth: TestAdmin or CanAdminTests
 func PublishTest(params test.PostPublishedTestParams, u *models.User) middleware.Responder {
-	if isAdmin(u) || isTestAdmin(u, params.Testid) {
+	if permissions.CanAdminTests(u) || isTestAdmin(u, params.Testid) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var oldDaoTest *dao.Test
@@ -394,9 +398,9 @@ func PublishTest(params test.PostPublishedTestParams, u *models.User) middleware
 }
 
 // GET /tests/{testid}/publishedTests
-// Auth: TestAdmin or Admin
+// Auth: TestAdmin or CanAdminTests
 func GetPTestsFromTest(params test.GetPublishedTestsFromTestParams, u *models.User) middleware.Responder {
-	if isAdmin(u) || isTestAdmin(u, params.Testid) {
+	if permissions.CanAdminTests(u) || isTestAdmin(u, params.Testid) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var tests []*dao.Test
@@ -416,9 +420,9 @@ func GetPTestsFromTest(params test.GetPublishedTestsFromTestParams, u *models.Us
 }
 
 // GetQuestionsFromTest GET /tests/{testid}/questions. Get questions from test
-// Auth: Teacher or Admin
+// Auth: CanVerTests
 func GetQuestionsFromTest(params test.GetQuestionsFromTestParams, u *models.User) middleware.Responder {
-	if isTeacherOrAdmin(u) {
+	if permissions.CanVerTests(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var qs []*dao.Question
@@ -438,9 +442,9 @@ func GetQuestionsFromTest(params test.GetQuestionsFromTestParams, u *models.User
 }
 
 // GetQuestionFromTest GET /tests/{testid}/questions/{questionid}. Get question from test
-// Auth: Teacher or Admin
+// Auth: CanVerTests
 func GetQuestionFromTest(params test.GetQuestionFromTestParams, u *models.User) middleware.Responder {
-	if isTeacherOrAdmin(u) {
+	if permissions.CanVerTests(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var qs *dao.Question
@@ -526,10 +530,10 @@ func addQuestionPointsTest(vf int64, testid int64) error {
 }
 
 // AddQuestionToTest PUT /tests/{testid}/questions/{questionid}. Add question to test
-// Auth: TestAdmin or Admin. Si question no publica => además questionAdmin or Admin, o que ya esté en el test
+// Auth: TestAdmin or CanAdminTests. Si question no publica => además questionAdmin or CanAdminQuestions, o que ya esté en el test
 // Req: Test.editable
 func AddQuestionToTest(params test.AddQuestionToTestParams, u *models.User) middleware.Responder {
-	if testEditable(params.Testid) && (isAdmin(u) || isTestAdmin(u, params.Testid)) {
+	if testEditable(params.Testid) && (permissions.CanAdminTests(u) || isTestAdmin(u, params.Testid)) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var q, qt *dao.Question
@@ -541,7 +545,7 @@ func AddQuestionToTest(params test.AddQuestionToTestParams, u *models.User) midd
 					puedeHacerse = true
 				} else if *q.AccesoPublicoNoPublicada {
 					puedeHacerse = true
-				} else if isAdmin(u) || isQuestionAdmin(u, params.Questionid) {
+				} else if permissions.CanAdminQuestions(u) || isQuestionAdmin(u, params.Questionid) {
 					puedeHacerse = true
 				}
 				if puedeHacerse {
@@ -601,10 +605,10 @@ func substractQuestionTimeTest(qid int64, tid int64) error {
 }
 
 // RemoveQuestionTest DELETE /tests/{testid}/questions/{questionid}. Remove question from test
-// Auth: TestAdmin or Admin
+// Auth: TestAdmin or CanAdminTests
 // Req: Test.editable
 func RemoveQuestionTest(params test.RemoveQuestionFromTestParams, u *models.User) middleware.Responder {
-	if testEditable(params.Testid) && (isAdmin(u) || isTestAdmin(u, params.Testid)) {
+	if testEditable(params.Testid) && (permissions.CanAdminTests(u) || isTestAdmin(u, params.Testid)) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var qt *dao.Question
@@ -634,9 +638,9 @@ func RemoveQuestionTest(params test.RemoveQuestionFromTestParams, u *models.User
 }
 
 // GetTagsFromTests GET /tests/{testid}/tags
-// Auth: Teacher or Admin
+// Auth: CanVerTests
 func GetTagsFromTest(params test.GetTagsFromTestParams, u *models.User) middleware.Responder {
-	if isTeacherOrAdmin(u) {
+	if permissions.CanVerTests(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var dts []*dao.Tag
@@ -652,9 +656,9 @@ func GetTagsFromTest(params test.GetTagsFromTestParams, u *models.User) middlewa
 }
 
 // GetTagFromTest GET /tests/{testid}/tags/{tag}
-// Auth: Teacher or Admin
+// Auth: CanVerTests
 func GetTagFromTest(params test.GetTagFromTestParams, u *models.User) middleware.Responder {
-	if isTeacherOrAdmin(u) {
+	if permissions.CanVerTests(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var dt *dao.Tag
@@ -673,10 +677,10 @@ func GetTagFromTest(params test.GetTagFromTestParams, u *models.User) middleware
 }
 
 // AddTagToTest PUT /tests/{testid}/tags/{tag}
-// Auth: TestAdmin or Admin
+// Auth: TestAdmin or CanAdminETests
 // Req: Test.editable
 func AddTagToTest(params test.AddTagToTestParams, u *models.User) middleware.Responder {
-	if testEditable(params.Testid) && (isAdmin(u) || isTestAdmin(u, params.Testid)) {
+	if testEditable(params.Testid) && (permissions.CanAdminETests(u) || isTestAdmin(u, params.Testid)) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var t *dao.Tag
@@ -695,10 +699,10 @@ func AddTagToTest(params test.AddTagToTestParams, u *models.User) middleware.Res
 }
 
 // RemoveTagFromTest DELETE /tests/{testid}/tags/{tag}
-// Auth: TestAdmin or Admin
+// Auth: TestAdmin or CanAdminETests
 // Req: Test.editable
 func RemoveTagFromTest(params test.RemoveTagFromTestParams, u *models.User) middleware.Responder {
-	if testEditable(params.Testid) && (isAdmin(u) || isTestAdmin(u, params.Testid)) {
+	if testEditable(params.Testid) && (permissions.CanAdminETests(u) || isTestAdmin(u, params.Testid)) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			err = dao.RemoveTestTag(db, params.Testid, params.Tag)
@@ -712,10 +716,10 @@ func RemoveTagFromTest(params test.RemoveTagFromTestParams, u *models.User) midd
 }
 
 // GET /users/{username}/favoriteEditTests
-// Auth: Current User or Admin
+// Auth: Current User or CanAdminUsers
 // Req: Fav+available+editable (SQL)
 func GetFavoriteEditTests(params user.GetFavoriteEditTestsParams, u *models.User) middleware.Responder {
-	if userOrAdmin(params.Username, u) {
+	if isUser(params.Username, u) || permissions.CanAdminUsers(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var qs []*dao.Test
@@ -735,10 +739,10 @@ func GetFavoriteEditTests(params user.GetFavoriteEditTestsParams, u *models.User
 }
 
 // GET /users/{username}/favoriteTests
-// Auth: Current User or Admin
+// Auth: Current User or CanAdminUsers
 // Req: Fav+available (SQL)
 func GetFavoriteTests(params user.GetFavoriteTestsParams, u *models.User) middleware.Responder {
-	if userOrAdmin(params.Username, u) {
+	if isUser(params.Username, u) || permissions.CanAdminUsers(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var qs []*dao.Test
@@ -758,10 +762,10 @@ func GetFavoriteTests(params user.GetFavoriteTestsParams, u *models.User) middle
 }
 
 // GET /users/{username}/favoriteTests/{testid}
-// Auth: Current User or Admin
+// Auth: Current User or CanAdminUsers
 // Req: Fav+available (SQL)
 func GetFavoriteTest(params user.GetFavoriteTestParams, u *models.User) middleware.Responder {
-	if userOrAdmin(params.Username, u) {
+	if isUser(params.Username, u) || permissions.CanAdminUsers(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var qs *dao.Test
@@ -783,9 +787,9 @@ func GetFavoriteTest(params user.GetFavoriteTestParams, u *models.User) middlewa
 }
 
 // PUT /users/{username}/favoriteTests/{testid}
-// Auth: Current User or Admin
+// Auth: Current User or CanAdminUsers
 func AddFavoriteTest(params user.AddTestFavoriteParams, u *models.User) middleware.Responder {
-	if userOrAdmin(params.Username, u) {
+	if isUser(params.Username, u) || permissions.CanAdminUsers(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			err = dao.AddFavoriteTest(db, params.Username, params.Testid)
@@ -801,7 +805,7 @@ func AddFavoriteTest(params user.AddTestFavoriteParams, u *models.User) middlewa
 // DELETE /users/{username}/favoriteTests/{testid}
 // Auth: Current User or Admin
 func RemoveFavoriteTest(params user.RemoveTestFavoriteParams, u *models.User) middleware.Responder {
-	if userOrAdmin(params.Username, u) {
+	if isUser(params.Username, u) || permissions.CanAdminUsers(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			err = dao.RemoveFavoriteTest(db, params.Username, params.Testid)

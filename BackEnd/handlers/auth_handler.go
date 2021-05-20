@@ -7,6 +7,7 @@ import (
 	"strings"
 	"uva-devtest/jwtauth"
 	"uva-devtest/models"
+	"uva-devtest/permissions"
 	"uva-devtest/persistence/dao"
 	"uva-devtest/persistence/dbconnection"
 	"uva-devtest/restapi/operations/auth"
@@ -93,8 +94,8 @@ func GetJWTModelUserCookies(cookieSlice []string, expectedName string, expectedS
 				}
 			}
 		}
-		log.Println("Cookie incorrecta:", err)
-		log.Println("Se esperaba:", expectedName, "y se obtuvo:", cookieName)
+		//log.Println("Cookie incorrecta:", err)
+		//log.Println("Se esperaba:", expectedName, "y se obtuvo:", cookieName)
 	}
 	errMsg := strings.Join([]string{"no se puede leer la cookie", expectedName}, " ")
 	return nil, errors.New(401, errMsg)
@@ -122,6 +123,13 @@ func ReAuth(cookies string) (*models.User, error) {
 		return mu, err
 	}
 	return nil, err
+}
+
+func NoRegisteredAuth(header string) (*models.User, error) {
+	if header == "true" {
+		return nil, nil
+	}
+	return nil, errors.New(401, "No se ha activado la cabecera registered auth correctamente. Tiene que valer true")
 }
 
 func Logout(auth.LogoutParams) middleware.Responder {
@@ -153,7 +161,7 @@ func Relogin(params auth.ReloginParams, u *models.User) middleware.Responder {
 }
 
 func CloseSessions(params auth.CloseSessionsParams, u *models.User) middleware.Responder {
-	if userOrAdmin(params.Username, u) {
+	if isUser(params.Username, u) || permissions.CanAdminUsers(u) {
 		p := params.Password
 		db, err := dbconnection.ConnectDb()
 		if err == nil {

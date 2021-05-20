@@ -33,9 +33,9 @@ func NewGetAllQuestions(ctx *middleware.Context, handler GetAllQuestionsHandler)
 
 /* GetAllQuestions swagger:route GET /allQuestions question getAllQuestions
 
-Returns all questions
+Returns all questions. Admin operation.
 
-Returns all questions
+Returns all questions. Admin operation.
 
 */
 type GetAllQuestions struct {

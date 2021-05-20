@@ -7,6 +7,7 @@ package handlers
 import (
 	"log"
 	"uva-devtest/models"
+	"uva-devtest/permissions"
 	"uva-devtest/persistence/dao"
 	"uva-devtest/persistence/dbconnection"
 	"uva-devtest/restapi/operations/tag"
@@ -47,9 +48,9 @@ func GetTag(params tag.GetTagParams, u *models.User) middleware.Responder {
 }
 
 // GetQuestionsFromTag GET /tags/{tag}/questions. Returns all questions related to tag.
-// Auth: Teacher Or Admin
+// Auth: CanVerQuestions
 func GetQuestionsFromTag(params tag.GetQuestionsFromTagParams, u *models.User) middleware.Responder {
-	if isTeacherOrAdmin(u) {
+	if permissions.CanVerQuestions(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var ts []*dao.Question
@@ -69,9 +70,9 @@ func GetQuestionsFromTag(params tag.GetQuestionsFromTagParams, u *models.User) m
 }
 
 // GetEditQuestionsFromTag GET /tags/{tag}/editQuestions. Returns all non-published questions related to tag.
-// Auth: Teacher Or Admin
+// Auth: CanVerQuestions
 func GetEditQuestionsFromTag(params tag.GetEditQuestionsFromTagParams, u *models.User) middleware.Responder {
-	if isTeacherOrAdmin(u) {
+	if permissions.CanVerQuestions(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var ts []*dao.Question
@@ -91,9 +92,9 @@ func GetEditQuestionsFromTag(params tag.GetEditQuestionsFromTagParams, u *models
 }
 
 // GetTestsFromTag GET /tags/{tag}/tests. Returns all questions related to tag
-// Auth: Teacher or Admin
+// Auth: CanVerQuestions
 func GetTestsFromTag(params tag.GetTestsFromTagParams, u *models.User) middleware.Responder {
-	if isTeacherOrAdmin(u) {
+	if permissions.CanVerQuestions(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var ts []*dao.Test
@@ -112,9 +113,9 @@ func GetTestsFromTag(params tag.GetTestsFromTagParams, u *models.User) middlewar
 }
 
 // GetEditTestsFromTag GET /tags/{tag}/editTests. Returns all non-published questions related to tag
-// Auth: Teacher or Admin
+// Auth: CanVerQuestions
 func GetEditTestsFromTag(params tag.GetEditTestsFromTagParams, u *models.User) middleware.Responder {
-	if isTeacherOrAdmin(u) {
+	if permissions.CanVerQuestions(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var ts []*dao.Test

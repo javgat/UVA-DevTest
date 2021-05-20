@@ -9,6 +9,7 @@ import (
 	"log"
 	"uva-devtest/emailHelper"
 	"uva-devtest/models"
+	"uva-devtest/permissions"
 	"uva-devtest/persistence/dao"
 	"uva-devtest/persistence/dbconnection"
 	"uva-devtest/restapi/operations/published_test"
@@ -17,52 +18,58 @@ import (
 )
 
 // GetPTests GET /publicPublishedTests. Returns all public published tests.
-// Auth: ALL
+// Auth: CanVerPTests
 func GetPublicPTests(params published_test.GetPublicPublishedTestsParams, u *models.User) middleware.Responder {
-	db, err := dbconnection.ConnectDb()
-	if err == nil {
-		var ts []*dao.Test
-		ts, err = dao.GetPublicPublishedTests(db, params.Tags, params.LikeTitle, params.Orderby,
-			params.Limit, params.Offset)
+	if permissions.CanVerPTests(u) {
+		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			var mts []*models.Test
-			mts, err = dao.ToModelTests(ts)
+			var ts []*dao.Test
+			ts, err = dao.GetPublicPublishedTests(db, params.Tags, params.LikeTitle, params.Orderby,
+				params.Limit, params.Offset)
 			if err == nil {
-				return published_test.NewGetPublicPublishedTestsOK().WithPayload(mts)
+				var mts []*models.Test
+				mts, err = dao.ToModelTests(ts)
+				if err == nil {
+					return published_test.NewGetPublicPublishedTestsOK().WithPayload(mts)
+				}
 			}
 		}
+		log.Println("Error en users_handler GetPublicPTests(): ", err)
+		return published_test.NewGetPublicPublishedTestsInternalServerError()
 	}
-	log.Println("Error en users_handler GetPublicPTests(): ", err)
-	return published_test.NewGetPublicPublishedTestsInternalServerError()
+	return published_test.NewGetPublicPublishedTestsForbidden()
 }
 
 // GetPTest GET /publicPublishedTests/{testid}. Returns a public published tests.
-// Auth: ALL
+// Auth: CanVerPTests
 func GetPublicPTest(params published_test.GetPublicPublishedTestParams, u *models.User) middleware.Responder {
-	db, err := dbconnection.ConnectDb()
-	if err == nil {
-		var ts *dao.Test
-		ts, err = dao.GetPublicPublishedTest(db, params.Testid)
-		if err == nil && ts != nil {
-			var mts *models.Test
-			mts, err = dao.ToModelTest(ts)
-			if err == nil {
-				return published_test.NewGetPublicPublishedTestOK().WithPayload(mts)
+	if permissions.CanVerPTests(u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			var ts *dao.Test
+			ts, err = dao.GetPublicPublishedTest(db, params.Testid)
+			if err == nil && ts != nil {
+				var mts *models.Test
+				mts, err = dao.ToModelTest(ts)
+				if err == nil {
+					return published_test.NewGetPublicPublishedTestOK().WithPayload(mts)
+				}
+			}
+			if ts == nil {
+				return published_test.NewGetPublicPublishedTestGone()
 			}
 		}
-		if ts == nil {
-			return published_test.NewGetPublicPublishedTestGone()
-		}
+		log.Println("Error en users_handler GetPublicPTest(): ", err)
+		return published_test.NewGetPublicPublishedTestInternalServerError()
 	}
-	log.Println("Error en users_handler GetPublicPTest(): ", err)
-	return published_test.NewGetPublicPublishedTestInternalServerError()
+	return published_test.NewGetPublicPublishedTestForbidden()
 }
 
 // GetPTests GET /publishedTests. Returns all published tests.
-// Auth: Admin
+// Auth: CanAdminPTests
 func GetPTests(params published_test.GetPublishedTestsParams, u *models.User) middleware.Responder {
 	db, err := dbconnection.ConnectDb()
-	if isAdmin(u) {
+	if permissions.CanAdminPTests(u) {
 		if err == nil {
 			var ts []*dao.Test
 			ts, err = dao.GetPublishedTests(db)
@@ -81,10 +88,10 @@ func GetPTests(params published_test.GetPublishedTestsParams, u *models.User) mi
 }
 
 // GetPTest GET /publishedTests/{testid}. Returns a published test.
-// Auth: Admin, or Test TestAdmin or TestInvited
+// Auth: CanAdminPTests, or Test TestAdmin or TestInvited
 func GetPTest(params published_test.GetPublishedTestParams, u *models.User) middleware.Responder {
 	db, err := dbconnection.ConnectDb()
-	if isAdmin(u) || isTestAdmin(u, params.Testid) || isTestInvited(u, params.Testid) {
+	if permissions.CanAdminPTests(u) || isTestAdmin(u, params.Testid) || isTestInvited(u, params.Testid) {
 		if err == nil {
 			var ts *dao.Test
 			ts, err = dao.GetPublishedTest(db, params.Testid)
@@ -103,27 +110,30 @@ func GetPTest(params published_test.GetPublishedTestParams, u *models.User) midd
 }
 
 // GetUsersFromPTest GET /publishedTests/{testid}/users. Returns a published tests users.
-// Auth: ALL
+// Auth: CanVerPTests
 func GetUsersFromPTest(params published_test.GetUsersFromPublishedTestParams, u *models.User) middleware.Responder {
-	db, err := dbconnection.ConnectDb()
-	if err == nil {
-		var us []*dao.User
-		us, err = dao.GetUsersInvitedPTest(db, params.Testid)
+	if permissions.CanVerPTests(u) {
+		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			mus := dao.ToModelsUser(us)
+			var us []*dao.User
+			us, err = dao.GetUsersInvitedPTest(db, params.Testid)
 			if err == nil {
-				return published_test.NewGetUsersFromPublishedTestOK().WithPayload(mus)
+				mus := dao.ToModelsUser(us)
+				if err == nil {
+					return published_test.NewGetUsersFromPublishedTestOK().WithPayload(mus)
+				}
 			}
 		}
+		log.Println("Error en users_handler GetUsersFromPTest(): ", err)
+		return published_test.NewGetUsersFromPublishedTestInternalServerError()
 	}
-	log.Println("Error en users_handler GetUsersFromPTest(): ", err)
-	return published_test.NewGetUsersFromPublishedTestInternalServerError()
+	return published_test.NewGetUsersFromPublishedTestForbidden()
 }
 
 // InviteUserPTest PUT /publishedTests/{testid}/users/{username}. Invites a user to solve the test
-// Auth: TestAdmin or Admin
+// Auth: TestAdmin or CanAdminPTests
 func InviteUserPTest(params published_test.InviteUserToPublishedTestParams, u *models.User) middleware.Responder {
-	if isAdmin(u) || isTestAdmin(u, params.Testid) {
+	if permissions.CanAdminPTests(u) || isTestAdmin(u, params.Testid) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			err = dao.InviteUserPTest(db, params.Testid, params.Username)
@@ -141,9 +151,9 @@ func InviteUserPTest(params published_test.InviteUserToPublishedTestParams, u *m
 }
 
 // RemoveUserPTest DELETE /publishedTests/{testid}/users/{username}. Withdraws invitation to user to solve test
-// Auth: TestAdmin or Admin
+// Auth: TestAdmin or CanAdminPTests
 func RemoveUserPTest(params published_test.RemoveUserToPublishedTestParams, u *models.User) middleware.Responder {
-	if isAdmin(u) || isTestAdmin(u, params.Testid) {
+	if permissions.CanAdminPTests(u) || isTestAdmin(u, params.Testid) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			err = dao.RemoveUserPTest(db, params.Testid, params.Username)
@@ -158,21 +168,24 @@ func RemoveUserPTest(params published_test.RemoveUserToPublishedTestParams, u *m
 }
 
 // GetTeamsFromPTest GET /publishedTests/{testid}/teams. Returns a published tests teams.
-// Auth: ALL
+// Auth: CanVerPTests
 func GetTeamsFromPTest(params published_test.GetTeamsFromPublishedTestParams, u *models.User) middleware.Responder {
-	db, err := dbconnection.ConnectDb()
-	if err == nil {
-		var ts []*dao.Team
-		ts, err = dao.GetTeamsInvitedPTest(db, params.Testid)
+	if permissions.CanVerPTests(u) {
+		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			mts := dao.ToModelsTeams(ts)
+			var ts []*dao.Team
+			ts, err = dao.GetTeamsInvitedPTest(db, params.Testid)
 			if err == nil {
-				return published_test.NewGetTeamsFromPublishedTestOK().WithPayload(mts)
+				mts := dao.ToModelsTeams(ts)
+				if err == nil {
+					return published_test.NewGetTeamsFromPublishedTestOK().WithPayload(mts)
+				}
 			}
 		}
+		log.Println("Error en users_handler GetTeamsFromPTest(): ", err)
+		return published_test.NewGetTeamsFromPublishedTestInternalServerError()
 	}
-	log.Println("Error en users_handler GetTeamsFromPTest(): ", err)
-	return published_test.NewGetTeamsFromPublishedTestInternalServerError()
+	return published_test.NewGetTeamsFromPublishedTestForbidden()
 }
 
 func sendEmailInvitedTeamMembers(db *sql.DB, teamname string, testid int64, message *models.Message) {
@@ -185,9 +198,9 @@ func sendEmailInvitedTeamMembers(db *sql.DB, teamname string, testid int64, mess
 }
 
 // InviteTeamPTest PUT /publishedTests/{testid}/teams/{teamname}. Invites a team to solve the test
-// Auth: TestAdmin or Admin
+// Auth: TestAdmin or CanAdminPTests
 func InviteTeamPTest(params published_test.InviteTeamToPublishedTestParams, u *models.User) middleware.Responder {
-	if isAdmin(u) || isTestAdmin(u, params.Testid) {
+	if permissions.CanAdminPTests(u) || isTestAdmin(u, params.Testid) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			err = dao.InviteTeamPTest(db, params.Testid, params.Teamname)
@@ -205,9 +218,9 @@ func InviteTeamPTest(params published_test.InviteTeamToPublishedTestParams, u *m
 }
 
 // RemoveTeamPTest DELETE /publishedTests/{testid}/teams/{teamname}. Withdraws invitation to team to solve test
-// Auth: TestAdmin or Admin
+// Auth: TestAdmin or CanAdminPTests
 func RemoveTeamPTest(params published_test.RemoveTeamToPublishedTestParams, u *models.User) middleware.Responder {
-	if isAdmin(u) || isTestAdmin(u, params.Testid) {
+	if permissions.CanAdminPTests(u) || isTestAdmin(u, params.Testid) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			err = dao.RemoveTeamPTest(db, params.Testid, params.Teamname)
@@ -222,6 +235,9 @@ func RemoveTeamPTest(params published_test.RemoveTeamToPublishedTestParams, u *m
 }
 
 func isTestInvited(u *models.User, testid int64) bool {
+	if u == nil {
+		return false
+	}
 	db, err := dbconnection.ConnectDb()
 	if err == nil {
 		var t *dao.Test
@@ -250,6 +266,9 @@ func isTestOpenByUser(u *models.User, testid int64) (bool, error) {
 }
 
 func isTestOpenByUserAuth(u *models.User, testid int64) bool {
+	if u == nil {
+		return false
+	}
 	b, e := isTestOpenByUser(u, testid)
 	if e == nil {
 		return b
@@ -271,6 +290,9 @@ func hasAnswerVisible(u *models.User, testid int64) (bool, error) {
 }
 
 func hasAnswerVisibleAuth(u *models.User, tid int64) bool {
+	if u == nil {
+		return false
+	}
 	b, e := hasAnswerVisible(u, tid)
 	if e == nil {
 		return b
@@ -279,15 +301,16 @@ func hasAnswerVisibleAuth(u *models.User, tid int64) bool {
 }
 
 // GetQuestionsPTest GET /publishedTests/{testid}/questions
-// Auth: (TestAdmin or Admin) OR ((ALL AND accesoPublico OR TestInvited) AND (TestOpenByThem||hasAnswerVisible))
+// Auth: (TestAdmin or CanAdminPTests) OR ((CanVerPTests AND accesoPublico OR TestInvited) AND (TestOpenByThem||hasAnswerVisible))
 func GetQuestionsPTest(params published_test.GetQuestionsFromPublishedTestsParams, u *models.User) middleware.Responder {
 	db, err := dbconnection.ConnectDb()
 	if err == nil {
 		var ts *dao.Test
 		ts, err = dao.GetPublishedTest(db, params.Testid)
 		if err == nil && ts != nil {
-			if !(isAdmin(u) || isTestAdmin(u, params.Testid)) {
-				if !((isTestOpenByUserAuth(u, params.Testid) || hasAnswerVisibleAuth(u, params.Testid)) && (*ts.AccesoPublico || isTestInvited(u, params.Testid))) {
+			if !(permissions.CanAdminPTests(u) || isTestAdmin(u, params.Testid)) {
+				if !((isTestOpenByUserAuth(u, params.Testid) || hasAnswerVisibleAuth(u, params.Testid)) &&
+					(permissions.CanVerPTests(u) && (*ts.AccesoPublico || isTestInvited(u, params.Testid)))) {
 					return published_test.NewGetQuestionsFromPublishedTestsForbidden()
 				}
 			}
@@ -306,15 +329,16 @@ func GetQuestionsPTest(params published_test.GetQuestionsFromPublishedTestsParam
 }
 
 // GetQuestionsPTest GET /publishedTests/{testid}/questions/{questionid}
-// Auth: (TestAdmin or Admin) OR ((ALL AND accesoPublico OR TestInvited) AND (TestOpenByThem||hasAnswerVisible))
+// Auth: (TestAdmin or CanAdminPTests) OR ((CanVerPTests AND accesoPublico OR TestInvited) AND (TestOpenByThem||hasAnswerVisible))
 func GetQuestionPTest(params published_test.GetQuestionFromPublishedTestsParams, u *models.User) middleware.Responder {
 	db, err := dbconnection.ConnectDb()
 	if err == nil {
 		var ts *dao.Test
 		ts, err = dao.GetPublishedTest(db, params.Testid)
 		if err == nil && ts != nil {
-			if !(isAdmin(u) || isTestAdmin(u, params.Testid)) {
-				if !((isTestOpenByUserAuth(u, params.Testid) || hasAnswerVisibleAuth(u, params.Testid)) && (*ts.AccesoPublico || isTestInvited(u, params.Testid))) {
+			if !(permissions.CanAdminPTests(u) || isTestAdmin(u, params.Testid)) {
+				if !((isTestOpenByUserAuth(u, params.Testid) || hasAnswerVisibleAuth(u, params.Testid)) && (permissions.CanVerPTests(u) &&
+					(*ts.AccesoPublico || isTestInvited(u, params.Testid)))) {
 					return published_test.NewGetQuestionFromPublishedTestsForbidden()
 				}
 			}
@@ -334,15 +358,15 @@ func GetQuestionPTest(params published_test.GetQuestionFromPublishedTestsParams,
 }
 
 // GetAnswersPTest GET /publishedTests/{testid}/answers
-// Auth: Teacher or Admin if accesoPublico, else: TestAdmin or Admin
+// Auth: CanVerAnswers if accesoPublico, else: TestAdmin or CanAdminPTests
 func GetAnswersPTest(params published_test.GetAnswersFromPublishedTestsParams, u *models.User) middleware.Responder {
 	db, err := dbconnection.ConnectDb()
 	if err == nil {
 		var ts *dao.Test
 		ts, err = dao.GetPublishedTest(db, params.Testid)
 		if err == nil && ts != nil {
-			if (!*ts.AccesoPublico && !(isAdmin(u) || isTestAdmin(u, params.Testid))) ||
-				!isTeacherOrAdmin(u) {
+			if (!*ts.AccesoPublico && !(permissions.CanAdminPTests(u) || isTestAdmin(u, params.Testid))) ||
+				!permissions.CanVerAnswers(u) {
 				return published_test.NewGetAnswersFromPublishedTestsForbidden()
 			}
 			var as []*dao.Answer
@@ -360,15 +384,15 @@ func GetAnswersPTest(params published_test.GetAnswersFromPublishedTestsParams, u
 }
 
 // GetCAnswersPTest GET /publishedTests/{testid}/correctedAnswers
-// Auth: Teacher or Admin if accesoPublico, else: TestAdmin or Admin
+// Auth: CanVerAnswers if accesoPublico, else: TestAdmin or CanAdminPTests
 func GetCAnswersPTest(params published_test.GetCorrectedAnswersFromPublishedTestsParams, u *models.User) middleware.Responder {
 	db, err := dbconnection.ConnectDb()
 	if err == nil {
 		var ts *dao.Test
 		ts, err = dao.GetPublishedTest(db, params.Testid)
 		if err == nil && ts != nil {
-			if (!*ts.AccesoPublico && !(isAdmin(u) || isTestAdmin(u, params.Testid))) ||
-				!isTeacherOrAdmin(u) {
+			if (!*ts.AccesoPublico && !(permissions.CanAdminPTests(u) || isTestAdmin(u, params.Testid))) ||
+				!permissions.CanVerAnswers(u) {
 				return published_test.NewGetCorrectedAnswersFromPublishedTestsForbidden()
 			}
 			var as []*dao.Answer
@@ -386,15 +410,15 @@ func GetCAnswersPTest(params published_test.GetCorrectedAnswersFromPublishedTest
 }
 
 // GetUCAnswersPTest GET /publishedTests/{testid}/correctedAnswers
-// Auth: Teacher or Admin if accesoPublico, else: TestAdmin or Admin
+// Auth: CanVerAnswers if accesoPublico, else: TestAdmin or CanAdminPTests
 func GetUCAnswersPTest(params published_test.GetUncorrectedAnswersFromPublishedTestsParams, u *models.User) middleware.Responder {
 	db, err := dbconnection.ConnectDb()
 	if err == nil {
 		var ts *dao.Test
 		ts, err = dao.GetPublishedTest(db, params.Testid)
 		if err == nil && ts != nil {
-			if (!*ts.AccesoPublico && !(isAdmin(u) || isTestAdmin(u, params.Testid))) ||
-				!isTeacherOrAdmin(u) {
+			if (!*ts.AccesoPublico && !(permissions.CanAdminPTests(u) || isTestAdmin(u, params.Testid))) ||
+				!permissions.CanVerAnswers(u) {
 				return published_test.NewGetUncorrectedAnswersFromPublishedTestsForbidden()
 			}
 			var as []*dao.Answer
@@ -412,15 +436,15 @@ func GetUCAnswersPTest(params published_test.GetUncorrectedAnswersFromPublishedT
 }
 
 // GetQuestionAnswersPTest GET /publishedTests/{testid}/questions/{questionid}/qanswers
-// Auth: Teacher or Admin if accesoPublico, else: TestAdmin or Admin
+// Auth: CanVerAnswers if accesoPublico, else: TestAdmin or CanAdminPTests
 func GetQuestionAnswersPTest(params published_test.GetQuestionAnswersFromPublishedTestQuestionParams, u *models.User) middleware.Responder {
 	db, err := dbconnection.ConnectDb()
 	if err == nil {
 		var ts *dao.Test
 		ts, err = dao.GetPublishedTest(db, params.Testid)
 		if err == nil && ts != nil {
-			if (!*ts.AccesoPublico && !(isAdmin(u) || isTestAdmin(u, params.Testid))) ||
-				!isTeacherOrAdmin(u) {
+			if (!*ts.AccesoPublico && !(permissions.CanAdminPTests(u) || isTestAdmin(u, params.Testid))) ||
+				!permissions.CanVerAnswers(u) {
 				return published_test.NewGetQuestionAnswersFromPublishedTestQuestionForbidden()
 			}
 			var as []*dao.QuestionAnswer
@@ -437,7 +461,7 @@ func GetQuestionAnswersPTest(params published_test.GetQuestionAnswersFromPublish
 }
 
 // GetOptionsPQuestion GET /publishedTests/{testid}/questions/{questionid}/options
-// Auth: ALL if accesoPublico, else: TestInvited, TestAdmin or Admin
+// Auth: CanVerPTests if accesoPublico, else: TestInvited, TestAdmin or CanAdminPTests
 // Info: If HasAnswerVisible -> Will know which options are correct. If not, all options as non correct
 func GetOptionsPQuestion(params published_test.GetOptionsFromPublishedQuestionParams, u *models.User) middleware.Responder {
 	db, err := dbconnection.ConnectDb()
@@ -446,9 +470,11 @@ func GetOptionsPQuestion(params published_test.GetOptionsFromPublishedQuestionPa
 		ts, err = dao.GetPublishedTest(db, params.Testid)
 		if err == nil && ts != nil {
 			if !*ts.AccesoPublico {
-				if !(isAdmin(u) || isTestAdmin(u, params.Testid) || isTestInvited(u, params.Testid)) {
+				if !(permissions.CanAdminPTests(u) || isTestAdmin(u, params.Testid) || isTestInvited(u, params.Testid)) {
 					return published_test.NewGetOptionsFromPublishedQuestionForbidden()
 				}
+			} else if !permissions.CanVerPTests(u) {
+				return published_test.NewGetOptionsFromPublishedQuestionForbidden()
 			}
 			var qs *dao.Question
 			qs, err = dao.GetQuestionFromTest(db, params.Testid, params.Questionid)
@@ -472,7 +498,7 @@ func GetOptionsPQuestion(params published_test.GetOptionsFromPublishedQuestionPa
 }
 
 // GetOptionsPQuestion GET /publishedTests/{testid}/questions/{questionid}/tags
-// Auth: ALL if accesoPublico, else: TestInvited, TestAdmin or Admin
+// Auth: CanVerPTests if accesoPublico, else: TestInvited, TestAdmin or CanAdminPTests
 func GetTagsPQuestion(params published_test.GetTagsFromPublishedQuestionParams, u *models.User) middleware.Responder {
 	db, err := dbconnection.ConnectDb()
 	if err == nil {
@@ -480,9 +506,11 @@ func GetTagsPQuestion(params published_test.GetTagsFromPublishedQuestionParams, 
 		ts, err = dao.GetPublishedTest(db, params.Testid)
 		if err == nil && ts != nil {
 			if !*ts.AccesoPublico {
-				if !(isAdmin(u) || isTestAdmin(u, params.Testid) || isTestInvited(u, params.Testid)) {
+				if !(permissions.CanAdminPTests(u) || isTestAdmin(u, params.Testid) || isTestInvited(u, params.Testid)) {
 					return published_test.NewGetTagsFromPublishedQuestionForbidden()
 				}
+			} else if !permissions.CanVerPTests(u) {
+				return published_test.NewGetTagsFromPublishedQuestionForbidden()
 			}
 			var qs *dao.Question
 			qs, err = dao.GetQuestionFromTest(db, params.Testid, params.Questionid)
@@ -501,7 +529,7 @@ func GetTagsPQuestion(params published_test.GetTagsFromPublishedQuestionParams, 
 }
 
 // GET /publishedTests/{testid}/tags
-// Auth: ALL if accesoPublico, else: TestInvited, TestAdmin or Admin
+// Auth: CanVerPTests if accesoPublico, else: TestInvited, TestAdmin or CanAdminPTests
 func GetTagsFromPTest(params published_test.GetTagsFromPublishedTestParams, u *models.User) middleware.Responder {
 	db, err := dbconnection.ConnectDb()
 	if err == nil {
@@ -509,9 +537,11 @@ func GetTagsFromPTest(params published_test.GetTagsFromPublishedTestParams, u *m
 		ts, err = dao.GetPublishedTest(db, params.Testid)
 		if err == nil && ts != nil {
 			if !*ts.AccesoPublico {
-				if !(isAdmin(u) || isTestAdmin(u, params.Testid) || isTestInvited(u, params.Testid)) {
+				if !(permissions.CanAdminPTests(u) || isTestAdmin(u, params.Testid) || isTestInvited(u, params.Testid)) {
 					return published_test.NewGetTagsFromPublishedTestForbidden()
 				}
+			} else if !permissions.CanVerPTests(u) {
+				return published_test.NewGetTagsFromPublishedTestForbidden()
 			}
 			var tags []*dao.Tag
 			tags, err = dao.GetTestTags(db, params.Testid)
@@ -526,7 +556,7 @@ func GetTagsFromPTest(params published_test.GetTagsFromPublishedTestParams, u *m
 }
 
 // GET /publishedTests/{testid}/tags/{tag}
-// Auth: ALL if accesoPublico, else: TestInvited, TestAdmin or Admin
+// Auth: CanVerPTests if accesoPublico, else: TestInvited, TestAdmin or CanAdminPTests
 func GetTagFromPTest(params published_test.GetTagFromPublishedTestParams, u *models.User) middleware.Responder {
 	db, err := dbconnection.ConnectDb()
 	if err == nil {
@@ -534,9 +564,11 @@ func GetTagFromPTest(params published_test.GetTagFromPublishedTestParams, u *mod
 		ts, err = dao.GetPublishedTest(db, params.Testid)
 		if err == nil && ts != nil {
 			if !*ts.AccesoPublico {
-				if !(isAdmin(u) || isTestAdmin(u, params.Testid) || isTestInvited(u, params.Testid)) {
+				if !(permissions.CanAdminPTests(u) || isTestAdmin(u, params.Testid) || isTestInvited(u, params.Testid)) {
 					return published_test.NewGetTagFromPublishedTestForbidden()
 				}
+			} else if !permissions.CanVerPTests(u) {
+				return published_test.NewGetTagFromPublishedTestForbidden()
 			}
 			var tag *dao.Tag
 			tag, err = dao.GetTestTag(db, params.Testid, params.Tag)

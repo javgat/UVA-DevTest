@@ -7,6 +7,7 @@ package handlers
 import (
 	"log"
 	"uva-devtest/models"
+	"uva-devtest/permissions"
 	"uva-devtest/persistence/dao"
 	"uva-devtest/persistence/dbconnection"
 	"uva-devtest/restapi/operations/question"
@@ -16,9 +17,9 @@ import (
 )
 
 // GetAllEditQuestions GET /allEditQuestions. Returns all non-published questions
-// Auth: Admin
+// Auth: CanAdminEQuestions
 func GetAllEditQuestions(params question.GetAllEditQuestionsParams, u *models.User) middleware.Responder {
-	if isAdmin(u) {
+	if permissions.CanAdminEQuestions(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var qs []*dao.Question
@@ -38,10 +39,10 @@ func GetAllEditQuestions(params question.GetAllEditQuestionsParams, u *models.Us
 	return question.NewGetAllEditQuestionsForbidden()
 }
 
-// GetAllEditQuestions GET /allQuestions. Returns all questions
-// Auth: Admin
+// GetAllQuestions GET /allQuestions. Returns all questions
+// Auth: CanAdminQuestions
 func GetAllQuestions(params question.GetAllQuestionsParams, u *models.User) middleware.Responder {
-	if isAdmin(u) {
+	if permissions.CanAdminQuestions(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var qs []*dao.Question
@@ -62,9 +63,9 @@ func GetAllQuestions(params question.GetAllQuestionsParams, u *models.User) midd
 }
 
 // GetEditQuestions GET /editQuestions. Returns all public non-published questions.
-// Auth: Teacher or Admin
+// Auth: CanVerEQuestions
 func GetEditQuestions(params question.GetEditQuestionsParams, u *models.User) middleware.Responder {
-	if isTeacherOrAdmin(u) {
+	if permissions.CanVerEQuestions(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var qs []*dao.Question
@@ -85,9 +86,9 @@ func GetEditQuestions(params question.GetEditQuestionsParams, u *models.User) mi
 }
 
 // GetQuestions GET /questions. Returns all public questions.
-// Auth: Teacher or Admin
+// Auth: CanVerQuestions
 func GetQuestions(params question.GetQuestionsParams, u *models.User) middleware.Responder {
-	if isTeacherOrAdmin(u) {
+	if permissions.CanVerQuestions(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var qs []*dao.Question
@@ -108,16 +109,16 @@ func GetQuestions(params question.GetQuestionsParams, u *models.User) middleware
 }
 
 // GetQuestion GET /questions/{questionid}. Returns a public question.
-// Auth: Teacher or Admin si accesoPublicoNoPublicada=true, admin o questionAdmin si false
+// Auth: CanVerQuestions si accesoPublicoNoPublicada=true, CanAdminQuestions o questionAdmin si false
 func GetQuestion(params question.GetQuestionParams, u *models.User) middleware.Responder {
-	if isTeacherOrAdmin(u) {
+	if permissions.CanVerQuestions(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var qs *dao.Question
 			qs, err = dao.GetQuestion(db, params.Questionid)
 			if err == nil && qs != nil {
 				if !*qs.AccesoPublicoNoPublicada {
-					if !(isAdmin(u) || isQuestionAdmin(u, params.Questionid)) {
+					if !(permissions.CanAdminQuestions(u) || isQuestionAdmin(u, params.Questionid)) {
 						return question.NewGetQuestionForbidden()
 					}
 				}
@@ -137,6 +138,9 @@ func GetQuestion(params question.GetQuestionParams, u *models.User) middleware.R
 
 // Owner o miembro de team que admin question
 func isQuestionAdmin(u *models.User, questionid int64) bool {
+	if u == nil {
+		return false
+	}
 	db, err := dbconnection.ConnectDb()
 	if err == nil {
 		var q *dao.Question
@@ -175,11 +179,11 @@ func isTeamSoloProfesores(teamname string) bool {
 	return false
 }
 
-// PutQuestion PUT /questions/{questionid}. Modifies a question
-// Auth: QuestionOwner or Admin
+// PutQuestion PUT /questions/{questionid}. Modifies an editable question
+// Auth: QuestionOwner or CanAdminEQuestions
 // Req: Question.Editable
 func PutQuestion(params question.PutQuestionParams, u *models.User) middleware.Responder {
-	if isQuestionEditable(params.Questionid) && (isAdmin(u) || isQuestionAdmin(u, params.Questionid)) {
+	if isQuestionEditable(params.Questionid) && (permissions.CanAdminEQuestions(u) || isQuestionAdmin(u, params.Questionid)) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			err = dao.PutQuestion(db, params.Questionid, params.Question)
@@ -191,11 +195,11 @@ func PutQuestion(params question.PutQuestionParams, u *models.User) middleware.R
 	return question.NewPutQuestionForbidden()
 }
 
-// DeleteQuestion DELETE /questions/{questionid}. Deletes a question
-// Auth: QuestionOwner or Admin
+// DeleteQuestion DELETE /questions/{questionid}. Deletes an editable question
+// Auth: QuestionOwner or CanAdminEQuestions
 // Req: Question.Editable
 func DeleteQuestion(params question.DeleteQuestionParams, u *models.User) middleware.Responder {
-	if isQuestionEditable(params.Questionid) && (isAdmin(u) || isQuestionAdmin(u, params.Questionid)) {
+	if isQuestionEditable(params.Questionid) && (permissions.CanAdminEQuestions(u) || isQuestionAdmin(u, params.Questionid)) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			err = dao.DeleteQuestion(db, params.Questionid)
@@ -208,9 +212,9 @@ func DeleteQuestion(params question.DeleteQuestionParams, u *models.User) middle
 }
 
 // GET /questions/{questionid}/tags
-// Auth: Teacher or admin
+// Auth: CanVerEQuestions
 func GetQuestionTags(params question.GetTagsFromQuestionParams, u *models.User) middleware.Responder {
-	if isTeacherOrAdmin(u) {
+	if permissions.CanVerEQuestions(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var ts []*dao.Tag
@@ -230,9 +234,9 @@ func GetQuestionTags(params question.GetTagsFromQuestionParams, u *models.User) 
 }
 
 // GET /questions/{questionid}/tags/{tag}
-// Auth: Teacher or admin
+// Auth: CanVerEQuestions
 func GetQuestionTag(params question.GetTagFromQuestionParams, u *models.User) middleware.Responder {
-	if isTeacherOrAdmin(u) {
+	if permissions.CanVerEQuestions(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var t *dao.Tag
@@ -253,10 +257,10 @@ func GetQuestionTag(params question.GetTagFromQuestionParams, u *models.User) mi
 }
 
 // PUT /questions/{questionid}/tags/{tag}
-// Auth: QuestionOwner or Admin
+// Auth: QuestionOwner or CanAdminEQuestions
 // Req: Question.Editable
 func AddQuestionTag(params question.AddTagToQuestionParams, u *models.User) middleware.Responder {
-	if isQuestionEditable(params.Questionid) && (isAdmin(u) || isQuestionAdmin(u, params.Questionid)) {
+	if isQuestionEditable(params.Questionid) && (permissions.CanAdminEQuestions(u) || isQuestionAdmin(u, params.Questionid)) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var t *dao.Tag
@@ -278,10 +282,10 @@ func AddQuestionTag(params question.AddTagToQuestionParams, u *models.User) midd
 }
 
 // DELETE /questions/{questionid}/tags/{tag}
-// Auth: QuestionOwner or Admin
+// Auth: QuestionOwner or CanAdminEQuestions
 // Req: Question.Editable
 func RemoveQuestionTag(params question.RemoveTagFromQuestionParams, u *models.User) middleware.Responder {
-	if isQuestionEditable(params.Questionid) && (isAdmin(u) || isQuestionAdmin(u, params.Questionid)) {
+	if isQuestionEditable(params.Questionid) && (permissions.CanAdminEQuestions(u) || isQuestionAdmin(u, params.Questionid)) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			err = dao.RemoveQuestionTag(db, params.Questionid, params.Tag)
@@ -298,10 +302,10 @@ func RemoveQuestionTag(params question.RemoveTagFromQuestionParams, u *models.Us
 }
 
 // PUT /questions/{questionid}/teams/{teamid}
-// Auth: QuestionOwner or Admin
+// Auth: QuestionOwner or CanAdminEQuestions
 // Req: Question.Editable
 func AddQuestionTeam(params question.AddTeamToQuestionParams, u *models.User) middleware.Responder {
-	if isQuestionEditable(params.Questionid) && (isAdmin(u) || isQuestionAdmin(u, params.Questionid)) {
+	if isQuestionEditable(params.Questionid) && (permissions.CanAdminEQuestions(u) || isQuestionAdmin(u, params.Questionid)) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			if isTeamSoloProfesores(params.Teamname) {
@@ -331,10 +335,10 @@ func AddQuestionTeam(params question.AddTeamToQuestionParams, u *models.User) mi
 }
 
 // DELETE /questions/{questionid}/teams/{teamid}
-// Auth: QuestionOwner or Admin
+// Auth: QuestionOwner or CanAdminEQuestions
 // Req: Question.Editable
 func RemoveQuestionTeam(params question.RemoveTeamToQuestionParams, u *models.User) middleware.Responder {
-	if isQuestionEditable(params.Questionid) && (isAdmin(u) || isQuestionAdmin(u, params.Questionid)) {
+	if isQuestionEditable(params.Questionid) && (permissions.CanAdminEQuestions(u) || isQuestionAdmin(u, params.Questionid)) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			err = dao.RemoveQuestionTeam(db, params.Questionid, params.Teamname)
@@ -351,27 +355,30 @@ func RemoveQuestionTeam(params question.RemoveTeamToQuestionParams, u *models.Us
 }
 
 // GET /questions/{questionid}/teams
-// Auth: All
+// Auth: CanVerEQuestions
 func GetTeamsFromQuestion(params question.GetTeamsFromQuestionParams, u *models.User) middleware.Responder {
-	db, err := dbconnection.ConnectDb()
-	if err == nil {
-		var ts []*dao.Team
-		ts, err = dao.GetTeamsQuestion(db, params.Questionid)
+	if permissions.CanVerEQuestions(u) {
+		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			mts := dao.ToModelsTeams(ts)
+			var ts []*dao.Team
+			ts, err = dao.GetTeamsQuestion(db, params.Questionid)
 			if err == nil {
-				return question.NewGetTeamsFromQuestionOK().WithPayload(mts)
+				mts := dao.ToModelsTeams(ts)
+				if err == nil {
+					return question.NewGetTeamsFromQuestionOK().WithPayload(mts)
+				}
 			}
 		}
+		log.Println("Error en users_handler GetTeamsFromQuestion(): ", err)
+		return question.NewGetTeamsFromQuestionInternalServerError()
 	}
-	log.Println("Error en users_handler GetTeamsFromQuestion(): ", err)
-	return question.NewGetTeamsFromQuestionInternalServerError()
+	return question.NewGetTeamsFromQuestionForbidden()
 }
 
 // GET /questions/{questionid}/options
-// Auth: Teacher or admin
+// Auth: CanVerEQuestions
 func GetOptions(params question.GetOptionsFromQuestionParams, u *models.User) middleware.Responder {
-	if isTeacherOrAdmin(u) {
+	if permissions.CanVerEQuestions(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var os []*dao.Option
@@ -390,9 +397,9 @@ func GetOptions(params question.GetOptionsFromQuestionParams, u *models.User) mi
 }
 
 // POST /questions/{questionid}/options
-// Auth: QuestionAdmin or Admin
+// Auth: QuestionAdmin or CanAdminEQuestions
 func PostOption(params question.PostOptionParams, u *models.User) middleware.Responder {
-	if isQuestionAdmin(u, params.Questionid) || isAdmin(u) {
+	if isQuestionAdmin(u, params.Questionid) || permissions.CanAdminEQuestions(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var os *dao.Option
@@ -411,9 +418,9 @@ func PostOption(params question.PostOptionParams, u *models.User) middleware.Res
 }
 
 // GET /questions/{questionid}/options/{optionindex}
-// Auth: Teacher or admin
+// Auth: CanVerEQuestions
 func GetOption(params question.GetOptionFromQuestionParams, u *models.User) middleware.Responder {
-	if isTeacherOrAdmin(u) {
+	if permissions.CanVerEQuestions(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var os *dao.Option
@@ -435,10 +442,10 @@ func GetOption(params question.GetOptionFromQuestionParams, u *models.User) midd
 }
 
 // PUT /questions/{questionid}/options/{optionindex}
-// Auth: QuestionAdmin or Admin
+// Auth: QuestionAdmin or CanAdminEQuestions
 // Req: Question.Editable
 func PutOption(params question.PutOptionParams, u *models.User) middleware.Responder {
-	if isQuestionEditable(params.Questionid) && (isQuestionAdmin(u, params.Questionid) || isAdmin(u)) {
+	if isQuestionEditable(params.Questionid) && (isQuestionAdmin(u, params.Questionid) || permissions.CanAdminEQuestions(u)) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			err = dao.PutOption(db, params.Questionid, params.Optionindex, params.Option)
@@ -453,10 +460,10 @@ func PutOption(params question.PutOptionParams, u *models.User) middleware.Respo
 }
 
 // DELETE /questions/{questionid}/options/{optionindex}
-// Auth: QuestionAdmin or Admin
+// Auth: QuestionAdmin or CanAdminEQuestions
 // Req: Question.Editable
 func DeleteOption(params question.DeleteOptionParams, u *models.User) middleware.Responder {
-	if isQuestionEditable(params.Questionid) && (isQuestionAdmin(u, params.Questionid) || isAdmin(u)) {
+	if isQuestionEditable(params.Questionid) && (isQuestionAdmin(u, params.Questionid) || permissions.CanAdminEQuestions(u)) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			err = dao.DeleteOption(db, params.Questionid, params.Optionindex)
@@ -470,10 +477,10 @@ func DeleteOption(params question.DeleteOptionParams, u *models.User) middleware
 }
 
 // GET /users/{username}/favoriteEditQuestions
-// Auth: Current User or Admin
+// Auth: Current User or CanAdminUsers
 // Req: Fav+available+editable (SQL)
 func GetFavoriteEditQuestions(params user.GetFavoriteEditQuestionsParams, u *models.User) middleware.Responder {
-	if userOrAdmin(params.Username, u) {
+	if isUser(params.Username, u) || permissions.CanAdminUsers(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var qs []*dao.Question
@@ -493,10 +500,10 @@ func GetFavoriteEditQuestions(params user.GetFavoriteEditQuestionsParams, u *mod
 }
 
 // GET /users/{username}/favoriteQuestions
-// Auth: Current User or Admin
+// Auth: Current User or CanAdminUsers
 // Req: Fav+available (SQL)
 func GetFavoriteQuestions(params user.GetFavoriteQuestionsParams, u *models.User) middleware.Responder {
-	if userOrAdmin(params.Username, u) {
+	if isUser(params.Username, u) || permissions.CanAdminUsers(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var qs []*dao.Question
@@ -516,10 +523,10 @@ func GetFavoriteQuestions(params user.GetFavoriteQuestionsParams, u *models.User
 }
 
 // GET /users/{username}/favoriteQuestions/{questionid}
-// Auth: Current User or Admin
+// Auth: Current User or CanAdminUsers
 // Req: Fav+available (SQL)
 func GetFavoriteQuestion(params user.GetFavoriteQuestionParams, u *models.User) middleware.Responder {
-	if userOrAdmin(params.Username, u) {
+	if isUser(params.Username, u) || permissions.CanAdminUsers(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var qs *dao.Question
@@ -541,9 +548,9 @@ func GetFavoriteQuestion(params user.GetFavoriteQuestionParams, u *models.User) 
 }
 
 // PUT /users/{username}/favoriteQuestions/{questionid}
-// Auth: Current User or Admin
+// Auth: Current User or CanAdminUsers
 func AddFavoriteQuestion(params user.AddQuestionFavoriteParams, u *models.User) middleware.Responder {
-	if userOrAdmin(params.Username, u) {
+	if isUser(params.Username, u) || permissions.CanAdminUsers(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			err = dao.AddFavoriteQuestion(db, params.Username, params.Questionid)
@@ -558,9 +565,9 @@ func AddFavoriteQuestion(params user.AddQuestionFavoriteParams, u *models.User) 
 }
 
 // DELETE /users/{username}/favoriteQuestions/{questionid}
-// Auth: Current User or Admin
+// Auth: Current User or CanAdminUsers
 func RemoveFavoriteQuestion(params user.RemoveQuestionFavoriteParams, u *models.User) middleware.Responder {
-	if userOrAdmin(params.Username, u) {
+	if isUser(params.Username, u) || permissions.CanAdminUsers(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			err = dao.RemoveFavoriteQuestion(db, params.Username, params.Questionid)

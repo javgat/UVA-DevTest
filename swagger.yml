@@ -3830,9 +3830,9 @@ paths:
         - BearerCookie: []
       tags:
       - question
-      summary: Returns all questions
+      summary: Returns all questions. Admin operation.
       operationId: GetAllQuestions
-      description: Returns all questions
+      description: Returns all questions. Admin operation.
       produces:
       - application/json
       parameters:
@@ -3934,6 +3934,7 @@ paths:
     get:
       security:
         - BearerCookie: []
+        - NoRegistered: []
       tags:
       - question
       summary: Returns all public non-published questions
@@ -3986,6 +3987,7 @@ paths:
     get:
       security:
         - BearerCookie: []
+        - NoRegistered: []
       tags:
       - question
       summary: Returns all public questions
@@ -4038,6 +4040,7 @@ paths:
     get:
       security:
         - BearerCookie: []
+        - NoRegistered: []
       tags:
       - question
       summary: Returns a question
@@ -4122,6 +4125,7 @@ paths:
     get:
       security:
         - BearerCookie: []
+        - NoRegistered: []
       tags:
       - question
       summary: Returns all options from a question.
@@ -4191,6 +4195,7 @@ paths:
     get:
       security:
         - BearerCookie: []
+        - NoRegistered: []
       tags:
       - question
       summary: Returns an options from a question.
@@ -4296,6 +4301,7 @@ paths:
     get:
       security:
         - BearerCookie: []
+        - NoRegistered: []
       tags:
       - question
       summary: Returns all tags from a question.
@@ -4329,6 +4335,7 @@ paths:
     get:
       security:
         - BearerCookie: []
+        - NoRegistered: []
       tags:
       - question
       summary: Returns a tag from a question.
@@ -4525,6 +4532,7 @@ paths:
     get:
       security:
         - BearerCookie: []
+        - NoRegistered: []
       tags:
       - test
       summary: Returns all public non-published tests
@@ -4626,6 +4634,7 @@ paths:
     get:
       security:
         - BearerCookie: []
+        - NoRegistered: []
       tags:
       - test
       summary: Returns all public tests
@@ -4650,6 +4659,7 @@ paths:
     get:
       security:
         - BearerCookie: []
+        - NoRegistered: []
       tags:
       - test
       summary: Returns a test
@@ -4737,6 +4747,7 @@ paths:
     get:
       security:
         - BearerCookie: []
+        - NoRegistered: []
       tags:
       - test
       summary: Returns all tags from a test.
@@ -4770,6 +4781,7 @@ paths:
     get:
       security:
         - BearerCookie: []
+        - NoRegistered: []
       tags:
       - test
       summary: Returns a tag from a test.
@@ -5002,6 +5014,7 @@ paths:
     get:
       security:
         - BearerCookie: []
+        - NoRegistered: []
       tags:
       - test
       - publishedTest
@@ -5035,6 +5048,7 @@ paths:
     get:
       security:
         - BearerCookie: []
+        - NoRegistered: []
       tags:
       - test
       summary: Returns all questions of the test
@@ -5068,6 +5082,7 @@ paths:
     get:
       security:
         - BearerCookie: []
+        - NoRegistered: []
       tags:
       - test
       summary: Returns a question from a test
@@ -5170,6 +5185,7 @@ paths:
     get:
       security:
         - BearerCookie: []
+        - NoRegistered: []
       tags:
       - publishedTest
       summary: Returns all public publishedTests
@@ -5222,6 +5238,7 @@ paths:
     get:
       security:
         - BearerCookie: []
+        - NoRegistered: []
       tags:
       - publishedTest
       summary: Returns a public publishedTest
@@ -5277,6 +5294,7 @@ paths:
     get:
       security:
         - BearerCookie: []
+        - NoRegistered: []
       tags:
       - publishedTest
       summary: Returns a publishedTest
@@ -5515,6 +5533,7 @@ paths:
     get:
       security:
         - BearerCookie: []
+        - NoRegistered: []
       tags:
       - publishedTest
       summary: Returns all tags from a published test.
@@ -5548,6 +5567,7 @@ paths:
     get:
       security:
         - BearerCookie: []
+        - NoRegistered: []
       tags:
       - publishedTest
       summary: Returns a tag from a published test.
@@ -5584,6 +5604,7 @@ paths:
     get:
       security:
         - BearerCookie: []
+        - NoRegistered: []
       tags:
       - publishedTest
       summary: Returns all questions from a published test
@@ -5617,6 +5638,7 @@ paths:
     get:
       security:
         - BearerCookie: []
+        - NoRegistered: []
       tags:
       - publishedTest
       summary: Returns a question from a published test
@@ -5652,6 +5674,7 @@ paths:
     get:
       security:
         - BearerCookie: []
+        - NoRegistered: []
       tags:
       - publishedTest
       summary: Returns all options from a question.
@@ -5690,6 +5713,7 @@ paths:
     get:
       security:
         - BearerCookie: []
+        - NoRegistered: []
       tags:
       - publishedTest
       summary: Returns all tags from a question.
@@ -6826,6 +6850,10 @@ securityDefinitions:
     type: apiKey
     in: header # Realmente en cookie, pero las cookies estan en header
     name: Cookie # La cookie ReAuth-Cookie
+  NoRegistered:
+    type: apiKey
+    in: header
+    name: NotLoggedIn # Esta API KEY valdra true si el cliente quiere que se procese la peticion como si no estuviera registrado
 host: localhost
 basePath: /DevTest
 schemes:

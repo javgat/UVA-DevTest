@@ -227,14 +227,14 @@ func init() {
             "BearerCookie": []
           }
         ],
-        "description": "Returns all questions",
+        "description": "Returns all questions. Admin operation.",
         "produces": [
           "application/json"
         ],
         "tags": [
           "question"
         ],
-        "summary": "Returns all questions",
+        "summary": "Returns all questions. Admin operation.",
         "operationId": "GetAllQuestions",
         "parameters": [
           {
@@ -1065,6 +1065,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns all public non-published questions",
@@ -1344,6 +1347,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns all public non-published tests",
@@ -1428,6 +1434,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns all public publishedTests",
@@ -1512,6 +1521,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns a public publishedTest",
@@ -1559,6 +1571,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns all tests",
@@ -1635,6 +1650,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns a publishedTest",
@@ -1782,6 +1800,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns all questions from a published test",
@@ -1832,6 +1853,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns a question from a published test",
@@ -1886,6 +1910,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns all options from a question.",
@@ -2000,6 +2027,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns all tags from a question.",
@@ -2057,6 +2087,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns all tags from a published test.",
@@ -2107,6 +2140,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns a tag from a published test.",
@@ -2527,6 +2563,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns all public questions",
@@ -2611,6 +2650,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns a question",
@@ -2742,6 +2784,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns all options from a question.",
@@ -2849,6 +2894,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns an option from a question.",
@@ -3010,6 +3058,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns all tags from a question.",
@@ -3060,6 +3111,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns a tag from a question.",
@@ -4963,6 +5017,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns a test",
@@ -5247,6 +5304,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns all publishedTest originated from the same test",
@@ -5353,6 +5413,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns all questions of the test",
@@ -5403,6 +5466,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns a question from a test",
@@ -5558,6 +5624,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns all tags from a test.",
@@ -5608,6 +5677,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns a tag from a test.",
@@ -10445,6 +10517,11 @@ func init() {
       "name": "Cookie",
       "in": "header"
     },
+    "NoRegistered": {
+      "type": "apiKey",
+      "name": "NotLoggedIn",
+      "in": "header"
+    },
     "ReAuthCookie": {
       "type": "apiKey",
       "name": "Cookie",
@@ -10719,14 +10796,14 @@ func init() {
             "BearerCookie": []
           }
         ],
-        "description": "Returns all questions",
+        "description": "Returns all questions. Admin operation.",
         "produces": [
           "application/json"
         ],
         "tags": [
           "question"
         ],
-        "summary": "Returns all questions",
+        "summary": "Returns all questions. Admin operation.",
         "operationId": "GetAllQuestions",
         "parameters": [
           {
@@ -11694,6 +11771,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns all public non-published questions",
@@ -12011,6 +12091,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns all public non-published tests",
@@ -12103,6 +12186,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns all public publishedTests",
@@ -12195,6 +12281,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns a public publishedTest",
@@ -12251,6 +12340,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns all tests",
@@ -12339,6 +12431,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns a publishedTest",
@@ -12513,6 +12608,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns all questions from a published test",
@@ -12572,6 +12670,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns a question from a published test",
@@ -12635,6 +12736,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns all options from a question.",
@@ -12767,6 +12871,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns all tags from a question.",
@@ -12833,6 +12940,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns all tags from a published test.",
@@ -12892,6 +13002,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns a tag from a published test.",
@@ -13384,6 +13497,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns all public questions",
@@ -13476,6 +13592,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns a question",
@@ -13628,6 +13747,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns all options from a question.",
@@ -13753,6 +13875,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns an option from a question.",
@@ -13941,6 +14066,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns all tags from a question.",
@@ -14000,6 +14128,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns a tag from a question.",
@@ -16229,6 +16360,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns a test",
@@ -16564,6 +16698,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns all publishedTest originated from the same test",
@@ -16688,6 +16825,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns all questions of the test",
@@ -16747,6 +16887,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns a question from a test",
@@ -16929,6 +17072,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns all tags from a test.",
@@ -16988,6 +17134,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns a tag from a test.",
@@ -22445,6 +22594,11 @@ func init() {
     "BearerCookie": {
       "type": "apiKey",
       "name": "Cookie",
+      "in": "header"
+    },
+    "NoRegistered": {
+      "type": "apiKey",
+      "name": "NotLoggedIn",
       "in": "header"
     },
     "ReAuthCookie": {
