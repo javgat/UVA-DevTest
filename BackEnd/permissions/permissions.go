@@ -85,7 +85,7 @@ func CanVerAnswers(u *models.User) bool {
 // Usa parametro change roles, y que el old rol sea de prioridad menor que el del usuario, y el new como maximo igual (la prioridad tiene orden inverso, mayor es 0)
 func CanChangeRoles(u *models.User, otherRolPriorityOld int64, otherRolPriorityNew int64) bool {
 	tipo := *getUserTipoRol(u)
-	return *tipo.ChangeRoles && (otherRolPriorityOld > *tipo.Prioridad) && (otherRolPriorityNew >= *tipo.Prioridad)
+	return *tipo.ChangeRoles && (otherRolPriorityOld >= *tipo.Prioridad) && (otherRolPriorityNew >= *tipo.Prioridad)
 }
 
 // CanTenerTeams indica si el usuario puede crear o ser administrador de un equipo

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AuthService } from '@javgat/devtest-api';
+import { AuthService, TipoRol, TiporolService } from '@javgat/devtest-api';
 import { BehaviorSubject } from 'rxjs';
 import { SessionLogin, SessionUser } from './app.model';
 import { DataService } from './data.service';
@@ -18,7 +18,10 @@ export class SessionService {
   private user = new BehaviorSubject<SessionUser>(new SessionUser())
   sessionUser = this.user.asObservable()
 
-  constructor(private auth: AuthService, private data: DataService) { }
+  private tipoRoles = new BehaviorSubject<TipoRol[]>([])
+  sessionTipoRoles = this.tipoRoles.asObservable()
+
+  constructor(private auth: AuthService, private data: DataService, private trS: TiporolService) { }
   
   // Actualiza la sesión a la pasada por parametro.
   cambiarSession(session:SessionLogin){
@@ -52,6 +55,7 @@ export class SessionService {
       loggedBool = ("true"==logged)
     }
     this.cambiarSession(new SessionLogin(loggedBool, username))
+    this.updateTipoRoles(true)
   }
 
   cambiarUser(user:SessionUser){
@@ -60,6 +64,19 @@ export class SessionService {
 
   borrarUser(){
     this.cambiarUser(new SessionUser())
+  }
+  
+  cambiarSessionTipoRoles(ntrs: TipoRol[]){
+    this.tipoRoles.next(ntrs)
+  }
+
+  updateTipoRoles(primera: boolean){
+    this.trS.getTipoRoles().subscribe(
+      resp=>{
+        this.cambiarSessionTipoRoles(resp)
+      },
+      err=> this.handleErrRelog(err, "obtener tipo de roles", primera, this.updateTipoRoles, this)
+    )
   }
 
   handleErrRelog<T>(err: any, action: string, primera: boolean, callbackFn: (this: T, prim: boolean) => void, that: T): void{

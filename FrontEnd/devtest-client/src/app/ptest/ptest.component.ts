@@ -111,7 +111,7 @@ export class PtestComponent extends LoggedInController implements OnInit {
   }
 
   isModoTestAdmin(): boolean {
-    return this.isInAdminTeam || this.test.username == this.getSessionUser().getUsername()
+    return this.isInAdminTeam || this.test.username == this.getSessionUser().getUsername() || this.getSessionUser().isAdmin()
   }
 
   getIsRespuestaIniciada(primera: boolean) {

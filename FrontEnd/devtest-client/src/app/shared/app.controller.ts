@@ -1,6 +1,6 @@
 import { Component, OnDestroy } from "@angular/core";
 import { Router } from "@angular/router";
-import { User, UserService } from "@javgat/devtest-api";
+import { TipoRol, User, UserService } from "@javgat/devtest-api";
 import { Subscription } from "rxjs";
 import { Mensaje, SessionLogin, SessionUser } from "./app.model";
 import { DataService } from "./data.service";
@@ -9,8 +9,10 @@ import { SessionService } from "./session.service";
 export class LoggedInController {
     private sessionLogin: SessionLogin
     private sessionUser: SessionUser
+    private sessionTipoRoles: TipoRol[]
     private sessionSubscription: Subscription
     private sessionUserSubscription: Subscription
+    private sessionTipoRolesSubscription: Subscription
     private mensaje: Mensaje
     private messageSubscription: Subscription
 
@@ -35,7 +37,15 @@ export class LoggedInController {
                 } else {
                     this.doInheritHasUserAction()
                     this.doHasUserAction()
+                    this.doActionKnowTipoRol()
                 }
+            }
+        )
+
+        this.sessionTipoRoles = []
+        this.sessionTipoRolesSubscription = this.session.sessionTipoRoles.subscribe(
+            valor => {
+                this.sessionTipoRoles = valor
             }
         )
 
@@ -45,11 +55,18 @@ export class LoggedInController {
     }
 
     doActionIsNotLoggedIn() {
-        this.router.navigate(['/'])
+        this.doActionKnowTipoRol()
     }
 
     doInheritHasUserAction() { }
-    doHasUserAction() { }
+    doHasUserAction() {
+    }
+
+    doActionKnowTipoRol() {
+        if (!this.sessionLogin.isLoggedIn()) {
+            this.router.navigate(['/'])
+        }
+    }
 
     getSessionLogin(): SessionLogin {
         return this.sessionLogin
@@ -74,10 +91,15 @@ export class LoggedInController {
         )
     }
 
+    getSessionTipoRoles(): TipoRol[] {
+        return this.sessionTipoRoles
+    }
+
     onDestroy() {
         this.sessionSubscription.unsubscribe()
         this.sessionUserSubscription.unsubscribe()
         this.messageSubscription.unsubscribe();
+        this.sessionTipoRolesSubscription.unsubscribe()
     }
 
     getMensaje(): Mensaje {

@@ -26,6 +26,6 @@ export class NavBarComponent extends LoggedInController implements OnInit {
   }
 
   // Para que no deslogee
-  doActionIsNotLoggedIn(){}
+  doActionKnowTipoRol(){}
 
 }
