@@ -11,6 +11,7 @@ import { QuestionService } from './api/question.service';
 import { TagService } from './api/tag.service';
 import { TeamService } from './api/team.service';
 import { TestService } from './api/test.service';
+import { TiporolService } from './api/tiporol.service';
 import { UserService } from './api/user.service';
 
 @NgModule({
@@ -26,6 +27,7 @@ import { UserService } from './api/user.service';
     TagService,
     TeamService,
     TestService,
+    TiporolService,
     UserService ]
 })
 export class ApiModule {

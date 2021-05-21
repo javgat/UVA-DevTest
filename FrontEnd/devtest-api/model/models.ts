@@ -17,6 +17,7 @@ export * from './signinUser';
 export * from './tag';
 export * from './team';
 export * from './test';
+export * from './tipoRol';
 export * from './user';
 export * from './userUpdate';
 export * from './valorFinal';

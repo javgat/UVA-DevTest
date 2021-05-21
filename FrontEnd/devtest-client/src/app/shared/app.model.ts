@@ -41,6 +41,7 @@ export class SessionUser implements User {
     readonly email: string;
     readonly fullname: string;
     readonly rol: User.RolEnum;
+    readonly tiporol: string;
     /**
      * 
      * @param username If undefined, SessionUser isEmpty
@@ -48,11 +49,12 @@ export class SessionUser implements User {
      * @param fullname 
      * @param type 
      */
-    constructor(username?: string, email?: string, fullname?: string, rol?: User.RolEnum) {
+    constructor(username?: string, email?: string, fullname?: string, rol?: User.RolEnum, tiporol?: string) {
         this.username = username || ""
         this.email = email || ""
         this.fullname = fullname || ""
         this.rol = rol || User.RolEnum.Estudiante
+        this.tiporol = tiporol || ""
         this.empty = (this.username == "" || this.email == "")
     }
 
@@ -74,6 +76,10 @@ export class SessionUser implements User {
 
     getRol(): User.RolEnum {
         return this.rol
+    }
+
+    getTipoRol(): string{
+        return this.tiporol
     }
 
     isStudent(): boolean {
@@ -101,8 +107,8 @@ export class Usuario extends SessionUser {
      * @param fullname 
      * @param type 
      */
-    constructor(username: string, email: string, fullname: string, rol: User.RolEnum) {
-        super(username, email, fullname, rol)
+    constructor(username: string, email: string, fullname: string, rol: User.RolEnum, tiporol: string | undefined) {
+        super(username, email, fullname, rol, tiporol)
     }
 }
 

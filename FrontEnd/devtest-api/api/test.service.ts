@@ -494,6 +494,11 @@ export class TestService {
             headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
         }
 
+        // authentication (NoRegistered) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["NotLoggedIn"]) {
+            headers = headers.set('NotLoggedIn', this.configuration.apiKeys["NotLoggedIn"]);
+        }
+
         // to determine the Accept header
         let httpHeaderAccepts: string[] = [
             'application/json'
@@ -534,6 +539,11 @@ export class TestService {
         // authentication (BearerCookie) required
         if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
             headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // authentication (NoRegistered) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["NotLoggedIn"]) {
+            headers = headers.set('NotLoggedIn', this.configuration.apiKeys["NotLoggedIn"]);
         }
 
         // to determine the Accept header
@@ -580,6 +590,11 @@ export class TestService {
         // authentication (BearerCookie) required
         if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
             headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // authentication (NoRegistered) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["NotLoggedIn"]) {
+            headers = headers.set('NotLoggedIn', this.configuration.apiKeys["NotLoggedIn"]);
         }
 
         // to determine the Accept header
@@ -633,6 +648,11 @@ export class TestService {
             headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
         }
 
+        // authentication (NoRegistered) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["NotLoggedIn"]) {
+            headers = headers.set('NotLoggedIn', this.configuration.apiKeys["NotLoggedIn"]);
+        }
+
         // to determine the Accept header
         let httpHeaderAccepts: string[] = [
             'application/json'
@@ -677,6 +697,11 @@ export class TestService {
         // authentication (BearerCookie) required
         if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
             headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // authentication (NoRegistered) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["NotLoggedIn"]) {
+            headers = headers.set('NotLoggedIn', this.configuration.apiKeys["NotLoggedIn"]);
         }
 
         // to determine the Accept header
@@ -730,6 +755,11 @@ export class TestService {
             headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
         }
 
+        // authentication (NoRegistered) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["NotLoggedIn"]) {
+            headers = headers.set('NotLoggedIn', this.configuration.apiKeys["NotLoggedIn"]);
+        }
+
         // to determine the Accept header
         let httpHeaderAccepts: string[] = [
             'application/json'
@@ -776,6 +806,11 @@ export class TestService {
             headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
         }
 
+        // authentication (NoRegistered) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["NotLoggedIn"]) {
+            headers = headers.set('NotLoggedIn', this.configuration.apiKeys["NotLoggedIn"]);
+        }
+
         // to determine the Accept header
         let httpHeaderAccepts: string[] = [
             'application/json'
@@ -820,6 +855,11 @@ export class TestService {
         // authentication (BearerCookie) required
         if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
             headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // authentication (NoRegistered) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["NotLoggedIn"]) {
+            headers = headers.set('NotLoggedIn', this.configuration.apiKeys["NotLoggedIn"]);
         }
 
         // to determine the Accept header

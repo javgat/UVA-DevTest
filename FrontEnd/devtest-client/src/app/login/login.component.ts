@@ -60,7 +60,7 @@ export class LoginComponent implements OnInit {
     this.userService.getUser(id).subscribe(
       resp =>{
         this.datos.cambiarMensaje(new Mensaje("Inicio de sesión con éxito", Tipo.SUCCESS, true))
-        this.session.cambiarUser(new Usuario(resp.username, resp.email, resp.fullname, resp.rol))
+        this.session.cambiarUser(new Usuario(resp.username, resp.email, resp.fullname, resp.rol, resp.tiporol))
         this.session.cambiarSession(new SessionLogin(true, resp.username))
         console.log("Inicio de sesión con éxito")
       },

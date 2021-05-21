@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService, LoginUser, PasswordUpdate, Role, User, UserService, UserUpdate } from '@javgat/devtest-api';
+import { AuthService, LoginUser, PasswordUpdate, Role, TipoRol, TiporolService, User, UserService, UserUpdate } from '@javgat/devtest-api';
 import { Subscription } from 'rxjs';
 import { LoggedInController } from '../shared/app.controller';
 import { Mensaje, SessionUser, Tipo, Usuario } from '../shared/app.model';
@@ -29,13 +29,16 @@ export class ProfileComponent extends LoggedInController implements OnInit {
     password: ""
   }
   editRol: Role = {
-    rol: User.RolEnum.Estudiante
+    rolId: 0,
   }
+  tiporoles: TipoRol[]
   constructor(session: SessionService, router: Router, private route: ActivatedRoute,
-    userS: UserService, data: DataService, private authService: AuthService) {
+    userS: UserService, data: DataService, private authService: AuthService, private trS?: TiporolService) {
     super(session, router, data, userS)
     this.profileUser = new SessionUser()
     this.id=""
+    this.tiporoles = []
+    this.getTipoRoles(true)
     this.routeSub = this.route.params.subscribe(params => {
       this.id = params['id']
       this.borrarMensaje()
@@ -69,7 +72,7 @@ export class ProfileComponent extends LoggedInController implements OnInit {
   getProfileUser(id: string, primera: boolean): void {
     this.userS.getUser(id).subscribe(
       resp => {
-        this.profileUser = new Usuario(resp.username, resp.email, resp.fullname, resp.rol)
+        this.profileUser = new Usuario(resp.username, resp.email, resp.fullname, resp.rol, resp.tiporol)
         this.editUser.username = resp.username
         this.editUser.email = resp.email
         this.editUser.fullname = resp.fullname
@@ -77,6 +80,13 @@ export class ProfileComponent extends LoggedInController implements OnInit {
       err => {
         this.handleErrRelog(err, "obtener datos de perfil de usuario", primera, this.getProfile, this)
       }
+    )
+  }
+
+  getTipoRoles(primera: boolean): void{
+    this.trS?.getTipoRoles().subscribe(
+      resp => this.tiporoles = resp,
+      err => this.handleErrRelog(err, "obtener tipos de roles", primera, this.getTipoRoles, this)
     )
   }
 
@@ -143,20 +153,8 @@ export class ProfileComponent extends LoggedInController implements OnInit {
     return this.getSessionUser().isAdmin()
   }
 
-  onSelectRol(rol: string){
-    switch(rol){
-      case User.RolEnum.Administrador:
-        this.editRol.rol = User.RolEnum.Administrador
-        break
-      case User.RolEnum.Profesor:
-        this.editRol.rol = User.RolEnum.Profesor
-        break
-      case User.RolEnum.Estudiante:
-        this.editRol.rol = User.RolEnum.Estudiante
-        break
-      default:
-        console.log("Error al detectar el nuevo rol")
-    }
+  onSelectRol(rolid: number){
+    this.editRol.rolId = rolid
   }
 
   changeRolSubmit(){

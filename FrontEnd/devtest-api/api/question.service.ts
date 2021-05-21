@@ -380,8 +380,8 @@ export class QuestionService {
     }
 
     /**
-     * Returns all questions
-     * Returns all questions
+     * Returns all questions. Admin operation.
+     * Returns all questions. Admin operation.
      * @param tags 
      * @param likeTitle 
      * @param orderby Indicates which element is first returned. In case of tie it unties with newdate first
@@ -493,6 +493,11 @@ export class QuestionService {
             headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
         }
 
+        // authentication (NoRegistered) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["NotLoggedIn"]) {
+            headers = headers.set('NotLoggedIn', this.configuration.apiKeys["NotLoggedIn"]);
+        }
+
         // to determine the Accept header
         let httpHeaderAccepts: string[] = [
             'application/json'
@@ -545,6 +550,11 @@ export class QuestionService {
             headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
         }
 
+        // authentication (NoRegistered) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["NotLoggedIn"]) {
+            headers = headers.set('NotLoggedIn', this.configuration.apiKeys["NotLoggedIn"]);
+        }
+
         // to determine the Accept header
         let httpHeaderAccepts: string[] = [
             'application/json'
@@ -591,6 +601,11 @@ export class QuestionService {
             headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
         }
 
+        // authentication (NoRegistered) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["NotLoggedIn"]) {
+            headers = headers.set('NotLoggedIn', this.configuration.apiKeys["NotLoggedIn"]);
+        }
+
         // to determine the Accept header
         let httpHeaderAccepts: string[] = [
             'application/json'
@@ -635,6 +650,11 @@ export class QuestionService {
         // authentication (BearerCookie) required
         if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
             headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // authentication (NoRegistered) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["NotLoggedIn"]) {
+            headers = headers.set('NotLoggedIn', this.configuration.apiKeys["NotLoggedIn"]);
         }
 
         // to determine the Accept header
@@ -705,6 +725,11 @@ export class QuestionService {
             headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
         }
 
+        // authentication (NoRegistered) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["NotLoggedIn"]) {
+            headers = headers.set('NotLoggedIn', this.configuration.apiKeys["NotLoggedIn"]);
+        }
+
         // to determine the Accept header
         let httpHeaderAccepts: string[] = [
             'application/json'
@@ -757,6 +782,11 @@ export class QuestionService {
             headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
         }
 
+        // authentication (NoRegistered) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["NotLoggedIn"]) {
+            headers = headers.set('NotLoggedIn', this.configuration.apiKeys["NotLoggedIn"]);
+        }
+
         // to determine the Accept header
         let httpHeaderAccepts: string[] = [
             'application/json'
@@ -801,6 +831,11 @@ export class QuestionService {
         // authentication (BearerCookie) required
         if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
             headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // authentication (NoRegistered) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["NotLoggedIn"]) {
+            headers = headers.set('NotLoggedIn', this.configuration.apiKeys["NotLoggedIn"]);
         }
 
         // to determine the Accept header

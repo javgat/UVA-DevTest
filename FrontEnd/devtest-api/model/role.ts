@@ -12,13 +12,5 @@
 
 
 export interface Role { 
-    rol: Role.RolEnum;
-}
-export namespace Role {
-    export type RolEnum = 'estudiante' | 'profesor' | 'administrador';
-    export const RolEnum = {
-        Estudiante: 'estudiante' as RolEnum,
-        Profesor: 'profesor' as RolEnum,
-        Administrador: 'administrador' as RolEnum
-    };
+    rolId: number;
 }

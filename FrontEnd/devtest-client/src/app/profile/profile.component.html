@@ -9,7 +9,8 @@
                 <li>Nombre de usuario: {{profileUser.getUsername()}}</li>
                 <li>Correo electrónico: {{profileUser.getEmail()}}</li>
                 <li>Nombre completo: {{profileUser.getFullname()}}</li>
-                <li>Rol: {{profileUser.getRol()}}</li>
+                <li>Rol: {{profileUser.getTipoRol()}}</li>
+                <li>Rol Base: {{profileUser.getRol()}}</li>
             </ul>
             <div class="d-grid gap-2">
                 <div *ngIf="checkPermisosEditarUser()" class="d-grid gap-2">
@@ -99,28 +100,17 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="inputRol" id="inputRolAdmin" required
-                                    (change)="onSelectRol('administrador')" />
-                                <label class="form-check-label" for="inputRolAdmin">
-                                    Administrador
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="inputRol" id="inputRolProfesor"
-                                    required (change)="onSelectRol('profesor')" />
-                                <label class="form-check-label" for="inputRolProfesor">
-                                    Profesor
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="inputRol" id="inputRolEstudiante"
-                                    required (change)="onSelectRol('estudiante')" />
-                                <label class="form-check-label" for="inputRolEstudiante">
-                                    Estudiante
-                                </label>
+                            <div *ngFor="let tiporol of tiporoles">
+                                <div *ngIf="tiporol.rolBase!='noRegistrado'" class="form-check">
+                                    <input class="form-check-input" type="radio" name="inputRol"
+                                        id="inputRol{{tiporol.id}}" required (change)="onSelectRol(tiporol.id)" />
+                                    <label class="form-check-label" for="inputRol{{tiporol.id}}">
+                                        {{tiporol.nombre}}
+                                    </label>
+                                </div>
                             </div>
                         </div>
+                        <!--Queda hacer que compruebe si puede darle ese nuevo rol al user, no mandarlo a saco. Comprobar prioridades-->
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                             <input type="submit" value="Guardar" (click)='changeRolSubmit()' data-bs-dismiss="modal"

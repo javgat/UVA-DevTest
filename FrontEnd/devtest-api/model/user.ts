@@ -16,6 +16,7 @@ export interface User {
     email: string;
     fullname: string;
     rol: User.RolEnum;
+    tiporol?: string;
 }
 export namespace User {
     export type RolEnum = 'estudiante' | 'profesor' | 'administrador';
