@@ -108,6 +108,16 @@ func ToModelTipoRol(t *TipoRol) *models.TipoRol {
 	return mt
 }
 
+// ToModelTipoRoles converts a splice of dao.TipoRol into models.TipoRol
+// Param us: slice of dao.TipoRol to convert
+func ToModelTipoRoles(trs []*TipoRol) []*models.TipoRol {
+	var mtrs = []*models.TipoRol{}
+	for _, itemCopy := range trs {
+		mtrs = append(mtrs, ToModelTipoRol(itemCopy))
+	}
+	return mtrs
+}
+
 func GetDefaultTipoRolStudent() *TipoRol {
 	var uno int64 = 1
 	var tipoEst string = models.TipoRolRolBaseEstudiante
@@ -288,19 +298,19 @@ func PostTipoRol(db *sql.DB, t *models.TipoRol) (*models.TipoRol, error) {
 	return nil, err
 }
 
-func PutTipoRol(db *sql.DB, id *int64, t *TipoRol) error {
-	if db == nil || t == nil || id == nil {
+func PutTipoRol(db *sql.DB, nombre *string, t *models.TipoRol) error {
+	if db == nil || t == nil || nombre == nil {
 		return errors.New(errorDBNil)
 	}
 	query, err := db.Prepare("UPDATE TipoRol SET rolBase=?, nombre=?, prioridad=?, verPTests=?, verETests=?, verEQuestions=?, verPQuestions=?, " +
 		" verAnswers=?, changeRoles=?, tenerTeams=?, tenerEQuestions=?, tenerETests=?, tenerPTests=?, adminPTests=?, adminETests=?, adminEQuestions=?, " +
-		" adminAnswers=?, adminUsers=?, adminTeams=?, adminConfiguration=?, adminPermissions=?, tipoInicial=? WHERE id=?")
+		" adminAnswers=?, adminUsers=?, adminTeams=?, adminConfiguration=?, adminPermissions=?, tipoInicial=? WHERE nombre=?")
 
 	if err == nil {
 		defer query.Close()
 		_, err = query.Exec(t.RolBase, t.Nombre, t.Prioridad, t.VerPTests, t.VerETests, t.VerEQuestions, t.VerPQuestions,
 			t.VerAnswers, t.ChangeRoles, t.TenerTeams, t.TenerEQuestions, t.TenerETests, t.TenerPTests, t.AdminPTests, t.AdminETests, t.AdminEQuestions,
-			t.AdminAnswers, t.AdminUsers, t.AdminTeams, t.AdminConfiguration, t.AdminPermissions, t.TipoInicial, id)
+			t.AdminAnswers, t.AdminUsers, t.AdminTeams, t.AdminConfiguration, t.AdminPermissions, t.TipoInicial, nombre)
 		if err == nil {
 			markAsInvalidTipoRolesSingleton()
 		}
@@ -308,14 +318,26 @@ func PutTipoRol(db *sql.DB, id *int64, t *TipoRol) error {
 	return err
 }
 
-func DeleteTipoRol(db *sql.DB, id *int64) error {
-	if db == nil || id == nil {
+func DeleteTipoRol(db *sql.DB, nombre *string) error {
+	if db == nil || nombre == nil {
 		return errors.New(errorDBNil)
 	}
-	query, err := db.Prepare("DELETE FROM TipoRol WHERE id=?")
+	query, err := db.Prepare("DELETE FROM TipoRol WHERE nombre=?")
 	if err == nil {
 		defer query.Close()
-		_, err = query.Exec(id)
+		_, err = query.Exec(nombre)
+	}
+	return err
+}
+
+func ChangeTipoRolUsers(db *sql.DB, oldId *int64, newId *int64) error {
+	if db == nil || oldId == nil || newId == nil {
+		return errors.New(errorDBNil)
+	}
+	query, err := db.Prepare("UPDATE Usuario SET tipoRolId=? WHERE tipoRolId=?")
+	if err == nil {
+		defer query.Close()
+		_, err = query.Exec(oldId)
 	}
 	return err
 }

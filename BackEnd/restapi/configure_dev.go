@@ -20,6 +20,7 @@ import (
 	"uva-devtest/restapi/operations/tag"
 	"uva-devtest/restapi/operations/team"
 	"uva-devtest/restapi/operations/test"
+	"uva-devtest/restapi/operations/tiporol"
 	"uva-devtest/restapi/operations/user"
 )
 
@@ -76,6 +77,15 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 
 	api.ConfigurationGetEmailConfigurationHandler = configuration.GetEmailConfigurationHandlerFunc(handlers.GetEmailConfiguration) // GET /emailConfiguration
 	api.ConfigurationPutEmailConfigurationHandler = configuration.PutEmailConfigurationHandlerFunc(handlers.PutEmailConfiguration) // PUT /emailConfiguration
+
+	// TipoRoles
+
+	api.TiporolGetTipoRolesHandler = tiporol.GetTipoRolesHandlerFunc(handlers.GetTipoRoles) // GET /tiporoles
+	api.TiporolPostTipoRolHandler = tiporol.PostTipoRolHandlerFunc(handlers.PostTipoRol)    // POST /tiporoles
+
+	api.TiporolGetTipoRolHandler = tiporol.GetTipoRolHandlerFunc(handlers.GetTipoRol)          // GET /tiporoles/{rolNombre}
+	api.TiporolPutTipoRolHandler = tiporol.PutTipoRolHandlerFunc(handlers.PutTipoRol)          // PUT /tiporoles/{rolNombre}
+	api.TiporolDeleteTipoRolHandler = tiporol.DeleteTipoRolHandlerFunc(handlers.DeleteTipoRol) // DELETE /tiporoles/{rolNombre}
 
 	// /users
 

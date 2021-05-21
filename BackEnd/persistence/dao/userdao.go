@@ -208,13 +208,13 @@ func GetAdmins(db *sql.DB) ([]*User, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
-	query, err := db.Prepare("SELECT * FROM Usuario WHERE rol=?")
+	query, err := db.Prepare("SELECT U.* FROM Usuario U JOIN TipoRol T ON T.id=U.tipoRolId WHERE T.rolBase=?")
 	var us []*User
 	if err != nil {
 		return us, err
 	}
 	defer query.Close()
-	rows, err := query.Query(models.UserRolAdministrador)
+	rows, err := query.Query(models.TipoRolRolBaseAdministrador)
 	if err == nil {
 		us, err = rowsToUsers(rows)
 	}

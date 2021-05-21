@@ -231,26 +231,40 @@ func PutRole(params user.PutRoleParams, u *models.User) middleware.Responder {
 
 	db, err := dbconnection.ConnectDb()
 	if err == nil {
-		if permissions.CanChangeRoles(u, 0, 0) {
-			r := params.Role
-			var admins []*dao.User
-			admins, err = dao.GetAdmins(db)
-			if err == nil {
-				if len(admins) == 1 && *admins[0].Username == params.Username {
-					log.Println("Error en users_handler PutRole(), intento de quitar admin de ultimo admin")
-					s := "Es el unico administrador existente"
-					return user.NewPutRoleBadRequest().WithPayload(&models.Error{Message: &s})
-				}
-				err = dao.PutRole(db, params.Username, r)
-				if err == nil {
-					return user.NewPutRoleOK()
+		var userC *dao.User
+		userC, err = dao.GetUserUsername(db, params.Username)
+		if err == nil && userC != nil {
+			var trold *dao.TipoRol
+			trold, err = dao.GetTipoRolByID(db, userC.TipoRolId)
+			if err == nil && trold != nil {
+				var trnew *dao.TipoRol
+				trnew, err = dao.GetTipoRolByID(db, params.Role.RolID)
+				if err == nil && trnew != nil {
+					if permissions.CanChangeRoles(u, *trold.Prioridad, *trnew.Prioridad) {
+						r := params.Role
+						var admins []*dao.User
+						admins, err = dao.GetAdmins(db)
+						if err == nil {
+							if len(admins) == 1 && *admins[0].Username == params.Username {
+								log.Println("Error en users_handler PutRole(), intento de quitar admin de ultimo admin")
+								s := "Es el unico administrador existente"
+								return user.NewPutRoleBadRequest().WithPayload(&models.Error{Message: &s})
+							}
+							err = dao.PutRole(db, params.Username, r)
+							if err == nil {
+								return user.NewPutRoleOK()
+							}
+						}
+						log.Println("Error en users_handler PutRole(): ", err)
+						return user.NewPutRoleInternalServerError()
+					}
+					return user.NewPutRoleForbidden()
 				}
 			}
 		}
-		log.Println("Error en users_handler PutRole(): ", err)
-		return user.NewPutRoleInternalServerError()
 	}
-	return user.NewPutRoleForbidden()
+	log.Println("Error en users_handler PutRole(): ", err)
+	return user.NewPutRoleInternalServerError()
 }
 
 // GetTeamsOfUser GET /users/{username}/teams

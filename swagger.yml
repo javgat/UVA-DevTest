@@ -189,6 +189,144 @@ paths:
           $ref: '#/responses/GoneError'
         500:
           $ref: '#/responses/InternalServerError'
+  /tipoRoles:
+    get:
+      tags:
+      - tiporol
+      summary: Returns all tipoRoles
+      operationId: GetTipoRoles
+      description: Returns all tipoRoles
+      produces:
+      - application/json
+      responses:
+        200:
+          description: TipoRoles Found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/TipoRol'
+        500:
+          $ref: '#/responses/InternalServerError'
+    post:
+      tags:
+      - tiporol
+      security:
+        - BearerCookie: []
+      summary: Creates a TipoRol
+      operationId: PostTipoRol
+      description: Creates a TipoRol
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: newTipoRol
+        description: New data for the TipoRol
+        required: true
+        schema:
+          $ref: '#/definitions/TipoRol'
+      responses:
+        201:
+          description: TipoRol Created
+          schema:
+            $ref: '#/definitions/TipoRol'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        409:
+          $ref: '#/responses/ConflictError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  /tipoRoles/{rolNombre}:
+    get:
+      tags:
+      - tiporol
+      summary: Returns a TipoRol
+      operationId: GetTipoRol
+      description: Returns a TipoRol
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: rolNombre
+        description: Nombre of the TipoRol to find
+        required: true
+        type: string
+      responses:
+        200:
+          description: TipoRol Found
+          schema:
+            $ref: '#/definitions/TipoRol'
+        400:
+          $ref: '#/responses/BadRequestError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+    put:
+      tags:
+      - tiporol
+      security:
+        - BearerCookie: []
+      summary: Modifies a TipoRol
+      operationId: PutTipoRol
+      description: Modifies a TipoRol
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: rolNombre
+        description: Nombre of the TipoRol to modify
+        required: true
+        type: string
+      - in: body
+        name: newTipoRol
+        description: New data for the TipoRol
+        required: true
+        schema:
+          $ref: '#/definitions/TipoRol'
+      responses:
+        200:
+          description: TipoRol modified
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        409:
+          $ref: '#/responses/ConflictError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+    delete:
+      tags:
+      - tiporol
+      security:
+        - BearerCookie: []
+      summary: Deletes a TipoRol.
+      operationId: DeleteTipoRol
+      description: Deletes a TipoRol. Every user with that TipoRol will now have the next less important TipoRol, or the next more important if there is none with less
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: rolNombre
+        description: Nombre of the TipoRol to delete
+        required: true
+        type: string
+      responses:
+        200:
+          description: TipoRol deleted
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
   /users:
     post:
       tags:

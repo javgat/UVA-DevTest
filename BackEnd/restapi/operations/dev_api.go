@@ -28,6 +28,7 @@ import (
 	"uva-devtest/restapi/operations/tag"
 	"uva-devtest/restapi/operations/team"
 	"uva-devtest/restapi/operations/test"
+	"uva-devtest/restapi/operations/tiporol"
 	"uva-devtest/restapi/operations/user"
 )
 
@@ -100,6 +101,9 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		}),
 		TestDeleteTestHandler: test.DeleteTestHandlerFunc(func(params test.DeleteTestParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation test.DeleteTest has not yet been implemented")
+		}),
+		TiporolDeleteTipoRolHandler: tiporol.DeleteTipoRolHandlerFunc(func(params tiporol.DeleteTipoRolParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation tiporol.DeleteTipoRol has not yet been implemented")
 		}),
 		TeamDeleteUserFromTeamHandler: team.DeleteUserFromTeamHandlerFunc(func(params team.DeleteUserFromTeamParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation team.DeleteUserFromTeam has not yet been implemented")
@@ -407,6 +411,12 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		UserGetTestsFromUserHandler: user.GetTestsFromUserHandlerFunc(func(params user.GetTestsFromUserParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation user.GetTestsFromUser has not yet been implemented")
 		}),
+		TiporolGetTipoRolHandler: tiporol.GetTipoRolHandlerFunc(func(params tiporol.GetTipoRolParams) middleware.Responder {
+			return middleware.NotImplemented("operation tiporol.GetTipoRol has not yet been implemented")
+		}),
+		TiporolGetTipoRolesHandler: tiporol.GetTipoRolesHandlerFunc(func(params tiporol.GetTipoRolesParams) middleware.Responder {
+			return middleware.NotImplemented("operation tiporol.GetTipoRoles has not yet been implemented")
+		}),
 		PublishedTestGetUncorrectedAnswersFromPublishedTestsHandler: published_test.GetUncorrectedAnswersFromPublishedTestsHandlerFunc(func(params published_test.GetUncorrectedAnswersFromPublishedTestsParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation published_test.GetUncorrectedAnswersFromPublishedTests has not yet been implemented")
 		}),
@@ -461,6 +471,9 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		UserPostTestHandler: user.PostTestHandlerFunc(func(params user.PostTestParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation user.PostTest has not yet been implemented")
 		}),
+		TiporolPostTipoRolHandler: tiporol.PostTipoRolHandlerFunc(func(params tiporol.PostTipoRolParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation tiporol.PostTipoRol has not yet been implemented")
+		}),
 		ConfigurationPutEmailConfigurationHandler: configuration.PutEmailConfigurationHandlerFunc(func(params configuration.PutEmailConfigurationParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation configuration.PutEmailConfiguration has not yet been implemented")
 		}),
@@ -478,6 +491,9 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		}),
 		TestPutTestHandler: test.PutTestHandlerFunc(func(params test.PutTestParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation test.PutTest has not yet been implemented")
+		}),
+		TiporolPutTipoRolHandler: tiporol.PutTipoRolHandlerFunc(func(params tiporol.PutTipoRolParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation tiporol.PutTipoRol has not yet been implemented")
 		}),
 		UserRegisterUserHandler: user.RegisterUserHandlerFunc(func(params user.RegisterUserParams) middleware.Responder {
 			return middleware.NotImplemented("operation user.RegisterUser has not yet been implemented")
@@ -661,6 +677,8 @@ type DevAPI struct {
 	AnswerDeleteReviewHandler answer.DeleteReviewHandler
 	// TestDeleteTestHandler sets the operation handler for the delete test operation
 	TestDeleteTestHandler test.DeleteTestHandler
+	// TiporolDeleteTipoRolHandler sets the operation handler for the delete tipo rol operation
+	TiporolDeleteTipoRolHandler tiporol.DeleteTipoRolHandler
 	// TeamDeleteUserFromTeamHandler sets the operation handler for the delete user from team operation
 	TeamDeleteUserFromTeamHandler team.DeleteUserFromTeamHandler
 	// AnswerFinishAnswerHandler sets the operation handler for the finish answer operation
@@ -865,6 +883,10 @@ type DevAPI struct {
 	TeamGetTestsFromTeamHandler team.GetTestsFromTeamHandler
 	// UserGetTestsFromUserHandler sets the operation handler for the get tests from user operation
 	UserGetTestsFromUserHandler user.GetTestsFromUserHandler
+	// TiporolGetTipoRolHandler sets the operation handler for the get tipo rol operation
+	TiporolGetTipoRolHandler tiporol.GetTipoRolHandler
+	// TiporolGetTipoRolesHandler sets the operation handler for the get tipo roles operation
+	TiporolGetTipoRolesHandler tiporol.GetTipoRolesHandler
 	// PublishedTestGetUncorrectedAnswersFromPublishedTestsHandler sets the operation handler for the get uncorrected answers from published tests operation
 	PublishedTestGetUncorrectedAnswersFromPublishedTestsHandler published_test.GetUncorrectedAnswersFromPublishedTestsHandler
 	// UserGetUncorrectedAnswersFromUserHandler sets the operation handler for the get uncorrected answers from user operation
@@ -901,6 +923,8 @@ type DevAPI struct {
 	TeamPostTeamHandler team.PostTeamHandler
 	// UserPostTestHandler sets the operation handler for the post test operation
 	UserPostTestHandler user.PostTestHandler
+	// TiporolPostTipoRolHandler sets the operation handler for the post tipo rol operation
+	TiporolPostTipoRolHandler tiporol.PostTipoRolHandler
 	// ConfigurationPutEmailConfigurationHandler sets the operation handler for the put email configuration operation
 	ConfigurationPutEmailConfigurationHandler configuration.PutEmailConfigurationHandler
 	// QuestionPutOptionHandler sets the operation handler for the put option operation
@@ -913,6 +937,8 @@ type DevAPI struct {
 	AnswerPutReviewHandler answer.PutReviewHandler
 	// TestPutTestHandler sets the operation handler for the put test operation
 	TestPutTestHandler test.PutTestHandler
+	// TiporolPutTipoRolHandler sets the operation handler for the put tipo rol operation
+	TiporolPutTipoRolHandler tiporol.PutTipoRolHandler
 	// UserRegisterUserHandler sets the operation handler for the register user operation
 	UserRegisterUserHandler user.RegisterUserHandler
 	// TestRemoveAdminTeamToTestHandler sets the operation handler for the remove admin team to test operation
@@ -1103,6 +1129,9 @@ func (o *DevAPI) Validate() error {
 	}
 	if o.TestDeleteTestHandler == nil {
 		unregistered = append(unregistered, "test.DeleteTestHandler")
+	}
+	if o.TiporolDeleteTipoRolHandler == nil {
+		unregistered = append(unregistered, "tiporol.DeleteTipoRolHandler")
 	}
 	if o.TeamDeleteUserFromTeamHandler == nil {
 		unregistered = append(unregistered, "team.DeleteUserFromTeamHandler")
@@ -1410,6 +1439,12 @@ func (o *DevAPI) Validate() error {
 	if o.UserGetTestsFromUserHandler == nil {
 		unregistered = append(unregistered, "user.GetTestsFromUserHandler")
 	}
+	if o.TiporolGetTipoRolHandler == nil {
+		unregistered = append(unregistered, "tiporol.GetTipoRolHandler")
+	}
+	if o.TiporolGetTipoRolesHandler == nil {
+		unregistered = append(unregistered, "tiporol.GetTipoRolesHandler")
+	}
 	if o.PublishedTestGetUncorrectedAnswersFromPublishedTestsHandler == nil {
 		unregistered = append(unregistered, "published_test.GetUncorrectedAnswersFromPublishedTestsHandler")
 	}
@@ -1464,6 +1499,9 @@ func (o *DevAPI) Validate() error {
 	if o.UserPostTestHandler == nil {
 		unregistered = append(unregistered, "user.PostTestHandler")
 	}
+	if o.TiporolPostTipoRolHandler == nil {
+		unregistered = append(unregistered, "tiporol.PostTipoRolHandler")
+	}
 	if o.ConfigurationPutEmailConfigurationHandler == nil {
 		unregistered = append(unregistered, "configuration.PutEmailConfigurationHandler")
 	}
@@ -1481,6 +1519,9 @@ func (o *DevAPI) Validate() error {
 	}
 	if o.TestPutTestHandler == nil {
 		unregistered = append(unregistered, "test.PutTestHandler")
+	}
+	if o.TiporolPutTipoRolHandler == nil {
+		unregistered = append(unregistered, "tiporol.PutTipoRolHandler")
 	}
 	if o.UserRegisterUserHandler == nil {
 		unregistered = append(unregistered, "user.RegisterUserHandler")
@@ -1741,6 +1782,10 @@ func (o *DevAPI) initHandlerCache() {
 		o.handlers["DELETE"] = make(map[string]http.Handler)
 	}
 	o.handlers["DELETE"]["/tests/{testid}"] = test.NewDeleteTest(o.context, o.TestDeleteTestHandler)
+	if o.handlers["DELETE"] == nil {
+		o.handlers["DELETE"] = make(map[string]http.Handler)
+	}
+	o.handlers["DELETE"]["/tipoRoles/{rolNombre}"] = tiporol.NewDeleteTipoRol(o.context, o.TiporolDeleteTipoRolHandler)
 	if o.handlers["DELETE"] == nil {
 		o.handlers["DELETE"] = make(map[string]http.Handler)
 	}
@@ -2152,6 +2197,14 @@ func (o *DevAPI) initHandlerCache() {
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
+	o.handlers["GET"]["/tipoRoles/{rolNombre}"] = tiporol.NewGetTipoRol(o.context, o.TiporolGetTipoRolHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/tipoRoles"] = tiporol.NewGetTipoRoles(o.context, o.TiporolGetTipoRolesHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
 	o.handlers["GET"]["/publishedTests/{testid}/uncorrectedAnswers"] = published_test.NewGetUncorrectedAnswersFromPublishedTests(o.context, o.PublishedTestGetUncorrectedAnswersFromPublishedTestsHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
@@ -2221,6 +2274,10 @@ func (o *DevAPI) initHandlerCache() {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
 	o.handlers["POST"]["/users/{username}/tests"] = user.NewPostTest(o.context, o.UserPostTestHandler)
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
+	}
+	o.handlers["POST"]["/tipoRoles"] = tiporol.NewPostTipoRol(o.context, o.TiporolPostTipoRolHandler)
 	if o.handlers["PUT"] == nil {
 		o.handlers["PUT"] = make(map[string]http.Handler)
 	}
@@ -2245,6 +2302,10 @@ func (o *DevAPI) initHandlerCache() {
 		o.handlers["PUT"] = make(map[string]http.Handler)
 	}
 	o.handlers["PUT"]["/tests/{testid}"] = test.NewPutTest(o.context, o.TestPutTestHandler)
+	if o.handlers["PUT"] == nil {
+		o.handlers["PUT"] = make(map[string]http.Handler)
+	}
+	o.handlers["PUT"]["/tipoRoles/{rolNombre}"] = tiporol.NewPutTipoRol(o.context, o.TiporolPutTipoRolHandler)
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}

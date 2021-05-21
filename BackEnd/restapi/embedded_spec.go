@@ -5824,6 +5824,218 @@ func init() {
         }
       }
     },
+    "/tipoRoles": {
+      "get": {
+        "description": "Returns all tipoRoles",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "tiporol"
+        ],
+        "summary": "Returns all tipoRoles",
+        "operationId": "GetTipoRoles",
+        "responses": {
+          "200": {
+            "description": "TipoRoles Found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/TipoRol"
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      },
+      "post": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Creates a TipoRol",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "tiporol"
+        ],
+        "summary": "Creates a TipoRol",
+        "operationId": "PostTipoRol",
+        "parameters": [
+          {
+            "description": "New data for the TipoRol",
+            "name": "newTipoRol",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/TipoRol"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "TipoRol Created",
+            "schema": {
+              "$ref": "#/definitions/TipoRol"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "409": {
+            "$ref": "#/responses/ConflictError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/tipoRoles/{rolNombre}": {
+      "get": {
+        "description": "Returns a TipoRol",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "tiporol"
+        ],
+        "summary": "Returns a TipoRol",
+        "operationId": "GetTipoRol",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Nombre of the TipoRol to find",
+            "name": "rolNombre",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "TipoRol Found",
+            "schema": {
+              "$ref": "#/definitions/TipoRol"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Modifies a TipoRol",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "tiporol"
+        ],
+        "summary": "Modifies a TipoRol",
+        "operationId": "PutTipoRol",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Nombre of the TipoRol to modify",
+            "name": "rolNombre",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "New data for the TipoRol",
+            "name": "newTipoRol",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/TipoRol"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "TipoRol modified"
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "409": {
+            "$ref": "#/responses/ConflictError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Deletes a TipoRol. Every user with that TipoRol will now have the next less important TipoRol, or the next more important if there is none with less",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "tiporol"
+        ],
+        "summary": "Deletes a TipoRol.",
+        "operationId": "DeleteTipoRol",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Nombre of the TipoRol to delete",
+            "name": "rolNombre",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "TipoRol deleted"
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
     "/users": {
       "get": {
         "security": [
@@ -17412,6 +17624,254 @@ func init() {
         "responses": {
           "200": {
             "description": "tag removed"
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/tipoRoles": {
+      "get": {
+        "description": "Returns all tipoRoles",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "tiporol"
+        ],
+        "summary": "Returns all tipoRoles",
+        "operationId": "GetTipoRoles",
+        "responses": {
+          "200": {
+            "description": "TipoRoles Found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/TipoRol"
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      },
+      "post": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Creates a TipoRol",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "tiporol"
+        ],
+        "summary": "Creates a TipoRol",
+        "operationId": "PostTipoRol",
+        "parameters": [
+          {
+            "description": "New data for the TipoRol",
+            "name": "newTipoRol",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/TipoRol"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "TipoRol Created",
+            "schema": {
+              "$ref": "#/definitions/TipoRol"
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "409": {
+            "description": "A user with same username/email already exists",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/tipoRoles/{rolNombre}": {
+      "get": {
+        "description": "Returns a TipoRol",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "tiporol"
+        ],
+        "summary": "Returns a TipoRol",
+        "operationId": "GetTipoRol",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Nombre of the TipoRol to find",
+            "name": "rolNombre",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "TipoRol Found",
+            "schema": {
+              "$ref": "#/definitions/TipoRol"
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Modifies a TipoRol",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "tiporol"
+        ],
+        "summary": "Modifies a TipoRol",
+        "operationId": "PutTipoRol",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Nombre of the TipoRol to modify",
+            "name": "rolNombre",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "New data for the TipoRol",
+            "name": "newTipoRol",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/TipoRol"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "TipoRol modified"
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "409": {
+            "description": "A user with same username/email already exists",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Deletes a TipoRol. Every user with that TipoRol will now have the next less important TipoRol, or the next more important if there is none with less",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "tiporol"
+        ],
+        "summary": "Deletes a TipoRol.",
+        "operationId": "DeleteTipoRol",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Nombre of the TipoRol to delete",
+            "name": "rolNombre",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "TipoRol deleted"
           },
           "400": {
             "description": "Incorrect Request, or invalida data",
