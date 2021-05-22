@@ -22,4 +22,8 @@ export class PtestsComponent extends LoggedInController implements OnInit {
   ngOnDestroy(): void {
     super.onDestroy()
   }
+
+  hasPermissions(): boolean{
+    return this.canVerPTests()
+  }
 }

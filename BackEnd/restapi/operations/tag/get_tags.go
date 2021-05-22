@@ -9,21 +9,19 @@ import (
 	"net/http"
 
 	"github.com/go-openapi/runtime/middleware"
-
-	"uva-devtest/models"
 )
 
 // GetTagsHandlerFunc turns a function with the right signature into a get tags handler
-type GetTagsHandlerFunc func(GetTagsParams, *models.User) middleware.Responder
+type GetTagsHandlerFunc func(GetTagsParams) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn GetTagsHandlerFunc) Handle(params GetTagsParams, principal *models.User) middleware.Responder {
-	return fn(params, principal)
+func (fn GetTagsHandlerFunc) Handle(params GetTagsParams) middleware.Responder {
+	return fn(params)
 }
 
 // GetTagsHandler interface for that can handle valid get tags params
 type GetTagsHandler interface {
-	Handle(GetTagsParams, *models.User) middleware.Responder
+	Handle(GetTagsParams) middleware.Responder
 }
 
 // NewGetTags creates a new http.Handler for the get tags operation
@@ -49,25 +47,12 @@ func (o *GetTags) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 		*r = *rCtx
 	}
 	var Params = NewGetTagsParams()
-	uprinc, aCtx, err := o.Context.Authorize(r, route)
-	if err != nil {
-		o.Context.Respond(rw, r, route.Produces, route, err)
-		return
-	}
-	if aCtx != nil {
-		*r = *aCtx
-	}
-	var principal *models.User
-	if uprinc != nil {
-		principal = uprinc.(*models.User) // this is really a models.User, I promise
-	}
-
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params
 		o.Context.Respond(rw, r, route.Produces, route, err)
 		return
 	}
 
-	res := o.Handler.Handle(Params, principal) // actually handle the request
+	res := o.Handler.Handle(Params) // actually handle the request
 	o.Context.Respond(rw, r, route.Produces, route, res)
 
 }

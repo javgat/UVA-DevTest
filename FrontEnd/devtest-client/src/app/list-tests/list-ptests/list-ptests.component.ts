@@ -26,6 +26,10 @@ export class ListPtestsComponent extends ListTestsComponent implements OnInit {
     super.ngOnDestroy()
   }
 
+  hasPermissions(): boolean{
+    return this.canVerPTests()
+  }
+
   getTestsInclude(primera: boolean) {
     //No hay getTestsFromUser en la API que tenga filtros
     this.getTestsEdit(true)

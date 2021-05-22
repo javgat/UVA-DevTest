@@ -3450,11 +3450,6 @@ func init() {
     },
     "/tags": {
       "get": {
-        "security": [
-          {
-            "BearerCookie": []
-          }
-        ],
         "description": "Returns all tags.",
         "produces": [
           "application/json"
@@ -3522,19 +3517,14 @@ func init() {
     },
     "/tags/{tag}": {
       "get": {
-        "security": [
-          {
-            "BearerCookie": []
-          }
-        ],
-        "description": "Returns a tags.",
+        "description": "Returns a tag.",
         "produces": [
           "application/json"
         ],
         "tags": [
           "tag"
         ],
-        "summary": "Returns a tags.",
+        "summary": "Returns a tag.",
         "operationId": "GetTag",
         "parameters": [
           {
@@ -3572,6 +3562,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns all non-published questions from a tag.",
@@ -3622,6 +3615,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns all non published tests from a tag.",
@@ -3672,6 +3668,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns all questions from a tag.",
@@ -3722,6 +3721,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns all tests from a tag.",
@@ -14871,11 +14873,6 @@ func init() {
     },
     "/tags": {
       "get": {
-        "security": [
-          {
-            "BearerCookie": []
-          }
-        ],
         "description": "Returns all tags.",
         "produces": [
           "application/json"
@@ -14951,19 +14948,14 @@ func init() {
     },
     "/tags/{tag}": {
       "get": {
-        "security": [
-          {
-            "BearerCookie": []
-          }
-        ],
-        "description": "Returns a tags.",
+        "description": "Returns a tag.",
         "produces": [
           "application/json"
         ],
         "tags": [
           "tag"
         ],
-        "summary": "Returns a tags.",
+        "summary": "Returns a tag.",
         "operationId": "GetTag",
         "parameters": [
           {
@@ -15010,6 +15002,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns all non-published questions from a tag.",
@@ -15069,6 +15064,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns all non published tests from a tag.",
@@ -15128,6 +15126,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns all questions from a tag.",
@@ -15187,6 +15188,9 @@ func init() {
         "security": [
           {
             "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
           }
         ],
         "description": "Returns all tests from a tag.",

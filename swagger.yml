@@ -3758,8 +3758,6 @@ paths:
 
   /tags:
     get:
-      security:
-        - BearerCookie: []
       tags:
       - tag
       summary: Returns all tags.
@@ -3803,13 +3801,11 @@ paths:
  
   /tags/{tag}:
     get:
-      security:
-        - BearerCookie: []
       tags:
       - tag
-      summary: Returns a tags.
+      summary: Returns a tag.
       operationId: GetTag
-      description: Returns a tags.
+      description: Returns a tag.
       produces:
       - application/json
       parameters:
@@ -3835,6 +3831,7 @@ paths:
     get:
       security:
         - BearerCookie: []
+        - NoRegistered: []
       tags:
       - tag
       summary: Returns all non-published questions from a tag.
@@ -3867,6 +3864,7 @@ paths:
     get:
       security:
         - BearerCookie: []
+        - NoRegistered: []
       tags:
       - tag
       summary: Returns all questions from a tag.
@@ -3900,6 +3898,7 @@ paths:
     get:
       security:
         - BearerCookie: []
+        - NoRegistered: []
       tags:
       - tag
       summary: Returns all tests from a tag.
@@ -3932,6 +3931,7 @@ paths:
     get:
       security:
         - BearerCookie: []
+        - NoRegistered: []
       tags:
       - tag
       summary: Returns all non published tests from a tag.

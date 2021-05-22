@@ -17,7 +17,7 @@ import (
 
 // GetTests GET /tags. Returns all tags.
 // Auth: ALL
-func GetTags(params tag.GetTagsParams, u *models.User) middleware.Responder {
+func GetTags(params tag.GetTagsParams) middleware.Responder {
 	db, err := dbconnection.ConnectDb()
 	if err == nil {
 		var ts []*dao.Tag
@@ -33,7 +33,7 @@ func GetTags(params tag.GetTagsParams, u *models.User) middleware.Responder {
 
 // GetTests GET /tags/{tag}. Returns a tag.
 // Auth: ALL
-func GetTag(params tag.GetTagParams, u *models.User) middleware.Responder {
+func GetTag(params tag.GetTagParams) middleware.Responder {
 	db, err := dbconnection.ConnectDb()
 	if err == nil {
 		var ts *dao.Tag

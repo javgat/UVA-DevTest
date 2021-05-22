@@ -24,8 +24,8 @@ export class PtestComponent extends LoggedInController implements OnInit {
   isRespuestaIniciada: boolean
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private route: ActivatedRoute, private ptestS: PublishedTestService) {
     super(session, router, data, userS);
-    this.test = new Examen()
     this.preguntas = []
+    this.test = new Examen()
     this.tags = []
     this.id = 0
     this.isInAdminTeam = false
@@ -33,7 +33,7 @@ export class PtestComponent extends LoggedInController implements OnInit {
     this.routeSub = this.route.params.subscribe(params => {
       this.id = params['testid']
       this.borrarMensaje()
-      if (this.getSessionUser().getUsername() != undefined && this.getSessionUser().getUsername() != "") {
+      if (this.getSessionUser().getUsername() != undefined && (!this.getSessionLogin().isLoggedIn() || this.getSessionUser().getUsername() != "")) {
         this.getPTest(true)
       }
     });
@@ -42,9 +42,13 @@ export class PtestComponent extends LoggedInController implements OnInit {
   ngOnInit(): void {
   }
 
-  ngOnDestroy() : void{
+  ngOnDestroy(): void {
     this.routeSub.unsubscribe()
     super.onDestroy()
+  }
+
+  hasPermissions(): boolean {
+    return this.canVerPTests()
   }
 
   doHasUserAction() {
@@ -63,13 +67,29 @@ export class PtestComponent extends LoggedInController implements OnInit {
   }
 
   getPTest(primera: boolean) {
-    this.userS.getSolvableTestFromUser(this.getSessionUser().getUsername(), this.id).subscribe(
+    if (this.getSessionLogin().isLoggedIn()) {
+      this.userS.getSolvableTestFromUser(this.getSessionUser().getUsername(), this.id).subscribe(
+        resp => {
+          this.test = Examen.constructorFromTest(resp)
+          this.gotTest()
+        },
+        err => {
+          this.handleErrRelog(err, "obtener test publicado", primera, this.getPTest, this)
+        }
+      )
+    } else {
+      this.getPublicTest(primera)
+    }
+  }
+
+  getPublicTest(primera: boolean) {
+    this.ptestS.getPublicPublishedTest(this.id).subscribe(
       resp => {
         this.test = Examen.constructorFromTest(resp)
         this.gotTest()
       },
       err => {
-        this.handleErrRelog(err, "obtener test publicado", primera, this.getPTest, this)
+        this.handleErrRelog(err, "obtener test publicado publico", primera, this.getPTest, this)
       }
     )
   }
@@ -94,16 +114,18 @@ export class PtestComponent extends LoggedInController implements OnInit {
   }
 
   getIsInAdminTeam(primera: boolean) {
-    this.userS.getSharedTestFromUser(this.getSessionUser().getUsername(), this.id).subscribe(
-      resp => {
-        this.isInAdminTeam = true
-        this.getPreguntasTest(true)
-      },
-      err => {
-        if (err.status != 410)
-          this.handleErrRelog(err, "saber si el usuario administra el test", primera, this.getIsInAdminTeam, this)
-      }
-    )
+    if (this.getSessionLogin().isLoggedIn()) {
+      this.userS.getSharedTestFromUser(this.getSessionUser().getUsername(), this.id).subscribe(
+        resp => {
+          this.isInAdminTeam = true
+          this.getPreguntasTest(true)
+        },
+        err => {
+          if (err.status != 410)
+            this.handleErrRelog(err, "saber si el usuario administra el test", primera, this.getIsInAdminTeam, this)
+        }
+      )
+    }
   }
 
   tipoPrint(tipo: string, eleccionUnica: boolean | undefined): string {
@@ -111,33 +133,37 @@ export class PtestComponent extends LoggedInController implements OnInit {
   }
 
   isModoTestAdmin(): boolean {
-    return this.isInAdminTeam || this.test.username == this.getSessionUser().getUsername() || this.getSessionUser().isAdmin()
+    return this.isInAdminTeam || (this.test.username == this.getSessionUser().getUsername() && this.test.username!="") || this.getSessionUser().isAdmin()
   }
 
   getIsRespuestaIniciada(primera: boolean) {
-    this.userS.getOpenAnswersFromUserTest(this.getSessionUser().getUsername(), this.id).subscribe(
-      resp => {
-        if(resp.length==0){
-          this.isRespuestaIniciada = false
-        }else{
-          this.isRespuestaIniciada = true
-          this.respuestaIniciadaId = resp[0].id
-        }
-      },
-      err => this.handleErrRelog(err, "obtener informacion de si hay respuesta iniciada", primera, this.getIsRespuestaIniciada, this)
-    )
+    if (this.getSessionLogin().isLoggedIn()) {
+      this.userS.getOpenAnswersFromUserTest(this.getSessionUser().getUsername(), this.id).subscribe(
+        resp => {
+          if (resp.length == 0) {
+            this.isRespuestaIniciada = false
+          } else {
+            this.isRespuestaIniciada = true
+            this.respuestaIniciadaId = resp[0].id
+          }
+        },
+        err => this.handleErrRelog(err, "obtener informacion de si hay respuesta iniciada", primera, this.getIsRespuestaIniciada, this)
+      )
+    } else {
+      this.isRespuestaIniciada = false
+    }
   }
 
-  startAnswerClick(){
+  startAnswerClick() {
     this.startAnswer(true)
   }
 
-  startAnswer(primera: boolean){
+  startAnswer(primera: boolean) {
     this.userS.startAnswer(this.getSessionUser().getUsername(), this.id).subscribe(
-      resp=>{
+      resp => {
         this.router.navigate(['/pt', this.id, "answering"])
       },
-      err =>{
+      err => {
         this.handleErrRelog(err, "iniciar respuesta a test publicado", primera, this.startAnswer, this)
       }
     )

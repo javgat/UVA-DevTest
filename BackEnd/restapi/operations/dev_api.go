@@ -354,7 +354,7 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		UserGetSolvableTestsFromUserHandler: user.GetSolvableTestsFromUserHandlerFunc(func(params user.GetSolvableTestsFromUserParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation user.GetSolvableTestsFromUser has not yet been implemented")
 		}),
-		TagGetTagHandler: tag.GetTagHandlerFunc(func(params tag.GetTagParams, principal *models.User) middleware.Responder {
+		TagGetTagHandler: tag.GetTagHandlerFunc(func(params tag.GetTagParams) middleware.Responder {
 			return middleware.NotImplemented("operation tag.GetTag has not yet been implemented")
 		}),
 		PublishedTestGetTagFromPublishedTestHandler: published_test.GetTagFromPublishedTestHandlerFunc(func(params published_test.GetTagFromPublishedTestParams, principal *models.User) middleware.Responder {
@@ -366,7 +366,7 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		TestGetTagFromTestHandler: test.GetTagFromTestHandlerFunc(func(params test.GetTagFromTestParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation test.GetTagFromTest has not yet been implemented")
 		}),
-		TagGetTagsHandler: tag.GetTagsHandlerFunc(func(params tag.GetTagsParams, principal *models.User) middleware.Responder {
+		TagGetTagsHandler: tag.GetTagsHandlerFunc(func(params tag.GetTagsParams) middleware.Responder {
 			return middleware.NotImplemented("operation tag.GetTags has not yet been implemented")
 		}),
 		PublishedTestGetTagsFromPublishedQuestionHandler: published_test.GetTagsFromPublishedQuestionHandlerFunc(func(params published_test.GetTagsFromPublishedQuestionParams, principal *models.User) middleware.Responder {

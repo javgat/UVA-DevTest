@@ -126,7 +126,7 @@ func ReAuth(cookies string) (*models.User, error) {
 }
 
 func NoRegisteredAuth(header string) (*models.User, error) {
-	if header == "true" {
+	if strings.EqualFold(header, "true") {
 		return nil, nil
 	}
 	return nil, errors.New(401, "No se ha activado la cabecera registered auth correctamente. Tiene que valer true")

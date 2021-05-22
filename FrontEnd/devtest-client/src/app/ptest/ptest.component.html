@@ -16,7 +16,8 @@
         <div class=" card">
             <div class="card-body">
                 <h2>Test: {{test.title}}</h2>
-                <p>Autor: <a [routerLink]="['/profile', test.username]">{{test.username}}</a></p>
+                <p>Autor: <a *ngIf="isLoggedIn()" [routerLink]="['/profile', test.username]">{{test.username}}</a>
+                    <a *ngIf="!isLoggedIn()">{{test.username}}</a></p>
                 <div *ngIf="isModoTestAdmin()">
                     <p><button class="btn btn-primary" type="button" [routerLink]="['/et', test.id, 'teams']">Ver
                             equipos administradores</button></p>
@@ -47,13 +48,16 @@
                     <button class="btn btn-primary btn-lg" type="button" [routerLink]="['/pt', test.id, 'answers']">Ver
                         respuestas</button>
                 </div>
-                <p>Llevas {{test.cantidadRespuestasDelUsuario}} intentos.</p>
+                <p *ngIf="isLoggedIn()">Llevas {{test.cantidadRespuestasDelUsuario}} intentos.</p>
                 <div *ngIf="isRespuestaIniciada" class="d-grid gap-2 my-3">
                     <button class="btn btn-success btn-lg" type="button"
                         [routerLink]="['/pt', id, 'answering']">Continuar
                         Respuesta</button>
                 </div>
-                <div *ngIf="!isRespuestaIniciada">
+                <div *ngIf="!isLoggedIn()">
+                    <p>Para realizar los tests tendrás que <a [routerLink]="['/login']">Iniciar Sesión</a></p>
+                </div>
+                <div *ngIf="!isRespuestaIniciada && isLoggedIn()">
                     <div class="d-grid gap-2 my-3">
                         <button class="btn btn-success btn-lg" type="button" data-bs-toggle="modal"
                             data-bs-target="#startAnswerModal">Iniciar Respuesta</button>
@@ -81,7 +85,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="d-grid gap-2 my-3">
+                <div class="d-grid gap-2 my-3" *ngIf="isLoggedIn()">
                     <button class="btn btn-primary btn-lg" type="button"
                         [routerLink]="['/pt', test.id, 'myanswers']">Ver
                         mis respuestas</button>
