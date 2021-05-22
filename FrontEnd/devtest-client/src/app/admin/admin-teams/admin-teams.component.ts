@@ -21,6 +21,10 @@ export class AdminTeamsComponent extends AdminComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  ngOnDestroy(): void{
+    super.onDestroy()
+  }
+
   getTeams(primera: boolean) {
     this.teamS.getTeams().subscribe(
       resp => {

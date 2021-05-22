@@ -26,6 +26,10 @@ export class AdminUsersComponent extends AdminComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  ngOnDestroy(): void{
+    super.onDestroy()
+  }
+
   doAdminAction(){
 
   }

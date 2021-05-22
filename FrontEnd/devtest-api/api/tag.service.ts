@@ -81,6 +81,11 @@ export class TagService {
             headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
         }
 
+        // authentication (NoRegistered) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["NotLoggedIn"]) {
+            headers = headers.set('NotLoggedIn', this.configuration.apiKeys["NotLoggedIn"]);
+        }
+
         // to determine the Accept header
         let httpHeaderAccepts: string[] = [
             'application/json'
@@ -125,6 +130,11 @@ export class TagService {
         // authentication (BearerCookie) required
         if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
             headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // authentication (NoRegistered) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["NotLoggedIn"]) {
+            headers = headers.set('NotLoggedIn', this.configuration.apiKeys["NotLoggedIn"]);
         }
 
         // to determine the Accept header
@@ -173,6 +183,11 @@ export class TagService {
             headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
         }
 
+        // authentication (NoRegistered) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["NotLoggedIn"]) {
+            headers = headers.set('NotLoggedIn', this.configuration.apiKeys["NotLoggedIn"]);
+        }
+
         // to determine the Accept header
         let httpHeaderAccepts: string[] = [
             'application/json'
@@ -197,8 +212,8 @@ export class TagService {
     }
 
     /**
-     * Returns a tags.
-     * Returns a tags.
+     * Returns a tag.
+     * Returns a tag.
      * @param tag Tag to find
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -213,11 +228,6 @@ export class TagService {
         }
 
         let headers = this.defaultHeaders;
-
-        // authentication (BearerCookie) required
-        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
-            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
-        }
 
         // to determine the Accept header
         let httpHeaderAccepts: string[] = [
@@ -277,11 +287,6 @@ export class TagService {
 
         let headers = this.defaultHeaders;
 
-        // authentication (BearerCookie) required
-        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
-            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
-        }
-
         // to determine the Accept header
         let httpHeaderAccepts: string[] = [
             'application/json'
@@ -327,6 +332,11 @@ export class TagService {
         // authentication (BearerCookie) required
         if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
             headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // authentication (NoRegistered) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["NotLoggedIn"]) {
+            headers = headers.set('NotLoggedIn', this.configuration.apiKeys["NotLoggedIn"]);
         }
 
         // to determine the Accept header

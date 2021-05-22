@@ -283,7 +283,7 @@ export abstract class LoggedInController {
         return false
     }
 
-    canAdminCnofiguration(): boolean {
+    canAdminConfiguration(): boolean {
         let rol = this.getTipoRolActual()
         if (rol != undefined && rol.adminConfiguration)
             return true

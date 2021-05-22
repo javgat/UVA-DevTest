@@ -25,6 +25,10 @@ export class AdminEmailComponent extends AdminComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  ngOnDestroy(): void{
+    super.onDestroy()
+  }
+
   getConfiguracionCorreo(primera: boolean){
     this.configS.getEmailConfiguration().subscribe(
       resp => {
