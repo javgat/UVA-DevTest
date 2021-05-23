@@ -24,6 +24,9 @@ export class SigninComponent implements OnInit {
   private messageSubscription: Subscription
   private sessionSubscription: Subscription
 
+
+  reppass: string
+
   // Variable que se modificara en el formulario de registro
   signinUser = this.signinUserEmpty as SigninUser
   mensaje: Mensaje
@@ -32,6 +35,7 @@ export class SigninComponent implements OnInit {
     private session: SessionService, private router: Router) {
     this.mensaje = new Mensaje()
     this.sessionUser = new SessionLogin(false)
+    this.reppass = ""
     this.session.checkStorageSession()
     this.sessionSubscription = this.session.sessionLogin.subscribe(
       valor => {
@@ -81,7 +85,11 @@ export class SigninComponent implements OnInit {
 
   // Cuando el formulario se envia, se ejecuta la funcio
   signinSubmit() {
-    this.signin(this.signinUser)
+    if(this.reppass == this.signinUser.pass)
+      this.signin(this.signinUser)
+    else{
+      this.datos.cambiarMensaje(new Mensaje("Las contraseñas no coinciden", Tipo.ERROR, true))
+    }
   }
 
 }
