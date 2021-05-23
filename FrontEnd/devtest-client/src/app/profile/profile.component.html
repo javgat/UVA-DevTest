@@ -157,7 +157,7 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                             <input type="submit" (click)='editUserSubmit()' value="Guardar" data-bs-dismiss="modal"
-                                class="btn btn-primary" id="buttonChangeUser" />
+                                class="btn btn-primary" id="buttonChangeUser" [disabled]="isDisabledModalEditUserGuardar()" />
                         </div>
                     </form>
                 </div>

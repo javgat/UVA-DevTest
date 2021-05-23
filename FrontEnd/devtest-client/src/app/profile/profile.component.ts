@@ -135,6 +135,7 @@ export class ProfileComponent extends LoggedInController implements OnInit {
     if (this.id == "") return
     this.userS.putUser(this.id, this.editUser).subscribe(
       resp =>{
+        this.editUser.password = ""
         this.id = this.editUser.username
         this.cambiarMensaje(new Mensaje("Perfil actualizado con éxito", Tipo.SUCCESS, true))
         this.router.navigate(['/profile', this.id])
@@ -178,6 +179,10 @@ export class ProfileComponent extends LoggedInController implements OnInit {
 
   checkVerBotonesTeacher() : boolean{
     return this.checkPermisosEditarUser() && this.profileUser.isTeacherOrAdmin()
+  }
+
+  isDisabledModalEditUserGuardar(): boolean{
+    return this.editUser.password.length<6
   }
 
 }
