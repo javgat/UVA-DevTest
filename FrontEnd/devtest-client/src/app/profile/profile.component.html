@@ -4,7 +4,7 @@
     <h2>Usuario: {{profileUser.getUsername()}}</h2>
     <hr />
     <div class="row">
-        <div class="col-sm">
+        <div class="col-sm mb-3">
             <ul>
                 <li>Nombre de usuario: {{profileUser.getUsername()}}</li>
                 <li>Correo electrónico: {{profileUser.getEmail()}}</li>
@@ -37,18 +37,20 @@
                     Equipos
                 </button>
             </div>
-            <div class="d-grid gap-2">
-                <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/profile', id, 'pt']">
-                    Tests Publicados
-                </button>
-            </div>
-            <div *ngIf="checkTeacherOrAdmin()" class="d-grid gap-2">
-                <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/profile', id, 'et']">
-                    Tests Editables
-                </button>
-                <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/profile', id, 'q']">
-                    Preguntas
-                </button>
+            <div *ngIf="profileNotStudent()">
+                <div class="d-grid gap-2">
+                    <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/profile', id, 'pt']">
+                        Tests Publicados
+                    </button>
+                </div>
+                <div *ngIf="checkTeacherOrAdmin()" class="d-grid gap-2">
+                    <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/profile', id, 'et']">
+                        Tests Editables
+                    </button>
+                    <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/profile', id, 'q']">
+                        Preguntas
+                    </button>
+                </div>
             </div>
             <div *ngIf="checkPermisosEditarUser()" class="d-grid gap-2">
                 <hr />
@@ -157,7 +159,8 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                             <input type="submit" (click)='editUserSubmit()' value="Guardar" data-bs-dismiss="modal"
-                                class="btn btn-primary" id="buttonChangeUser" [disabled]="isDisabledModalEditUserGuardar()" />
+                                class="btn btn-primary" id="buttonChangeUser"
+                                [disabled]="isDisabledModalEditUserGuardar()" />
                         </div>
                     </form>
                 </div>
@@ -194,7 +197,8 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                             <input type="submit" value="Guardar" (click)='changePassSubmit()' data-bs-dismiss="modal"
-                                class="btn btn-primary" id="buttonChangePass" [disabled]="isDisabledModalEditPassGuardar()" />
+                                class="btn btn-primary" id="buttonChangePass"
+                                [disabled]="isDisabledModalEditPassGuardar()" />
                         </div>
                     </form>
                 </div>

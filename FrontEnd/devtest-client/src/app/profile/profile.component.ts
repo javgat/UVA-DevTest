@@ -200,4 +200,8 @@ export class ProfileComponent extends LoggedInController implements OnInit {
     return !(this.isValidPass(this.pUpdate.newpass) && this.isValidPass(this.pUpdate.oldpass) && this.isValidPass(this.newpassR))
   }
 
+  profileNotStudent(): boolean{
+    return !this.profileUser.isStudent()
+  }
+
 }
