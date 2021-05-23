@@ -31,12 +31,15 @@ export class ProfileComponent extends LoggedInController implements OnInit {
   editRol: Role = {
     rolId: 0,
   }
+
+  newpassR: string
   tiporoles: TipoRol[]
   constructor(session: SessionService, router: Router, private route: ActivatedRoute,
     userS: UserService, data: DataService, private authService: AuthService, private trS?: TiporolService) {
     super(session, router, data, userS)
     this.profileUser = new SessionUser()
     this.id=""
+    this.newpassR=""
     this.tiporoles = []
     this.getTipoRoles(true)
     this.routeSub = this.route.params.subscribe(params => {
@@ -91,7 +94,11 @@ export class ProfileComponent extends LoggedInController implements OnInit {
   }
 
   changePassSubmit(): void {
-    this.changePass(true)
+    if(this.newpassR==this.pUpdate.newpass){
+      this.changePass(true)
+    }else{
+      this.cambiarMensaje(new Mensaje("Error al actualizar la contraseña: Las contraseñas no coinciden", Tipo.ERROR, true))
+    }
   }
 
   changePass(primera: boolean){
@@ -181,8 +188,16 @@ export class ProfileComponent extends LoggedInController implements OnInit {
     return this.checkPermisosEditarUser() && this.profileUser.isTeacherOrAdmin()
   }
 
+  isValidPass(pass: string): boolean{
+    return pass.length>=6
+  }
+
   isDisabledModalEditUserGuardar(): boolean{
-    return this.editUser.password.length<6
+    return !this.isValidPass(this.editUser.password)
+  }
+
+  isDisabledModalEditPassGuardar(): boolean{
+    return !(this.isValidPass(this.pUpdate.newpass) && this.isValidPass(this.pUpdate.oldpass) && this.isValidPass(this.newpassR))
   }
 
 }

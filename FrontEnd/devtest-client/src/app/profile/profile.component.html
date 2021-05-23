@@ -184,12 +184,17 @@
                                 <input type="password" class="form-control" id="newpass" name="newpass"
                                     [(ngModel)]="pUpdate.newpass" required>
                             </div>
+                            <div class="mb-3">
+                                <label for="newpassR" class="form-label">Confirmar nueva contraseña</label>
+                                <input type="password" class="form-control" id="newpassR" name="newpassR"
+                                    [(ngModel)]="newpassR" required>
+                            </div>
                             <!-- PEDIR REPETIR CONTRASEÑA ? -->
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                             <input type="submit" value="Guardar" (click)='changePassSubmit()' data-bs-dismiss="modal"
-                                class="btn btn-primary" id="buttonChangePass" />
+                                class="btn btn-primary" id="buttonChangePass" [disabled]="isDisabledModalEditPassGuardar()" />
                         </div>
                     </form>
                 </div>
