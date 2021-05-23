@@ -204,4 +204,8 @@ export class ProfileComponent extends LoggedInController implements OnInit {
     return !this.profileUser.isStudent()
   }
 
+  checkPermisoVerPrivado(): boolean{
+    return this.profileUser.isAdmin()
+  }
+
 }
