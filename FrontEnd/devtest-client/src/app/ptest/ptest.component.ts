@@ -169,4 +169,9 @@ export class PtestComponent extends LoggedInController implements OnInit {
     )
   }
 
+  mostrarVerMisRespuestas(): boolean{
+    if(this.test.cantidadRespuestasDelUsuario==undefined) return false
+    return this.isLoggedIn() && this.test.cantidadRespuestasDelUsuario>0 && (!this.isRespuestaIniciada || this.test.cantidadRespuestasDelUsuario>1)
+  }
+
 }
