@@ -1,5 +1,6 @@
 <div class="container my-5">
-    <h1 class="my-5 text-center fw-bold">¡Bienvenido a DevTest!</h1>
+    <h1 class="my-5 text-center fw-bold">¡Bienvenido a DevTest <a class="link-dark"
+            [routerLink]="['/profile', getSessionUser().getUsername()]">{{getSessionUser().getUsername()}}</a>!</h1>
     <app-lgi-student *ngIf="isStudent()"></app-lgi-student>
     <app-lgi-teacher *ngIf="isTeacherOrAdmin()"></app-lgi-teacher>
 </div>
