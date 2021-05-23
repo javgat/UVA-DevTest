@@ -4,8 +4,12 @@
         <h5 class="card-title">{{getPregunta(qa.idPregunta).title}}</h5>
         <h6 class="card-subtitle mb-2 text-muted">Tipo: {{tipoPrint(getPregunta(qa.idPregunta).tipoPregunta,
             getPregunta(qa.idPregunta).eleccionUnica)}}
-            <h6 class="card-subtitle mb-2 text-muted">Puntuación: {{calcValor(qa.puntuacion,
-                getPregunta(qa.idPregunta).valorFinal)}}/{{getPregunta(qa.idPregunta).valorFinal}}</h6>
+            <h6 class="card-subtitle mb-2 text-muted">Puntuación:
+                <span class="badge {{bgcolorQAnswerPuntuacion(qa.puntuacion)}}">
+                    {{calcValor(qa.puntuacion,
+                    getPregunta(qa.idPregunta).valorFinal)}}/{{getPregunta(qa.idPregunta).valorFinal}}
+                </span>
+            </h6>
         </h6>
         <p *ngIf="mostrarAutor">Autor: <a class="link-dark" [routerLink]="['/profile', qa.username]">{{qa.username}}</a>
         </p>

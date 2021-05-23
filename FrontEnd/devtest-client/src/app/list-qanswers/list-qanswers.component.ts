@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Answer, AnswerService, PublishedTestService, Question, QuestionAnswer, UserService } from '@javgat/devtest-api';
 import { Subscription } from 'rxjs';
 import { LoggedInController } from '../shared/app.controller';
-import { Respuesta, tipoPrint } from '../shared/app.model';
+import { bgcolorQAnswerPuntuacion, Respuesta, tipoPrint } from '../shared/app.model';
 import { DataService } from '../shared/data.service';
 import { SessionService } from '../shared/session.service';
 
@@ -80,6 +80,10 @@ export class ListQAnswersComponent extends LoggedInController implements OnInit 
   calcValor(porcentaje: number | undefined, valorFinal: number | undefined): number{
     if(porcentaje == undefined || valorFinal == undefined) return 0
     return (porcentaje * valorFinal)/100
+  }
+
+  bgcolorQAnswerPuntuacion(punt: number){
+    return bgcolorQAnswerPuntuacion(punt)
   }
 
 }

@@ -12,17 +12,22 @@
         Ver respuesta completa del examen</button>
     <div class="card">
         <div class="card-body">
-            <h2>Pregunta <a class="link-dark" [routerLink]="['/pt', testid, 'q', questionid]">{{question.title}}</a></h2>
+            <h2>Pregunta <a class="link-dark" [routerLink]="['/pt', testid, 'q', questionid]">{{question.title}}</a>
+            </h2>
             <p><b>Usuario: </b> <a [routerLink]="['/profile', question.username]">{{question.username}}</a></p>
             <p><b>Tiempo estimado:</b> {{question.estimatedTime}} minutos</p>
             <p><b>Valor:</b> {{question.valorFinal}} puntos</p>
             <p><b>Penalización por fallo: </b> {{question.penalizacion}} %</p>
             <p><b>Corrección automática: </b> <span *ngIf="question.autoCorrect">Sí</span><span
                     *ngIf="!question.autoCorrect">No</span></p>
-            <p><b>Corregida: </b><span class="badge bg-success" *ngIf="qa.corregida">Sí</span><span class="badge bg-danger"
-                    *ngIf="!qa.corregida">No</span></p>
-            <p *ngIf="qa.corregida"><b>Puntuación:</b> {{qa.puntuacion}}% ({{calcValor(qa.puntuacion,
-                question.valorFinal)}}/{{question.valorFinal}})</p>
+            <p><b>Corregida: </b><span class="badge bg-success" *ngIf="qa.corregida">Sí</span><span
+                    class="badge bg-danger" *ngIf="!qa.corregida">No</span></p>
+            <p *ngIf="qa.corregida"><b>Puntuación: </b>
+                <span class="badge {{bgcolorQAnswerPuntuacion(qa.puntuacion)}}">
+                    {{qa.puntuacion}}% ({{calcValor(qa.puntuacion,
+                    question.valorFinal)}}/{{question.valorFinal}})
+                </span>
+            </p>
             <div *ngIf="isModoTestAdmin()">
                 <p *ngIf="!qa.corregida">
                     <button *ngIf="!showCorregir" type="button" class="btn btn-primary"

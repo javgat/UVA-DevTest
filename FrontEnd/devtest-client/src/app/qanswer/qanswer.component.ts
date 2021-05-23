@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AnswerService, Option, PublishedTestService, Question, QuestionAnswer, QuestionService, Review, Test, UserService } from '@javgat/devtest-api';
 import { Subscription } from 'rxjs';
 import { LoggedInController } from '../shared/app.controller';
-import { Examen, Pregunta, RespuestaPregunta, tipoPrint } from '../shared/app.model';
+import { bgcolorQAnswerPuntuacion, Examen, Pregunta, RespuestaPregunta, tipoPrint } from '../shared/app.model';
 import { DataService } from '../shared/data.service';
 import { SessionService } from '../shared/session.service';
 
@@ -233,6 +233,10 @@ export class QanswerComponent extends LoggedInController implements OnInit {
 
   isModoTestAdmin(): boolean {
     return this.isInAdminTeam || this.test.username == this.getSessionUser().getUsername()
+  }
+
+  bgcolorQAnswerPuntuacion(punt: number){
+    return bgcolorQAnswerPuntuacion(punt)
   }
 
 }

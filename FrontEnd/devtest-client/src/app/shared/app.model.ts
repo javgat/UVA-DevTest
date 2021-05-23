@@ -253,6 +253,16 @@ export function tipoPrint(tipo: string, eleccionUnica: boolean | undefined): str
     }
 }
 
+export function bgcolorQAnswerPuntuacion(puntuacion: number): string{
+    if(puntuacion >= 100){
+        return "bg-success"
+    }else if(puntuacion >0){
+        return "bg-warning text-dark"
+    }else{
+        return "bg-danger"
+    }
+}
+
 export class Respuesta implements Answer{
     id: number;
     startTime?: Date | undefined;
