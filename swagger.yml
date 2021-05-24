@@ -327,6 +327,95 @@ paths:
           $ref: '#/responses/GoneError'
         500:
           $ref: '#/responses/InternalServerError'
+  /customizedViews:
+    get:
+      tags:
+      - configuration
+      security:
+        - BearerCookie: []
+        - NoRegistered: []
+      summary: Returns all CustomizedViews
+      operationId: GetCViews
+      description: Returns all CustomizedViews
+      produces:
+      - application/json
+      responses:
+        200:
+          description: CustomizedViews Found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/CustomizedView'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  /customizedViews/{rolBase}:
+    get:
+      tags:
+      - configuration
+      security:
+        - BearerCookie: []
+        - NoRegistered: []
+      summary: Returns a CustomizedView
+      operationId: GetCView
+      description: Returns a CustomizedView
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: rolBase
+        description: Name of the rolBase to find its customized view
+        required: true
+        type: string
+        enum: [administrador, profesor, estudiante, noRegistrado]
+      responses:
+        200:
+          description: CustomizedView Found
+          schema:
+            $ref: '#/definitions/CustomizedView'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+    put:
+      tags:
+      - configuration
+      security:
+        - BearerCookie: []
+        - NoRegistered: []
+      summary: Modifies a CustomizedView
+      operationId: PutCView
+      description: Modifies a CustomizedView
+      consumes:
+      - application/json
+      parameters:
+      - in: path
+        name: rolBase
+        description: Name of the rolBase to modify its customized view
+        required: true
+        type: string
+        enum: [administrador, profesor, estudiante, noRegistrado]
+      - in: body
+        name: newView
+        required: true
+        description: Customized View information updated
+        schema:
+          $ref: '#/definitions/CustomizedView'
+      responses:
+        200:
+          description: CustomizedView Found
+          schema:
+            $ref: '#/definitions/CustomizedView'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
   /users:
     post:
       tags:
@@ -6630,6 +6719,17 @@ definitions:
         example: password
         format: password
         pattern: '^.{6,}$'
+  CustomizedView:
+    type: object
+    required:
+    - rolBase
+    - mensajeInicio
+    properties:
+      rolBase:
+        type: string
+        enum: [administrador, profesor, estudiante, noRegistrado]
+      mensajeInicio:
+        type: string
   TipoRol:
     type: object
     required:

@@ -162,6 +162,12 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		UserGetAvailableQuestionsOfUserHandler: user.GetAvailableQuestionsOfUserHandlerFunc(func(params user.GetAvailableQuestionsOfUserParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation user.GetAvailableQuestionsOfUser has not yet been implemented")
 		}),
+		ConfigurationGetCViewHandler: configuration.GetCViewHandlerFunc(func(params configuration.GetCViewParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation configuration.GetCView has not yet been implemented")
+		}),
+		ConfigurationGetCViewsHandler: configuration.GetCViewsHandlerFunc(func(params configuration.GetCViewsParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation configuration.GetCViews has not yet been implemented")
+		}),
 		PublishedTestGetCorrectedAnswersFromPublishedTestsHandler: published_test.GetCorrectedAnswersFromPublishedTestsHandlerFunc(func(params published_test.GetCorrectedAnswersFromPublishedTestsParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation published_test.GetCorrectedAnswersFromPublishedTests has not yet been implemented")
 		}),
@@ -474,6 +480,9 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		TiporolPostTipoRolHandler: tiporol.PostTipoRolHandlerFunc(func(params tiporol.PostTipoRolParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation tiporol.PostTipoRol has not yet been implemented")
 		}),
+		ConfigurationPutCViewHandler: configuration.PutCViewHandlerFunc(func(params configuration.PutCViewParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation configuration.PutCView has not yet been implemented")
+		}),
 		ConfigurationPutEmailConfigurationHandler: configuration.PutEmailConfigurationHandlerFunc(func(params configuration.PutEmailConfigurationParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation configuration.PutEmailConfiguration has not yet been implemented")
 		}),
@@ -717,6 +726,10 @@ type DevAPI struct {
 	UserGetAvailableEditQuestionsOfUserHandler user.GetAvailableEditQuestionsOfUserHandler
 	// UserGetAvailableQuestionsOfUserHandler sets the operation handler for the get available questions of user operation
 	UserGetAvailableQuestionsOfUserHandler user.GetAvailableQuestionsOfUserHandler
+	// ConfigurationGetCViewHandler sets the operation handler for the get c view operation
+	ConfigurationGetCViewHandler configuration.GetCViewHandler
+	// ConfigurationGetCViewsHandler sets the operation handler for the get c views operation
+	ConfigurationGetCViewsHandler configuration.GetCViewsHandler
 	// PublishedTestGetCorrectedAnswersFromPublishedTestsHandler sets the operation handler for the get corrected answers from published tests operation
 	PublishedTestGetCorrectedAnswersFromPublishedTestsHandler published_test.GetCorrectedAnswersFromPublishedTestsHandler
 	// UserGetCorrectedAnswersFromUserHandler sets the operation handler for the get corrected answers from user operation
@@ -925,6 +938,8 @@ type DevAPI struct {
 	UserPostTestHandler user.PostTestHandler
 	// TiporolPostTipoRolHandler sets the operation handler for the post tipo rol operation
 	TiporolPostTipoRolHandler tiporol.PostTipoRolHandler
+	// ConfigurationPutCViewHandler sets the operation handler for the put c view operation
+	ConfigurationPutCViewHandler configuration.PutCViewHandler
 	// ConfigurationPutEmailConfigurationHandler sets the operation handler for the put email configuration operation
 	ConfigurationPutEmailConfigurationHandler configuration.PutEmailConfigurationHandler
 	// QuestionPutOptionHandler sets the operation handler for the put option operation
@@ -1189,6 +1204,12 @@ func (o *DevAPI) Validate() error {
 	}
 	if o.UserGetAvailableQuestionsOfUserHandler == nil {
 		unregistered = append(unregistered, "user.GetAvailableQuestionsOfUserHandler")
+	}
+	if o.ConfigurationGetCViewHandler == nil {
+		unregistered = append(unregistered, "configuration.GetCViewHandler")
+	}
+	if o.ConfigurationGetCViewsHandler == nil {
+		unregistered = append(unregistered, "configuration.GetCViewsHandler")
 	}
 	if o.PublishedTestGetCorrectedAnswersFromPublishedTestsHandler == nil {
 		unregistered = append(unregistered, "published_test.GetCorrectedAnswersFromPublishedTestsHandler")
@@ -1501,6 +1522,9 @@ func (o *DevAPI) Validate() error {
 	}
 	if o.TiporolPostTipoRolHandler == nil {
 		unregistered = append(unregistered, "tiporol.PostTipoRolHandler")
+	}
+	if o.ConfigurationPutCViewHandler == nil {
+		unregistered = append(unregistered, "configuration.PutCViewHandler")
 	}
 	if o.ConfigurationPutEmailConfigurationHandler == nil {
 		unregistered = append(unregistered, "configuration.PutEmailConfigurationHandler")
@@ -1862,6 +1886,14 @@ func (o *DevAPI) initHandlerCache() {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
 	o.handlers["GET"]["/users/{username}/availableQuestions"] = user.NewGetAvailableQuestionsOfUser(o.context, o.UserGetAvailableQuestionsOfUserHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/customizedViews/{rolBase}"] = configuration.NewGetCView(o.context, o.ConfigurationGetCViewHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/customizedViews"] = configuration.NewGetCViews(o.context, o.ConfigurationGetCViewsHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
@@ -2278,6 +2310,10 @@ func (o *DevAPI) initHandlerCache() {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
 	o.handlers["POST"]["/tipoRoles"] = tiporol.NewPostTipoRol(o.context, o.TiporolPostTipoRolHandler)
+	if o.handlers["PUT"] == nil {
+		o.handlers["PUT"] = make(map[string]http.Handler)
+	}
+	o.handlers["PUT"]["/customizedViews/{rolBase}"] = configuration.NewPutCView(o.context, o.ConfigurationPutCViewHandler)
 	if o.handlers["PUT"] == nil {
 		o.handlers["PUT"] = make(map[string]http.Handler)
 	}

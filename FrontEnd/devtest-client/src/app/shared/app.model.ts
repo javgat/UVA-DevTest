@@ -1,4 +1,4 @@
-import { User, Team, Question, Test, Answer, QuestionAnswer, EmailConfiguration } from "@javgat/devtest-api";
+import { User, Team, Question, Test, Answer, QuestionAnswer, EmailConfiguration, CustomizedView } from "@javgat/devtest-api";
 
 export enum Tipo {
     SUCCESS = "success",
@@ -328,4 +328,13 @@ export enum EnumOrderBy {
     lessFav = "lessFav",
     moreTime = "moreTime",
     lessTime = "lessTime"
+}
+
+export class VistaPersonalizada implements CustomizedView{
+    rolBase: CustomizedView.RolBaseEnum;
+    mensajeInicio: string;
+    constructor(c?: CustomizedView){
+        this.rolBase = c?.rolBase || CustomizedView.RolBaseEnum.NoRegistrado
+        this.mensajeInicio = c?.mensajeInicio || ""
+    }
 }

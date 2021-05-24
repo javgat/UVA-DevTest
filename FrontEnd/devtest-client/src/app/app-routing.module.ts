@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AdminCustomizedViewsComponent } from './admin/admin-customized-views/admin-customized-views.component';
 import { AdminEmailComponent } from './admin/admin-email/admin-email.component';
 import { AdminPermissionsComponent } from './admin/admin-permissions/admin-permissions.component';
 import { AdminTeamsComponent } from './admin/admin-teams/admin-teams.component';
@@ -81,6 +82,7 @@ const routes: Routes = [
   {path: 'admin/teams', component: AdminTeamsComponent},
   {path: 'admin/email', component: AdminEmailComponent},
   {path: 'admin/permissions', component: AdminPermissionsComponent},
+  {path: 'admin/customizedViews', component: AdminCustomizedViewsComponent},
   {path: 'ptests', component: PtestsComponent},
   {path: 'teams/:id', component: TeamComponent},
   {path: 'teams/:id/invitedTests', component: TeamResourcesComponent},

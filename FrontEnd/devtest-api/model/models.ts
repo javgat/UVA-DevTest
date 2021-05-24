@@ -1,4 +1,5 @@
 export * from './answer';
+export * from './customizedView';
 export * from './emailConfiguration';
 export * from './emailUser';
 export * from './loginUser';

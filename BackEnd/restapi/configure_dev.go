@@ -78,6 +78,12 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 	api.ConfigurationGetEmailConfigurationHandler = configuration.GetEmailConfigurationHandlerFunc(handlers.GetEmailConfiguration) // GET /emailConfiguration
 	api.ConfigurationPutEmailConfigurationHandler = configuration.PutEmailConfigurationHandlerFunc(handlers.PutEmailConfiguration) // PUT /emailConfiguration
 
+	// > CustomizedView
+
+	api.ConfigurationGetCViewsHandler = configuration.GetCViewsHandlerFunc(handlers.GetCViews) // GET /customizedViews
+	api.ConfigurationGetCViewHandler = configuration.GetCViewHandlerFunc(handlers.GetCView)    // GET /customizedViews/{rolBase}
+	api.ConfigurationPutCViewHandler = configuration.PutCViewHandlerFunc(handlers.PutCView)    // PUT /customizedViews/{rolBase}
+
 	// TipoRoles
 
 	api.TiporolGetTipoRolesHandler = tiporol.GetTipoRolesHandlerFunc(handlers.GetTipoRoles) // GET /tiporoles

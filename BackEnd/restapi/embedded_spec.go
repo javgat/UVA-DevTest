@@ -1060,6 +1060,157 @@ func init() {
         }
       }
     },
+    "/customizedViews": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
+          }
+        ],
+        "description": "Returns all CustomizedViews",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "configuration"
+        ],
+        "summary": "Returns all CustomizedViews",
+        "operationId": "GetCViews",
+        "responses": {
+          "200": {
+            "description": "CustomizedViews Found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/CustomizedView"
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/customizedViews/{rolBase}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
+          }
+        ],
+        "description": "Returns a CustomizedView",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "configuration"
+        ],
+        "summary": "Returns a CustomizedView",
+        "operationId": "GetCView",
+        "parameters": [
+          {
+            "enum": [
+              "administrador",
+              "profesor",
+              "estudiante",
+              "noRegistrado"
+            ],
+            "type": "string",
+            "description": "Name of the rolBase to find its customized view",
+            "name": "rolBase",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "CustomizedView Found",
+            "schema": {
+              "$ref": "#/definitions/CustomizedView"
+            }
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
+          }
+        ],
+        "description": "Modifies a CustomizedView",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "configuration"
+        ],
+        "summary": "Modifies a CustomizedView",
+        "operationId": "PutCView",
+        "parameters": [
+          {
+            "enum": [
+              "administrador",
+              "profesor",
+              "estudiante",
+              "noRegistrado"
+            ],
+            "type": "string",
+            "description": "Name of the rolBase to modify its customized view",
+            "name": "rolBase",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Customized View information updated",
+            "name": "newView",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CustomizedView"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "CustomizedView Found",
+            "schema": {
+              "$ref": "#/definitions/CustomizedView"
+            }
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
     "/editQuestions": {
       "get": {
         "security": [
@@ -10133,6 +10284,27 @@ func init() {
         "visibleParaUsuario": {
           "type": "boolean",
           "example": true
+        }
+      }
+    },
+    "CustomizedView": {
+      "type": "object",
+      "required": [
+        "rolBase",
+        "mensajeInicio"
+      ],
+      "properties": {
+        "mensajeInicio": {
+          "type": "string"
+        },
+        "rolBase": {
+          "type": "string",
+          "enum": [
+            "administrador",
+            "profesor",
+            "estudiante",
+            "noRegistrado"
+          ]
         }
       }
     },
@@ -12106,6 +12278,172 @@ func init() {
         }
       }
     },
+    "/customizedViews": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
+          }
+        ],
+        "description": "Returns all CustomizedViews",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "configuration"
+        ],
+        "summary": "Returns all CustomizedViews",
+        "operationId": "GetCViews",
+        "responses": {
+          "200": {
+            "description": "CustomizedViews Found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/CustomizedView"
+              }
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/customizedViews/{rolBase}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
+          }
+        ],
+        "description": "Returns a CustomizedView",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "configuration"
+        ],
+        "summary": "Returns a CustomizedView",
+        "operationId": "GetCView",
+        "parameters": [
+          {
+            "enum": [
+              "administrador",
+              "profesor",
+              "estudiante",
+              "noRegistrado"
+            ],
+            "type": "string",
+            "description": "Name of the rolBase to find its customized view",
+            "name": "rolBase",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "CustomizedView Found",
+            "schema": {
+              "$ref": "#/definitions/CustomizedView"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "BearerCookie": []
+          },
+          {
+            "NoRegistered": []
+          }
+        ],
+        "description": "Modifies a CustomizedView",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "configuration"
+        ],
+        "summary": "Modifies a CustomizedView",
+        "operationId": "PutCView",
+        "parameters": [
+          {
+            "enum": [
+              "administrador",
+              "profesor",
+              "estudiante",
+              "noRegistrado"
+            ],
+            "type": "string",
+            "description": "Name of the rolBase to modify its customized view",
+            "name": "rolBase",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Customized View information updated",
+            "name": "newView",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CustomizedView"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "CustomizedView Found",
+            "schema": {
+              "$ref": "#/definitions/CustomizedView"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
     "/editQuestions": {
       "get": {
         "security": [
@@ -22581,6 +22919,27 @@ func init() {
         "visibleParaUsuario": {
           "type": "boolean",
           "example": true
+        }
+      }
+    },
+    "CustomizedView": {
+      "type": "object",
+      "required": [
+        "rolBase",
+        "mensajeInicio"
+      ],
+      "properties": {
+        "mensajeInicio": {
+          "type": "string"
+        },
+        "rolBase": {
+          "type": "string",
+          "enum": [
+            "administrador",
+            "profesor",
+            "estudiante",
+            "noRegistrado"
+          ]
         }
       }
     },

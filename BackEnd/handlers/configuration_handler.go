@@ -10,6 +10,8 @@ import (
 	"uva-devtest/emailHelper"
 	"uva-devtest/models"
 	"uva-devtest/permissions"
+	"uva-devtest/persistence/dao"
+	"uva-devtest/persistence/dbconnection"
 	"uva-devtest/restapi/operations/configuration"
 
 	"github.com/go-openapi/runtime/middleware"
@@ -62,4 +64,53 @@ func PutEmailConfiguration(params configuration.PutEmailConfigurationParams, u *
 	}
 	log.Println("Error en PutEmailConfiguration(): ", err)
 	return configuration.NewPutEmailConfigurationInternalServerError()
+}
+
+func GetCViews(params configuration.GetCViewsParams, u *models.User) middleware.Responder {
+	if permissions.CanAdminConfiguration(u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			var cvs []*dao.CustomizedView
+			cvs, err = dao.GetCViews(db)
+			if err == nil {
+				mcvs := dao.ToModelCustomizedViews(cvs)
+				return configuration.NewGetCViewsOK().WithPayload(mcvs)
+			}
+		}
+		log.Println("Error en GetCViews(): ", err)
+		return configuration.NewGetCViewsInternalServerError()
+	}
+	return configuration.NewGetCViewsForbidden()
+}
+
+func GetCView(params configuration.GetCViewParams, u *models.User) middleware.Responder {
+	if permissions.CanAdminConfiguration(u) || params.RolBase == models.CustomizedViewRolBaseNoRegistrado || (u != nil && params.RolBase == *u.Rol) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			var cv *dao.CustomizedView
+			cv, err = dao.GetCView(db, params.RolBase)
+			if err == nil {
+				mcv := dao.ToModelCustomizedView(cv)
+				return configuration.NewGetCViewOK().WithPayload(mcv)
+			}
+		}
+		log.Println("Error en GetCView(): ", err)
+		return configuration.NewGetCViewInternalServerError()
+	}
+	return configuration.NewGetCViewForbidden()
+}
+
+func PutCView(params configuration.PutCViewParams, u *models.User) middleware.Responder {
+	if permissions.CanAdminConfiguration(u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			err = dao.PutCView(db, params.RolBase, params.NewView)
+			if err == nil {
+				return configuration.NewPutCViewOK()
+			}
+		}
+		log.Println("Error en PutCView(): ", err)
+		return configuration.NewPutCViewInternalServerError()
+	}
+	return configuration.NewPutCViewForbidden()
 }

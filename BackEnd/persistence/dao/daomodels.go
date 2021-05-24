@@ -487,3 +487,18 @@ const (
 
 	TagOrderByLessTest string = "lessTest"
 )
+
+// CustomizedView customized view
+//
+// swagger:model CustomizedView
+type CustomizedView struct {
+
+	// mensaje inicio
+	// Required: true
+	MensajeInicio *string `json:"mensajeInicio"`
+
+	// rol base
+	// Required: true
+	// Enum: [administrador profesor estudiante noRegistrado]
+	RolBase *string `json:"rolBase"`
+}

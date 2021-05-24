@@ -102,6 +102,7 @@ import { LaUUncorrectedComponent } from './list-answers/la-u-uncorrected/la-u-un
 import { ListUsersComponent } from './list-users/list-users.component';
 import { UsersComponent } from './users/users.component';
 import { AdminPermissionsComponent } from './admin/admin-permissions/admin-permissions.component';
+import { AdminCustomizedViewsComponent } from './admin/admin-customized-views/admin-customized-views.component';
 
 export function apiConfigFactory (): Configuration {
   const params: ConfigurationParameters = {
@@ -206,7 +207,8 @@ export function apiConfigFactory (): Configuration {
     LaUUncorrectedComponent,
     ListUsersComponent,
     UsersComponent,
-    AdminPermissionsComponent
+    AdminPermissionsComponent,
+    AdminCustomizedViewsComponent
   ],
   imports: [
     BrowserModule,

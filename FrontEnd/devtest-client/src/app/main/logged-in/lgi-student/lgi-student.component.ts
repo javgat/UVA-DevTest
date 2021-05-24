@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { UserService } from '@javgat/devtest-api';
+import { ConfigurationService, CustomizedView, UserService } from '@javgat/devtest-api';
 import { LoggedInController } from 'src/app/shared/app.controller';
+import { VistaPersonalizada } from 'src/app/shared/app.model';
 import { DataService } from 'src/app/shared/data.service';
 import { SessionService } from 'src/app/shared/session.service';
 

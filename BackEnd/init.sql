@@ -22,6 +22,18 @@ DROP TABLE IF EXISTS Equipo;
 DROP TABLE IF EXISTS TokenCorreo;
 DROP TABLE IF EXISTS Usuario;
 DROP TABLE IF EXISTS TipoRol;
+DROP TABLE IF EXISTS VistaPersonalizada;
+
+CREATE TABLE VistaPersonalizada (
+  rolBase ENUM('administrador', 'profesor', 'estudiante', 'noRegistrado') NOT NULL,
+  mensajeInicio longtext COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY(rolBase)
+);
+
+INSERT INTO VistaPersonalizada(rolBase, mensajeInicio) VALUES('administrador', "Bienvenido Administrador");
+INSERT INTO VistaPersonalizada(rolBase, mensajeInicio) VALUES('profesor', "Bienvenido Profesor");
+INSERT INTO VistaPersonalizada(rolBase, mensajeInicio) VALUES('estudiante', "Bienvenido Estudiante");
+INSERT INTO VistaPersonalizada(rolBase, mensajeInicio) VALUES('noRegistrado', "");
 
 CREATE TABLE TipoRol (
   id int(11) NOT NULL AUTO_INCREMENT,
