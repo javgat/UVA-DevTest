@@ -6,10 +6,11 @@ import { AppComponent } from './app.component';
 import { SigninComponent } from './signin/signin.component';
 import { LoginComponent } from './login/login.component';
 
-import { HttpClientModule, HttpClientXsrfModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HttpClientXsrfModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { ApiModule, BASE_PATH, Configuration, ConfigurationParameters } from '@javgat/devtest-api';
 import { environment } from '../environments/environment';
+import { MarkdownModule } from 'ngx-markdown';
 import { MainComponent } from './main/main.component';
 import { LoggedInComponent } from './main/logged-in/logged-in.component';
 import { NotLoggedInComponent } from './main/not-logged-in/not-logged-in.component';
@@ -216,6 +217,7 @@ export function apiConfigFactory (): Configuration {
     HttpClientModule,
     ApiModule.forRoot(apiConfigFactory),
     FormsModule,
+    MarkdownModule.forRoot({ loader: HttpClient }),
   ],
   providers: [
     { provide: BASE_PATH, useValue: environment.API_BASE_PATH },

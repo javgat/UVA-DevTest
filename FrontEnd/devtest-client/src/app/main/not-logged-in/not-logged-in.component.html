@@ -1,8 +1,5 @@
 <div class="d-grid gap-2 container my-5">
-    <markdown [data]="vistaPers.mensajeInicio" (ready)="onReady()"></markdown>
-    <div class="my-3 text-center">
-        <span style="white-space: pre-line">{{vistaPers.mensajeInicio}}</span>
-    </div>
+    <markdown class="text-center" [data]="vistaPers.mensajeInicio"></markdown>
     <a type="button" [routerLink]="['/login']" class="btn btn-primary btn-lg my-3">INICIAR SESIÓN</a>
     <a type="button" [routerLink]="['/signin']" class="btn btn-primary btn-lg my-3">REGISTRARSE</a>
 </div>
