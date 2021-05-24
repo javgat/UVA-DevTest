@@ -5698,12 +5698,12 @@ func init() {
             "required": true
           },
           {
-            "description": "Valor que tendra la pregunta en el test",
-            "name": "valorFinal",
+            "description": "Valor que tendra la pregunta en el test, y posicion",
+            "name": "testPregunta",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/ValorFinal"
+              "$ref": "#/definitions/TestPregunta"
             }
           }
         ],
@@ -10545,6 +10545,10 @@ func init() {
           "type": "integer",
           "maximum": 100
         },
+        "posicion": {
+          "type": "integer",
+          "example": 5
+        },
         "question": {
           "type": "string",
           "example": "¿Cual es el lenguaje que tiene un nombre más largo de todos?"
@@ -10785,6 +10789,23 @@ func init() {
         }
       }
     },
+    "TestPregunta": {
+      "type": "object",
+      "required": [
+        "valorFinal",
+        "posicion"
+      ],
+      "properties": {
+        "posicion": {
+          "type": "integer",
+          "example": 5
+        },
+        "valorFinal": {
+          "type": "integer",
+          "example": 1
+        }
+      }
+    },
     "TipoRol": {
       "type": "object",
       "required": [
@@ -10978,18 +10999,6 @@ func init() {
           "type": "string",
           "pattern": "^[^@ \\t\\r\\n]+$",
           "example": "carlosg72"
-        }
-      }
-    },
-    "ValorFinal": {
-      "type": "object",
-      "required": [
-        "valorFinal"
-      ],
-      "properties": {
-        "valorFinal": {
-          "type": "integer",
-          "example": 1
         }
       }
     }
@@ -17655,12 +17664,12 @@ func init() {
             "required": true
           },
           {
-            "description": "Valor que tendra la pregunta en el test",
-            "name": "valorFinal",
+            "description": "Valor que tendra la pregunta en el test, y posicion",
+            "name": "testPregunta",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/ValorFinal"
+              "$ref": "#/definitions/TestPregunta"
             }
           }
         ],
@@ -23183,6 +23192,10 @@ func init() {
           "maximum": 100,
           "minimum": 0
         },
+        "posicion": {
+          "type": "integer",
+          "example": 5
+        },
         "question": {
           "type": "string",
           "example": "¿Cual es el lenguaje que tiene un nombre más largo de todos?"
@@ -23426,6 +23439,24 @@ func init() {
         }
       }
     },
+    "TestPregunta": {
+      "type": "object",
+      "required": [
+        "valorFinal",
+        "posicion"
+      ],
+      "properties": {
+        "posicion": {
+          "type": "integer",
+          "example": 5
+        },
+        "valorFinal": {
+          "type": "integer",
+          "minimum": 0,
+          "example": 1
+        }
+      }
+    },
     "TipoRol": {
       "type": "object",
       "required": [
@@ -23620,19 +23651,6 @@ func init() {
           "type": "string",
           "pattern": "^[^@ \\t\\r\\n]+$",
           "example": "carlosg72"
-        }
-      }
-    },
-    "ValorFinal": {
-      "type": "object",
-      "required": [
-        "valorFinal"
-      ],
-      "properties": {
-        "valorFinal": {
-          "type": "integer",
-          "minimum": 0,
-          "example": 1
         }
       }
     }

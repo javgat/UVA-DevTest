@@ -841,7 +841,7 @@ func copyQuestions(sourceTID int64, targetTID int64, username string, userid int
 				if err != nil {
 					return err
 				}
-				err = dao.AddQuestionTest(db, mq.ID, targetTID, *mq.ValorFinal)
+				err = dao.AddQuestionTest(db, mq.ID, targetTID, *mq.ValorFinal, mq.Posicion)
 				if err != nil {
 					return err
 				}

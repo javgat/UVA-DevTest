@@ -151,11 +151,12 @@ export class Pregunta implements Question {
     isRespondida: boolean;
     penalizacion: number;
     cantidadFavoritos: number;
+    posicion: number;
 
     constructor(id?: number | undefined, title?: string, question?: string, estT?: number, autoC?: boolean,
         edit?: boolean, username?: string, accesoPublicoNoPublicada?: boolean, eleUni?: boolean | undefined, solu?: string | undefined,
         tipo?: Question.TipoPreguntaEnum, valor?: number | undefined, isRespondida?: boolean, penalizacion?: number,
-        cantidadFavoritos?: number) {
+        cantidadFavoritos?: number, posicion?: number) {
         this.id = id || 0
         this.title = title || ""
         this.question = question || ""
@@ -171,12 +172,13 @@ export class Pregunta implements Question {
         this.isRespondida = isRespondida || false
         this.penalizacion = penalizacion || 0
         this.cantidadFavoritos = cantidadFavoritos || 0
+        this.posicion = posicion || 0
     }
 
     static constructorFromQuestion(q: Question): Pregunta{
         return new Pregunta(q.id, q.title, q.question, q.estimatedTime, q.autoCorrect, q.editable, q.username,
         q.accesoPublicoNoPublicada, q.eleccionUnica, q.solucion, q.tipoPregunta, q.valorFinal, q.isRespondida,
-        q.penalizacion, q.cantidadFavoritos)
+        q.penalizacion, q.cantidadFavoritos, q.posicion)
     }
 }
 

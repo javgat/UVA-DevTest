@@ -30,6 +30,7 @@ export interface Question {
     isRespondida?: boolean;
     penalizacion: number;
     cantidadFavoritos?: number;
+    posicion?: number;
 }
 export namespace Question {
     export type TipoPreguntaEnum = 'opciones' | 'string' | 'codigo';

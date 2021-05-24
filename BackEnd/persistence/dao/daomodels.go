@@ -118,6 +118,10 @@ type Question struct {
 	// Minimum: 0
 	Penalizacion *int64 `json:"penalizacion"`
 
+	// posicion
+	// Example: 5
+	Posicion int64 `json:"posicion,omitempty"`
+
 	// question
 	// Example: ¿Cual es el lenguaje que tiene un nombre más largo de todos?
 	// Required: true
@@ -501,4 +505,21 @@ type CustomizedView struct {
 	// Required: true
 	// Enum: [administrador profesor estudiante noRegistrado]
 	RolBase *string `json:"rolBase"`
+}
+
+// TestPregunta test pregunta
+//
+// swagger:model TestPregunta
+type TestPregunta struct {
+
+	// posicion
+	// Example: 5
+	// Required: true
+	Posicion *int64 `json:"posicion"`
+
+	// valor final
+	// Example: 1
+	// Required: true
+	// Minimum: 0
+	ValorFinal *int64 `json:"valorFinal"`
 }

@@ -23,7 +23,7 @@ import { Question } from '../model/question';
 import { Tag } from '../model/tag';
 import { Team } from '../model/team';
 import { Test } from '../model/test';
-import { ValorFinal } from '../model/valorFinal';
+import { TestPregunta } from '../model/testPregunta';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -118,14 +118,14 @@ export class TestService {
      * Adds an existing question to a test
      * @param testid Id of the test to add a question to
      * @param questionid Id of the question to add to the test
-     * @param valorFinal Valor que tendra la pregunta en el test
+     * @param testPregunta Valor que tendra la pregunta en el test, y posicion
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public addQuestionToTest(testid: number, questionid: number, valorFinal: ValorFinal, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public addQuestionToTest(testid: number, questionid: number, valorFinal: ValorFinal, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public addQuestionToTest(testid: number, questionid: number, valorFinal: ValorFinal, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public addQuestionToTest(testid: number, questionid: number, valorFinal: ValorFinal, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public addQuestionToTest(testid: number, questionid: number, testPregunta: TestPregunta, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public addQuestionToTest(testid: number, questionid: number, testPregunta: TestPregunta, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public addQuestionToTest(testid: number, questionid: number, testPregunta: TestPregunta, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public addQuestionToTest(testid: number, questionid: number, testPregunta: TestPregunta, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (testid === null || testid === undefined) {
             throw new Error('Required parameter testid was null or undefined when calling addQuestionToTest.');
@@ -135,8 +135,8 @@ export class TestService {
             throw new Error('Required parameter questionid was null or undefined when calling addQuestionToTest.');
         }
 
-        if (valorFinal === null || valorFinal === undefined) {
-            throw new Error('Required parameter valorFinal was null or undefined when calling addQuestionToTest.');
+        if (testPregunta === null || testPregunta === undefined) {
+            throw new Error('Required parameter testPregunta was null or undefined when calling addQuestionToTest.');
         }
 
         let headers = this.defaultHeaders;
@@ -163,7 +163,7 @@ export class TestService {
         }
 
         return this.httpClient.put<any>(`${this.basePath}/tests/${encodeURIComponent(String(testid))}/questions/${encodeURIComponent(String(questionid))}`,
-            valorFinal,
+            testPregunta,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

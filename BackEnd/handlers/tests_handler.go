@@ -273,11 +273,11 @@ func cloneQuestions(db *sql.DB, mqs []*models.Question, newMTest *models.Test, o
 		if err == nil {
 			if qp != nil {
 				newqid := qp.ID
-				var vF *int64
-				vF, err = dao.GetValorFinal(db, origqid, oldDTest.ID)
+				var tp *dao.TestPregunta
+				tp, err = dao.GetTestPreguntaAtributos(db, origqid, oldDTest.ID)
 				if err == nil {
-					if vF != nil {
-						err = dao.AddQuestionTest(db, newqid, newMTest.ID, *vF)
+					if tp != nil {
+						err = dao.AddQuestionTest(db, newqid, newMTest.ID, *tp.ValorFinal, *tp.Posicion)
 						if err == nil {
 							var tags []*dao.Tag
 							tags, err = dao.GetQuestionTags(db, origqid)
@@ -299,11 +299,11 @@ func cloneQuestions(db *sql.DB, mqs []*models.Question, newMTest *models.Test, o
 							}
 						}
 					} else {
-						err = errors.New("valor final no se pudo obtener")
+						err = errors.New("valor TestPregunta no se pudo obtener")
 					}
 				}
 			} else {
-				err = errors.New("valor final no se pudo obtener")
+				err = errors.New("valor TestPregunta no se pudo obtener")
 			}
 		}
 		if err != nil {
@@ -558,9 +558,9 @@ func AddQuestionToTest(params test.AddQuestionToTestParams, u *models.User) midd
 						err = addQuestionTimeToTest(q, params.Testid)
 					}
 					if err == nil {
-						err = addQuestionPointsTest(*params.ValorFinal.ValorFinal, params.Testid)
+						err = addQuestionPointsTest(*params.TestPregunta.ValorFinal, params.Testid)
 						if err == nil {
-							err = dao.AddQuestionTest(db, params.Questionid, params.Testid, *params.ValorFinal.ValorFinal)
+							err = dao.AddQuestionTest(db, params.Questionid, params.Testid, *params.TestPregunta.ValorFinal, *params.TestPregunta.Posicion)
 							if err == nil {
 								return test.NewAddQuestionToTestOK()
 							}

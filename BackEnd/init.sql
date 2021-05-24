@@ -235,6 +235,7 @@ CREATE TABLE TestPregunta(
   testid int(11) NOT NULL,
   preguntaid int(11) NOT NULL,
   valorFinal int(11) NOT NULL,
+  posicion int(11) NOT NULL,
   CONSTRAINT CHK_valorFinal CHECK (valorFinal>=0),
   FOREIGN KEY(testid) REFERENCES Test(id) ON DELETE CASCADE,
   FOREIGN KEY(preguntaid) REFERENCES Pregunta(id) ON DELETE CASCADE,

@@ -5361,11 +5361,11 @@ paths:
         required: true
         type: integer
       - in: body
-        name: valorFinal
-        description: Valor que tendra la pregunta en el test
+        name: testPregunta
+        description: Valor que tendra la pregunta en el test, y posicion
         required: true
         schema:
-          $ref: '#/definitions/ValorFinal'
+          $ref: '#/definitions/TestPregunta'
       responses:
         200:
           description: Question added
@@ -6950,6 +6950,9 @@ definitions:
       cantidadFavoritos:
         type: integer
         minimum: 0
+      posicion:
+        type: integer
+        example: 5
   Test:
     type: object
     required:
@@ -7095,15 +7098,19 @@ definitions:
       puntuacion:
         type: integer
         example: 100
-  ValorFinal:
+  TestPregunta:
     type: object
     required:
     - valorFinal
+    - posicion
     properties:
       valorFinal:
         type: integer
         example: 1
         minimum: 0
+      posicion:
+        type: integer
+        example: 5
   Error:
     type: object
     required:

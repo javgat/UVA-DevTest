@@ -63,6 +63,10 @@ type Question struct {
 	// Minimum: 0
 	Penalizacion *int64 `json:"penalizacion"`
 
+	// posicion
+	// Example: 5
+	Posicion int64 `json:"posicion,omitempty"`
+
 	// question
 	// Example: ¿Cual es el lenguaje que tiene un nombre más largo de todos?
 	// Required: true

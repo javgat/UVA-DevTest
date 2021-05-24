@@ -42,16 +42,16 @@ type AddQuestionToTestParams struct {
 	  In: path
 	*/
 	Questionid int64
+	/*Valor que tendra la pregunta en el test, y posicion
+	  Required: true
+	  In: body
+	*/
+	TestPregunta *models.TestPregunta
 	/*Id of the test to add a question to
 	  Required: true
 	  In: path
 	*/
 	Testid int64
-	/*Valor que tendra la pregunta en el test
-	  Required: true
-	  In: body
-	*/
-	ValorFinal *models.ValorFinal
 }
 
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
@@ -68,19 +68,14 @@ func (o *AddQuestionToTestParams) BindRequest(r *http.Request, route *middleware
 		res = append(res, err)
 	}
 
-	rTestid, rhkTestid, _ := route.Params.GetOK("testid")
-	if err := o.bindTestid(rTestid, rhkTestid, route.Formats); err != nil {
-		res = append(res, err)
-	}
-
 	if runtime.HasBody(r) {
 		defer r.Body.Close()
-		var body models.ValorFinal
+		var body models.TestPregunta
 		if err := route.Consumer.Consume(r.Body, &body); err != nil {
 			if err == io.EOF {
-				res = append(res, errors.Required("valorFinal", "body", ""))
+				res = append(res, errors.Required("testPregunta", "body", ""))
 			} else {
-				res = append(res, errors.NewParseError("valorFinal", "body", "", err))
+				res = append(res, errors.NewParseError("testPregunta", "body", "", err))
 			}
 		} else {
 			// validate body object
@@ -94,11 +89,16 @@ func (o *AddQuestionToTestParams) BindRequest(r *http.Request, route *middleware
 			}
 
 			if len(res) == 0 {
-				o.ValorFinal = &body
+				o.TestPregunta = &body
 			}
 		}
 	} else {
-		res = append(res, errors.Required("valorFinal", "body", ""))
+		res = append(res, errors.Required("testPregunta", "body", ""))
+	}
+
+	rTestid, rhkTestid, _ := route.Params.GetOK("testid")
+	if err := o.bindTestid(rTestid, rhkTestid, route.Formats); err != nil {
+		res = append(res, err)
 	}
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)

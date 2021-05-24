@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PublishedTestService, Question, Tag, Test, TestService, UserService } from '@javgat/devtest-api';
+import { PublishedTestService, Question, Tag, Test, UserService } from '@javgat/devtest-api';
 import { Subscription } from 'rxjs';
 import { LoggedInController } from '../shared/app.controller';
 import { Examen, tipoPrint } from '../shared/app.model';

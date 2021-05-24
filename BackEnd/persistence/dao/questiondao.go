@@ -38,6 +38,7 @@ func ToModelQuestion(q *Question) (*models.Question, error) {
 				AccesoPublicoNoPublicada: q.AccesoPublicoNoPublicada,
 				Penalizacion:             q.Penalizacion,
 				CantidadFavoritos:        q.CantidadFavoritos,
+				Posicion:                 q.Posicion,
 			}
 			return mq, nil
 		}
@@ -584,23 +585,24 @@ func RemoveQuestionTeam(db *sql.DB, questionid int64, teamname string) error {
 	return err
 }
 
-func addValorFinal(qs *Question, testid int64) error {
+func addTestPreguntaAtributos(qs *Question, testid int64) error {
 	db, err := dbconnection.ConnectDb()
 	if err != nil {
 		return err
 	}
-	var vF *int64
-	vF, err = GetValorFinal(db, qs.ID, testid)
-	if err != nil || vF == nil {
-		return errors.New("no se pudo leer un valor final")
+	var tp *TestPregunta
+	tp, err = GetTestPreguntaAtributos(db, qs.ID, testid)
+	if err != nil || tp == nil {
+		return errors.New("no se pudo leer un valor de TestPregunta")
 	}
-	qs.ValorFinal = vF
+	qs.ValorFinal = tp.ValorFinal
+	qs.Posicion = *tp.Posicion
 	return nil
 }
 
-func addValoresFinales(qs []*Question, testid int64) error {
+func addTestPreguntasAtributos(qs []*Question, testid int64) error {
 	for _, q := range qs {
-		err := addValorFinal(q, testid)
+		err := addTestPreguntaAtributos(q, testid)
 		if err != nil {
 			return err
 		}
@@ -613,14 +615,14 @@ func GetQuestionsFromTest(db *sql.DB, testid int64) ([]*Question, error) {
 		return nil, errors.New(errorDBNil)
 	}
 	var qs []*Question
-	query, err := db.Prepare("SELECT P.* FROM Pregunta P JOIN TestPregunta T ON P.id=T.preguntaid WHERE T.testid=?")
+	query, err := db.Prepare("SELECT P.* FROM Pregunta P JOIN TestPregunta T ON P.id=T.preguntaid WHERE T.testid=? ORDER BY T.posicion ASC")
 	if err == nil {
 		defer query.Close()
 		rows, err := query.Query(testid)
 		if err == nil {
 			qs, err = rowsToQuestions(rows)
 			if err == nil {
-				err = addValoresFinales(qs, testid)
+				err = addTestPreguntasAtributos(qs, testid)
 				return qs, err
 			}
 		}
@@ -642,7 +644,7 @@ func GetQuestionFromTest(db *sql.DB, testid int64, questionid int64) (*Question,
 		if err == nil {
 			qs, err = rowsToQuestion(rows)
 			if qs != nil && err == nil {
-				err = addValorFinal(qs, testid)
+				err = addTestPreguntaAtributos(qs, testid)
 				return qs, err
 			}
 		}
@@ -652,14 +654,14 @@ func GetQuestionFromTest(db *sql.DB, testid int64, questionid int64) (*Question,
 	return nil, err
 }
 
-func AddQuestionTest(db *sql.DB, questionid int64, testid int64, valorFinal int64) error {
+func AddQuestionTest(db *sql.DB, questionid int64, testid int64, valorFinal int64, posicion int64) error {
 	if db == nil {
 		return errors.New(errorDBNil)
 	}
-	query, err := db.Prepare("INSERT INTO TestPregunta(testid, preguntaid, valorFinal) VALUES(?,?,?)")
+	query, err := db.Prepare("INSERT INTO TestPregunta(testid, preguntaid, valorFinal, posicion) VALUES(?,?,?,?)")
 	if err == nil {
 		defer query.Close()
-		_, err = query.Exec(testid, questionid, valorFinal)
+		_, err = query.Exec(testid, questionid, valorFinal, posicion)
 		return err
 	}
 	return err
@@ -739,18 +741,42 @@ func rowsToInt64(rows *sql.Rows) (*int64, error) {
 	return i, err
 }
 
-func GetValorFinal(db *sql.DB, questionid int64, testid int64) (*int64, error) {
+func rowsToTestPreguntas(rows *sql.Rows) ([]*TestPregunta, error) {
+	var tps []*TestPregunta
+	for rows.Next() {
+		var i TestPregunta
+		var t1, t2 int64
+		err := rows.Scan(&t1, &t2, &i.ValorFinal, &i.Posicion)
+		if err != nil {
+			log.Print(err)
+			return tps, err
+		}
+		tps = append(tps, &i)
+	}
+	return tps, nil
+}
+
+func rowsToTestPregunta(rows *sql.Rows) (*TestPregunta, error) {
+	var i *TestPregunta
+	ts, err := rowsToTestPreguntas(rows)
+	if len(ts) >= 1 {
+		i = ts[0]
+	}
+	return i, err
+}
+
+func GetTestPreguntaAtributos(db *sql.DB, questionid int64, testid int64) (*TestPregunta, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
-	var vF *int64
-	query, err := db.Prepare("SELECT valorFinal FROM TestPregunta WHERE preguntaid=? AND testid=?")
+	var tP *TestPregunta
+	query, err := db.Prepare("SELECT * FROM TestPregunta WHERE preguntaid=? AND testid=?")
 	if err == nil {
 		defer query.Close()
 		rows, err := query.Query(questionid, testid)
 		if err == nil {
-			vF, err = rowsToInt64(rows)
-			return vF, err
+			tP, err = rowsToTestPregunta(rows)
+			return tP, err
 		}
 	} else {
 		log.Print(err)

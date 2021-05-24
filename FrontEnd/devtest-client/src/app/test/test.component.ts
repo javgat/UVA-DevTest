@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PublishTestParams, Question, Tag, TagService, Test, TestService, UserService, ValorFinal } from '@javgat/devtest-api';
+import { PublishTestParams, Question, Tag, TagService, Test, TestService, UserService } from '@javgat/devtest-api';
+import { TestPregunta } from '@javgat/devtest-api/model/testPregunta';
 import { Subscription } from 'rxjs';
 import { LoggedInTeacherController } from '../shared/app.controller';
 import { Examen, Mensaje, Tipo, tipoPrint } from '../shared/app.model';
@@ -179,15 +180,28 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
     })
   }
 
+  getMaxPositionQuestions(): number{
+    let first = this.preguntas.map(item => item.posicion).map(i => i || 0)
+    let max: number
+    console.log(first)
+    if(first.length==0){
+      max = -1
+    }else{
+      max = Math.max(...first);
+    }
+    return max
+  }
+
   addQuestion(primera: boolean) {
     if (this.isQuestionInTest(this.addQuestionId)) {
       this.cambiarMensaje(new Mensaje("La pregunta ya está en el test", Tipo.ERROR, true))
       return
     }
-    let vF: ValorFinal = {
-      valorFinal: 1
+    let tp: TestPregunta = {
+      valorFinal: 1,
+      posicion: this.getMaxPositionQuestions()+1
     }
-    this.testS.addQuestionToTest(this.id, this.addQuestionId, vF).subscribe(
+    this.testS.addQuestionToTest(this.id, this.addQuestionId, tp).subscribe(
       resp => {
         this.getTest(true)
       },
@@ -208,10 +222,11 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
     if (this.preguntaChange == null || this.preguntaChange.id == null || this.preguntaChange.valorFinal == null) {
       return
     }
-    let vF: ValorFinal = {
-      valorFinal: this.preguntaChange.valorFinal
+    let tp: TestPregunta = {
+      valorFinal: this.preguntaChange.valorFinal,
+      posicion: this.preguntaChange.posicion || 0
     }
-    this.testS.addQuestionToTest(this.id, this.preguntaChange.id, vF).subscribe(
+    this.testS.addQuestionToTest(this.id, this.preguntaChange.id, tp).subscribe(
       resp => this.cambiarMensaje(new Mensaje("Valor cambiado con éxito", Tipo.SUCCESS, true)),
       err => this.handleErrRelog(err, "cambiar valor de una pregunta", primera, this.changeValue, this)
     )
