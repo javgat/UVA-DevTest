@@ -6,8 +6,10 @@ package emailHelper
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"os"
+	"sync"
 )
 
 const errorResourceNotFound = "no se encontro el recurso"
@@ -20,17 +22,6 @@ type EmailInfo struct {
 	Serverhost  string `json:"serverhost"`
 	Serverport  string `json:"serverport"`
 	FrontEndUrl string `json:"frontendurl"`
-}
-
-// smtpServer data to smtp server
-type smtpServer struct {
-	host string
-	port string
-}
-
-// Address URI to smtp server
-func (s *smtpServer) Address() string {
-	return s.host + ":" + s.port
 }
 
 // Opens the email information file and returns a EmailInfo struct
@@ -46,10 +37,6 @@ func GetEmailInfo(filename string) (*EmailInfo, error) {
 	return emailInfo, err
 }
 
-func GetOwnEmailInfo() (*EmailInfo, error) {
-	return GetEmailInfo(emailinfo_filename)
-}
-
 func PutEmailInfo(filename string, emailInfo *EmailInfo) error {
 	data, err := json.Marshal(emailInfo)
 	if err != nil {
@@ -59,6 +46,44 @@ func PutEmailInfo(filename string, emailInfo *EmailInfo) error {
 	return err
 }
 
+// smtpServer data to smtp server
+type smtpServer struct {
+	host string
+	port string
+}
+
+// Address URI to smtp server
+func (s *smtpServer) Address() string {
+	return s.host + ":" + s.port
+}
+
+var selfEmailInfoSingleton *EmailInfo
+
+var lockSEmail = &sync.Mutex{}
+
+func GetOwnEmailInfo() (*EmailInfo, error) {
+	var err error
+	if selfEmailInfoSingleton == nil {
+		lockSEmail.Lock()
+		defer lockSEmail.Unlock()
+		if selfEmailInfoSingleton == nil {
+			fmt.Println("Reading EmailInfo...")
+			selfEmailInfoSingleton, err = GetEmailInfo(emailinfo_filename)
+		}
+	}
+	return selfEmailInfoSingleton, err
+}
+
+func markAsInvalidSEmail() {
+	lockSEmail.Lock()
+	defer lockSEmail.Unlock()
+	selfEmailInfoSingleton = nil
+}
+
 func PutOwnEmailInfo(emailInfo *EmailInfo) error {
-	return PutEmailInfo(emailinfo_filename, emailInfo)
+	err := PutEmailInfo(emailinfo_filename, emailInfo)
+	if err == nil {
+		markAsInvalidSEmail()
+	}
+	return err
 }
