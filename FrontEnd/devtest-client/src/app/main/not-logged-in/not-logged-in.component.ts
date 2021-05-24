@@ -3,7 +3,7 @@ import { DataService } from 'src/app/shared/data.service';
 import { SessionService } from 'src/app/shared/session.service';
 import { MainComponent } from '../main.component';
 
-import { ConfigurationService, CustomizedView, UserService} from '@javgat/devtest-api'
+import { ConfigurationService, CustomizedView, UserService } from '@javgat/devtest-api'
 import { Router } from '@angular/router';
 import { VistaPersonalizada } from 'src/app/shared/app.model';
 
@@ -15,29 +15,21 @@ import { VistaPersonalizada } from 'src/app/shared/app.model';
 export class NotLoggedInComponent extends MainComponent implements OnInit {
 
   vistaPers: CustomizedView
-  constructor(session: SessionService, router: Router, datos: DataService, userService : UserService, private configS?: ConfigurationService){
+  constructor(session: SessionService, router: Router, datos: DataService, userService: UserService, private configS?: ConfigurationService) {
     super(session, router, datos, userService);
     this.vistaPers = new VistaPersonalizada()
-    if(!this.getSessionUser().isEmpty()){
-      this.getVistaPersonalizada(true)
-    }
+    this.getVistaPersonalizada(true)
   }
 
   ngOnInit(): void {
   }
 
-  doHasUserAction(){
-    if(this.configS != undefined){
-      this.getVistaPersonalizada(true)
-    }
-  }
-
-  hasPermissions(){
+  hasPermissions() {
     return true
   }
 
-  getVistaPersonalizada(primera: boolean){
-    if(this.configS==undefined) return
+  getVistaPersonalizada(primera: boolean) {
+    if (this.configS == undefined) return
     this.configS.getCView("noRegistrado").subscribe(
       resp => {
         this.vistaPers = new VistaPersonalizada(resp)
