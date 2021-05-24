@@ -46,41 +46,44 @@
             (change)="changeFlexInclude()">
         <label class="form-check-label" for="flexSwitchIncludeNonEdit">{{includeLabel}}</label>
     </div>
-    <table class="table table-striped table-hover table-primary my-3">
-        <thead>
-            <tr>
-                <th>Título</th>
-                <th>Autor</th>
-                <th role="button" (click)="clickOrderByTiempo()">
-                    Tiempo Disponible
-                    <span class="arrow-orderby" *ngIf="isMoreTimeSelected()"> &uarr;</span>
-                    <span class="arrow-orderby" *ngIf="isLessTimeSelected()"> &darr;</span>
-                    <span class="arrow-orderby" *ngIf="!isMoreTimeSelected() && !isLessTimeSelected()"> &#8597;</span>
-                </th>
-                <th *ngIf="!arePublished" role="button" (click)="clickOrderByFavoritos()">
-                    Favoritos
-                    <span class="arrow-orderby" *ngIf="isMoreFavSelected()"> &uarr;</span>
-                    <span class="arrow-orderby" *ngIf="isLessFavSelected()"> &darr;</span>
-                    <span class="arrow-orderby" *ngIf="!isMoreFavSelected() && !isLessFavSelected()"> &#8597;</span>
-                </th>
-            </tr>
-        </thead>
-        <tbody *ngIf="!arePublished">
-            <tr *ngFor="let test of tests" role="button" [routerLink]="['/et', test.id]">
-                <td>{{test.title}}</td>
-                <td>{{test.username}}</td>
-                <td>{{test.maxMinutes}} minutos</td>
-                <td>{{test.cantidadFavoritos}}</td>
-            </tr>
-        </tbody>
-        <tbody *ngIf="arePublished">
-            <tr *ngFor="let test of tests" role="button" [routerLink]="['/pt', test.id]">
-                <td>{{test.title}}</td>
-                <td>{{test.username}}</td>
-                <td>{{test.maxMinutes}} minutos</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="table-responsive">
+        <table class="table table-striped table-hover table-primary my-3">
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Autor</th>
+                    <th role="button" (click)="clickOrderByTiempo()">
+                        Tiempo Disponible
+                        <span class="arrow-orderby" *ngIf="isMoreTimeSelected()"> &uarr;</span>
+                        <span class="arrow-orderby" *ngIf="isLessTimeSelected()"> &darr;</span>
+                        <span class="arrow-orderby" *ngIf="!isMoreTimeSelected() && !isLessTimeSelected()">
+                            &#8597;</span>
+                    </th>
+                    <th *ngIf="!arePublished" role="button" (click)="clickOrderByFavoritos()">
+                        Favoritos
+                        <span class="arrow-orderby" *ngIf="isMoreFavSelected()"> &uarr;</span>
+                        <span class="arrow-orderby" *ngIf="isLessFavSelected()"> &darr;</span>
+                        <span class="arrow-orderby" *ngIf="!isMoreFavSelected() && !isLessFavSelected()"> &#8597;</span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody *ngIf="!arePublished">
+                <tr *ngFor="let test of tests" role="button" [routerLink]="['/et', test.id]">
+                    <td>{{test.title}}</td>
+                    <td>{{test.username}}</td>
+                    <td>{{test.maxMinutes}} minutos</td>
+                    <td>{{test.cantidadFavoritos}}</td>
+                </tr>
+            </tbody>
+            <tbody *ngIf="arePublished">
+                <tr *ngFor="let test of tests" role="button" [routerLink]="['/pt', test.id]">
+                    <td>{{test.title}}</td>
+                    <td>{{test.username}}</td>
+                    <td>{{test.maxMinutes}} minutos</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
     <nav aria-label="Tests page navigation">
         <ul class="pagination justify-content-center">
             <li class="page-item" [ngClass]="{disabled: getCurrentPage()<=1}"><a class="page-link" role="button"

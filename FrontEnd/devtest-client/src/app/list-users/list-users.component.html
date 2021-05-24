@@ -10,20 +10,22 @@
                 nombre de usuario</button>
         </div>
     </form>
-    <table class="table table-striped table-hover table-primary">
-        <thead>
-            <tr>
-                <th>Nombre de usuario</th>
-                <th>Correo electrónico</th>
-                <th>Rol</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let user of users" role="button" [routerLink]="['/profile', user.username]">
-                <td>{{user.username}}</td>
-                <td>{{user.email}}</td>
-                <td>{{user.rol}}</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="table-responsive">
+        <table class="table table-striped table-hover table-primary">
+            <thead>
+                <tr>
+                    <th>Nombre de usuario</th>
+                    <th>Correo electrónico</th>
+                    <th>Rol</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let user of users" role="button" [routerLink]="['/profile', user.username]">
+                    <td>{{user.username}}</td>
+                    <td>{{user.email}}</td>
+                    <td>{{user.rol}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>

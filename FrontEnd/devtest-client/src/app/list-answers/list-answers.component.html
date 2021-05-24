@@ -10,47 +10,48 @@
                 usuario</button>
         </div>
     </form>
-    <table class="table table-striped table-hover table-primary my-3">
-        <thead>
-            <tr>
-                <th>Autor</th>
-                <th>Entregado</th>
-                <th>Hora de inicio</th>
-                <th>Hora de entrega</th>
-                <th>Puntuación</th>
-                <th *ngIf="modoUsuario()">Visible</th>
-            </tr>
-        </thead>
-        <tbody *ngFor="let ans of answers">
-            <tr *ngIf="!modoUsuario()" role="button"
-                [routerLink]="['/pt', testid, 'answers', ans.id]">
-                <td>{{ans.username || ""}}</td>
-                <td><span *ngIf="ans.entregado">Sí</span><span *ngIf="!ans.entregado">No</span></td>
-                <td>{{printDate(ans.startTime)}}</td>
-                <td><span *ngIf="ans.entregado">{{printDate(ans.finishTime)}}</span></td>
-                <td>{{ans.puntuacion || "--"}}</td>
-                <td *ngIf="modoUsuario()"><span *ngIf="ans.visibleParaUsuario">Sí</span><span
-                        *ngIf="!ans.visibleParaUsuario">No</span></td>
-            </tr>
-            <tr *ngIf="modoUsuario() && ans.visibleParaUsuario" role="button"
-                [routerLink]="['/pt', testid, 'answers', ans.id]">
-                <td>{{ans.username || ""}}</td>
-                <td><span *ngIf="ans.entregado">Sí</span><span *ngIf="!ans.entregado">No</span></td>
-                <td>{{printDate(ans.startTime)}}</td>
-                <td><span *ngIf="ans.entregado">{{printDate(ans.finishTime)}}</span></td>
-                <td>{{ans.puntuacion || "--"}}</td>
-                <td *ngIf="modoUsuario()"><span *ngIf="ans.visibleParaUsuario">Sí</span><span
-                        *ngIf="!ans.visibleParaUsuario">No</span></td>
-            </tr>
-            <tr *ngIf="modoUsuario() && !ans.visibleParaUsuario">
-                <td>{{ans.username || ""}}</td>
-                <td><span *ngIf="ans.entregado">Sí</span><span *ngIf="!ans.entregado">No</span></td>
-                <td>{{printDate(ans.startTime)}}</td>
-                <td><span *ngIf="ans.entregado">{{printDate(ans.finishTime)}}</span></td>
-                <td>{{ans.puntuacion || "--"}}</td>
-                <td *ngIf="modoUsuario()"><span *ngIf="ans.visibleParaUsuario">Sí</span><span
-                        *ngIf="!ans.visibleParaUsuario">No</span></td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="table-responsive">
+        <table class="table table-striped table-hover table-primary my-3">
+            <thead>
+                <tr>
+                    <th>Autor</th>
+                    <th>Entregado</th>
+                    <th>Hora de inicio</th>
+                    <th>Hora de entrega</th>
+                    <th>Puntuación</th>
+                    <th *ngIf="modoUsuario()">Visible</th>
+                </tr>
+            </thead>
+            <tbody *ngFor="let ans of answers">
+                <tr *ngIf="!modoUsuario()" role="button" [routerLink]="['/pt', testid, 'answers', ans.id]">
+                    <td>{{ans.username || ""}}</td>
+                    <td><span *ngIf="ans.entregado">Sí</span><span *ngIf="!ans.entregado">No</span></td>
+                    <td>{{printDate(ans.startTime)}}</td>
+                    <td><span *ngIf="ans.entregado">{{printDate(ans.finishTime)}}</span></td>
+                    <td>{{ans.puntuacion || "--"}}</td>
+                    <td *ngIf="modoUsuario()"><span *ngIf="ans.visibleParaUsuario">Sí</span><span
+                            *ngIf="!ans.visibleParaUsuario">No</span></td>
+                </tr>
+                <tr *ngIf="modoUsuario() && ans.visibleParaUsuario" role="button"
+                    [routerLink]="['/pt', testid, 'answers', ans.id]">
+                    <td>{{ans.username || ""}}</td>
+                    <td><span *ngIf="ans.entregado">Sí</span><span *ngIf="!ans.entregado">No</span></td>
+                    <td>{{printDate(ans.startTime)}}</td>
+                    <td><span *ngIf="ans.entregado">{{printDate(ans.finishTime)}}</span></td>
+                    <td>{{ans.puntuacion || "--"}}</td>
+                    <td *ngIf="modoUsuario()"><span *ngIf="ans.visibleParaUsuario">Sí</span><span
+                            *ngIf="!ans.visibleParaUsuario">No</span></td>
+                </tr>
+                <tr *ngIf="modoUsuario() && !ans.visibleParaUsuario">
+                    <td>{{ans.username || ""}}</td>
+                    <td><span *ngIf="ans.entregado">Sí</span><span *ngIf="!ans.entregado">No</span></td>
+                    <td>{{printDate(ans.startTime)}}</td>
+                    <td><span *ngIf="ans.entregado">{{printDate(ans.finishTime)}}</span></td>
+                    <td>{{ans.puntuacion || "--"}}</td>
+                    <td *ngIf="modoUsuario()"><span *ngIf="ans.visibleParaUsuario">Sí</span><span
+                            *ngIf="!ans.visibleParaUsuario">No</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>

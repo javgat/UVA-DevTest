@@ -104,6 +104,7 @@ import { ListUsersComponent } from './list-users/list-users.component';
 import { UsersComponent } from './users/users.component';
 import { AdminPermissionsComponent } from './admin/admin-permissions/admin-permissions.component';
 import { AdminCustomizedViewsComponent } from './admin/admin-customized-views/admin-customized-views.component';
+import { DragulaModule } from 'ng2-dragula';
 
 export function apiConfigFactory (): Configuration {
   const params: ConfigurationParameters = {
@@ -218,6 +219,7 @@ export function apiConfigFactory (): Configuration {
     ApiModule.forRoot(apiConfigFactory),
     FormsModule,
     MarkdownModule.forRoot({ loader: HttpClient }),
+    DragulaModule.forRoot(),
   ],
   providers: [
     { provide: BASE_PATH, useValue: environment.API_BASE_PATH },
