@@ -117,6 +117,8 @@
                 <p><a class="link-dark mx-3" role="button" (click)="changeAddByID()">Añadir por id</a></p>
             </div>
         </form>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#changePositionModal"
+            (click)="prepareModalPosPreguntas()">Modificar orden de preguntas</button>
         <div class="table-responsive">
             <table class="table table-striped table-hover table-primary my-3">
                 <thead>
@@ -132,13 +134,15 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let pregunta of preguntas">
-                        <td [routerLink]="['/q', pregunta.id]" role="button">{{pregunta.id}}</td>
-                        <td [routerLink]="['/q', pregunta.id]" role="button">{{pregunta.title}}</td>
-                        <td [routerLink]="['/q', pregunta.id]" role="button">{{pregunta.username}}</td>
-                        <td [routerLink]="['/q', pregunta.id]" role="button">{{pregunta.estimatedTime}} minutos</td>
-                        <td [routerLink]="['/q', pregunta.id]" role="button">{{tipoPrint(pregunta.tipoPregunta,
+                        <td width="5%" [routerLink]="['/q', pregunta.id]" role="button">{{pregunta.id}}</td>
+                        <td width="5%" [routerLink]="['/q', pregunta.id]" role="button">{{pregunta.title}}</td>
+                        <td width="5%" [routerLink]="['/q', pregunta.id]" role="button">{{pregunta.username}}</td>
+                        <td width="5%" [routerLink]="['/q', pregunta.id]" role="button">{{pregunta.estimatedTime}}
+                            minutos</td>
+                        <td width="5%" [routerLink]="['/q', pregunta.id]" role="button">
+                            {{tipoPrint(pregunta.tipoPregunta,
                             pregunta.eleccionUnica)}}</td>
-                        <td *ngIf="checkPermisosEdicion()" (submit)="changeValueSubmit(pregunta)">
+                        <td width="15%" *ngIf="checkPermisosEdicion()" (submit)="changeValueSubmit(pregunta)">
                             <form ngNativeValidate>
                                 <div class="row">
                                     <div class="col-auto">
@@ -151,7 +155,7 @@
                                 </div>
                             </form>
                         </td>
-                        <td *ngIf="checkPermisosEdicion()">
+                        <td width="1%" *ngIf="checkPermisosEdicion()">
                             <div class="btn-group dropstart" role="button">
                                 <a data-bs-toggle="dropdown" class="link-dark" aria-expanded="false">
                                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24"
@@ -167,12 +171,72 @@
                                 </ul>
                             </div>
                         </td>
-                        <td *ngIf="!checkPermisosEdicion()">{{pregunta.valorFinal}}</td>
+                        <td width="5%" *ngIf="!checkPermisosEdicion()">{{pregunta.valorFinal}}</td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
+
+    <!-- Modal cambiar posicion preguntas-->
+    <div class="modal fade" id="changePositionModal" *ngIf="checkPermisosEdicion()" tabindex="-1"
+        aria-labelledby="changePositionModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <form ngNativeValidate>
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="changePositionModalLabel">Modificar orden de preguntas</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Modifica la posición de las preguntas arrastrándolas con el ratón, y pulsa guardar cuando hayas
+                        terminado
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover table-primary my-3">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>ID</th>
+                                        <th>Título</th>
+                                        <th>Autor</th>
+                                        <th>Tiempo Estimado</th>
+                                        <th>Tipo</th>
+                                        <th>Valor en test</th>
+                                    </tr>
+                                </thead>
+                                <tbody dragula="PREGUNTAS" [(dragulaModel)]="changePosPreguntas">
+                                    <tr role="button" *ngFor="let pregunta of changePosPreguntas">
+                                        <td width="1%"><svg xmlns="http://www.w3.org/2000/svg" height="24px"
+                                                viewBox="0 0 24 24" width="24px" fill="#000000">
+                                                <path d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+                                            </svg></td>
+                                        <td width="5%" role="button">{{pregunta.id}}</td>
+                                        <td width="5%" role="button">{{pregunta.title}}
+                                        </td>
+                                        <td width="5%" role="button">
+                                            {{pregunta.username}}</td>
+                                        <td width="5%" role="button">
+                                            {{pregunta.estimatedTime}} minutos</td>
+                                        <td width="5%" role="button">
+                                            {{tipoPrint(pregunta.tipoPregunta,
+                                            pregunta.eleccionUnica)}}</td>
+                                        <td width="5%">{{pregunta.valorFinal}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-lg" data-bs-dismiss="modal">Cancelar</button>
+                        <input type="submit" value="Guardar" data-bs-dismiss="modal" class="btn btn-success btn-lg"
+                            (click)='changePosPreguntasSubmit()' id="buttonSubmitPosPreguntas" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <div class="modal fade" id="editTestModal" *ngIf="checkPermisosEdicion()" tabindex="-1"
         aria-labelledby="editTestModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">

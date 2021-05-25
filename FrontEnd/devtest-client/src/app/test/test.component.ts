@@ -19,6 +19,7 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
   test: Test
   testEdit: Test
   preguntas: Question[]
+  changePosPreguntas: Question[]
   addQuestionId: number
   preguntaChange?: Question
   isInAdminTeam: boolean
@@ -31,8 +32,10 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
   isFavorita: boolean
   publishedTitle: string
   autotags: Tag[]
+  tPTempPosicion?: TestPregunta
+  pregTempPosicion?: Question
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private route: ActivatedRoute,
-      private testS: TestService, private tagS: TagService) {
+    private testS: TestService, private tagS: TagService) {
     super(session, router, data, userS)
     this.isInAdminTeam = false
     this.id = 0
@@ -40,6 +43,7 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
     this.test = new Examen()
     this.testEdit = new Examen()
     this.preguntas = []
+    this.changePosPreguntas = []
     this.tags = []
     this.newTag = ""
     this.deletingTag = ""
@@ -180,13 +184,13 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
     })
   }
 
-  getMaxPositionQuestions(): number{
+  getMaxPositionQuestions(): number {
     let first = this.preguntas.map(item => item.posicion).map(i => i || 0)
     let max: number
     console.log(first)
-    if(first.length==0){
+    if (first.length == 0) {
       max = -1
-    }else{
+    } else {
       max = Math.max(...first);
     }
     return max
@@ -199,7 +203,7 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
     }
     let tp: TestPregunta = {
       valorFinal: 1,
-      posicion: this.getMaxPositionQuestions()+1
+      posicion: this.getMaxPositionQuestions() + 1
     }
     this.testS.addQuestionToTest(this.id, this.addQuestionId, tp).subscribe(
       resp => {
@@ -379,16 +383,41 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
     return Test.VisibilidadEnum.AlEntregar
   }
 
-  changeGetAutoTags(){
+  changeGetAutoTags() {
     this.getAutoTags(true)
   }
 
-  getAutoTags(primera: boolean){
+  getAutoTags(primera: boolean) {
     this.tagS.getTags(this.newTag, "moreTest", 20).subscribe(
-      resp=>{
-        this.autotags=resp
+      resp => {
+        this.autotags = resp
       },
       err => this.handleErrRelog(err, "obtener tags de tests mas comunes", primera, this.getAutoTags, this)
+    )
+  }
+
+  prepareModalPosPreguntas() {
+    this.changePosPreguntas = this.preguntas
+  }
+
+  changePosPreguntasSubmit() {
+    this.preguntas = this.changePosPreguntas
+    for (let i = 0; i < this.preguntas.length; i++) {
+      let tP: TestPregunta = {
+        valorFinal: this.preguntas[i].valorFinal || 0,
+        posicion: i
+      }
+      this.tPTempPosicion = tP
+      this.pregTempPosicion = this.preguntas[i]
+      this.putPosPregunta(true)
+    }
+  }
+
+  putPosPregunta(primera: boolean){
+    if(this.pregTempPosicion==undefined || this.tPTempPosicion == undefined) return
+    this.testS.addQuestionToTest(this.id, this.pregTempPosicion.id || 0, this.tPTempPosicion).subscribe(
+      resp => {},
+      err => this.handleErrRelog(err, "Actualizar posicion de una pregunta", primera, this.putPosPregunta, this)
     )
   }
 
