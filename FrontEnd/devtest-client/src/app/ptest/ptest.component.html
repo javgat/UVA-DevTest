@@ -31,8 +31,8 @@
                 <div>
                     <p *ngIf="isLoggedIn()">Llevas {{test.cantidadRespuestasDelUsuario}} intentos.</p>
                     <div class="d-grid gap-2 my-3" *ngIf="mostrarVerMisRespuestas()">
-                        <button class="btn btn-secondary" type="button"
-                            [routerLink]="['/pt', test.id, 'myanswers']">Ver mis respuestas</button>
+                        <button class="btn btn-secondary" type="button" [routerLink]="['/pt', test.id, 'myanswers']">Ver
+                            mis respuestas</button>
                     </div>
                     <div *ngIf="isRespuestaIniciada" class="d-grid gap-2 my-3">
                         <button class="btn btn-success btn-lg" type="button"
@@ -70,10 +70,11 @@
                         </div>
                     </div>
                 </div>
-                <p><b>Descripción:</b>
-                <p>
-                <div class="mb-4">
-                    <span style="white-space: pre-line">{{test.description}}</span>
+                <p><b>Descripción:</b></p>
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <markdown class="my-3" [data]="test.description"></markdown>
+                    </div>
                 </div>
                 <p><b>Tiempo disponible:</b> {{test.maxMinutes}} minutos</p>
                 <p><b>Nota máxima: </b> {{test.notaMaxima}}</p>

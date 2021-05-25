@@ -72,10 +72,11 @@
                         Editar Test
                     </button>
                 </div>
-                <p><b>Descripción:</b>
-                <p>
-                <div class="mb-4">
-                    <span style="white-space: pre-line">{{test.description}}</span>
+                <p><b>Descripción:</b></p>
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <markdown class="my-3" [data]="test.description"></markdown>
+                    </div>
                 </div>
                 <p><b>Tiempo disponible:</b> {{test.maxMinutes}}
                     minutos</p>
@@ -256,6 +257,7 @@
                             <label for="inputDescription" class="form-label">Descripción</label>
                             <textarea type="text" class="form-control" name="inputDescription"
                                 [(ngModel)]="testEdit.description" required rows=3></textarea>
+                            <div id="inputDescriptionHelp" class="form-text text-muted">Puedes utilizar MarkDown</div>
                         </div>
                         <div class="mb-3">
                             <label for="inputTime" class="form-label">Tiempo disponible (minutos)</label>

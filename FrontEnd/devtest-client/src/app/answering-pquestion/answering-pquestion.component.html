@@ -13,14 +13,18 @@
     </button>
     <h3>Respondiendo a la pregunta {{pregunta.title}}</h3>
     <p><b>Valor:</b> {{pregunta.valorFinal}} puntos</p>
-    <p><b>Penalización por fallo:</b> {{pregunta.penalizacion}} %</p>
+    <p><b>Penalización en caso de fallo:</b> {{pregunta.penalizacion}}%</p>
     <p><b>Tiempo estimado:</b> {{pregunta.estimatedTime}} minutos</p>
     <p><b>Tipo:</b> {{tipoPrint(pregunta.tipoPregunta, pregunta.eleccionUnica)}}</p>
     <p class="card-text"><span class="badge bg-danger" *ngIf="!(pregunta.isRespondida || false)">No
             respondida</span> <span class="badge bg-success" *ngIf="(pregunta.isRespondida || false)">Respondida</span>
     </p>
     <h4>Enunciado:</h4>
-    <p><span style="white-space: pre-line">{{pregunta.question}}</span></p>
+    <div class="card">
+        <div class="card-body">
+            <markdown class="my-3" [data]="pregunta.question"></markdown>
+        </div>
+    </div>
     <h4 class="my-3">Respuesta:</h4>
     <div class="my-3" *ngIf="(pregunta.isRespondida || false)">
         <a class="link-danger" role="button" data-bs-toggle="modal" data-bs-target="#deleteQAnswerModal">Borrar
@@ -57,7 +61,8 @@
         </div>
         <form (ngSubmit)="sendTextRespuestaClick()">
             <div class="input-group my-3" *ngIf="(!pregunta.isRespondida || modificandoRespuesta)">
-                <input type="text" class="form-control" name="inputAddRespuesta" [(ngModel)]="newRespuesta" required placeholder="Introduce tu respuesta" />
+                <input type="text" class="form-control" name="inputAddRespuesta" [(ngModel)]="newRespuesta" required
+                    placeholder="Introduce tu respuesta" />
             </div>
             <div class="d-grid gap-2 mt-3" *ngIf="(!pregunta.isRespondida || modificandoRespuesta)">
                 <input class="button btn btn-success btn-lg" type="submit" value="Guardar respuesta" />
@@ -109,7 +114,8 @@
         <p>TODO:</p>
     </div>
     <div class="d-grid gap-2 mt-3" *ngIf="(pregunta.isRespondida || false) &&  !modificandoRespuesta">
-        <button class="btn btn-warning text-dark btn-lg my-3" type="button" (click)="modificarRespuestaClick()">Modificar
+        <button class="btn btn-warning text-dark btn-lg my-3" type="button"
+            (click)="modificarRespuestaClick()">Modificar
             respuesta</button>
     </div>
     <div class="row" *ngIf="!showWarningExitQuestion()">

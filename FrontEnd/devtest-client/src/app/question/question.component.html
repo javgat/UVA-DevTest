@@ -93,7 +93,11 @@
                     [routerLink]="['/pt', testid, 'q', question.id, 'qanswers']">Ver respuestas entregadas</button></p>
             <hr />
             <h5>Enunciado:</h5>
-            <p><span style="white-space: pre-line">{{question.question}}</span></p>
+            <div class="card mb-3">
+                <div class="card-body">
+                    <markdown class="my-3" [data]="question.question"></markdown>
+                </div>
+            </div>
         </div>
     </div>
     <div class="my-3">
@@ -210,6 +214,7 @@
                         <label for="inputQuestion" class="form-label">Cuerpo de la pregunta</label>
                         <textarea type="text" class="form-control" name="inputQuestion"
                             [(ngModel)]="questionEdit.question" required rows=3></textarea>
+                        <div id="inputDescriptionHelp" class="form-text text-muted">Puedes utilizar MarkDown</div>
                     </div>
                     <div class="mb-3">
                         <label for="inputTime" class="form-label">Tiempo estimado (minutos)</label>
