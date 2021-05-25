@@ -210,10 +210,11 @@ export class Examen implements Test{
     autoCorrect: boolean;
     visibilidad: Test.VisibilidadEnum;
     cantidadFavoritos: number;
+    tiempoEstricto: boolean;
     constructor(title?: string, description?: string, accesoPublico?: boolean, editable?: boolean, maxMinutes?: number, 
         username?: string, id?: number, accesoPublicoNoPublicado?: boolean, horaCreacion?: Date, originalTestID?: number,
         cantidadRespuestasDelUsuario?: number, notaMaxima?: number, autoCorrect?: boolean, visibilidad?: Test.VisibilidadEnum,
-        cantidadFavoritos?: number){
+        cantidadFavoritos?: number, tiempoEstricto?: boolean){
         this.title=title || ""
         this.description=description || ""
         this.maxMinutes=maxMinutes || 0
@@ -229,12 +230,13 @@ export class Examen implements Test{
         this.autoCorrect = autoCorrect || false
         this.visibilidad = visibilidad || Test.VisibilidadEnum.Manual
         this.cantidadFavoritos = cantidadFavoritos || 0
+        this.tiempoEstricto = tiempoEstricto || false
     }
 
     static constructorFromTest(t: Test): Examen{
         return new Examen(t.title, t.description, t.accesoPublico, t.editable, t.maxMinutes, t.username, t.id,
             t.accesoPublicoNoPublicado, t.horaCreacion, t.originalTestID, t.cantidadRespuestasDelUsuario, t.notaMaxima,
-            t.autoCorrect, t.visibilidad, t.cantidadFavoritos)
+            t.autoCorrect, t.visibilidad, t.cantidadFavoritos, t.tiempoEstricto)
     }
 
     static visibilidadToString(vis: Test.VisibilidadEnum ) : string{

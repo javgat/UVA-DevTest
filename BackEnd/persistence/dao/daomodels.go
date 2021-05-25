@@ -227,6 +227,11 @@ type Test struct {
 	// Example: 15
 	OriginalTestID *int64 `json:"originalTestID,omitempty"`
 
+	// tiempo estricto
+	// Example: true
+	// Required: true
+	TiempoEstricto *bool `json:"tiempoEstricto"`
+
 	// visibilidad
 	// Required: true
 	// Enum: [alEntregar alCorregir manual]

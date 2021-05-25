@@ -597,7 +597,7 @@ func addNextPrevIdQuestion(qs *Question, testid int64) error {
 		prevQ, err = GetPreviousQuestionFromTest(db, testid, qs)
 		if err == nil {
 			if prevQ != nil {
-				qs.PrevID = prevQ.ID // En FE tienes que poner por defecto 0 en ambos
+				qs.PrevID = prevQ.ID // En FE tienes que poner por defecto 0 en ambos, ya que no se enviara nada si es 0
 			} else {
 				qs.PrevID = -1
 			}

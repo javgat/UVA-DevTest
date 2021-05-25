@@ -6186,6 +6186,8 @@ paths:
           $ref: '#/responses/BadRequestError'
         403:
           $ref: '#/responses/ForbiddenError'
+        409:
+          $ref: '#/responses/ConflictError'
         410:
           $ref: '#/responses/GoneError'
         500:
@@ -6971,6 +6973,7 @@ definitions:
     - accesoPublicoNoPublicado
     - autoCorrect
     - visibilidad
+    - tiempoEstricto
     properties:
       id:
         type: integer
@@ -7021,6 +7024,9 @@ definitions:
       cantidadFavoritos:
         type: integer
         minimum: 0
+      tiempoEstricto:
+        type: boolean
+        example: true
   Answer:
     type: object
     required:

@@ -9,6 +9,7 @@ import (
 	"errors"
 	"log"
 	"strings"
+	"time"
 	"uva-devtest/models"
 	"uva-devtest/permissions"
 	"uva-devtest/persistence/dao"
@@ -283,6 +284,7 @@ func autoCorregirLoPosible(aid int64) error {
 // PUT /answers/{answerid}
 // Auth: CanAdminAnswers OR AnswerOwner
 // Req: Answer not finished
+// If Test.tiempoEstricto && Test.maxMinutes < (now - Question.startTime) => Error, demasiado tarde
 func FinishAnswer(params answer.FinishAnswerParams, u *models.User) middleware.Responder {
 	if permissions.CanAdminAnswers(u) || isAnswerOwner(params.Answerid, u) {
 		db, err := dbconnection.ConnectDb()
@@ -296,12 +298,24 @@ func FinishAnswer(params answer.FinishAnswerParams, u *models.User) middleware.R
 				if *da.Entregado {
 					return answer.NewFinishAnswerForbidden()
 				}
-			}
-			err = dao.FinishAnswer(db, params.Answerid)
-			if err == nil {
-				err = autoCorregirLoPosible(params.Answerid)
+				var dt *dao.Test
+				dt, err = dao.GetTest(db, da.Testid)
 				if err == nil {
-					return answer.NewFinishAnswerOK()
+					if dt == nil {
+						log.Println("Error en answers_handler FinishAnswer(): El Test no existe")
+						return answer.NewFinishAnswerGone()
+					} // 0.1 minutos de margen de delay
+					if *dt.TiempoEstricto && ((float64(*dt.MaxMinutes) + float64(0.1)) < float64(time.Since(time.Time(da.Startime)).Minutes())) {
+						// ERROR FUERA DE TIEMPO
+						return answer.NewFinishAnswerConflict()
+					}
+					err = dao.FinishAnswer(db, params.Answerid)
+					if err == nil {
+						err = autoCorregirLoPosible(params.Answerid)
+						if err == nil {
+							return answer.NewFinishAnswerOK()
+						}
+					}
 				}
 			}
 		}

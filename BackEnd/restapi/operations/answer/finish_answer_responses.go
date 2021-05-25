@@ -125,10 +125,54 @@ func (o *FinishAnswerForbidden) WriteResponse(rw http.ResponseWriter, producer r
 	}
 }
 
+// FinishAnswerConflictCode is the HTTP code returned for type FinishAnswerConflict
+const FinishAnswerConflictCode int = 409
+
+/*FinishAnswerConflict A user with same username/email already exists
+
+swagger:response finishAnswerConflict
+*/
+type FinishAnswerConflict struct {
+
+	/*
+	  In: Body
+	*/
+	Payload *models.Error `json:"body,omitempty"`
+}
+
+// NewFinishAnswerConflict creates FinishAnswerConflict with default headers values
+func NewFinishAnswerConflict() *FinishAnswerConflict {
+
+	return &FinishAnswerConflict{}
+}
+
+// WithPayload adds the payload to the finish answer conflict response
+func (o *FinishAnswerConflict) WithPayload(payload *models.Error) *FinishAnswerConflict {
+	o.Payload = payload
+	return o
+}
+
+// SetPayload sets the payload to the finish answer conflict response
+func (o *FinishAnswerConflict) SetPayload(payload *models.Error) {
+	o.Payload = payload
+}
+
+// WriteResponse to the client
+func (o *FinishAnswerConflict) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	rw.WriteHeader(409)
+	if o.Payload != nil {
+		payload := o.Payload
+		if err := producer.Produce(rw, payload); err != nil {
+			panic(err) // let the recovery middleware deal with this
+		}
+	}
+}
+
 // FinishAnswerGoneCode is the HTTP code returned for type FinishAnswerGone
 const FinishAnswerGoneCode int = 410
 
-/*FinishAnswerGone That user (password and name) does not exist
+/*FinishAnswerGone That resource does not exist
 
 swagger:response finishAnswerGone
 */

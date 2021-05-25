@@ -752,16 +752,19 @@ func GetEditTestsFromUser(params user.GetEditTestsFromUserParams, u *models.User
 	if isUser(params.Username, u) || permissions.CanAdminTests(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			t, err := dao.GetEditTestsFromUser(db, params.Username, params.Tags, params.LikeTitle, params.Orderby,
+			var t []*dao.Test
+			t, err = dao.GetEditTestsFromUser(db, params.Username, params.Tags, params.LikeTitle, params.Orderby,
 				params.Limit, params.Offset)
 			if err == nil {
-				mt, err := dao.ToModelTests(t)
+				var mt []*models.Test
+				mt, err = dao.ToModelTests(t)
 				if mt != nil && err == nil {
 					return user.NewGetEditTestsFromUserOK().WithPayload(mt)
 				}
 				return user.NewGetEditTestsFromUserGone()
 			}
 		}
+		log.Print("Error en GetEditTestFromUser(): ", err)
 		return user.NewGetEditTestsFromUserInternalServerError()
 	}
 	return user.NewGetEditTestsFromUserForbidden()
@@ -782,6 +785,7 @@ func GetTestsFromUser(params user.GetTestsFromUserParams, u *models.User) middle
 				return user.NewGetTestsFromUserGone()
 			}
 		}
+		log.Print("Error en GetTestsFromUser(): ", err)
 		return user.NewGetTestsFromUserInternalServerError()
 	}
 	return user.NewGetTestsFromUserForbidden()
@@ -824,6 +828,7 @@ func GetTestFromUser(params user.GetTestFromUserParams, u *models.User) middlewa
 			}
 			return user.NewGetTestFromUserGone()
 		}
+		log.Print("Error en GetTestFromUser(): ", err)
 		return user.NewGetTestFromUserInternalServerError()
 	}
 	return user.NewGetTestFromUserForbidden()

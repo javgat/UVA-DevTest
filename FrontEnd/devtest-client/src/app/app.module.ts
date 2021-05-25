@@ -105,6 +105,7 @@ import { UsersComponent } from './users/users.component';
 import { AdminPermissionsComponent } from './admin/admin-permissions/admin-permissions.component';
 import { AdminCustomizedViewsComponent } from './admin/admin-customized-views/admin-customized-views.component';
 import { DragulaModule } from 'ng2-dragula';
+import { CountdownModule } from 'ngx-countdown';
 
 export function apiConfigFactory (): Configuration {
   const params: ConfigurationParameters = {
@@ -220,6 +221,7 @@ export function apiConfigFactory (): Configuration {
     FormsModule,
     MarkdownModule.forRoot({ loader: HttpClient }),
     DragulaModule.forRoot(),
+    CountdownModule,
   ],
   providers: [
     { provide: BASE_PATH, useValue: environment.API_BASE_PATH },

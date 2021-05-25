@@ -223,10 +223,12 @@ func GetOpenAnswersFromUserTest(db *sql.DB, username string, testid int64) ([]*A
 	u, err := GetUserUsername(db, username)
 	if err == nil {
 		var a []*Answer
-		query, err := db.Prepare("SELECT * FROM RespuestaExamen WHERE usuarioid=? AND testid=? AND entregado=0")
+		query, err := db.Prepare("SELECT R.* FROM RespuestaExamen R JOIN Test T ON R.testid=T.id WHERE R.usuarioid=? AND R.testid=? AND R.entregado=0 " +
+			" AND (T.tiempoEstricto=0 OR T.maxMinutes>TIMESTAMPDIFF(MINUTE, R.startTime, ?))")
 		if err == nil {
 			defer query.Close()
-			rows, err := query.Query(u.ID, testid)
+			now := time.Now()
+			rows, err := query.Query(u.ID, testid, now)
 			if err == nil {
 				a, err = rowsToAnswers(rows)
 				return a, err

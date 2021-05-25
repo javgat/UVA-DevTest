@@ -30,6 +30,7 @@ export interface Test {
     autoCorrect: boolean;
     visibilidad: Test.VisibilidadEnum;
     cantidadFavoritos?: number;
+    tiempoEstricto: boolean;
 }
 export namespace Test {
     export type VisibilidadEnum = 'alEntregar' | 'alCorregir' | 'manual';

@@ -121,6 +121,7 @@ CREATE TABLE Test(
   autoCorrect boolean NOT NULL,
   visibilidad ENUM('alEntregar', 'alCorregir', 'manual') NOT NULL,
   cantidadFavoritos int(11) DEFAULT 0,
+  tiempoEstricto boolean NOT NULL,
   FOREIGN KEY(usuarioid) REFERENCES Usuario(id),
   FOREIGN KEY(origenTestid) REFERENCES Test(id),
   PRIMARY KEY(id)

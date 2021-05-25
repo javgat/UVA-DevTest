@@ -76,6 +76,11 @@ type Test struct {
 	// Example: 15
 	OriginalTestID *int64 `json:"originalTestID,omitempty"`
 
+	// tiempo estricto
+	// Example: true
+	// Required: true
+	TiempoEstricto *bool `json:"tiempoEstricto"`
+
 	// title
 	// Example: Test de introduccion a Java
 	// Required: true
@@ -125,6 +130,10 @@ func (m *Test) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateMaxMinutes(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateTiempoEstricto(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -222,6 +231,15 @@ func (m *Test) validateMaxMinutes(formats strfmt.Registry) error {
 	}
 
 	if err := validate.MinimumInt("maxMinutes", "body", *m.MaxMinutes, 0, false); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Test) validateTiempoEstricto(formats strfmt.Registry) error {
+
+	if err := validate.Required("tiempoEstricto", "body", m.TiempoEstricto); err != nil {
 		return err
 	}
 

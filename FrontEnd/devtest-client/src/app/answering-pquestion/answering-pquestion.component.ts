@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Answer, AnswerService, Option, PublishedTestService, Question, QuestionAnswer, UserService } from '@javgat/devtest-api';
+import { CountdownEvent } from 'ngx-countdown';
 import { Subscription } from 'rxjs';
 import { LoggedInController } from '../shared/app.controller';
-import { Mensaje, Pregunta, Tipo, tipoPrint } from '../shared/app.model';
+import { Examen, Mensaje, Pregunta, Tipo, tipoPrint } from '../shared/app.model';
 import { DataService } from '../shared/data.service';
 import { SessionService } from '../shared/session.service';
 
@@ -23,6 +24,8 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
   newRespuesta: string
   options: Option[]
   modificandoRespuesta: boolean
+  test: Examen
+  timeOver: boolean
 
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private route: ActivatedRoute, private ptestS: PublishedTestService, private answerS: AnswerService) {
     super(session, router, data, userS);
@@ -31,6 +34,8 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
     this.preguntaid = 0
     this.options = []
     this.pregunta = new Pregunta()
+    this.test = new Examen()
+    this.timeOver = false
     this.questionAnswer = {
       idPregunta: 0,
       idRespuesta: 0,
@@ -85,6 +90,7 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
       resp => {
         if (resp.length == 0) {
           this.cambiarMensaje(new Mensaje("No existe una respuesta iniciada para el test por el usuario", Tipo.ERROR, true))
+          this.router.navigate(['/pt', this.testid])
         } else {
           this.openAnswer = resp[0]
           this.getPQuestionFromPTest(true)
@@ -102,9 +108,22 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
         if (this.pregunta.tipoPregunta == "opciones") {
           this.getOpciones(true)
         }
+        this.getPTest(true)
       },
       err => {
         this.handleErrRelog(err, "obtener pregunta publicada de test publicado", primera, this.getPQuestionFromPTest, this)
+      }
+    )
+  }
+
+  getPTest(primera: boolean) {
+    this.userS.getSolvableTestFromUser(this.getSessionUser().getUsername(), this.testid).subscribe(
+      resp => {
+        this.test = Examen.constructorFromTest(resp)
+        this.updateIsTimeOver()
+      },
+      err => {
+        this.handleErrRelog(err, "obtener test publicado", primera, this.getPTest, this)
       }
     )
   }
@@ -258,6 +277,38 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
 
   showWarningExitQuestion(): boolean{
     return (!this.pregunta.isRespondida) || this.modificandoRespuesta
+  }
+
+  updateIsTimeOver(){
+    if(this.getLeftTime()>=0){
+      this.timeOver = false
+    }else{
+      this.timeOver = true
+    }
+  }
+  
+  leftTime?: number
+
+  getLeftTime(): number{
+    if(this.leftTime !=undefined)
+      return this.leftTime
+    if(this.openAnswer==undefined || this.openAnswer.startTime == undefined) return 0
+    var date = new Date(this.openAnswer.startTime)
+    var now = new Date()
+    var ahoraSecs = now.getTime()/1000
+    this.leftTime = ((date.getTime()/1000)+(this.test.maxMinutes*60))-ahoraSecs
+    return this.leftTime
+  }
+
+  timeIsOver(event: CountdownEvent){
+    if(event.left == 0)
+      this.timeOver = true
+  }
+
+  isTimeOver(): boolean{
+    if(this.openAnswer==undefined || this.openAnswer.startTime == undefined) return false
+    return this.timeOver
+
   }
 
 }
