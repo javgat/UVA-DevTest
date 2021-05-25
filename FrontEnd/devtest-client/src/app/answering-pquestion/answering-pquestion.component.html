@@ -1,7 +1,7 @@
 <div class="mt-2">
     <div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message" role="alert">
         {{getMensaje().texto}}</div>
-    <button class="button btn btn-outline-primary m-3" [routerLink]="['/pt', testid, 'answering']">
+    <button class="button btn btn-secondary m-3 btn-lg" [routerLink]="['/pt', testid, 'answering']">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
             class="bi bi-chevron-double-left" viewBox="0 0 16 16">
             <path fill-rule="evenodd"
@@ -11,11 +11,17 @@
         </svg>
         Volver a la lista de preguntas
     </button>
-    <h3>Respondiendo a la pregunta {{pregunta.title}}</h3>
-    <p><b>Valor:</b> {{pregunta.valorFinal}} puntos</p>
-    <p><b>Penalización en caso de fallo:</b> {{pregunta.penalizacion}}%</p>
-    <p><b>Tiempo estimado:</b> {{pregunta.estimatedTime}} minutos</p>
-    <p><b>Tipo:</b> {{tipoPrint(pregunta.tipoPregunta, pregunta.eleccionUnica)}}</p>
+    <h3>Respondiendo a la pregunta {{pregunta.posicion}}: {{pregunta.title}}</h3>
+    <table class="table table-borderless">
+        <tbody>
+            <tr>
+                <td><b>Valor:</b> {{pregunta.valorFinal}} puntos</td>
+                <td><b>Penalización en caso de fallo:</b> {{pregunta.penalizacion}}%</td>
+                <td><b>Tiempo estimado:</b> {{pregunta.estimatedTime}} minutos</td>
+                <td><b>Tipo:</b> {{tipoPrint(pregunta.tipoPregunta, pregunta.eleccionUnica)}}</td>
+            </tr>
+        </tbody>
+    </table>
     <p class="card-text"><span class="badge bg-danger" *ngIf="!(pregunta.isRespondida || false)">No
             respondida</span> <span class="badge bg-success" *ngIf="(pregunta.isRespondida || false)">Respondida</span>
     </p>
@@ -121,11 +127,27 @@
     <div class="row" *ngIf="!showWarningExitQuestion()">
         <div class="col-sm d-grid gap-2 mb-3">
             <button type="button" class="btn btn-primary btn-lg" [ngClass]="{ 'disabled': !hasPrevQuestion() }"
-                (click)="goPrevQuestion()">Pregunta Anterior</button>
+                (click)="goPrevQuestion()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-chevron-double-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                        d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+                    <path fill-rule="evenodd"
+                        d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+                </svg>
+                Pregunta Anterior</button>
         </div>
         <div class="col-sm d-grid gap-2 mb-3">
             <button type="button" class="btn btn-primary btn-lg" *ngIf="hasNextQuestion()"
-                (click)="goNextQuestion()">Pregunta Siguiente</button>
+                (click)="goNextQuestion()">Pregunta Siguiente
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-chevron-double-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                        d="M3.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L9.293 8 3.646 2.354a.5.5 0 0 1 0-.708z" />
+                    <path fill-rule="evenodd"
+                        d="M7.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L13.293 8 7.646 2.354a.5.5 0 0 1 0-.708z" />
+                </svg>
+            </button>
             <button type="button" class="btn btn-success btn-lg" *ngIf="!hasNextQuestion()"
                 [routerLink]="['/pt', testid, 'answering']">Revisar Preguntas Para Finalizar</button>
         </div>
@@ -133,11 +155,27 @@
     <div class="row" *ngIf="showWarningExitQuestion()">
         <div class="col-sm d-grid gap-2 my-3">
             <button type="button" class="btn btn-primary btn-lg" [ngClass]="{ 'disabled': !hasPrevQuestion() }"
-                data-bs-toggle="modal" data-bs-target="#anteriorModal">Pregunta Anterior</button>
+                data-bs-toggle="modal" data-bs-target="#anteriorModal">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-chevron-double-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                        d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+                    <path fill-rule="evenodd"
+                        d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+                </svg>
+                Pregunta Anterior</button>
         </div>
         <div class="col-sm d-grid gap-2 my-3">
             <button type="button" class="btn btn-primary btn-lg" *ngIf="hasNextQuestion()" data-bs-toggle="modal"
-                data-bs-target="#nextModal">Pregunta Siguiente</button>
+                data-bs-target="#nextModal">Pregunta Siguiente
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-chevron-double-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                        d="M3.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L9.293 8 3.646 2.354a.5.5 0 0 1 0-.708z" />
+                    <path fill-rule="evenodd"
+                        d="M7.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L13.293 8 7.646 2.354a.5.5 0 0 1 0-.708z" />
+                </svg>
+            </button>
             <button type="button" class="btn btn-success btn-lg" *ngIf="!hasNextQuestion()" data-bs-toggle="modal"
                 data-bs-target="#goAnsweringListModal">Revisar Preguntas Para Finalizar</button>
         </div>

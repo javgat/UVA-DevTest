@@ -259,9 +259,9 @@ export function tipoPrint(tipo: string, eleccionUnica: boolean | undefined): str
             return "Código"
         case Question.TipoPreguntaEnum.Opciones:
             if (eleccionUnica)
-                return "Respuesta única"
+                return "Elección múltiple con respuesta única"
             else
-                return "Respuesta múltiple"
+                return "Elección múltiple con respuesta múltiple"
         default:
             return ""
     }
