@@ -256,4 +256,8 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
     this.router.navigate(['/pt', testid, 'answering', 'pq', nextId])
   }
 
+  showWarningExitQuestion(): boolean{
+    return (!this.pregunta.isRespondida) || this.modificandoRespuesta
+  }
+
 }

@@ -82,7 +82,8 @@
                 <div class="form-check" *ngFor="let option of options">
                     <input class="form-check-input" type="radio" name="flexRadioRespuesta"
                         id="flexRadio{{option.indice}}" [checked]="isChecked(option.indice)"
-                        (change)="pressedRadio(option.indice)" [disabled]="!(!pregunta.isRespondida || modificandoRespuesta)">
+                        (change)="pressedRadio(option.indice)"
+                        [disabled]="!(!pregunta.isRespondida || modificandoRespuesta)">
                     <label class="form-check-label" for="flexRadio{{option.indice}}">
                         {{option.texto}}
                     </label>
@@ -100,7 +101,7 @@
         <button class="btn btn-warning text-dark btn-lg" type="button" (click)="modificarRespuestaClick()">Modificar
             respuesta</button>
     </div>
-    <div class="row">
+    <div class="row" *ngIf="!showWarningExitQuestion()">
         <div class="col-sm d-grid gap-2 my-3">
             <button type="button" class="btn btn-primary btn-lg" [ngClass]="{ 'disabled': !hasPrevQuestion() }"
                 (click)="goPrevQuestion()">Pregunta Anterior</button>
@@ -111,5 +112,79 @@
             <button type="button" class="btn btn-success btn-lg" *ngIf="!hasNextQuestion()"
                 [routerLink]="['/pt', testid, 'answering']">Revisar Preguntas Para Finalizar</button>
         </div>
+    </div>
+    <div class="row" *ngIf="showWarningExitQuestion()">
+        <div class="col-sm d-grid gap-2 my-3">
+            <button type="button" class="btn btn-primary btn-lg" [ngClass]="{ 'disabled': !hasPrevQuestion() }"
+                data-bs-toggle="modal" data-bs-target="#anteriorModal">Pregunta Anterior</button>
+        </div>
+        <div class="col-sm d-grid gap-2 my-3">
+            <button type="button" class="btn btn-primary btn-lg" *ngIf="hasNextQuestion()" data-bs-toggle="modal"
+                data-bs-target="#nextModal">Pregunta Siguiente</button>
+            <button type="button" class="btn btn-success btn-lg" *ngIf="!hasNextQuestion()" data-bs-toggle="modal"
+                data-bs-target="#goAnsweringListModal">Revisar Preguntas Para Finalizar</button>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="anteriorModal" tabindex="-1" aria-labelledby="anteriorModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="anteriorModalLabel">¿Ir a la pregunta anterior sin guardar?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        No has guardado tu respuesta a la pregunta, ¿seguro que quieres ir a la pregunta anterior?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="goPrevQuestion()">Sí, Ir a la pregunta
+                            anterior</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="nextModal" tabindex="-1" aria-labelledby="nextModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="nextModalLabel">¿Ir a la pregunta siguiente sin guardar?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        No has guardado tu respuesta a la pregunta, ¿seguro que quieres ir a la pregunta siguiente?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="goNextQuestion()">Sí, Ir a la pregunta
+                            siguiente</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="goAnsweringListModal" tabindex="-1" aria-labelledby="goAnsweringListModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="goAnsweringListModalLabel">¿Revisar preguntas sin guardar la actual?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        No has guardado tu respuesta a la pregunta, ¿seguro que quieres ir a la lista de preguntas?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" [routerLink]="['/pt', testid, 'answering']">Sí, Ir a la lista de preguntas</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
