@@ -58,10 +58,6 @@
             <div class="d-grid gap-2 my-3" *ngIf="(!pregunta.isRespondida || modificandoRespuesta)">
                 <input class="button btn btn-success btn-lg" type="submit" value="Guardar respuesta" />
             </div>
-            <div class="d-grid gap-2 my-3" *ngIf="(pregunta.isRespondida || false) &&  !modificandoRespuesta">
-                <button class="btn btn-warning text-dark btn-lg" type="button"
-                    (click)="modificarRespuestaClick()">Modificar respuesta</button>
-            </div>
         </form>
     </div>
     <div class="m-3" *ngIf="pregunta.tipoPregunta=='opciones'">
@@ -69,13 +65,14 @@
             <form (ngSubmit)="sendRespuestaTipoTest()">
                 <div class="form-check" *ngFor="let option of options">
                     <input class="form-check-input" type="checkbox" value="" id="flexCheck{{option.indice}}"
-                        (change)="pressedCheckbox(option.indice)" [checked]="isChecked(option.indice)">
+                        (change)="pressedCheckbox(option.indice)" [checked]="isChecked(option.indice)"
+                        [disabled]="!(!pregunta.isRespondida || modificandoRespuesta)">
                     <label class="form-check-label" for="flexCheck{{option.indice}}">
                         {{option.texto}}
                     </label>
                 </div>
 
-                <div class="d-grid gap-2 my-3">
+                <div class="d-grid gap-2 mt-3" *ngIf="(!pregunta.isRespondida || modificandoRespuesta)">
                     <input class="button btn btn-success btn-lg my-3" type="submit" value="Guardar respuesta" />
                 </div>
             </form>
@@ -85,12 +82,12 @@
                 <div class="form-check" *ngFor="let option of options">
                     <input class="form-check-input" type="radio" name="flexRadioRespuesta"
                         id="flexRadio{{option.indice}}" [checked]="isChecked(option.indice)"
-                        (change)="pressedRadio(option.indice)">
+                        (change)="pressedRadio(option.indice)" [disabled]="!(!pregunta.isRespondida || modificandoRespuesta)">
                     <label class="form-check-label" for="flexRadio{{option.indice}}">
                         {{option.texto}}
                     </label>
                 </div>
-                <div class="d-grid gap-2 my-3">
+                <div class="d-grid gap-2 mt-3" *ngIf="(!pregunta.isRespondida || modificandoRespuesta)">
                     <input class="button btn btn-success btn-lg my-3" type="submit" value="Guardar respuesta" />
                 </div>
             </form>
@@ -99,7 +96,10 @@
     <div class="m-3" *ngIf="pregunta.tipoPregunta=='codigo'">
         <p>TODO:</p>
     </div>
-
+    <div class="d-grid gap-2 my-3" *ngIf="(pregunta.isRespondida || false) &&  !modificandoRespuesta">
+        <button class="btn btn-warning text-dark btn-lg" type="button" (click)="modificarRespuestaClick()">Modificar
+            respuesta</button>
+    </div>
     <div class="row">
         <div class="col-sm d-grid gap-2 my-3">
             <button type="button" class="btn btn-primary btn-lg" [ngClass]="{ 'disabled': !hasPrevQuestion() }"

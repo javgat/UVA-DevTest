@@ -145,11 +145,11 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
   sendTextRespuestaClick() {
     this.questionAnswer.respuesta = this.newRespuesta
     this.newRespuesta = ""
-    this.modificandoRespuesta = false
     this.sendRespuesta()
   }
 
   sendRespuesta() {
+    this.modificandoRespuesta = false
     if (this.pregunta.isRespondida) {
       this.putRespuesta(true)
     } else {
