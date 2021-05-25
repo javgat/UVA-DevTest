@@ -9,7 +9,7 @@
             <path fill-rule="evenodd"
                 d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
         </svg>
-        Volver
+        Volver a la lista de preguntas
     </button>
     <h3>Respondiendo a la pregunta {{pregunta.title}}</h3>
     <p><b>Valor:</b> {{pregunta.valorFinal}} puntos</p>
@@ -23,7 +23,7 @@
     <p><span style="white-space: pre-line">{{pregunta.question}}</span></p>
     <h4 class="my-3">Respuesta:</h4>
     <div class="my-3" *ngIf="(pregunta.isRespondida || false)">
-        <a class="link-dark" role="button" data-bs-toggle="modal" data-bs-target="#deleteQAnswerModal">Borrar
+        <a class="link-danger" role="button" data-bs-toggle="modal" data-bs-target="#deleteQAnswerModal">Borrar
             respuesta</a>
 
         <!-- Modal borrar respuesta-->
@@ -49,14 +49,18 @@
 
     </div>
     <div class="my-3" *ngIf="pregunta.tipoPregunta=='string'">
-        <h5>Respuesta registrada:</h5>
+        <h5 *ngIf="(pregunta.isRespondida || false)">Respuesta registrada:</h5>
         <p><span style="white-space: pre-line">{{questionAnswer.respuesta}}</span></p>
         <form (ngSubmit)="sendTextRespuestaClick()">
-            <div class="input-group my-3">
+            <div class="input-group my-3" *ngIf="(!pregunta.isRespondida || modificandoRespuesta)">
                 <input type="text" class="form-control" name="inputAddRespuesta" [(ngModel)]="newRespuesta" required />
             </div>
-            <div class="d-grid gap-2 my-3">
-                <input class="button btn btn-primary btn-lg" type="submit" value="Guardar respuesta" />
+            <div class="d-grid gap-2 my-3" *ngIf="(!pregunta.isRespondida || modificandoRespuesta)">
+                <input class="button btn btn-success btn-lg" type="submit" value="Guardar respuesta" />
+            </div>
+            <div class="d-grid gap-2 my-3" *ngIf="(pregunta.isRespondida || false) &&  !modificandoRespuesta">
+                <button class="btn btn-warning text-dark btn-lg" type="button"
+                    (click)="modificarRespuestaClick()">Modificar respuesta</button>
             </div>
         </form>
     </div>
@@ -72,7 +76,7 @@
                 </div>
 
                 <div class="d-grid gap-2 my-3">
-                    <input class="button btn btn-primary btn-lg my-3" type="submit" value="Guardar respuesta" />
+                    <input class="button btn btn-success btn-lg my-3" type="submit" value="Guardar respuesta" />
                 </div>
             </form>
         </div>
@@ -87,12 +91,25 @@
                     </label>
                 </div>
                 <div class="d-grid gap-2 my-3">
-                    <input class="button btn btn-primary btn-lg my-3" type="submit" value="Guardar respuesta" />
+                    <input class="button btn btn-success btn-lg my-3" type="submit" value="Guardar respuesta" />
                 </div>
             </form>
         </div>
     </div>
     <div class="m-3" *ngIf="pregunta.tipoPregunta=='codigo'">
         <p>TODO:</p>
+    </div>
+
+    <div class="row">
+        <div class="col-sm d-grid gap-2 my-3">
+            <button type="button" class="btn btn-primary btn-lg" [ngClass]="{ 'disabled': !hasPrevQuestion() }"
+                (click)="goPrevQuestion()">Pregunta Anterior</button>
+        </div>
+        <div class="col-sm d-grid gap-2 my-3">
+            <button type="button" class="btn btn-primary btn-lg" *ngIf="hasNextQuestion()"
+                (click)="goNextQuestion()">Pregunta Siguiente</button>
+            <button type="button" class="btn btn-success btn-lg" *ngIf="!hasNextQuestion()"
+                [routerLink]="['/pt', testid, 'answering']">Revisar Preguntas Para Finalizar</button>
+        </div>
     </div>
 </div>

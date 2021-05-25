@@ -10541,6 +10541,10 @@ func init() {
           "type": "boolean",
           "example": false
         },
+        "nextId": {
+          "type": "integer",
+          "example": 4
+        },
         "penalizacion": {
           "type": "integer",
           "maximum": 100
@@ -10548,6 +10552,10 @@ func init() {
         "posicion": {
           "type": "integer",
           "example": 5
+        },
+        "prevId": {
+          "type": "integer",
+          "example": 1
         },
         "question": {
           "type": "string",
@@ -23187,6 +23195,10 @@ func init() {
           "type": "boolean",
           "example": false
         },
+        "nextId": {
+          "type": "integer",
+          "example": 4
+        },
         "penalizacion": {
           "type": "integer",
           "maximum": 100,
@@ -23195,6 +23207,10 @@ func init() {
         "posicion": {
           "type": "integer",
           "example": 5
+        },
+        "prevId": {
+          "type": "integer",
+          "example": 1
         },
         "question": {
           "type": "string",

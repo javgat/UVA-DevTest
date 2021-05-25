@@ -18,13 +18,15 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
   testid: number
   preguntaid: number
   openAnswer?: Answer
-  pregunta: Question
+  pregunta: Pregunta
   questionAnswer: QuestionAnswer
   newRespuesta: string
   options: Option[]
+  modificandoRespuesta: boolean
 
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private route: ActivatedRoute, private ptestS: PublishedTestService, private answerS: AnswerService) {
     super(session, router, data, userS);
+    this.modificandoRespuesta = false
     this.testid = 0
     this.preguntaid = 0
     this.options = []
@@ -62,6 +64,22 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
     }
   }
 
+  resetViewData(): void{
+    this.modificandoRespuesta = false
+    this.testid = 0
+    this.preguntaid = 0
+    this.options = []
+    this.pregunta = new Pregunta()
+    this.questionAnswer = {
+      idPregunta: 0,
+      idRespuesta: 0,
+      puntuacion: 0,
+      corregida: false,
+      respuesta: ""
+    }
+    this.newRespuesta = ""
+  }
+
   getOpenAnswer(primera: boolean) {
     this.userS.getOpenAnswersFromUserTest(this.getSessionUser().getUsername(), this.testid).subscribe(
       resp => {
@@ -79,7 +97,7 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
   getPQuestionFromPTest(primera: boolean) {
     this.ptestS.getQuestionFromPublishedTests(this.testid, this.preguntaid).subscribe(
       resp => {
-        this.pregunta = resp
+        this.pregunta = Pregunta.constructorFromQuestion(resp)
         this.getQuestionAnswersQuestion(true)
         if (this.pregunta.tipoPregunta == "opciones") {
           this.getOpciones(true)
@@ -126,6 +144,8 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
 
   sendTextRespuestaClick() {
     this.questionAnswer.respuesta = this.newRespuesta
+    this.newRespuesta = ""
+    this.modificandoRespuesta = false
     this.sendRespuesta()
   }
 
@@ -141,7 +161,7 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
     if (this.openAnswer == undefined || this.openAnswer.id == undefined) return
     this.answerS.postQuestionAnswer(this.openAnswer.id, this.questionAnswer).subscribe(
       resp => {
-        this.cambiarMensaje(new Mensaje("Respuesta actualizada con éxito", Tipo.SUCCESS, true))
+        //this.cambiarMensaje(new Mensaje("Respuesta actualizada con éxito", Tipo.SUCCESS, true))
         this.getOpenAnswer(true)
       },
       err => {
@@ -193,6 +213,7 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
   }
 
   borrarRespuestaClick(){
+    this.newRespuesta = ""
     this.borrarRespuesta(true)
   }
 
@@ -200,13 +221,39 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
     if (this.openAnswer == undefined || this.openAnswer.id == undefined) return
     this.answerS.deleteQuestionAnswerFromAnswer(this.openAnswer?.id, this.preguntaid).subscribe(
       resp => {
-        this.cambiarMensaje(new Mensaje("Respuesta borrada con éxito", Tipo.SUCCESS, true))
+        //this.cambiarMensaje(new Mensaje("Respuesta borrada con éxito", Tipo.SUCCESS, true))
         this.getOpenAnswer(true)
       },
       err => {
         this.handleErrRelog(err, "borrar respuesta a una pregunta", primera, this.borrarRespuesta, this)
       }
     )
+  }
+
+  modificarRespuestaClick(){
+    this.modificandoRespuesta = true
+  }
+
+  hasPrevQuestion(): boolean{
+    return this.pregunta.hasPrevious()
+  }
+
+  hasNextQuestion(): boolean{
+    return this.pregunta.hasNext()
+  }
+
+  goPrevQuestion(): void{
+    let testid = this.testid
+    let prevId = this.pregunta.prevId
+    this.resetViewData()
+    this.router.navigate(['/pt', testid, 'answering', 'pq', prevId])
+  }
+
+  goNextQuestion(): void{
+    let testid = this.testid
+    let nextId = this.pregunta.nextId
+    this.resetViewData()
+    this.router.navigate(['/pt', testid, 'answering', 'pq', nextId])
   }
 
 }

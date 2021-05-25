@@ -6953,6 +6953,12 @@ definitions:
       posicion:
         type: integer
         example: 5
+      prevId:
+        type: integer
+        example: 1
+      nextId:
+        type: integer
+        example: 4
   Test:
     type: object
     required:

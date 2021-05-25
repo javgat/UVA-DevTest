@@ -39,6 +39,8 @@ func ToModelQuestion(q *Question) (*models.Question, error) {
 				Penalizacion:             q.Penalizacion,
 				CantidadFavoritos:        q.CantidadFavoritos,
 				Posicion:                 q.Posicion,
+				NextID:                   q.NextID,
+				PrevID:                   q.PrevID,
 			}
 			return mq, nil
 		}
@@ -585,6 +587,35 @@ func RemoveQuestionTeam(db *sql.DB, questionid int64, teamname string) error {
 	return err
 }
 
+func addNextPrevIdQuestion(qs *Question, testid int64) error {
+	db, err := dbconnection.ConnectDb()
+	if err != nil {
+		return err
+	}
+	if err == nil {
+		var prevQ, nextQ *Question
+		prevQ, err = GetPreviousQuestionFromTest(db, testid, qs)
+		if err == nil {
+			if prevQ != nil {
+				qs.PrevID = prevQ.ID // En FE tienes que poner por defecto 0 en ambos
+			} else {
+				qs.PrevID = -1
+			}
+			if err == nil {
+				nextQ, err = GetNextQuestionFromTest(db, testid, qs)
+				if err == nil {
+					if nextQ != nil {
+						qs.NextID = nextQ.ID
+					} else {
+						qs.NextID = -1
+					}
+				}
+			}
+		}
+	}
+	return err
+}
+
 func addTestPreguntaAtributos(qs *Question, testid int64) error {
 	db, err := dbconnection.ConnectDb()
 	if err != nil {
@@ -645,8 +676,51 @@ func GetQuestionFromTest(db *sql.DB, testid int64, questionid int64) (*Question,
 			qs, err = rowsToQuestion(rows)
 			if qs != nil && err == nil {
 				err = addTestPreguntaAtributos(qs, testid)
-				return qs, err
+				if err == nil {
+					err = addNextPrevIdQuestion(qs, testid)
+					return qs, err
+				}
 			}
+		}
+	} else {
+		log.Print(err)
+	}
+	return nil, err
+}
+
+func GetPreviousQuestionFromTest(db *sql.DB, testid int64, question *Question) (*Question, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var qs *Question
+	query, err := db.Prepare("SELECT P.* FROM Pregunta P JOIN TestPregunta T ON P.id=T.preguntaid WHERE T.testid=? AND T.posicion<? " +
+		" ORDER BY T.posicion DESC LIMIT 1;")
+	if err == nil {
+		defer query.Close()
+		rows, err := query.Query(testid, question.Posicion)
+		if err == nil {
+			qs, err = rowsToQuestion(rows)
+			return qs, err
+		}
+	} else {
+		log.Print(err)
+	}
+	return nil, err
+}
+
+func GetNextQuestionFromTest(db *sql.DB, testid int64, question *Question) (*Question, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var qs *Question
+	query, err := db.Prepare("SELECT P.* FROM Pregunta P JOIN TestPregunta T ON P.id=T.preguntaid WHERE T.testid=? AND T.posicion>? " +
+		" ORDER BY T.posicion ASC LIMIT 1;")
+	if err == nil {
+		defer query.Close()
+		rows, err := query.Query(testid, question.Posicion)
+		if err == nil {
+			qs, err = rowsToQuestion(rows)
+			return qs, err
 		}
 	} else {
 		log.Print(err)

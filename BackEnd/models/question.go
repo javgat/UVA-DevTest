@@ -57,6 +57,10 @@ type Question struct {
 	// Example: false
 	IsRespondida bool `json:"isRespondida,omitempty"`
 
+	// next Id
+	// Example: 4
+	NextID int64 `json:"nextId,omitempty"`
+
 	// penalizacion
 	// Required: true
 	// Maximum: 100
@@ -66,6 +70,10 @@ type Question struct {
 	// posicion
 	// Example: 5
 	Posicion int64 `json:"posicion,omitempty"`
+
+	// prev Id
+	// Example: 1
+	PrevID int64 `json:"prevId,omitempty"`
 
 	// question
 	// Example: ¿Cual es el lenguaje que tiene un nombre más largo de todos?

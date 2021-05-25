@@ -31,6 +31,8 @@ export interface Question {
     penalizacion: number;
     cantidadFavoritos?: number;
     posicion?: number;
+    prevId?: number;
+    nextId?: number;
 }
 export namespace Question {
     export type TipoPreguntaEnum = 'opciones' | 'string' | 'codigo';
