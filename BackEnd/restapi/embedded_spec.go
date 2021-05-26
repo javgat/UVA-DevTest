@@ -10793,7 +10793,8 @@ func init() {
         "accesoPublicoNoPublicado",
         "autoCorrect",
         "visibilidad",
-        "tiempoEstricto"
+        "tiempoEstricto",
+        "maxIntentos"
       ],
       "properties": {
         "accesoPublico": {
@@ -10832,6 +10833,10 @@ func init() {
         "id": {
           "type": "integer",
           "example": 1
+        },
+        "maxIntentos": {
+          "description": "Maximum of tries that a user has solving a test. If \u003c1, there is no limit of tries.",
+          "type": "integer"
         },
         "maxMinutes": {
           "type": "integer",
@@ -23527,7 +23532,8 @@ func init() {
         "accesoPublicoNoPublicado",
         "autoCorrect",
         "visibilidad",
-        "tiempoEstricto"
+        "tiempoEstricto",
+        "maxIntentos"
       ],
       "properties": {
         "accesoPublico": {
@@ -23567,6 +23573,10 @@ func init() {
         "id": {
           "type": "integer",
           "example": 1
+        },
+        "maxIntentos": {
+          "description": "Maximum of tries that a user has solving a test. If \u003c1, there is no limit of tries.",
+          "type": "integer"
         },
         "maxMinutes": {
           "type": "integer",

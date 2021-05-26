@@ -62,6 +62,10 @@ type Test struct {
 	// Example: 1
 	ID int64 `json:"id,omitempty"`
 
+	// Maximum of tries that a user has solving a test. If <1, there is no limit of tries.
+	// Required: true
+	MaxIntentos *int64 `json:"maxIntentos"`
+
 	// max minutes
 	// Example: 60
 	// Required: true
@@ -126,6 +130,10 @@ func (m *Test) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateHoraCreacion(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateMaxIntentos(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -218,6 +226,15 @@ func (m *Test) validateHoraCreacion(formats strfmt.Registry) error {
 	}
 
 	if err := validate.FormatOf("horaCreacion", "body", "date-time", m.HoraCreacion.String(), formats); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Test) validateMaxIntentos(formats strfmt.Registry) error {
+
+	if err := validate.Required("maxIntentos", "body", m.MaxIntentos); err != nil {
 		return err
 	}
 

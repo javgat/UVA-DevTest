@@ -7001,6 +7001,7 @@ definitions:
     - autoCorrect
     - visibilidad
     - tiempoEstricto
+    - maxIntentos
     properties:
       id:
         type: integer
@@ -7054,6 +7055,9 @@ definitions:
       tiempoEstricto:
         type: boolean
         example: true
+      maxIntentos:
+        type: integer
+        description: Maximum of tries that a user has solving a test. If <1, there is no limit of tries.
   Answer:
     type: object
     required:

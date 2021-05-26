@@ -122,6 +122,7 @@ CREATE TABLE Test(
   visibilidad ENUM('alEntregar', 'alCorregir', 'manual') NOT NULL,
   cantidadFavoritos int(11) DEFAULT 0,
   tiempoEstricto boolean NOT NULL,
+  maxIntentos int(11) NOT NULL, /*if <1, sin Limite*/
   FOREIGN KEY(usuarioid) REFERENCES Usuario(id),
   FOREIGN KEY(origenTestid) REFERENCES Test(id),
   PRIMARY KEY(id)

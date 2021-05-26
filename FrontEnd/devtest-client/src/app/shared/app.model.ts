@@ -211,10 +211,11 @@ export class Examen implements Test{
     visibilidad: Test.VisibilidadEnum;
     cantidadFavoritos: number;
     tiempoEstricto: boolean;
+    maxIntentos: number;
     constructor(title?: string, description?: string, accesoPublico?: boolean, editable?: boolean, maxMinutes?: number, 
         username?: string, id?: number, accesoPublicoNoPublicado?: boolean, horaCreacion?: Date, originalTestID?: number,
         cantidadRespuestasDelUsuario?: number, notaMaxima?: number, autoCorrect?: boolean, visibilidad?: Test.VisibilidadEnum,
-        cantidadFavoritos?: number, tiempoEstricto?: boolean){
+        cantidadFavoritos?: number, tiempoEstricto?: boolean, maxIntentos?: number){
         this.title=title || ""
         this.description=description || ""
         this.maxMinutes=maxMinutes || 0
@@ -231,12 +232,13 @@ export class Examen implements Test{
         this.visibilidad = visibilidad || Test.VisibilidadEnum.Manual
         this.cantidadFavoritos = cantidadFavoritos || 0
         this.tiempoEstricto = tiempoEstricto || false
+        this.maxIntentos = maxIntentos || 0
     }
 
     static constructorFromTest(t: Test): Examen{
         return new Examen(t.title, t.description, t.accesoPublico, t.editable, t.maxMinutes, t.username, t.id,
             t.accesoPublicoNoPublicado, t.horaCreacion, t.originalTestID, t.cantidadRespuestasDelUsuario, t.notaMaxima,
-            t.autoCorrect, t.visibilidad, t.cantidadFavoritos, t.tiempoEstricto)
+            t.autoCorrect, t.visibilidad, t.cantidadFavoritos, t.tiempoEstricto, t.maxIntentos)
     }
 
     static visibilidadToString(vis: Test.VisibilidadEnum ) : string{

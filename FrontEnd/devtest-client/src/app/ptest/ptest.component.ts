@@ -15,7 +15,7 @@ import { SessionService } from '../shared/session.service';
 export class PtestComponent extends LoggedInController implements OnInit {
 
   routeSub: Subscription
-  test: Test
+  test: Examen
   preguntas: Question[]
   id: number
   tags: Tag[]
@@ -174,4 +174,11 @@ export class PtestComponent extends LoggedInController implements OnInit {
     return this.isLoggedIn() && this.test.cantidadRespuestasDelUsuario>0 && (!this.isRespuestaIniciada || this.test.cantidadRespuestasDelUsuario>1)
   }
 
+  testHasMaxIntentos(): boolean{
+    return this.test.maxIntentos>0
+  }
+
+  quedanMasIntentos(): boolean{
+    return (this.test.maxIntentos<1) || this.test.maxIntentos>this.test.cantidadRespuestasDelUsuario
+  }
 }

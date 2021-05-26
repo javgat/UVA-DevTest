@@ -35,7 +35,8 @@
                     </span>
                 </p>
                 <div>
-                    <p *ngIf="isLoggedIn()">Llevas {{test.cantidadRespuestasDelUsuario}} intentos.</p>
+                    <p *ngIf="isLoggedIn()">Llevas {{test.cantidadRespuestasDelUsuario}} intentos<span
+                            *ngIf="testHasMaxIntentos()"> de un máximo de {{test.maxIntentos}}</span>.</p>
                     <div class="d-grid gap-2 my-3" *ngIf="mostrarVerMisRespuestas()">
                         <button class="btn btn-secondary" type="button" [routerLink]="['/pt', test.id, 'myanswers']">Ver
                             mis respuestas</button>
@@ -44,10 +45,13 @@
                         <button class="btn btn-success btn-lg" type="button"
                             [routerLink]="['/pt', id, 'answering']">CONTINUAR RESPUESTA</button>
                     </div>
+                    <div *ngIf="!quedanMasIntentos() && !isRespuestaIniciada && isLoggedIn()">
+                        <p>No te quedan más intentos para resolver este test.</p>
+                    </div>
                     <div *ngIf="!isLoggedIn()">
                         <p>Para realizar los tests tendrás que <a [routerLink]="['/login']">Iniciar Sesión</a></p>
                     </div>
-                    <div *ngIf="!isRespuestaIniciada && isLoggedIn()">
+                    <div *ngIf="!isRespuestaIniciada && isLoggedIn() && quedanMasIntentos()">
                         <div class="d-grid gap-2 my-3">
                             <button class="btn btn-success btn-lg" type="button" data-bs-toggle="modal"
                                 data-bs-target="#startAnswerModal">RESPONDER</button>

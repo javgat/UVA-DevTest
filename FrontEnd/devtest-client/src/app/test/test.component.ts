@@ -437,4 +437,20 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
     window.open(url, '_blank');
   }
 
+  testHasMaxIntentos(): boolean{
+    return this.test.maxIntentos>0
+  }
+
+  testEditHasMaxIntentos(): boolean{
+    return this.testEdit.maxIntentos>0
+  }
+
+  changeSwitchLimitIntentos(){
+    if(this.testEditHasMaxIntentos()){
+      this.testEdit.maxIntentos = 0
+    }else{
+      this.testEdit.maxIntentos = 1
+    }
+  }
+
 }

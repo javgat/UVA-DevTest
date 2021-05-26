@@ -1098,11 +1098,27 @@ func GetSolvableTestFromUser(params user.GetSolvableTestFromUserParams, u *model
 
 // POST /users/{username}/solvableTests/{testid}/answers
 // Auth: Current User or CanAdminUsers&&CanAdminAnswers
+// Req: Test.maxIntentos <1 || Test.maxIntentos > user intentos al test
 func StartAnswer(params user.StartAnswerParams, u *models.User) middleware.Responder {
 	if isUser(params.Username, u) || (permissions.CanAdminUsers(u) && permissions.CanAdminAnswers(u)) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			t, err := dao.GetSolvableTestFromUser(db, params.Username, params.Testid)
+			if int(*t.MaxIntentos) > 0 {
+				var as []*dao.Answer
+				as, err = dao.GetAnswersFromUserAnsweredTest(db, params.Username, params.Testid)
+				if err == nil {
+					if len(as) >= int(*t.MaxIntentos) {
+						var mesErr *models.Error
+						cadErr := "no se puede iniciar una respuesta al test, maximo de intentos alcanzado"
+						mesErr = &models.Error{
+							Message: &cadErr,
+						}
+						log.Println("Error en StartAnswer(): ", *mesErr.Message)
+						return user.NewStartAnswerBadRequest().WithPayload(mesErr)
+					}
+				}
+			}
 			if t == nil && err == nil && permissions.CanAdminPTests(u) {
 				t, err = dao.GetPublishedTest(db, params.Testid)
 			}
@@ -1118,7 +1134,7 @@ func StartAnswer(params user.StartAnswerParams, u *models.User) middleware.Respo
 					}
 				}
 			}
-			log.Print("error StartUser: ", err)
+			log.Println("error StartUser: ", err)
 			return user.NewStartAnswerGone()
 		}
 		return user.NewStartAnswerInternalServerError()

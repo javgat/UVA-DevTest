@@ -31,6 +31,10 @@ export interface Test {
     visibilidad: Test.VisibilidadEnum;
     cantidadFavoritos?: number;
     tiempoEstricto: boolean;
+    /**
+     * Maximum of tries that a user has solving a test. If <1, there is no limit of tries.
+     */
+    maxIntentos: number;
 }
 export namespace Test {
     export type VisibilidadEnum = 'alEntregar' | 'alCorregir' | 'manual';

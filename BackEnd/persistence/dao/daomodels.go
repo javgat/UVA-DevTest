@@ -198,6 +198,10 @@ type Test struct {
 	// Example: 1
 	ID int64 `json:"id,omitempty"`
 
+	// Maximum of tries that a user has solving a test. If <1, there is no limit of tries.
+	// Required: true
+	MaxIntentos *int64 `json:"maxIntentos"`
+
 	// max minutes
 	// Example: 60
 	// Required: true
