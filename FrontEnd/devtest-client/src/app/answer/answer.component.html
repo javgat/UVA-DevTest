@@ -25,7 +25,7 @@
     <p><b>Autor: </b><a [routerLink]="['/profile', answer.username]">{{answer.username}}</a></p>
     <p><b>Entregada: </b><span *ngIf="answer.entregado">Sí</span><span *ngIf="!answer.entregado">No</span></p>
     <p><b>Fecha de inicio: </b>{{printDate(answer.startTime)}}</p>
-    <p><b>Fecha de entrega: </b>{{printDate(answer.finishTime)}}</p>
+    <p *ngIf="answer.entregado"><b>Fecha de entrega: </b>{{printDate(answer.finishTime)}}</p>
     <p><b>Puntuacion: </b>{{answer.puntuacion || 0}} / {{test.notaMaxima}}</p>
     <p *ngIf="isModoTestAdmin()"><b>Visible para el usuario: </b>
         <span *ngIf="answer.visibleParaUsuario">Sí</span><span *ngIf="!answer.visibleParaUsuario">No</span>
