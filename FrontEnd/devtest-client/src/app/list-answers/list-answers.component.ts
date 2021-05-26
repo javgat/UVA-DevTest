@@ -22,6 +22,7 @@ export class ListAnswersComponent extends LoggedInController implements OnInit {
   buscarUsuario: boolean
   isInAdminTeam: boolean
   test: Examen
+  mensajeListaVacia: string
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, protected ptestS : PublishedTestService, private route: ActivatedRoute) {
     super(session, router, data, userS)
     this.testid = 0
@@ -30,6 +31,7 @@ export class ListAnswersComponent extends LoggedInController implements OnInit {
     this.buscarUsuario = true
     this.isInAdminTeam = false
     this.test = new Examen()
+    this.mensajeListaVacia = "¡Vaya! Parece que aún no hay respuestas para mostrar en esta lista"
     this.routeSub = this.route.params.subscribe(params => {
       this.testid = params['testid']
       this.borrarMensaje()

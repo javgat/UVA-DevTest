@@ -17,3 +17,5 @@
                 corregida</span> <span class="badge bg-success" *ngIf="(qa.corregida || false)">Corregida</span></p>
     </div>
 </div>
+<div *ngIf="questionAnswers.length==0" class="bg-white bg-gradient fw-bold text-center p-5">{{mensajeListaVacia}}</div>
+<br />

@@ -27,6 +27,7 @@ export class ListQuestionsComponent extends LoggedInController implements OnInit
   limit: number
   offset: number
   autotags: Tag[]
+  mensajeListaVacia: string
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService,
      protected qS: QuestionService, protected tagS: TagService, protected teamS?: TeamService) {
     super(session, router, data, userS)
@@ -43,6 +44,7 @@ export class ListQuestionsComponent extends LoggedInController implements OnInit
     this.limit = 20
     this.offset = 0
     this.autotags = []
+    this.mensajeListaVacia = "¡Vaya! Parece que no hay ninguna pregunta para mostrar"
     this.getQuestionsFilters()
     this.changeGetAutoTags()
   }

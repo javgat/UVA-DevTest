@@ -21,6 +21,7 @@ export class ListQAnswersComponent extends LoggedInController implements OnInit 
   questionid: number
   questions: Question[]
   mostrarAutor: boolean
+  mensajeListaVacia: string
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService,
     private route: ActivatedRoute, protected answerS: AnswerService, protected ptestS: PublishedTestService) {
     super(session, router, data, userS)
@@ -30,6 +31,7 @@ export class ListQAnswersComponent extends LoggedInController implements OnInit 
     this.answerid = 0
     this.questionid = 0
     this.mostrarAutor = false
+    this.mensajeListaVacia = "¡Vaya! Parece que no hay ninguna Respuesta a una Pregunta para mostrar."
     this.routeSub = this.route.params.subscribe(params => {
       this.testid = params['testid']
       this.answerid = params['answerid']

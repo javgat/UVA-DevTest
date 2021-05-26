@@ -11,7 +11,7 @@
         </div>
     </form>
     <div class="table-responsive">
-        <table class="table table-striped table-hover table-primary my-3">
+        <table class="table table-striped table-hover table-primary mt-3 mb-0">
             <thead>
                 <tr>
                     <th>Autor</th>
@@ -53,5 +53,7 @@
                 </tr>
             </tbody>
         </table>
+        <div *ngIf="answers.length==0" class="bg-white bg-gradient fw-bold text-center p-5">{{mensajeListaVacia}}</div>
+        <br />
     </div>
 </div>

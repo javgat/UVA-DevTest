@@ -48,7 +48,7 @@
             publicados</label>
     </div>
     <div class="table-responsive">
-        <table class="table table-striped table-hover table-primary my-3" [ngClass]="{'scrolly': scrollable}">
+        <table class="table table-striped table-hover table-primary mt-3 mb-0" [ngClass]="{'scrolly': scrollable}">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -100,6 +100,8 @@
                 </tr>
             </tbody>
         </table>
+        <div *ngIf="questions.length==0" class="bg-white bg-gradient fw-bold text-center p-5">{{mensajeListaVacia}}</div>
+        <br />
     </div>
     <nav aria-label="Questions page navigation">
         <ul class="pagination justify-content-center">

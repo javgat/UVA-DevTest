@@ -17,9 +17,11 @@ export class ListUsersComponent extends LoggedInController implements OnInit {
   users: User[]
   likeUsername: string | undefined
   editLikeUsername: string
+  mensajeListaVacia: string
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService) {
     super(session, router, data, userS)
     this.editLikeUsername = ""
+    this.mensajeListaVacia = "¡Vaya! Parece que no hay ningún usuario para mostrar"
     this.users = []
     this.getUsersFilters()
   }

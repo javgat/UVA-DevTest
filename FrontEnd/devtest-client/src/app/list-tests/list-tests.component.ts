@@ -26,6 +26,7 @@ export class ListTestsComponent extends LoggedInController implements OnInit {
   limit: number
   offset: number
   autotags: Tag[]
+  mensajeListaVacia: string
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, protected tS: TestService,
      protected tagS: TagService, protected teamS?: TeamService) {
     super(session, router, data, userS)
@@ -42,6 +43,7 @@ export class ListTestsComponent extends LoggedInController implements OnInit {
     this.limit = 20
     this.offset = 0
     this.autotags = []
+    this.mensajeListaVacia = "¡Vaya! Parece que no hay ningún test para mostrar"
     this.getTestsFilters()
     this.changeGetAutoTags()
   }
