@@ -121,9 +121,9 @@
             <h4>Opciones:</h4>
             <form (ngSubmit)='addOptionSubmit()' ngNativeValidate>
                 <div *ngIf="checkPermisosEdicion()" class="input-group my-3">
-                    <input class="button btn btn-primary" type="submit" value="Añadir opción" />
+                    <input class="button btn btn-primary" type="submit" value="Añadir opción" [disabled]="anadirOpcionDisabled()" />
                     <input type="text" class="form-control" name="inputAddOption" [(ngModel)]="nuevaOpcion.texto"
-                        placeholder="Nueva opción" required pattern=".+" />
+                        placeholder="Introduce el texto de la nueva opción" required pattern=".+" />
                 </div>
             </form>
             <div *ngFor="let opc of opciones">

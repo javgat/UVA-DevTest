@@ -59,19 +59,22 @@
                         </datalist>
                     </div>
                 </form>
-                <hr />
-                <div class="d-grid gap-2 my-3">
-                    <button *ngIf="checkPermisosEdicion()" type="button" class="btn btn-lg btn-primary"
-                        data-bs-toggle="modal" data-bs-target="#editTestModal">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 26" width="24px"
-                            fill="currentColor">
-                            <path d="M0 0h24v24H0z" fill="none" />
-                            <path
-                                d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
-                        </svg>
-                        Editar Test
-                    </button>
+
+                <div class="d-grid gap-2">
+                    <div class="btn-group">
+                        <button *ngIf="checkPermisosEdicion()" style="width:80%;" type="button" class="btn btn-lg btn-success"
+                            data-bs-toggle="modal" data-bs-target="#modalPublishTest">PUBLICAR</button>
+                        <button type="button" class="btn btn-success btn-lg dropdown-toggle dropdown-toggle-split"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="visually-hidden">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" [routerLink]="['/et', test.id, 'ptests']">Ver Publicaciones</a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
+                <hr />
                 <p><b>Descripción:</b></p>
                 <div class="card mb-3">
                     <div class="card-body">
@@ -90,12 +93,17 @@
                 <p><b>Publicación automática de corrección de respuestas: </b> <span
                         *ngIf="test.autoCorrect">Sí</span><span *ngIf="!test.autoCorrect">No</span></p>
                 <p><b>Visibilidad de la respuesta: </b>{{visibilidadToString(test.visibilidad)}}</p>
-
-                <div class="d-grid gap-2">
-                    <button *ngIf="checkPermisosEdicion()" type="button" class="btn btn-lg btn-outline-success"
-                        data-bs-toggle="modal" data-bs-target="#modalPublishTest">Publicar</button>
-                    <button type="button" class="btn btn-lg btn-primary" [routerLink]="['/et', test.id, 'ptests']">Ver
-                        Publicaciones</button>
+                <div class="d-grid gap-2 my-3">
+                    <button *ngIf="checkPermisosEdicion()" type="button" class="btn btn-lg btn-primary"
+                        data-bs-toggle="modal" data-bs-target="#editTestModal">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 26" width="24px"
+                            fill="currentColor">
+                            <path d="M0 0h24v24H0z" fill="none" />
+                            <path
+                                d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+                        </svg>
+                        Editar Test
+                    </button>
                 </div>
             </div>
         </div>

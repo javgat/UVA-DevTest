@@ -346,4 +346,8 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
     )
   }
 
+  anadirOpcionDisabled(): boolean{
+    return this.nuevaOpcion.texto=="" || this.nuevaOpcion.texto == undefined
+  }
+
 }
