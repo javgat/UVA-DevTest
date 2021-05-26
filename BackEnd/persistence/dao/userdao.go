@@ -173,6 +173,7 @@ func addFiltersUsers(hayWhere bool, initQuery string, likeUsername *string, like
 		query = query + nexoQuery + " username LIKE ? "
 		nexoQuery = " AND "
 	}
+	query += " ORDER BY username ASC "
 	if limit != nil {
 		query = query + " LIMIT " + strconv.FormatInt(*limit, 10) + " "
 	}

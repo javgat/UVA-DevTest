@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EmailUser, Message, PublishedTestService, Team, Test, TestService, User, UserService } from '@javgat/devtest-api';
+import { EmailUser, Message, PublishedTestService, Team, TeamService, Test, TestService, User, UserService } from '@javgat/devtest-api';
 import { Subscription } from 'rxjs';
 import { LoggedInTeacherController } from '../shared/app.controller';
 import { Examen, Mensaje, Tipo } from '../shared/app.model';
@@ -29,12 +29,16 @@ export class PtestInvitesComponent extends LoggedInTeacherController implements 
   enviaMensaje: boolean
   createUser: boolean
   checkedSendEmail: boolean
+  autousers: User[]
+  autoteams: Team[]
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, 
-      private tS: TestService, private route: ActivatedRoute, private ptS: PublishedTestService) {
+      private tS: TestService, private route: ActivatedRoute, private ptS: PublishedTestService, private teamS: TeamService) {
     super(session, router, data, userS)
     this.test = new Examen()
     this.teams = []
     this.iusers = []
+    this.autoteams = []
+    this.autousers = []
     this.id = 0
     this.isInAdminTeam = false
     this.addTeamTeamname = ""
@@ -51,6 +55,8 @@ export class PtestInvitesComponent extends LoggedInTeacherController implements 
       this.borrarMensaje()
       this.getTest(true)
     });
+    this.changeGetAutoTeams()
+    this.changeGetAutoUsers()
   }
 
   ngOnInit(): void {
@@ -254,6 +260,32 @@ export class PtestInvitesComponent extends LoggedInTeacherController implements 
 
   changeFlexSendEmail(){
     this.checkedSendEmail = !this.checkedSendEmail
+  }
+
+  changeGetAutoUsers(){
+    this.getAutoUsers(true)
+  }
+
+  changeGetAutoTeams(){
+    this.getAutoTeams(true)
+  }
+
+  getAutoUsers(primera: boolean){
+    this.userS.getUsers(undefined, this.addUserUsername, 20).subscribe(
+      resp=>{
+        this.autousers=resp
+      },
+      err => this.handleErrRelog(err, "obtener usuarios que empiezan por ese username", primera, this.getAutoUsers, this)
+    )
+  }
+
+  getAutoTeams(primera: boolean){
+    this.teamS.getTeams(this.addTeamTeamname, 20).subscribe(
+      resp=>{
+        this.autoteams=resp
+      },
+      err => this.handleErrRelog(err, "obtener equipos que empiezan por ese teamname", primera, this.getAutoTeams, this)
+    )
   }
 
 }

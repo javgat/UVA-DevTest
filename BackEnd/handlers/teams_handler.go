@@ -22,7 +22,8 @@ func GetTeams(params team.GetTeamsParams, u *models.User) middleware.Responder {
 	if permissions.CanAdminTeams(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			teams, err := dao.GetTeams(db, params.LikeStartTeamname, params.Limit, params.Offset)
+			var teams []*dao.Team
+			teams, err = dao.GetTeams(db, params.LikeStartTeamname, params.Limit, params.Offset)
 			if err == nil {
 				return team.NewGetTeamsOK().WithPayload(dao.ToModelsTeams(teams))
 			}

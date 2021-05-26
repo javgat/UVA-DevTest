@@ -17,9 +17,14 @@
                 <div class="input-group">
                     <input class="button btn btn-primary" type="submit" value="Añadir equipo" />
                     <input type="text" class="form-control" name="inputAddTeam" aria-describedby="inputAddTeamHelp"
-                        [(ngModel)]="addTeamTeamname" placeholder="Nombre de equipo" required pattern="[^@]+" />
+                        [(ngModel)]="addTeamTeamname" placeholder="Nombre de equipo" required pattern="[^@]+"
+                        autocomplete="off" list="auto_teams" required (ngModelChange)="changeGetAutoTeams()" />
+                    <datalist id="auto_teams">
+                        <option *ngFor="let autoteam of autoteams" value="{{autoteam.teamname}}">
+                    </datalist>
                 </div>
-                <div id="inputAddTeamHelp" class="form-text text-muted">Invita a los miembros de un equipo a realizar un test</div>
+                <div id="inputAddTeamHelp" class="form-text text-muted">Invita a los miembros de un equipo a realizar un
+                    test</div>
             </div>
         </form>
         <form *ngIf="!createUser" (ngSubmit)='inviteUserSubmit()' ngNativeValidate>
@@ -27,11 +32,16 @@
                 <div class="input-group">
                     <input class="button btn btn-primary" type="submit" value="Añadir usuario" />
                     <input type="text" class="form-control" name="inputAddUser" aria-describedby="inputAddUserHelp"
-                        [(ngModel)]="addUserUsername" placeholder="Nombre de usuario" required />
+                        [(ngModel)]="addUserUsername" placeholder="Nombre de usuario" autocomplete="off" required
+                        list="auto_users" (ngModelChange)="changeGetAutoUsers()" />
+                    <datalist id="auto_users">
+                        <option *ngFor="let autouser of autousers" value="{{autouser.username}}">
+                    </datalist>
                 </div>
                 <div id="inputAddUserHelp" class="form-text text-muted">Invita a un usuario a realizar un test</div>
             </div>
-            <p><a class="link-dark m-3" role="button" (click)="changeAddUser()">Crear cuenta de usuario por correo electronico</a></p>
+            <p><a class="link-dark m-3" role="button" (click)="changeAddUser()">Crear cuenta de usuario por correo
+                    electronico</a></p>
         </form>
         <form *ngIf="createUser" (ngSubmit)='createInviteUserSubmit()' ngNativeValidate>
             <div class="my-3">
@@ -40,7 +50,8 @@
                     <input type="text" class="form-control" name="inputAddUser" aria-describedby="inputAddUserHelp"
                         [(ngModel)]="addUserUsername" placeholder="Correo electrónico" required />
                 </div>
-                <div id="inputAddUserHelp" class="form-text text-muted">Crea una nueva cuenta e invitala a realizar un test</div>
+                <div id="inputAddUserHelp" class="form-text text-muted">Crea una nueva cuenta e invitala a realizar un
+                    test</div>
             </div>
             <p><a class="link-dark m-3" role="button" (click)="changeNotAddUser()">Añadir usuario existente</a></p>
         </form>
@@ -49,8 +60,10 @@
                 (change)="changeFlexSendEmail()">
             <label class="form-check-label" for="flexSwitchSendEmail">Enviar notificación por correo</label>
         </div>
-        <p *ngIf="!enviaMensaje && checkedSendEmail"><a class="link-dark mx-3" role="button" (click)="changeEnviaMensaje()">Enviar mensaje personalizado en la notificación</a></p>
-        <p *ngIf="enviaMensaje && checkedSendEmail"><a class="link-dark mx-3" role="button" (click)="changeNoEnviaMensaje()">No enviar mensaje personalizado en la notificación</a></p>
+        <p *ngIf="!enviaMensaje && checkedSendEmail"><a class="link-dark mx-3" role="button"
+                (click)="changeEnviaMensaje()">Enviar mensaje personalizado en la notificación</a></p>
+        <p *ngIf="enviaMensaje && checkedSendEmail"><a class="link-dark mx-3" role="button"
+                (click)="changeNoEnviaMensaje()">No enviar mensaje personalizado en la notificación</a></p>
 
 
         <div *ngIf="enviaMensaje" class="input-group my-3">

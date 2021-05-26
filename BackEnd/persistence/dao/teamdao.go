@@ -156,6 +156,7 @@ func addFiltersTeams(hayWhere bool, initQuery string, likeStartTeamname *string,
 		query = query + nexoQuery + " teamname LIKE ? "
 		nexoQuery = " AND "
 	}
+	query += " ORDER BY teamname ASC"
 	if limit != nil {
 		query = query + " LIMIT " + strconv.FormatInt(*limit, 10) + " "
 	}
