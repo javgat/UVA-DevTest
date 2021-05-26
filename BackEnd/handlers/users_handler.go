@@ -71,7 +71,7 @@ func GetUsers(params user.GetUsersParams, u *models.User) middleware.Responder {
 		return user.NewGetUsersInternalServerError()
 	}
 	log.Println("Conectado a la base de datos")
-	us, err := dao.GetUsers(db, params.LikeUsername)
+	us, err := dao.GetUsers(db, params.LikeUsername, params.LikeStartUsername, params.Limit, params.Offset)
 	if err != nil {
 		log.Println("Error en users_handler GetUsers(): ", err)
 		return user.NewGetUsersBadRequest()

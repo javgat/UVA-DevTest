@@ -7,6 +7,7 @@ package dao
 import (
 	"database/sql"
 	"errors"
+	"strconv"
 	"uva-devtest/models"
 )
 
@@ -145,18 +146,52 @@ func DeleteTeam(db *sql.DB, teamname string) error {
 	return err
 }
 
+func addFiltersTeams(hayWhere bool, initQuery string, likeStartTeamname *string, limit *int64, offset *int64) string {
+	query := initQuery
+	nexoQuery := " WHERE "
+	if hayWhere {
+		nexoQuery = " AND "
+	}
+	if likeStartTeamname != nil && *likeStartTeamname != "" {
+		query = query + nexoQuery + " teamname LIKE ? "
+		nexoQuery = " AND "
+	}
+	if limit != nil {
+		query = query + " LIMIT " + strconv.FormatInt(*limit, 10) + " "
+	}
+	if offset != nil {
+		query = query + " OFFSET " + strconv.FormatInt(*offset, 10) + " "
+	}
+	return query
+}
+
+func FilterTeamParamsToInterfaceArr(likeStartTeamname *string) []interface{} {
+	hayLikeStartTeamname := 0
+	if likeStartTeamname != nil && *likeStartTeamname != "" {
+		hayLikeStartTeamname = 1
+	}
+	interfaceParams := make([]interface{}, hayLikeStartTeamname)
+	if hayLikeStartTeamname == 1 {
+		interfaceParams[0] = *likeStartTeamname + "%"
+	}
+	return interfaceParams
+}
+
 // GetTeams gets all teams
-func GetTeams(db *sql.DB) ([]*Team, error) {
+func GetTeams(db *sql.DB, likeStartTeamname *string, limit *int64, offset *int64) ([]*Team, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
-	query, err := db.Prepare("SELECT * FROM Equipo")
+	stPrepare := "SELECT * FROM Equipo "
+	stPrepare = addFiltersTeams(false, stPrepare, likeStartTeamname, limit, offset)
+	query, err := db.Prepare(stPrepare)
 	var ts []*Team
 	if err != nil {
 		return ts, err
 	}
 	defer query.Close()
-	rows, err := query.Query()
+	interfaceParams := FilterTeamParamsToInterfaceArr(likeStartTeamname)
+	rows, err := query.Query(interfaceParams...)
 	if err == nil {
 		ts, err = rowsToTeams(rows)
 	}

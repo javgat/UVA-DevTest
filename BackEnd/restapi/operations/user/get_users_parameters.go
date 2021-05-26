@@ -12,6 +12,8 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // NewGetUsersParams creates a new GetUsersParams object
@@ -34,7 +36,21 @@ type GetUsersParams struct {
 	/*
 	  In: query
 	*/
+	LikeStartUsername *string
+	/*
+	  In: query
+	*/
 	LikeUsername *string
+	/*max number of elements to be returned
+	  Minimum: 0
+	  In: query
+	*/
+	Limit *int64
+	/*first elements to be skipped at being returned
+	  Minimum: 0
+	  In: query
+	*/
+	Offset *int64
 }
 
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
@@ -48,13 +64,46 @@ func (o *GetUsersParams) BindRequest(r *http.Request, route *middleware.MatchedR
 
 	qs := runtime.Values(r.URL.Query())
 
+	qLikeStartUsername, qhkLikeStartUsername, _ := qs.GetOK("likeStartUsername")
+	if err := o.bindLikeStartUsername(qLikeStartUsername, qhkLikeStartUsername, route.Formats); err != nil {
+		res = append(res, err)
+	}
+
 	qLikeUsername, qhkLikeUsername, _ := qs.GetOK("likeUsername")
 	if err := o.bindLikeUsername(qLikeUsername, qhkLikeUsername, route.Formats); err != nil {
+		res = append(res, err)
+	}
+
+	qLimit, qhkLimit, _ := qs.GetOK("limit")
+	if err := o.bindLimit(qLimit, qhkLimit, route.Formats); err != nil {
+		res = append(res, err)
+	}
+
+	qOffset, qhkOffset, _ := qs.GetOK("offset")
+	if err := o.bindOffset(qOffset, qhkOffset, route.Formats); err != nil {
 		res = append(res, err)
 	}
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// bindLikeStartUsername binds and validates parameter LikeStartUsername from query.
+func (o *GetUsersParams) bindLikeStartUsername(rawData []string, hasKey bool, formats strfmt.Registry) error {
+	var raw string
+	if len(rawData) > 0 {
+		raw = rawData[len(rawData)-1]
+	}
+
+	// Required: false
+	// AllowEmptyValue: false
+
+	if raw == "" { // empty values pass all other validations
+		return nil
+	}
+	o.LikeStartUsername = &raw
+
 	return nil
 }
 
@@ -72,6 +121,80 @@ func (o *GetUsersParams) bindLikeUsername(rawData []string, hasKey bool, formats
 		return nil
 	}
 	o.LikeUsername = &raw
+
+	return nil
+}
+
+// bindLimit binds and validates parameter Limit from query.
+func (o *GetUsersParams) bindLimit(rawData []string, hasKey bool, formats strfmt.Registry) error {
+	var raw string
+	if len(rawData) > 0 {
+		raw = rawData[len(rawData)-1]
+	}
+
+	// Required: false
+	// AllowEmptyValue: false
+
+	if raw == "" { // empty values pass all other validations
+		return nil
+	}
+
+	value, err := swag.ConvertInt64(raw)
+	if err != nil {
+		return errors.InvalidType("limit", "query", "int64", raw)
+	}
+	o.Limit = &value
+
+	if err := o.validateLimit(formats); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// validateLimit carries on validations for parameter Limit
+func (o *GetUsersParams) validateLimit(formats strfmt.Registry) error {
+
+	if err := validate.MinimumInt("limit", "query", *o.Limit, 0, false); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// bindOffset binds and validates parameter Offset from query.
+func (o *GetUsersParams) bindOffset(rawData []string, hasKey bool, formats strfmt.Registry) error {
+	var raw string
+	if len(rawData) > 0 {
+		raw = rawData[len(rawData)-1]
+	}
+
+	// Required: false
+	// AllowEmptyValue: false
+
+	if raw == "" { // empty values pass all other validations
+		return nil
+	}
+
+	value, err := swag.ConvertInt64(raw)
+	if err != nil {
+		return errors.InvalidType("offset", "query", "int64", raw)
+	}
+	o.Offset = &value
+
+	if err := o.validateOffset(formats); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// validateOffset carries on validations for parameter Offset
+func (o *GetUsersParams) validateOffset(formats strfmt.Registry) error {
+
+	if err := validate.MinimumInt("offset", "query", *o.Offset, 0, false); err != nil {
+		return err
+	}
 
 	return nil
 }

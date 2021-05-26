@@ -3939,6 +3939,25 @@ func init() {
         ],
         "summary": "Returns all teams.",
         "operationId": "GetTeams",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "likeStartTeamname",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
+            "in": "query"
+          }
+        ],
         "responses": {
           "200": {
             "description": "teams found",
@@ -6212,6 +6231,23 @@ func init() {
           {
             "type": "string",
             "name": "likeUsername",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "likeStartUsername",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
             "in": "query"
           }
         ],
@@ -15657,6 +15693,27 @@ func init() {
         ],
         "summary": "Returns all teams.",
         "operationId": "GetTeams",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "likeStartTeamname",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
+            "in": "query"
+          }
+        ],
         "responses": {
           "200": {
             "description": "teams found",
@@ -18317,6 +18374,25 @@ func init() {
           {
             "type": "string",
             "name": "likeUsername",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "likeStartUsername",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
             "in": "query"
           }
         ],

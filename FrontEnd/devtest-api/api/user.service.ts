@@ -2964,18 +2964,33 @@ export class UserService {
      * Returns all users.
      * Returns all users.
      * @param likeUsername 
+     * @param likeStartUsername 
+     * @param limit max number of elements to be returned
+     * @param offset first elements to be skipped at being returned
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getUsers(likeUsername?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<User>>;
-    public getUsers(likeUsername?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<User>>>;
-    public getUsers(likeUsername?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<User>>>;
-    public getUsers(likeUsername?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getUsers(likeUsername?: string, likeStartUsername?: string, limit?: number, offset?: number, observe?: 'body', reportProgress?: boolean): Observable<Array<User>>;
+    public getUsers(likeUsername?: string, likeStartUsername?: string, limit?: number, offset?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<User>>>;
+    public getUsers(likeUsername?: string, likeStartUsername?: string, limit?: number, offset?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<User>>>;
+    public getUsers(likeUsername?: string, likeStartUsername?: string, limit?: number, offset?: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+
+
 
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
         if (likeUsername !== undefined && likeUsername !== null) {
             queryParameters = queryParameters.set('likeUsername', <any>likeUsername);
+        }
+        if (likeStartUsername !== undefined && likeStartUsername !== null) {
+            queryParameters = queryParameters.set('likeStartUsername', <any>likeStartUsername);
+        }
+        if (limit !== undefined && limit !== null) {
+            queryParameters = queryParameters.set('limit', <any>limit);
+        }
+        if (offset !== undefined && offset !== null) {
+            queryParameters = queryParameters.set('offset', <any>offset);
         }
 
         let headers = this.defaultHeaders;

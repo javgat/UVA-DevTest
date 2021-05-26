@@ -460,6 +460,19 @@ paths:
       - in: query
         name: likeUsername
         type: string
+      - in: query
+        name: likeStartUsername
+        type: string
+      - in: query
+        name: limit
+        type: integer
+        description: max number of elements to be returned
+        minimum: 0
+      - in: query
+        name: offset
+        type: integer
+        description: first elements to be skipped at being returned
+        minimum: 0
       responses:
         200:
           description: users found
@@ -3075,6 +3088,20 @@ paths:
       description: Returns all teams.
       produces:
       - application/json
+      parameters:
+      - in: query
+        name: likeStartTeamname
+        type: string
+      - in: query
+        name: limit
+        type: integer
+        description: max number of elements to be returned
+        minimum: 0
+      - in: query
+        name: offset
+        type: integer
+        description: first elements to be skipped at being returned
+        minimum: 0
       responses:
         200:
           description: teams found

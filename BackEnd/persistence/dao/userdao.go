@@ -7,6 +7,7 @@ package dao
 import (
 	"database/sql"
 	"errors"
+	"strconv"
 	"uva-devtest/models"
 	"uva-devtest/persistence/dbconnection"
 
@@ -158,7 +159,7 @@ func GetUserByID(db *sql.DB, ID int64) (*User, error) {
 	return u, err
 }
 
-func addFiltersUsers(hayWhere bool, initQuery string, likeUsername *string) string {
+func addFiltersUsers(hayWhere bool, initQuery string, likeUsername *string, likeStartUsername *string, limit *int64, offset *int64) string {
 	query := initQuery
 	nexoQuery := " WHERE "
 	if hayWhere {
@@ -166,36 +167,54 @@ func addFiltersUsers(hayWhere bool, initQuery string, likeUsername *string) stri
 	}
 	if likeUsername != nil && *likeUsername != "" {
 		query = query + nexoQuery + " username LIKE ? "
+		nexoQuery = " AND "
+	}
+	if likeStartUsername != nil && *likeStartUsername != "" {
+		query = query + nexoQuery + " username LIKE ? "
+		nexoQuery = " AND "
+	}
+	if limit != nil {
+		query = query + " LIMIT " + strconv.FormatInt(*limit, 10) + " "
+	}
+	if offset != nil {
+		query = query + " OFFSET " + strconv.FormatInt(*offset, 10) + " "
 	}
 	return query
 }
 
-func FilterUserParamsToInterfaceArr(likeUsername *string) []interface{} {
-	hayTitle := 0
+func FilterUserParamsToInterfaceArr(likeUsername *string, likeStartUsername *string) []interface{} {
+	hayLikeUsername := 0
+	hayLikeStartUsername := 0
 	if likeUsername != nil && *likeUsername != "" {
-		hayTitle = 1
+		hayLikeUsername = 1
 	}
-	interfaceParams := make([]interface{}, hayTitle)
-	if hayTitle == 1 {
+	if likeStartUsername != nil && *likeStartUsername != "" {
+		hayLikeStartUsername = 1
+	}
+	interfaceParams := make([]interface{}, hayLikeUsername+hayLikeStartUsername)
+	if hayLikeUsername == 1 {
 		interfaceParams[0] = "%" + *likeUsername + "%"
+	}
+	if hayLikeStartUsername == 1 {
+		interfaceParams[hayLikeUsername] = *likeStartUsername + "%"
 	}
 	return interfaceParams
 }
 
 // GetUsers returns all users
-func GetUsers(db *sql.DB, likeUsername *string) ([]*User, error) {
+func GetUsers(db *sql.DB, likeUsername *string, likeStartUsername *string, limit *int64, offset *int64) ([]*User, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
 	stPrepare := "SELECT * FROM Usuario "
-	stPrepare = addFiltersUsers(false, stPrepare, likeUsername)
+	stPrepare = addFiltersUsers(false, stPrepare, likeUsername, likeStartUsername, limit, offset)
 	query, err := db.Prepare(stPrepare)
 	var us []*User
 	if err != nil {
 		return us, err
 	}
 	defer query.Close()
-	interfaceParams := FilterUserParamsToInterfaceArr(likeUsername)
+	interfaceParams := FilterUserParamsToInterfaceArr(likeUsername, likeStartUsername)
 	rows, err := query.Query(interfaceParams...)
 	if err == nil {
 		us, err = rowsToUsers(rows)
