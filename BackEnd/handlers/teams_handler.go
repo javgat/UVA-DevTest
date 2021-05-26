@@ -17,9 +17,9 @@ import (
 )
 
 // GetTeams returns all teams GET /teams
-// Auth: CanAdminTeams
+// Auth: CanAdminTeams || CanTenerPTests
 func GetTeams(params team.GetTeamsParams, u *models.User) middleware.Responder {
-	if permissions.CanAdminTeams(u) {
+	if permissions.CanAdminTeams(u) || permissions.CanTenerPTests(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var teams []*dao.Team
