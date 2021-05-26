@@ -62,8 +62,9 @@
 
                 <div class="d-grid gap-2">
                     <div class="btn-group">
-                        <button *ngIf="checkPermisosEdicion()" style="width:80%;" type="button" class="btn btn-lg btn-success"
-                            data-bs-toggle="modal" data-bs-target="#modalPublishTest">PUBLICAR</button>
+                        <button *ngIf="checkPermisosEdicion()" style="width:80%;" type="button"
+                            class="btn btn-lg btn-success" data-bs-toggle="modal"
+                            data-bs-target="#modalPublishTest">PUBLICAR</button>
                         <button type="button" class="btn btn-success btn-lg dropdown-toggle dropdown-toggle-split"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             <span class="visually-hidden">Toggle Dropdown</span>
@@ -81,16 +82,17 @@
                         <markdown class="my-3" [data]="test.description"></markdown>
                     </div>
                 </div>
-                <button type="button" class="btn btn-primary btn-lg mb-3" [routerLink]="['./']" [fragment]="'preguntas_header'">Ver Preguntas</button>
+                <button type="button" class="btn btn-primary btn-lg mb-3" [routerLink]="['./']"
+                    [fragment]="'preguntas_header'">Ver Preguntas</button>
                 <p><b>Tiempo disponible:</b> {{test.maxMinutes}} minutos</p>
                 <p><b>Permitir entregas más allá del tiempo disponible: </b> <span *ngIf="test.tiempoEstricto">No
                         permitir</span><span *ngIf="!test.tiempoEstricto">Permitir</span></p>
                 <p><b>Nota máxima: </b> {{test.notaMaxima}}</p>
-                <p><b>Realización pública una vez publicado: </b> <span *ngIf="test.accesoPublico">Sí</span><span
-                        *ngIf="!test.accesoPublico">No</span></p>
-                <p><b>Acceso público para profesores: </b> <span *ngIf="test.accesoPublicoNoPublicado">Sí</span><span
-                        *ngIf="!test.accesoPublicoNoPublicado">No</span>
-                </p>
+                <p><b>Acceso público al borrador para profesores: </b> <span
+                        *ngIf="test.accesoPublicoNoPublicado">Sí</span><span
+                        *ngIf="!test.accesoPublicoNoPublicado">No</span></p>
+                <p><b>Necesidad de invitación para poder realizar el test: </b> <span
+                        *ngIf="!test.accesoPublico">Sí</span><span *ngIf="test.accesoPublico">No</span></p>
                 <p><b>Publicación automática de corrección de respuestas: </b> <span
                         *ngIf="test.autoCorrect">Sí</span><span *ngIf="!test.autoCorrect">No</span></p>
                 <p><b>Visibilidad de la respuesta: </b>{{visibilidadToString(test.visibilidad)}}</p>
@@ -283,10 +285,10 @@
                         </div>
                         <div class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault"
-                                [checked]="testEdit.accesoPublico"
+                                [checked]="!testEdit.accesoPublico"
                                 (change)="testEdit.accesoPublico = !testEdit.accesoPublico">
-                            <label class="form-check-label" for="flexSwitchCheckDefault">Acceso público a
-                                realización</label>
+                            <label class="form-check-label" for="flexSwitchCheckDefault">Necesidad de invitación para
+                                poder realizar el Test</label>
                         </div>
                         <div class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" id="flexSwitchCheckLectura"

@@ -80,8 +80,8 @@
                 <p><b>Permitir entregas más allá del tiempo disponible: </b> <span *ngIf="test.tiempoEstricto">No
                     permitir</span><span *ngIf="!test.tiempoEstricto">Permitir</span></p>
                 <p><b>Nota máxima: </b> {{test.notaMaxima}}</p>
-                <p><b>Realización pública una vez publicado: </b> <span *ngIf="test.accesoPublico">Sí</span><span
-                        *ngIf="!test.accesoPublico">No</span></p>
+                <p><b>Necesidad de invitación para poder realizar el Test: </b> <span *ngIf="!test.accesoPublico">Sí</span><span
+                        *ngIf="test.accesoPublico">No</span></p>
                 <p><b>Acceso público para profesores: </b> <span *ngIf="test.accesoPublicoNoPublicado">Sí</span><span
                         *ngIf="!test.accesoPublicoNoPublicado">No</span>
                 </p>
