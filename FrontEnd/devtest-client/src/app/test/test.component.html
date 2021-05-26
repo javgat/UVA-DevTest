@@ -336,7 +336,7 @@
                     <div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message"
                         role="alert">
                         {{getMensaje().texto}}</div>
-                    <p>Pulsa la pregunta que quieras añadir</p>
+                    <p>Pulsa la pregunta que quieras añadir, o <a role="button" class="link-dark" (click)="newTabCreateQuestion()">crea tu propia pregunta</a> (se abrirá en pestaña nueva).</p>
                     <app-lq-add-question-test (onQuestionPicked)="questionPicked($event)"></app-lq-add-question-test>
                 </div>
                 <div class="modal-footer">

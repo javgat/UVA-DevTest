@@ -33,7 +33,7 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
   testid?: number
   autotags: Tag[]
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private qS: QuestionService,
-      private route: ActivatedRoute, private tagS: TagService) {
+    private route: ActivatedRoute, private tagS: TagService) {
     super(session, router, data, userS)
     this.isInAdminTeam = false
     this.newTag = {
@@ -78,8 +78,10 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
   }
 
   doHasUserAction() {
-    if (this.id != undefined && this.id != 0)
+    if (this.id != undefined && this.id != 0){
       this.getIsInAdminTeam(true)
+      this.getIsFavorita(true)
+    }
   }
 
   setTipoPrint() {
@@ -115,9 +117,10 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
           this.getOptions(true)
         }
         this.getTags(true)
-        if (!this.getSessionUser().isEmpty())
+        if (!this.getSessionUser().isEmpty()) {
           this.getIsInAdminTeam(true)
-        this.getIsFavorita(true)
+          this.getIsFavorita(true)
+        }
       },
       err => this.handleErrRelog(err, "obtener pregunta", primera, this.getPregunta, this)
     )
@@ -205,10 +208,10 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
       resp => {
         this.getTags(true)
       },
-      err =>{
-        if(err.status==409){
+      err => {
+        if (err.status == 409) {
           this.cambiarMensaje(new Mensaje("Esa etiqueta ya está añadida", Tipo.ERROR, true))
-        }else{
+        } else {
           this.handleErrRelog(err, "añadir una etiqueta a una pregunta", primera, this.addTag, this)
         }
       }
@@ -292,28 +295,28 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
     )
   }
 
-  getIsFavorita(primera: boolean){
+  getIsFavorita(primera: boolean) {
     this.userS.getFavoriteQuestion(this.getSessionUser().getUsername(), this.id).subscribe(
       resp => this.isFavorita = true,
       err => {
-        if (err.status==410){
+        if (err.status == 410) {
           this.isFavorita = false
-        }else{
+        } else {
           this.handleErrRelog(err, "ver si la pregunta esta marcada como favorita", primera, this.getIsFavorita, this)
         }
       }
     )
   }
 
-  changeFavorita(){
-    if(this.isFavorita){
+  changeFavorita() {
+    if (this.isFavorita) {
       this.removeFavorita(true)
-    }else{
+    } else {
       this.addFavorita(true)
     }
   }
 
-  addFavorita(primera: boolean){
+  addFavorita(primera: boolean) {
     this.userS.addQuestionFavorite(this.getSessionUser().getUsername(), this.id).subscribe(
       resp => {
         this.getPregunta(true)
@@ -324,7 +327,7 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
     )
   }
 
-  removeFavorita(primera: boolean){
+  removeFavorita(primera: boolean) {
     this.userS.removeQuestionFavorite(this.getSessionUser().getUsername(), this.id).subscribe(
       resp => this.getPregunta(true),
       err => {
@@ -333,21 +336,21 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
     )
   }
 
-  changeGetAutoTags(){
+  changeGetAutoTags() {
     this.getAutoTags(true)
   }
 
-  getAutoTags(primera: boolean){
+  getAutoTags(primera: boolean) {
     this.tagS.getTags(this.newTag.tag, "moreQuestion", 20).subscribe(
-      resp=>{
-        this.autotags=resp
+      resp => {
+        this.autotags = resp
       },
       err => this.handleErrRelog(err, "obtener tags de preguntas mas comunes", primera, this.getAutoTags, this)
     )
   }
 
-  anadirOpcionDisabled(): boolean{
-    return this.nuevaOpcion.texto=="" || this.nuevaOpcion.texto == undefined
+  anadirOpcionDisabled(): boolean {
+    return this.nuevaOpcion.texto == "" || this.nuevaOpcion.texto == undefined
   }
 
 }

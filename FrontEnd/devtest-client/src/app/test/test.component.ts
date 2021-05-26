@@ -429,4 +429,12 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
     )
   }
 
+  newTabCreateQuestion(){
+    const url = this.router.serializeUrl(
+      this.router.createUrlTree(['/qCreate'])
+    );
+  
+    window.open(url, '_blank');
+  }
+
 }

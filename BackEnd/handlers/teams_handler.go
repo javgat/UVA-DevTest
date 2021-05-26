@@ -151,8 +151,7 @@ func AddAdminToTeam(params team.AddAdminParams, u *models.User) middleware.Respo
 				if ous == nil {
 					return team.NewAddAdminGone()
 				}
-				var mous *models.User
-				mous = dao.ToModelUser(ous)
+				mous := dao.ToModelUser(ous)
 				if !permissions.CanTenerTeams(mous) {
 					s := "No se puede añadir ese tipo de usuario como administrador"
 					return team.NewAddAdminBadRequest().WithPayload(&models.Error{Message: &s})

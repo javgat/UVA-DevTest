@@ -3,7 +3,7 @@
         <div class="input-group my-3">
             <input class="button btn btn-primary" type="submit" value="Buscar por nombre de usuario" />
             <input type="text" class="form-control" name="inputSearchUsername" [(ngModel)]="editLikeUsername"
-                placeholder="Título" required pattern=".+" />
+                placeholder="Nombre de Usuario" required pattern=".+" />
         </div>
         <div *ngIf="likeUsername!=undefined">
             <button type="button" class="btn btn-secondary" (click)="clickBorrarUsername()">Borrar filtro de

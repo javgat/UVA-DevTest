@@ -23,6 +23,12 @@
                     <p><button class="btn btn-primary" type="button" [routerLink]="['/et', test.id, 'teams']">Ver
                             equipos administradores</button></p>
                 </div>
+                <div *ngIf="isModoTestAdmin()" class="d-grid gap-2 my-3">
+                    <button class="btn btn-primary btn-lg" type="button"
+                        [routerLink]="['/pt', test.id, 'invite']">INVITAR Y VER INVITACIONES</button>
+                    <button class="btn btn-primary btn-lg" type="button" [routerLink]="['/pt', test.id, 'answers']">VER
+                        RESPUESTAS</button>
+                </div>
                 <p>Etiquetas:
                     <span *ngFor="let tag of tags">
                         <span class="badge bg-warning text-dark">{{tag.tag}}</span>&nbsp;
@@ -78,22 +84,15 @@
                 </div>
                 <p><b>Tiempo disponible:</b> {{test.maxMinutes}} minutos</p>
                 <p><b>Permitir entregas más allá del tiempo disponible: </b> <span *ngIf="test.tiempoEstricto">No
-                    permitir</span><span *ngIf="!test.tiempoEstricto">Permitir</span></p>
+                        permitir</span><span *ngIf="!test.tiempoEstricto">Permitir</span></p>
                 <p><b>Nota máxima: </b> {{test.notaMaxima}}</p>
-                <p><b>Necesidad de invitación para poder realizar el Test: </b> <span *ngIf="!test.accesoPublico">Sí</span><span
-                        *ngIf="test.accesoPublico">No</span></p>
+                <p><b>Necesidad de invitación para poder realizar el Test: </b> <span
+                        *ngIf="!test.accesoPublico">Sí</span><span *ngIf="test.accesoPublico">No</span></p>
                 <p><b>Acceso público para profesores: </b> <span *ngIf="test.accesoPublicoNoPublicado">Sí</span><span
                         *ngIf="!test.accesoPublicoNoPublicado">No</span>
                 </p>
                 <p><b>Publicación automática de corrección de respuestas: </b> <span
                         *ngIf="test.autoCorrect">Sí</span><span *ngIf="!test.autoCorrect">No</span></p>
-
-                <div *ngIf="isModoTestAdmin()" class="d-grid gap-2 my-3">
-                    <button class="btn btn-primary btn-lg" type="button" [routerLink]="['/pt', test.id, 'invite']">Ver
-                        equipos y usuarios invitados</button>
-                    <button class="btn btn-primary btn-lg" type="button" [routerLink]="['/pt', test.id, 'answers']">Ver
-                        respuestas</button>
-                </div>
             </div>
         </div>
         <div *ngIf="this.isModoTestAdmin()">
