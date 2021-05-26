@@ -30,7 +30,7 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
   addQuestionById: boolean
   preguntaQuitando: number
   isFavorita: boolean
-  publishedTitle: string
+  publishedParams: PublishTestParams
   autotags: Tag[]
   tPTempPosicion?: TestPregunta
   pregTempPosicion?: Question
@@ -50,7 +50,14 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
     this.mantenerMensaje = false
     this.isFavorita = false
     this.preguntaQuitando = 0
-    this.publishedTitle = ""
+    this.publishedParams = {
+      title: "",
+      accesoPublico: false,
+      autoCorrect: false,
+      visibilidad: "manual",
+      tiempoEstricto: false,
+      maxMinutes: 1
+    }
     this.routeSub = this.route.params.subscribe(params => {
       this.id = params['testid']
       if (!this.mantenerMensaje) {
@@ -95,7 +102,12 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
         }
         this.test = Examen.constructorFromTest(resp)
         this.testEdit = Examen.constructorFromTest(resp)
-        this.publishedTitle = this.test.title
+        this.publishedParams.title = this.test.title
+        this.publishedParams.accesoPublico = this.test.accesoPublico
+        this.publishedParams.autoCorrect = this.test.autoCorrect
+        this.publishedParams.maxMinutes =  this.test.maxMinutes
+        this.publishedParams.tiempoEstricto = this.test.tiempoEstricto
+        this.publishedParams.visibilidad = this.test.visibilidad
         this.getPreguntasTest(true)
         this.getTags(true)
         if (!this.getSessionUser().isEmpty()) {
@@ -343,11 +355,7 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
   }
 
   publishTest(primera: boolean) {
-    var params: PublishTestParams
-    params = {
-      title: this.publishedTitle
-    }
-    this.testS.postPublishedTest(params, this.id).subscribe(
+    this.testS.postPublishedTest(this.publishedParams, this.id).subscribe(
       resp => {
         this.router.navigate(['/pt', resp.id])
       },

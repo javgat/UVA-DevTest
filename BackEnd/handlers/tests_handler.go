@@ -364,6 +364,11 @@ func PublishTest(params test.PostPublishedTestParams, u *models.User) middleware
 							newModelTest.Editable = &bfalse
 							newModelTest.OriginalTestID = &params.Testid
 							*newModelTest.Title = *params.PublishTestParams.Title
+							*newModelTest.AccesoPublico = *params.PublishTestParams.AccesoPublico
+							*newModelTest.AutoCorrect = *params.PublishTestParams.AutoCorrect
+							*newModelTest.MaxMinutes = *params.PublishTestParams.MaxMinutes
+							*newModelTest.Visibilidad = *params.PublishTestParams.Visibilidad
+							*newModelTest.TiempoEstricto = *params.PublishTestParams.TiempoEstricto
 							horaCreacion := time.Now()
 							newModelTest, err = dao.PostTest(db, *newModelTest.Username, newModelTest, horaCreacion)
 							if err == nil {

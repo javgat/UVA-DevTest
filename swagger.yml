@@ -5216,7 +5216,7 @@ paths:
       parameters:
       - in: body
         name: publishTestParams
-        description: New Title of the test
+        description: Some attributes of the new test
         required: true
         schema:
           $ref: '#/definitions/PublishTestParams'
@@ -7153,10 +7153,28 @@ definitions:
     type: object
     required:
     - title
+    - accesoPublico
+    - autoCorrect
+    - visibilidad
+    - maxMinutes
+    - tiempoEstricto
     properties:
       title:
         type: string
         example: Nuevo titulo
+      accesoPublico:
+        type: boolean
+        description: True si no necesitaras invitacion para hacer el test
+      autoCorrect:
+        type: boolean
+      visibilidad:
+        type: string
+        enum: [alEntregar, alCorregir, manual]
+      maxMinutes:
+        type: integer
+        example: 4
+      tiempoEstricto:
+        type: boolean
   EmailConfiguration:
     type: object
     required:

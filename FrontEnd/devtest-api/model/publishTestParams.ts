@@ -13,4 +13,20 @@
 
 export interface PublishTestParams { 
     title: string;
+    /**
+     * True si no necesitaras invitacion para hacer el test
+     */
+    accesoPublico: boolean;
+    autoCorrect: boolean;
+    visibilidad: PublishTestParams.VisibilidadEnum;
+    maxMinutes: number;
+    tiempoEstricto: boolean;
+}
+export namespace PublishTestParams {
+    export type VisibilidadEnum = 'alEntregar' | 'alCorregir' | 'manual';
+    export const VisibilidadEnum = {
+        AlEntregar: 'alEntregar' as VisibilidadEnum,
+        AlCorregir: 'alCorregir' as VisibilidadEnum,
+        Manual: 'manual' as VisibilidadEnum
+    };
 }

@@ -1059,7 +1059,7 @@ export class PublishedTestService {
     /**
      * Creates a new publishedTest. The user must be the owner of the test.
      * Creates a new publishedTest. The user must be the owner of the test.
-     * @param publishTestParams New Title of the test
+     * @param publishTestParams Some attributes of the new test
      * @param testid Id of the test to publish
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.

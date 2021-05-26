@@ -384,9 +384,43 @@
                             {{getMensaje().texto}}</div>
                         <p>Se creará una copia publicada del test</p>
                         <div class="mb-3">
-                            <label for="inputTitle" class="form-label">Título del test</label>
-                            <input type="text" class="form-control" name="inputTitle" [(ngModel)]="publishedTitle"
+                            <label for="inputTitlePublishedParams" class="form-label">Título del test publicado</label>
+                            <input type="text" class="form-control" name="inputTitlePublishedParams" [(ngModel)]="publishedParams.title"
                                 required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="inputTimePublishedParams" class="form-label">Tiempo disponible (minutos)</label>
+                            <input type="number" class="form-control" name="inputTimePublishedParams" [(ngModel)]="publishedParams.maxMinutes"
+                                required min=0 />
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="flexSwitchChecktiempoEstrictoPublishedParams"
+                                [checked]="!publishedParams.tiempoEstricto"
+                                (change)="publishedParams.tiempoEstricto = !publishedParams.tiempoEstricto">
+                            <label class="form-check-label" for="flexSwitchChecktiempoEstrictoPublishedParams">Permitir entregas más
+                                allá del tiempo disponible</label>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefaultPublishedParams"
+                                [checked]="!publishedParams.accesoPublico"
+                                (change)="publishedParams.accesoPublico = !publishedParams.accesoPublico">
+                            <label class="form-check-label" for="flexSwitchCheckDefaultPublishedParams">Necesidad de invitación para
+                                poder realizar el Test</label>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckAutoCorrectPublishedParams"
+                                [checked]="publishedParams.autoCorrect"
+                                (change)="publishedParams.autoCorrect = !publishedParams.autoCorrect">
+                            <label class="form-check-label" for="flexSwitchCheckAutoCorrectPublishedParams">Publicación automática de
+                                corrección de respuestas</label>
+                        </div>
+                        <div>
+                            <label class="form-label" for="selectVisibilidadLabelPublishedParams">Visibilidad de la respuesta</label>
+                            <select class="form-select" name="visibilidad" [(ngModel)]="publishedParams.visibilidad">
+                                <option [value]="getValueManual()">{{printManual()}}</option>
+                                <option [value]="getValueCorregir()">{{printCorregir()}}</option>
+                                <option [value]="getValueEntregar()">{{printEntregar()}}</option>
+                            </select>
                         </div>
                     </div>
                     <div class="modal-footer">

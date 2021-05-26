@@ -37,7 +37,7 @@ type PostPublishedTestParams struct {
 	// HTTP Request Object
 	HTTPRequest *http.Request `json:"-"`
 
-	/*New Title of the test
+	/*Some attributes of the new test
 	  Required: true
 	  In: body
 	*/

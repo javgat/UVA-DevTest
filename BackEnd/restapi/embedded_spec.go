@@ -5526,7 +5526,7 @@ func init() {
         "operationId": "PostPublishedTest",
         "parameters": [
           {
-            "description": "New Title of the test",
+            "description": "Some attributes of the new test",
             "name": "publishTestParams",
             "in": "body",
             "required": true,
@@ -10489,12 +10489,39 @@ func init() {
     "PublishTestParams": {
       "type": "object",
       "required": [
-        "title"
+        "title",
+        "accesoPublico",
+        "autoCorrect",
+        "visibilidad",
+        "maxMinutes",
+        "tiempoEstricto"
       ],
       "properties": {
+        "accesoPublico": {
+          "description": "True si no necesitaras invitacion para hacer el test",
+          "type": "boolean"
+        },
+        "autoCorrect": {
+          "type": "boolean"
+        },
+        "maxMinutes": {
+          "type": "integer",
+          "example": 4
+        },
+        "tiempoEstricto": {
+          "type": "boolean"
+        },
         "title": {
           "type": "string",
           "example": "Nuevo titulo"
+        },
+        "visibilidad": {
+          "type": "string",
+          "enum": [
+            "alEntregar",
+            "alCorregir",
+            "manual"
+          ]
         }
       }
     },
@@ -17484,7 +17511,7 @@ func init() {
         "operationId": "PostPublishedTest",
         "parameters": [
           {
-            "description": "New Title of the test",
+            "description": "Some attributes of the new test",
             "name": "publishTestParams",
             "in": "body",
             "required": true,
@@ -23152,12 +23179,39 @@ func init() {
     "PublishTestParams": {
       "type": "object",
       "required": [
-        "title"
+        "title",
+        "accesoPublico",
+        "autoCorrect",
+        "visibilidad",
+        "maxMinutes",
+        "tiempoEstricto"
       ],
       "properties": {
+        "accesoPublico": {
+          "description": "True si no necesitaras invitacion para hacer el test",
+          "type": "boolean"
+        },
+        "autoCorrect": {
+          "type": "boolean"
+        },
+        "maxMinutes": {
+          "type": "integer",
+          "example": 4
+        },
+        "tiempoEstricto": {
+          "type": "boolean"
+        },
         "title": {
           "type": "string",
           "example": "Nuevo titulo"
+        },
+        "visibilidad": {
+          "type": "string",
+          "enum": [
+            "alEntregar",
+            "alCorregir",
+            "manual"
+          ]
         }
       }
     },
