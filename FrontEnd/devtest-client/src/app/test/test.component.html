@@ -81,6 +81,7 @@
                         <markdown class="my-3" [data]="test.description"></markdown>
                     </div>
                 </div>
+                <button type="button" class="btn btn-primary btn-lg mb-3" [routerLink]="['./']" [fragment]="'preguntas_header'">Ver Preguntas</button>
                 <p><b>Tiempo disponible:</b> {{test.maxMinutes}} minutos</p>
                 <p><b>Permitir entregas más allá del tiempo disponible: </b> <span *ngIf="test.tiempoEstricto">No
                         permitir</span><span *ngIf="!test.tiempoEstricto">Permitir</span></p>
@@ -107,7 +108,7 @@
                 </div>
             </div>
         </div>
-        <h3 class="mt-3">Preguntas:</h3>
+        <h3 id="preguntas_header" class="mt-3">Preguntas:</h3>
         <form *ngIf="checkPermisosEdicion()" (ngSubmit)='addQuestionSubmit()' ngNativeValidate>
             <div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message" role="alert">
                 {{getMensaje().texto}}</div>

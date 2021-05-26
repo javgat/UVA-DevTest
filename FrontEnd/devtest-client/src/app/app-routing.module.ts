@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { ExtraOptions, RouterModule, Routes } from '@angular/router';
 import { AdminCustomizedViewsComponent } from './admin/admin-customized-views/admin-customized-views.component';
 import { AdminEmailComponent } from './admin/admin-email/admin-email.component';
 import { AdminPermissionsComponent } from './admin/admin-permissions/admin-permissions.component';
@@ -113,8 +113,15 @@ const routes: Routes = [
   {path: '**', component: MainComponent, pathMatch:'full'}
 ];
 
+const routerOptions: ExtraOptions = {
+  useHash: false,
+  anchorScrolling: 'enabled',
+  onSameUrlNavigation: 'reload',  
+};
+
+
 @NgModule({
-  imports: [RouterModule.forRoot(routes, {onSameUrlNavigation: 'reload'})],
+  imports: [RouterModule.forRoot(routes, routerOptions)],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
