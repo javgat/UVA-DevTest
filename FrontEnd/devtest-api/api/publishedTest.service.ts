@@ -495,13 +495,14 @@ export class PublishedTestService {
      * Returns all questions answers to a question of a published test
      * @param testid Id of the publishedTest
      * @param questionid Id of the question
+     * @param likeUsername 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getQuestionAnswersFromPublishedTestQuestion(testid: number, questionid: number, observe?: 'body', reportProgress?: boolean): Observable<Array<QuestionAnswer>>;
-    public getQuestionAnswersFromPublishedTestQuestion(testid: number, questionid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<QuestionAnswer>>>;
-    public getQuestionAnswersFromPublishedTestQuestion(testid: number, questionid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<QuestionAnswer>>>;
-    public getQuestionAnswersFromPublishedTestQuestion(testid: number, questionid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getQuestionAnswersFromPublishedTestQuestion(testid: number, questionid: number, likeUsername?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<QuestionAnswer>>;
+    public getQuestionAnswersFromPublishedTestQuestion(testid: number, questionid: number, likeUsername?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<QuestionAnswer>>>;
+    public getQuestionAnswersFromPublishedTestQuestion(testid: number, questionid: number, likeUsername?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<QuestionAnswer>>>;
+    public getQuestionAnswersFromPublishedTestQuestion(testid: number, questionid: number, likeUsername?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (testid === null || testid === undefined) {
             throw new Error('Required parameter testid was null or undefined when calling getQuestionAnswersFromPublishedTestQuestion.');
@@ -509,6 +510,12 @@ export class PublishedTestService {
 
         if (questionid === null || questionid === undefined) {
             throw new Error('Required parameter questionid was null or undefined when calling getQuestionAnswersFromPublishedTestQuestion.');
+        }
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (likeUsername !== undefined && likeUsername !== null) {
+            queryParameters = queryParameters.set('likeUsername', <any>likeUsername);
         }
 
         let headers = this.defaultHeaders;
@@ -533,6 +540,7 @@ export class PublishedTestService {
 
         return this.httpClient.get<Array<QuestionAnswer>>(`${this.basePath}/publishedTests/${encodeURIComponent(String(testid))}/questions/${encodeURIComponent(String(questionid))}/qanswers`,
             {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

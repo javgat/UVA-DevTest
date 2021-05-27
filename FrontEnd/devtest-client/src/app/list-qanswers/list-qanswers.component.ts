@@ -22,6 +22,9 @@ export class ListQAnswersComponent extends LoggedInController implements OnInit 
   questions: Question[]
   mostrarAutor: boolean
   mensajeListaVacia: string
+  canSearchByUsername: boolean
+  likeUsername?: string
+  editLikeUsername: string
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService,
     private route: ActivatedRoute, protected answerS: AnswerService, protected ptestS: PublishedTestService) {
     super(session, router, data, userS)
@@ -31,6 +34,9 @@ export class ListQAnswersComponent extends LoggedInController implements OnInit 
     this.answerid = 0
     this.questionid = 0
     this.mostrarAutor = false
+    this.canSearchByUsername = false
+    this.likeUsername = undefined
+    this.editLikeUsername = ""
     this.mensajeListaVacia = "¡Vaya! Parece que no hay ninguna Respuesta a una Pregunta para mostrar."
     this.routeSub = this.route.params.subscribe(params => {
       this.testid = params['testid']
@@ -87,5 +93,21 @@ export class ListQAnswersComponent extends LoggedInController implements OnInit 
   bgcolorQAnswerPuntuacion(punt: number){
     return bgcolorQAnswerPuntuacion(punt)
   }
+
+  canSearchUsername(): boolean{
+    return this.canSearchByUsername
+  }
+
+  clickSearchUsername(){
+    this.likeUsername = this.editLikeUsername
+    this.getQAnswers(true)
+  }
+
+  clickBorrarUsername(){
+    this.likeUsername = undefined
+    this.editLikeUsername = ""
+    this.getQAnswers(true)
+  }
+
 
 }

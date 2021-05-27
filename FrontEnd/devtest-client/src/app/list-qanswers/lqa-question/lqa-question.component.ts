@@ -16,6 +16,7 @@ export class LqaQuestionComponent extends ListQAnswersComponent implements OnIni
     route: ActivatedRoute, answerS: AnswerService, ptestS: PublishedTestService) {
     super(session, router, data, userS, route, answerS, ptestS)
     this.mostrarAutor = true
+    this.canSearchByUsername = true
   }
 
   ngOnInit(): void {
@@ -26,7 +27,7 @@ export class LqaQuestionComponent extends ListQAnswersComponent implements OnIni
   }
 
   getQAnswers(primera: boolean) {
-    this.ptestS.getQuestionAnswersFromPublishedTestQuestion(this.testid, this.questionid).subscribe(
+    this.ptestS.getQuestionAnswersFromPublishedTestQuestion(this.testid, this.questionid, this.likeUsername).subscribe(
       resp => this.questionAnswers = resp,
       err => this.handleErrRelog(err, "obtener respuestas a la pregunta de todos los usuarios", primera, this.getQAnswers, this)
     )

@@ -6165,6 +6165,9 @@ paths:
         description: Id of the question
         required: true
         type: integer
+      - in: query
+        name: likeUsername
+        type: string
       responses:
         200:
           description: QuestionAnswers found

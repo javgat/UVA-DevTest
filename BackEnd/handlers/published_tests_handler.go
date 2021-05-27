@@ -465,7 +465,7 @@ func GetQuestionAnswersPTest(params published_test.GetQuestionAnswersFromPublish
 				return published_test.NewGetQuestionAnswersFromPublishedTestQuestionForbidden()
 			}
 			var as []*dao.QuestionAnswer
-			as, err = dao.GetQuestionAnswersFromPTestQuestion(db, params.Testid, params.Questionid)
+			as, err = dao.GetQuestionAnswersFromPTestQuestion(db, params.Testid, params.Questionid, params.LikeUsername)
 			if err == nil {
 				mas := dao.ToModelQuestionAnswers(as)
 				if err == nil {

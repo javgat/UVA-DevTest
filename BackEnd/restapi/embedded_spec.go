@@ -2210,6 +2210,11 @@ func init() {
             "name": "questionid",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "string",
+            "name": "likeUsername",
+            "in": "query"
           }
         ],
         "responses": {
@@ -13802,6 +13807,11 @@ func init() {
             "name": "questionid",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "string",
+            "name": "likeUsername",
+            "in": "query"
           }
         ],
         "responses": {

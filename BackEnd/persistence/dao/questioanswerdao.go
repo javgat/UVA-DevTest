@@ -94,15 +94,53 @@ func addOptionsChosen(db *sql.DB, qa *QuestionAnswer) error {
 	return err
 }
 
-func GetQuestionAnswersFromPTestQuestion(db *sql.DB, testid int64, questionid int64) ([]*QuestionAnswer, error) {
+func prepareQueryLikeUsername(initQuery string, usernameConsulta string) string {
+	query := initQuery + " ( " + usernameConsulta + " LIKE ? )"
+	return query
+}
+
+func addFiltersToQueryQuestionAnswer(hayWhere bool, initQuery string, likeUsername *string, usernameConsulta string) string {
+	stPrepare := initQuery
+	nexoString := " AND "
+	if !hayWhere {
+		nexoString = " WHERE "
+	}
+	if likeUsername != nil && *likeUsername != "" {
+		stPrepare = stPrepare + nexoString
+		stPrepare = prepareQueryLikeUsername(stPrepare, usernameConsulta)
+	}
+	return stPrepare
+}
+
+func FilterParamsQuestionAnswers(likeUsername *string) []interface{} {
+	hayUsername := 0
+	if likeUsername != nil && *likeUsername != "" {
+		hayUsername = 1
+	}
+	interfaceParams := make([]interface{}, hayUsername)
+	if hayUsername == 1 {
+		interfaceParams[0] = "%" + *likeUsername + "%"
+	}
+	return interfaceParams
+}
+
+func GetQuestionAnswersFromPTestQuestion(db *sql.DB, testid int64, questionid int64, likeUsername *string) ([]*QuestionAnswer, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
 	var qas []*QuestionAnswer
-	query, err := db.Prepare("SELECT R.* FROM RespuestaPregunta R JOIN RespuestaExamen E ON R.respuestaExamenid=E.id WHERE R.preguntaid=? AND E.testid=?")
+	stPrepare := "SELECT R.* FROM RespuestaPregunta R JOIN RespuestaExamen E ON R.respuestaExamenid=E.id JOIN Usuario U ON U.id=E.usuarioid " +
+		" WHERE R.preguntaid=? AND E.testid=? "
+	stPrepare = addFiltersToQueryQuestionAnswer(true, stPrepare, likeUsername, "U.username")
+	query, err := db.Prepare(stPrepare)
 	if err == nil {
 		defer query.Close()
-		rows, err := query.Query(questionid, testid)
+		interfaceParams := FilterParamsQuestionAnswers(likeUsername)
+		var paramsSlice []interface{}
+		paramsSlice = append(paramsSlice, questionid)
+		paramsSlice = append(paramsSlice, testid)
+		interfaceParams = append(paramsSlice, interfaceParams...)
+		rows, err := query.Query(interfaceParams...)
 		if err == nil {
 			qas, err = rowsToQuestionAnswers(rows)
 			if err == nil {
