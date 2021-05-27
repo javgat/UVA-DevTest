@@ -1,16 +1,28 @@
-<div class="d-grid gap-2 my-4">
+<div class="my-4">
     <h3 class="fw-bold text-center">Preguntas</h3>
-    <a class="btn btn-lg btn-primary button my-2" [routerLink]="['/u', getSessionUser().getUsername(), 'q' ]">MIS PREGUNTAS</a>
-    <a class="btn btn-lg btn-primary button my-2" [routerLink]="['/u', getSessionUser().getUsername(), 'sq' ]">COMPARTIENDO CONMIGO</a>
-    <a class="btn btn-lg btn-primary button my-2" [routerLink]="['/q']">EXPLORAR PREGUNTAS</a>
-    <hr/>
+    <div class="row">
+        <a class="btn btn-lg btn-primary button m-2 col-sm"
+            [routerLink]="['/u', getSessionUser().getUsername(), 'q' ]">MIS PREGUNTAS</a>
+        <a class="btn btn-lg btn-primary button m-2 col-sm"
+            [routerLink]="['/u', getSessionUser().getUsername(), 'sq' ]">COMPARTIENDO CONMIGO</a>
+        <a class="btn btn-lg btn-primary button m-2 col-sm" [routerLink]="['/q']">EXPLORAR PREGUNTAS</a>
+    </div>
+    <hr />
     <h3 class="fw-bold text-center">Tests</h3>
-    <a class="btn btn-lg btn-primary button my-2" [routerLink]="['/u', getSessionUser().getUsername(), 'et' ]">MIS TESTS</a>
-    <a class="btn btn-lg btn-primary button my-2" [routerLink]="['/u', getSessionUser().getUsername(), 'set' ]">COMPARTIENDO CONMIGO</a>
-    <a class="btn btn-lg btn-primary button my-2" [routerLink]="['/et']">EXPLORAR TESTS</a>
-    <hr/>
+    <div class="row">
+        <a class="btn btn-lg btn-primary button m-2 col-sm" [routerLink]="['/u', getSessionUser().getUsername(), 'et' ]">MIS
+            TESTS</a>
+        <a class="btn btn-lg btn-primary button m-2 col-sm"
+            [routerLink]="['/u', getSessionUser().getUsername(), 'set' ]">COMPARTIENDO CONMIGO</a>
+        <a class="btn btn-lg btn-primary button m-2 col-sm" [routerLink]="['/et']">EXPLORAR TESTS</a>
+    </div>
+    <hr />
     <h3 class="fw-bold text-center">Tests publicados</h3>
-    <a class="btn btn-lg btn-primary button my-2" [routerLink]="['/u', getSessionUser().getUsername(), 'pt' ]">MIS TESTS PUBLICADOS</a>
-    <a class="btn btn-lg btn-primary button my-2" [routerLink]="['/u', getSessionUser().getUsername(), 'spt' ]">COMPARTIENDO CONMIGO</a>
-    <a class="btn btn-lg btn-primary button my-2" [routerLink]="['/ptests']">EXPLORAR TESTS PUBLICADOS</a>
+    <div class="row">
+    <a class="btn btn-lg btn-primary button m-2 col-sm" [routerLink]="['/u', getSessionUser().getUsername(), 'pt' ]">MIS TESTS
+        PUBLICADOS</a>
+    <a class="btn btn-lg btn-primary button m-2 col-sm"
+        [routerLink]="['/u', getSessionUser().getUsername(), 'spt' ]">COMPARTIENDO CONMIGO</a>
+    <a class="btn btn-lg btn-primary button m-2 col-sm" [routerLink]="['/ptests']">EXPLORAR TESTS PUBLICADOS</a>
+</div>
 </div>
