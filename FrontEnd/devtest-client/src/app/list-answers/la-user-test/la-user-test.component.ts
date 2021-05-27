@@ -15,6 +15,8 @@ export class LaUserTestComponent extends ListAnswersComponent implements OnInit 
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, ptestS: PublishedTestService, route: ActivatedRoute) {
     super(session, router, data, userS, ptestS, route)
     this.buscarUsuario = false
+    this.canOrderByDuracion = true
+    this.canOrderByPuntuacion = true
     if (this.getSessionUser().getUsername() != undefined && this.getSessionUser().getUsername() != "") {
       this.likeUsername = this.getSessionUser().getUsername()
       this.getPTestAllAnswers(true)
@@ -37,7 +39,7 @@ export class LaUserTestComponent extends ListAnswersComponent implements OnInit 
 
   getPTestAllAnswers(primera: boolean) {
     if (this.likeUsername == undefined) return
-    this.userS.getAnswersFromUserAnsweredTest(this.likeUsername, this.testid).subscribe(
+    this.userS.getAnswersFromUserAnsweredTest(this.likeUsername, this.testid, this.orderBy).subscribe(
       resp => {
         this.answers = resp
       },

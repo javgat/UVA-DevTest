@@ -14,6 +14,8 @@ export class LaCorrectedComponent extends ListAnswersComponent implements OnInit
 
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, ptestS: PublishedTestService, route: ActivatedRoute) {
     super(session, router, data, userS, ptestS, route)
+    this.canOrderByDuracion = true
+    this.canOrderByPuntuacion = true
   }
 
   ngOnInit(): void {
@@ -24,7 +26,9 @@ export class LaCorrectedComponent extends ListAnswersComponent implements OnInit
   }
 
   getPTestAllAnswers(primera: boolean){
-    this.ptestS.getCorrectedAnswersFromPublishedTests(this.testid).subscribe(
+    this.canOrderByDuracion = true
+    this.canOrderByPuntuacion = true
+    this.ptestS.getCorrectedAnswersFromPublishedTests(this.testid, this.orderBy).subscribe(
       resp => {
         this.answers = resp
       },
@@ -35,6 +39,8 @@ export class LaCorrectedComponent extends ListAnswersComponent implements OnInit
   }
 
   getPTestAnswersFromUser(primera: boolean){
+    this.canOrderByDuracion = false
+    this.canOrderByPuntuacion = false
     if(this.likeUsername==undefined) return
     this.userS.getCorrectedAnswersFromUserAnsweredTest(this.likeUsername, this.testid).subscribe(
       resp =>{

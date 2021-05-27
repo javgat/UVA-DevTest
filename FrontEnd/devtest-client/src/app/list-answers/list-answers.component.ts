@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Answer, PublishedTestService, UserService } from '@javgat/devtest-api';
 import { Subscription } from 'rxjs';
 import { LoggedInController } from '../shared/app.controller';
-import { Examen } from '../shared/app.model';
+import { EnumOrderByAnswer, Examen } from '../shared/app.model';
 import { DataService } from '../shared/data.service';
 import { SessionService } from '../shared/session.service';
 
@@ -23,6 +23,9 @@ export class ListAnswersComponent extends LoggedInController implements OnInit {
   isInAdminTeam: boolean
   test: Examen
   mensajeListaVacia: string
+  orderBy: EnumOrderByAnswer
+  canOrderByPuntuacion: boolean
+  canOrderByDuracion: boolean
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, protected ptestS : PublishedTestService, private route: ActivatedRoute) {
     super(session, router, data, userS)
     this.testid = 0
@@ -30,7 +33,10 @@ export class ListAnswersComponent extends LoggedInController implements OnInit {
     this.editLikeUsername = ""
     this.buscarUsuario = true
     this.isInAdminTeam = false
+    this.orderBy = EnumOrderByAnswer.newStartDate
     this.test = new Examen()
+    this.canOrderByDuracion = false
+    this.canOrderByPuntuacion = false
     this.mensajeListaVacia = "¡Vaya! Parece que aún no hay respuestas para mostrar en esta lista"
     this.routeSub = this.route.params.subscribe(params => {
       this.testid = params['testid']
@@ -140,7 +146,62 @@ export class ListAnswersComponent extends LoggedInController implements OnInit {
     return date.toLocaleString()
   }
 
+  printDuracion(di: Date | undefined, df: Date | undefined): string{
+    if(di==undefined || df == undefined) return "--"
+    var d1 = new Date(di)
+    var d2 = new Date(df)
+    var time = d2.getTime() - d1.getTime()
+    var minutes = time/60000
+    return minutes.toLocaleString('en-us', {minimumFractionDigits: 2, maximumFractionDigits: 2})
+  }
+
   isModoTestAdmin(): boolean {
     return this.isInAdminTeam || this.test.username == this.getSessionUser().getUsername() || this.getSessionUser().isAdmin()
+  }
+
+  clickOrderByPuntuacion(){
+    if(this.orderBy == EnumOrderByAnswer.morePuntuacion){
+      this.orderBy = EnumOrderByAnswer.lessPuntuacion
+    }else if(this.orderBy == EnumOrderByAnswer.lessPuntuacion){
+      this.orderBy = EnumOrderByAnswer.newStartDate
+    }else{
+      this.orderBy = EnumOrderByAnswer.morePuntuacion
+    }
+    this.getPTestAnswers()
+  }
+
+  isMorePuntuacionSelected(): boolean{
+    return this.orderBy == EnumOrderByAnswer.morePuntuacion
+  }
+
+  isLessPuntuacionSelected(): boolean{
+    return this.orderBy == EnumOrderByAnswer.lessPuntuacion
+  }
+
+  clickOrderByDuracion(){
+    if(this.orderBy == EnumOrderByAnswer.moreDuracion){
+      this.orderBy = EnumOrderByAnswer.lessDuracion
+    }else if(this.orderBy == EnumOrderByAnswer.lessDuracion){
+      this.orderBy = EnumOrderByAnswer.newStartDate
+    }else{
+      this.orderBy = EnumOrderByAnswer.moreDuracion
+    }
+    this.getPTestAnswers()
+  }
+
+  isMoreDuracionSelected(): boolean{
+    return this.orderBy == EnumOrderByAnswer.moreDuracion
+  }
+
+  isLessDuracionSelected(): boolean{
+    return this.orderBy == EnumOrderByAnswer.lessDuracion
+  }
+  
+  canOrderPuntuacion(): boolean{
+    return this.canOrderByPuntuacion
+  }
+
+  canOrderDuracion(): boolean{
+    return this.canOrderByDuracion
   }
 }

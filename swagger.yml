@@ -2854,6 +2854,10 @@ paths:
         description: Id of the test
         required: true
         type: integer
+      - in: query
+        name: orderByAnswer
+        type: string
+        enum: [newStartDate, oldStartDate, morePuntuacion, lessPuntuacion, moreDuracion, lessDuracion]
       responses:
         200:
           description: answers found  
@@ -6083,6 +6087,10 @@ paths:
         description: Id of the publishedTest
         required: true
         type: integer
+      - in: query
+        name: orderByAnswer
+        type: string
+        enum: [newStartDate, oldStartDate, morePuntuacion, lessPuntuacion, moreDuracion, lessDuracion]
       responses:
         200:
           description: Answers found
@@ -6115,6 +6123,10 @@ paths:
         description: Id of the publishedTest
         required: true
         type: integer
+      - in: query
+        name: orderByAnswer
+        type: string
+        enum: [newStartDate, oldStartDate, morePuntuacion, lessPuntuacion, moreDuracion, lessDuracion]
       responses:
         200:
           description: Answers found

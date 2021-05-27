@@ -1106,7 +1106,7 @@ func StartAnswer(params user.StartAnswerParams, u *models.User) middleware.Respo
 			t, err := dao.GetSolvableTestFromUser(db, params.Username, params.Testid)
 			if int(*t.MaxIntentos) > 0 {
 				var as []*dao.Answer
-				as, err = dao.GetAnswersFromUserAnsweredTest(db, params.Username, params.Testid)
+				as, err = dao.GetAnswersFromUserAnsweredTest(db, params.Username, params.Testid, nil)
 				if err == nil {
 					if len(as) >= int(*t.MaxIntentos) {
 						var mesErr *models.Error
@@ -1237,7 +1237,7 @@ func GetAnswersFromUserATest(params user.GetAnswersFromUserAnsweredTestParams, u
 	if isUser(params.Username, u) || (permissions.CanAdminUsers(u) && permissions.CanAdminAnswers(u)) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			a, err := dao.GetAnswersFromUserAnsweredTest(db, params.Username, params.Testid)
+			a, err := dao.GetAnswersFromUserAnsweredTest(db, params.Username, params.Testid, params.OrderByAnswer)
 			if err == nil {
 				ma, err := dao.ToModelAnswers(a)
 				if err == nil {

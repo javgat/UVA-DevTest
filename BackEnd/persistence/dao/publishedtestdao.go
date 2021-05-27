@@ -204,12 +204,42 @@ func GetAnswersFromPTest(db *sql.DB, testid int64) ([]*Answer, error) {
 	return nil, err
 }
 
-func GetCorrectedAnswersFromPTest(db *sql.DB, testid int64) ([]*Answer, error) {
+func prepareQueryOrderByAnswersConsultas(initQuery string, orderBy *string) string {
+	return prepareQueryOrderByAnswers(initQuery, orderBy, "id", "TIMESTAMPDIFF(SECOND, startTime, finishTime)", "puntuacion")
+}
+
+func prepareQueryOrderByAnswers(initQuery string, orderBy *string, idNombreConsulta string, duracionConsulta string, puntuacionConsulta string) string {
+	query := initQuery + " ORDER BY "
+	if orderBy == nil {
+		newDate := OrderByAnswerNewStartDate
+		orderBy = &newDate
+	}
+	switch *orderBy {
+	case OrderByAnswerLessDuracion:
+		query += duracionConsulta + " ASC "
+	case OrderByAnswerMoreDuracion:
+		query += duracionConsulta + " DESC "
+	case OrderByAnswerLessPuntuacion:
+		query += puntuacionConsulta + " ASC "
+	case OrderByAnswerMorePuntuacion:
+		query += puntuacionConsulta + " DESC "
+	case OrderByAnswerOldStartDate:
+		query += idNombreConsulta + " ASC "
+	default: // order by new date
+		query += idNombreConsulta + " DESC "
+	}
+	query += ", " + idNombreConsulta + " DESC "
+	return query
+}
+
+func GetCorrectedAnswersFromPTest(db *sql.DB, testid int64, orderBy *string) ([]*Answer, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
 	var as []*Answer
-	query, err := db.Prepare("SELECT * FROM RespuestaExamen WHERE testid=? AND corregida=1")
+	stPrepare := "SELECT * FROM RespuestaExamen WHERE testid=? AND corregida=1 "
+	stPrepare = prepareQueryOrderByAnswersConsultas(stPrepare, orderBy)
+	query, err := db.Prepare(stPrepare)
 	if err == nil {
 		defer query.Close()
 		rows, err := query.Query(testid)
@@ -221,12 +251,14 @@ func GetCorrectedAnswersFromPTest(db *sql.DB, testid int64) ([]*Answer, error) {
 	return nil, err
 }
 
-func GetUncorrectedAnswersFromPTest(db *sql.DB, testid int64) ([]*Answer, error) {
+func GetUncorrectedAnswersFromPTest(db *sql.DB, testid int64, orderBy *string) ([]*Answer, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
 	var as []*Answer
-	query, err := db.Prepare("SELECT * FROM RespuestaExamen WHERE testid=? AND corregida=0")
+	stPrepare := "SELECT * FROM RespuestaExamen WHERE testid=? AND corregida=0 "
+	stPrepare = prepareQueryOrderByAnswersConsultas(stPrepare, orderBy)
+	query, err := db.Prepare(stPrepare)
 	if err == nil {
 		defer query.Close()
 		rows, err := query.Query(testid)

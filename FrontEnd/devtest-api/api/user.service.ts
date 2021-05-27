@@ -546,13 +546,14 @@ export class UserService {
      * Returns all answers that the user has answered to a test
      * @param username Username of the user who has answered the test
      * @param testid Id of the test
+     * @param orderByAnswer 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAnswersFromUserAnsweredTest(username: string, testid: number, observe?: 'body', reportProgress?: boolean): Observable<Array<Answer>>;
-    public getAnswersFromUserAnsweredTest(username: string, testid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Answer>>>;
-    public getAnswersFromUserAnsweredTest(username: string, testid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Answer>>>;
-    public getAnswersFromUserAnsweredTest(username: string, testid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getAnswersFromUserAnsweredTest(username: string, testid: number, orderByAnswer?: 'newStartDate' | 'oldStartDate' | 'morePuntuacion' | 'lessPuntuacion' | 'moreDuracion' | 'lessDuracion', observe?: 'body', reportProgress?: boolean): Observable<Array<Answer>>;
+    public getAnswersFromUserAnsweredTest(username: string, testid: number, orderByAnswer?: 'newStartDate' | 'oldStartDate' | 'morePuntuacion' | 'lessPuntuacion' | 'moreDuracion' | 'lessDuracion', observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Answer>>>;
+    public getAnswersFromUserAnsweredTest(username: string, testid: number, orderByAnswer?: 'newStartDate' | 'oldStartDate' | 'morePuntuacion' | 'lessPuntuacion' | 'moreDuracion' | 'lessDuracion', observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Answer>>>;
+    public getAnswersFromUserAnsweredTest(username: string, testid: number, orderByAnswer?: 'newStartDate' | 'oldStartDate' | 'morePuntuacion' | 'lessPuntuacion' | 'moreDuracion' | 'lessDuracion', observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (username === null || username === undefined) {
             throw new Error('Required parameter username was null or undefined when calling getAnswersFromUserAnsweredTest.');
@@ -560,6 +561,12 @@ export class UserService {
 
         if (testid === null || testid === undefined) {
             throw new Error('Required parameter testid was null or undefined when calling getAnswersFromUserAnsweredTest.');
+        }
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (orderByAnswer !== undefined && orderByAnswer !== null) {
+            queryParameters = queryParameters.set('orderByAnswer', <any>orderByAnswer);
         }
 
         let headers = this.defaultHeaders;
@@ -584,6 +591,7 @@ export class UserService {
 
         return this.httpClient.get<Array<Answer>>(`${this.basePath}/users/${encodeURIComponent(String(username))}/answeredTests/${encodeURIComponent(String(testid))}/answers`,
             {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

@@ -413,7 +413,7 @@ func GetCAnswersPTest(params published_test.GetCorrectedAnswersFromPublishedTest
 				return published_test.NewGetCorrectedAnswersFromPublishedTestsForbidden()
 			}
 			var as []*dao.Answer
-			as, err = dao.GetCorrectedAnswersFromPTest(db, params.Testid)
+			as, err = dao.GetCorrectedAnswersFromPTest(db, params.Testid, params.OrderByAnswer)
 			if err == nil {
 				var mas []*models.Answer
 				mas, err = dao.ToModelAnswers(as)
@@ -439,7 +439,7 @@ func GetUCAnswersPTest(params published_test.GetUncorrectedAnswersFromPublishedT
 				return published_test.NewGetUncorrectedAnswersFromPublishedTestsForbidden()
 			}
 			var as []*dao.Answer
-			as, err = dao.GetUncorrectedAnswersFromPTest(db, params.Testid)
+			as, err = dao.GetUncorrectedAnswersFromPTest(db, params.Testid, params.OrderByAnswer)
 			if err == nil {
 				var mas []*models.Answer
 				mas, err = dao.ToModelAnswers(as)

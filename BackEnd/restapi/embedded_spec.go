@@ -1970,6 +1970,19 @@ func init() {
             "name": "testid",
             "in": "path",
             "required": true
+          },
+          {
+            "enum": [
+              "newStartDate",
+              "oldStartDate",
+              "morePuntuacion",
+              "lessPuntuacion",
+              "moreDuracion",
+              "lessDuracion"
+            ],
+            "type": "string",
+            "name": "orderByAnswer",
+            "in": "query"
           }
         ],
         "responses": {
@@ -2575,6 +2588,19 @@ func init() {
             "name": "testid",
             "in": "path",
             "required": true
+          },
+          {
+            "enum": [
+              "newStartDate",
+              "oldStartDate",
+              "morePuntuacion",
+              "lessPuntuacion",
+              "moreDuracion",
+              "lessDuracion"
+            ],
+            "type": "string",
+            "name": "orderByAnswer",
+            "in": "query"
           }
         ],
         "responses": {
@@ -6732,6 +6758,19 @@ func init() {
             "name": "testid",
             "in": "path",
             "required": true
+          },
+          {
+            "enum": [
+              "newStartDate",
+              "oldStartDate",
+              "morePuntuacion",
+              "lessPuntuacion",
+              "moreDuracion",
+              "lessDuracion"
+            ],
+            "type": "string",
+            "name": "orderByAnswer",
+            "in": "query"
           }
         ],
         "responses": {
@@ -13487,6 +13526,19 @@ func init() {
             "name": "testid",
             "in": "path",
             "required": true
+          },
+          {
+            "enum": [
+              "newStartDate",
+              "oldStartDate",
+              "morePuntuacion",
+              "lessPuntuacion",
+              "moreDuracion",
+              "lessDuracion"
+            ],
+            "type": "string",
+            "name": "orderByAnswer",
+            "in": "query"
           }
         ],
         "responses": {
@@ -14191,6 +14243,19 @@ func init() {
             "name": "testid",
             "in": "path",
             "required": true
+          },
+          {
+            "enum": [
+              "newStartDate",
+              "oldStartDate",
+              "morePuntuacion",
+              "lessPuntuacion",
+              "moreDuracion",
+              "lessDuracion"
+            ],
+            "type": "string",
+            "name": "orderByAnswer",
+            "in": "query"
           }
         ],
         "responses": {
@@ -19048,6 +19113,19 @@ func init() {
             "name": "testid",
             "in": "path",
             "required": true
+          },
+          {
+            "enum": [
+              "newStartDate",
+              "oldStartDate",
+              "morePuntuacion",
+              "lessPuntuacion",
+              "moreDuracion",
+              "lessDuracion"
+            ],
+            "type": "string",
+            "name": "orderByAnswer",
+            "in": "query"
           }
         ],
         "responses": {

@@ -348,6 +348,15 @@ export enum EnumOrderBy {
     lessTime = "lessTime"
 }
 
+export enum EnumOrderByAnswer {
+    newStartDate = "newStartDate",
+    oldStartDate = "oldStartDate",
+    morePuntuacion = "morePuntuacion",
+    lessPuntuacion = "lessPuntuacion",
+    moreDuracion = "moreDuracion",
+    lessDuracion = "lessDuracion",
+}
+
 export class VistaPersonalizada implements CustomizedView{
     rolBase: CustomizedView.RolBaseEnum;
     mensajeInicio: string;

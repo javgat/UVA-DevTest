@@ -9,9 +9,11 @@ import (
 	"net/http"
 
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // NewGetCorrectedAnswersFromPublishedTestsParams creates a new GetCorrectedAnswersFromPublishedTestsParams object
@@ -31,6 +33,10 @@ type GetCorrectedAnswersFromPublishedTestsParams struct {
 	// HTTP Request Object
 	HTTPRequest *http.Request `json:"-"`
 
+	/*
+	  In: query
+	*/
+	OrderByAnswer *string
 	/*Id of the publishedTest
 	  Required: true
 	  In: path
@@ -47,6 +53,13 @@ func (o *GetCorrectedAnswersFromPublishedTestsParams) BindRequest(r *http.Reques
 
 	o.HTTPRequest = r
 
+	qs := runtime.Values(r.URL.Query())
+
+	qOrderByAnswer, qhkOrderByAnswer, _ := qs.GetOK("orderByAnswer")
+	if err := o.bindOrderByAnswer(qOrderByAnswer, qhkOrderByAnswer, route.Formats); err != nil {
+		res = append(res, err)
+	}
+
 	rTestid, rhkTestid, _ := route.Params.GetOK("testid")
 	if err := o.bindTestid(rTestid, rhkTestid, route.Formats); err != nil {
 		res = append(res, err)
@@ -54,6 +67,38 @@ func (o *GetCorrectedAnswersFromPublishedTestsParams) BindRequest(r *http.Reques
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// bindOrderByAnswer binds and validates parameter OrderByAnswer from query.
+func (o *GetCorrectedAnswersFromPublishedTestsParams) bindOrderByAnswer(rawData []string, hasKey bool, formats strfmt.Registry) error {
+	var raw string
+	if len(rawData) > 0 {
+		raw = rawData[len(rawData)-1]
+	}
+
+	// Required: false
+	// AllowEmptyValue: false
+
+	if raw == "" { // empty values pass all other validations
+		return nil
+	}
+	o.OrderByAnswer = &raw
+
+	if err := o.validateOrderByAnswer(formats); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// validateOrderByAnswer carries on validations for parameter OrderByAnswer
+func (o *GetCorrectedAnswersFromPublishedTestsParams) validateOrderByAnswer(formats strfmt.Registry) error {
+
+	if err := validate.EnumCase("orderByAnswer", "query", *o.OrderByAnswer, []interface{}{"newStartDate", "oldStartDate", "morePuntuacion", "lessPuntuacion", "moreDuracion", "lessDuracion"}, true); err != nil {
+		return err
+	}
+
 	return nil
 }
 

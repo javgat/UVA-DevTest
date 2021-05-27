@@ -258,7 +258,7 @@ func GetVisibleAnswersFromUserTest(db *sql.DB, username string, testid int64) ([
 	return nil, err
 }
 
-func GetAnswersFromUserAnsweredTest(db *sql.DB, username string, testid int64) ([]*Answer, error) {
+func GetAnswersFromUserAnsweredTest(db *sql.DB, username string, testid int64, orderBy *string) ([]*Answer, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
@@ -268,7 +268,9 @@ func GetAnswersFromUserAnsweredTest(db *sql.DB, username string, testid int64) (
 			return []*Answer{}, nil
 		}
 		var a []*Answer
-		query, err := db.Prepare("SELECT * FROM RespuestaExamen WHERE usuarioid=? AND testid=?")
+		stPrepare := "SELECT * FROM RespuestaExamen WHERE usuarioid=? AND testid=? "
+		stPrepare = prepareQueryOrderByAnswersConsultas(stPrepare, orderBy)
+		query, err := db.Prepare(stPrepare)
 		if err == nil {
 			defer query.Close()
 			rows, err := query.Query(u.ID, testid)

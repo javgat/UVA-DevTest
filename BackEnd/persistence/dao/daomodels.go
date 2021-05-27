@@ -496,6 +496,15 @@ const (
 )
 
 const (
+	OrderByAnswerMorePuntuacion string = "morePuntuacion"
+	OrderByAnswerLessPuntuacion string = "lessPuntuacion"
+	OrderByAnswerMoreDuracion   string = "moreDuracion"
+	OrderByAnswerLessDuracion   string = "lessDuracion"
+	OrderByAnswerNewStartDate   string = "newStartDate"
+	OrderByAnswerOldStartDate   string = "oldStartDate"
+)
+
+const (
 	TagOrderByFirstAlpha string = "firstAlpha"
 
 	TagOrderByLastAlpha string = "lastAlpha"
