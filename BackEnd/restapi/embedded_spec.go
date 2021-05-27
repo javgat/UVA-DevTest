@@ -1847,6 +1847,54 @@ func init() {
             "$ref": "#/responses/InternalServerError"
           }
         }
+      },
+      "put": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Updates a published test. Only a few parameters are affected",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "publishedTest"
+        ],
+        "summary": "Updates a published test. Only a few parameters are affected",
+        "operationId": "PutPublishedTest",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the published test to update",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "PTest new parameters",
+            "name": "pTestUpdate",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PTestUpdate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Test updated"
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
       }
     },
     "/publishedTests/{testid}/answers": {
@@ -10466,6 +10514,47 @@ func init() {
         "texto": {
           "type": "string",
           "example": "Esta opcion es la buena"
+        }
+      }
+    },
+    "PTestUpdate": {
+      "type": "object",
+      "required": [
+        "maxMinutes",
+        "accesoPublico",
+        "autoCorrect",
+        "visibilidad",
+        "tiempoEstricto",
+        "maxIntentos"
+      ],
+      "properties": {
+        "accesoPublico": {
+          "type": "boolean",
+          "example": true
+        },
+        "autoCorrect": {
+          "type": "boolean",
+          "example": true
+        },
+        "maxIntentos": {
+          "description": "Maximum of tries that a user has solving a test. If \u003c1, there is no limit of tries.",
+          "type": "integer"
+        },
+        "maxMinutes": {
+          "type": "integer",
+          "example": 60
+        },
+        "tiempoEstricto": {
+          "type": "boolean",
+          "example": true
+        },
+        "visibilidad": {
+          "type": "string",
+          "enum": [
+            "alEntregar",
+            "alCorregir",
+            "manual"
+          ]
         }
       }
     },
@@ -13260,6 +13349,60 @@ func init() {
             "description": "Internal error"
           }
         }
+      },
+      "put": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Updates a published test. Only a few parameters are affected",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "publishedTest"
+        ],
+        "summary": "Updates a published test. Only a few parameters are affected",
+        "operationId": "PutPublishedTest",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the published test to update",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "PTest new parameters",
+            "name": "pTestUpdate",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PTestUpdate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Test updated"
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
       }
     },
     "/publishedTests/{testid}/answers": {
@@ -23201,6 +23344,48 @@ func init() {
         "texto": {
           "type": "string",
           "example": "Esta opcion es la buena"
+        }
+      }
+    },
+    "PTestUpdate": {
+      "type": "object",
+      "required": [
+        "maxMinutes",
+        "accesoPublico",
+        "autoCorrect",
+        "visibilidad",
+        "tiempoEstricto",
+        "maxIntentos"
+      ],
+      "properties": {
+        "accesoPublico": {
+          "type": "boolean",
+          "example": true
+        },
+        "autoCorrect": {
+          "type": "boolean",
+          "example": true
+        },
+        "maxIntentos": {
+          "description": "Maximum of tries that a user has solving a test. If \u003c1, there is no limit of tries.",
+          "type": "integer"
+        },
+        "maxMinutes": {
+          "type": "integer",
+          "minimum": 0,
+          "example": 60
+        },
+        "tiempoEstricto": {
+          "type": "boolean",
+          "example": true
+        },
+        "visibilidad": {
+          "type": "string",
+          "enum": [
+            "alEntregar",
+            "alCorregir",
+            "manual"
+          ]
         }
       }
     },

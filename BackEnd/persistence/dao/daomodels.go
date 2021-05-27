@@ -540,3 +540,39 @@ type TestPregunta struct {
 	// Minimum: 0
 	ValorFinal *int64 `json:"valorFinal"`
 }
+
+// PTestUpdate p test update
+//
+// swagger:model PTestUpdate
+type PTestUpdate struct {
+
+	// acceso publico
+	// Example: true
+	// Required: true
+	AccesoPublico *bool `json:"accesoPublico"`
+
+	// auto correct
+	// Example: true
+	// Required: true
+	AutoCorrect *bool `json:"autoCorrect"`
+
+	// Maximum of tries that a user has solving a test. If <1, there is no limit of tries.
+	// Required: true
+	MaxIntentos *int64 `json:"maxIntentos"`
+
+	// max minutes
+	// Example: 60
+	// Required: true
+	// Minimum: 0
+	MaxMinutes *int64 `json:"maxMinutes"`
+
+	// tiempo estricto
+	// Example: true
+	// Required: true
+	TiempoEstricto *bool `json:"tiempoEstricto"`
+
+	// visibilidad
+	// Required: true
+	// Enum: [alEntregar alCorregir manual]
+	Visibilidad *string `json:"visibilidad"`
+}

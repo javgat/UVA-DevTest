@@ -97,6 +97,19 @@
                 </p>
                 <p><b>Publicación automática de corrección de respuestas: </b> <span
                         *ngIf="test.autoCorrect">Sí</span><span *ngIf="!test.autoCorrect">No</span></p>
+                <p><b>Visibilidad de la respuesta: </b>{{visibilidadToString(test.visibilidad)}}</p>
+                <div class="d-grid gap-2 my-3">
+                    <button *ngIf="checkPermisosEdicion()" type="button" class="btn btn-lg btn-primary"
+                        data-bs-toggle="modal" data-bs-target="#editTestModal">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 26" width="24px"
+                            fill="currentColor">
+                            <path d="M0 0h24v24H0z" fill="none" />
+                            <path
+                                d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+                        </svg>
+                        Modificar Test Publicado
+                    </button>
+                </div>
             </div>
         </div>
         <div *ngIf="this.isModoTestAdmin()">
@@ -125,6 +138,71 @@
                     </tr>
                 </tbody>
             </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editTestModal" *ngIf="checkPermisosEdicion()" tabindex="-1"
+    aria-labelledby="editTestModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <form ngNativeValidate>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editQuestionModalLabel">Modificar Test</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="inputTime" class="form-label">Tiempo disponible (minutos)</label>
+                        <input type="number" class="form-control" name="inputTime" [(ngModel)]="ptestUpdate.maxMinutes"
+                            required min=0 />
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckLimitIntentos"
+                            [checked]="ptestUpdateHasMaxIntentos()" (change)="changeSwitchLimitIntentos()">
+                        <label class="form-check-label" for="flexSwitchCheckLimitIntentos">Límite de intentos</label>
+                    </div>
+                    <div class="mb-3" *ngIf="ptestUpdateHasMaxIntentos()">
+                        <label for="inputMaxIntentos" class="form-label">Cantidad de intentos máxima</label>
+                        <input type="number" class="form-control" name="inputMaxIntentos"
+                            [(ngModel)]="ptestUpdate.maxIntentos" required min=1 />
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="flexSwitchChecktiempoEstricto"
+                            [checked]="!ptestUpdate.tiempoEstricto"
+                            (change)="ptestUpdate.tiempoEstricto = !ptestUpdate.tiempoEstricto">
+                        <label class="form-check-label" for="flexSwitchChecktiempoEstricto">Permitir entregas más
+                            allá del tiempo disponible</label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault"
+                            [checked]="!ptestUpdate.accesoPublico"
+                            (change)="ptestUpdate.accesoPublico = !ptestUpdate.accesoPublico">
+                        <label class="form-check-label" for="flexSwitchCheckDefault">Necesidad de invitación para
+                            poder realizar el Test</label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckAutoCorrect"
+                            [checked]="ptestUpdate.autoCorrect"
+                            (change)="ptestUpdate.autoCorrect = !ptestUpdate.autoCorrect">
+                        <label class="form-check-label" for="flexSwitchCheckAutoCorrect">Publicación automática de
+                            corrección de respuestas</label>
+                    </div>
+                    <div>
+                        <label class="form-label" for="selectVisibilidadLabel">Visibilidad de la respuesta</label>
+                        <select class="form-select" name="visibilidad" [(ngModel)]="ptestUpdate.visibilidad">
+                            <option [value]="getValueManual()">{{printManual()}}</option>
+                            <option [value]="getValueCorregir()">{{printCorregir()}}</option>
+                            <option [value]="getValueEntregar()">{{printEntregar()}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <input type="submit" value="Guardar" data-bs-dismiss="modal" class="btn btn-primary"
+                        (click)='putPTestSubmit()' id="buttonSubmitTest" />
+                </div>
+            </form>
         </div>
     </div>
 </div>

@@ -871,7 +871,8 @@ bg=yellow
 bg=yellow
 --
 --
-+ &lt;&lt;GET&gt;&gt; getPublishedTest(): Test</panel_attributes>
++ &lt;&lt;GET&gt;&gt; getPublishedTest(): Test
++ &lt;&lt;PUT&gt;&gt; putPublishedTest(t: Test): void</panel_attributes>
     <additional_attributes/>
   </element>
   <element>

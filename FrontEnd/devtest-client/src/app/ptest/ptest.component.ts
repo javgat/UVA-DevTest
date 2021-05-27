@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PublishedTestService, Question, Tag, Test, UserService } from '@javgat/devtest-api';
+import { PublishedTestService, Question, Tag, PTestUpdate, UserService, Test } from '@javgat/devtest-api';
 import { Subscription } from 'rxjs';
 import { LoggedInController } from '../shared/app.controller';
 import { Examen, tipoPrint } from '../shared/app.model';
@@ -22,6 +22,7 @@ export class PtestComponent extends LoggedInController implements OnInit {
   isInAdminTeam: boolean
   respuestaIniciadaId?: number
   isRespuestaIniciada: boolean
+  ptestUpdate: PTestUpdate
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private route: ActivatedRoute, private ptestS: PublishedTestService) {
     super(session, router, data, userS);
     this.preguntas = []
@@ -30,6 +31,14 @@ export class PtestComponent extends LoggedInController implements OnInit {
     this.id = 0
     this.isInAdminTeam = false
     this.isRespuestaIniciada = false
+    this.ptestUpdate = {
+      maxIntentos: 0,
+      maxMinutes: 0,
+      accesoPublico: false,
+      autoCorrect: false,
+      visibilidad: "manual",
+      tiempoEstricto: false,
+    }
     this.routeSub = this.route.params.subscribe(params => {
       this.id = params['testid']
       this.borrarMensaje()
@@ -66,11 +75,21 @@ export class PtestComponent extends LoggedInController implements OnInit {
     this.getIsRespuestaIniciada(true)
   }
 
+  copyTestToPTestUpdate(){
+    this.ptestUpdate.accesoPublico = this.test.accesoPublico
+    this.ptestUpdate.autoCorrect = this.test.autoCorrect
+    this.ptestUpdate.maxIntentos = this.test.maxIntentos
+    this.ptestUpdate.maxMinutes = this.test.maxMinutes
+    this.ptestUpdate.tiempoEstricto = this.test.tiempoEstricto
+    this.ptestUpdate.visibilidad = this.test.visibilidad
+  }
+
   getPTest(primera: boolean) {
     if (this.getSessionLogin().isLoggedIn()) {
       this.userS.getSolvableTestFromUser(this.getSessionUser().getUsername(), this.id).subscribe(
         resp => {
           this.test = Examen.constructorFromTest(resp)
+          this.copyTestToPTestUpdate()
           this.gotTest()
         },
         err => {
@@ -181,4 +200,64 @@ export class PtestComponent extends LoggedInController implements OnInit {
   quedanMasIntentos(): boolean{
     return (this.test.maxIntentos<1) || this.test.maxIntentos>this.test.cantidadRespuestasDelUsuario
   }
+
+  isPermisosAdministracion(): boolean {
+    return this.getSessionUser().isAdmin() || (this.getSessionUser().getUsername() == this.test.username) || this.isInAdminTeam
+  }
+
+  checkPermisosEdicion(): boolean {
+    return this.isPermisosAdministracion()
+  }
+
+  ptestUpdateHasMaxIntentos(): boolean{
+    return this.ptestUpdate.maxIntentos>0
+  }
+
+  changeSwitchLimitIntentos(){
+    if(this.ptestUpdateHasMaxIntentos()){
+      this.ptestUpdate.maxIntentos = 0
+    }else{
+      this.ptestUpdate.maxIntentos = 1
+    }
+  }
+
+  putPTestSubmit(){
+    this.putPTest(true)
+  }
+
+  putPTest(primera: boolean){
+    this.ptestS.putPublishedTest(this.id, this.ptestUpdate).subscribe(
+      resp => this.getPTest(true),
+      err => this.handleErrRelog(err, "modificar test publicado", primera, this.putPTest, this)
+    )
+  }
+
+  visibilidadToString(vis: Test.VisibilidadEnum): string {
+    return Examen.visibilidadToString(vis)
+  }
+
+  printManual(): string {
+    return this.visibilidadToString(Test.VisibilidadEnum.Manual)
+  }
+
+  printCorregir(): string {
+    return this.visibilidadToString(Test.VisibilidadEnum.AlCorregir)
+  }
+
+  printEntregar(): string {
+    return this.visibilidadToString(Test.VisibilidadEnum.AlEntregar)
+  }
+
+  getValueManual(): Test.VisibilidadEnum {
+    return Test.VisibilidadEnum.Manual
+  }
+
+  getValueCorregir(): Test.VisibilidadEnum {
+    return Test.VisibilidadEnum.AlCorregir
+  }
+
+  getValueEntregar(): Test.VisibilidadEnum {
+    return Test.VisibilidadEnum.AlEntregar
+  }
+
 }

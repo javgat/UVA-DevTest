@@ -6,6 +6,7 @@ export * from './loginUser';
 export * from './message';
 export * from './modelError';
 export * from './option';
+export * from './pTestUpdate';
 export * from './password';
 export * from './passwordRecovery';
 export * from './passwordUpdate';

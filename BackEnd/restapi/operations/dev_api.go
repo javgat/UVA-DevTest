@@ -489,6 +489,9 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		QuestionPutOptionHandler: question.PutOptionHandlerFunc(func(params question.PutOptionParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation question.PutOption has not yet been implemented")
 		}),
+		PublishedTestPutPublishedTestHandler: published_test.PutPublishedTestHandlerFunc(func(params published_test.PutPublishedTestParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation published_test.PutPublishedTest has not yet been implemented")
+		}),
 		QuestionPutQuestionHandler: question.PutQuestionHandlerFunc(func(params question.PutQuestionParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation question.PutQuestion has not yet been implemented")
 		}),
@@ -944,6 +947,8 @@ type DevAPI struct {
 	ConfigurationPutEmailConfigurationHandler configuration.PutEmailConfigurationHandler
 	// QuestionPutOptionHandler sets the operation handler for the put option operation
 	QuestionPutOptionHandler question.PutOptionHandler
+	// PublishedTestPutPublishedTestHandler sets the operation handler for the put published test operation
+	PublishedTestPutPublishedTestHandler published_test.PutPublishedTestHandler
 	// QuestionPutQuestionHandler sets the operation handler for the put question operation
 	QuestionPutQuestionHandler question.PutQuestionHandler
 	// AnswerPutQuestionAnswerFromAnswerHandler sets the operation handler for the put question answer from answer operation
@@ -1531,6 +1536,9 @@ func (o *DevAPI) Validate() error {
 	}
 	if o.QuestionPutOptionHandler == nil {
 		unregistered = append(unregistered, "question.PutOptionHandler")
+	}
+	if o.PublishedTestPutPublishedTestHandler == nil {
+		unregistered = append(unregistered, "published_test.PutPublishedTestHandler")
 	}
 	if o.QuestionPutQuestionHandler == nil {
 		unregistered = append(unregistered, "question.PutQuestionHandler")
@@ -2322,6 +2330,10 @@ func (o *DevAPI) initHandlerCache() {
 		o.handlers["PUT"] = make(map[string]http.Handler)
 	}
 	o.handlers["PUT"]["/questions/{questionid}/options/{optionindex}"] = question.NewPutOption(o.context, o.QuestionPutOptionHandler)
+	if o.handlers["PUT"] == nil {
+		o.handlers["PUT"] = make(map[string]http.Handler)
+	}
+	o.handlers["PUT"]["/publishedTests/{testid}"] = published_test.NewPutPublishedTest(o.context, o.PublishedTestPutPublishedTestHandler)
 	if o.handlers["PUT"] == nil {
 		o.handlers["PUT"] = make(map[string]http.Handler)
 	}

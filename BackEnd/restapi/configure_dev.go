@@ -280,11 +280,13 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 
 	// /publishedTests
 
-	api.PublishedTestGetPublicPublishedTestsHandler = published_test.GetPublicPublishedTestsHandlerFunc(handlers.GetPublicPTests) // GET /publishedTests
-	api.PublishedTestGetPublicPublishedTestHandler = published_test.GetPublicPublishedTestHandlerFunc(handlers.GetPublicPTest)    // GET /publishedTests/{testid}
+	api.PublishedTestGetPublicPublishedTestsHandler = published_test.GetPublicPublishedTestsHandlerFunc(handlers.GetPublicPTests) // GET /publicPublishedTests
+	api.PublishedTestGetPublicPublishedTestHandler = published_test.GetPublicPublishedTestHandlerFunc(handlers.GetPublicPTest)    // GET /publicPublishedTests/{testid}
 
 	api.PublishedTestGetPublishedTestsHandler = published_test.GetPublishedTestsHandlerFunc(handlers.GetPTests) // GET /publishedTests
 	api.PublishedTestGetPublishedTestHandler = published_test.GetPublishedTestHandlerFunc(handlers.GetPTest)    // GET /publishedTests/{testid}
+
+	api.PublishedTestPutPublishedTestHandler = published_test.PutPublishedTestHandlerFunc(handlers.PutPTest) // PUT /publishedTests/{testid}
 
 	api.PublishedTestGetUsersFromPublishedTestHandler = published_test.GetUsersFromPublishedTestHandlerFunc(handlers.GetUsersFromPTest) // GET /publishedTests/{testid}/users
 

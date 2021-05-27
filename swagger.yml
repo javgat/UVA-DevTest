@@ -5575,6 +5575,37 @@ paths:
           $ref: '#/responses/GoneError'
         500:
           $ref: '#/responses/InternalServerError'
+    put:
+      security:
+        - BearerCookie: []
+      tags:
+      - publishedTest
+      summary: Updates a published test. Only a few parameters are affected
+      operationId: PutPublishedTest
+      description: Updates a published test. Only a few parameters are affected
+      consumes:
+      - application/json
+      parameters:
+      - in: path
+        name: testid
+        description: Id of the published test to update
+        required: true
+        type: integer
+      - in: body
+        name: pTestUpdate
+        description: PTest new parameters
+        required: true
+        schema:
+          $ref: '#/definitions/PTestUpdate'
+      responses:
+        200:
+          description: Test updated
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        500:
+          $ref: '#/responses/InternalServerError'
 
   /publishedTests/{testid}/users:
     get:
@@ -7058,6 +7089,36 @@ definitions:
       maxIntentos:
         type: integer
         description: Maximum of tries that a user has solving a test. If <1, there is no limit of tries.
+  PTestUpdate:
+    type: object
+    required:
+    - maxMinutes
+    - accesoPublico
+    - autoCorrect
+    - visibilidad
+    - tiempoEstricto
+    - maxIntentos
+    properties:
+      maxMinutes:
+        type: integer
+        example: 60
+        minimum: 0
+      accesoPublico:
+        type: boolean
+        example: true
+      autoCorrect:
+        type: boolean
+        example: true
+      visibilidad:
+        type: string
+        enum: [alEntregar, alCorregir, manual]
+      tiempoEstricto:
+        type: boolean
+        example: true
+      maxIntentos:
+        type: integer
+        description: Maximum of tries that a user has solving a test. If <1, there is no limit of tries.
+
   Answer:
     type: object
     required:

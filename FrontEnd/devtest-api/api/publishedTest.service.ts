@@ -21,6 +21,7 @@ import { Observable }                                        from 'rxjs';
 import { Answer } from '../model/answer';
 import { Message } from '../model/message';
 import { Option } from '../model/option';
+import { PTestUpdate } from '../model/pTestUpdate';
 import { PublishTestParams } from '../model/publishTestParams';
 import { Question } from '../model/question';
 import { QuestionAnswer } from '../model/questionAnswer';
@@ -1103,6 +1104,62 @@ export class PublishedTestService {
 
         return this.httpClient.post<Test>(`${this.basePath}/tests/${encodeURIComponent(String(testid))}/publishedTests`,
             publishTestParams,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Updates a published test. Only a few parameters are affected
+     * Updates a published test. Only a few parameters are affected
+     * @param testid Id of the published test to update
+     * @param pTestUpdate PTest new parameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public putPublishedTest(testid: number, pTestUpdate: PTestUpdate, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public putPublishedTest(testid: number, pTestUpdate: PTestUpdate, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public putPublishedTest(testid: number, pTestUpdate: PTestUpdate, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public putPublishedTest(testid: number, pTestUpdate: PTestUpdate, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (testid === null || testid === undefined) {
+            throw new Error('Required parameter testid was null or undefined when calling putPublishedTest.');
+        }
+
+        if (pTestUpdate === null || pTestUpdate === undefined) {
+            throw new Error('Required parameter pTestUpdate was null or undefined when calling putPublishedTest.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.put<any>(`${this.basePath}/publishedTests/${encodeURIComponent(String(testid))}`,
+            pTestUpdate,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

@@ -7,6 +7,7 @@ package dao
 import (
 	"database/sql"
 	"errors"
+	"uva-devtest/models"
 
 	// Blank import of mysql driver
 	_ "github.com/go-sql-driver/mysql"
@@ -561,4 +562,21 @@ func GetATestFromUser(db *sql.DB, username string, testid int64) (*Test, error) 
 		}
 	}
 	return nil, err
+}
+
+func PutPTest(db *sql.DB, testid int64, t *models.PTestUpdate) error {
+	if db == nil || t == nil {
+		return errors.New(errorDBNil)
+	}
+	query, err := db.Prepare("UPDATE Test SET maxMinutes=?, accesoPublico=?, " +
+		" autoCorrect=?, visibilidad=?, tiempoEstricto=?, maxIntentos=? " +
+		" WHERE editable=0 AND id=?")
+
+	if err != nil {
+		return err
+	}
+	defer query.Close()
+	_, err = query.Exec(t.MaxMinutes, *t.AccesoPublico, t.AutoCorrect, t.Visibilidad,
+		t.TiempoEstricto, t.MaxIntentos, testid)
+	return err
 }

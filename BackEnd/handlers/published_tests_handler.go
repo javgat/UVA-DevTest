@@ -109,6 +109,23 @@ func GetPTest(params published_test.GetPublishedTestParams, u *models.User) midd
 	return published_test.NewGetPublishedTestForbidden()
 }
 
+// PutTest PUT /publishedTests/{testid}. Updates a ptest.
+// Auth: TestAdmin or CanAdminTests
+func PutPTest(params published_test.PutPublishedTestParams, u *models.User) middleware.Responder {
+	if permissions.CanAdminTests(u) || isTestAdmin(u, params.Testid) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			err = dao.PutPTest(db, params.Testid, params.PTestUpdate)
+			if err == nil {
+				return published_test.NewPutPublishedTestOK()
+			}
+		}
+		log.Println("Error en published_test_handler PutPublishedTest(): ", err)
+		return published_test.NewPutPublishedTestInternalServerError()
+	}
+	return published_test.NewPutPublishedTestForbidden()
+}
+
 // GetUsersFromPTest GET /publishedTests/{testid}/users. Returns a published tests users.
 // Auth: CanVerPTests
 func GetUsersFromPTest(params published_test.GetUsersFromPublishedTestParams, u *models.User) middleware.Responder {
