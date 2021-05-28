@@ -45,7 +45,7 @@ export class DataService {
 
   // Borra el mensaje si esta cargando.
   borrarMensajeIfLoading() {
-    if(this.mensaje.value.type==Tipo.SENDING)
+    if(this.mensaje.value.isLoading())
       this.borrarMensaje()
   }
 

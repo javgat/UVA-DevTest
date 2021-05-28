@@ -4,22 +4,42 @@ export enum Tipo {
     SUCCESS = "success",
     ERROR = "danger",
     WARNING = "warning",
-    SENDING = "warning",
+    SENDING = "sending",
     INFO = "info"
 }
 
 export class Mensaje {
     readonly texto: String;
     readonly type: Tipo;
+    readonly trueType: Tipo;
     readonly mostrar: boolean;
     constructor(mensaje?: String, type?: Tipo, mostrar?: boolean) {
         this.texto = mensaje || "";
+        this.trueType = type || Tipo.INFO;
         this.type = type || Tipo.INFO;
+        if(type==Tipo.SENDING)
+            this.type = Tipo.WARNING
         this.mostrar = mostrar || false;
     }
 
     showSpinner(): boolean{
-        return this.type == Tipo.SENDING
+        return this.trueType == Tipo.SENDING
+    }
+    
+    showCheckCircle(): boolean{
+        return this.trueType == Tipo.SUCCESS
+    }
+
+    showExclamationTriangle(): boolean{
+        return (this.trueType == Tipo.ERROR) || (this.trueType == Tipo.WARNING)
+    }
+
+    showInfo(): boolean{
+        return this.trueType == Tipo.INFO
+    }
+
+    isLoading(): boolean{
+        return this.trueType==Tipo.SENDING
     }
 }
 
