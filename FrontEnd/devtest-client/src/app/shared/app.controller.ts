@@ -2,7 +2,7 @@ import { Component, OnDestroy } from "@angular/core";
 import { Router } from "@angular/router";
 import { TipoRol, User, UserService } from "@javgat/devtest-api";
 import { Subscription } from "rxjs";
-import { Mensaje, SessionLogin, SessionUser } from "./app.model";
+import { Mensaje, SessionLogin, SessionUser, Tipo } from "./app.model";
 import { DataService } from "./data.service";
 import { SessionService } from "./session.service";
 
@@ -142,6 +142,10 @@ export abstract class LoggedInController {
 
     cambiarMensaje(m: Mensaje) {
         this.data.cambiarMensaje(m)
+    }
+
+    cambiarMensajeSending(){
+        this.cambiarMensaje(new Mensaje("Enviando datos...", Tipo.SENDING, true))
     }
 
     borrarMensaje() {

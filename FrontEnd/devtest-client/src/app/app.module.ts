@@ -106,6 +106,7 @@ import { AdminPermissionsComponent } from './admin/admin-permissions/admin-permi
 import { AdminCustomizedViewsComponent } from './admin/admin-customized-views/admin-customized-views.component';
 import { DragulaModule } from 'ng2-dragula';
 import { CountdownModule } from 'ngx-countdown';
+import { MensajeComponent } from './mensaje/mensaje.component';
 
 export function apiConfigFactory (): Configuration {
   const params: ConfigurationParameters = {
@@ -211,7 +212,8 @@ export function apiConfigFactory (): Configuration {
     ListUsersComponent,
     UsersComponent,
     AdminPermissionsComponent,
-    AdminCustomizedViewsComponent
+    AdminCustomizedViewsComponent,
+    MensajeComponent
   ],
   imports: [
     BrowserModule,

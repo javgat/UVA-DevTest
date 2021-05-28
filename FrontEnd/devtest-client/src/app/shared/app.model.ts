@@ -4,6 +4,7 @@ export enum Tipo {
     SUCCESS = "success",
     ERROR = "danger",
     WARNING = "warning",
+    SENDING = "warning",
     INFO = "info"
 }
 
@@ -15,6 +16,10 @@ export class Mensaje {
         this.texto = mensaje || "";
         this.type = type || Tipo.INFO;
         this.mostrar = mostrar || false;
+    }
+
+    showSpinner(): boolean{
+        return this.type == Tipo.SENDING
     }
 }
 

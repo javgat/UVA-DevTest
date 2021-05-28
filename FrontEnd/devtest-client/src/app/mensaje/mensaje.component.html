@@ -1,0 +1,6 @@
+<div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message" role="alert">
+    {{getMensaje().texto}}
+    <div class="spinner-border" role="status" *ngIf="getMensaje().showSpinner()">
+        <span class="visually-hidden">Cargando...</span>
+    </div>
+</div>
