@@ -27,7 +27,7 @@ export class CustomHttpInterceptorService implements HttpInterceptor {
       case "PUT":
       case "DELETE":
       case "POST": {
-        this.data.cambiarMensaje(new Mensaje("Guardando datos...", Tipo.SENDING, true))
+        this.data.cambiarMensaje(new Mensaje("Enviando datos...", Tipo.SENDING, true))
         break;
       }
       case "GET":{

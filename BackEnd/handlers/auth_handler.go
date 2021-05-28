@@ -194,3 +194,69 @@ func CloseSessions(params auth.CloseSessionsParams, u *models.User) middleware.R
 	}
 	return auth.NewCloseSessionsInternalServerError()
 }
+
+// Responds with Bad Request Error
+func badReqErrorLogin(err error) middleware.Responder {
+	log.Println(err)
+	errSt := "Datos de log invalidos"
+	prerr := models.Error{
+		Message: &errSt,
+	}
+	return auth.NewLoginBadRequest().WithPayload(&prerr)
+}
+
+// Responds with authentication Failure Error
+func authFailErrorLogin(err error, info string) middleware.Responder {
+	log.Println(err)
+	errSt := info
+	prerr := models.Error{
+		Message: &errSt,
+	}
+	return auth.NewLoginGone().WithPayload(&prerr)
+}
+
+// Login is the main handler function for the login functionality
+// Param params Parametros de entrada que tiene la peticion http
+// Return middleware.Responder
+func Login(params auth.LoginParams) middleware.Responder {
+	log.Println("Generando Token JWT de usuario...")
+	var lu *models.LoginUser = params.LoginUser
+	log.Printf("Login id: %v\n", *lu.Loginid)
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		var u *dao.User
+		if *lu.Loginid != "" {
+			// Primero compruebo si la LoginId corresponde a un username
+			u, err = dao.GetUserUsername(db, *lu.Loginid)
+			if err == nil {
+				if u == nil {
+					//Si no corresponde, compruebo con un email
+					u, err = dao.GetUserEmail(db, *lu.Loginid)
+				}
+				if err == nil {
+					if u == nil {
+						return authFailErrorLogin(err, "Usuario no existe")
+					}
+					err = bcrypt.CompareHashAndPassword([]byte(*u.Pwhash), []byte(*lu.Pass))
+					if err != nil {
+						return authFailErrorLogin(err, "Password incorrecto")
+					}
+					var signedToken string
+					signedToken, err = CreateJWT(*u, int64(hoursToSeconds(AuthHours)))
+					if err == nil {
+						var resignedToken string
+						resignedToken, err = CreateJWT(*u, int64(hoursToSeconds(ReauthHours)))
+						if err == nil {
+							cookie := CreateCookie(BearerCookieName, signedToken, hoursToSeconds(AuthHours))
+							recookie := CreateCookie(ReauthCookieName, resignedToken, hoursToSeconds(ReauthHours))
+							return auth.NewLoginCreated().WithAuth(cookie).WithReAuth(recookie)
+						}
+					}
+				}
+			}
+		}
+		return badReqErrorLogin(err)
+	}
+	log.Println("Error en Login, ", err)
+	return auth.NewLoginInternalServerError()
+}
