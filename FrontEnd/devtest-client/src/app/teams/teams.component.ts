@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { User, Team, UserService } from '@javgat/devtest-api';
 import { Subscription } from 'rxjs';
 import { LoggedInController } from '../shared/app.controller';
@@ -16,30 +16,30 @@ export class TeamsComponent extends LoggedInController implements OnInit {
 
   teams: Team[]
 
-  private sUserSub: Subscription = new Subscription;
-  constructor(session: SessionService, router: Router, data: DataService, userS: UserService) {
+  username: string
+  routeSub: Subscription
+  constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private route: ActivatedRoute) {
     super(session, router, data, userS)
     this.teams = []
+    this.username = ""
+    this.routeSub = this.route.params.subscribe(params => {
+      this.username = params['username']
+      this.borrarMensaje()
+      this.getTeams(true)
+    });
   }
 
   ngOnInit(): void {
-    this.getTeams(true)
   }
 
   ngOnDestroy(): void {
-    this.sUserSub.unsubscribe()
+    this.routeSub.unsubscribe()
     super.onDestroy()
   }
 
   getTeams(primera: boolean) {
-    this.sUserSub.unsubscribe()
-    this.sUserSub = this.session.sessionUser.subscribe(
-      valor => {
-        if(!valor.isEmpty()){
-          this.getTeamsOfUser(valor.username, primera)
-        }
-      }
-    )
+    if(this.username == "" || this.username == undefined) return
+    this.getTeamsOfUser(this.username, primera)
   }
 
   getTeamsOfUser(username: string, primera: boolean) {
