@@ -34,6 +34,7 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
   autotags: Tag[]
   tPTempPosicion?: TestPregunta
   pregTempPosicion?: Question
+  pregsUpdated: number
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private route: ActivatedRoute,
     private testS: TestService, private tagS: TagService) {
     super(session, router, data, userS)
@@ -50,6 +51,7 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
     this.mantenerMensaje = false
     this.isFavorita = false
     this.preguntaQuitando = 0
+    this.pregsUpdated = 0
     this.publishedParams = {
       title: "",
       accesoPublico: false,
@@ -414,6 +416,7 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
 
   changePosPreguntasSubmit() {
     this.preguntas = this.changePosPreguntas
+    this.pregsUpdated = 0
     for (let i = 0; i < this.preguntas.length; i++) {
       let tP: TestPregunta = {
         valorFinal: this.preguntas[i].valorFinal || 0,
@@ -428,7 +431,12 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
   putPosPregunta(primera: boolean){
     if(this.pregTempPosicion==undefined || this.tPTempPosicion == undefined) return
     this.testS.addQuestionToTest(this.id, this.pregTempPosicion.id || 0, this.tPTempPosicion).subscribe(
-      resp => {},
+      resp => {
+        this.pregsUpdated++
+        if(this.pregsUpdated == this.preguntas.length){
+          this.cambiarMensaje(new Mensaje("Posiciones de preguntas actualizadas", Tipo.SUCCESS, true))
+        }
+      },
       err => this.handleErrRelog(err, "Actualizar posicion de una pregunta", primera, this.putPosPregunta, this)
     )
   }
