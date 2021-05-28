@@ -21,19 +21,15 @@ export class SigninComponent implements OnInit {
     pass: ""
   }
 
-  private messageSubscription: Subscription
   private sessionSubscription: Subscription
-
 
   reppass: string
 
   // Variable que se modificara en el formulario de registro
   signinUser = this.signinUserEmpty as SigninUser
-  mensaje: Mensaje
   sessionUser: SessionLogin
   constructor(private authService: AuthService, private datos: DataService,
     private session: SessionService, private router: Router) {
-    this.mensaje = new Mensaje()
     this.sessionUser = new SessionLogin(false)
     this.reppass = ""
     this.session.checkStorageSession()
@@ -45,9 +41,6 @@ export class SigninComponent implements OnInit {
         }
       }
     )
-    this.messageSubscription = this.datos.mensajeActual.subscribe(
-      valor => this.mensaje = valor
-    )
   }
 
   ngOnInit(): void {
@@ -55,7 +48,6 @@ export class SigninComponent implements OnInit {
 
   ngOnDestroy(): void {
     this.sessionSubscription.unsubscribe();
-    this.messageSubscription.unsubscribe();
     this.datos.borrarMensaje()
   }
 
