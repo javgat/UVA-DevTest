@@ -10482,6 +10482,7 @@ func init() {
         "email": {
           "type": "string",
           "format": "email",
+          "maxLength": 100,
           "pattern": "^[^@ \\t\\r\\n]+@[^@ \\t\\r\\n]+\\.[^@ \\t\\r\\n]+$",
           "example": "carlos@mail.com"
         }
@@ -10508,6 +10509,7 @@ func init() {
       "properties": {
         "loginid": {
           "type": "string",
+          "maxLength": 100,
           "example": "carlosg72 || carlos@mail.com"
         },
         "pass": {
@@ -10682,6 +10684,7 @@ func init() {
         },
         "title": {
           "type": "string",
+          "maxLength": 100,
           "example": "Nuevo titulo"
         },
         "visibilidad": {
@@ -10774,6 +10777,7 @@ func init() {
         },
         "title": {
           "type": "string",
+          "maxLength": 100,
           "example": "Paralelismo en C"
         },
         "username": {
@@ -10864,6 +10868,7 @@ func init() {
         "email": {
           "type": "string",
           "format": "email",
+          "maxLength": 100,
           "pattern": "^[^@ \\t\\r\\n]+@[^@ \\t\\r\\n]+\\.[^@ \\t\\r\\n]+$",
           "example": "carlos@mail.com"
         },
@@ -10875,6 +10880,7 @@ func init() {
         },
         "username": {
           "type": "string",
+          "maxLength": 40,
           "pattern": "^[^@ \\t\\r\\n]+$",
           "example": "carlosg72"
         }
@@ -10888,6 +10894,7 @@ func init() {
       "properties": {
         "tag": {
           "type": "string",
+          "maxLength": 100,
           "example": "Java"
         }
       }
@@ -10909,6 +10916,7 @@ func init() {
         },
         "teamname": {
           "type": "string",
+          "maxLength": 40,
           "pattern": "^[^@ \\t\\r\\n]+$",
           "example": "devtestTeam"
         }
@@ -10990,6 +10998,7 @@ func init() {
         },
         "title": {
           "type": "string",
+          "maxLength": 100,
           "example": "Test de introduccion a Java"
         },
         "username": {
@@ -11161,6 +11170,7 @@ func init() {
         "email": {
           "type": "string",
           "format": "email",
+          "maxLength": 100,
           "pattern": "^[^@ \\t\\r\\n]+@[^@ \\t\\r\\n]+\\.[^@ \\t\\r\\n]+$",
           "example": "carlos@mail.com"
         },
@@ -11182,6 +11192,7 @@ func init() {
         },
         "username": {
           "type": "string",
+          "maxLength": 40,
           "pattern": "^[^@ \\t\\r\\n]+$",
           "example": "carlosg72"
         }
@@ -11199,6 +11210,7 @@ func init() {
         "email": {
           "type": "string",
           "format": "email",
+          "maxLength": 100,
           "pattern": "^[^@ \\t\\r\\n]+@[^@ \\t\\r\\n]+\\.[^@ \\t\\r\\n]+$",
           "example": "carlos@mail.com"
         },
@@ -11214,6 +11226,7 @@ func init() {
         },
         "username": {
           "type": "string",
+          "maxLength": 40,
           "pattern": "^[^@ \\t\\r\\n]+$",
           "example": "carlosg72"
         }
@@ -23356,6 +23369,7 @@ func init() {
         "email": {
           "type": "string",
           "format": "email",
+          "maxLength": 100,
           "pattern": "^[^@ \\t\\r\\n]+@[^@ \\t\\r\\n]+\\.[^@ \\t\\r\\n]+$",
           "example": "carlos@mail.com"
         }
@@ -23382,6 +23396,7 @@ func init() {
       "properties": {
         "loginid": {
           "type": "string",
+          "maxLength": 100,
           "example": "carlosg72 || carlos@mail.com"
         },
         "pass": {
@@ -23557,6 +23572,7 @@ func init() {
         },
         "title": {
           "type": "string",
+          "maxLength": 100,
           "example": "Nuevo titulo"
         },
         "visibilidad": {
@@ -23652,6 +23668,7 @@ func init() {
         },
         "title": {
           "type": "string",
+          "maxLength": 100,
           "example": "Paralelismo en C"
         },
         "username": {
@@ -23743,6 +23760,7 @@ func init() {
         "email": {
           "type": "string",
           "format": "email",
+          "maxLength": 100,
           "pattern": "^[^@ \\t\\r\\n]+@[^@ \\t\\r\\n]+\\.[^@ \\t\\r\\n]+$",
           "example": "carlos@mail.com"
         },
@@ -23754,6 +23772,7 @@ func init() {
         },
         "username": {
           "type": "string",
+          "maxLength": 40,
           "pattern": "^[^@ \\t\\r\\n]+$",
           "example": "carlosg72"
         }
@@ -23767,6 +23786,7 @@ func init() {
       "properties": {
         "tag": {
           "type": "string",
+          "maxLength": 100,
           "example": "Java"
         }
       }
@@ -23788,6 +23808,7 @@ func init() {
         },
         "teamname": {
           "type": "string",
+          "maxLength": 40,
           "pattern": "^[^@ \\t\\r\\n]+$",
           "example": "devtestTeam"
         }
@@ -23871,6 +23892,7 @@ func init() {
         },
         "title": {
           "type": "string",
+          "maxLength": 100,
           "example": "Test de introduccion a Java"
         },
         "username": {
@@ -24044,6 +24066,7 @@ func init() {
         "email": {
           "type": "string",
           "format": "email",
+          "maxLength": 100,
           "pattern": "^[^@ \\t\\r\\n]+@[^@ \\t\\r\\n]+\\.[^@ \\t\\r\\n]+$",
           "example": "carlos@mail.com"
         },
@@ -24065,6 +24088,7 @@ func init() {
         },
         "username": {
           "type": "string",
+          "maxLength": 40,
           "pattern": "^[^@ \\t\\r\\n]+$",
           "example": "carlosg72"
         }
@@ -24082,6 +24106,7 @@ func init() {
         "email": {
           "type": "string",
           "format": "email",
+          "maxLength": 100,
           "pattern": "^[^@ \\t\\r\\n]+@[^@ \\t\\r\\n]+\\.[^@ \\t\\r\\n]+$",
           "example": "carlos@mail.com"
         },
@@ -24097,6 +24122,7 @@ func init() {
         },
         "username": {
           "type": "string",
+          "maxLength": 40,
           "pattern": "^[^@ \\t\\r\\n]+$",
           "example": "carlosg72"
         }

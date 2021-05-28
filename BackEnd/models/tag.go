@@ -22,6 +22,7 @@ type Tag struct {
 	// tag
 	// Example: Java
 	// Required: true
+	// Max Length: 100
 	Tag *string `json:"tag"`
 }
 
@@ -42,6 +43,10 @@ func (m *Tag) Validate(formats strfmt.Registry) error {
 func (m *Tag) validateTag(formats strfmt.Registry) error {
 
 	if err := validate.Required("tag", "body", m.Tag); err != nil {
+		return err
+	}
+
+	if err := validate.MaxLength("tag", "body", *m.Tag, 100); err != nil {
 		return err
 	}
 

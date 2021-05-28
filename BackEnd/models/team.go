@@ -31,6 +31,7 @@ type Team struct {
 	// teamname
 	// Example: devtestTeam
 	// Required: true
+	// Max Length: 40
 	// Pattern: ^[^@ \t\r\n]+$
 	Teamname *string `json:"teamname"`
 }
@@ -65,6 +66,10 @@ func (m *Team) validateSoloProfesores(formats strfmt.Registry) error {
 func (m *Team) validateTeamname(formats strfmt.Registry) error {
 
 	if err := validate.Required("teamname", "body", m.Teamname); err != nil {
+		return err
+	}
+
+	if err := validate.MaxLength("teamname", "body", *m.Teamname, 40); err != nil {
 		return err
 	}
 

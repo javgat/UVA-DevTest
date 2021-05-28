@@ -22,6 +22,7 @@ type LoginUser struct {
 	// loginid
 	// Example: carlosg72 || carlos@mail.com
 	// Required: true
+	// Max Length: 100
 	Loginid *string `json:"loginid"`
 
 	// pass
@@ -53,6 +54,10 @@ func (m *LoginUser) Validate(formats strfmt.Registry) error {
 func (m *LoginUser) validateLoginid(formats strfmt.Registry) error {
 
 	if err := validate.Required("loginid", "body", m.Loginid); err != nil {
+		return err
+	}
+
+	if err := validate.MaxLength("loginid", "body", *m.Loginid, 100); err != nil {
 		return err
 	}
 

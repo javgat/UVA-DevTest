@@ -6709,11 +6709,13 @@ definitions:
         type: string
         example: carlosg72
         pattern: '^[^@ \t\r\n]+$'
+        maxLength: 40
       email:
         type: string
         example: carlos@mail.com
         format: email
         pattern: '^[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+$'
+        maxLength: 100
       pass:
         type: string
         example: password
@@ -6729,6 +6731,7 @@ definitions:
         example: carlos@mail.com
         format: email
         pattern: '^[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+$'
+        maxLength: 100
   LoginUser:
     type: object
     required:
@@ -6738,6 +6741,7 @@ definitions:
       loginid:
         type: string
         example: carlosg72 || carlos@mail.com #??????
+        maxLength: 100
       pass:
         type: string
         example: password
@@ -6755,11 +6759,13 @@ definitions:
         type: string
         example: carlosg72
         pattern: '^[^@ \t\r\n]+$'
+        maxLength: 40
       email:
         type: string
         example: carlos@mail.com
         format: email
         pattern: '^[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+$'
+        maxLength: 100
       fullname:
         type: string
         example: Javier Gatón Herguedas
@@ -6781,11 +6787,13 @@ definitions:
         type: string
         example: carlosg72
         pattern: '^[^@ \t\r\n]+$'
+        maxLength: 40
       email:
         type: string
         example: carlos@mail.com
         format: email
         pattern: '^[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+$'
+        maxLength: 100
       fullname:
         type: string
         example: Javier Gatón Herguedas
@@ -6919,6 +6927,7 @@ definitions:
         type: string
         example: devtestTeam
         pattern: '^[^@ \t\r\n]+$'
+        maxLength: 40
       description:
         type: string
         example: DevTest Team
@@ -6983,6 +6992,7 @@ definitions:
       title:
         type: string
         example: Paralelismo en C
+        maxLength: 100
       question:
         type: string
         example: ¿Cual es el lenguaje que tiene un nombre más largo de todos?
@@ -7055,6 +7065,7 @@ definitions:
       title:
         type: string
         example: Test de introduccion a Java
+        maxLength: 100
       description:
         type: string
         example: En este test se evaluaran los conocimientos respecto al lenguaje de programación Java
@@ -7208,7 +7219,8 @@ definitions:
     properties:
       tag:
         type: string
-        example: Java    
+        example: Java 
+        maxLength: 100   
   Review:
     type: object
     required:
@@ -7269,6 +7281,7 @@ definitions:
       title:
         type: string
         example: Nuevo titulo
+        maxLength: 100
       accesoPublico:
         type: boolean
         description: True si no necesitaras invitacion para hacer el test

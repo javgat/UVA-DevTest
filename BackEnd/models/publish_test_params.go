@@ -40,6 +40,7 @@ type PublishTestParams struct {
 	// title
 	// Example: Nuevo titulo
 	// Required: true
+	// Max Length: 100
 	Title *string `json:"title"`
 
 	// visibilidad
@@ -121,6 +122,10 @@ func (m *PublishTestParams) validateTiempoEstricto(formats strfmt.Registry) erro
 func (m *PublishTestParams) validateTitle(formats strfmt.Registry) error {
 
 	if err := validate.Required("title", "body", m.Title); err != nil {
+		return err
+	}
+
+	if err := validate.MaxLength("title", "body", *m.Title, 100); err != nil {
 		return err
 	}
 

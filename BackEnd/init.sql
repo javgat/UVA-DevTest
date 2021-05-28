@@ -73,7 +73,7 @@ CREATE TABLE Usuario (
   email varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   pwhash longtext COLLATE utf8_unicode_ci NOT NULL,
   tipoRolId int(11) NOT NULL,
-  fullname varchar(200) COLLATE utf8_unicode_ci,
+  fullname longtext COLLATE utf8_unicode_ci,
   FOREIGN KEY(tipoRolId) REFERENCES TipoRol(id),
   UNIQUE(username),
   UNIQUE(email),
@@ -108,7 +108,7 @@ CREATE TABLE EquipoUsuario(
 
 CREATE TABLE Test(
   id int(11) NOT NULL AUTO_INCREMENT,
-  title varchar(40) COLLATE utf8_unicode_ci NOT NULL,
+  title varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   description longtext COLLATE utf8_unicode_ci NOT NULL,
   maxMinutes int(11) NOT NULL,
   accesoPublico boolean NOT NULL,
@@ -192,7 +192,7 @@ CREATE TABLE Pregunta(
   editable boolean NOT NULL,
   usuarioid int(11) NOT NULL,
   eleccionUnica boolean,
-  solucion varchar(100) COLLATE utf8_unicode_ci,
+  solucion longtext COLLATE utf8_unicode_ci,
   accesoPublicoNoPublicada boolean NOT NULL,
   penalizacion int(11) NOT NULL,
   cantidadFavoritos int(11) DEFAULT 0,

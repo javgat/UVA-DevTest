@@ -23,6 +23,7 @@ type User struct {
 	// email
 	// Example: carlos@mail.com
 	// Required: true
+	// Max Length: 100
 	// Pattern: ^[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+$
 	// Format: email
 	Email *strfmt.Email `json:"email"`
@@ -44,6 +45,7 @@ type User struct {
 	// username
 	// Example: carlosg72
 	// Required: true
+	// Max Length: 40
 	// Pattern: ^[^@ \t\r\n]+$
 	Username *string `json:"username"`
 }
@@ -77,6 +79,10 @@ func (m *User) Validate(formats strfmt.Registry) error {
 func (m *User) validateEmail(formats strfmt.Registry) error {
 
 	if err := validate.Required("email", "body", m.Email); err != nil {
+		return err
+	}
+
+	if err := validate.MaxLength("email", "body", m.Email.String(), 100); err != nil {
 		return err
 	}
 
@@ -149,6 +155,10 @@ func (m *User) validateRol(formats strfmt.Registry) error {
 func (m *User) validateUsername(formats strfmt.Registry) error {
 
 	if err := validate.Required("username", "body", m.Username); err != nil {
+		return err
+	}
+
+	if err := validate.MaxLength("username", "body", *m.Username, 40); err != nil {
 		return err
 	}
 

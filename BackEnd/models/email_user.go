@@ -22,6 +22,7 @@ type EmailUser struct {
 	// email
 	// Example: carlos@mail.com
 	// Required: true
+	// Max Length: 100
 	// Pattern: ^[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+$
 	// Format: email
 	Email *strfmt.Email `json:"email"`
@@ -44,6 +45,10 @@ func (m *EmailUser) Validate(formats strfmt.Registry) error {
 func (m *EmailUser) validateEmail(formats strfmt.Registry) error {
 
 	if err := validate.Required("email", "body", m.Email); err != nil {
+		return err
+	}
+
+	if err := validate.MaxLength("email", "body", m.Email.String(), 100); err != nil {
 		return err
 	}
 

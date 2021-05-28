@@ -88,6 +88,7 @@ type Test struct {
 	// title
 	// Example: Test de introduccion a Java
 	// Required: true
+	// Max Length: 100
 	Title *string `json:"title"`
 
 	// username
@@ -266,6 +267,10 @@ func (m *Test) validateTiempoEstricto(formats strfmt.Registry) error {
 func (m *Test) validateTitle(formats strfmt.Registry) error {
 
 	if err := validate.Required("title", "body", m.Title); err != nil {
+		return err
+	}
+
+	if err := validate.MaxLength("title", "body", *m.Title, 100); err != nil {
 		return err
 	}
 
