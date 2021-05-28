@@ -188,6 +188,15 @@ export class ListTestsComponent extends LoggedInController implements OnInit {
     this.getTestsFilters()
   }
 
+  clickOrderByFechaPub(){
+    if(this.orderBy == EnumOrderBy.oldDate){
+      this.orderBy = EnumOrderBy.newDate
+    }else{
+      this.orderBy = EnumOrderBy.oldDate
+    }
+    this.getTestsFilters()
+  }
+
   isMoreTimeSelected(): boolean{
     return this.orderBy == EnumOrderBy.moreTime
   }
@@ -202,6 +211,14 @@ export class ListTestsComponent extends LoggedInController implements OnInit {
 
   isLessFavSelected(): boolean{
     return this.orderBy == EnumOrderBy.lessFav
+  }
+
+  isNewDateSelected(): boolean{
+    return this.orderBy == EnumOrderBy.newDate
+  }
+
+  isOldDateSelected(): boolean{
+    return this.orderBy == EnumOrderBy.oldDate
   }
 
   getCurrentPage(): number{
@@ -242,5 +259,11 @@ export class ListTestsComponent extends LoggedInController implements OnInit {
       },
       err => this.handleErrRelog(err, "obtener tags de tests mas comunes", primera, this.getAutoTags, this)
     )
+  }
+  
+  printDate(d: Date | undefined): string{
+    if(d==undefined) return ""
+    var date = new Date(d)
+    return date.toLocaleString()
   }
 }

@@ -59,6 +59,11 @@
                         <span class="arrow-orderby" *ngIf="!isMoreTimeSelected() && !isLessTimeSelected()">
                             &#8597;</span>
                     </th>
+                    <th role="button" (click)="clickOrderByFechaPub()">Fecha de Publicación
+                        <span class="arrow-orderby" *ngIf="isNewDateSelected()"> &uarr;</span>
+                        <span class="arrow-orderby" *ngIf="isOldDateSelected()"> &darr;</span>
+                        <span class="arrow-orderby" *ngIf="!isOldDateSelected() && !isNewDateSelected()"> &#8597;</span>
+                    </th>
                     <th *ngIf="!arePublished" role="button" (click)="clickOrderByFavoritos()">
                         Favoritos
                         <span class="arrow-orderby" *ngIf="isMoreFavSelected()"> &uarr;</span>
@@ -72,6 +77,7 @@
                     <td>{{test.title}}</td>
                     <td>{{test.username}}</td>
                     <td>{{test.maxMinutes}} minutos</td>
+                    <td>{{printDate(test.horaCreacion)}}</td>
                     <td>{{test.cantidadFavoritos}}</td>
                 </tr>
             </tbody>
@@ -80,6 +86,7 @@
                     <td>{{test.title}}</td>
                     <td>{{test.username}}</td>
                     <td>{{test.maxMinutes}} minutos</td>
+                    <td>{{printDate(test.horaCreacion)}}</td>
                 </tr>
             </tbody>
         </table>
