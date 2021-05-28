@@ -32,10 +32,12 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
   isFavorita: boolean
   testid?: number
   autotags: Tag[]
+  private editandoRespuesta: boolean
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private qS: QuestionService,
     private route: ActivatedRoute, private tagS: TagService) {
     super(session, router, data, userS)
     this.isInAdminTeam = false
+    this.editandoRespuesta = false
     this.newTag = {
       tag: ""
     }
@@ -248,6 +250,7 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
   }
 
   putQuestionSubmit() {
+    this.stopEditarRespuesta()
     this.putQuestion(true)
   }
 
@@ -355,4 +358,23 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
     return this.nuevaOpcion.texto == "" || this.nuevaOpcion.texto == undefined
   }
 
+  clickEditarRespuesta(){
+    this.editandoRespuesta = true
+  }
+
+  clickStopEditarRespuesta(){
+    this.stopEditarRespuesta()
+  }
+
+  stopEditarRespuesta(){
+    this.editandoRespuesta = false
+  }
+
+  isEditandoRespuesta(): boolean{
+    return this.editandoRespuesta
+  }
+
+  needsStopEditarRespuesta(): boolean{
+    return this.question.tipoPregunta == "opciones"
+  }
 }

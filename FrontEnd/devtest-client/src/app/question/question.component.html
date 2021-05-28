@@ -100,11 +100,15 @@
     </div>
     <div class="my-3">
         <h3>Respuesta:</h3>
+        <div class="d-grid gap-2" *ngIf="checkPermisosEdicion()">
+            <button *ngIf="!isEditandoRespuesta()" type="button" class="btn btn-warning btn-lg" (click)="clickEditarRespuesta()">Editar Respuesta Esperada</button>
+            <button *ngIf="isEditandoRespuesta() && needsStopEditarRespuesta()" type="button" class="btn btn-secondary btn-lg" (click)="clickStopEditarRespuesta()">Dejar de Editar Respuesta</button>
+        </div>
         <div class="m-3" *ngIf="question.tipoPregunta=='string'">
             <p>Respuesta esperada:</p>
             <p>{{question.solucion}}</p>
             <form class="my-4" (ngSubmit)='putQuestionSubmit()' ngNativeValidate>
-                <div *ngIf="checkPermisosEdicion()">
+                <div *ngIf="isEditandoRespuesta()">
                     <h5>Modificar respuesta esperada:</h5>
                     <div class="input-group my-3">
                         <input type="text" class="form-control" name="inputAddOption"
@@ -118,7 +122,7 @@
         <div class="m-3" *ngIf="question.tipoPregunta=='opciones'">
             <h4>Opciones:</h4>
             <form (ngSubmit)='addOptionSubmit()' ngNativeValidate>
-                <div *ngIf="checkPermisosEdicion()" class="input-group my-3">
+                <div *ngIf="isEditandoRespuesta()" class="input-group my-3">
                     <input class="button btn btn-primary" type="submit" value="Añadir opción"
                         [disabled]="anadirOpcionDisabled()" />
                     <input type="text" class="form-control" name="inputAddOption" [(ngModel)]="nuevaOpcion.texto"
@@ -153,21 +157,21 @@
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" id="radioCorrecta{{opc.indice}}"
                                             role="button" [checked]="opc.correcta" (change)="changeCorrectaOpc(opc)"
-                                            [disabled]="!checkPermisosEdicion()">
+                                            [disabled]="!isEditandoRespuesta()">
                                         <label class="form-check-label" role="button"
                                             for="radioCorrecta{{opc.indice}}">Respuesta correcta</label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" id="radioIncorrecta{{opc.indice}}"
                                             role="button" [checked]="!opc.correcta" (change)="changeCorrectaOpc(opc)"
-                                            [disabled]="!checkPermisosEdicion()">
+                                            [disabled]="!isEditandoRespuesta()">
                                         <label class="form-check-label" role="button"
                                             for="radioIncorrecta{{opc.indice}}">Respuesta incorrecta</label>
                                     </div>
                                 </div>
                                 <div class="col-sm">
                                     <div class="btn-group dropstart d-grid gap-2 d-md-flex d-inline-flex justify-content-md-end col-sm"
-                                        role="button" *ngIf="checkPermisosEdicion()">
+                                        role="button" *ngIf="isEditandoRespuesta()">
                                         <a data-bs-toggle="dropdown" class="link-dark" aria-expanded="false">
                                             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24"
                                                 width="24px" fill="currentColor">
