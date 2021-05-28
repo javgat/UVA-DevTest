@@ -1,5 +1,4 @@
 <div class="mt-2">
-    <app-mensaje></app-mensaje>
     <button *ngIf="testid!=undefined" class="button btn btn-outline-primary m-3" [routerLink]="['/pt', testid]">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
             class="bi bi-chevron-double-left" viewBox="0 0 16 16">
@@ -101,7 +100,6 @@
     </div>
     <div class="my-3">
         <h3>Respuesta:</h3>
-        <app-mensaje></app-mensaje>
         <div class="m-3" *ngIf="question.tipoPregunta=='string'">
             <p>Respuesta esperada:</p>
             <p>{{question.solucion}}</p>

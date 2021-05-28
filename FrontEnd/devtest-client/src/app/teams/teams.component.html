@@ -1,5 +1,4 @@
 <div class="mt-5">
-    <app-mensaje></app-mensaje>
     <h2 class="text-center fw-bold">Tus Equipos</h2>
     <div *ngIf="getSessionUser().isTeacherOrAdmin()" class="d-grid gap-2 my-4">
         <a class="button btn btn-primary btn-lg" [routerLink]="['/createTeam']">CREAR EQUIPO</a>
