@@ -54,9 +54,7 @@ export class MensajeComponent implements OnInit {
       clearTimeout(this.timerId);
       this.timerId = undefined
     }
-    console.log(this.getMensaje().trueType)
     if(this.getMensaje().trueType == Tipo.SUCCESS){
-      console.log("en 3 secs adios")
       this.timerId = setTimeout(this.ocultarMensajeOther, 2500, this)
     }
   }
