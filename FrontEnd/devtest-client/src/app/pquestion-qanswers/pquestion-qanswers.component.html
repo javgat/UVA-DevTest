@@ -9,8 +9,7 @@
         </svg>
         Volver a la pregunta
     </button>
-    <div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message" role="alert">
-        {{getMensaje().texto}}</div>
+    <app-mensaje></app-mensaje>
     <h3>Respuestas entregadas para la pregunta:</h3>
     <app-lqa-question></app-lqa-question>
 </div>

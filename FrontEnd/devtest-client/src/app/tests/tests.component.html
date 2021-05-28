@@ -1,6 +1,5 @@
 <div class="mt-5">
-    <div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message" role="alert">
-        {{getMensaje().texto}}</div>
+    <app-mensaje></app-mensaje>
     <h2 class="text-center fw-bold">Tests Borradores</h2>
     <div class="d-grid gap-2 my-4">
         <a class="button btn btn-primary btn-lg mb-3" [routerLink]="['/etCreate']">CREAR TEST</a>

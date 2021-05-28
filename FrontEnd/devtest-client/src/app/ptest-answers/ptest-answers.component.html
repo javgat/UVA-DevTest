@@ -1,6 +1,5 @@
 <div class="mt-2">
-    <div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message" role="alert">
-        {{getMensaje().texto}}</div>
+    <app-mensaje></app-mensaje>
     <button class="button btn btn-outline-primary m-3"
         [routerLink]="['/pt', test.id]">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"

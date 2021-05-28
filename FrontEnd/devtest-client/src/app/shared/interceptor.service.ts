@@ -1,7 +1,8 @@
 import { HttpHandler, HttpHeaderResponse, HttpInterceptor, HttpProgressEvent, HttpRequest, HttpResponse, HttpSentEvent, HttpUserEvent } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
-import { SessionLogin } from './app.model';
+import { Mensaje, SessionLogin, Tipo } from './app.model';
+import { DataService } from './data.service';
 import { SessionService } from './session.service';
 
 @Injectable({
@@ -11,7 +12,7 @@ export class CustomHttpInterceptorService implements HttpInterceptor {
 
   sessionLogin: SessionLogin
   sessionSubscription: Subscription
-  constructor(private session: SessionService) {
+  constructor(private session: SessionService, private data: DataService) {
     this.sessionLogin = new SessionLogin(false)
     this.sessionSubscription = this.session.sessionLogin.subscribe(
       valor => {
@@ -22,6 +23,21 @@ export class CustomHttpInterceptorService implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler):
     Observable<HttpSentEvent | HttpHeaderResponse | HttpProgressEvent | HttpResponse<any> | HttpUserEvent<any>> {
+    switch(req.method){
+      case "PUT":
+      case "DELETE":
+      case "POST": {
+        this.data.cambiarMensaje(new Mensaje("Guardando datos...", Tipo.SENDING, true))
+        break;
+      }
+      case "GET":{
+        this.data.borrarMensajeIfLoading()
+        break;
+      }
+      default: {
+        break;
+      }
+    }
     let notLoggedIn = 'true'
     if (this.sessionLogin.isLoggedIn()) {
       notLoggedIn = 'false'

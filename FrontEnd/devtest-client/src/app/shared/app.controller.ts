@@ -13,8 +13,6 @@ export abstract class LoggedInController {
     private sessionSubscription: Subscription
     private sessionUserSubscription: Subscription
     private sessionTipoRolesSubscription: Subscription
-    private mensaje: Mensaje
-    private messageSubscription: Subscription
 
     private sessionLoginWaited: boolean
     private sessionUserWaited: boolean
@@ -23,7 +21,6 @@ export abstract class LoggedInController {
         this.session.checkStorageSession()
         this.sessionLogin = new SessionLogin(false)
         this.sessionUser = new SessionUser()
-        this.mensaje = new Mensaje()
         this.sessionTipoRoles = []
         this.sessionLoginWaited = false
         this.sessionUserWaited = false
@@ -49,9 +46,6 @@ export abstract class LoggedInController {
                 this.sessionUser = valor
                 this.doUserSubscriptionAction()
             }
-        )
-        this.messageSubscription = this.data.mensajeActual.subscribe(
-            valor => this.mensaje = valor
         )
     }
 
@@ -132,12 +126,7 @@ export abstract class LoggedInController {
     onDestroy() {
         this.sessionSubscription.unsubscribe()
         this.sessionUserSubscription.unsubscribe()
-        this.messageSubscription.unsubscribe();
         this.sessionTipoRolesSubscription.unsubscribe()
-    }
-
-    getMensaje(): Mensaje {
-        return this.mensaje
     }
 
     cambiarMensaje(m: Mensaje) {

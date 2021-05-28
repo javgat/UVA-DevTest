@@ -19,8 +19,7 @@
         </svg>
         Ver todas tus respuestas al test
     </button>
-    <div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message" role="alert">
-        {{getMensaje().texto}}</div>
+    <app-mensaje></app-mensaje>>
     <h3>Respuesta al test <a [routerLink]="['/pt', testid]">{{test.title}}</a></h3>
     <p><b>Autor: </b><a [routerLink]="['/profile', answer.username]">{{answer.username}}</a></p>
     <p><b>Entregada: </b><span *ngIf="answer.entregado">Sí</span><span *ngIf="!answer.entregado">No</span></p>

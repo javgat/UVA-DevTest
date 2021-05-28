@@ -1,7 +1,6 @@
 <div class="mt-5">
     <h2>Crear Test Borrador</h2>
-    <div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message" role="alert">
-        {{getMensaje().texto}}</div>
+    <app-mensaje></app-mensaje>
     <form (ngSubmit)='testSubmit()' ngNativeValidate>
         <div class="mb-3">
             <label for="inputTitle" class="form-label">Título del test</label>

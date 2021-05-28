@@ -1,6 +1,5 @@
 <div class="container my-5">
-    <div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message" role="alert">
-        {{getMensaje().texto}}</div>
+    <app-mensaje></app-mensaje>
     <h2>Usuario: {{profileUser.getUsername()}}</h2>
     <hr />
     <div class="row">

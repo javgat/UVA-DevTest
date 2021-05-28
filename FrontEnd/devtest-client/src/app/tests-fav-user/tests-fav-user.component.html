@@ -1,6 +1,5 @@
 <div class="mt-5">
-    <div class="alert alert-{{getMensaje().type}}" *ngIf="getMensaje().mostrar" id="message" role="alert">
-        {{getMensaje().texto}}</div>
+    <app-mensaje></app-mensaje>
     <h2 class="text-center fw-bold">Tests Borradores favoritos de <a class="link-dark" [routerLink]="['/profile', username]">{{username}}</a></h2>
     <app-lt-favs-user></app-lt-favs-user>
 </div>
