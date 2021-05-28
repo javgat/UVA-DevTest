@@ -219,6 +219,7 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
     }
     this.testS.addQuestionToTest(this.id, this.addQuestionId, tp).subscribe(
       resp => {
+        this.cambiarMensaje(new Mensaje("Pregunta añadida al test con éxito", Tipo.SUCCESS, true))
         this.getTest(true)
       },
       err => this.handleErrRelog(err, "añadir pregunta a test", primera, this.addQuestion, this)
@@ -303,7 +304,10 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
   quitarPregunta(primera: boolean) {
     if (this.test.id == undefined) return
     this.testS.removeQuestionFromTest(this.test.id, this.preguntaQuitando).subscribe(
-      resp => this.getTest(true),
+      resp => {
+        this.cambiarMensaje(new Mensaje("Pregunta quitada del test con éxito", Tipo.SUCCESS, true))
+        this.getTest(true)
+      },
       err => this.handleErrRelog(err, "quitar pregunta de test", primera, this.quitarPregunta, this)
     )
   }

@@ -166,7 +166,9 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
       return
     }
     this.qS.putOption(this.id, this.op.indice, this.op).subscribe(
-      resp => { },
+      resp => {
+        this.cambiarMensaje(new Mensaje("Valor de opción modificado", Tipo.SUCCESS, true))
+      },
       err => this.handleErrRelog(err, "cambiar campo de correccion de una opcion", primera, this.changeCorrecta, this)
     )
   }
