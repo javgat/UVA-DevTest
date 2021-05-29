@@ -39,7 +39,7 @@ export class LoggedInComponent extends MainComponent implements OnInit {
       resp => {
         this.vistaPers = new VistaPersonalizada(resp)
       },
-      err => this.handleErrRelog(err, "obtener datos personalizados de la vista segun el rol", primera, this.getVistaPersonalizada, this)
+      err => this.handleErrRelog(err, "obtener datos personalizados de la vista segun el rol "+this.getSessionUser().getRol(), primera, this.getVistaPersonalizada, this)
     )
   }
 
