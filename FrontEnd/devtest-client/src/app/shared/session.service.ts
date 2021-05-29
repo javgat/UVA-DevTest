@@ -22,16 +22,20 @@ export class SessionService {
   sessionTipoRoles = this.tipoRoles.asObservable()
 
   constructor(private auth: AuthService, private data: DataService, private trS: TiporolService) { }
-  
+
+  private localStorageLoggedKey = 'logged'
+  private localStorageUsernameKey = 'username'
+  private localStorageTipoRolesKey = 'tipoRoles'
+
   // Actualiza la sesión a la pasada por parametro.
-  cambiarSession(session:SessionLogin){
-    localStorage.setItem('logged', String(session.isLoggedIn()))
-    localStorage.setItem('username', String(session.getUserUsername()))
+  cambiarSession(session: SessionLogin) {
+    localStorage.setItem(this.localStorageLoggedKey, String(session.isLoggedIn()))
+    localStorage.setItem(this.localStorageUsernameKey, String(session.getUserUsername()))
     this.session.next(session)
   }
 
   // Desautentica al usuario. Elimina la sesión.
-  borrarSession(){
+  borrarSession() {
     this.cambiarSession(new SessionLogin(false))
     this.auth.logout().subscribe(
       _ => console.log("Sesion cerrada con exito"),
@@ -39,54 +43,85 @@ export class SessionService {
     )
   }
 
-  logout(){
+  logout() {
     this.borrarSession()
     this.borrarUser()
   }
 
-  checkStorageSession(){
-    var logged = localStorage.getItem('logged')
-    var username = localStorage.getItem('username')
+  checkStorageSession() {
+    var logged = localStorage.getItem(this.localStorageLoggedKey)
+    var username = localStorage.getItem(this.localStorageUsernameKey)
     var loggedBool
-    if(logged == null || username == null){
+    if (logged == null || username == null) {
       username = ""
       loggedBool = false
-    }else{
-      loggedBool = ("true"==logged)
+    } else {
+      loggedBool = ("true" == logged)
     }
     this.cambiarSession(new SessionLogin(loggedBool, username))
-    this.updateTipoRoles(true)
+    var tipoRolesStorage = this.getWithExpiry(this.localStorageTipoRolesKey)
+    if(tipoRolesStorage == null){
+      this.updateTipoRoles(true)
+    }else{
+      this.cambiarSessionTipoRoles(tipoRolesStorage as TipoRol[])
+    }
   }
 
-  cambiarUser(user:SessionUser){
+  // ttl = milliseconds
+  setWithExpiry(key: string, value: any, ttl: number) {
+    const now = new Date()
+    const item = {
+      value: value,
+      expiry: now.getTime() + ttl,
+    }
+    localStorage.setItem(key, JSON.stringify(item))
+  }
+
+  // if the item doesn't exist, return null
+  getWithExpiry(key: string) {
+    const itemStr = localStorage.getItem(key)
+    if (!itemStr) {
+      return null
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return null
+    }
+    return item.value
+  }
+
+  cambiarUser(user: SessionUser) {
     this.user.next(user)
   }
 
-  borrarUser(){
+  borrarUser() {
     this.cambiarUser(new SessionUser())
   }
-  
-  cambiarSessionTipoRoles(ntrs: TipoRol[]){
+
+  cambiarSessionTipoRoles(ntrs: TipoRol[]) {
     this.tipoRoles.next(ntrs)
   }
 
-  updateTipoRoles(primera: boolean){
+  updateTipoRoles(primera: boolean) {
     this.trS.getTipoRoles().subscribe(
-      resp=>{
+      resp => {
         this.cambiarSessionTipoRoles(resp)
+        this.setWithExpiry(this.localStorageTipoRolesKey, resp, 5*60000) // lo guarda 5 minutos
       },
-      err=> this.handleErrRelog(err, "obtener tipo de roles", primera, this.updateTipoRoles, this)
+      err => this.handleErrRelog(err, "obtener tipo de roles", primera, this.updateTipoRoles, this)
     )
   }
 
-  handleErrRelog<T>(err: any, action: string, primera: boolean, callbackFn: (this: T, prim: boolean) => void, that: T): void{
-    if (err.status==401){
-      if(!primera){
+  handleErrRelog<T>(err: any, action: string, primera: boolean, callbackFn: (this: T, prim: boolean) => void, that: T): void {
+    if (err.status == 401) {
+      if (!primera) {
         this.data.handleShowErr(err, "alargar sesión de usuario")
         this.logout()
-      }else{
+      } else {
         this.auth.relogin().subscribe(
-          resp =>{
+          resp => {
             return callbackFn.call(that, false)
           },
           err => {
@@ -95,7 +130,7 @@ export class SessionService {
           }
         )
       }
-    }else{
+    } else {
       this.data.handleShowErr(err, action)
     }
   }
