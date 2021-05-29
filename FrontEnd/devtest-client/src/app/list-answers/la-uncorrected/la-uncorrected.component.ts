@@ -30,7 +30,7 @@ export class LaUncorrectedComponent extends ListAnswersComponent implements OnIn
     this.canOrderByPuntuacion = true
     this.ptestS.getUncorrectedAnswersFromPublishedTests(this.testid, this.orderBy).subscribe(
       resp => {
-        this.answers = resp
+        this.ptestAnswersRecieved(resp)
       },
       err => {
         this.handleErrRelog(err, "obtener respuestas no corregidas de test", primera, this.getPTestAllAnswers, this)
@@ -44,7 +44,7 @@ export class LaUncorrectedComponent extends ListAnswersComponent implements OnIn
     if(this.likeUsername==undefined) return
     this.userS.getUncorrectedAnswersFromUserAnsweredTest(this.likeUsername, this.testid).subscribe(
       resp =>{
-        this.answers = resp
+        this.ptestAnswersRecieved(resp)
       },
       err => {
         this.handleErrRelog(err, "obtener respuestas no corregidas de test y usuario", primera, this.getPTestAnswersFromUser, this)

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Question, QuestionService, Tag, TagService, TeamService, UserService } from '@javgat/devtest-api';
 import { LoggedInController } from '../shared/app.controller';
-import { EnumOrderBy, tipoPrint } from '../shared/app.model';
+import { EnumOrderBy, Mensaje, Tipo, tipoPrint } from '../shared/app.model';
 import { DataService } from '../shared/data.service';
 import { SessionService } from '../shared/session.service';
 
@@ -59,7 +59,7 @@ export class ListQuestionsComponent extends LoggedInController implements OnInit
   // esta funcion se tiene que sobreescribir
   getQuestionsInclude(primera: boolean) {
     this.qS.getQuestions(this.searchTags, this.likeTitle, this.orderBy, this.limit, this.offset).subscribe(
-      resp => this.questions = resp,
+      resp => this.saveQuestions(resp),
       err => this.handleErrRelog(err, "obtener preguntas", primera, this.getQuestionsInclude, this)
     )
   }
@@ -67,14 +67,20 @@ export class ListQuestionsComponent extends LoggedInController implements OnInit
   // esta funcion se tiene que sobreescribir
   getQuestionsEdit(primera: boolean) {
     this.qS.getEditQuestions(this.searchTags, this.likeTitle, this.orderBy, this.limit, this.offset).subscribe(
-      resp => this.questions = resp,
+      resp => this.saveQuestions(resp),
       err => this.handleErrRelog(err, "obtener preguntas no publicadas", primera, this.getQuestionsEdit, this)
     )
   }
 
   selectQuestion(id: number | undefined){}
 
+  saveQuestions(resp: Question[]){
+    this.questions = resp
+    this.borrarMensaje()
+  }
+
   getQuestionsFilters() {
+    this.cambiarMensaje(new Mensaje("Descargando preguntas... ", Tipo.DOWNLOADING, true))
     if (this.includeNonEdit) {
       this.getQuestionsInclude(true)
     } else {

@@ -28,14 +28,14 @@ export class LqaQuestionComponent extends ListQAnswersComponent implements OnIni
 
   getQAnswers(primera: boolean) {
     this.ptestS.getQuestionAnswersFromPublishedTestQuestion(this.testid, this.questionid, this.likeUsername).subscribe(
-      resp => this.questionAnswers = resp,
+      resp => this.saveQAnswers(resp),
       err => this.handleErrRelog(err, "obtener respuestas a la pregunta de todos los usuarios", primera, this.getQAnswers, this)
     )
   }
 
   getQuestionsTest(primera: boolean) {
     this.ptestS.getQuestionsFromPublishedTests(this.testid).subscribe(
-      resp => this.questions = resp,
+      resp => this.saveQuestionsTest(resp),
       err => this.handleErrRelog(err, "obtener preguntas del test", primera, this.getQuestionsTest, this)
     )
   }

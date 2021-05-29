@@ -38,7 +38,7 @@ export class LqProfilePublicComponent extends ListQuestionsComponent implements 
     //No hay getPublicQUestionsOfUser en la API
     if(this.id==undefined) return
     this.userS.getPublicEditQuestionsOfUser(this.id, this.searchTags, this.likeTitle, this.orderBy).subscribe(
-      resp => this.questions = resp,
+      resp => this.saveQuestions(resp),
       err => this.handleErrRelog(err, "obtener preguntas no publicadas publicas de un usuario", primera, this.getQuestionsInclude, this)
     )
   }
@@ -46,7 +46,7 @@ export class LqProfilePublicComponent extends ListQuestionsComponent implements 
   getQuestionsEdit(primera: boolean) {
     if(this.id==undefined) return
     this.userS.getPublicEditQuestionsOfUser(this.id, this.searchTags, this.likeTitle, this.orderBy).subscribe(
-      resp => this.questions = resp,
+      resp => this.saveQuestions(resp),
       err => this.handleErrRelog(err, "obtener preguntas no publicadas publicas de un usuario", primera, this.getQuestionsEdit, this)
     )
   }

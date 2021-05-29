@@ -40,7 +40,7 @@ export class LptInvitedUserComponent extends ListTestsComponent implements OnIni
   getTestsInclude(primera: boolean) {
     if(this.id==undefined) return
     this.userS.getInvitedTestsByTeamsAndUser(this.id, this.searchTags, this.likeTitle, this.orderBy, this.limit, this.offset).subscribe(
-      resp => this.tests = resp,
+      resp => this.saveTests(resp),
       err => this.handleErrRelog(err, "obtener tests invitados directa o indirectamente de un usuario", primera, this.getTestsInclude, this)
     )
   }
@@ -49,7 +49,7 @@ export class LptInvitedUserComponent extends ListTestsComponent implements OnIni
   getTestsEdit(primera: boolean) {
     if(this.id==undefined) return
     this.userS.getInvitedTestsFromUser(this.id, this.searchTags, this.likeTitle, this.orderBy, this.limit, this.offset).subscribe(
-      resp => this.tests = resp,
+      resp => this.saveTests(resp),
       err => this.handleErrRelog(err, "obtener tests invitados directos a un usuario", primera, this.getTestsEdit, this)
     )
   }

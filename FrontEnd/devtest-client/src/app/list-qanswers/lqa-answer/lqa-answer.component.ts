@@ -26,14 +26,14 @@ export class LqaAnswerComponent extends ListQAnswersComponent implements OnInit 
 
   getQAnswers(primera: boolean) {
     this.answerS.getQuestionAnswersFromAnswer(this.answerid).subscribe(
-      resp => this.questionAnswers = resp,
+      resp => this.saveQAnswers(resp),
       err => this.handleErrRelog(err, "obtener respuestas a preguntas del test", primera, this.getQAnswers, this)
     )
   }
 
   getQuestionsTest(primera: boolean) {
     this.ptestS.getQuestionsFromPublishedTests(this.testid).subscribe(
-      resp => this.questions = resp,
+      resp => this.saveQuestionsTest(resp),
       err => this.handleErrRelog(err, "obtener preguntas del test", primera, this.getQuestionsTest, this)
     )
   }

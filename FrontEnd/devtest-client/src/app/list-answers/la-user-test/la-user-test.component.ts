@@ -41,7 +41,7 @@ export class LaUserTestComponent extends ListAnswersComponent implements OnInit 
     if (this.likeUsername == undefined) return
     this.userS.getAnswersFromUserAnsweredTest(this.likeUsername, this.testid, this.orderBy).subscribe(
       resp => {
-        this.answers = resp
+        this.ptestAnswersRecieved(resp)
       },
       err => {
         this.handleErrRelog(err, "obtener respuestas corregidas de test y usuario", primera, this.getPTestAllAnswers, this)

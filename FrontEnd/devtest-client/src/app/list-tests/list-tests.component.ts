@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Tag, TagService, TeamService, Test, TestService, UserService } from '@javgat/devtest-api';
 import { LoggedInController } from '../shared/app.controller';
-import { EnumOrderBy, tipoPrint } from '../shared/app.model';
+import { EnumOrderBy, Mensaje, Tipo, tipoPrint } from '../shared/app.model';
 import { DataService } from '../shared/data.service';
 import { SessionService } from '../shared/session.service';
 @Component({
@@ -63,12 +63,18 @@ export class ListTestsComponent extends LoggedInController implements OnInit {
   // esta funcion se tiene que sobreescribir
   getTestsEdit(primera: boolean) {
     this.tS.getPublicEditTests(this.searchTags, this.likeTitle, this.orderBy, this.limit, this.offset).subscribe(
-      resp => this.tests = resp,
+      resp => this.saveTests(resp),
       err => this.handleErrRelog(err, "obtener preguntas no publicadas", primera, this.getTestsEdit, this)
     )
   }
 
+  saveTests(resp: Test[]){
+    this.tests = resp
+    this.borrarMensaje()
+  }
+
   getTestsFilters() {
+    this.cambiarMensaje(new Mensaje("Descargando tests... ", Tipo.DOWNLOADING, true))
     if (this.includeNonEdit) {
       this.getTestsInclude(true)
     } else {

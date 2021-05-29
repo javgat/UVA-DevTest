@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { User, UserService } from '@javgat/devtest-api';
 import { LoggedInController } from '../shared/app.controller';
+import { Mensaje, Tipo } from '../shared/app.model';
 import { DataService } from '../shared/data.service';
 import { SessionService } from '../shared/session.service';
 
@@ -37,14 +38,20 @@ export class ListUsersComponent extends LoggedInController implements OnInit {
     this.getUsersFilters()
   }   
 
+  saveUsers(resp: User[]){
+    this.users = resp
+    this.borrarMensaje()
+  }
+
   getUsersFilters(){
+    this.cambiarMensaje(new Mensaje("Descargando usuarios... ", Tipo.DOWNLOADING, true))
     this.getUsers(true)
   }
 
   getUsers(primera: boolean){
     this.userS.getUsers(this.likeUsername).subscribe(
       resp => {
-        this.users = resp
+        this.saveUsers(resp)
       },
       err => this.handleErrRelog(this.handleErrRelog, "obtener la lista de usuarios", primera, this.getUsers, this)
     )

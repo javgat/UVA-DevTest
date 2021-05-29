@@ -32,7 +32,7 @@ export class LqAdminTeamComponent extends ListQuestionsComponent implements OnIn
   getQuestionsEdit(primera: boolean) {
     if(this.teamname=="" || this.teamname==undefined || this.teamS == undefined) return
     this.teamS.getQuestionsFromTeam(this.teamname, this.searchTags, this.likeTitle, this.orderBy).subscribe(
-      resp => this.questions = resp,
+      resp => this.saveQuestions(resp),
       err => this.handleErrRelog(err, "obtener preguntas de un equipo", primera, this.getQuestionsInclude, this)
     )
   }

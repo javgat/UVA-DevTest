@@ -41,7 +41,7 @@ export class LtUserComponent extends ListTestsComponent implements OnInit {
   getTestsEdit(primera: boolean) {
     if(this.id==undefined) return
     this.userS.getEditTestsFromUser(this.id, this.searchTags, this.likeTitle, this.orderBy, this.limit, this.offset).subscribe(
-      resp => this.tests = resp,
+      resp => this.saveTests(resp),
       err => this.handleErrRelog(err, "obtener tests no publicados de un usuario", primera, this.getTestsEdit, this)
     )
   }

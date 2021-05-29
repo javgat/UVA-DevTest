@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Answer, PublishedTestService, UserService } from '@javgat/devtest-api';
 import { Subscription } from 'rxjs';
 import { LoggedInController } from '../shared/app.controller';
-import { EnumOrderByAnswer, Examen } from '../shared/app.model';
+import { EnumOrderByAnswer, Examen, Mensaje, Tipo } from '../shared/app.model';
 import { DataService } from '../shared/data.service';
 import { SessionService } from '../shared/session.service';
 
@@ -83,17 +83,23 @@ export class ListAnswersComponent extends LoggedInController implements OnInit {
   }
 
   getPTestAnswers(){
+    this.cambiarMensaje(new Mensaje("Descargando respuestas... ", Tipo.DOWNLOADING, true))
     if(this.likeUsername == undefined)
       this.getPTestAllAnswers(true)
     else
       this.getPTestAnswersFromUser(true)
   }
 
+  ptestAnswersRecieved(resp: Answer[]){
+    this.borrarMensaje()
+    this.answers = resp
+  }
+
   //Sobreescribir
   getPTestAllAnswers(primera: boolean){
     this.ptestS.getAnswersFromPublishedTests(this.testid).subscribe(
       resp => {
-        this.answers = resp
+        this.ptestAnswersRecieved(resp)
       },
       err => {
         this.handleErrRelog(err, "obtener respuestas de test", primera, this.getPTestAllAnswers, this)
@@ -106,7 +112,7 @@ export class ListAnswersComponent extends LoggedInController implements OnInit {
     if(this.likeUsername==undefined) return
     this.userS.getAnswersFromUserAnsweredTest(this.likeUsername, this.testid).subscribe(
       resp =>{
-        this.answers = resp
+        this.ptestAnswersRecieved(resp)
       },
       err => {
         this.handleErrRelog(err, "obtener respuestas de test y usuario", primera, this.getPTestAnswersFromUser, this)

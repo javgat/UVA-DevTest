@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Answer, AnswerService, PublishedTestService, Question, QuestionAnswer, UserService } from '@javgat/devtest-api';
 import { Subscription } from 'rxjs';
 import { LoggedInController } from '../shared/app.controller';
-import { bgcolorQAnswerPuntuacion, Respuesta, tipoPrint } from '../shared/app.model';
+import { bgcolorQAnswerPuntuacion, Mensaje, Respuesta, Tipo, tipoPrint } from '../shared/app.model';
 import { DataService } from '../shared/data.service';
 import { SessionService } from '../shared/session.service';
 
@@ -44,8 +44,8 @@ export class ListQAnswersComponent extends LoggedInController implements OnInit 
       this.questionid = params['questionid']
       this.borrarMensaje()
       if (this.getSessionUser().getUsername() != undefined && this.getSessionUser().getUsername() != "") {
-        this.getQAnswers(true)
-        this.getQuestionsTest(true)
+        this.getWantedQAnswers()
+        this.getWantedQuestionsTest()
       }
     });
   }
@@ -60,13 +60,33 @@ export class ListQAnswersComponent extends LoggedInController implements OnInit 
 
   doHasUserAction() {
     if (this.isDefinido(this.testid) && (this.isDefinido(this.answerid) || this.isDefinido(this.questionid))) {
-      this.getQAnswers(true)
-      this.getQuestionsTest(true)
+      this.getWantedQAnswers()
+      this.getWantedQuestionsTest()
     }
   }
 
   isDefinido(num: number | undefined): boolean{
     return (num!=undefined && num!=0)
+  }
+
+  saveQAnswers(resp: QuestionAnswer[]){
+    this.borrarMensaje()
+    this.questionAnswers = resp
+  }
+
+  saveQuestionsTest(resp: Question[]){
+    this.borrarMensaje()
+    this.questions = resp
+  }
+
+  getWantedQAnswers(): void{
+    this.cambiarMensaje(new Mensaje("Descargando respuestas del usuario a las preguntas del test... ", Tipo.DOWNLOADING, true))
+    this.getQAnswers(true)
+  }
+
+  getWantedQuestionsTest(): void{
+    this.cambiarMensaje(new Mensaje("Descargando preguntas del test... ", Tipo.DOWNLOADING, true))
+    this.getQuestionsTest(true)
   }
 
   getQAnswers(primera: boolean): void{
@@ -100,13 +120,13 @@ export class ListQAnswersComponent extends LoggedInController implements OnInit 
 
   clickSearchUsername(){
     this.likeUsername = this.editLikeUsername
-    this.getQAnswers(true)
+    this.getWantedQAnswers()
   }
 
   clickBorrarUsername(){
     this.likeUsername = undefined
     this.editLikeUsername = ""
-    this.getQAnswers(true)
+    this.getWantedQAnswers()
   }
 
 

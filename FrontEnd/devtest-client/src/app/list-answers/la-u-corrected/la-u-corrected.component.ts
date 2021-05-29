@@ -33,7 +33,7 @@ export class LaUCorrectedComponent extends ListAnswersComponent implements OnIni
     if (this.likeUsername == undefined) return
     this.userS.getCorrectedAnswersFromUser(this.likeUsername).subscribe(
       resp => {
-        this.answers = resp
+        this.ptestAnswersRecieved(resp)
       },
       err => {
         this.handleErrRelog(err, "obtener respuestas corregidas de usuario", primera, this.getPTestAllAnswers, this)

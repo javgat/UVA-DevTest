@@ -33,7 +33,7 @@ export class LtAdminTeamComponent extends ListTestsComponent  implements OnInit 
   getTestsEdit(primera: boolean) {
     if(this.teamname=="" || this.teamname==undefined || this.teamS == undefined) return
     this.teamS.getTestsFromTeam(this.teamname, this.searchTags, this.likeTitle, this.orderBy, this.limit, this.offset).subscribe(
-      resp => this.tests = resp,
+      resp => this.saveTests(resp),
       err => this.handleErrRelog(err, "obtener tests que el equipo administra", primera, this.getTestsEdit, this)
     )
   }

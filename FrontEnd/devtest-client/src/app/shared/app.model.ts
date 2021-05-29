@@ -4,6 +4,7 @@ export enum Tipo {
     SUCCESS = "success",
     ERROR = "danger",
     WARNING = "warning",
+    DOWNLOADING = "downloading",
     SENDING = "sending",
     INFO = "info"
 }
@@ -17,13 +18,13 @@ export class Mensaje {
         this.texto = mensaje || "";
         this.trueType = type || Tipo.INFO;
         this.type = type || Tipo.INFO;
-        if(type==Tipo.SENDING)
+        if(type==Tipo.SENDING || type==Tipo.DOWNLOADING)
             this.type = Tipo.WARNING
         this.mostrar = mostrar || false;
     }
 
     showSpinner(): boolean{
-        return this.trueType == Tipo.SENDING
+        return this.isLoading()
     }
     
     showCheckCircle(): boolean{
@@ -39,7 +40,7 @@ export class Mensaje {
     }
 
     isLoading(): boolean{
-        return this.trueType==Tipo.SENDING
+        return this.trueType==Tipo.SENDING || this.trueType==Tipo.DOWNLOADING
     }
 }
 

@@ -33,7 +33,7 @@ export class LaUUncorrectedComponent extends ListAnswersComponent implements OnI
     if (this.likeUsername == undefined) return
     this.userS.getUncorrectedAnswersFromUser(this.likeUsername).subscribe(
       resp => {
-        this.answers = resp
+        this.ptestAnswersRecieved(resp)
       },
       err => {
         this.handleErrRelog(err, "obtener respuestas no corregidas de usuario", primera, this.getPTestAllAnswers, this)

@@ -30,7 +30,7 @@ export class LaCorrectedComponent extends ListAnswersComponent implements OnInit
     this.canOrderByPuntuacion = true
     this.ptestS.getCorrectedAnswersFromPublishedTests(this.testid, this.orderBy).subscribe(
       resp => {
-        this.answers = resp
+        this.ptestAnswersRecieved(resp)
       },
       err => {
         this.handleErrRelog(err, "obtener respuestas corregidas de test", primera, this.getPTestAllAnswers, this)
@@ -44,7 +44,7 @@ export class LaCorrectedComponent extends ListAnswersComponent implements OnInit
     if(this.likeUsername==undefined) return
     this.userS.getCorrectedAnswersFromUserAnsweredTest(this.likeUsername, this.testid).subscribe(
       resp =>{
-        this.answers = resp
+        this.ptestAnswersRecieved(resp)
       },
       err => {
         this.handleErrRelog(err, "obtener respuestas corregidas de test y usuario", primera, this.getPTestAnswersFromUser, this)

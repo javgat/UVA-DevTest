@@ -36,7 +36,7 @@ export class LqSharedUserComponent  extends ListQuestionsComponent implements On
   getQuestionsInclude(primera: boolean) {
     if(this.id==undefined) return
     this.userS.getSharedQuestionsOfUser(this.id, this.searchTags, this.likeTitle, this.orderBy).subscribe(
-      resp => this.questions = resp,
+      resp => this.saveQuestions(resp),
       err => this.handleErrRelog(err, "obtener preguntas compartidas con un usuario", primera, this.getQuestionsInclude, this)
     )
   }
@@ -45,7 +45,7 @@ export class LqSharedUserComponent  extends ListQuestionsComponent implements On
     //No hay getSharedEditQuestionsOfUser en la API
     if(this.id==undefined) return
     this.userS.getSharedQuestionsOfUser(this.id, this.searchTags, this.likeTitle, this.orderBy).subscribe(
-      resp => this.questions = resp,
+      resp => this.saveQuestions(resp),
       err => this.handleErrRelog(err, "obtener preguntas compartidas con un usuario", primera, this.getQuestionsEdit, this)
     )
   }
