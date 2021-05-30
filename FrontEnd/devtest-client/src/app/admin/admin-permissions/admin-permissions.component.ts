@@ -28,6 +28,7 @@ export class AdminPermissionsComponent extends AdminComponent implements OnInit 
             this.setPermissionData()
         }
     )
+    this.session.updateTipoRoles(true)
   }
 
   ngOnInit(): void {
@@ -57,6 +58,7 @@ export class AdminPermissionsComponent extends AdminComponent implements OnInit 
       resp=>{
         this.setPermissionData()
         this.cambiarMensaje(new Mensaje("Datos de permisos actualizados con éxito", Tipo.SUCCESS, true))
+        this.session.updateTipoRoles(true)
       },
       err => this.handleErrRelog(err, "cambiar permisos tipo no registrado", primera, this.sendNoReg, this)
     )
