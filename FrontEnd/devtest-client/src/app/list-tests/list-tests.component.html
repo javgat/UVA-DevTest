@@ -59,7 +59,8 @@
                         <span class="arrow-orderby" *ngIf="!isMoreTimeSelected() && !isLessTimeSelected()">
                             &#8597;</span>
                     </th>
-                    <th role="button" (click)="clickOrderByFechaPub()">Fecha de Publicación
+                    <th role="button" (click)="clickOrderByFechaPub()">Fecha de <span
+                            *ngIf="arePublished">Publicación</span><span *ngIf="!arePublished">Creación</span>
                         <span class="arrow-orderby" *ngIf="isNewDateSelected()"> &uarr;</span>
                         <span class="arrow-orderby" *ngIf="isOldDateSelected()"> &darr;</span>
                         <span class="arrow-orderby" *ngIf="!isOldDateSelected() && !isNewDateSelected()"> &#8597;</span>
