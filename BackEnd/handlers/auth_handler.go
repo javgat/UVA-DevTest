@@ -24,14 +24,14 @@ const ReauthCookieName string = "ReAuth-Cookie"
 const AuthHours float32 = 0.5
 const ReauthHours float32 = 48
 
-func CreateCookie(name string, token string, maxage int) *http.Cookie {
+func CreateCookie(name string, token string, maxage int, secure bool) *http.Cookie {
 
 	cookie := &http.Cookie{
 		Name:     name,
 		Value:    token,
 		Path:     "/",
 		HttpOnly: true,                    // Evita ataques XSS
-		Secure:   true,                    // Fuerza HTTPS
+		Secure:   secure,                  // Fuerza HTTPS
 		MaxAge:   maxage,                  //Poner fin en 24h
 		SameSite: http.SameSiteStrictMode, // Evita ataques XSRF
 	}
@@ -42,11 +42,11 @@ func CreateCookie(name string, token string, maxage int) *http.Cookie {
 	return cookie
 }
 
-func CreateDeprecatedCookie(name string) *http.Cookie {
+func CreateDeprecatedCookie(name string, secure bool) *http.Cookie {
 	/*path := "/"
 	samesite := "strict"
 	cookie := fmt.Sprintf("%s=; Path=%s; Secure; SameSite=%s; HttpOnly; expires=Thu, 01 Jan 1970 00:00:00 GMT", name, path, samesite)*/
-	return CreateCookie(name, "", 1)
+	return CreateCookie(name, "", 1, secure)
 }
 
 func hoursToSeconds(hours float32) int {
@@ -132,14 +132,16 @@ func NoRegisteredAuth(header string) (*models.User, error) {
 	return nil, errors.New(401, "No se ha activado la cabecera registered auth correctamente. Tiene que valer true")
 }
 
-func Logout(auth.LogoutParams) middleware.Responder {
-	bcookie := CreateDeprecatedCookie(BearerCookieName)
-	rcookie := CreateDeprecatedCookie(ReauthCookieName)
+func Logout(params auth.LogoutParams) middleware.Responder {
+	secure := !(params.HTTPRequest.TLS == nil)
+	bcookie := CreateDeprecatedCookie(BearerCookieName, secure)
+	rcookie := CreateDeprecatedCookie(ReauthCookieName, secure)
 	return auth.NewLogoutOK().WithAuth(bcookie).WithReAuth(rcookie)
 }
 
 func Relogin(params auth.ReloginParams, u *models.User) middleware.Responder {
 	db, err := dbconnection.ConnectDb()
+	secure := !(params.HTTPRequest.TLS == nil)
 	if err == nil {
 		var du *dao.User
 		du, err = dao.GetUserUsername(db, *u.Username)
@@ -150,8 +152,8 @@ func Relogin(params auth.ReloginParams, u *models.User) middleware.Responder {
 			if err == nil {
 				rtoken, err = CreateJWT(*du, int64(hoursToSeconds(ReauthHours)))
 				if err == nil {
-					bcookie := CreateCookie(BearerCookieName, btoken, hoursToSeconds(AuthHours))
-					recookie := CreateCookie(ReauthCookieName, rtoken, hoursToSeconds(ReauthHours))
+					bcookie := CreateCookie(BearerCookieName, btoken, hoursToSeconds(AuthHours), secure)
+					recookie := CreateCookie(ReauthCookieName, rtoken, hoursToSeconds(ReauthHours), secure)
 					return auth.NewReloginOK().WithAuth(bcookie).WithReAuth(recookie)
 				}
 			}
@@ -220,6 +222,7 @@ func authFailErrorLogin(err error, info string) middleware.Responder {
 // Return middleware.Responder
 func Login(params auth.LoginParams) middleware.Responder {
 	log.Println("Generando Token JWT de usuario...")
+	secure := !(params.HTTPRequest.TLS == nil)
 	var lu *models.LoginUser = params.LoginUser
 	log.Printf("Login id: %v\n", *lu.Loginid)
 	db, err := dbconnection.ConnectDb()
@@ -247,8 +250,8 @@ func Login(params auth.LoginParams) middleware.Responder {
 						var resignedToken string
 						resignedToken, err = CreateJWT(*u, int64(hoursToSeconds(ReauthHours)))
 						if err == nil {
-							cookie := CreateCookie(BearerCookieName, signedToken, hoursToSeconds(AuthHours))
-							recookie := CreateCookie(ReauthCookieName, resignedToken, hoursToSeconds(ReauthHours))
+							cookie := CreateCookie(BearerCookieName, signedToken, hoursToSeconds(AuthHours), secure)
+							recookie := CreateCookie(ReauthCookieName, resignedToken, hoursToSeconds(ReauthHours), secure)
 							return auth.NewLoginCreated().WithAuth(cookie).WithReAuth(recookie)
 						}
 					}

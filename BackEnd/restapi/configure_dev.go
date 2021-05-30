@@ -379,7 +379,7 @@ func setupMiddlewares(handler http.Handler) http.Handler {
 func setupGlobalMiddleware(handler http.Handler) http.Handler {
 	var c = cors.New(cors.Options{
 		//AllowedOrigins:   []string{"*"},
-		AllowedOrigins:   []string{"https://localhost:*"},
+		AllowedOrigins:   []string{"https://localhost:*", "http://localhost:*"},
 		AllowCredentials: true,
 		AllowedMethods:   []string{"POST", "PUT", "GET", "DELETE", "OPTIONS"},
 		AllowedHeaders: []string{"Accept", "Accept-Encoding", "Authorization", "Content-Type",

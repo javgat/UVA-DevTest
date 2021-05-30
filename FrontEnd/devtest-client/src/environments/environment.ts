@@ -3,7 +3,7 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  API_BASE_PATH: 'https://localhost:8080/DevTest',
+  API_BASE_PATH: 'http://localhost:8000/DevTest', // 'https://localhost:8080/DevTest'
   production: false
 };
 
