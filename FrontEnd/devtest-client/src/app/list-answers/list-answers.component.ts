@@ -14,7 +14,7 @@ import { SessionService } from '../shared/session.service';
 })
 export class ListAnswersComponent extends LoggedInController implements OnInit {
 
-  testid: number
+  testid?: number
   answers: Answer[]
   routeSub: Subscription
   editLikeUsername: string
@@ -28,7 +28,6 @@ export class ListAnswersComponent extends LoggedInController implements OnInit {
   canOrderByDuracion: boolean
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, protected ptestS : PublishedTestService, private route: ActivatedRoute) {
     super(session, router, data, userS)
-    this.testid = 0
     this.answers = []
     this.editLikeUsername = ""
     this.buscarUsuario = true
@@ -71,6 +70,7 @@ export class ListAnswersComponent extends LoggedInController implements OnInit {
   }
 
   getPTest(primera: boolean) {
+    if(this.testid == undefined) return
     this.userS.getSolvableTestFromUser(this.getSessionUser().getUsername(), this.testid).subscribe(
       resp => {
         this.test = Examen.constructorFromTest(resp)
@@ -97,6 +97,7 @@ export class ListAnswersComponent extends LoggedInController implements OnInit {
 
   //Sobreescribir
   getPTestAllAnswers(primera: boolean){
+    if(this.testid == undefined) return
     this.ptestS.getAnswersFromPublishedTests(this.testid).subscribe(
       resp => {
         this.ptestAnswersRecieved(resp)
@@ -109,7 +110,7 @@ export class ListAnswersComponent extends LoggedInController implements OnInit {
 
   //Sobreescribir
   getPTestAnswersFromUser(primera: boolean){
-    if(this.likeUsername==undefined) return
+    if(this.likeUsername==undefined || this.testid == undefined) return
     this.userS.getAnswersFromUserAnsweredTest(this.likeUsername, this.testid).subscribe(
       resp =>{
         this.ptestAnswersRecieved(resp)
@@ -121,6 +122,7 @@ export class ListAnswersComponent extends LoggedInController implements OnInit {
   }
 
   getIsInAdminTeam(primera: boolean) {
+    if(this.testid == undefined) return
     this.userS.getSharedTestFromUser(this.getSessionUser().getUsername(), this.testid).subscribe(
       resp => {
         this.isInAdminTeam = true

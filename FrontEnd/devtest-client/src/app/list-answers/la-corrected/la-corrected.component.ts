@@ -28,6 +28,7 @@ export class LaCorrectedComponent extends ListAnswersComponent implements OnInit
   getPTestAllAnswers(primera: boolean){
     this.canOrderByDuracion = true
     this.canOrderByPuntuacion = true
+    if(this.testid == undefined) return
     this.ptestS.getCorrectedAnswersFromPublishedTests(this.testid, this.orderBy).subscribe(
       resp => {
         this.ptestAnswersRecieved(resp)
@@ -41,7 +42,7 @@ export class LaCorrectedComponent extends ListAnswersComponent implements OnInit
   getPTestAnswersFromUser(primera: boolean){
     this.canOrderByDuracion = false
     this.canOrderByPuntuacion = false
-    if(this.likeUsername==undefined) return
+    if(this.likeUsername==undefined || this.testid==undefined) return
     this.userS.getCorrectedAnswersFromUserAnsweredTest(this.likeUsername, this.testid).subscribe(
       resp =>{
         this.ptestAnswersRecieved(resp)

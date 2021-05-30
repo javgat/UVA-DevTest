@@ -38,7 +38,7 @@ export class LaUserTestComponent extends ListAnswersComponent implements OnInit 
   }
 
   getPTestAllAnswers(primera: boolean) {
-    if (this.likeUsername == undefined) return
+    if (this.likeUsername == undefined || this.testid==undefined) return
     this.userS.getAnswersFromUserAnsweredTest(this.likeUsername, this.testid, this.orderBy).subscribe(
       resp => {
         this.ptestAnswersRecieved(resp)
