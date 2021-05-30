@@ -12,8 +12,10 @@
     <div *ngIf="test.tiempoEstricto" class="card m-3">
         <div class="card-body">
             <b>Tiempo Restante: </b>
-                <countdown #cd [config]="{ leftTime: getLeftTime() }" (event)="timeIsOver($event)"></countdown>
-            <div *ngIf="isTimeOver()" class="badge bg-danger"><p>Se acabo el tiempo</p></div>
+            <countdown #cd [config]="{ leftTime: getLeftTime() }" (event)="timeIsOver($event)"></countdown>
+            <div *ngIf="isTimeOver()" class="badge bg-danger">
+                <p>Se acabo el tiempo</p>
+            </div>
         </div>
     </div>
     <h3>Respondiendo a la pregunta {{pregunta.posicion}}: {{pregunta.title}}</h3>
@@ -72,8 +74,8 @@
         </div>
         <form (ngSubmit)="sendTextRespuestaClick()">
             <div class="input-group my-3" *ngIf="(!pregunta.isRespondida || modificandoRespuesta)">
-                <input type="text" class="form-control" name="inputAddRespuesta" [(ngModel)]="newRespuesta" required
-                    placeholder="Introduce tu respuesta" />
+                <textarea type="text" class="form-control" name="inputAddRespuesta" [(ngModel)]="newRespuesta"
+                    placeholder="Introduce tu respuesta" required rows=3></textarea>
             </div>
             <div class="d-grid gap-2 mt-3" *ngIf="(!pregunta.isRespondida || modificandoRespuesta)">
                 <input class="button btn btn-success btn-lg" type="submit" value="Guardar respuesta" />
