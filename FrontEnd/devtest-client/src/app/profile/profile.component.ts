@@ -31,6 +31,7 @@ export class ProfileComponent extends LoggedInController implements OnInit {
   editRol: Role = {
     rolId: 0,
   }
+  editRolChecked: boolean
 
   newpassR: string
   tiporoles: TipoRol[]
@@ -41,6 +42,7 @@ export class ProfileComponent extends LoggedInController implements OnInit {
     this.id=""
     this.newpassR=""
     this.tiporoles = []
+    this.editRolChecked = false
     this.getTipoRoles(true)
     this.routeSub = this.route.params.subscribe(params => {
       this.id = params['id']
@@ -162,6 +164,7 @@ export class ProfileComponent extends LoggedInController implements OnInit {
   }
 
   onSelectRol(rolid: number){
+    this.editRolChecked = true
     this.editRol.rolId = rolid
   }
 
@@ -190,6 +193,10 @@ export class ProfileComponent extends LoggedInController implements OnInit {
 
   isValidPass(pass: string): boolean{
     return pass.length>=6
+  }
+
+  isDisabledModalEditRolGuardar(): boolean{
+    return !this.editRolChecked
   }
 
   isDisabledModalEditUserGuardar(): boolean{
