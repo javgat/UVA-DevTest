@@ -8,7 +8,8 @@
         </div>
         <div class="mb-3">
             <label for="inputPassword" class="form-label">Contraseña</label>
-            <input type="password" class="form-control" name="inputPassword" [(ngModel)]="loginUser.pass" required />
+            <input type="password" class="form-control" name="inputPassword" [(ngModel)]="loginUser.pass" required
+                minlength="6" />
         </div>
         <div class="d-grid gap-2">
             <input type="submit" value="Acceder" class="btn btn-primary btn-lg" id="buttonLoginSignin" />
