@@ -111,7 +111,7 @@ export class SessionService {
   }
 
   updateTipoRoles(primera: boolean) {
-    if (this.updatingTipoRoles) return
+    if (this.updatingTipoRoles && primera) return
     this.updatingTipoRoles = true
     this.trS.getTipoRoles().subscribe(
       resp => {
@@ -124,7 +124,7 @@ export class SessionService {
   }
 
   updateUser(primera: boolean) {
-    if (this.updatingUser) return
+    if (this.updatingUser && primera) return
     this.updatingUser = true
     this.userS.getUser(this.session.value.getUserUsername() as string).subscribe(
       resp => {
