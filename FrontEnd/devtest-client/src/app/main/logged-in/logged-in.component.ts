@@ -40,7 +40,7 @@ export class LoggedInComponent extends MainComponent implements OnInit {
   }
 
   getVistaPersonalizadaOnce(primera: boolean) {
-    if (this.configS == undefined || this.downloadingVP) return
+    if (this.configS == undefined || this.downloadingVP && primera) return
     this.downloadingVP = true
     this.configS.getCView(this.getSessionUser().getRol()).subscribe(
       resp => {
