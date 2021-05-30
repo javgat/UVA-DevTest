@@ -251,6 +251,7 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
 
   modificarRespuestaClick(){
     this.modificandoRespuesta = true
+    this.newRespuesta = this.questionAnswer.respuesta || ""
   }
 
   hasPrevQuestion(): boolean{
