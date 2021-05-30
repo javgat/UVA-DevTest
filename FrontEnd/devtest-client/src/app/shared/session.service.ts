@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AuthService, TipoRol, TiporolService } from '@javgat/devtest-api';
+import { AuthService, TipoRol, TiporolService, UserService } from '@javgat/devtest-api';
 import { BehaviorSubject } from 'rxjs';
 import { SessionLogin, SessionUser } from './app.model';
 import { DataService } from './data.service';
@@ -21,11 +21,17 @@ export class SessionService {
   private tipoRoles = new BehaviorSubject<TipoRol[]>([])
   sessionTipoRoles = this.tipoRoles.asObservable()
 
-  constructor(private auth: AuthService, private data: DataService, private trS: TiporolService) { }
-
   private localStorageLoggedKey = 'logged'
   private localStorageUsernameKey = 'username'
   private localStorageTipoRolesKey = 'tipoRoles'
+
+  private updatingTipoRoles: boolean
+  private updatingUser: boolean
+
+  constructor(private auth: AuthService, private data: DataService, private trS: TiporolService, private userS: UserService) {
+    this.updatingTipoRoles = false
+    this.updatingUser = false
+  }
 
   // Actualiza la sesión a la pasada por parametro.
   cambiarSession(session: SessionLogin) {
@@ -60,9 +66,9 @@ export class SessionService {
     }
     this.cambiarSession(new SessionLogin(loggedBool, username))
     var tipoRolesStorage = this.getWithExpiry(this.localStorageTipoRolesKey)
-    if(tipoRolesStorage == null){
+    if (tipoRolesStorage == null) {
       this.updateTipoRoles(true)
-    }else{
+    } else {
       this.cambiarSessionTipoRoles(tipoRolesStorage as TipoRol[])
     }
   }
@@ -105,12 +111,29 @@ export class SessionService {
   }
 
   updateTipoRoles(primera: boolean) {
+    if (this.updatingTipoRoles) return
+    this.updatingTipoRoles = true
     this.trS.getTipoRoles().subscribe(
       resp => {
         this.cambiarSessionTipoRoles(resp)
-        this.setWithExpiry(this.localStorageTipoRolesKey, resp, 5*60000) // lo guarda 5 minutos
+        this.setWithExpiry(this.localStorageTipoRolesKey, resp, 5 * 60000) // lo guarda 5 minutos
       },
-      err => this.handleErrRelog(err, "obtener tipo de roles", primera, this.updateTipoRoles, this)
+      err => this.handleErrRelog(err, "obtener tipo de roles", primera, this.updateTipoRoles, this),
+      () => this.updatingTipoRoles = false
+    )
+  }
+
+  updateUser(primera: boolean) {
+    if (this.updatingUser) return
+    this.updatingUser = true
+    this.userS.getUser(this.session.value.getUserUsername() as string).subscribe(
+      resp => {
+        this.cambiarUser(new SessionUser(resp.username, resp.email, resp.fullname, resp.rol, resp.tiporol))
+      },
+      err => {
+        this.handleErrRelog(err, "obtencion del usuario", primera, this.updateUser, this)
+      },
+      () => this.updatingUser = false
     )
   }
 

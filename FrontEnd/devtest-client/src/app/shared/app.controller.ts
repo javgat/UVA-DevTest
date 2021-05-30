@@ -109,14 +109,7 @@ export abstract class LoggedInController {
     }
 
     downloadUser(primera: boolean) {
-        this.userS.getUser(this.sessionLogin.getUserUsername() as string).subscribe(
-            resp => {
-                this.session.cambiarUser(new SessionUser(resp.username, resp.email, resp.fullname, resp.rol, resp.tiporol))
-            },
-            err => {
-                this.handleErrRelog(err, "obtencion del usuario", primera, this.downloadUser, this)
-            }
-        )
+        this.session.updateUser(primera)
     }
 
     getSessionTipoRoles(): TipoRol[] {
