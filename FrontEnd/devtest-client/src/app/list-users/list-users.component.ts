@@ -53,7 +53,7 @@ export class ListUsersComponent extends LoggedInController implements OnInit {
       resp => {
         this.saveUsers(resp)
       },
-      err => this.handleErrRelog(this.handleErrRelog, "obtener la lista de usuarios", primera, this.getUsers, this)
+      err => this.handleErrRelog(err, "obtener la lista de usuarios", primera, this.getUsers, this)
     )
   }
 
