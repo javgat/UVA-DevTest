@@ -2,3 +2,4 @@
 /BackEnd/config/
 **/dist/
 **/logs/
+/diagrams/ignore_diagrams/

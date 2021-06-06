@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<diagram program="umlet" version="13.3">
+<diagram program="umlet" version="14.3.0">
   <help_text>// Uncomment the following line to change the fontsize and font:
 fontsize=12
 // fontfamily=SansSerif //possible: SansSerif,Serif,Monospaced
@@ -28,8 +28,8 @@ fontfamily=Monospaced
   <element>
     <id>UMLActor</id>
     <coordinates>
-      <x>360</x>
-      <y>2410</y>
+      <x>300</x>
+      <y>2770</y>
       <w>120</w>
       <h>100</h>
     </coordinates>
@@ -39,9 +39,9 @@ fontfamily=Monospaced
   <element>
     <id>UMLActor</id>
     <coordinates>
-      <x>390</x>
-      <y>280</y>
-      <w>60</w>
+      <x>320</x>
+      <y>460</y>
+      <w>80</w>
       <h>100</h>
     </coordinates>
     <panel_attributes>Usuario</panel_attributes>
@@ -50,8 +50,8 @@ fontfamily=Monospaced
   <element>
     <id>UMLActor</id>
     <coordinates>
-      <x>380</x>
-      <y>1360</y>
+      <x>320</x>
+      <y>1540</y>
       <w>80</w>
       <h>100</h>
     </coordinates>
@@ -61,67 +61,22 @@ fontfamily=Monospaced
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>600</x>
-      <y>120</y>
-      <w>120</w>
-      <h>40</h>
-    </coordinates>
-    <panel_attributes>*Cerrar sesión*</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLUseCase</id>
-    <coordinates>
-      <x>600</x>
-      <y>170</y>
-      <w>130</w>
-      <h>60</h>
-    </coordinates>
-    <panel_attributes>*Cerrar todas*
-*las sesiones*</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLUseCase</id>
-    <coordinates>
-      <x>590</x>
-      <y>240</y>
+      <x>550</x>
+      <y>350</y>
       <w>150</w>
       <h>50</h>
     </coordinates>
     <panel_attributes>*Modificar datos*
-*de usuario*</panel_attributes>
+*personales*</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>600</x>
-      <y>60</y>
-      <w>120</w>
-      <h>40</h>
-    </coordinates>
-    <panel_attributes>*Registrarse*</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLUseCase</id>
-    <coordinates>
-      <x>600</x>
-      <y>0</y>
-      <w>120</w>
-      <h>40</h>
-    </coordinates>
-    <panel_attributes>*Iniciar sesión*</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLUseCase</id>
-    <coordinates>
-      <x>590</x>
-      <y>410</y>
+      <x>550</x>
+      <y>530</y>
       <w>150</w>
-      <h>40</h>
+      <h>50</h>
     </coordinates>
     <panel_attributes>*Salir de un Equipo*</panel_attributes>
     <additional_attributes/>
@@ -129,31 +84,31 @@ fontfamily=Monospaced
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>610</x>
-      <y>510</y>
+      <x>560</x>
+      <y>590</y>
       <w>120</w>
       <h>40</h>
     </coordinates>
-    <panel_attributes>*Realizar Test*</panel_attributes>
+    <panel_attributes>*Realizar Examen*</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>610</x>
-      <y>560</y>
+      <x>560</x>
+      <y>640</y>
       <w>130</w>
-      <h>50</h>
+      <h>60</h>
     </coordinates>
-    <panel_attributes>*Ver respuesta*
-*enviada*</panel_attributes>
+    <panel_attributes>*Ver respuestas*
+*enviadas*</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>610</x>
-      <y>300</y>
+      <x>560</x>
+      <y>410</y>
       <w>120</w>
       <h>40</h>
     </coordinates>
@@ -163,152 +118,85 @@ fontfamily=Monospaced
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>440</x>
-      <y>10</y>
-      <w>180</w>
-      <h>300</h>
-    </coordinates>
-    <panel_attributes/>
-    <additional_attributes>10.0;280.0;120.0;10.0;160.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>440</x>
-      <y>70</y>
-      <w>180</w>
-      <h>250</h>
-    </coordinates>
-    <panel_attributes/>
-    <additional_attributes>10.0;230.0;120.0;10.0;160.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>440</x>
-      <y>130</y>
-      <w>180</w>
-      <h>200</h>
-    </coordinates>
-    <panel_attributes/>
-    <additional_attributes>10.0;180.0;120.0;10.0;160.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>440</x>
-      <y>190</y>
-      <w>180</w>
-      <h>140</h>
-    </coordinates>
-    <panel_attributes/>
-    <additional_attributes>10.0;120.0;120.0;10.0;160.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>440</x>
-      <y>250</y>
-      <w>170</w>
-      <h>90</h>
-    </coordinates>
-    <panel_attributes/>
-    <additional_attributes>10.0;70.0;110.0;10.0;150.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>440</x>
-      <y>300</y>
+      <x>380</x>
+      <y>360</y>
       <w>190</w>
-      <h>40</h>
+      <h>160</h>
     </coordinates>
     <panel_attributes/>
-    <additional_attributes>10.0;20.0;170.0;20.0</additional_attributes>
+    <additional_attributes>10.0;140.0;110.0;10.0;170.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>440</x>
-      <y>320</y>
-      <w>170</w>
-      <h>130</h>
+      <x>380</x>
+      <y>420</y>
+      <w>200</w>
+      <h>100</h>
     </coordinates>
     <panel_attributes/>
-    <additional_attributes>10.0;10.0;120.0;110.0;150.0;110.0</additional_attributes>
+    <additional_attributes>10.0;80.0;100.0;10.0;180.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>440</x>
-      <y>330</y>
-      <w>190</w>
-      <h>220</h>
-    </coordinates>
-    <panel_attributes/>
-    <additional_attributes>10.0;10.0;120.0;200.0;170.0;200.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>440</x>
-      <y>340</y>
-      <w>190</w>
-      <h>260</h>
-    </coordinates>
-    <panel_attributes/>
-    <additional_attributes>10.0;10.0;120.0;240.0;170.0;240.0</additional_attributes>
-  </element>
-  <element>
-    <id>UMLUseCase</id>
-    <coordinates>
-      <x>590</x>
-      <y>460</y>
-      <w>150</w>
-      <h>40</h>
-    </coordinates>
-    <panel_attributes>*Buscar Test*</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>440</x>
-      <y>320</y>
-      <w>170</w>
-      <h>180</h>
-    </coordinates>
-    <panel_attributes/>
-    <additional_attributes>10.0;10.0;120.0;160.0;150.0;160.0</additional_attributes>
-  </element>
-  <element>
-    <id>UMLUseCase</id>
-    <coordinates>
-      <x>610</x>
-      <y>350</y>
-      <w>120</w>
-      <h>50</h>
-    </coordinates>
-    <panel_attributes>*Ver equipos*
-*del usuario*</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>440</x>
-      <y>310</y>
+      <x>380</x>
+      <y>500</y>
       <w>190</w>
       <h>80</h>
     </coordinates>
     <panel_attributes/>
-    <additional_attributes>10.0;10.0;120.0;60.0;170.0;60.0</additional_attributes>
+    <additional_attributes>10.0;10.0;100.0;60.0;170.0;60.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>350</x>
-      <y>300</y>
+      <x>380</x>
+      <y>510</y>
+      <w>200</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;10.0;110.0;100.0;180.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>380</x>
+      <y>520</y>
+      <w>200</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;10.0;110.0;150.0;180.0;150.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>560</x>
+      <y>470</y>
+      <w>130</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>*Ver sus equipos*</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>380</x>
+      <y>480</y>
+      <w>200</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;30.0;100.0;10.0;180.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>290</x>
+      <y>480</y>
       <w>90</w>
       <h>1080</h>
     </coordinates>
@@ -318,19 +206,19 @@ fontfamily=Monospaced
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>350</x>
-      <y>1390</y>
+      <x>290</x>
+      <y>1570</y>
       <w>90</w>
-      <h>1040</h>
+      <h>1220</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>40.0;10.0;10.0;10.0;10.0;90.0;70.0;90.0;70.0;1020.0</additional_attributes>
+    <additional_attributes>40.0;10.0;10.0;10.0;10.0;90.0;70.0;90.0;70.0;1200.0</additional_attributes>
   </element>
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>610</x>
-      <y>660</y>
+      <x>540</x>
+      <y>980</y>
       <w>130</w>
       <h>40</h>
     </coordinates>
@@ -340,8 +228,8 @@ fontfamily=Monospaced
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>610</x>
-      <y>710</y>
+      <x>540</x>
+      <y>1030</y>
       <w>140</w>
       <h>40</h>
     </coordinates>
@@ -351,8 +239,8 @@ fontfamily=Monospaced
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>610</x>
-      <y>760</y>
+      <x>540</x>
+      <y>1080</y>
       <w>140</w>
       <h>50</h>
     </coordinates>
@@ -363,8 +251,8 @@ fontfamily=Monospaced
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>600</x>
-      <y>820</y>
+      <x>530</x>
+      <y>1140</y>
       <w>180</w>
       <h>50</h>
     </coordinates>
@@ -375,20 +263,9 @@ fontfamily=Monospaced
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>610</x>
-      <y>880</y>
-      <w>130</w>
-      <h>40</h>
-    </coordinates>
-    <panel_attributes>*Borrar Equipo*</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLUseCase</id>
-    <coordinates>
-      <x>610</x>
-      <y>930</y>
-      <w>140</w>
+      <x>550</x>
+      <y>1210</y>
+      <w>150</w>
       <h>50</h>
     </coordinates>
     <panel_attributes>*Eliminar Usario*
@@ -398,8 +275,8 @@ fontfamily=Monospaced
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>610</x>
-      <y>1090</y>
+      <x>550</x>
+      <y>1270</y>
       <w>130</w>
       <h>40</h>
     </coordinates>
@@ -409,74 +286,63 @@ fontfamily=Monospaced
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>440</x>
-      <y>670</y>
-      <w>190</w>
-      <h>710</h>
-    </coordinates>
-    <panel_attributes/>
-    <additional_attributes>10.0;690.0;130.0;10.0;170.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>440</x>
-      <y>720</y>
-      <w>190</w>
-      <h>660</h>
-    </coordinates>
-    <panel_attributes/>
-    <additional_attributes>10.0;640.0;130.0;10.0;170.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>440</x>
-      <y>770</y>
-      <w>190</w>
-      <h>620</h>
-    </coordinates>
-    <panel_attributes/>
-    <additional_attributes>10.0;600.0;130.0;10.0;170.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>440</x>
-      <y>830</y>
+      <x>380</x>
+      <y>990</y>
       <w>180</w>
-      <h>560</h>
+      <h>570</h>
     </coordinates>
     <panel_attributes/>
-    <additional_attributes>10.0;540.0;130.0;10.0;160.0;10.0</additional_attributes>
+    <additional_attributes>10.0;550.0;130.0;10.0;160.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>440</x>
-      <y>890</y>
+      <x>380</x>
+      <y>1040</y>
+      <w>180</w>
+      <h>520</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;500.0;130.0;10.0;160.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>380</x>
+      <y>1090</y>
+      <w>180</w>
+      <h>480</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;460.0;130.0;10.0;160.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>380</x>
+      <y>1150</y>
+      <w>170</w>
+      <h>420</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;400.0;130.0;10.0;150.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>380</x>
+      <y>1230</y>
       <w>190</w>
-      <h>510</h>
+      <h>350</h>
     </coordinates>
     <panel_attributes/>
-    <additional_attributes>10.0;490.0;130.0;10.0;170.0;10.0</additional_attributes>
+    <additional_attributes>10.0;330.0;130.0;10.0;170.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>440</x>
-      <y>950</y>
-      <w>190</w>
-      <h>450</h>
-    </coordinates>
-    <panel_attributes/>
-    <additional_attributes>10.0;430.0;130.0;10.0;170.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>440</x>
-      <y>1100</y>
+      <x>380</x>
+      <y>1280</y>
       <w>190</w>
       <h>300</h>
     </coordinates>
@@ -486,86 +352,53 @@ fontfamily=Monospaced
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>610</x>
-      <y>1140</y>
+      <x>550</x>
+      <y>1320</y>
       <w>130</w>
       <h>40</h>
     </coordinates>
-    <panel_attributes>*Crear Test*</panel_attributes>
+    <panel_attributes>*Crear Examen*</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>590</x>
-      <y>1240</y>
+      <x>550</x>
+      <y>1420</y>
       <w>180</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>*Asignar Pregunta*
-*a Test*</panel_attributes>
+*a Examen*</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>610</x>
-      <y>1420</y>
+      <x>550</x>
+      <y>1630</y>
       <w>130</w>
       <h>40</h>
     </coordinates>
-    <panel_attributes>*Publicar Test*</panel_attributes>
+    <panel_attributes>*Publicar Examen*</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>610</x>
-      <y>1470</y>
+      <x>550</x>
+      <y>1680</y>
       <w>130</w>
       <h>40</h>
     </coordinates>
-    <panel_attributes>*Borrar Pregunta*</panel_attributes>
+    <panel_attributes>*Clonar Examen*</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>610</x>
-      <y>1520</y>
-      <w>130</w>
-      <h>40</h>
-    </coordinates>
-    <panel_attributes>*Borrar Test*</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLUseCase</id>
-    <coordinates>
-      <x>610</x>
-      <y>1570</y>
-      <w>170</w>
-      <h>40</h>
-    </coordinates>
-    <panel_attributes>*Borrar Test publicado*</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLUseCase</id>
-    <coordinates>
-      <x>610</x>
-      <y>1620</y>
-      <w>130</w>
-      <h>40</h>
-    </coordinates>
-    <panel_attributes>*Clonar Test*</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLUseCase</id>
-    <coordinates>
-      <x>610</x>
-      <y>1670</y>
+      <x>550</x>
+      <y>1730</y>
       <w>130</w>
       <h>40</h>
     </coordinates>
@@ -575,32 +408,32 @@ fontfamily=Monospaced
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>610</x>
-      <y>1720</y>
+      <x>540</x>
+      <y>1940</y>
       <w>180</w>
       <h>50</h>
     </coordinates>
-    <panel_attributes>*Asignar Test a*
+    <panel_attributes>*Asignar Examen a*
 *Equipo de Profesores*</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>610</x>
-      <y>1780</y>
+      <x>540</x>
+      <y>2000</y>
       <w>160</w>
       <h>50</h>
     </coordinates>
-    <panel_attributes>*Enviar Test*
+    <panel_attributes>*Enviar Examen*
 *Publicado a Equipo*</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>610</x>
-      <y>1840</y>
+      <x>540</x>
+      <y>2130</y>
       <w>150</w>
       <h>40</h>
     </coordinates>
@@ -611,8 +444,8 @@ fontfamily=Monospaced
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>440</x>
-      <y>1150</y>
+      <x>380</x>
+      <y>1330</y>
       <w>190</w>
       <h>260</h>
     </coordinates>
@@ -622,213 +455,108 @@ fontfamily=Monospaced
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>440</x>
-      <y>1250</y>
-      <w>170</w>
+      <x>380</x>
+      <y>1430</y>
+      <w>190</w>
       <h>160</h>
     </coordinates>
     <panel_attributes/>
-    <additional_attributes>10.0;140.0;130.0;10.0;150.0;10.0</additional_attributes>
+    <additional_attributes>10.0;140.0;130.0;10.0;170.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>440</x>
-      <y>1380</y>
+      <x>380</x>
+      <y>1570</y>
       <w>190</w>
-      <h>80</h>
+      <h>100</h>
     </coordinates>
     <panel_attributes/>
-    <additional_attributes>10.0;10.0;170.0;60.0</additional_attributes>
+    <additional_attributes>10.0;10.0;170.0;80.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>440</x>
-      <y>1390</y>
+      <x>380</x>
+      <y>1570</y>
       <w>190</w>
-      <h>120</h>
+      <h>150</h>
     </coordinates>
     <panel_attributes/>
-    <additional_attributes>10.0;10.0;130.0;100.0;170.0;100.0</additional_attributes>
+    <additional_attributes>10.0;10.0;130.0;130.0;170.0;130.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>440</x>
-      <y>1390</y>
+      <x>380</x>
+      <y>1580</y>
       <w>190</w>
-      <h>170</h>
+      <h>190</h>
     </coordinates>
     <panel_attributes/>
-    <additional_attributes>10.0;10.0;130.0;150.0;170.0;150.0</additional_attributes>
+    <additional_attributes>10.0;10.0;130.0;170.0;170.0;170.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>440</x>
-      <y>1390</y>
-      <w>190</w>
-      <h>220</h>
-    </coordinates>
-    <panel_attributes/>
-    <additional_attributes>10.0;10.0;130.0;200.0;170.0;200.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>440</x>
-      <y>1400</y>
-      <w>190</w>
-      <h>260</h>
-    </coordinates>
-    <panel_attributes/>
-    <additional_attributes>10.0;10.0;130.0;240.0;170.0;240.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>440</x>
-      <y>1400</y>
-      <w>190</w>
-      <h>310</h>
-    </coordinates>
-    <panel_attributes/>
-    <additional_attributes>10.0;10.0;130.0;290.0;170.0;290.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>440</x>
-      <y>1400</y>
-      <w>190</w>
-      <h>360</h>
-    </coordinates>
-    <panel_attributes/>
-    <additional_attributes>10.0;10.0;130.0;340.0;170.0;340.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>440</x>
-      <y>1420</y>
-      <w>190</w>
+      <x>380</x>
+      <y>1580</y>
+      <w>180</w>
       <h>400</h>
     </coordinates>
     <panel_attributes/>
-    <additional_attributes>10.0;10.0;130.0;380.0;170.0;380.0</additional_attributes>
+    <additional_attributes>10.0;10.0;120.0;380.0;160.0;380.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>440</x>
-      <y>1420</y>
-      <w>190</w>
-      <h>460</h>
+      <x>380</x>
+      <y>1590</y>
+      <w>180</w>
+      <h>450</h>
     </coordinates>
     <panel_attributes/>
-    <additional_attributes>10.0;10.0;130.0;440.0;170.0;440.0</additional_attributes>
+    <additional_attributes>10.0;10.0;120.0;430.0;160.0;430.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>380</x>
+      <y>1590</y>
+      <w>180</w>
+      <h>580</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;10.0;120.0;560.0;160.0;560.0</additional_attributes>
   </element>
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>610</x>
-      <y>1900</y>
-      <w>210</w>
+      <x>540</x>
+      <y>2190</y>
+      <w>230</w>
       <h>50</h>
     </coordinates>
     <panel_attributes>*Ver lista de Respuestas*
-*a Test Publicado*</panel_attributes>
+*a Examen Publicado*</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>440</x>
-      <y>1420</y>
-      <w>190</w>
-      <h>520</h>
+      <x>380</x>
+      <y>1600</y>
+      <w>180</w>
+      <h>630</h>
     </coordinates>
     <panel_attributes/>
-    <additional_attributes>10.0;10.0;130.0;500.0;170.0;500.0</additional_attributes>
+    <additional_attributes>10.0;10.0;120.0;610.0;160.0;610.0</additional_attributes>
   </element>
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>870</x>
-      <y>1310</y>
-      <w>170</w>
-      <h>50</h>
-    </coordinates>
-    <panel_attributes>*Introducción de*
-*datos nuevo test*</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>730</x>
-      <y>1150</y>
-      <w>230</w>
-      <h>190</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;.
-&lt;&lt;include&gt;&gt;</panel_attributes>
-    <additional_attributes>160.0;170.0;130.0;80.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>730</x>
-      <y>1350</y>
-      <w>260</w>
-      <h>310</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;.
-&lt;&lt;include&gt;&gt;</panel_attributes>
-    <additional_attributes>200.0;10.0;150.0;210.0;10.0;290.0</additional_attributes>
-  </element>
-  <element>
-    <id>UMLUseCase</id>
-    <coordinates>
-      <x>1050</x>
-      <y>1440</y>
-      <w>180</w>
-      <h>50</h>
-    </coordinates>
-    <panel_attributes>*Introducción de*
-*datos nueva pregunta*</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>730</x>
-      <y>1100</y>
-      <w>490</w>
-      <h>360</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;.
-&lt;&lt;include&gt;&gt;</panel_attributes>
-    <additional_attributes>410.0;340.0;410.0;190.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>730</x>
-      <y>1480</y>
-      <w>460</w>
-      <h>230</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;.
-&lt;&lt;include&gt;&gt;</panel_attributes>
-    <additional_attributes>400.0;10.0;350.0;160.0;10.0;210.0</additional_attributes>
-  </element>
-  <element>
-    <id>UMLUseCase</id>
-    <coordinates>
-      <x>610</x>
-      <y>1190</y>
+      <x>550</x>
+      <y>1370</y>
       <w>130</w>
       <h>40</h>
     </coordinates>
@@ -838,8 +566,8 @@ fontfamily=Monospaced
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>440</x>
-      <y>1190</y>
+      <x>380</x>
+      <y>1370</y>
       <w>190</w>
       <h>220</h>
     </coordinates>
@@ -849,42 +577,42 @@ fontfamily=Monospaced
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>730</x>
-      <y>1200</y>
-      <w>110</w>
+      <x>670</x>
+      <y>1380</y>
+      <w>120</w>
       <h>80</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;include&gt;&gt;</panel_attributes>
-    <additional_attributes>10.0;10.0;40.0;60.0</additional_attributes>
+    <additional_attributes>10.0;10.0;60.0;60.0</additional_attributes>
   </element>
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>600</x>
-      <y>1290</y>
-      <w>130</w>
+      <x>550</x>
+      <y>1520</y>
+      <w>200</w>
       <h>40</h>
     </coordinates>
-    <panel_attributes>*Modificar Test*</panel_attributes>
+    <panel_attributes>*Modificar Examen Borrador*</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>440</x>
-      <y>1300</y>
-      <w>180</w>
-      <h>110</h>
+      <x>380</x>
+      <y>1530</y>
+      <w>190</w>
+      <h>60</h>
     </coordinates>
     <panel_attributes/>
-    <additional_attributes>10.0;90.0;130.0;10.0;160.0;10.0</additional_attributes>
+    <additional_attributes>10.0;40.0;130.0;10.0;170.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>600</x>
-      <y>1340</y>
+      <x>550</x>
+      <y>1570</y>
       <w>150</w>
       <h>40</h>
     </coordinates>
@@ -894,31 +622,32 @@ fontfamily=Monospaced
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>440</x>
-      <y>1350</y>
-      <w>180</w>
-      <h>60</h>
+      <x>380</x>
+      <y>1560</y>
+      <w>190</w>
+      <h>50</h>
     </coordinates>
     <panel_attributes/>
-    <additional_attributes>10.0;40.0;130.0;10.0;160.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;130.0;30.0;170.0;30.0</additional_attributes>
   </element>
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>630</x>
-      <y>2390</y>
-      <w>130</w>
-      <h>40</h>
+      <x>570</x>
+      <y>2750</y>
+      <w>180</w>
+      <h>50</h>
     </coordinates>
-    <panel_attributes>*Borrar usuario*</panel_attributes>
+    <panel_attributes>*Crear usuario con*
+*correo electrónico*</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>630</x>
-      <y>2310</y>
-      <w>170</w>
+      <x>570</x>
+      <y>2670</y>
+      <w>180</w>
       <h>60</h>
     </coordinates>
     <panel_attributes>*Ver panel de gestión*
@@ -928,20 +657,20 @@ fontfamily=Monospaced
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>630</x>
-      <y>2460</y>
+      <x>570</x>
+      <y>2820</y>
       <w>140</w>
       <h>50</h>
     </coordinates>
-    <panel_attributes>*Cambiar rango*
-*de usuario*</panel_attributes>
+    <panel_attributes>*Cambiar el rol*
+*de otro usuario*</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>440</x>
-      <y>2390</y>
+      <x>380</x>
+      <y>2750</y>
       <w>210</w>
       <h>70</h>
     </coordinates>
@@ -951,8 +680,8 @@ fontfamily=Monospaced
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>440</x>
-      <y>2320</y>
+      <x>380</x>
+      <y>2680</y>
       <w>210</w>
       <h>130</h>
     </coordinates>
@@ -962,12 +691,324 @@ fontfamily=Monospaced
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>440</x>
-      <y>2440</y>
+      <x>380</x>
+      <y>2790</y>
+      <w>210</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>190.0;50.0;140.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>540</x>
+      <y>2250</y>
+      <w>210</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>*Corregir respuesta*
+*a Pregunta*</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>540</x>
+      <y>2310</y>
+      <w>260</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>*Modificar estados de*
+*Corregido y/o Visible*
+*de una Respuesta a Examen*</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>380</x>
+      <y>1600</y>
+      <w>180</w>
+      <h>690</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;10.0;120.0;670.0;160.0;670.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>380</x>
+      <y>1600</y>
+      <w>180</w>
+      <h>760</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;10.0;120.0;740.0;160.0;740.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLActor</id>
+    <coordinates>
+      <x>300</x>
+      <y>0</y>
+      <w>120</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>Usuario
+no registrado</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>290</x>
+      <y>20</y>
+      <w>90</w>
+      <h>460</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>40.0;10.0;10.0;10.0;10.0;110.0;70.0;110.0;70.0;440.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>530</x>
+      <y>10</y>
+      <w>150</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>*Buscar Examen*</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>380</x>
+      <y>10</y>
+      <w>170</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;20.0;150.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>550</x>
+      <y>290</y>
+      <w>150</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>*Ver datos*
+*personales*</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>380</x>
+      <y>310</y>
+      <w>190</w>
+      <h>200</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;180.0;110.0;10.0;170.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>690</x>
+      <y>310</y>
+      <w>110</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;include&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;50.0;50.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>550</x>
+      <y>1470</y>
+      <w>180</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>*Buscar Examen*
+*Borrador*</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>380</x>
+      <y>1480</y>
+      <w>190</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;90.0;130.0;10.0;170.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>560</x>
+      <y>2890</y>
       <w>210</w>
       <h>60</h>
     </coordinates>
+    <panel_attributes>*Modificar datos de*
+*correo electrónico*
+*del sistema*</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>560</x>
+      <y>3030</y>
+      <w>210</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>*Personalizar*
+*mensajes de bienvenida*</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>560</x>
+      <y>2960</y>
+      <w>210</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>*Modificar los*
+*permisos de cada rol*</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>380</x>
+      <y>2800</y>
+      <w>200</w>
+      <h>140</h>
+    </coordinates>
     <panel_attributes/>
-    <additional_attributes>190.0;40.0;140.0;40.0;10.0;10.0</additional_attributes>
+    <additional_attributes>180.0;120.0;140.0;120.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>380</x>
+      <y>2800</y>
+      <w>200</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>180.0;190.0;140.0;190.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>380</x>
+      <y>2810</y>
+      <w>200</w>
+      <h>270</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>180.0;250.0;140.0;250.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>760</x>
+      <y>590</y>
+      <w>160</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>*Responder Pregunta*</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>670</x>
+      <y>590</y>
+      <w>110</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;include&gt;&gt;</panel_attributes>
+    <additional_attributes>90.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>550</x>
+      <y>1780</y>
+      <w>140</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>*Marcar Pregunta*
+*Como Favorita*</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>550</x>
+      <y>1860</y>
+      <w>140</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>*Marcar Examen*
+*Como Favorito*</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>380</x>
+      <y>1580</y>
+      <w>190</w>
+      <h>250</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;10.0;130.0;230.0;170.0;230.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>380</x>
+      <y>1580</y>
+      <w>190</w>
+      <h>330</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;10.0;130.0;310.0;170.0;310.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>540</x>
+      <y>2070</y>
+      <w>160</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>*Enviar Examen*
+*Publicado a Usuario*</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>380</x>
+      <y>1590</y>
+      <w>180</w>
+      <h>520</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;10.0;120.0;500.0;160.0;500.0</additional_attributes>
   </element>
 </diagram>
