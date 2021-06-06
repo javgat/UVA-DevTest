@@ -212,7 +212,7 @@ export class ProfileComponent extends LoggedInController implements OnInit {
   }
 
   checkPermisoVerPrivado(): boolean{
-    return this.profileUser.isAdmin()
+    return this.getSessionUser().isAdmin() //|| this.getSessionUser().getUsername()==this.profileUser.getUsername()
   }
 
 }
