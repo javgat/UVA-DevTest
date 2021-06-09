@@ -15,10 +15,12 @@ export class AdminEmailComponent extends AdminComponent implements OnInit {
 
   emailConfig: EmailConfiguration
   emailConfigEdit: EmailConfiguration
+  editingMailInfo: boolean
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, teamS: TeamService, private configS: ConfigurationService) {
     super(session, router, data, userS, teamS)
     this.emailConfig = new ConfiguracionCorreo()
     this.emailConfigEdit = new ConfiguracionCorreo()
+    this.editingMailInfo = false
     this.getConfiguracionCorreo(true)
   }
 
@@ -51,6 +53,7 @@ export class AdminEmailComponent extends AdminComponent implements OnInit {
   }
 
   copyOriginalConfigInEdit(){
+    this.editingMailInfo = true
     this.emailConfigEdit = new ConfiguracionCorreo(this.emailConfig)
   }
 

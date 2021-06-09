@@ -33,7 +33,7 @@
                         <input type="email" class="form-control" id="inputEmailFrom" name="inputEmailFrom"
                             [(ngModel)]="emailConfigEdit.from" required />
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-3" *ngIf="editingMailInfo" >
                         <label for="inputPassword" class="form-label">Contraseña</label>
                         <input type="password" class="form-control" id="inputPassword" name="inputPassword"
                             [(ngModel)]="emailConfigEdit.password" required />

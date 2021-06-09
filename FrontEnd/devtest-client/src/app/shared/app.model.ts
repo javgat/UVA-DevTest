@@ -358,7 +358,7 @@ export class ConfiguracionCorreo implements EmailConfiguration{
     frontendurl: string;
     constructor(c?: ConfiguracionCorreo){
         this.from = c?.from || ""
-        this.password = c?.from || ""
+        this.password = c?.password || ""
         this.serverhost = c?.serverhost || ""
         this.serverport = c?.serverport || 0
         this.frontendurl = c?.frontendurl || ""
