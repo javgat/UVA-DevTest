@@ -1,6 +1,6 @@
 <div class="container my-5">
-    <h1 class="my-5 text-center fw-bold">¡Bienvenido a DevTest <a class="link-dark"
-            [routerLink]="['/profile', getSessionUser().getUsername()]">{{getSessionUser().getUsername()}}</a>!</h1>
+    <h3 class="my-3 text-center fw-bold">¡Bienvenido a DevTest <a class="link-dark"
+            [routerLink]="['/profile', getSessionUser().getUsername()]">{{getSessionUser().getUsername()}}</a>!</h3>
 
     <markdown class="my-3 text-center" [data]="vistaPers.mensajeInicio"></markdown>
     <app-lgi-student *ngIf="isStudent()"></app-lgi-student>
