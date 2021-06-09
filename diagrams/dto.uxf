@@ -1,0 +1,551 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <help_text>// Uncomment the following line to change the fontsize and font:
+// fontsize=14
+// fontfamily=SansSerif //possible: SansSerif,Serif,Monospaced
+fontsize=12
+fontfamily=Monospaced
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+// Welcome to UMLet!
+//
+// Double-click on elements to add them to the diagram, or to copy them
+// Edit elements by modifying the text in this panel
+// Hold Ctrl to select multiple elements
+// Use Ctrl+mouse to select via lasso
+//
+// Use +/- or Ctrl+mouse wheel to zoom
+// Drag a whole relation at its central square icon
+//
+// Press Ctrl+C to copy the whole diagram to the system clipboard (then just paste it to, eg, Word)
+// Edit the files in the "palettes" directory to create your own element palettes
+//
+// Select "Custom Elements &gt; New..." to create new element types
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+
+// This text will be stored with each diagram;  use it for notes.</help_text>
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>20</x>
+      <y>50</y>
+      <w>150</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>*SigninUser*
+-
++ username: string
++ email: string
++ pass: string
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>20</x>
+      <y>140</y>
+      <w>140</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>*EmailUser*
+-
++ email: string
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>20</x>
+      <y>200</y>
+      <w>140</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>*LoginUser*
+-
++ loginid: string
++ pass: string
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>20</x>
+      <y>270</y>
+      <w>170</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>*User*
+-
++ username: string
++ email: string
++ fullname: string
++ rol: RolUsuarioRegE
++ tiporol: string
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>250</x>
+      <y>50</y>
+      <w>150</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>*UserUpdate*
+-
++ username: string
++ email: string
++ fullname: string
++ password: string
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>250</x>
+      <y>150</y>
+      <w>190</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>*CustomizedView*
+-
++ rolBase: RolUsuarioE
++ mensajeInicio: string
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>20</x>
+      <y>400</y>
+      <w>220</w>
+      <h>360</h>
+    </coordinates>
+    <panel_attributes>*TipoRol*
+-
++ id: integer
++ rolBase: RolUsuarioE
++ nombre: string
++ prioridad: integer
++ verPTests: boolean
++ verETests: boolean
++ verEQuestions: boolean
++ verPQuestions: boolean
++ verAnswers: boolean
++ changeRoles: boolean
++ tenerTeams: boolean
++ tenerEQuestions: boolean
++ tenerETests: boolean
++ tenerPTests: boolean
++ adminPTests: boolean
++ adminETests: boolean
++ adminEQuestions: boolean
++ adminAnswers: boolean
++ adminUsers: boolean
++ adminTeams: boolean
++ adminConfiguration: boolean
++ adminPermissions: boolean
++ tipoInicial: boolean
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>250</x>
+      <y>220</y>
+      <w>140</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>*Role*
+-
++ rolId: integer
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>250</x>
+      <y>280</y>
+      <w>200</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>*Team*
+-
++ teamname: string
++ description: string
++ soloProfesores: boolean
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>250</x>
+      <y>370</y>
+      <w>150</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>*PasswordUpdate*
+-
++ oldpass: string
++ newpass: string
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>250</x>
+      <y>440</y>
+      <w>150</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>*PasswordRecovery*
+-
++ mailtoken: string
++ newpass: string
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>250</x>
+      <y>520</y>
+      <w>150</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>*Password*
+-
++ password: string
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>470</x>
+      <y>50</y>
+      <w>270</w>
+      <h>290</h>
+    </coordinates>
+    <panel_attributes>*Question*
+-
++ id: integer
++ title: string
++ question: string
++ estimatedTime: integer
++ autoCorrect: boolean
++ editable: boolean
++ username: string
++ eleccionUnica: boolean
++ solucion: string 
++ tipoPregunta: TipoPreguntaE
++ valorFinal: integer
++ accesoPublicoNoPublicada: boolean
++ isRespondida: boolean
++ penalizacion: integer
++ cantidadFavoritos: integer
++ posicion: integer
++ prevId: integer
++ nextId: integer
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>470</x>
+      <y>350</y>
+      <w>300</w>
+      <h>280</h>
+    </coordinates>
+    <panel_attributes>*Test*
+-
++ id: integer
++ title: string
++ description: string
++ maxMinutes: integer
++ accesoPublico: boolean
++ editable: boolean
++ username: string
++ accesoPublicoNoPublicado: boolean
++ horaCreacion: DateTime
++ originalTestID: integer
++ notaMaxima: integer
++ cantidadRespuestasDelUsuario: integer
++ autoCorrect: boolean
++ visibilidad: VisibilidadE
++ cantidadFavoritos: integer
++ tiempoEstricto: boolean
++ maxIntentos: integer
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>470</x>
+      <y>640</y>
+      <w>220</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>*PTestUpdate*
+-
++ maxMinutes: integer
++ accesoPublico: boolean
++ autoCorrect: boolean
++ visibilidad: VisibilidadE
++ tiempoEstricto: boolean
++ maxIntentos: integer
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>780</x>
+      <y>50</y>
+      <w>230</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>*Answer*
+-
++ id: integer
++ startTime: DateTime
++ finishTime: DateTime
++ entregado: boolean
++ testid: integer
++ username: string
++ puntuacion: number
++ corregido: boolean
++ visibleParaUsuario: boolean
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>780</x>
+      <y>510</y>
+      <w>220</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>*QuestionAnswer*
+-
++ respuesta: string
++ idPregunta: integer
++ idRespuesta: integer
++ puntuacion: integer
++ corregida: boolean
++ indicesOpciones: integer[]
++ username: string
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>780</x>
+      <y>220</y>
+      <w>110</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>*Tag*
+-
++ tag: string
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>780</x>
+      <y>280</y>
+      <w>170</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>*Review*
+-
++ puntuacion: integer
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>780</x>
+      <y>340</y>
+      <w>170</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>*TestPregunta*
+-
++ valorFinal: integer
++ puntuacion: integer
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1020</x>
+      <y>50</y>
+      <w>140</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>*Error*
+-
++ message: string
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>780</x>
+      <y>410</y>
+      <w>170</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>*Option*
+-
++ indice: integer
++ preguntaid: integer
++ texto: string
++ correcta: boolean
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>250</x>
+      <y>580</y>
+      <w>210</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>*PublishTestParams*
+-
++ title: string
++ accesoPublico: boolean
++ autoCorrect: boolean
++ visibilidad: VisibilidadE
++ maxMinutes: integer
++ tiempoEstricto: boolean
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1020</x>
+      <y>120</y>
+      <w>180</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>*EmailConfiguration*
+-
++ from: string
++ password: string
++ serverhost: string
++ serverport: integer
++ frontendurl: string
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1020</x>
+      <y>240</y>
+      <w>160</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>*Message*
+-
++ body: string
++ sendEmail: boolean
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1020</x>
+      <y>320</y>
+      <w>140</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;enum&gt;&gt;
+*RolUsuarioRegE*
+-
+- estudiante
+- profesor
+- administrador
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1020</x>
+      <y>420</y>
+      <w>140</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;enum&gt;&gt;
+*RolUsuarioE*
+-
+- noRegistrado
+- estudiante
+- profesor
+- administrador
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1020</x>
+      <y>640</y>
+      <w>120</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;enum&gt;&gt;
+*VisibilidadE*
+-
+- alEntregar
+- alCorregir
+- manual
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1020</x>
+      <y>540</y>
+      <w>120</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;enum&gt;&gt;
+*TipoPreguntaE*
+-
+- opciones
+- string
+- codigo
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

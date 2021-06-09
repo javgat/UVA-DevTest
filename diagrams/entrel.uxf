@@ -54,15 +54,16 @@ bg=yellow</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>1656</x>
-      <y>369</y>
+      <y>360</y>
       <w>180</w>
-      <h>81</h>
+      <h>90</h>
     </coordinates>
     <panel_attributes>*RespuestaExamen*
 bg=yellow
 --
 - id: int {id}
 - startTime: DateTime
+- finishTime: DateTime
 - entregado: bool
 - visibleParaUsuario: bool</panel_attributes>
     <additional_attributes/>
@@ -169,12 +170,12 @@ m2=1</panel_attributes>
       <x>693</x>
       <y>54</y>
       <w>1062</w>
-      <h>333</h>
+      <h>324</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=0..*
 m2=1</panel_attributes>
-    <additional_attributes>1130.0;350.0;1130.0;10.0;10.0;10.0;10.0;340.0</additional_attributes>
+    <additional_attributes>1130.0;340.0;1130.0;10.0;10.0;10.0;10.0;340.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -321,7 +322,7 @@ bg=yellow</panel_attributes>
     </coordinates>
     <panel_attributes>context Equipo inv:
 self.equipoUsuarios -&gt;
-exists(e| e.rol=='Admin')
+exists(e| e.rol='Admin')
 fontsize=11
 bg=cyan</panel_attributes>
     <additional_attributes/>
@@ -335,8 +336,8 @@ bg=cyan</panel_attributes>
       <h>54</h>
     </coordinates>
     <panel_attributes>context EquipoUsuario inv:
-self.rol=='Admin' implies
-self.usuario.tipoRol.rolBase!='Estudiante'
+self.rol='Admin' implies
+self.usuario.tipoRol.rolBase&lt;&gt;'Estudiante'
 fontsize=11
 bg=cyan</panel_attributes>
     <additional_attributes/>
@@ -350,8 +351,8 @@ bg=cyan</panel_attributes>
       <h>63</h>
     </coordinates>
     <panel_attributes>context Equipo inv:
-self.soloProfesores==true implies
-self.usuarios.tipoRol.rolBase!='Estudiante'
+self.soloProfesores=true implies
+self.usuarios.tipoRol.rolBase&lt;&gt;'Estudiante'
 fontsize=11
 bg=cyan</panel_attributes>
     <additional_attributes/>
@@ -365,7 +366,7 @@ bg=cyan</panel_attributes>
       <h>36</h>
     </coordinates>
     <panel_attributes>context GestionTestEquipo inv:
-self.equipo.soloProfesores==true
+self.equipo.soloProfesores=true
 fontsize=11
 bg=cyan</panel_attributes>
     <additional_attributes/>
@@ -647,11 +648,11 @@ bg=yellow</panel_attributes>
       <h>81</h>
     </coordinates>
     <panel_attributes>context Pregunta inv:
-self.editable==false implies
-self.tests -&gt; size() == 1 and
-self.tests -&gt; forAll(t| t.editable==false)
-self.editable==true implies
-self.tests -&gt; forAll(t| t.editable==true)
+self.editable=false implies
+self.tests -&gt; size() = 1 and
+self.tests -&gt; forAll(t| t.editable=false)
+self.editable=true implies
+self.tests -&gt; forAll(t| t.editable=true)
 fontsize=11
 bg=cyan</panel_attributes>
     <additional_attributes/>
@@ -714,7 +715,7 @@ fontsize=11</panel_attributes>
       <h>36</h>
     </coordinates>
     <panel_attributes>context RespuestaPregunta inv:
-self.pregunta.editable==false
+self.pregunta.editable=false
 fontsize=11
 bg=cyan</panel_attributes>
     <additional_attributes/>
@@ -739,7 +740,7 @@ bg=cyan</panel_attributes>
       <h>36</h>
     </coordinates>
     <panel_attributes>context RespuestaExamen inv:
-self.test.editable==false
+self.test.editable=false
 fontsize=11
 bg=cyan</panel_attributes>
     <additional_attributes/>
@@ -750,10 +751,10 @@ bg=cyan</panel_attributes>
       <x>1755</x>
       <y>315</y>
       <w>90</w>
-      <h>72</h>
+      <h>63</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;60.0;80.0;10.0</additional_attributes>
+    <additional_attributes>10.0;50.0;80.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
@@ -764,7 +765,7 @@ bg=cyan</panel_attributes>
       <h>36</h>
     </coordinates>
     <panel_attributes>context InvitacionTestUsuario inv:
-self.test.editable==false
+self.test.editable=false
 fontsize=11
 bg=cyan</panel_attributes>
     <additional_attributes/>
@@ -789,7 +790,7 @@ bg=cyan</panel_attributes>
       <h>36</h>
     </coordinates>
     <panel_attributes>context InvitacionTestEquipo inv:
-self.test.editable==false
+self.test.editable=false
 fontsize=11
 bg=cyan</panel_attributes>
     <additional_attributes/>
@@ -814,15 +815,15 @@ bg=cyan</panel_attributes>
       <h>153</h>
     </coordinates>
     <panel_attributes>context Test inv:
-self.editable==true implies
-self.preguntas -&gt; forAll(p| p.editable==true)
+self.editable=true implies
+self.preguntas -&gt; forAll(p| p.editable=true)
 and self.test -&gt; notEmpty()
 
-self.editable==false implies
-self.preguntas -&gt; forAll(p| p.editable==false)
+self.editable=false implies
+self.preguntas -&gt; forAll(p| p.editable=false)
 and self.test -&gt; isEmpty()
 
-self.tests -&gt; forAll(t| t.editable==false)
+self.tests -&gt; forAll(t| t.editable=false)
 fontsize=11
 bg=cyan</panel_attributes>
     <additional_attributes/>
@@ -847,7 +848,7 @@ bg=cyan</panel_attributes>
       <h>36</h>
     </coordinates>
     <panel_attributes>context PreguntaEquipo inv:
-self.equipo.soloProfesores==true
+self.equipo.soloProfesores=true
 fontsize=11
 bg=cyan</panel_attributes>
     <additional_attributes/>
@@ -873,7 +874,7 @@ bg=cyan</panel_attributes>
     </coordinates>
     <panel_attributes>context Test inv:
 self.usuario.
-tipoRol.rolBase!='Estudiante'
+tipoRol.rolBase&lt;&gt;'Estudiante'
 fontsize=11
 bg=cyan</panel_attributes>
     <additional_attributes/>
@@ -899,7 +900,7 @@ bg=cyan</panel_attributes>
     </coordinates>
     <panel_attributes>context Pregunta inv:
 self.usuario.
-tipoRol.rolBase!='Estudiante'
+tipoRol.rolBase&lt;&gt;'Estudiante'
 fontsize=11
 bg=cyan</panel_attributes>
     <additional_attributes/>
@@ -987,7 +988,7 @@ self.respuesta -&gt; isEmpty() and
 self.pregunta.opciones -&gt; notEmpty()
 
 self.opciones -&gt; size() &gt; 1 implies
-self.pregunta.eleccionUnica==true
+self.pregunta.eleccionUnica=true
 
 self.respuesta -&gt; notEmpty() implies
 self.opciones -&gt; isEmpty() and
@@ -1167,9 +1168,9 @@ bg=yellow</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>432</x>
+      <x>423</x>
       <y>378</y>
-      <w>144</w>
+      <w>153</w>
       <h>63</h>
     </coordinates>
     <panel_attributes>*TokenCorreo*
@@ -1360,15 +1361,15 @@ m2=1</panel_attributes>
       <h>135</h>
     </coordinates>
     <panel_attributes>context TipoRol inv:
-self.rolBase != 'Administrador'implies
-self.adminPTests == false and
-self.adminETests == false and 
-self.adminEQuestions == false and 
-self.adminAnswers == false and 
-self.adminUsers == false and 
-self.adminTeams == false and 
-self.adminConfiguration == false and 
-self.adminPermissions == false
+self.rolBase &lt;&gt; 'Administrador'implies
+self.adminPTests = false and
+self.adminETests = false and 
+self.adminEQuestions = false and 
+self.adminAnswers = false and 
+self.adminUsers = false and 
+self.adminTeams = false and 
+self.adminConfiguration = false and 
+self.adminPermissions = false
 fontsize=11
 bg=cyan</panel_attributes>
     <additional_attributes/>
@@ -1383,13 +1384,13 @@ bg=cyan</panel_attributes>
     </coordinates>
     <panel_attributes>context TipoRol inv:
 TipoRol.allInstances() -&gt;
-exists(t| t.rolBase == 'NoRegistrado')
+exists(t| t.rolBase = 'NoRegistrado')
 TipoRol.allInstances() -&gt;
-exists(t| t.rolBase == 'Estudiante')
+exists(t| t.rolBase = 'Estudiante')
 TipoRol.allInstances() -&gt;
-exists(t| t.rolBase == 'Profesor')
+exists(t| t.rolBase = 'Profesor')
 TipoRol.allInstances() -&gt;
-exists(t| t.rolBase == 'Administrador')
+exists(t| t.rolBase = 'Administrador')
 fontsize=11
 bg=cyan</panel_attributes>
     <additional_attributes/>
@@ -1404,7 +1405,7 @@ bg=cyan</panel_attributes>
     </coordinates>
     <panel_attributes>context TipoRol inv:
 TipoRol.allInstances() -&gt;
-exists(t| t.adminPermissions == true)
+exists(t| t.adminPermissions = true)
 fontsize=11
 bg=cyan</panel_attributes>
     <additional_attributes/>
@@ -1476,7 +1477,7 @@ bg=cyan</panel_attributes>
       <h>45</h>
     </coordinates>
     <panel_attributes>context TipoRol inv:
-self.rolBase == 'NoRegistrado'
+self.rolBase = 'NoRegistrado'
 implies self.usuarios -&gt; isEmpty()
 fontsize=11
 bg=cyan</panel_attributes>
@@ -1503,7 +1504,7 @@ bg=cyan</panel_attributes>
     </coordinates>
     <panel_attributes>context TipoRol inv:
 TipoRol.allInstances() -&gt;
-exists(t| t.tipoInicial == true)
+exists(t| t.tipoInicial = true)
 fontsize=11
 bg=cyan</panel_attributes>
     <additional_attributes/>
@@ -1544,13 +1545,13 @@ bg=yellow</panel_attributes>
     </coordinates>
     <panel_attributes>context VistaPersonalizada inv:
 VistaPersonalizada.allInstances() -&gt;
-exists(v| v.rolBase == 'NoRegistrado')
+exists(v| v.rolBase = 'NoRegistrado')
 VistaPersonalizada.allInstances() -&gt;
-exists(v| v.rolBase == 'Estudiante')
+exists(v| v.rolBase = 'Estudiante')
 VistaPersonalizada.allInstances() -&gt;
-exists(v| v.rolBase == 'Profesor')
+exists(v| v.rolBase = 'Profesor')
 VistaPersonalizada.allInstances() -&gt;
-exists(v| v.rolBase == 'Administrador')
+exists(v| v.rolBase = 'Administrador')
 fontsize=11
 bg=cyan</panel_attributes>
     <additional_attributes/>
