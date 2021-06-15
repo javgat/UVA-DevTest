@@ -59,8 +59,8 @@
                 </form>
 
                 <div class="d-grid gap-2">
-                    <div class="btn-group">
-                        <button *ngIf="checkPermisosEdicion()" style="width:80%;" type="button"
+                    <div class="btn-group" *ngIf="checkPermisosEdicion()">
+                        <button style="width:80%;" type="button"
                             class="btn btn-lg btn-success" data-bs-toggle="modal"
                             data-bs-target="#modalPublishTest">PUBLICAR</button>
                         <button type="button" class="btn btn-success btn-lg dropdown-toggle dropdown-toggle-split"
@@ -71,6 +71,11 @@
                             <li><a class="dropdown-item" [routerLink]="['/et', test.id, 'ptests']">Ver Publicaciones</a>
                             </li>
                         </ul>
+                    </div>
+                    <div *ngIf="!checkPermisosEdicion()">
+                        <button type="button"
+                            class="btn btn-lg btn-secondary" data-bs-toggle="modal"
+                            [routerLink]="['/et', test.id, 'ptests']">VER PUBLICACIONES</button>
                     </div>
                 </div>
                 <hr />
