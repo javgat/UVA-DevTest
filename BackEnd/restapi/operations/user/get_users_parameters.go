@@ -36,6 +36,14 @@ type GetUsersParams struct {
 	/*
 	  In: query
 	*/
+	LikeEmail *string
+	/*
+	  In: query
+	*/
+	LikeStartEmail *string
+	/*
+	  In: query
+	*/
 	LikeStartUsername *string
 	/*
 	  In: query
@@ -64,6 +72,16 @@ func (o *GetUsersParams) BindRequest(r *http.Request, route *middleware.MatchedR
 
 	qs := runtime.Values(r.URL.Query())
 
+	qLikeEmail, qhkLikeEmail, _ := qs.GetOK("likeEmail")
+	if err := o.bindLikeEmail(qLikeEmail, qhkLikeEmail, route.Formats); err != nil {
+		res = append(res, err)
+	}
+
+	qLikeStartEmail, qhkLikeStartEmail, _ := qs.GetOK("likeStartEmail")
+	if err := o.bindLikeStartEmail(qLikeStartEmail, qhkLikeStartEmail, route.Formats); err != nil {
+		res = append(res, err)
+	}
+
 	qLikeStartUsername, qhkLikeStartUsername, _ := qs.GetOK("likeStartUsername")
 	if err := o.bindLikeStartUsername(qLikeStartUsername, qhkLikeStartUsername, route.Formats); err != nil {
 		res = append(res, err)
@@ -86,6 +104,42 @@ func (o *GetUsersParams) BindRequest(r *http.Request, route *middleware.MatchedR
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// bindLikeEmail binds and validates parameter LikeEmail from query.
+func (o *GetUsersParams) bindLikeEmail(rawData []string, hasKey bool, formats strfmt.Registry) error {
+	var raw string
+	if len(rawData) > 0 {
+		raw = rawData[len(rawData)-1]
+	}
+
+	// Required: false
+	// AllowEmptyValue: false
+
+	if raw == "" { // empty values pass all other validations
+		return nil
+	}
+	o.LikeEmail = &raw
+
+	return nil
+}
+
+// bindLikeStartEmail binds and validates parameter LikeStartEmail from query.
+func (o *GetUsersParams) bindLikeStartEmail(rawData []string, hasKey bool, formats strfmt.Registry) error {
+	var raw string
+	if len(rawData) > 0 {
+		raw = rawData[len(rawData)-1]
+	}
+
+	// Required: false
+	// AllowEmptyValue: false
+
+	if raw == "" { // empty values pass all other validations
+		return nil
+	}
+	o.LikeStartEmail = &raw
+
 	return nil
 }
 

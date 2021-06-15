@@ -6319,6 +6319,16 @@ func init() {
             "in": "query"
           },
           {
+            "type": "string",
+            "name": "likeEmail",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "likeStartEmail",
+            "in": "query"
+          },
+          {
             "type": "integer",
             "description": "max number of elements to be returned",
             "name": "limit",
@@ -18617,6 +18627,16 @@ func init() {
           {
             "type": "string",
             "name": "likeStartUsername",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "likeEmail",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "likeStartEmail",
             "in": "query"
           },
           {

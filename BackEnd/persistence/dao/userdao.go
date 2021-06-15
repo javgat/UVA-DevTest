@@ -159,7 +159,8 @@ func GetUserByID(db *sql.DB, ID int64) (*User, error) {
 	return u, err
 }
 
-func addFiltersUsers(hayWhere bool, initQuery string, likeUsername *string, likeStartUsername *string, limit *int64, offset *int64) string {
+func addFiltersUsers(hayWhere bool, initQuery string, likeUsername *string, likeStartUsername *string, likeEmail *string,
+	likeStartEmail *string, limit *int64, offset *int64) string {
 	query := initQuery
 	nexoQuery := " WHERE "
 	if hayWhere {
@@ -173,6 +174,14 @@ func addFiltersUsers(hayWhere bool, initQuery string, likeUsername *string, like
 		query = query + nexoQuery + " username LIKE ? "
 		nexoQuery = " AND "
 	}
+	if likeEmail != nil && *likeEmail != "" {
+		query = query + nexoQuery + " email LIKE ? "
+		nexoQuery = " AND "
+	}
+	if likeStartEmail != nil && *likeStartEmail != "" {
+		query = query + nexoQuery + " email LIKE ? "
+		nexoQuery = " AND "
+	}
 	query += " ORDER BY username ASC "
 	if limit != nil {
 		query = query + " LIMIT " + strconv.FormatInt(*limit, 10) + " "
@@ -183,39 +192,55 @@ func addFiltersUsers(hayWhere bool, initQuery string, likeUsername *string, like
 	return query
 }
 
-func FilterUserParamsToInterfaceArr(likeUsername *string, likeStartUsername *string) []interface{} {
+func FilterUserParamsToInterfaceArr(likeUsername *string, likeStartUsername *string, likeEmail *string,
+	likeStartEmail *string) []interface{} {
 	hayLikeUsername := 0
 	hayLikeStartUsername := 0
+	hayLikeEmail := 0
+	hayLikeStartEmail := 0
 	if likeUsername != nil && *likeUsername != "" {
 		hayLikeUsername = 1
 	}
 	if likeStartUsername != nil && *likeStartUsername != "" {
 		hayLikeStartUsername = 1
 	}
-	interfaceParams := make([]interface{}, hayLikeUsername+hayLikeStartUsername)
+	if likeEmail != nil && *likeEmail != "" {
+		hayLikeEmail = 1
+	}
+	if likeStartEmail != nil && *likeStartEmail != "" {
+		hayLikeStartEmail = 1
+	}
+	interfaceParams := make([]interface{}, hayLikeUsername+hayLikeStartUsername+hayLikeEmail+hayLikeStartEmail)
 	if hayLikeUsername == 1 {
 		interfaceParams[0] = "%" + *likeUsername + "%"
 	}
 	if hayLikeStartUsername == 1 {
 		interfaceParams[hayLikeUsername] = *likeStartUsername + "%"
 	}
+	if hayLikeEmail == 1 {
+		interfaceParams[hayLikeUsername+hayLikeStartUsername] = "%" + *likeEmail + "%"
+	}
+	if hayLikeStartEmail == 1 {
+		interfaceParams[hayLikeUsername+hayLikeStartUsername+hayLikeEmail] = *likeStartEmail + "%"
+	}
 	return interfaceParams
 }
 
 // GetUsers returns all users
-func GetUsers(db *sql.DB, likeUsername *string, likeStartUsername *string, limit *int64, offset *int64) ([]*User, error) {
+func GetUsers(db *sql.DB, likeUsername *string, likeStartUsername *string, likeEmail *string, likeStartEmail *string,
+	limit *int64, offset *int64) ([]*User, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
 	stPrepare := "SELECT * FROM Usuario "
-	stPrepare = addFiltersUsers(false, stPrepare, likeUsername, likeStartUsername, limit, offset)
+	stPrepare = addFiltersUsers(false, stPrepare, likeUsername, likeStartUsername, likeEmail, likeStartEmail, limit, offset)
 	query, err := db.Prepare(stPrepare)
 	var us []*User
 	if err != nil {
 		return us, err
 	}
 	defer query.Close()
-	interfaceParams := FilterUserParamsToInterfaceArr(likeUsername, likeStartUsername)
+	interfaceParams := FilterUserParamsToInterfaceArr(likeUsername, likeStartUsername, likeEmail, likeStartEmail)
 	rows, err := query.Query(interfaceParams...)
 	if err == nil {
 		us, err = rowsToUsers(rows)

@@ -581,7 +581,7 @@ func TestGetUsersNilDB(t *testing.T) {
 	}
 	defer db.Close()
 	expectGetUsersDefault(mock)
-	u, err := GetUsers(nil, nil, nil, nil, nil)
+	u, err := GetUsers(nil, nil, nil, nil, nil, nil, nil)
 	if err == nil {
 		t.Log("error should not be nil", err)
 		t.Fail()
@@ -598,7 +598,7 @@ func TestGetUsersClosedDb(t *testing.T) {
 	}
 	db.Close()
 	expectGetUsersDefault(mock)
-	u, err := GetUsers(db, nil, nil, nil, nil)
+	u, err := GetUsers(db, nil, nil, nil, nil, nil, nil)
 	if err == nil {
 		t.Log("error should not be nil", err)
 		t.Fail()
@@ -616,7 +616,7 @@ func TestGetUsersError(t *testing.T) {
 	defer db.Close()
 	mock.ExpectPrepare("SELECT (.+) FROM Usuario").ExpectQuery().
 		WillReturnError(fmt.Errorf("Error"))
-	u, err := GetUsers(db, nil, nil, nil, nil)
+	u, err := GetUsers(db, nil, nil, nil, nil, nil, nil)
 	if err == nil {
 		t.Log("error should not be nil", err)
 		t.Fail()
@@ -633,7 +633,7 @@ func TestGetUsersEmpty(t *testing.T) {
 	}
 	defer db.Close()
 	expectGetUsersEmpty(mock)
-	u, err := GetUsers(db, nil, nil, nil, nil)
+	u, err := GetUsers(db, nil, nil, nil, nil, nil, nil)
 	if err != nil {
 		t.Log("error should be nil", err)
 		t.Fail()
@@ -650,7 +650,7 @@ func TestGetUsersTablesWrong(t *testing.T) {
 	}
 	defer db.Close()
 	expectGetUsersWrong(mock)
-	u, err := GetUsers(db, nil, nil, nil, nil)
+	u, err := GetUsers(db, nil, nil, nil, nil, nil, nil)
 	if err == nil {
 		t.Log("error should not be nil", err)
 		t.Fail()
@@ -667,7 +667,7 @@ func TestGetUsersFound(t *testing.T) {
 	}
 	defer db.Close()
 	expectGetUsersDefault(mock)
-	u, err := GetUsers(db, nil, nil, nil, nil)
+	u, err := GetUsers(db, nil, nil, nil, nil, nil, nil)
 	if err != nil {
 		t.Log("error should be nil", err)
 		t.Fail()

@@ -464,6 +464,12 @@ paths:
         name: likeStartUsername
         type: string
       - in: query
+        name: likeEmail
+        type: string
+      - in: query
+        name: likeStartEmail
+        type: string
+      - in: query
         name: limit
         type: integer
         description: max number of elements to be returned
