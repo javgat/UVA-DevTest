@@ -32,14 +32,14 @@
             </span>
         </span>
     </p>
-    <form *ngIf="searchTags.length>0">
+    <form *ngIf="searchTags.length>1 || (searchTags.length>0 && !orOperation)">
         <input type="radio" class="btn-check" name="options" id="option1" autocomplete="off" [checked]="orOperation"
-            (click)="swapOrAndTags()">
-        <label class="btn btn-outline-secondary" for="option1">Alguna de las etiquetas</label>
+            (click)="clickOrTags()">
+        <label class="btn btn-primary" for="option1">Alguna de las etiquetas</label>
 
         <input type="radio" class="btn-check" name="options" id="option2" autocomplete="off" [checked]="!orOperation"
-            (click)="swapOrAndTags()">
-        <label class="btn btn-outline-secondary mx-2" for="option2">Todas las etiquetas</label>
+            (click)="clickAndTags()">
+        <label class="btn btn-primary mx-2" for="option2">Todas las etiquetas</label>
     </form>
     <div class="form-check form-switch my-2" *ngIf="!hideSwitchInclude">
         <input class="form-check-input" type="checkbox" id="flexSwitchIncludeNonEdit" [checked]="includeNonEdit"

@@ -152,12 +152,13 @@ export class ListTestsComponent extends LoggedInController implements OnInit {
     }
   }
 
-  swapOrAndTags(){
-    if(this.orOperation){
-      this.changeToAndTags()
-    }else{
-      this.changeToOrTags()
-    }
+  clickOrTags(){
+    this.changeToOrTags()
+    this.getTestsFilters()
+  }
+
+  clickAndTags(){
+    this.changeToAndTags()
     this.getTestsFilters()
   }
 

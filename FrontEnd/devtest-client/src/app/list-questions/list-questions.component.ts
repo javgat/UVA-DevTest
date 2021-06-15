@@ -158,12 +158,13 @@ export class ListQuestionsComponent extends LoggedInController implements OnInit
     }
   }
 
-  swapOrAndTags(){
-    if(this.orOperation){
-      this.changeToAndTags()
-    }else{
-      this.changeToOrTags()
-    }
+  clickOrTags(){
+    this.changeToOrTags()
+    this.getQuestionsFilters()
+  }
+
+  clickAndTags(){
+    this.changeToAndTags()
     this.getQuestionsFilters()
   }
 
