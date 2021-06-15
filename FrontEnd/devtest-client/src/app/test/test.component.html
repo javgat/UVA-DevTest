@@ -72,7 +72,7 @@
                             </li>
                         </ul>
                     </div>
-                    <div *ngIf="!checkPermisosEdicion()">
+                    <div class="btn-group" *ngIf="!checkPermisosEdicion()">
                         <button type="button"
                             class="btn btn-lg btn-secondary" data-bs-toggle="modal"
                             [routerLink]="['/et', test.id, 'ptests']">VER PUBLICACIONES</button>
