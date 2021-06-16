@@ -9,14 +9,18 @@
         </svg>
         Volver
     </button>
-    <h2>Equipos que administran el Test Borrador {{test.title}}</h2>
+    <h2>Equipos que administran el Test {{test.title}}</h2>
     <div *ngIf="checkPermisosAdministracion()">
         <form (ngSubmit)='addTeamSubmit()' ngNativeValidate>
             <div class="my-3">
                 <div class="input-group">
                     <input class="button btn btn-primary" type="submit" value="Añadir equipo" />
                     <input type="text" class="form-control" name="inputAddTeam" aria-describedby="inputAddTeamHelp"
-                        [(ngModel)]="addTeamTeamname" placeholder="Nombre de equipo" required pattern="[^@]+" />
+                        autocomplete="off" list="auto_teams" [(ngModel)]="addTeamTeamname" (ngModelChange)="changeGetAutoTeams()"
+                        placeholder="Nombre de equipo" required pattern="[^@]+" />
+                    <datalist id="auto_teams">
+                        <option *ngFor="let autoteam of autoteams" value="{{autoteam.teamname}}">
+                    </datalist>
                 </div>
                 <div id="inputAddTeamHelp" class="form-text text-muted">Otorga permisos de administración a un equipo de
                     solo profesores</div>
@@ -33,7 +37,8 @@
         <tbody *ngFor="let team of teams">
             <tr>
                 <td role="button" [routerLink]="['/teams', team.teamname]">{{team.teamname}}</td>
-                <td *ngIf="checkPermisosAdministracion()"><button type="button" class="btn btn-danger" (click)="kickTeam(team.teamname)"> Eliminar</button></td>
+                <td *ngIf="checkPermisosAdministracion()"><button type="button" class="btn btn-danger"
+                        (click)="kickTeam(team.teamname)"> Eliminar</button></td>
             </tr>
         </tbody>
     </table>

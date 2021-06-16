@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Team, Test, TestService, UserService } from '@javgat/devtest-api';
+import { Team, TeamService, Test, TestService, UserService } from '@javgat/devtest-api';
 import { Subscription } from 'rxjs';
 import { LoggedInTeacherController } from '../shared/app.controller';
 import { Examen } from '../shared/app.model';
@@ -21,11 +21,14 @@ export class TestTeamsComponent extends LoggedInTeacherController implements OnI
   addTeamTeamname: string
   kickingTeamname: string
   isInAdminTeam: boolean
-  constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private tS: TestService, private route: ActivatedRoute) {
+  autoteams: Team[]
+  constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private tS: TestService, private route: ActivatedRoute,
+      private teamS: TeamService) {
     super(session, router, data, userS)
     this.test = new Examen()
     this.teams = []
     this.id = 0
+    this.autoteams = []
     this.isInAdminTeam = false
     this.addTeamTeamname = ""
     this.kickingTeamname = ""
@@ -34,6 +37,7 @@ export class TestTeamsComponent extends LoggedInTeacherController implements OnI
       this.borrarMensaje()
       this.getTest(true)
     });
+    this.changeGetAutoTeams()
   }
 
   ngOnInit(): void {
@@ -86,7 +90,7 @@ export class TestTeamsComponent extends LoggedInTeacherController implements OnI
   }
 
   checkPermisosAdministracion(): boolean {
-    return this.test.editable && (this.getSessionUser().isAdmin() || this.isPermisosAdministracion())
+    return (this.getSessionUser().isAdmin() || this.isPermisosAdministracion()) // && this.test.editable 
   }
 
   addTeamSubmit(){
@@ -109,6 +113,19 @@ export class TestTeamsComponent extends LoggedInTeacherController implements OnI
     this.tS.removeAdminTeamToTest(this.kickingTeamname, this.id).subscribe(
       resp => this.getTeamsTest(true),
       err => this.handleErrRelog(err, "eliminar equipo de un test", primera, this.kickT, this)
+    )
+  }
+
+  changeGetAutoTeams(){
+    this.getAutoTeams(true)
+  }
+
+  getAutoTeams(primera: boolean){
+    this.teamS.getTeams(this.addTeamTeamname, undefined, 20).subscribe(
+      resp=>{
+        this.autoteams=resp
+      },
+      err => this.handleErrRelog(err, "obtener equipos que empiezan por ese teamname", primera, this.getAutoTeams, this)
     )
   }
 
