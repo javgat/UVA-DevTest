@@ -10,6 +10,16 @@
                 nombre de usuario</button>
         </div>
     </form>
+    <form class="my-3" (ngSubmit)='clickSearchEmail()' ngNativeValidate>
+        <div class="input-group my-3">
+            <input class="button btn btn-primary" type="submit" value="Buscar por correo electrónico" />
+            <input type="text" class="form-control" name="inputSearchEmail" [(ngModel)]="editLikeEmail"
+                placeholder="Correo electrónico" required pattern=".+" />
+        </div>
+        <div *ngIf="likeEmail!=undefined">
+            <button type="button" class="btn btn-secondary" (click)="clickBorrarEmail()">Borrar filtro de correo electrónico</button>
+        </div>
+    </form>
     <div class="table-responsive">
         <table class="table table-striped table-hover table-primary mb-0">
             <thead>

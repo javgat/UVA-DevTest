@@ -1,4 +1,4 @@
-## @javgat/devtest-api@0.0.1-SNAPSHOT.202105301407
+## @javgat/devtest-api@0.0.1-SNAPSHOT.202106161211
 
 ### Building
 
@@ -19,7 +19,7 @@ Navigate to the folder of your consuming project and run one of next commands.
 _published:_
 
 ```
-npm install @javgat/devtest-api@0.0.1-SNAPSHOT.202105301407 --save
+npm install @javgat/devtest-api@0.0.1-SNAPSHOT.202106161211 --save
 ```
 
 _without publishing (not recommended):_

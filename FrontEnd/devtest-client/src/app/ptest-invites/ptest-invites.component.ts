@@ -271,7 +271,7 @@ export class PtestInvitesComponent extends LoggedInTeacherController implements 
   }
 
   getAutoUsers(primera: boolean){
-    this.userS.getUsers(undefined, this.addUserUsername, 20).subscribe(
+    this.userS.getUsers(undefined, this.addUserUsername, undefined, undefined, 20).subscribe(
       resp=>{
         this.autousers=resp
       },

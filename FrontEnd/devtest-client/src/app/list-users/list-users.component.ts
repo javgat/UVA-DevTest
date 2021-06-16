@@ -18,10 +18,13 @@ export class ListUsersComponent extends LoggedInController implements OnInit {
   users: User[]
   likeUsername: string | undefined
   editLikeUsername: string
+  likeEmail: string | undefined
+  editLikeEmail: string
   mensajeListaVacia: string
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService) {
     super(session, router, data, userS)
     this.editLikeUsername = ""
+    this.editLikeEmail = ""
     this.mensajeListaVacia = "¡Vaya! Parece que no hay ningún usuario para mostrar"
     this.users = []
     this.getUsersFilters()
@@ -49,7 +52,7 @@ export class ListUsersComponent extends LoggedInController implements OnInit {
   }
 
   getUsers(primera: boolean){
-    this.userS.getUsers(this.likeUsername).subscribe(
+    this.userS.getUsers(this.likeUsername, undefined, this.likeEmail).subscribe(
       resp => {
         this.saveUsers(resp)
       },
@@ -65,6 +68,17 @@ export class ListUsersComponent extends LoggedInController implements OnInit {
   clickBorrarUsername(){
     this.likeUsername = undefined
     this.editLikeUsername = ""
+    this.getUsersFilters()
+  }
+
+  clickSearchEmail(){
+    this.likeEmail = this.editLikeEmail
+    this.getUsersFilters()
+  }
+
+  clickBorrarEmail(){
+    this.likeEmail = undefined
+    this.editLikeEmail = ""
     this.getUsersFilters()
   }
 
