@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '@javgat/devtest-api';
 import { LoggedInController } from '../shared/app.controller';
 import { DataService } from '../shared/data.service';
@@ -12,8 +12,8 @@ import { SessionService } from '../shared/session.service';
 })
 export class MainComponent extends LoggedInController implements OnInit {
 
-  constructor(session: SessionService, router: Router, datos: DataService, userS : UserService) {
-    super(session, router, datos, userS)
+  constructor(session: SessionService, router: Router, datos: DataService, userS : UserService, route?: ActivatedRoute) {
+    super(session, router, datos, userS, route)
   }
 
   ngOnDestroy(): void {
@@ -22,7 +22,6 @@ export class MainComponent extends LoggedInController implements OnInit {
   }
 
   ngOnInit(): void {
-    
   }
 
   isStudent(): boolean{

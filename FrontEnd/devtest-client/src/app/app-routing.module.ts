@@ -110,6 +110,7 @@ const routes: Routes = [
   {path: 'pt/:testid/answering/pq/:questionid', component: AnsweringPQuestionComponent},
   {path: 'forgotPassword', component: ForgotPasswordComponent},
   {path: 'recoverPassword/:username', component: RecoverPasswordComponent},
+  {path: '', component: MainComponent},
   {path: '**', component: MainComponent, pathMatch:'full'}
 ];
 

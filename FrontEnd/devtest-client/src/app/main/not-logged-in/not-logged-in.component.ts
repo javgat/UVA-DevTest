@@ -4,7 +4,7 @@ import { SessionService } from 'src/app/shared/session.service';
 import { MainComponent } from '../main.component';
 
 import { ConfigurationService, CustomizedView, UserService } from '@javgat/devtest-api'
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { VistaPersonalizada } from 'src/app/shared/app.model';
 import { Subscription } from 'rxjs';
 
@@ -17,11 +17,11 @@ export class NotLoggedInComponent extends MainComponent implements OnInit {
 
   vistaPers: CustomizedView
   messSub: Subscription
-  constructor(session: SessionService, router: Router, datos: DataService, userService: UserService, private configS?: ConfigurationService) {
-    super(session, router, datos, userService);
+  constructor(session: SessionService, router: Router, datos: DataService, userService: UserService, private route: ActivatedRoute, private configS?: ConfigurationService) {
+    super(session, router, datos, userService, route);
     this.messSub = datos.mensajeActual.subscribe(
       valor => {
-        if(valor.mostrar==true){
+        if (valor.mostrar == true) {
           this.borrarMensaje()
         }
       }
@@ -31,9 +31,24 @@ export class NotLoggedInComponent extends MainComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.route.fragment.subscribe(
+      (fragments) => {
+        if (fragments != undefined) {
+          var elem = document.getElementById(fragments)
+          if (elem != undefined) {
+            this.router.navigate(['/'], { fragment: fragments })
+          }else{
+            setTimeout(() => {
+              elem = document.getElementById(fragments)
+              this.router.navigate(['/'], { fragment: fragments })
+            }, 500);
+          }
+        }
+      }
+    );
   }
 
-  ngOnDestroy(): void{
+  ngOnDestroy(): void {
     this.messSub.unsubscribe()
     super.ngOnDestroy()
   }

@@ -1,5 +1,5 @@
 import { Component, OnDestroy } from "@angular/core";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { TipoRol, User, UserService } from "@javgat/devtest-api";
 import { Subscription } from "rxjs";
 import { Mensaje, SessionLogin, SessionUser, Tipo } from "./app.model";
@@ -17,7 +17,7 @@ export abstract class LoggedInController {
     private sessionLoginWaited: boolean
     private sessionUserWaited: boolean
 
-    constructor(protected session: SessionService, protected router: Router, private data: DataService, protected userS: UserService) {
+    constructor(protected session: SessionService, protected router: Router, private data: DataService, protected userS: UserService, private routex?: ActivatedRoute) {
         this.session.checkStorageSession()
         this.sessionLogin = new SessionLogin(false)
         this.sessionUser = new SessionUser()
@@ -27,10 +27,10 @@ export abstract class LoggedInController {
         this.sessionTipoRolesSubscription = this.session.sessionTipoRoles.subscribe(
             valor => {
                 this.sessionTipoRoles = valor
-                if(this.sessionUserWaited){
+                if (this.sessionUserWaited) {
                     this.doUserSubscriptionAction()
                 }
-                if(this.sessionLoginWaited){
+                if (this.sessionLoginWaited) {
                     this.doSessionLoginSubscriptionAction()
                 }
             }
@@ -51,10 +51,10 @@ export abstract class LoggedInController {
 
     doSessionLoginSubscriptionAction() {
         if (this.sessionTipoRoles.length > 0) {
-            if(!this.sessionLogin.isLoggedIn()){
+            if (!this.sessionLogin.isLoggedIn()) {
                 this.doActionIsNotLoggedIn()
             }
-        }else{
+        } else {
             this.sessionLoginWaited = true
         }
     }
@@ -66,7 +66,7 @@ export abstract class LoggedInController {
             this.doInheritHasUserAction()
             this.doHasUserAction()
             this.doActionKnowTipoRol()
-        } else{
+        } else {
             this.sessionUserWaited = true
         }
     }
@@ -93,7 +93,15 @@ export abstract class LoggedInController {
 
     // Redirige cuando no tienes permisos
     redirectNotAllowed() {
-        this.router.navigate(['/'])
+        if(this.routex == undefined){
+            this.router.navigate(['/'])
+            return
+        }
+        this.routex.fragment.subscribe(
+            (fragments) => {
+                this.router.navigate(['/'], { fragment: fragments || undefined })
+            }
+        );
     }
 
     getSessionLogin(): SessionLogin {
@@ -126,7 +134,7 @@ export abstract class LoggedInController {
         this.data.cambiarMensaje(m)
     }
 
-    cambiarMensajeSending(){
+    cambiarMensajeSending() {
         this.cambiarMensaje(new Mensaje("Enviando datos...", Tipo.SENDING, true))
     }
 

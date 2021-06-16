@@ -10,7 +10,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0 container align-items-center">
         <li class="col-sm nav-item" *ngIf="canVerPTests()">
-          <a [routerLink]="['/ptests']" class="nav-link fw-bold">TESTS PÚBLICOS</a>
+          <a [routerLink]="['/']" fragment="ptests" class="nav-link fw-bold">TESTS</a>
         </li>
         <li class="col-sm nav-item" *ngIf="canVerETests()">
           <a [routerLink]="['/etests']" class="nav-link fw-bold">TESTS BORRADORES</a>

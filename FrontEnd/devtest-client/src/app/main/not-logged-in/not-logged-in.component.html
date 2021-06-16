@@ -1,5 +1,8 @@
 <div class="d-grid gap-2 container my-5">
     <markdown class="text-center" [data]="vistaPers.mensajeInicio"></markdown>
-    <a type="button" [routerLink]="['/login']" class="btn btn-primary btn-lg my-3">INICIAR SESIÓN</a>
-    <a type="button" [routerLink]="['/signin']" class="btn btn-primary btn-lg my-3">REGISTRARSE</a>
+    <div id="ptests" *ngIf="canVerPTests()">
+        <hr />
+        <h2 class="text-center fw-bold">Tests Públicos</h2>
+        <app-list-ptests></app-list-ptests>
+    </div>
 </div>
