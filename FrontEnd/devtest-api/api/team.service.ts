@@ -863,15 +863,17 @@ export class TeamService {
      * Returns all teams.
      * Returns all teams.
      * @param likeStartTeamname 
+     * @param likeTeamname 
      * @param limit max number of elements to be returned
      * @param offset first elements to be skipped at being returned
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getTeams(likeStartTeamname?: string, limit?: number, offset?: number, observe?: 'body', reportProgress?: boolean): Observable<Array<Team>>;
-    public getTeams(likeStartTeamname?: string, limit?: number, offset?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Team>>>;
-    public getTeams(likeStartTeamname?: string, limit?: number, offset?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Team>>>;
-    public getTeams(likeStartTeamname?: string, limit?: number, offset?: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getTeams(likeStartTeamname?: string, likeTeamname?: string, limit?: number, offset?: number, observe?: 'body', reportProgress?: boolean): Observable<Array<Team>>;
+    public getTeams(likeStartTeamname?: string, likeTeamname?: string, limit?: number, offset?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Team>>>;
+    public getTeams(likeStartTeamname?: string, likeTeamname?: string, limit?: number, offset?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Team>>>;
+    public getTeams(likeStartTeamname?: string, likeTeamname?: string, limit?: number, offset?: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
 
 
 
@@ -879,6 +881,9 @@ export class TeamService {
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
         if (likeStartTeamname !== undefined && likeStartTeamname !== null) {
             queryParameters = queryParameters.set('likeStartTeamname', <any>likeStartTeamname);
+        }
+        if (likeTeamname !== undefined && likeTeamname !== null) {
+            queryParameters = queryParameters.set('likeTeamname', <any>likeTeamname);
         }
         if (limit !== undefined && limit !== null) {
             queryParameters = queryParameters.set('limit', <any>limit);

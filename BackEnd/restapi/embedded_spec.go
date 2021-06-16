@@ -4026,6 +4026,11 @@ func init() {
             "in": "query"
           },
           {
+            "type": "string",
+            "name": "likeTeamname",
+            "in": "query"
+          },
+          {
             "type": "integer",
             "description": "max number of elements to be returned",
             "name": "limit",
@@ -10028,6 +10033,28 @@ func init() {
             "name": "username",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "string",
+            "name": "likeStartTeamname",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "likeTeamname",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
+            "in": "query"
           }
         ],
         "responses": {
@@ -15948,6 +15975,11 @@ func init() {
             "in": "query"
           },
           {
+            "type": "string",
+            "name": "likeTeamname",
+            "in": "query"
+          },
+          {
             "minimum": 0,
             "type": "integer",
             "description": "max number of elements to be returned",
@@ -22866,6 +22898,30 @@ func init() {
             "name": "username",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "string",
+            "name": "likeStartTeamname",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "likeTeamname",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "max number of elements to be returned",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "description": "first elements to be skipped at being returned",
+            "name": "offset",
+            "in": "query"
           }
         ],
         "responses": {

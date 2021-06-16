@@ -146,13 +146,17 @@ func DeleteTeam(db *sql.DB, teamname string) error {
 	return err
 }
 
-func addFiltersTeams(hayWhere bool, initQuery string, likeStartTeamname *string, limit *int64, offset *int64) string {
+func addFiltersTeams(hayWhere bool, initQuery string, likeStartTeamname *string, likeTeamname *string, limit *int64, offset *int64) string {
 	query := initQuery
 	nexoQuery := " WHERE "
 	if hayWhere {
 		nexoQuery = " AND "
 	}
 	if likeStartTeamname != nil && *likeStartTeamname != "" {
+		query = query + nexoQuery + " teamname LIKE ? "
+		nexoQuery = " AND "
+	}
+	if likeTeamname != nil && *likeTeamname != "" {
 		query = query + nexoQuery + " teamname LIKE ? "
 		nexoQuery = " AND "
 	}
@@ -166,32 +170,39 @@ func addFiltersTeams(hayWhere bool, initQuery string, likeStartTeamname *string,
 	return query
 }
 
-func FilterTeamParamsToInterfaceArr(likeStartTeamname *string) []interface{} {
+func FilterTeamParamsToInterfaceArr(likeStartTeamname *string, likeTeamname *string) []interface{} {
 	hayLikeStartTeamname := 0
+	hayLikeTeamname := 0
 	if likeStartTeamname != nil && *likeStartTeamname != "" {
 		hayLikeStartTeamname = 1
 	}
-	interfaceParams := make([]interface{}, hayLikeStartTeamname)
+	if likeTeamname != nil && *likeTeamname != "" {
+		hayLikeTeamname = 1
+	}
+	interfaceParams := make([]interface{}, hayLikeStartTeamname+hayLikeTeamname)
 	if hayLikeStartTeamname == 1 {
 		interfaceParams[0] = *likeStartTeamname + "%"
+	}
+	if hayLikeTeamname == 1 {
+		interfaceParams[hayLikeStartTeamname] = "%" + *likeTeamname + "%"
 	}
 	return interfaceParams
 }
 
 // GetTeams gets all teams
-func GetTeams(db *sql.DB, likeStartTeamname *string, limit *int64, offset *int64) ([]*Team, error) {
+func GetTeams(db *sql.DB, likeStartTeamname *string, likeTeamname *string, limit *int64, offset *int64) ([]*Team, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
 	stPrepare := "SELECT * FROM Equipo "
-	stPrepare = addFiltersTeams(false, stPrepare, likeStartTeamname, limit, offset)
+	stPrepare = addFiltersTeams(false, stPrepare, likeStartTeamname, likeTeamname, limit, offset)
 	query, err := db.Prepare(stPrepare)
 	var ts []*Team
 	if err != nil {
 		return ts, err
 	}
 	defer query.Close()
-	interfaceParams := FilterTeamParamsToInterfaceArr(likeStartTeamname)
+	interfaceParams := FilterTeamParamsToInterfaceArr(likeStartTeamname, likeTeamname)
 	rows, err := query.Query(interfaceParams...)
 	if err == nil {
 		ts, err = rowsToTeams(rows)
@@ -201,7 +212,7 @@ func GetTeams(db *sql.DB, likeStartTeamname *string, limit *int64, offset *int64
 
 // GetTeamsUsername gets all teams from user <username>
 // Param username: Username of the user
-func GetTeamsUsername(db *sql.DB, username string) ([]*Team, error) {
+func GetTeamsUsername(db *sql.DB, username string, likeStartTeamname *string, likeTeamname *string, limit *int64, offset *int64) ([]*Team, error) {
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
@@ -212,12 +223,18 @@ func GetTeamsUsername(db *sql.DB, username string) ([]*Team, error) {
 		return nil, errors.New(errorResourceNotFound)
 	}
 	var ts []*Team
-	query, err := db.Prepare("SELECT T.* FROM Equipo T JOIN EquipoUsuario R ON	T.id=R.equipoid WHERE R.usuarioid = ?")
+	stPrepare := "SELECT T.* FROM Equipo T JOIN EquipoUsuario R ON	T.id=R.equipoid WHERE R.usuarioid = ? "
+	stPrepare = addFiltersTeams(true, stPrepare, likeStartTeamname, likeTeamname, limit, offset)
+	query, err := db.Prepare(stPrepare)
 	if err != nil {
 		return ts, err
 	}
 	defer query.Close()
-	rows, err := query.Query(u.ID)
+	interfaceParams := FilterTeamParamsToInterfaceArr(likeStartTeamname, likeTeamname)
+	var paramsSlice []interface{}
+	paramsSlice = append(paramsSlice, u.ID)
+	interfaceParams = append(paramsSlice, interfaceParams...)
+	rows, err := query.Query(interfaceParams...)
 	if err == nil {
 		ts, err = rowsToTeams(rows)
 	}

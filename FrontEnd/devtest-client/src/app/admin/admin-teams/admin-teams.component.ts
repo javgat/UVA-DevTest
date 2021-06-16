@@ -12,10 +12,8 @@ import { AdminComponent } from '../admin.component';
 })
 export class AdminTeamsComponent extends AdminComponent implements OnInit {
 
-  teams: Team[]
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, teamS: TeamService) {
     super(session, router, data, userS, teamS)
-    this.teams = []
   }
 
   ngOnInit(): void {
@@ -23,21 +21,6 @@ export class AdminTeamsComponent extends AdminComponent implements OnInit {
 
   ngOnDestroy(): void{
     super.onDestroy()
-  }
-
-  getTeams(primera: boolean) {
-    this.teamS.getTeams().subscribe(
-      resp => {
-        this.teams = resp
-      },
-      err => {
-        this.handleErrRelog(err, "Obtener equipos del panel de administración", primera, this.getTeams, this)
-      }
-    )
-  }
-
-  doAdminAction() {
-    this.getTeams(true)
   }
 
 }

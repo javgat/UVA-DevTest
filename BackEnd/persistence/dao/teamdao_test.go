@@ -44,7 +44,7 @@ func TestGetTeamsNilBD(t *testing.T) {
 	}
 	defer db.Close()
 	expectGetTeamsDefault(mock)
-	teams, err := GetTeams(nil, nil, nil, nil)
+	teams, err := GetTeams(nil, nil, nil, nil, nil)
 	if err == nil {
 		t.Log("error should not be nil", err)
 		t.Fail()
@@ -61,7 +61,7 @@ func TestGetTeamsClosedBD(t *testing.T) {
 	}
 	db.Close()
 	expectGetTeamsDefault(mock)
-	teams, err := GetTeams(db, nil, nil, nil)
+	teams, err := GetTeams(db, nil, nil, nil, nil)
 	if err == nil {
 		t.Log("error should not be nil", err)
 		t.Fail()
@@ -78,7 +78,7 @@ func TestGetTeamsError(t *testing.T) {
 	}
 	defer db.Close()
 	expectGetTeamsError(mock)
-	teams, err := GetTeams(db, nil, nil, nil)
+	teams, err := GetTeams(db, nil, nil, nil, nil)
 	if err == nil {
 		t.Log("error should not be nil", err)
 		t.Fail()
@@ -95,7 +95,7 @@ func TestGetTeamsEmpty(t *testing.T) {
 	}
 	defer db.Close()
 	expectGetTeamsEmpty(mock)
-	teams, err := GetTeams(db, nil, nil, nil)
+	teams, err := GetTeams(db, nil, nil, nil, nil)
 	if err != nil {
 		t.Log("error should be nil", err)
 		t.Fail()
@@ -112,7 +112,7 @@ func TestGetTeamsFound(t *testing.T) {
 	}
 	defer db.Close()
 	expectGetTeamsDefault(mock)
-	teams, err := GetTeams(db, nil, nil, nil)
+	teams, err := GetTeams(db, nil, nil, nil, nil)
 	if err != nil {
 		t.Log("error should be nil", err)
 		t.Fail()
@@ -166,7 +166,7 @@ func TestGetTeamsUsernameNilDB(t *testing.T) {
 	}
 	defer db.Close()
 	expectGetTeamsUsernameDefault(mock)
-	teams, err := GetTeamsUsername(nil, username)
+	teams, err := GetTeamsUsername(nil, username, nil, nil, nil, nil)
 	if err == nil {
 		t.Log("error should not be nil", err)
 		t.Fail()
@@ -183,7 +183,7 @@ func TestGetTeamsUsernameClosedDB(t *testing.T) {
 	}
 	db.Close()
 	expectGetTeamsUsernameDefault(mock)
-	teams, err := GetTeamsUsername(db, username)
+	teams, err := GetTeamsUsername(db, username, nil, nil, nil, nil)
 	if err == nil {
 		t.Log("error should not be nil", err)
 		t.Fail()
@@ -200,7 +200,7 @@ func TestGetTeamsUsernameUsernameNotFound(t *testing.T) {
 	}
 	defer db.Close()
 	expectGetTeamsUsernameUsernameNotFound(mock)
-	teams, err := GetTeamsUsername(db, username)
+	teams, err := GetTeamsUsername(db, username, nil, nil, nil, nil)
 	if err == nil {
 		t.Log("error should not be nil", err)
 		t.Fail()
@@ -217,7 +217,7 @@ func TestGetTeamsUsernameError(t *testing.T) {
 	}
 	defer db.Close()
 	expectGetTeamsUsernameError(mock)
-	teams, err := GetTeamsUsername(db, username)
+	teams, err := GetTeamsUsername(db, username, nil, nil, nil, nil)
 	if err == nil {
 		t.Log("error should not be nil", err)
 		t.Fail()
@@ -234,7 +234,7 @@ func TestGetTeamsUsernameEmpty(t *testing.T) {
 	}
 	defer db.Close()
 	expectGetTeamsUsernameEmpty(mock)
-	teams, err := GetTeamsUsername(db, username)
+	teams, err := GetTeamsUsername(db, username, nil, nil, nil, nil)
 	if err != nil {
 		t.Log("error should be nil", err)
 		t.Fail()
@@ -251,7 +251,7 @@ func TestGetTeamsUsernameFound(t *testing.T) {
 	}
 	defer db.Close()
 	expectGetTeamsUsernameDefault(mock)
-	teams, err := GetTeamsUsername(db, username)
+	teams, err := GetTeamsUsername(db, username, nil, nil, nil, nil)
 	if err != nil {
 		t.Log("error should be nil", err)
 		t.Fail()

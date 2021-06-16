@@ -37,6 +37,10 @@ type GetTeamsParams struct {
 	  In: query
 	*/
 	LikeStartTeamname *string
+	/*
+	  In: query
+	*/
+	LikeTeamname *string
 	/*max number of elements to be returned
 	  Minimum: 0
 	  In: query
@@ -62,6 +66,11 @@ func (o *GetTeamsParams) BindRequest(r *http.Request, route *middleware.MatchedR
 
 	qLikeStartTeamname, qhkLikeStartTeamname, _ := qs.GetOK("likeStartTeamname")
 	if err := o.bindLikeStartTeamname(qLikeStartTeamname, qhkLikeStartTeamname, route.Formats); err != nil {
+		res = append(res, err)
+	}
+
+	qLikeTeamname, qhkLikeTeamname, _ := qs.GetOK("likeTeamname")
+	if err := o.bindLikeTeamname(qLikeTeamname, qhkLikeTeamname, route.Formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -94,6 +103,24 @@ func (o *GetTeamsParams) bindLikeStartTeamname(rawData []string, hasKey bool, fo
 		return nil
 	}
 	o.LikeStartTeamname = &raw
+
+	return nil
+}
+
+// bindLikeTeamname binds and validates parameter LikeTeamname from query.
+func (o *GetTeamsParams) bindLikeTeamname(rawData []string, hasKey bool, formats strfmt.Registry) error {
+	var raw string
+	if len(rawData) > 0 {
+		raw = rawData[len(rawData)-1]
+	}
+
+	// Required: false
+	// AllowEmptyValue: false
+
+	if raw == "" { // empty values pass all other validations
+		return nil
+	}
+	o.LikeTeamname = &raw
 
 	return nil
 }

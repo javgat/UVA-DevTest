@@ -280,7 +280,7 @@ export class PtestInvitesComponent extends LoggedInTeacherController implements 
   }
 
   getAutoTeams(primera: boolean){
-    this.teamS.getTeams(this.addTeamTeamname, 20).subscribe(
+    this.teamS.getTeams(this.addTeamTeamname, undefined, 20).subscribe(
       resp=>{
         this.autoteams=resp
       },

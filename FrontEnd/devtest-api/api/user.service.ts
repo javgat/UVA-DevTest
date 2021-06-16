@@ -2686,16 +2686,38 @@ export class UserService {
      * Returns all teams of a user.
      * Returns all teams of a user.
      * @param username Username of the user to get their teams
+     * @param likeStartTeamname 
+     * @param likeTeamname 
+     * @param limit max number of elements to be returned
+     * @param offset first elements to be skipped at being returned
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getTeamsOfUser(username: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Team>>;
-    public getTeamsOfUser(username: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Team>>>;
-    public getTeamsOfUser(username: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Team>>>;
-    public getTeamsOfUser(username: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getTeamsOfUser(username: string, likeStartTeamname?: string, likeTeamname?: string, limit?: number, offset?: number, observe?: 'body', reportProgress?: boolean): Observable<Array<Team>>;
+    public getTeamsOfUser(username: string, likeStartTeamname?: string, likeTeamname?: string, limit?: number, offset?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Team>>>;
+    public getTeamsOfUser(username: string, likeStartTeamname?: string, likeTeamname?: string, limit?: number, offset?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Team>>>;
+    public getTeamsOfUser(username: string, likeStartTeamname?: string, likeTeamname?: string, limit?: number, offset?: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (username === null || username === undefined) {
             throw new Error('Required parameter username was null or undefined when calling getTeamsOfUser.');
+        }
+
+
+
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (likeStartTeamname !== undefined && likeStartTeamname !== null) {
+            queryParameters = queryParameters.set('likeStartTeamname', <any>likeStartTeamname);
+        }
+        if (likeTeamname !== undefined && likeTeamname !== null) {
+            queryParameters = queryParameters.set('likeTeamname', <any>likeTeamname);
+        }
+        if (limit !== undefined && limit !== null) {
+            queryParameters = queryParameters.set('limit', <any>limit);
+        }
+        if (offset !== undefined && offset !== null) {
+            queryParameters = queryParameters.set('offset', <any>offset);
         }
 
         let headers = this.defaultHeaders;
@@ -2720,6 +2742,7 @@ export class UserService {
 
         return this.httpClient.get<Array<Team>>(`${this.basePath}/users/${encodeURIComponent(String(username))}/teams`,
             {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

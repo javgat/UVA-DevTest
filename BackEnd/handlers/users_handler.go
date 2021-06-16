@@ -274,7 +274,7 @@ func GetTeamsOfUser(params user.GetTeamsOfUserParams, u *models.User) middleware
 	var teams []*dao.Team
 	db, err := dbconnection.ConnectDb()
 	if err == nil {
-		teams, err = dao.GetTeamsUsername(db, params.Username)
+		teams, err = dao.GetTeamsUsername(db, params.Username, params.LikeStartTeamname, params.LikeTeamname, params.Limit, params.Offset)
 		if err == nil && teams != nil {
 			return user.NewGetTeamsOfUserOK().WithPayload(dao.ToModelsTeams(teams))
 		}

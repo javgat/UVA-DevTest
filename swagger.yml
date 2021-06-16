@@ -759,6 +759,22 @@ paths:
         description: Username of the user to get their teams
         required: true
         type: string
+      - in: query
+        name: likeStartTeamname
+        type: string
+      - in: query
+        name: likeTeamname
+        type: string
+      - in: query
+        name: limit
+        type: integer
+        description: max number of elements to be returned
+        minimum: 0
+      - in: query
+        name: offset
+        type: integer
+        description: first elements to be skipped at being returned
+        minimum: 0
       responses:
         200:
           description: teams found
@@ -3101,6 +3117,9 @@ paths:
       parameters:
       - in: query
         name: likeStartTeamname
+        type: string
+      - in: query
+        name: likeTeamname
         type: string
       - in: query
         name: limit

@@ -25,7 +25,6 @@ export class TeamsComponent extends LoggedInController implements OnInit {
     this.routeSub = this.route.params.subscribe(params => {
       this.username = params['username']
       this.borrarMensaje()
-      this.getTeams(true)
     });
   }
 
@@ -35,22 +34,6 @@ export class TeamsComponent extends LoggedInController implements OnInit {
   ngOnDestroy(): void {
     this.routeSub.unsubscribe()
     super.onDestroy()
-  }
-
-  getTeams(primera: boolean) {
-    if(this.username == "" || this.username == undefined) return
-    this.getTeamsOfUser(this.username, primera)
-  }
-
-  getTeamsOfUser(username: string, primera: boolean) {
-    this.userS.getTeamsOfUser(username).subscribe(
-      resp => {
-        this.teams = resp
-      },
-      err => {
-        this.handleErrRelog(err, "obtener equipos de usuario", primera, this.getTeams, this)
-      }
-    )
   }
 
 }

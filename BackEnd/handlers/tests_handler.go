@@ -149,7 +149,7 @@ func isTestAdmin(u *models.User, testid int64) bool {
 			return true
 		}
 		var ts []*dao.Team
-		ts, err = dao.GetTeamsUsername(db, *u.Username)
+		ts, err = dao.GetTeamsUsername(db, *u.Username, nil, nil, nil, nil)
 		if err == nil {
 			for _, itemCopy := range ts {
 				t, err = dao.GetTestFromTeam(db, *itemCopy.Teamname, testid)
