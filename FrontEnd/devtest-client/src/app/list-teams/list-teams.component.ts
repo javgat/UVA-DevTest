@@ -15,9 +15,11 @@ export class ListTeamsComponent extends LoggedInController implements OnInit {
   teams: Team[]
   editLikeTeamname: string
   likeTeamname: string | undefined
+  searchActive: boolean
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, protected teamS: TeamService) {
     super(session, router, data, userS)
     this.editLikeTeamname = ""
+    this.searchActive = false
     this.teams = []
     this.getTeamsFilter()
   }
@@ -40,6 +42,15 @@ export class ListTeamsComponent extends LoggedInController implements OnInit {
     this.likeTeamname = undefined
     this.editLikeTeamname = ""
     this.getTeamsFilter()
+  }
+
+
+  activateSearch(){
+    this.searchActive=true
+  }
+
+  isSearchActive(): boolean{
+    return this.searchActive
   }
 
 }
