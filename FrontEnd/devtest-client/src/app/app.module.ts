@@ -110,6 +110,7 @@ import { MensajeComponent } from './mensaje/mensaje.component';
 import { ListTeamsComponent } from './list-teams/list-teams.component';
 import { LtAdminComponent } from './list-teams/lt-admin/lt-admin.component';
 import { LtmUserComponent } from './list-teams/ltm-user/ltm-user.component';
+import { FooterComponent } from './footer/footer.component';
 
 export function apiConfigFactory (): Configuration {
   const params: ConfigurationParameters = {
@@ -219,7 +220,8 @@ export function apiConfigFactory (): Configuration {
     MensajeComponent,
     ListTeamsComponent,
     LtAdminComponent,
-    LtmUserComponent
+    LtmUserComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
