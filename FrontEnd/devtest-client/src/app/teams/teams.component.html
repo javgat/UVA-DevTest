@@ -1,6 +1,6 @@
 <div class="mt-5">
     <h2 class="text-center fw-bold">Tus Equipos</h2>
-    <div *ngIf="getSessionUser().isTeacherOrAdmin()" class="d-grid gap-2 my-4">
+    <div *ngIf="getSessionUser().isTeacherOrAdmin()" class="d-grid gap-2 my-4 col-6 mx-auto">
         <a class="button btn btn-primary btn-lg" [routerLink]="['/createTeam']">CREAR EQUIPO</a>
     </div>
     <app-ltm-user [username]="username"></app-ltm-user>

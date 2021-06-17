@@ -97,9 +97,9 @@
                     </span>
                 </span>
             </p>
-            <form *ngIf="checkPermisosEdicion()" ngNativeValidate>
+            <form *ngIf="checkPermisosEdicion()" (ngSubmit)='addTagSubmit()' ngNativeValidate>
                 <div class="input-group my-3">
-                    <button class="btn btn-primary" (click)='addTagSubmit()' type="button">
+                    <button class="btn btn-primary" type="submit">
                         Añadir etiqueta
                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
                             fill="currentColor">

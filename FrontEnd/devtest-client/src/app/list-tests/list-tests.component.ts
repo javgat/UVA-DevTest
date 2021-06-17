@@ -27,6 +27,8 @@ export class ListTestsComponent extends LoggedInController implements OnInit {
   offset: number
   autotags: Tag[]
   mensajeListaVacia: string
+  searchActive: boolean
+  filterActive: boolean
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, protected tS: TestService,
      protected tagS: TagService, protected teamS?: TeamService) {
     super(session, router, data, userS)
@@ -43,6 +45,8 @@ export class ListTestsComponent extends LoggedInController implements OnInit {
     this.limit = 20
     this.offset = 0
     this.autotags = []
+    this.searchActive = false
+    this.filterActive = false
     this.mensajeListaVacia = "¡Vaya! Parece que no hay ningún test para mostrar"
     this.getTestsFilters()
     this.changeGetAutoTags()
@@ -272,5 +276,21 @@ export class ListTestsComponent extends LoggedInController implements OnInit {
     if(d==undefined) return ""
     var date = new Date(d)
     return date.toLocaleString()
+  }
+
+  activateSearch(){
+    this.searchActive=true
+  }
+
+  isSearchActive(): boolean{
+    return this.searchActive
+  }
+
+  activateFilter(){
+    this.filterActive=true
+  }
+
+  isFilterActive(): boolean{
+    return this.filterActive
   }
 }
