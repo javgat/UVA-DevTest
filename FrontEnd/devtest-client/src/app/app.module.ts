@@ -10,7 +10,7 @@ import { HttpClient, HttpClientModule, HttpClientXsrfModule, HTTP_INTERCEPTORS }
 import { FormsModule } from '@angular/forms';
 import { ApiModule, BASE_PATH, Configuration, ConfigurationParameters } from '@javgat/devtest-api';
 import { environment } from '../environments/environment';
-import { MarkdownModule } from 'ngx-markdown';
+import { MarkdownModule, MarkedOptions } from 'ngx-markdown';
 import { MainComponent } from './main/main.component';
 import { LoggedInComponent } from './main/logged-in/logged-in.component';
 import { NotLoggedInComponent } from './main/not-logged-in/not-logged-in.component';
@@ -227,7 +227,19 @@ export function apiConfigFactory (): Configuration {
     HttpClientModule,
     ApiModule.forRoot(apiConfigFactory),
     FormsModule,
-    MarkdownModule.forRoot({ loader: HttpClient }),
+    MarkdownModule.forRoot({
+      loader: HttpClient,
+      markedOptions: {
+        provide: MarkedOptions,
+        useValue: {
+          gfm: true,
+          breaks: false,
+          pedantic: false,
+          smartLists: true,
+          smartypants: false,
+        },
+      }
+    }),
     DragulaModule.forRoot(),
     CountdownModule,
   ],

@@ -1,5 +1,7 @@
-<div class="d-grid gap-2 container my-5">
-    <markdown class="text-center" [data]="vistaPers.mensajeInicio"></markdown>
+<div class="container my-5">
+    <button *ngIf="canVerPTests()" [routerLink]="['/']" fragment="ptests" class="button btn btn-primary">IR A
+        TESTS &darr;</button>
+    <markdown class="text-sm-center d-block" [data]="vistaPers.mensajeInicio"></markdown>
     <div id="ptests" *ngIf="canVerPTests()">
         <hr />
         <h2 class="text-center fw-bold">Tests Públicos</h2>
