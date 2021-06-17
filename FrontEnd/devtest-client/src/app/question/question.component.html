@@ -66,10 +66,7 @@
                     </div>
                 </div>
             </div>
-            <p>Autor: <a [routerLink]="['/profile', question.username]">{{question.username}}</a></p>
-            <p><button class="btn btn-primary" type="button" [routerLink]="['/q', question.id, 'teams']">Ver equipos
-                    administradores</button></p>
-            <p>Etiquetas:
+            <p>Etiquetas: <span *ngIf="tags.length==0">Ninguna</span>
                 <span *ngFor="let tag of tags">
                     <span *ngIf="checkPermisosEdicion()">
                         <span class="badge bg-warning text-dark" role="button" id="{{tag.tag}}"
@@ -97,7 +94,45 @@
                 </div>
             </form>
             <hr />
-            <div class="d-grid gap-2 my-3">
+
+            <div class="row">
+                <div class="col">
+                    <p><b>Tiempo estimado:</b> {{question.estimatedTime}} minutos</p>
+                    <p><b>Tipo:</b> {{tipoPrint}}</p>
+                </div>
+                <div class="col-sm">
+                    <div class="d-grid gap-2 d-flex justify-content-md-end">
+                        <button class="btn btn-primary mt-3" type="button" (click)="swapShowExtraInfo()">
+                            <span *ngIf="!showMostrarExtraInfo()">Mostrar Información Extra</span>
+                            <span *ngIf="showMostrarExtraInfo()">Ocultar Información Extra</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="container mt-3" *ngIf="showMostrarExtraInfo()">
+                <p><button class="btn btn-primary" type="button" [routerLink]="['/q', question.id, 'teams']">Ver equipos
+                        administradores</button></p>
+                <p><b>Autor: </b><a [routerLink]="['/profile', question.username]">{{question.username}}</a></p>
+                <p><b>ID:</b> {{question.id}}</p>
+                <p><b>Corrección automática:</b> <span *ngIf="question.autoCorrect"> Sí</span><span
+                        *ngIf="!question.autoCorrect"> No</span></p>
+                <p><b>Acceso público para profesores:</b> <span *ngIf="question.accesoPublicoNoPublicada">
+                        Sí</span><span *ngIf="!question.accesoPublicoNoPublicada"> No</span></p>
+                <p><b>Penalización por fallo:</b>
+                    <span *ngIf="question.penalizacion!=0"> {{question.penalizacion}} %</span>
+                    <span *ngIf="question.penalizacion==0"> No</span>
+                </p>
+            </div>
+            <p *ngIf="!question.editable"><button class="btn btn-primary" type="button"
+                    [routerLink]="['/pt', testid, 'q', question.id, 'qanswers']">Ver respuestas entregadas</button></p>
+            <h5>Enunciado:</h5>
+            <div class="card mb-3">
+                <div class="card-body">
+                    <markdown class="my-3" [data]="question.question"></markdown>
+                </div>
+            </div>
+
+            <div class="d-grid gap-2 my-3 col-6 mx-auto">
                 <button *ngIf="checkPermisosEdicion()" type="button" class="btn btn-primary btn-lg"
                     data-bs-toggle="modal" data-bs-target="#editQuestionModal">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 26" width="24px"
@@ -108,31 +143,11 @@
                     </svg>
                     Editar pregunta</button>
             </div>
-            <p><b>ID:</b> {{question.id}}</p>
-            <p><b>Tiempo estimado:</b> {{question.estimatedTime}} minutos</p>
-            <p><b>Corrección automática:</b> <span *ngIf="question.autoCorrect"> Sí</span><span
-                    *ngIf="!question.autoCorrect"> No</span></p>
-            <p><b>Acceso público para profesores:</b> <span *ngIf="question.accesoPublicoNoPublicada"> Sí</span><span
-                    *ngIf="!question.accesoPublicoNoPublicada"> No</span></p>
-            <p><b>Penalización por fallo:</b>
-                <span *ngIf="question.penalizacion!=0"> {{question.penalizacion}} %</span>
-                <span *ngIf="question.penalizacion==0"> No</span>
-            </p>
-            <p><b>Tipo:</b> {{tipoPrint}}</p>
-            <p *ngIf="!question.editable"><button class="btn btn-primary" type="button"
-                    [routerLink]="['/pt', testid, 'q', question.id, 'qanswers']">Ver respuestas entregadas</button></p>
-            <hr />
-            <h5>Enunciado:</h5>
-            <div class="card mb-3">
-                <div class="card-body">
-                    <markdown class="my-3" [data]="question.question"></markdown>
-                </div>
-            </div>
         </div>
     </div>
     <div class="my-3">
         <h3>Respuesta:</h3>
-        <div class="d-grid gap-2" *ngIf="checkPermisosEdicion()">
+        <div class="d-grid gap-2 col-6 mx-auto" *ngIf="checkPermisosEdicion()">
             <button *ngIf="!isEditandoRespuesta()" type="button" class="btn btn-warning btn-lg"
                 (click)="clickEditarRespuesta()">Editar Respuesta Esperada</button>
             <button *ngIf="isEditandoRespuesta() && needsStopEditarRespuesta()" type="button"
@@ -150,6 +165,8 @@
                     </div>
                     <input class="button btn btn-primary" type="submit"
                         value="Guardar modificación de respuesta esperada" />
+                    <button type="button" class="btn btn-danger mx-3"
+                        (click)="clickStopEditarRespuesta()">Cancelar</button>
                 </div>
             </form>
         </div>

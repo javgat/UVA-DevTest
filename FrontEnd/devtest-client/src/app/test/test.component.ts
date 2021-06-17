@@ -35,6 +35,7 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
   tPTempPosicion?: TestPregunta
   pregTempPosicion?: Question
   pregsUpdated: number
+  showExtraInfo: boolean
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private route: ActivatedRoute,
     private testS: TestService, private tagS: TagService) {
     super(session, router, data, userS)
@@ -52,6 +53,7 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
     this.isFavorita = false
     this.preguntaQuitando = 0
     this.pregsUpdated = 0
+    this.showExtraInfo = false
     this.publishedParams = {
       title: "",
       accesoPublico: false,
@@ -475,6 +477,14 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
 
   showVolverTests(): boolean{
     return !this.showVolverMisTests() && !this.showVolverTestsCompartidos()
+  }
+
+  swapShowExtraInfo(){
+    this.showExtraInfo = !this.showExtraInfo
+  }
+
+  showMostrarExtraInfo(): boolean{
+    return this.showExtraInfo
   }
 
 }

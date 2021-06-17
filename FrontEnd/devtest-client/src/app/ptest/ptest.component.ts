@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PublishedTestService, Question, Tag, PTestUpdate, UserService, Test } from '@javgat/devtest-api';
 import { Subscription } from 'rxjs';
 import { LoggedInController } from '../shared/app.controller';
-import { Examen, tipoPrint } from '../shared/app.model';
+import { Examen, Mensaje, Tipo, tipoPrint } from '../shared/app.model';
 import { DataService } from '../shared/data.service';
 import { SessionService } from '../shared/session.service';
 
@@ -23,6 +23,7 @@ export class PtestComponent extends LoggedInController implements OnInit {
   respuestaIniciadaId?: number
   isRespuestaIniciada: boolean
   ptestUpdate: PTestUpdate
+  showExtraInfo: boolean
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private route: ActivatedRoute, private ptestS: PublishedTestService) {
     super(session, router, data, userS);
     this.preguntas = []
@@ -31,6 +32,7 @@ export class PtestComponent extends LoggedInController implements OnInit {
     this.id = 0
     this.isInAdminTeam = false
     this.isRespuestaIniciada = false
+    this.showExtraInfo = false
     this.ptestUpdate = {
       maxIntentos: 0,
       maxMinutes: 0,
@@ -270,6 +272,37 @@ export class PtestComponent extends LoggedInController implements OnInit {
 
   showVolverTests(): boolean{
     return !this.showVolverMisTests() && !this.showVolverTestsCompartidos()
+  }
+
+  checkCloneTest(): boolean {
+    if (this.test.accesoPublicoNoPublicado) {
+      return this.getSessionUser().isTeacherOrAdmin()
+    } else {
+      return this.isPermisosAdministracion()
+    }
+  }
+
+  cloneTestClick() {
+    this.cloneTest(true)
+  }
+
+  cloneTest(primera: boolean) {
+    this.userS.copyTest(this.getSessionUser().getUsername(), this.id).subscribe(
+      resp => {
+        this.cambiarMensaje(new Mensaje("Test clonado con éxito", Tipo.SUCCESS, true))
+        //this.mantenerMensaje = true
+        this.router.navigate(['/et', resp.id])
+      },
+      err => this.handleErrRelog(err, "clonar test", primera, this.cloneTest, this)
+    )
+  }
+
+  swapShowExtraInfo(){
+    this.showExtraInfo = !this.showExtraInfo
+  }
+
+  showMostrarExtraInfo(): boolean{
+    return this.showExtraInfo
   }
 
 }

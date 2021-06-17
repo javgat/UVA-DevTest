@@ -32,6 +32,7 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
   isFavorita: boolean
   testid?: number
   autotags: Tag[]
+  showExtraInfo: boolean
   private editandoRespuesta: boolean
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private qS: QuestionService,
     private route: ActivatedRoute, private tagS: TagService) {
@@ -49,6 +50,7 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
     this.question = new Pregunta()
     this.questionEdit = new Pregunta()
     this.isFavorita = false
+    this.showExtraInfo = false
     this.nuevaOpcion = {
       correcta: false,
       texto: ""
@@ -392,5 +394,13 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
 
   showVolverQuestions(): boolean{
     return !this.showVolverMisQuestions() && !this.showVolverQuestionsCompartidos() && !this.showVolverTest()
+  }
+
+  swapShowExtraInfo(){
+    this.showExtraInfo = !this.showExtraInfo
+  }
+
+  showMostrarExtraInfo(): boolean{
+    return this.showExtraInfo
   }
 }

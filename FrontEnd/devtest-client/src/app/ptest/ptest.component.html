@@ -34,48 +34,92 @@
     <div class="my-3">
         <div class=" card">
             <div class="card-body">
-                <h2>Test: {{test.title}}</h2>
-                <p>Autor: <a *ngIf="isLoggedIn()" [routerLink]="['/profile', test.username]">{{test.username}}</a>
-                    <a *ngIf="!isLoggedIn()">{{test.username}}</a>
-                </p>
-                <div *ngIf="isModoTestAdmin()">
-                    <p><button class="btn btn-primary" type="button" [routerLink]="['/et', test.id, 'teams']">Ver
-                            equipos administradores</button></p>
+                <div class="row">
+                    <h2 class="col">Test: {{test.title}}</h2>
+                    <div class="col-sm">
+                        <div class="d-grid gap-2 d-flex justify-content-md-end" *ngIf="checkCloneTest()">
+                            <button type="button" class="btn btn-outline-primary mx-3 me-md-2" data-bs-toggle="modal"
+                                data-bs-target="#modalCloneTest">Clonar</button>
+                            <button *ngIf="isModoTestAdmin()" class="button btn btn-outline-primary"
+                                [routerLink]="['/et', test.originalTestID]">
+                                Volver al test borrador original
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <button *ngIf="isModoTestAdmin()" class="button btn btn-outline-primary"
-                    [routerLink]="['/et', test.originalTestID]">
-                    Volver al test borrador original
-                </button>
-                <div *ngIf="isModoTestAdmin()" class="d-grid gap-2 my-3">
-                    <button class="btn btn-primary btn-lg" type="button"
-                        [routerLink]="['/pt', test.id, 'invite']">INVITAR Y VER INVITACIONES</button>
-                    <button class="btn btn-primary btn-lg" type="button" [routerLink]="['/pt', test.id, 'answers']">VER
-                        RESPUESTAS</button>
-                </div>
-                <p>Etiquetas:
+                <p>Etiquetas: <span *ngIf="tags.length==0">Ninguna</span>
                     <span *ngFor="let tag of tags">
                         <span class="badge bg-warning text-dark">{{tag.tag}}</span>&nbsp;
                     </span>
                 </p>
+                <button type="button" class="btn btn-primary mb-3" [routerLink]="['./']" [fragment]="'preguntas'"
+                    *ngIf="isModoTestAdmin()">Ver Preguntas &darr;</button>
+                <hr *ngIf="isModoTestAdmin()"/>
+                <div *ngIf="isModoTestAdmin()" class="d-grid gap-2 mt-3 col-6 mx-auto">
+                    <h4 class="text-center">Opciones de administración:</h4>
+                    <button class="btn btn-primary btn-lg" type="button"
+                        [routerLink]="['/pt', test.id, 'invite']">INVITAR Y VER INVITACIONES</button>
+                    <button class="btn btn-primary btn-lg" type="button" [routerLink]="['/pt', test.id, 'answers']">VER
+                        RESPUESTAS</button>
+                    <button type="button" class="btn btn-lg btn-primary"
+                        data-bs-toggle="modal" data-bs-target="#editTestModal">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 26" width="24px"
+                            fill="currentColor">
+                            <path d="M0 0h24v24H0z" fill="none" />
+                            <path
+                                d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+                        </svg>
+                        Modificar Test Publicado
+                    </button>
+                </div>
+                <hr />
                 <div>
-                    <p *ngIf="isLoggedIn()">Llevas {{test.cantidadRespuestasDelUsuario}} intentos<span
-                            *ngIf="testHasMaxIntentos()"> de un máximo de {{test.maxIntentos}}</span>.</p>
-                    <div class="d-grid gap-2 my-3" *ngIf="mostrarVerMisRespuestas()">
-                        <button class="btn btn-secondary" type="button" [routerLink]="['/pt', test.id, 'myanswers']">Ver
-                            mis respuestas</button>
+
+                    <div class="row">
+                        <div class="col">
+                            <p><b>Tiempo máximo:</b> {{test.maxMinutes}} minutos</p>
+                            <p><b>Nota máxima: </b> {{test.notaMaxima}}</p>
+                        </div>
+                        <div class="col-sm">
+                            <div class="d-grid gap-2 d-flex justify-content-md-end">
+                                <button class="btn btn-primary mt-3" type="button" (click)="swapShowExtraInfo()">
+                                    <span *ngIf="!showMostrarExtraInfo()">Mostrar Información Extra</span>
+                                    <span *ngIf="showMostrarExtraInfo()">Ocultar Información Extra</span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <div *ngIf="isRespuestaIniciada" class="d-grid gap-2 my-3">
-                        <button class="btn btn-success btn-lg" type="button"
-                            [routerLink]="['/pt', id, 'answering']">CONTINUAR RESPUESTA</button>
+                    <div class="container mt-3" *ngIf="showMostrarExtraInfo()">
+                        <div *ngIf="isModoTestAdmin()">
+                            <p><button class="btn btn-primary" type="button"
+                                    [routerLink]="['/et', test.id, 'teams']">Ver
+                                    equipos administradores</button></p>
+                        </div>
+                        <p><b>Autor: </b><a *ngIf="isLoggedIn()"
+                                [routerLink]="['/profile', test.username]">{{test.username}}</a>
+                            <a *ngIf="!isLoggedIn()">{{test.username}}</a>
+                        </p>
+                        <p><b>Permitir entregas más allá del tiempo disponible: </b> <span
+                                *ngIf="test.tiempoEstricto">No
+                                permitir</span><span *ngIf="!test.tiempoEstricto">Permitir</span></p>
+                        <p><b>Necesidad de invitación para poder realizar el Test: </b> <span
+                                *ngIf="!test.accesoPublico">Sí</span><span *ngIf="test.accesoPublico">No</span></p>
+                        <p><b>Acceso público para profesores: </b> <span
+                                *ngIf="test.accesoPublicoNoPublicado">Sí</span><span
+                                *ngIf="!test.accesoPublicoNoPublicado">No</span>
+                        </p>
+                        <p><b>Publicación automática de corrección de respuestas: </b> <span
+                                *ngIf="test.autoCorrect">Sí</span><span *ngIf="!test.autoCorrect">No</span></p>
+                        <p><b>Visibilidad de la respuesta: </b>{{visibilidadToString(test.visibilidad)}}</p>
                     </div>
-                    <div *ngIf="!quedanMasIntentos() && !isRespuestaIniciada && isLoggedIn()">
-                        <p>No te quedan más intentos para resolver este test.</p>
-                    </div>
-                    <div *ngIf="!isLoggedIn()">
-                        <p>Para realizar los tests tendrás que <a [routerLink]="['/login']">Iniciar Sesión</a></p>
+                    <p><b>Descripción:</b></p>
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <markdown class="my-3" [data]="test.description"></markdown>
+                        </div>
                     </div>
                     <div *ngIf="!isRespuestaIniciada && isLoggedIn() && quedanMasIntentos()">
-                        <div class="d-grid gap-2 my-3">
+                        <div class="d-grid gap-2 my-3 col-6 mx-auto">
                             <button class="btn btn-success btn-lg" type="button" data-bs-toggle="modal"
                                 data-bs-target="#startAnswerModal">RESPONDER</button>
                         </div>
@@ -102,41 +146,27 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <p><b>Descripción:</b></p>
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <markdown class="my-3" [data]="test.description"></markdown>
+                    <p *ngIf="isLoggedIn()" class="text-center">Llevas {{test.cantidadRespuestasDelUsuario}}
+                        intentos<span *ngIf="testHasMaxIntentos()"> de un máximo de {{test.maxIntentos}}</span>.</p>
+                    <div *ngIf="isRespuestaIniciada" class="d-grid gap-2 my-3 col-6 mx-auto">
+                        <button class="btn btn-success btn-lg" type="button"
+                            [routerLink]="['/pt', id, 'answering']">CONTINUAR RESPUESTA</button>
                     </div>
-                </div>
-                <p><b>Tiempo disponible:</b> {{test.maxMinutes}} minutos</p>
-                <p><b>Permitir entregas más allá del tiempo disponible: </b> <span *ngIf="test.tiempoEstricto">No
-                        permitir</span><span *ngIf="!test.tiempoEstricto">Permitir</span></p>
-                <p><b>Nota máxima: </b> {{test.notaMaxima}}</p>
-                <p><b>Necesidad de invitación para poder realizar el Test: </b> <span
-                        *ngIf="!test.accesoPublico">Sí</span><span *ngIf="test.accesoPublico">No</span></p>
-                <p><b>Acceso público para profesores: </b> <span *ngIf="test.accesoPublicoNoPublicado">Sí</span><span
-                        *ngIf="!test.accesoPublicoNoPublicado">No</span>
-                </p>
-                <p><b>Publicación automática de corrección de respuestas: </b> <span
-                        *ngIf="test.autoCorrect">Sí</span><span *ngIf="!test.autoCorrect">No</span></p>
-                <p><b>Visibilidad de la respuesta: </b>{{visibilidadToString(test.visibilidad)}}</p>
-                <div class="d-grid gap-2 my-3">
-                    <button *ngIf="checkPermisosEdicion()" type="button" class="btn btn-lg btn-primary"
-                        data-bs-toggle="modal" data-bs-target="#editTestModal">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 26" width="24px"
-                            fill="currentColor">
-                            <path d="M0 0h24v24H0z" fill="none" />
-                            <path
-                                d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
-                        </svg>
-                        Modificar Test Publicado
-                    </button>
+                    <div *ngIf="!quedanMasIntentos() && !isRespuestaIniciada && isLoggedIn()">
+                        <p class="text-center">No te quedan más intentos para resolver este test.</p>
+                    </div>
+                    <div *ngIf="!isLoggedIn()">
+                        <p>Para realizar los tests tendrás que <a [routerLink]="['/login']">Iniciar Sesión</a></p>
+                    </div>
+                    <div class="d-grid gap-2 my-3 col-6 mx-auto" *ngIf="mostrarVerMisRespuestas()">
+                        <button class="btn btn-secondary" type="button" [routerLink]="['/pt', test.id, 'myanswers']">Ver
+                            mis respuestas</button>
+                    </div>
                 </div>
             </div>
         </div>
         <div *ngIf="this.isModoTestAdmin()">
-            <h3 class="mt-3">Preguntas:</h3>
+            <h3 class="mt-3" id="preguntas">Preguntas:</h3>
             <table class="table table-striped table-hover table-primary my-3">
                 <thead>
                     <tr>
@@ -161,6 +191,28 @@
                     </tr>
                 </tbody>
             </table>
+        </div>
+    </div>
+</div>
+
+<!-- Confirmacion clonar-->
+<div class="modal fade" id="modalCloneTest" tabindex="-1" aria-labelledby="modalCloneTestLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form ngNativeValidate>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalCloneTestLabel">¿Clonar Test?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Se creará un test nuevo, clonando también las preguntas
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success" data-bs-dismiss="modal"
+                        (click)="cloneTestClick()">Clonar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
