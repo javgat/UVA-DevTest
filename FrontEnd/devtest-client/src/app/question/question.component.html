@@ -1,5 +1,5 @@
 <div class="mt-2">
-    <button *ngIf="testid!=undefined" class="button btn btn-outline-primary m-3" [routerLink]="['/pt', testid]">
+    <button *ngIf="showVolverTest()" class="button btn btn-outline-primary m-3" [routerLink]="['/pt', testid]">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
             class="bi bi-chevron-double-left" viewBox="0 0 16 16">
             <path fill-rule="evenodd"
@@ -8,6 +8,38 @@
                 d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
         </svg>
         Volver al test
+    </button>
+    <button *ngIf="showVolverMisQuestions()" class="button btn btn-outline-primary m-3"
+        [routerLink]="['/u', getSessionUser().getUsername(),'q']">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+            class="bi bi-chevron-double-left" viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+                d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+            <path fill-rule="evenodd"
+                d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+        </svg>
+        Volver a Mis Preguntas
+    </button>
+    <button *ngIf="showVolverQuestionsCompartidos()" class="button btn btn-outline-primary m-3"
+        [routerLink]="['/u', getSessionUser().getUsername(),'sq']">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+            class="bi bi-chevron-double-left" viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+                d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+            <path fill-rule="evenodd"
+                d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+        </svg>
+        Volver a Preguntas Compartiendo Conmigo
+    </button>
+    <button *ngIf="showVolverQuestions()" class="button btn btn-outline-primary m-3" [routerLink]="['/q']">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+            class="bi bi-chevron-double-left" viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+                d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+            <path fill-rule="evenodd"
+                d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+        </svg>
+        Volver a Preguntas Públicas
     </button>
     <div class="card">
         <div class="card-body">
@@ -101,8 +133,10 @@
     <div class="my-3">
         <h3>Respuesta:</h3>
         <div class="d-grid gap-2" *ngIf="checkPermisosEdicion()">
-            <button *ngIf="!isEditandoRespuesta()" type="button" class="btn btn-warning btn-lg" (click)="clickEditarRespuesta()">Editar Respuesta Esperada</button>
-            <button *ngIf="isEditandoRespuesta() && needsStopEditarRespuesta()" type="button" class="btn btn-secondary btn-lg" (click)="clickStopEditarRespuesta()">Dejar de Editar Respuesta</button>
+            <button *ngIf="!isEditandoRespuesta()" type="button" class="btn btn-warning btn-lg"
+                (click)="clickEditarRespuesta()">Editar Respuesta Esperada</button>
+            <button *ngIf="isEditandoRespuesta() && needsStopEditarRespuesta()" type="button"
+                class="btn btn-secondary btn-lg" (click)="clickStopEditarRespuesta()">Dejar de Editar Respuesta</button>
         </div>
         <div class="m-3" *ngIf="question.tipoPregunta=='string'">
             <p>Respuesta esperada:</p>
@@ -196,7 +230,7 @@
             <p>Tests:</p>
         </div>
     </div>
-    <br class="m-4"/>
+    <br class="m-4" />
 </div>
 <!-- Modal edit question-->
 <div class="modal fade" id="editQuestionModal" *ngIf="checkPermisosEdicion()" tabindex="-1"

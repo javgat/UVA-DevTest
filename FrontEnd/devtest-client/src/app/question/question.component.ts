@@ -377,4 +377,20 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
   needsStopEditarRespuesta(): boolean{
     return this.question.tipoPregunta == "opciones"
   }
+
+  showVolverTest(): boolean{
+    return this.testid!=undefined
+  }
+
+  showVolverMisQuestions(): boolean{
+    return this.getSessionUser().getUsername() == this.question.username && !this.showVolverTest()
+  }
+
+  showVolverQuestionsCompartidos(): boolean{
+    return this.isInAdminTeam && !this.showVolverMisQuestions() && !this.showVolverTest()
+  }
+
+  showVolverQuestions(): boolean{
+    return !this.showVolverMisQuestions() && !this.showVolverQuestionsCompartidos() && !this.showVolverTest()
+  }
 }

@@ -1,6 +1,6 @@
 <div class="">
-    <button *ngIf="isModoTestAdmin()" class="button btn btn-outline-primary mx-3 mt-3"
-        [routerLink]="['/et', test.originalTestID]">
+    <button *ngIf="showVolverMisTests()" class="button btn btn-outline-primary m-3"
+        [routerLink]="['/u', getSessionUser().getUsername(),'pt']">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
             class="bi bi-chevron-double-left" viewBox="0 0 16 16">
             <path fill-rule="evenodd"
@@ -8,7 +8,28 @@
             <path fill-rule="evenodd"
                 d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
         </svg>
-        Volver al test borrador original
+        Volver a Mis Tests Publicados
+    </button>
+    <button *ngIf="showVolverTestsCompartidos()" class="button btn btn-outline-primary m-3"
+        [routerLink]="['/u', getSessionUser().getUsername(),'spt']">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+            class="bi bi-chevron-double-left" viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+                d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+            <path fill-rule="evenodd"
+                d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+        </svg>
+        Volver a Tests Publicados Compartiendo Conmigo
+    </button>
+    <button *ngIf="showVolverTests()" class="button btn btn-outline-primary m-3" [routerLink]="['/pt']">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+            class="bi bi-chevron-double-left" viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+                d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+            <path fill-rule="evenodd"
+                d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+        </svg>
+        Volver a Tests Publicados Públicos
     </button>
     <div class="my-3">
         <div class=" card">
@@ -21,6 +42,10 @@
                     <p><button class="btn btn-primary" type="button" [routerLink]="['/et', test.id, 'teams']">Ver
                             equipos administradores</button></p>
                 </div>
+                <button *ngIf="isModoTestAdmin()" class="button btn btn-outline-primary"
+                    [routerLink]="['/et', test.originalTestID]">
+                    Volver al test borrador original
+                </button>
                 <div *ngIf="isModoTestAdmin()" class="d-grid gap-2 my-3">
                     <button class="btn btn-primary btn-lg" type="button"
                         [routerLink]="['/pt', test.id, 'invite']">INVITAR Y VER INVITACIONES</button>

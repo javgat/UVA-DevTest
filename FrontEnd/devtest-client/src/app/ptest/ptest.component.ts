@@ -260,4 +260,16 @@ export class PtestComponent extends LoggedInController implements OnInit {
     return Test.VisibilidadEnum.AlEntregar
   }
 
+  showVolverMisTests(): boolean{
+    return this.getSessionUser().getUsername() == this.test.username
+  }
+
+  showVolverTestsCompartidos(): boolean{
+    return this.isInAdminTeam && !this.showVolverMisTests()
+  }
+
+  showVolverTests(): boolean{
+    return !this.showVolverMisTests() && !this.showVolverTestsCompartidos()
+  }
+
 }

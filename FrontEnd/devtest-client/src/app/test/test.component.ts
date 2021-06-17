@@ -465,4 +465,16 @@ export class TestComponent extends LoggedInTeacherController implements OnInit {
     }
   }
 
+  showVolverMisTests(): boolean{
+    return this.getSessionUser().getUsername() == this.test.username
+  }
+
+  showVolverTestsCompartidos(): boolean{
+    return this.isInAdminTeam && !this.showVolverMisTests()
+  }
+
+  showVolverTests(): boolean{
+    return !this.showVolverMisTests() && !this.showVolverTestsCompartidos()
+  }
+
 }

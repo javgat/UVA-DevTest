@@ -1,5 +1,35 @@
 <div class="">
     <div class="my-3">
+        <button *ngIf="showVolverMisTests()" class="button btn btn-outline-primary m-3" [routerLink]="['/u', getSessionUser().getUsername(),'et']">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-chevron-double-left" viewBox="0 0 16 16">
+                <path fill-rule="evenodd"
+                    d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+                <path fill-rule="evenodd"
+                    d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+            </svg>
+            Volver a Mis Tests Borradores
+        </button>
+        <button *ngIf="showVolverTestsCompartidos()" class="button btn btn-outline-primary m-3" [routerLink]="['/u', getSessionUser().getUsername(),'set']">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-chevron-double-left" viewBox="0 0 16 16">
+                <path fill-rule="evenodd"
+                    d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+                <path fill-rule="evenodd"
+                    d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+            </svg>
+            Volver a Tests Borradores Compartiendo Conmigo
+        </button>
+        <button *ngIf="showVolverTests()" class="button btn btn-outline-primary m-3" [routerLink]="['/et']">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-chevron-double-left" viewBox="0 0 16 16">
+                <path fill-rule="evenodd"
+                    d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+                <path fill-rule="evenodd"
+                    d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+            </svg>
+            Volver a Tests Borradores Públicos
+        </button>
         <div class=" card">
             <div class="card-body">
                 <div class="row">
@@ -60,8 +90,7 @@
 
                 <div class="d-grid gap-2">
                     <div class="btn-group" *ngIf="checkPermisosEdicion()">
-                        <button style="width:80%;" type="button"
-                            class="btn btn-lg btn-success" data-bs-toggle="modal"
+                        <button style="width:80%;" type="button" class="btn btn-lg btn-success" data-bs-toggle="modal"
                             data-bs-target="#modalPublishTest">PUBLICAR</button>
                         <button type="button" class="btn btn-success btn-lg dropdown-toggle dropdown-toggle-split"
                             data-bs-toggle="dropdown" aria-expanded="false">
@@ -73,8 +102,7 @@
                         </ul>
                     </div>
                     <div class="btn-group" *ngIf="!checkPermisosEdicion()">
-                        <button type="button"
-                            class="btn btn-lg btn-secondary" data-bs-toggle="modal"
+                        <button type="button" class="btn btn-lg btn-secondary" data-bs-toggle="modal"
                             [routerLink]="['/et', test.id, 'ptests']">VER PUBLICACIONES</button>
                     </div>
                 </div>
@@ -86,7 +114,7 @@
                     </div>
                 </div>
                 <button type="button" class="btn btn-primary btn-lg mb-3" [routerLink]="['./']"
-                    [fragment]="'preguntas_header'">Ver Preguntas</button>
+                    [fragment]="'preguntas_header'">Ver Preguntas &darr;</button>
                 <p><b>Tiempo disponible:</b> {{test.maxMinutes}} minutos</p>
                 <p><b>Permitir entregas más allá del tiempo disponible: </b> <span *ngIf="test.tiempoEstricto">No
                         permitir</span><span *ngIf="!test.tiempoEstricto">Permitir</span></p>
@@ -280,10 +308,10 @@
                                 required min=0 />
                         </div>
                         <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox"
-                                id="flexSwitchCheckLimitIntentos" [checked]="testEditHasMaxIntentos()"
-                                (change)="changeSwitchLimitIntentos()">
-                            <label class="form-check-label" for="flexSwitchCheckLimitIntentos">Límite de intentos</label>
+                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckLimitIntentos"
+                                [checked]="testEditHasMaxIntentos()" (change)="changeSwitchLimitIntentos()">
+                            <label class="form-check-label" for="flexSwitchCheckLimitIntentos">Límite de
+                                intentos</label>
                         </div>
                         <div class="mb-3" *ngIf="testEditHasMaxIntentos()">
                             <label for="inputMaxIntentos" class="form-label">Cantidad de intentos máxima</label>
