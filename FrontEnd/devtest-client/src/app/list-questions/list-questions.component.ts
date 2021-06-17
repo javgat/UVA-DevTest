@@ -28,6 +28,8 @@ export class ListQuestionsComponent extends LoggedInController implements OnInit
   offset: number
   autotags: Tag[]
   mensajeListaVacia: string
+  searchActive: boolean
+  filterActive: boolean
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService,
      protected qS: QuestionService, protected tagS: TagService, protected teamS?: TeamService) {
     super(session, router, data, userS)
@@ -44,6 +46,8 @@ export class ListQuestionsComponent extends LoggedInController implements OnInit
     this.limit = 20
     this.offset = 0
     this.autotags = []
+    this.searchActive = false
+    this.filterActive = false
     this.mensajeListaVacia = "¡Vaya! Parece que no hay ninguna pregunta para mostrar"
     this.getQuestionsFilters()
     this.changeGetAutoTags()
@@ -264,6 +268,23 @@ export class ListQuestionsComponent extends LoggedInController implements OnInit
       },
       err => this.handleErrRelog(err, "obtener tags de preguntas mas comunes", primera, this.getAutoTags, this)
     )
+  }
+
+
+  activateSearch(){
+    this.searchActive=true
+  }
+
+  isSearchActive(): boolean{
+    return this.searchActive
+  }
+
+  activateFilter(){
+    this.filterActive=true
+  }
+
+  isFilterActive(): boolean{
+    return this.filterActive
   }
 
 }

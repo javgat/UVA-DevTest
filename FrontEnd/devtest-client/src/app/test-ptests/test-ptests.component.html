@@ -11,20 +11,24 @@
     </button>
     <h2>Tests Publicados basados en el Test Borrador {{test.title}}</h2>
     <div *ngIf="checkPermisosAdministracion()">
-        
+
     </div>
-    <table class="table table-striped table-hover table-primary my-3">
-        <thead>
-            <tr>
-                <th>Título</th>
-                <th>Fecha de publicación</th>
-            </tr>
-        </thead>
-        <tbody >
-            <tr *ngFor="let ptest of ptests" role="button" [routerLink]="['/pt', ptest.id]">
-                <td>{{ptest.title}}</td>
-                <td>{{printDate(ptest.horaCreacion)}}</td>
-            </tr>
-        </tbody>
-    </table>
+
+    <div class="table-responsive mt-3">
+        <table class="table table-striped table-hover table-primary mb-0">
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Fecha de publicación</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let ptest of ptests" role="button" [routerLink]="['/pt', ptest.id]">
+                    <td>{{ptest.title}}</td>
+                    <td>{{printDate(ptest.horaCreacion)}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <div *ngIf="ptests.length==0" class="bg-white bg-gradient fw-bold text-center p-5">{{mensajeListaVacia}}</div>
+    </div>
 </div>

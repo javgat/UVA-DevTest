@@ -21,6 +21,7 @@ export class TestPTestsComponent extends LoggedInTeacherController implements On
   addTeamTeamname: string
   kickingTeamname: string
   isInAdminTeam: boolean
+  mensajeListaVacia: string
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private tS: TestService, private route: ActivatedRoute) {
     super(session, router, data, userS)
     this.test = new Examen()
@@ -29,6 +30,7 @@ export class TestPTestsComponent extends LoggedInTeacherController implements On
     this.isInAdminTeam = false
     this.addTeamTeamname = ""
     this.kickingTeamname = ""
+    this.mensajeListaVacia = "No hay ninguna publicación para este Test"
     this.routeSub = this.route.params.subscribe(params => {
       this.id = params['testid']
       this.borrarMensaje()

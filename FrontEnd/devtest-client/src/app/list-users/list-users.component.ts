@@ -21,10 +21,12 @@ export class ListUsersComponent extends LoggedInController implements OnInit {
   likeEmail: string | undefined
   editLikeEmail: string
   mensajeListaVacia: string
+  searchActive: boolean
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService) {
     super(session, router, data, userS)
     this.editLikeUsername = ""
     this.editLikeEmail = ""
+    this.searchActive = false
     this.mensajeListaVacia = "¡Vaya! Parece que no hay ningún usuario para mostrar"
     this.users = []
     this.getUsersFilters()
@@ -82,4 +84,11 @@ export class ListUsersComponent extends LoggedInController implements OnInit {
     this.getUsersFilters()
   }
 
+  activateSearch(){
+    this.searchActive=true
+  }
+
+  isSearchActive(): boolean{
+    return this.searchActive
+  }
 }
