@@ -39,7 +39,15 @@
                     <div class="col-sm">
                         <div class="d-grid gap-2 d-flex justify-content-md-end" *ngIf="checkCloneTest()">
                             <button type="button" class="btn btn-outline-primary mx-3 me-md-2" data-bs-toggle="modal"
-                                data-bs-target="#modalCloneTest">Clonar</button>
+                                data-bs-target="#modalCloneTest">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
+                                    fill="currentColor">
+                                    <path d="M0 0h24v24H0z" fill="none" />
+                                    <path
+                                        d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm-1 4l6 6v10c0 1.1-.9 2-2 2H7.99C6.89 23 6 22.1 6 21l.01-14c0-1.1.89-2 1.99-2h7zm-1 7h5.5L14 6.5V12z" />
+                                </svg>
+                                Clonar
+                            </button>
                             <input type="checkbox" class="btn-check" id="btn-check-2" [checked]="isFavorita"
                                 (click)="changeFavorita()">
                             <label class="btn btn-outline-success" for="btn-check-2">
@@ -57,7 +65,14 @@
                         </div>
                     </div>
                 </div>
-                <p>Etiquetas: <span *ngIf="tags.length==0">Ninguna</span>
+                <p>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
+                        fill="currentColor">
+                        <path d="M0 0h24v24H0V0z" fill="none" />
+                        <path
+                            d="M19 18l2 1V3c0-1.1-.9-2-2-2H8.99C7.89 1 7 1.9 7 3h10c1.1 0 2 .9 2 2v13zM15 5H5c-1.1 0-2 .9-2 2v16l7-3 7 3V7c0-1.1-.9-2-2-2z" />
+                    </svg>
+                    Etiquetas: <span *ngIf="tags.length==0">Ninguna</span>
                     <span *ngFor="let tag of tags">
                         <span *ngIf="checkPermisosEdicion()">
                             <span class="badge bg-warning text-dark" role="button" id="{{tag.tag}}"
@@ -73,9 +88,16 @@
                         </span>
                     </span>
                 </p>
-                <form *ngIf="checkPermisosEdicion()" (ngSubmit)='addTagSubmit()' ngNativeValidate>
+                <form *ngIf="checkPermisosEdicion()" ngNativeValidate>
                     <div class="input-group my-3">
-                        <input class="button btn btn-primary" type="submit" value="Añadir etiqueta" />
+                        <button class="btn btn-primary" (click)='addTagSubmit()' type="button">
+                            Añadir etiqueta
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
+                                fill="currentColor">
+                                <path d="M0 0h24v24H0z" fill="none" />
+                                <path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z" />
+                            </svg>
+                        </button>
                         <input type="text" class="form-control" name="inputAddTag" [(ngModel)]="newTag"
                             placeholder="Etiqueta" required pattern=".+" list="auto_tags" autocomplete="off"
                             (ngModelChange)="changeGetAutoTags()" />
@@ -84,13 +106,21 @@
                         </datalist>
                     </div>
                 </form>
-                <button type="button" class="btn btn-primary mb-3" [routerLink]="['./']"
-                    [fragment]="'preguntas'">Ver Preguntas &darr;</button>
+                <button type="button" class="btn btn-primary mb-3" [routerLink]="['./']" [fragment]="'preguntas'">Ver
+                    Preguntas &darr;</button>
                 <hr />
 
                 <div class="row">
                     <div class="col">
-                        <p><b>Tiempo máximo:</b> {{test.maxMinutes}} minutos</p>
+                        <p>
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
+                                fill="currentColor">
+                                <path d="M0 0h24v24H0z" fill="none" />
+                                <path
+                                    d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z" />
+                                <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z" />
+                            </svg>
+                            <b>Tiempo máximo:</b> {{test.maxMinutes}} minutos</p>
                         <p><b>Nota máxima: </b> {{test.notaMaxima}}</p>
                     </div>
                     <div class="col-sm">
