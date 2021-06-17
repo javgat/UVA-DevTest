@@ -26,6 +26,7 @@ export class ListAnswersComponent extends LoggedInController implements OnInit {
   orderBy: EnumOrderByAnswer
   canOrderByPuntuacion: boolean
   canOrderByDuracion: boolean
+  searchActive: boolean
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, protected ptestS : PublishedTestService, private route: ActivatedRoute) {
     super(session, router, data, userS)
     this.answers = []
@@ -35,6 +36,7 @@ export class ListAnswersComponent extends LoggedInController implements OnInit {
     this.orderBy = EnumOrderByAnswer.newStartDate
     this.test = new Examen()
     this.canOrderByDuracion = false
+    this.searchActive = false
     this.canOrderByPuntuacion = false
     this.mensajeListaVacia = "¡Vaya! Parece que aún no hay respuestas para mostrar en esta lista"
     this.routeSub = this.route.params.subscribe(params => {
@@ -211,5 +213,13 @@ export class ListAnswersComponent extends LoggedInController implements OnInit {
 
   canOrderDuracion(): boolean{
     return this.canOrderByDuracion
+  }
+
+  activateSearch(){
+    this.searchActive=true
+  }
+
+  isSearchActive(): boolean{
+    return this.searchActive
   }
 }
