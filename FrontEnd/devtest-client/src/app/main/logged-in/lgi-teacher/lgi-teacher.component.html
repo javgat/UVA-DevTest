@@ -1,5 +1,10 @@
 <div class="my-4">
-    <h3 class="fw-bold text-center">Preguntas</h3>
+    <h3 class="fw-bold text-center">
+        <svg width="24" height="26" role="img">
+            <use xlink:href="#icon-question" />
+          </svg>
+        Preguntas
+    </h3>
     <div class="row">
         <a class="btn btn-lg btn-primary button m-2 col-sm"
             [routerLink]="['/u', getSessionUser().getUsername(), 'q' ]">MIS PREGUNTAS</a>
@@ -8,7 +13,12 @@
         <a class="btn btn-lg btn-primary button m-2 col-sm" [routerLink]="['/q']">EXPLORAR PREGUNTAS</a>
     </div>
     <hr />
-    <h3 class="fw-bold text-center">Tests</h3>
+    <h3 class="fw-bold text-center">
+        <svg width="24" height="26" role="img">
+            <use xlink:href="#icon-etest" />
+        </svg>
+        Tests borradores
+    </h3>
     <div class="row">
         <a class="btn btn-lg btn-primary button m-2 col-sm"
             [routerLink]="['/u', getSessionUser().getUsername(), 'et' ]">MIS
@@ -18,7 +28,12 @@
         <a class="btn btn-lg btn-primary button m-2 col-sm" [routerLink]="['/et']">EXPLORAR TESTS</a>
     </div>
     <hr />
-    <h3 class="fw-bold text-center">Tests publicados</h3>
+    <h3 class="fw-bold text-center">
+        <svg width="24" height="26" role="img">
+            <use xlink:href="#icon-ptest" />
+        </svg>
+        Tests publicados
+    </h3>
     <div class="row">
         <a class="btn btn-lg btn-primary button m-2 col-sm"
             [routerLink]="['/u', getSessionUser().getUsername(), 'pt' ]">MIS TESTS

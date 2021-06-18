@@ -2,7 +2,7 @@
     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
         <button [routerLink]="['/']" fragment="landing_options" class="button btn btn-primary">BAJAR &darr;</button>
     </div>
-    <markdown class="my-3 text-center" [data]="vistaPers.mensajeInicio"></markdown>
+    <markdown class="my-3 text-center text-break" [data]="vistaPers.mensajeInicio"></markdown>
     <div id="landing_options">
         <app-lgi-student *ngIf="isStudent()"></app-lgi-student>
         <app-lgi-teacher *ngIf="isTeacherOrAdmin()"></app-lgi-teacher>
