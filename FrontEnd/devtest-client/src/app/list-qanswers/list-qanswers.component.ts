@@ -25,6 +25,7 @@ export class ListQAnswersComponent extends LoggedInController implements OnInit 
   canSearchByUsername: boolean
   likeUsername?: string
   editLikeUsername: string
+  searchActive: boolean
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService,
     private route: ActivatedRoute, protected answerS: AnswerService, protected ptestS: PublishedTestService) {
     super(session, router, data, userS)
@@ -37,6 +38,7 @@ export class ListQAnswersComponent extends LoggedInController implements OnInit 
     this.canSearchByUsername = false
     this.likeUsername = undefined
     this.editLikeUsername = ""
+    this.searchActive = false
     this.mensajeListaVacia = "¡Vaya! Parece que no hay ninguna Respuesta a una Pregunta para mostrar."
     this.routeSub = this.route.params.subscribe(params => {
       this.testid = params['testid']
@@ -129,5 +131,12 @@ export class ListQAnswersComponent extends LoggedInController implements OnInit 
     this.getWantedQAnswers()
   }
 
+  activateSearch(){
+    this.searchActive=true
+  }
+
+  isSearchActive(): boolean{
+    return this.searchActive
+  }
 
 }
