@@ -1,8 +1,10 @@
 <div class="container my-5">
-    <h3 class="my-3 text-center fw-bold">¡Bienvenido a DevTest <a class="link-dark"
-            [routerLink]="['/profile', getSessionUser().getUsername()]">{{getSessionUser().getUsername()}}</a>!</h3>
-
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+        <button [routerLink]="['/']" fragment="landing_options" class="button btn btn-primary">BAJAR &darr;</button>
+    </div>
     <markdown class="my-3 text-center" [data]="vistaPers.mensajeInicio"></markdown>
-    <app-lgi-student *ngIf="isStudent()"></app-lgi-student>
-    <app-lgi-teacher *ngIf="isTeacherOrAdmin()"></app-lgi-teacher>
+    <div id="landing_options">
+        <app-lgi-student *ngIf="isStudent()"></app-lgi-student>
+        <app-lgi-teacher *ngIf="isTeacherOrAdmin()"></app-lgi-teacher>
+    </div>
 </div>
