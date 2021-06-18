@@ -1,0 +1,394 @@
+<div class="mt-2">
+    <button *ngIf="showVolverTest()" class="button btn btn-outline-primary m-3" [routerLink]="['/pt', testid]">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+            class="bi bi-chevron-double-left" viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+                d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+            <path fill-rule="evenodd"
+                d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+        </svg>
+        Volver al test
+    </button>
+    <button *ngIf="showVolverMisQuestions()" class="button btn btn-outline-primary m-3"
+        [routerLink]="['/u', getSessionUser().getUsername(),'q']">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+            class="bi bi-chevron-double-left" viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+                d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+            <path fill-rule="evenodd"
+                d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+        </svg>
+        Volver a Mis Preguntas
+    </button>
+    <button *ngIf="showVolverQuestionsCompartidos()" class="button btn btn-outline-primary m-3"
+        [routerLink]="['/u', getSessionUser().getUsername(),'sq']">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+            class="bi bi-chevron-double-left" viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+                d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+            <path fill-rule="evenodd"
+                d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+        </svg>
+        Volver a Preguntas Compartiendo Conmigo
+    </button>
+    <button *ngIf="showVolverQuestions()" class="button btn btn-outline-primary m-3" [routerLink]="['/q']">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+            class="bi bi-chevron-double-left" viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+                d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+            <path fill-rule="evenodd"
+                d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+        </svg>
+        Volver a Preguntas Públicas
+    </button>
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <h2 class="col">Pregunta: {{question.title}}</h2>
+                <div class="col-sm">
+                    <div class="d-grid gap-2 d-flex justify-content-md-end" *ngIf="checkCloneQuestion()">
+                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
+                            data-bs-target="#modalCloneQuestion">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
+                                fill="currentColor">
+                                <path d="M0 0h24v24H0z" fill="none" />
+                                <path
+                                    d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm-1 4l6 6v10c0 1.1-.9 2-2 2H7.99C6.89 23 6 22.1 6 21l.01-14c0-1.1.89-2 1.99-2h7zm-1 7h5.5L14 6.5V12z" />
+                            </svg>
+                            Clonar
+                        </button>
+
+                        <input type="checkbox" class="btn-check" id="btn-check-2" [checked]="isFavorita"
+                            (click)="changeFavorita()">
+                        <label class="btn btn-outline-success" for="btn-check-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 26" width="24px"
+                                fill="currentColor">
+                                <path d="M0 0h24v24H0z" fill="none" />
+                                <path d="M0 0h24v24H0z" fill="none" />
+                                <path
+                                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <span *ngIf="!isFavorita">Guardar
+                                Favorita</span><span *ngIf="isFavorita">Guardada Favorita</span> |
+                            {{question.cantidadFavoritos}}</label>
+                    </div>
+                </div>
+            </div>
+            <p>
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
+                    fill="currentColor">
+                    <path d="M0 0h24v24H0V0z" fill="none" />
+                    <path
+                        d="M19 18l2 1V3c0-1.1-.9-2-2-2H8.99C7.89 1 7 1.9 7 3h10c1.1 0 2 .9 2 2v13zM15 5H5c-1.1 0-2 .9-2 2v16l7-3 7 3V7c0-1.1-.9-2-2-2z" />
+                </svg>
+                Etiquetas: <span *ngIf="tags.length==0">Ninguna</span>
+                <span *ngFor="let tag of tags">
+                    <span *ngIf="checkPermisosEdicion()">
+                        <span class="badge bg-warning text-dark" role="button" id="{{tag.tag}}"
+                            data-bs-toggle="dropdown" aria-expanded="false">{{tag.tag}}</span>&nbsp;
+                        <ul class="dropdown-menu" attr.aria-labelledby="{{tag.tag}}">
+                            <li><a class="dropdown-item" role="button" (click)="deleteTagClick(tag.tag)">Eliminar</a>
+                            </li>
+                        </ul>
+                    </span>
+
+                    <span *ngIf="!checkPermisosEdicion()">
+                        <span class="badge bg-warning text-dark">{{tag.tag}}</span>&nbsp;
+                    </span>
+                </span>
+            </p>
+            <form *ngIf="checkPermisosEdicion()" (ngSubmit)='addTagSubmit()' ngNativeValidate>
+                <div class="input-group my-3">
+                    <button class="btn btn-primary" type="submit">
+                        Añadir etiqueta
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
+                            fill="currentColor">
+                            <path d="M0 0h24v24H0z" fill="none" />
+                            <path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z" />
+                        </svg>
+                    </button>
+                    <input type="text" class="form-control" name="inputAddTag" [(ngModel)]="newTag.tag"
+                        placeholder="Etiqueta" required pattern=".+" list="auto_tags" autocomplete="off"
+                        (ngModelChange)="changeGetAutoTags()" />
+                    <datalist id="auto_tags">
+                        <option *ngFor="let autotag of autotags" value="{{autotag.tag}}">
+                    </datalist>
+                </div>
+            </form>
+            <hr />
+
+            <div class="row">
+                <div class="col">
+                    <p>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
+                            fill="currentColor">
+                            <path d="M0 0h24v24H0z" fill="none" />
+                            <path
+                                d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z" />
+                            <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z" />
+                        </svg>
+                        <b>Tiempo estimado:</b> {{question.estimatedTime}} minutos
+                    </p>
+                    <p><b>Tipo:</b> {{tipoPrint}}</p>
+                </div>
+                <div class="col-sm">
+                    <div class="d-grid gap-2 d-flex justify-content-md-end">
+                        <button class="btn btn-primary mt-3" type="button" (click)="swapShowExtraInfo()">
+                            <span *ngIf="!showMostrarExtraInfo()">Mostrar Información Extra</span>
+                            <span *ngIf="showMostrarExtraInfo()">Ocultar Información Extra</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="container mt-3" *ngIf="showMostrarExtraInfo()">
+                <p><button class="btn btn-primary" type="button" [routerLink]="['/q', question.id, 'teams']">Ver equipos
+                        administradores</button></p>
+                <p><b>Autor: </b><a [routerLink]="['/profile', question.username]">{{question.username}}</a></p>
+                <p><b>ID:</b> {{question.id}}</p>
+                <p><b>Corrección automática:</b> <span *ngIf="question.autoCorrect"> Sí</span><span
+                        *ngIf="!question.autoCorrect"> No</span></p>
+                <p><b>Acceso público para profesores:</b> <span *ngIf="question.accesoPublicoNoPublicada">
+                        Sí</span><span *ngIf="!question.accesoPublicoNoPublicada"> No</span></p>
+                <p><b>Penalización por fallo:</b>
+                    <span *ngIf="question.penalizacion!=0"> {{question.penalizacion}} %</span>
+                    <span *ngIf="question.penalizacion==0"> No</span>
+                </p>
+            </div>
+            <p *ngIf="!question.editable"><button class="btn btn-primary" type="button"
+                    [routerLink]="['/pt', testid, 'q', question.id, 'qanswers']">Ver respuestas entregadas</button></p>
+            <h5>Enunciado:</h5>
+            <div class="card mb-3">
+                <div class="card-body">
+                    <markdown class="my-3 text-break" [data]="question.question"></markdown>
+                </div>
+            </div>
+
+            <div class="d-grid gap-2 my-3 col-6 mx-auto">
+                <button *ngIf="checkPermisosEdicion()" type="button" class="btn btn-primary btn-lg"
+                    data-bs-toggle="modal" data-bs-target="#editQuestionModal">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 26" width="24px"
+                        fill="currentColor">
+                        <path d="M0 0h24v24H0z" fill="none" />
+                        <path
+                            d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+                    </svg>
+                    Editar pregunta</button>
+            </div>
+        </div>
+    </div>
+    <div class="my-3">
+        <h3>Respuesta:</h3>
+        <div class="d-grid gap-2 col-6 mx-auto" *ngIf="checkPermisosEdicion()">
+            <button *ngIf="!isEditandoRespuesta()" type="button" class="btn btn-warning btn-lg"
+                (click)="clickEditarRespuesta()">Editar Respuesta Esperada</button>
+            <button *ngIf="isEditandoRespuesta() && needsStopEditarRespuesta()" type="button"
+                class="btn btn-secondary btn-lg" (click)="clickStopEditarRespuesta()">Dejar de Editar Respuesta</button>
+        </div>
+        <div class="m-3" *ngIf="question.tipoPregunta=='string'">
+            <p>Respuesta esperada:</p>
+            <p>{{question.solucion}}</p>
+            <form class="my-4" (ngSubmit)='putQuestionSubmit()' ngNativeValidate>
+                <div *ngIf="isEditandoRespuesta()">
+                    <h5>Modificar respuesta esperada:</h5>
+                    <div class="input-group my-3">
+                        <input type="text" class="form-control" name="inputAddOption"
+                            [(ngModel)]="questionEdit.solucion" required pattern=".+" />
+                    </div>
+                    <input class="button btn btn-primary" type="submit"
+                        value="Guardar modificación de respuesta esperada" />
+                    <button type="button" class="btn btn-danger mx-3"
+                        (click)="clickStopEditarRespuesta()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+        <div class="m-3" *ngIf="question.tipoPregunta=='opciones'">
+            <h4>Opciones:</h4>
+            <form (ngSubmit)='addOptionSubmit()' ngNativeValidate>
+                <div *ngIf="isEditandoRespuesta()" class="input-group my-3">
+                    <input class="button btn btn-primary" type="submit" value="Añadir opción"
+                        [disabled]="anadirOpcionDisabled()" />
+                    <input type="text" class="form-control" name="inputAddOption" [(ngModel)]="nuevaOpcion.texto"
+                        placeholder="Introduce el texto de la nueva opción" required pattern=".+" />
+                </div>
+            </form>
+            <div *ngFor="let opc of opciones">
+                <div class="my-4 card">
+                    <div class="card-body">
+                        <div class="my-1">{{opc.texto}}</div>
+                        <span style="color:green" *ngIf="opc.correcta">
+                            <!--tick-->
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
+                                fill="currentColor">
+                                <path d="M0 0h24v24H0V0z" fill="none" />
+                                <path
+                                    d="M19.77 5.03l1.4 1.4L8.43 19.17l-5.6-5.6 1.4-1.4 4.2 4.2L19.77 5.03m0-2.83L8.43 13.54l-4.2-4.2L0 13.57 8.43 22 24 6.43 19.77 2.2z" />
+                            </svg>
+                        </span>
+                        <span style="color: red" *ngIf="!opc.correcta">
+                            <!--Cross-->
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
+                                fill="currentColor">
+                                <path d="M0 0h24v24H0z" fill="none" />
+                                <path
+                                    d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z" />
+                            </svg>
+                        </span>
+                        <div class="my-1">
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" id="radioCorrecta{{opc.indice}}"
+                                            role="button" [checked]="opc.correcta" (change)="changeCorrectaOpc(opc)"
+                                            [disabled]="!isEditandoRespuesta()">
+                                        <label class="form-check-label" role="button"
+                                            for="radioCorrecta{{opc.indice}}">Respuesta correcta</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" id="radioIncorrecta{{opc.indice}}"
+                                            role="button" [checked]="!opc.correcta" (change)="changeCorrectaOpc(opc)"
+                                            [disabled]="!isEditandoRespuesta()">
+                                        <label class="form-check-label" role="button"
+                                            for="radioIncorrecta{{opc.indice}}">Respuesta incorrecta</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm">
+                                    <div class="btn-group dropstart d-grid gap-2 d-md-flex d-inline-flex justify-content-md-end col-sm"
+                                        role="button" *ngIf="isEditandoRespuesta()">
+                                        <a data-bs-toggle="dropdown" class="link-dark" aria-expanded="false">
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24"
+                                                width="24px" fill="currentColor">
+                                                <path d="M0 0h24v24H0z" fill="none" />
+                                                <path
+                                                    d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
+                                            </svg>
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" (click)="deleteOpc(opc.indice)">Eliminar</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="m-3" *ngIf="question.tipoPregunta=='codigo'">
+            <p>Tests:</p>
+        </div>
+    </div>
+    <br class="m-4" />
+</div>
+<!-- Modal edit question-->
+<div class="modal fade" id="editQuestionModal" *ngIf="checkPermisosEdicion()" tabindex="-1"
+    aria-labelledby="editQuestionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <form ngNativeValidate>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editQuestionModalLabel">Modificar Pregunta</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="inputTitle" class="form-label">Título de la pregunta</label>
+                        <input type="text" class="form-control" name="inputTitle" [(ngModel)]="questionEdit.title"
+                            required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputQuestion" class="form-label">Cuerpo de la pregunta</label>
+                        <textarea type="text" class="form-control" name="inputQuestion"
+                            [(ngModel)]="questionEdit.question" required rows=3></textarea>
+                        <div id="inputDescriptionHelp" class="form-text text-muted">Puedes utilizar MarkDown</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputTime" class="form-label">Tiempo estimado (minutos)</label>
+                        <input type="number" class="form-control" name="inputTime"
+                            [(ngModel)]="questionEdit.estimatedTime" required min=0 />
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault"
+                            [checked]="questionEdit.autoCorrect"
+                            (change)="questionEdit.autoCorrect = !questionEdit.autoCorrect">
+                        <label class="form-check-label" for="flexSwitchCheckDefault">Corrección automática</label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="flexSwitchAccesoPublicoNoPublicada"
+                            [checked]="questionEdit.accesoPublicoNoPublicada"
+                            (change)="questionEdit.accesoPublicoNoPublicada = !questionEdit.accesoPublicoNoPublicada">
+                        <label class="form-check-label" for="flexSwitchAccesoPublicoNoPublicada">Acceso público para
+                            profesores</label>
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputPenalizacion" class="form-label">Penalización (%)</label>
+                        <input type="number" class="form-control" name="inputPenalizacion"
+                            [(ngModel)]="questionEdit.penalizacion" required min=0 max=100 />
+                    </div>
+                    <div class="my-3">
+                        <label class="form-label">Tipo de pregunta:</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="inputTipo" id="inputTipoString" required
+                                (change)="onSelectTipoString()"
+                                [checked]="tipPrint(questionEdit.tipoPregunta, questionEdit.eleccionUnica)=='Texto'" />
+                            <label class="form-check-label" for="inputTipoString">
+                                Pregunta de texto
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="inputTipo" id="inputTipoRadio" required
+                                (change)="onSelectTipoRadio()"
+                                [checked]="tipPrint(questionEdit.tipoPregunta, questionEdit.eleccionUnica)=='Respuesta única'" />
+                            <label class="form-check-label" for="inputTipoRadio">
+                                Pregunta tipo test de respuesta única
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="inputTipo" id="inputTipoCheck" required
+                                (change)="onSelectTipoCheck()"
+                                [checked]="tipPrint(questionEdit.tipoPregunta, questionEdit.eleccionUnica)=='Respuesta múltiple'" />
+                            <label class="form-check-label" for="inputTipoCheck">
+                                Pregunta tipo test de respuesta múltiple
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="inputTipo" id="inputTipoCode" required
+                                (change)="onSelectTipoCode()"
+                                [checked]="tipPrint(questionEdit.tipoPregunta, questionEdit.eleccionUnica)=='Código'" />
+                            <label class="form-check-label" for="inputTipoCode">
+                                Pregunta de código
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <input type="submit" value="Guardar" (click)='putQuestionSubmit()' data-bs-dismiss="modal"
+                        class="btn btn-primary" id="buttonChangeRol" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Confirmacion clonar-->
+<div class="modal fade" id="modalCloneQuestion" tabindex="-1" aria-labelledby="modalCloneQuestionLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form ngNativeValidate>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalCloneQuestionLabel">¿Clonar pregunta?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Se creará una pregunta nueva
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success" data-bs-dismiss="modal"
+                        (click)="cloneQuestionClick()">Clonar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

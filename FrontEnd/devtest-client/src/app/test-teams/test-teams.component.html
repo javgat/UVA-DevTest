@@ -1,0 +1,45 @@
+<div class="mt-5">
+    <button class="button btn btn-outline-primary m-3" [routerLink]="['/et', test.id]">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+            class="bi bi-chevron-double-left" viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+                d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+            <path fill-rule="evenodd"
+                d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+        </svg>
+        Volver
+    </button>
+    <h2>Equipos que administran el Test {{test.title}}</h2>
+    <div *ngIf="checkPermisosAdministracion()">
+        <form (ngSubmit)='addTeamSubmit()' ngNativeValidate>
+            <div class="my-3">
+                <div class="input-group">
+                    <input class="button btn btn-primary" type="submit" value="Añadir equipo" />
+                    <input type="text" class="form-control" name="inputAddTeam" aria-describedby="inputAddTeamHelp"
+                        autocomplete="off" list="auto_teams" [(ngModel)]="addTeamTeamname" (ngModelChange)="changeGetAutoTeams()"
+                        placeholder="Nombre de equipo" required pattern="[^@]+" />
+                    <datalist id="auto_teams">
+                        <option *ngFor="let autoteam of autoteams" value="{{autoteam.teamname}}">
+                    </datalist>
+                </div>
+                <div id="inputAddTeamHelp" class="form-text text-muted">Otorga permisos de administración a un equipo de
+                    solo profesores</div>
+            </div>
+        </form>
+    </div>
+    <table class="table table-striped table-hover table-primary my-3">
+        <thead>
+            <tr>
+                <th>Nombre de equipo</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody *ngFor="let team of teams">
+            <tr>
+                <td role="button" [routerLink]="['/teams', team.teamname]">{{team.teamname}}</td>
+                <td *ngIf="checkPermisosAdministracion()"><button type="button" class="btn btn-danger"
+                        (click)="kickTeam(team.teamname)"> Eliminar</button></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

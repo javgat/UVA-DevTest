@@ -1,0 +1,208 @@
+<div class="container my-5">
+    <h2>Usuario: {{profileUser.getUsername()}}</h2>
+    <hr />
+    <div class="row">
+        <div class="col-sm mb-3">
+            <ul>
+                <li>Nombre de usuario: {{profileUser.getUsername()}}</li>
+                <li>Correo electrónico: {{profileUser.getEmail()}}</li>
+                <li>Nombre completo: {{profileUser.getFullname()}}</li>
+                <li>Rol: {{profileUser.getTipoRol()}}</li>
+                <li>Rol Base: {{profileUser.getRol()}}</li>
+            </ul>
+            <div class="d-grid gap-2">
+                <div *ngIf="checkPermisosEditarUser()" class="d-grid gap-2">
+                    <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal"
+                        data-bs-target="#editUserModal">
+                        Editar datos
+                    </button>
+                    <button type="button" class="btn btn-warning btn-lg" data-bs-toggle="modal"
+                        data-bs-target="#editPassModal">
+                        Cambiar contraseña
+                    </button>
+                </div>
+                <div *ngIf="checkAdmin()" class="d-grid gap-2">
+                    <button type="button" class="btn btn-warning btn-lg" data-bs-toggle="modal"
+                        data-bs-target="#editRolModal">
+                        Modificar Rol
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm">
+            <div class="d-grid gap-2 mb-2">
+                <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/profile', id, 'teams']">
+                    Equipos
+                </button>
+            </div>
+            <div *ngIf="profileNotStudent()">
+                <div class="d-grid gap-2 mb-2">
+                    <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/profile', id, 'pt']">
+                        Tests Publicados
+                    </button>
+                </div>
+                <div *ngIf="checkTeacherOrAdmin()" class="d-grid gap-2">
+                    <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/profile', id, 'et']">
+                        Tests Editables
+                    </button>
+                    <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/profile', id, 'q']">
+                        Preguntas
+                    </button>
+                </div>
+            </div>
+            <div *ngIf="checkPermisoVerPrivado()">
+                <hr />
+                <h3 class="text-center">Privado</h3>
+
+                <div *ngIf="checkVerBotonesTeacher()" class="d-grid gap-2 mb-2">
+                    <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/u', id, 'q']">
+                        Preguntas
+                    </button>
+                    <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/u', id, 'sq']">
+                        Preguntas compartidas con el usuario
+                    </button>
+                    <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/u', id, 'fq']">
+                        Preguntas favoritas
+                    </button>
+                    <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/u', id, 'et']">
+                        Tests editables
+                    </button>
+                    <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/u', id, 'set']">
+                        Tests editables compartidos con el usuario
+                    </button>
+                    <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/u', id, 'fet']">
+                        Tests editables favoritos
+                    </button>
+                    <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/u', id, 'pt']">
+                        Tests Publicados
+                    </button>
+                    <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/u', id, 'spt']">
+                        Tests Publicados compartidos con el usuario
+                    </button>
+                </div>
+                <div class="d-grid gap-2 mb-2">
+                    <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/u', id, 'invited']">
+                        Tests Publicados con invitación
+                    </button>
+                    <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/u', id, 'solvable']">
+                        Tests Publicados disponibles
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="checkAdmin()">
+        <!-- Modal edit rol-->
+        <div class="modal fade" id="editRolModal" tabindex="-1" aria-labelledby="editRolModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form ngNativeValidate>
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editRolModalLabel">Modificar Rol</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div *ngFor="let tiporol of tiporoles">
+                                <div *ngIf="tiporol.rolBase!='noRegistrado'" class="form-check">
+                                    <input class="form-check-input" type="radio" name="inputRol"
+                                        id="inputRol{{tiporol.id}}" required (change)="onSelectRol(tiporol.id)" />
+                                    <label class="form-check-label" for="inputRol{{tiporol.id}}">
+                                        {{tiporol.nombre}}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Queda hacer que compruebe si puede darle ese nuevo rol al user, no mandarlo a saco. Comprobar prioridades-->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <input type="submit" value="Guardar" (click)='changeRolSubmit()' data-bs-dismiss="modal"
+                                class="btn btn-primary" id="buttonChangeRol" [disabled]="isDisabledModalEditRolGuardar()" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="checkPermisosEditarUser()">
+        <!-- Modal edit datos-->
+        <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form ngNativeValidate>
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editUserModalLabel">Editar datos</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="inputUsername" class="form-label">Nombre de usuario</label>
+                                <input type="text" class="form-control" id="inputUsername" name="inputUsername"
+                                    [(ngModel)]="editUser.username" value="{{profileUser.getUsername()}}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="inputEmail" class="form-label">Correo electrónico</label>
+                                <input type="text" class="form-control" id="inputEmail" name="inputEmail"
+                                    [(ngModel)]="editUser.email" value="{{profileUser.getEmail()}}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="inputFullname" class="form-label">Nombre completo</label>
+                                <input type="text" class="form-control" id="inputFullname" name="inputFullname"
+                                    [(ngModel)]="editUser.fullname" value="{{profileUser.getFullname()}}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="inputPassword" class="form-label">Contraseña actual</label>
+                                <input type="password" class="form-control" id="inputPassword" name="inputPassword"
+                                    [(ngModel)]="editUser.password" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <input type="submit" (click)='editUserSubmit()' value="Guardar" data-bs-dismiss="modal"
+                                class="btn btn-primary" id="buttonChangeUser"
+                                [disabled]="isDisabledModalEditUserGuardar()" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Modal edit contra-->
+        <div class="modal fade" id="editPassModal" tabindex="-1" aria-labelledby="editPassModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form ngNativeValidate>
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editPassModalLabel">Editar contraseña</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="oldpass" class="form-label">Contraseña actual</label>
+                                <input type="password" class="form-control" id="oldpass" name="oldpass"
+                                    [(ngModel)]="pUpdate.oldpass" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="newpass" class="form-label">Nueva contraseña</label>
+                                <input type="password" class="form-control" id="newpass" name="newpass"
+                                    [(ngModel)]="pUpdate.newpass" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="newpassR" class="form-label">Confirmar nueva contraseña</label>
+                                <input type="password" class="form-control" id="newpassR" name="newpassR"
+                                    [(ngModel)]="newpassR" required>
+                            </div>
+                            <!-- PEDIR REPETIR CONTRASEÑA ? -->
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <input type="submit" value="Guardar" (click)='changePassSubmit()' data-bs-dismiss="modal"
+                                class="btn btn-primary" id="buttonChangePass"
+                                [disabled]="isDisabledModalEditPassGuardar()" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

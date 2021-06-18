@@ -1,0 +1,306 @@
+<div class="">
+    <button *ngIf="showVolverMisTests()" class="button btn btn-outline-primary m-3"
+        [routerLink]="['/u', getSessionUser().getUsername(),'pt']">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+            class="bi bi-chevron-double-left" viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+                d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+            <path fill-rule="evenodd"
+                d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+        </svg>
+        Volver a Mis Tests Publicados
+    </button>
+    <button *ngIf="showVolverTestsCompartidos()" class="button btn btn-outline-primary m-3"
+        [routerLink]="['/u', getSessionUser().getUsername(),'spt']">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+            class="bi bi-chevron-double-left" viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+                d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+            <path fill-rule="evenodd"
+                d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+        </svg>
+        Volver a Tests Publicados Compartiendo Conmigo
+    </button>
+    <button *ngIf="showVolverTests()" class="button btn btn-outline-primary m-3" [routerLink]="['/pt']">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+            class="bi bi-chevron-double-left" viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+                d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+            <path fill-rule="evenodd"
+                d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+        </svg>
+        Volver a Tests Publicados Públicos
+    </button>
+    <div class="my-3">
+        <div class=" card">
+            <div class="card-body">
+                <div class="row">
+                    <h2 class="col">Test: {{test.title}}</h2>
+                    <div class="col-sm">
+                        <div class="d-grid gap-2 d-flex justify-content-md-end" *ngIf="checkCloneTest()">
+                            <button type="button" class="btn btn-outline-primary mx-3 me-md-2" data-bs-toggle="modal"
+                                data-bs-target="#modalCloneTest">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
+                                    fill="currentColor">
+                                    <path d="M0 0h24v24H0z" fill="none" />
+                                    <path
+                                        d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm-1 4l6 6v10c0 1.1-.9 2-2 2H7.99C6.89 23 6 22.1 6 21l.01-14c0-1.1.89-2 1.99-2h7zm-1 7h5.5L14 6.5V12z" />
+                                </svg>
+                                Clonar
+                            </button>
+                            <button *ngIf="isModoTestAdmin()" class="button btn btn-outline-primary"
+                                [routerLink]="['/et', test.originalTestID]">
+                                Volver al test borrador original
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <p>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
+                        fill="currentColor">
+                        <path d="M0 0h24v24H0V0z" fill="none" />
+                        <path
+                            d="M19 18l2 1V3c0-1.1-.9-2-2-2H8.99C7.89 1 7 1.9 7 3h10c1.1 0 2 .9 2 2v13zM15 5H5c-1.1 0-2 .9-2 2v16l7-3 7 3V7c0-1.1-.9-2-2-2z" />
+                    </svg>
+                    Etiquetas: <span *ngIf="tags.length==0">Ninguna</span>
+                    <span *ngFor="let tag of tags">
+                        <span class="badge bg-warning text-dark">{{tag.tag}}</span>&nbsp;
+                    </span>
+                </p>
+                <button type="button" class="btn btn-primary mb-3" [routerLink]="['./']" [fragment]="'preguntas'"
+                    *ngIf="isModoTestAdmin()">Ver Preguntas &darr;</button>
+                <hr *ngIf="isModoTestAdmin()" />
+                <div *ngIf="isModoTestAdmin()" class="d-grid gap-2 mt-3 col-6 mx-auto">
+                    <h4 class="text-center">Opciones de administración:</h4>
+                    <button class="btn btn-primary btn-lg" type="button"
+                        [routerLink]="['/pt', test.id, 'invite']">INVITAR Y VER INVITACIONES</button>
+                    <button class="btn btn-primary btn-lg" type="button" [routerLink]="['/pt', test.id, 'answers']">VER
+                        RESPUESTAS</button>
+                    <button type="button" class="btn btn-lg btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#editTestModal">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 26" width="24px"
+                            fill="currentColor">
+                            <path d="M0 0h24v24H0z" fill="none" />
+                            <path
+                                d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+                        </svg>
+                        Modificar Test Publicado
+                    </button>
+                </div>
+                <hr />
+                <div>
+
+                    <div class="row">
+                        <div class="col">
+                            <p>
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
+                                    fill="currentColor">
+                                    <path d="M0 0h24v24H0z" fill="none" />
+                                    <path
+                                        d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z" />
+                                    <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z" />
+                                </svg>
+                                <b>Tiempo máximo:</b> {{test.maxMinutes}} minutos</p>
+                            <p><b>Nota máxima: </b> {{test.notaMaxima}}</p>
+                        </div>
+                        <div class="col-sm">
+                            <div class="d-grid gap-2 d-flex justify-content-md-end">
+                                <button class="btn btn-primary mt-3" type="button" (click)="swapShowExtraInfo()">
+                                    <span *ngIf="!showMostrarExtraInfo()">Mostrar Información Extra</span>
+                                    <span *ngIf="showMostrarExtraInfo()">Ocultar Información Extra</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container mt-3" *ngIf="showMostrarExtraInfo()">
+                        <div *ngIf="isModoTestAdmin()">
+                            <p><button class="btn btn-primary" type="button"
+                                    [routerLink]="['/et', test.id, 'teams']">Ver
+                                    equipos administradores</button></p>
+                        </div>
+                        <p><b>Autor: </b><a *ngIf="isLoggedIn()"
+                                [routerLink]="['/profile', test.username]">{{test.username}}</a>
+                            <a *ngIf="!isLoggedIn()">{{test.username}}</a>
+                        </p>
+                        <p><b>Permitir entregas más allá del tiempo disponible: </b> <span
+                                *ngIf="test.tiempoEstricto">No
+                                permitir</span><span *ngIf="!test.tiempoEstricto">Permitir</span></p>
+                        <p><b>Necesidad de invitación para poder realizar el Test: </b> <span
+                                *ngIf="!test.accesoPublico">Sí</span><span *ngIf="test.accesoPublico">No</span></p>
+                        <p><b>Acceso público para profesores: </b> <span
+                                *ngIf="test.accesoPublicoNoPublicado">Sí</span><span
+                                *ngIf="!test.accesoPublicoNoPublicado">No</span>
+                        </p>
+                        <p><b>Publicación automática de corrección de respuestas: </b> <span
+                                *ngIf="test.autoCorrect">Sí</span><span *ngIf="!test.autoCorrect">No</span></p>
+                        <p><b>Visibilidad de la respuesta: </b>{{visibilidadToString(test.visibilidad)}}</p>
+                    </div>
+                    <p><b>Descripción:</b></p>
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <markdown class="my-3 text-break" [data]="test.description"></markdown>
+                        </div>
+                    </div>
+                    <div *ngIf="!isRespuestaIniciada && isLoggedIn() && quedanMasIntentos()">
+                        <div class="d-grid gap-2 my-3 col-6 mx-auto">
+                            <button class="btn btn-success btn-lg" type="button" data-bs-toggle="modal"
+                                data-bs-target="#startAnswerModal">RESPONDER</button>
+                        </div>
+                        <!-- Modal iniciar respuesta -->
+                        <div class="modal fade" id="startAnswerModal" tabindex="-1"
+                            aria-labelledby="startAnswerModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="startAnswerModalLabel">Iniciar respuesta</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        ¿Seguro que quieres iniciar la respuesta al test?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Cancelar</button>
+                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                                            (click)="startAnswerClick()">Iniciar Respuesta</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p *ngIf="isLoggedIn()" class="text-center">Llevas {{test.cantidadRespuestasDelUsuario}}
+                        intentos<span *ngIf="testHasMaxIntentos()"> de un máximo de {{test.maxIntentos}}</span>.</p>
+                    <div *ngIf="isRespuestaIniciada" class="d-grid gap-2 my-3 col-6 mx-auto">
+                        <button class="btn btn-success btn-lg" type="button"
+                            [routerLink]="['/pt', id, 'answering']">CONTINUAR RESPUESTA</button>
+                    </div>
+                    <div *ngIf="!quedanMasIntentos() && !isRespuestaIniciada && isLoggedIn()">
+                        <p class="text-center">No te quedan más intentos para resolver este test.</p>
+                    </div>
+                    <div *ngIf="!isLoggedIn()">
+                        <p>Para realizar los tests tendrás que <a [routerLink]="['/login']">Iniciar Sesión</a></p>
+                    </div>
+                    <div class="d-grid gap-2 my-3 col-6 mx-auto" *ngIf="mostrarVerMisRespuestas()">
+                        <button class="btn btn-secondary" type="button" [routerLink]="['/pt', test.id, 'myanswers']">Ver
+                            mis respuestas</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="this.isModoTestAdmin()">
+            <h3 class="mt-3" id="preguntas">Preguntas:</h3>
+            <table class="table table-striped table-hover table-primary my-3">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Título</th>
+                        <th>Autor</th>
+                        <th>Tiempo Estimado</th>
+                        <th>Tipo</th>
+                        <th>Valor en test</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let pregunta of preguntas" role="button"
+                        [routerLink]="['/pt', test.id, 'q', pregunta.id ]">
+                        <td>{{pregunta.id}}</td>
+                        <td>{{pregunta.title}}</td>
+                        <td>{{pregunta.username}}</td>
+                        <td>{{pregunta.estimatedTime}} minutos</td>
+                        <td>{{tipoPrint(pregunta.tipoPregunta,
+                            pregunta.eleccionUnica)}}</td>
+                        <td>{{pregunta.valorFinal}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Confirmacion clonar-->
+<div class="modal fade" id="modalCloneTest" tabindex="-1" aria-labelledby="modalCloneTestLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form ngNativeValidate>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalCloneTestLabel">¿Clonar Test?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Se creará un test nuevo, clonando también las preguntas
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success" data-bs-dismiss="modal"
+                        (click)="cloneTestClick()">Clonar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editTestModal" *ngIf="checkPermisosEdicion()" tabindex="-1"
+    aria-labelledby="editTestModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <form ngNativeValidate>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editQuestionModalLabel">Modificar Test</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="inputTime" class="form-label">Tiempo disponible (minutos)</label>
+                        <input type="number" class="form-control" name="inputTime" [(ngModel)]="ptestUpdate.maxMinutes"
+                            required min=0 />
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckLimitIntentos"
+                            [checked]="ptestUpdateHasMaxIntentos()" (change)="changeSwitchLimitIntentos()">
+                        <label class="form-check-label" for="flexSwitchCheckLimitIntentos">Límite de intentos</label>
+                    </div>
+                    <div class="mb-3" *ngIf="ptestUpdateHasMaxIntentos()">
+                        <label for="inputMaxIntentos" class="form-label">Cantidad de intentos máxima</label>
+                        <input type="number" class="form-control" name="inputMaxIntentos"
+                            [(ngModel)]="ptestUpdate.maxIntentos" required min=1 />
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="flexSwitchChecktiempoEstricto"
+                            [checked]="!ptestUpdate.tiempoEstricto"
+                            (change)="ptestUpdate.tiempoEstricto = !ptestUpdate.tiempoEstricto">
+                        <label class="form-check-label" for="flexSwitchChecktiempoEstricto">Permitir entregas más
+                            allá del tiempo disponible</label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault"
+                            [checked]="!ptestUpdate.accesoPublico"
+                            (change)="ptestUpdate.accesoPublico = !ptestUpdate.accesoPublico">
+                        <label class="form-check-label" for="flexSwitchCheckDefault">Necesidad de invitación para
+                            poder realizar el Test</label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckAutoCorrect"
+                            [checked]="ptestUpdate.autoCorrect"
+                            (change)="ptestUpdate.autoCorrect = !ptestUpdate.autoCorrect">
+                        <label class="form-check-label" for="flexSwitchCheckAutoCorrect">Publicación automática de
+                            corrección de respuestas</label>
+                    </div>
+                    <div>
+                        <label class="form-label" for="selectVisibilidadLabel">Visibilidad de la respuesta</label>
+                        <select class="form-select" name="visibilidad" [(ngModel)]="ptestUpdate.visibilidad">
+                            <option [value]="getValueManual()">{{printManual()}}</option>
+                            <option [value]="getValueCorregir()">{{printCorregir()}}</option>
+                            <option [value]="getValueEntregar()">{{printEntregar()}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <input type="submit" value="Guardar" data-bs-dismiss="modal" class="btn btn-primary"
+                        (click)='putPTestSubmit()' id="buttonSubmitTest" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

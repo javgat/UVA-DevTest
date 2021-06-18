@@ -1,0 +1,31 @@
+<div class="container col-md-8 my-5">
+    <form (ngSubmit)='loginSubmit()' class="my-2" ngNativeValidate>
+        <div class="mb-3">
+            <label for="inputUsername" class="form-label">Nombre de usuario o Correo electrónico</label>
+            <input type="text" class="form-control" name="inputUsername" aria-describedby="usernameHelp"
+                [(ngModel)]="loginUser.loginid" required />
+            <div id="usernameHelp" class="form-text text-muted">El nick o correo asociado a tu cuenta</div>
+        </div>
+        <div class="mb-3">
+            <label for="inputPassword" class="form-label">Contraseña</label>
+            <input type="password" class="form-control" name="inputPassword" [(ngModel)]="loginUser.pass" required
+                minlength="6" />
+        </div>
+        <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-primary btn-lg" id="buttonLoginSignin">
+                <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="28px"
+                    viewBox="0 0 24 28" width="24px" fill="currentColor">
+                    <g>
+                        <rect fill="none" height="24" width="24" />
+                    </g>
+                    <g>
+                        <path
+                            d="M11,7L9.6,8.4l2.6,2.6H2v2h10.2l-2.6,2.6L11,17l5-5L11,7z M20,19h-8v2h8c1.1,0,2-0.9,2-2V5c0-1.1-0.9-2-2-2h-8v2h8V19z" />
+                    </g>
+                </svg>
+                Acceder
+            </button>
+        </div>
+    </form>
+    <div><a class="link-dark" [routerLink]="['/forgotPassword']">He olvidado mi contraseña</a></div>
+</div>

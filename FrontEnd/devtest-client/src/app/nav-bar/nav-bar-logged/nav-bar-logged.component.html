@@ -1,0 +1,2 @@
+<app-nv-student *ngIf="getSessionUser().isStudent()"></app-nv-student>
+<app-nv-teacher-admin *ngIf="!getSessionUser().isStudent()"></app-nv-teacher-admin>

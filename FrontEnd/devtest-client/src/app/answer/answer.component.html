@@ -1,0 +1,65 @@
+<div class="mt-2">
+    <button *ngIf="isModoTestAdmin()" class="button btn btn-outline-primary m-3" [routerLink]="['/pt', test.id, 'answers']">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+            class="bi bi-chevron-double-left" viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+                d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+            <path fill-rule="evenodd"
+                d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+        </svg>
+        Ver todas las respuestas al test
+    </button>
+    <button *ngIf="!isModoTestAdmin()" class="button btn btn-outline-primary m-3" [routerLink]="['/pt', test.id, 'myanswers']">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+            class="bi bi-chevron-double-left" viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+                d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+            <path fill-rule="evenodd"
+                d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+        </svg>
+        Ver todas tus respuestas al test
+    </button>
+    <h3>Respuesta al test <a [routerLink]="['/pt', testid]">{{test.title}}</a></h3>
+    <p><b>Autor: </b><a [routerLink]="['/profile', answer.username]">{{answer.username}}</a></p>
+    <p><b>Entregada: </b><span *ngIf="answer.entregado">Sí</span><span *ngIf="!answer.entregado">No</span></p>
+    <p><b>Fecha de inicio: </b>{{printDate(answer.startTime)}}</p>
+    <p *ngIf="answer.entregado"><b>Fecha de entrega: </b>{{printDate(answer.finishTime)}}</p>
+    <p><b>Puntuacion: </b>{{answer.puntuacion || 0}} / {{test.notaMaxima}}</p>
+    <p *ngIf="isModoTestAdmin()"><b>Visible para el usuario: </b>
+        <span *ngIf="answer.visibleParaUsuario">Sí</span><span *ngIf="!answer.visibleParaUsuario">No</span>
+        <button type="button" class="mx-2 btn btn-sm btn-primary" (click)="clickHacerVisible()">Hacer <span *ngIf="answer.visibleParaUsuario">no </span>visible</button>
+    </p>
+    <p><b>Corregida: </b><span class="badge bg-success" *ngIf="answer.corregida">Sí</span><span class="badge bg-danger" *ngIf="!answer.corregida">No</span></p>
+    <div class="my-3" *ngIf="isModoTestAdmin()">
+        <button *ngIf="!answer.corregida" type="button" class="btn btn-primary" data-bs-toggle="modal"
+            data-bs-target="#modalCorregida">Marcar como corregida</button>
+        <button *ngIf="answer.corregida" type="button" class="btn btn-primary" data-bs-toggle="modal"
+            data-bs-target="#modalCorregida">Marcar como no corregida</button>
+
+        <div class="modal fade" id="modalCorregida" tabindex="-1" aria-labelledby="modalCorregidaLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalCorregidaLabel">Marcar como <span *ngIf="answer.corregida">no
+                            </span>corregida</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        ¿Marcar respuesta como <span *ngIf="answer.corregida">no </span>corregida?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button *ngIf="!answer.corregida" type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                            (click)="setAsCorregidaClick()">Marcar como corregida</button>
+                        <button *ngIf="answer.corregida" type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                            (click)="setAsNotCorregidaClick()">Marcar como no corregida</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h3>Respuestas entregadas:</h3>
+    <app-lqa-answer></app-lqa-answer>
+
+</div>

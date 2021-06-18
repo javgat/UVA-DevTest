@@ -1,0 +1,521 @@
+<div class="">
+    <div class="my-3">
+        <button *ngIf="showVolverMisTests()" class="button btn btn-outline-primary m-3"
+            [routerLink]="['/u', getSessionUser().getUsername(),'et']">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-chevron-double-left" viewBox="0 0 16 16">
+                <path fill-rule="evenodd"
+                    d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+                <path fill-rule="evenodd"
+                    d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+            </svg>
+            Volver a Mis Tests Borradores
+        </button>
+        <button *ngIf="showVolverTestsCompartidos()" class="button btn btn-outline-primary m-3"
+            [routerLink]="['/u', getSessionUser().getUsername(),'set']">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-chevron-double-left" viewBox="0 0 16 16">
+                <path fill-rule="evenodd"
+                    d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+                <path fill-rule="evenodd"
+                    d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+            </svg>
+            Volver a Tests Borradores Compartiendo Conmigo
+        </button>
+        <button *ngIf="showVolverTests()" class="button btn btn-outline-primary m-3" [routerLink]="['/et']">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-chevron-double-left" viewBox="0 0 16 16">
+                <path fill-rule="evenodd"
+                    d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+                <path fill-rule="evenodd"
+                    d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+            </svg>
+            Volver a Tests Borradores Públicos
+        </button>
+        <div class=" card">
+            <div class="card-body">
+                <div class="row">
+                    <h2 class="col">Test Borrador: {{test.title}}</h2>
+                    <div class="col-sm">
+                        <div class="d-grid gap-2 d-flex justify-content-md-end" *ngIf="checkCloneTest()">
+                            <button type="button" class="btn btn-outline-primary mx-3 me-md-2" data-bs-toggle="modal"
+                                data-bs-target="#modalCloneTest">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
+                                    fill="currentColor">
+                                    <path d="M0 0h24v24H0z" fill="none" />
+                                    <path
+                                        d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm-1 4l6 6v10c0 1.1-.9 2-2 2H7.99C6.89 23 6 22.1 6 21l.01-14c0-1.1.89-2 1.99-2h7zm-1 7h5.5L14 6.5V12z" />
+                                </svg>
+                                Clonar
+                            </button>
+                            <input type="checkbox" class="btn-check" id="btn-check-2" [checked]="isFavorita"
+                                (click)="changeFavorita()">
+                            <label class="btn btn-outline-success" for="btn-check-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 26" width="24px"
+                                    fill="currentColor">
+                                    <path d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M0 0h24v24H0z" fill="none" />
+                                    <path
+                                        d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                </svg>
+                                <span *ngIf="!isFavorita">Guardar
+                                    Favorito</span><span *ngIf="isFavorita">Guardado Favorito</span>
+                                | {{test.cantidadFavoritos}}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <p>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
+                        fill="currentColor">
+                        <path d="M0 0h24v24H0V0z" fill="none" />
+                        <path
+                            d="M19 18l2 1V3c0-1.1-.9-2-2-2H8.99C7.89 1 7 1.9 7 3h10c1.1 0 2 .9 2 2v13zM15 5H5c-1.1 0-2 .9-2 2v16l7-3 7 3V7c0-1.1-.9-2-2-2z" />
+                    </svg>
+                    Etiquetas: <span *ngIf="tags.length==0">Ninguna</span>
+                    <span *ngFor="let tag of tags">
+                        <span *ngIf="checkPermisosEdicion()">
+                            <span class="badge bg-warning text-dark" role="button" id="{{tag.tag}}"
+                                data-bs-toggle="dropdown" aria-expanded="false">{{tag.tag}}</span>&nbsp;
+                            <ul class="dropdown-menu" attr.aria-labelledby="{{tag.tag}}">
+                                <li><a class="dropdown-item" role="button"
+                                        (click)="deleteTagClick(tag.tag)">Eliminar</a>
+                                </li>
+                            </ul>
+                        </span>
+                        <span *ngIf="!checkPermisosEdicion()">
+                            <span class="badge bg-warning text-dark">{{tag.tag}}</span>&nbsp;
+                        </span>
+                    </span>
+                </p>
+                <form *ngIf="checkPermisosEdicion()" (ngSubmit)='addTagSubmit()' ngNativeValidate>
+                    <div class="input-group my-3">
+                        <button class="btn btn-primary" type="submit">
+                            Añadir etiqueta
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
+                                fill="currentColor">
+                                <path d="M0 0h24v24H0z" fill="none" />
+                                <path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z" />
+                            </svg>
+                        </button>
+                        <input type="text" class="form-control" name="inputAddTag" [(ngModel)]="newTag"
+                            placeholder="Etiqueta" required pattern=".+" list="auto_tags" autocomplete="off"
+                            (ngModelChange)="changeGetAutoTags()" />
+                        <datalist id="auto_tags">
+                            <option *ngFor="let autotag of autotags" value="{{autotag.tag}}">
+                        </datalist>
+                    </div>
+                </form>
+                <button type="button" class="btn btn-primary mb-3" [routerLink]="['./']" [fragment]="'preguntas'">Ver
+                    Preguntas &darr;</button>
+                <hr />
+
+                <div class="row">
+                    <div class="col">
+                        <p>
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
+                                fill="currentColor">
+                                <path d="M0 0h24v24H0z" fill="none" />
+                                <path
+                                    d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z" />
+                                <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z" />
+                            </svg>
+                            <b>Tiempo máximo:</b> {{test.maxMinutes}} minutos</p>
+                        <p><b>Nota máxima: </b> {{test.notaMaxima}}</p>
+                    </div>
+                    <div class="col-sm">
+                        <div class="d-grid gap-2 d-flex justify-content-md-end">
+                            <button class="btn btn-primary mt-3" type="button" (click)="swapShowExtraInfo()">
+                                <span *ngIf="!showMostrarExtraInfo()">Mostrar Información Extra</span>
+                                <span *ngIf="showMostrarExtraInfo()">Ocultar Información Extra</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="container mt-3" *ngIf="showMostrarExtraInfo()">
+                    <p><button class="btn btn-secondary" type="button" [routerLink]="['/et', test.id, 'teams']">Ver
+                            equipos administradores</button></p>
+                    <p><b>Autor: </b><a *ngIf="isLoggedIn()"
+                            [routerLink]="['/profile', test.username]">{{test.username}}</a>
+                        <a *ngIf="!isLoggedIn()">{{test.username}}</a>
+                    <p><b>Permitir entregas más allá del tiempo máximo: </b> <span *ngIf="test.tiempoEstricto">No
+                            permitir</span><span *ngIf="!test.tiempoEstricto">Permitir</span></p>
+                    <p><b>Máximo de intentos: </b> <span *ngIf="testHasMaxIntentos()">{{test.maxIntentos}}</span><span
+                            *ngIf="!testHasMaxIntentos()">Sin límite</span></p>
+                    <p><b>Acceso público al borrador para profesores: </b> <span
+                            *ngIf="test.accesoPublicoNoPublicado">Sí</span><span
+                            *ngIf="!test.accesoPublicoNoPublicado">No</span></p>
+                    <p><b>Necesidad de invitación para poder realizar el test: </b> <span
+                            *ngIf="!test.accesoPublico">Sí</span><span *ngIf="test.accesoPublico">No</span></p>
+                    <p><b>Publicación automática de corrección de respuestas: </b> <span
+                            *ngIf="test.autoCorrect">Sí</span><span *ngIf="!test.autoCorrect">No</span></p>
+                    <p><b>Visibilidad de la respuesta: </b>{{visibilidadToString(test.visibilidad)}}</p>
+                </div>
+                <p><b>Descripción:</b></p>
+                <div class="card">
+                    <div class="card-body">
+                        <markdown class="my-3 text-break" [data]="test.description"></markdown>
+                    </div>
+                </div>
+
+                <div class="d-grid gap-2 col-6 mx-auto mt-3">
+                    <div class="btn-group" *ngIf="checkPermisosEdicion()">
+                        <button style="width:80%;" type="button" class="btn btn-lg btn-success" data-bs-toggle="modal"
+                            data-bs-target="#modalPublishTest">PUBLICAR</button>
+                        <button type="button" class="btn btn-success btn-lg dropdown-toggle dropdown-toggle-split"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="visually-hidden">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" [routerLink]="['/et', test.id, 'ptests']">Ver Publicaciones</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="btn-group" *ngIf="!checkPermisosEdicion()">
+                        <button type="button" class="btn btn-lg btn-secondary" data-bs-toggle="modal"
+                            [routerLink]="['/et', test.id, 'ptests']">VER PUBLICACIONES</button>
+                    </div>
+                    <button *ngIf="checkPermisosEdicion()" type="button" class="btn btn-lg btn-primary"
+                        data-bs-toggle="modal" data-bs-target="#editTestModal">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 26" width="24px"
+                            fill="currentColor">
+                            <path d="M0 0h24v24H0z" fill="none" />
+                            <path
+                                d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+                        </svg>
+                        Editar Test
+                    </button>
+                </div>
+            </div>
+        </div>
+        <h3 id="preguntas" class="mt-3">Preguntas:</h3>
+        <form *ngIf="checkPermisosEdicion()" (ngSubmit)='addQuestionSubmit()' ngNativeValidate>
+            <div *ngIf="addQuestionById">
+                <div class="input-group my-3">
+                    <input class="button btn btn-lg btn-primary" type="submit" value="Añadir pregunta por ID" />
+                    <input type="number" class="form-control" name="inputAddQuestion" [(ngModel)]="addQuestionId"
+                        placeholder="Id de la pregunta" required min=1 />
+                </div>
+                <p><a class="link-dark m-3" role="button" (click)="changeNotAddByID()">Añadir con buscador</a></p>
+            </div>
+            <div class="my-3" *ngIf="!addQuestionById">
+                <div class="d-grid gap-2 mb-3 col-6 mx-auto">
+                    <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal"
+                        data-bs-target="#modalSearchQuestion" (click)="borrarMensaje()">Añadir pregunta</button>
+                    <a class="link-dark mx-3" role="button" (click)="changeAddByID()">Añadir por id</a>
+                </div>
+            </div>
+        </form>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#changePositionModal"
+            (click)="prepareModalPosPreguntas()">Modificar orden de preguntas</button>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover table-primary my-3">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Título</th>
+                        <th>Autor</th>
+                        <th>Tiempo Estimado</th>
+                        <th>Tipo</th>
+                        <th>Valor en test</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let pregunta of preguntas">
+                        <td width="5%" [routerLink]="['/q', pregunta.id]" role="button">{{pregunta.id}}</td>
+                        <td width="5%" [routerLink]="['/q', pregunta.id]" role="button">{{pregunta.title}}</td>
+                        <td width="5%" [routerLink]="['/q', pregunta.id]" role="button">{{pregunta.username}}</td>
+                        <td width="5%" [routerLink]="['/q', pregunta.id]" role="button">{{pregunta.estimatedTime}}
+                            minutos</td>
+                        <td width="5%" [routerLink]="['/q', pregunta.id]" role="button">
+                            {{tipoPrint(pregunta.tipoPregunta,
+                            pregunta.eleccionUnica)}}</td>
+                        <td width="15%" *ngIf="checkPermisosEdicion()" (submit)="changeValueSubmit(pregunta)">
+                            <form ngNativeValidate>
+                                <div class="row">
+                                    <div class="col-auto">
+                                        <input type="number" class="form-control" name="inputChangeValorFinal"
+                                            [(ngModel)]="pregunta.valorFinal" required min=0 />
+                                    </div>
+                                    <div class="col-auto">
+                                        <input class="button btn btn-primary" type="submit" value="Guardar valor" />
+                                    </div>
+                                </div>
+                            </form>
+                        </td>
+                        <td width="1%" *ngIf="checkPermisosEdicion()">
+                            <div class="btn-group dropstart" role="button">
+                                <a data-bs-toggle="dropdown" class="link-dark" aria-expanded="false">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24"
+                                        width="24px" fill="currentColor">
+                                        <path d="M0 0h24v24H0z" fill="none" />
+                                        <path
+                                            d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
+                                    </svg>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" (click)="quitarPreguntaClick(pregunta.id)">Quitar</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                        <td width="5%" *ngIf="!checkPermisosEdicion()">{{pregunta.valorFinal}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal cambiar posicion preguntas-->
+    <div class="modal fade" id="changePositionModal" *ngIf="checkPermisosEdicion()" tabindex="-1"
+        aria-labelledby="changePositionModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <form ngNativeValidate>
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="changePositionModalLabel">Modificar orden de preguntas</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Modifica la posición de las preguntas arrastrándolas con el ratón, y pulsa guardar cuando hayas
+                        terminado
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover table-primary my-3">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>ID</th>
+                                        <th>Título</th>
+                                        <th>Autor</th>
+                                        <th>Tiempo Estimado</th>
+                                        <th>Tipo</th>
+                                        <th>Valor en test</th>
+                                    </tr>
+                                </thead>
+                                <tbody dragula="PREGUNTAS" [(dragulaModel)]="changePosPreguntas">
+                                    <tr role="button" *ngFor="let pregunta of changePosPreguntas">
+                                        <td width="1%"><svg xmlns="http://www.w3.org/2000/svg" height="24px"
+                                                viewBox="0 0 24 24" width="24px" fill="#000000">
+                                                <path d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+                                            </svg></td>
+                                        <td width="5%" role="button">{{pregunta.id}}</td>
+                                        <td width="5%" role="button">{{pregunta.title}}
+                                        </td>
+                                        <td width="5%" role="button">
+                                            {{pregunta.username}}</td>
+                                        <td width="5%" role="button">
+                                            {{pregunta.estimatedTime}} minutos</td>
+                                        <td width="5%" role="button">
+                                            {{tipoPrint(pregunta.tipoPregunta,
+                                            pregunta.eleccionUnica)}}</td>
+                                        <td width="5%">{{pregunta.valorFinal}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-lg" data-bs-dismiss="modal">Cancelar</button>
+                        <input type="submit" value="Guardar" data-bs-dismiss="modal" class="btn btn-success btn-lg"
+                            (click)='changePosPreguntasSubmit()' id="buttonSubmitPosPreguntas" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editTestModal" *ngIf="checkPermisosEdicion()" tabindex="-1"
+        aria-labelledby="editTestModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <form ngNativeValidate>
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editQuestionModalLabel">Modificar Test</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="inputTitle" class="form-label">Título del test</label>
+                            <input type="text" class="form-control" name="inputTitle" [(ngModel)]="testEdit.title"
+                                required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="inputDescription" class="form-label">Descripción</label>
+                            <textarea type="text" class="form-control" name="inputDescription"
+                                [(ngModel)]="testEdit.description" required rows=3></textarea>
+                            <div id="inputDescriptionHelp" class="form-text text-muted">Puedes utilizar MarkDown</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="inputTime" class="form-label">Tiempo disponible (minutos)</label>
+                            <input type="number" class="form-control" name="inputTime" [(ngModel)]="testEdit.maxMinutes"
+                                required min=0 />
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckLimitIntentos"
+                                [checked]="testEditHasMaxIntentos()" (change)="changeSwitchLimitIntentos()">
+                            <label class="form-check-label" for="flexSwitchCheckLimitIntentos">Límite de
+                                intentos</label>
+                        </div>
+                        <div class="mb-3" *ngIf="testEditHasMaxIntentos()">
+                            <label for="inputMaxIntentos" class="form-label">Cantidad de intentos máxima</label>
+                            <input type="number" class="form-control" name="inputMaxIntentos"
+                                [(ngModel)]="testEdit.maxIntentos" required min=1 />
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="flexSwitchChecktiempoEstricto"
+                                [checked]="!testEdit.tiempoEstricto"
+                                (change)="testEdit.tiempoEstricto = !testEdit.tiempoEstricto">
+                            <label class="form-check-label" for="flexSwitchChecktiempoEstricto">Permitir entregas más
+                                allá del tiempo disponible</label>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault"
+                                [checked]="!testEdit.accesoPublico"
+                                (change)="testEdit.accesoPublico = !testEdit.accesoPublico">
+                            <label class="form-check-label" for="flexSwitchCheckDefault">Necesidad de invitación para
+                                poder realizar el Test</label>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckLectura"
+                                [checked]="testEdit.accesoPublicoNoPublicado"
+                                (change)="testEdit.accesoPublicoNoPublicado = !testEdit.accesoPublicoNoPublicado">
+                            <label class="form-check-label" for="flexSwitchCheckLectura">Visionado público para
+                                profesores</label>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckAutoCorrect"
+                                [checked]="testEdit.autoCorrect"
+                                (change)="testEdit.autoCorrect = !testEdit.autoCorrect">
+                            <label class="form-check-label" for="flexSwitchCheckAutoCorrect">Publicación automática de
+                                corrección de respuestas</label>
+                        </div>
+                        <div>
+                            <label class="form-label" for="selectVisibilidadLabel">Visibilidad de la respuesta</label>
+                            <select class="form-select" name="visibilidad" [(ngModel)]="testEdit.visibilidad">
+                                <option [value]="getValueManual()">{{printManual()}}</option>
+                                <option [value]="getValueCorregir()">{{printCorregir()}}</option>
+                                <option [value]="getValueEntregar()">{{printEntregar()}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <input type="submit" value="Guardar" data-bs-dismiss="modal" class="btn btn-primary"
+                            (click)='putTestSubmit()' id="buttonSubmitTest" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Buscador preguntas-->
+    <div class="modal fade" id="modalSearchQuestion" tabindex="-1" aria-labelledby="modalSearchQuestionLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalSearchQuestionLabel">Buscador de preguntas para añadir</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Pulsa la pregunta que quieras añadir, o <a role="button" class="link-dark"
+                            (click)="newTabCreateQuestion()">crea tu propia pregunta</a> (se abrirá en pestaña nueva).
+                    </p>
+                    <app-lq-add-question-test (onQuestionPicked)="questionPicked($event)"></app-lq-add-question-test>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmacion clonar-->
+    <div class="modal fade" id="modalCloneTest" tabindex="-1" aria-labelledby="modalCloneTestLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <form ngNativeValidate>
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalCloneTestLabel">¿Clonar Test?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Se creará un test nuevo, clonando también las preguntas
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success" data-bs-dismiss="modal"
+                            (click)="cloneTestClick()">Clonar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmacion publicar-->
+    <div class="modal fade" id="modalPublishTest" tabindex="-1" aria-labelledby="modalPublishTestLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <form ngNativeValidate>
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalPublishTestLabel">¿Publicar Test?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Se creará una copia publicada del test</p>
+                        <div class="mb-3">
+                            <label for="inputTitlePublishedParams" class="form-label">Título del test publicado</label>
+                            <input type="text" class="form-control" name="inputTitlePublishedParams"
+                                [(ngModel)]="publishedParams.title" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="inputTimePublishedParams" class="form-label">Tiempo disponible (minutos)</label>
+                            <input type="number" class="form-control" name="inputTimePublishedParams"
+                                [(ngModel)]="publishedParams.maxMinutes" required min=0 />
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox"
+                                id="flexSwitchChecktiempoEstrictoPublishedParams"
+                                [checked]="!publishedParams.tiempoEstricto"
+                                (change)="publishedParams.tiempoEstricto = !publishedParams.tiempoEstricto">
+                            <label class="form-check-label" for="flexSwitchChecktiempoEstrictoPublishedParams">Permitir
+                                entregas más allá del tiempo disponible</label>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefaultPublishedParams"
+                                [checked]="!publishedParams.accesoPublico"
+                                (change)="publishedParams.accesoPublico = !publishedParams.accesoPublico">
+                            <label class="form-check-label" for="flexSwitchCheckDefaultPublishedParams">Necesidad de
+                                invitación para poder realizar el Test</label>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox"
+                                id="flexSwitchCheckAutoCorrectPublishedParams" [checked]="publishedParams.autoCorrect"
+                                (change)="publishedParams.autoCorrect = !publishedParams.autoCorrect">
+                            <label class="form-check-label" for="flexSwitchCheckAutoCorrectPublishedParams">Publicación
+                                automática de corrección de respuestas</label>
+                        </div>
+                        <div>
+                            <label class="form-label" for="selectVisibilidadLabelPublishedParams">Visibilidad de la
+                                respuesta</label>
+                            <select class="form-select" name="visibilidad" [(ngModel)]="publishedParams.visibilidad">
+                                <option [value]="getValueManual()">{{printManual()}}</option>
+                                <option [value]="getValueCorregir()">{{printCorregir()}}</option>
+                                <option [value]="getValueEntregar()">{{printEntregar()}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success" data-bs-dismiss="modal"
+                            (click)="publishTestClick()">Publicar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>

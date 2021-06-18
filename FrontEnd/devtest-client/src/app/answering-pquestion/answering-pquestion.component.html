@@ -1,0 +1,272 @@
+<div class="mt-2">
+    <button class="button btn btn-secondary m-3 btn-lg" [routerLink]="['/pt', testid, 'answering']">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+            class="bi bi-chevron-double-left" viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+                d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+            <path fill-rule="evenodd"
+                d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+        </svg>
+        Volver a la lista de preguntas
+    </button>
+    <div *ngIf="test.tiempoEstricto" class="card m-3">
+        <div class="card-body">
+            <b>Tiempo Restante: </b>
+            <countdown #cd [config]="{ leftTime: getLeftTime() }" (event)="timeIsOver($event)"></countdown>
+            <div *ngIf="isTimeOver()" class="badge bg-danger">
+                <p>Se acabo el tiempo</p>
+            </div>
+        </div>
+    </div>
+    <h3>Respondiendo a la pregunta {{pregunta.posicion}}: {{pregunta.title}}</h3>
+    <table class="table table-borderless">
+        <tbody>
+            <tr>
+                <td><b>Valor:</b> {{pregunta.valorFinal}} puntos</td>
+                <td><b>Penalización en caso de fallo:</b> {{pregunta.penalizacion}}%</td>
+                <td><b>Tiempo estimado:</b> {{pregunta.estimatedTime}} minutos</td>
+                <td><b>Tipo:</b> {{tipoPrint(pregunta.tipoPregunta, pregunta.eleccionUnica)}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <p class="card-text"><span class="badge bg-danger" *ngIf="!(pregunta.isRespondida || false)">No
+            respondida</span> <span class="badge bg-success" *ngIf="(pregunta.isRespondida || false)">Respondida</span>
+    </p>
+    <h4>Enunciado:</h4>
+    <div class="card">
+        <div class="card-body">
+            <markdown class="my-3 text-break" [data]="pregunta.question"></markdown>
+        </div>
+    </div>
+    <h4 class="my-3">Respuesta:</h4>
+    <div class="my-3" *ngIf="(pregunta.isRespondida || false)">
+        <a class="link-danger" role="button" data-bs-toggle="modal" data-bs-target="#deleteQAnswerModal">Borrar
+            respuesta</a>
+
+        <!-- Modal borrar respuesta-->
+        <div class="modal fade" id="deleteQAnswerModal" tabindex="-1" aria-labelledby="deleteQAnswerModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteQAnswerModalLabel">¿Borrar respuesta de la pregunta?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Si borras la respuesta la pregunta se marcará como no respondida
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
+                            (click)="borrarRespuestaClick()">Borrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="my-3" *ngIf="pregunta.tipoPregunta=='string'">
+        <div class="card" *ngIf="(pregunta.isRespondida || false)">
+            <div class="card-body">
+                <h5 class="card-title">Respuesta guardada:</h5>
+                <span style="white-space: pre-line">{{questionAnswer.respuesta}}</span>
+            </div>
+        </div>
+        <form (ngSubmit)="sendTextRespuestaClick()">
+            <div class="input-group my-3" *ngIf="(!pregunta.isRespondida || modificandoRespuesta)">
+                <textarea type="text" class="form-control" name="inputAddRespuesta" [(ngModel)]="newRespuesta"
+                    placeholder="Introduce tu respuesta" required rows=3></textarea>
+            </div>
+            <div class="d-grid gap-2 mt-3" *ngIf="(!pregunta.isRespondida || modificandoRespuesta)">
+                <input class="button btn btn-success btn-lg" type="submit" value="Guardar respuesta" />
+            </div>
+        </form>
+    </div>
+    <div class="m-3" *ngIf="pregunta.tipoPregunta=='opciones'">
+        <div *ngIf="!(pregunta.eleccionUnica || false)">
+            <form (ngSubmit)="sendRespuestaTipoTest()">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="form-check" *ngFor="let option of options">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheck{{option.indice}}"
+                                (change)="pressedCheckbox(option.indice)" [checked]="isChecked(option.indice)"
+                                [disabled]="!(!pregunta.isRespondida || modificandoRespuesta)">
+                            <label class="form-check-label" for="flexCheck{{option.indice}}">
+                                {{option.texto}}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-grid gap-2 mt-3" *ngIf="(!pregunta.isRespondida || modificandoRespuesta)">
+                    <input class="button btn btn-success btn-lg" type="submit" value="Guardar respuesta" />
+                </div>
+            </form>
+        </div>
+        <div *ngIf="(pregunta.eleccionUnica || false)">
+            <form (ngSubmit)="sendRespuestaTipoTest()">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="form-check" *ngFor="let option of options">
+                            <input class="form-check-input" type="radio" name="flexRadioRespuesta"
+                                id="flexRadio{{option.indice}}" [checked]="isChecked(option.indice)"
+                                (change)="pressedRadio(option.indice)"
+                                [disabled]="!(!pregunta.isRespondida || modificandoRespuesta)">
+                            <label class="form-check-label" for="flexRadio{{option.indice}}">
+                                {{option.texto}}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-grid gap-2 mt-3" *ngIf="(!pregunta.isRespondida || modificandoRespuesta)">
+                    <input class="button btn btn-success btn-lg" type="submit" value="Guardar respuesta" />
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="m-3" *ngIf="pregunta.tipoPregunta=='codigo'">
+        <p>TODO:</p>
+    </div>
+    <div class="d-grid gap-2 mt-3" *ngIf="(pregunta.isRespondida || false) &&  !modificandoRespuesta">
+        <button class="btn btn-warning text-dark btn-lg my-3" type="button"
+            (click)="modificarRespuestaClick()">Modificar
+            respuesta</button>
+    </div>
+    <div class="row" *ngIf="!showWarningExitQuestion()">
+        <div class="col-sm d-grid gap-2 mb-3">
+            <button type="button" class="btn btn-primary btn-lg" [ngClass]="{ 'disabled': !hasPrevQuestion() }"
+                (click)="goPrevQuestion()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-chevron-double-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                        d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+                    <path fill-rule="evenodd"
+                        d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+                </svg>
+                Pregunta Anterior</button>
+        </div>
+        <div class="col-sm d-grid gap-2 mb-3">
+            <button type="button" class="btn btn-primary btn-lg" *ngIf="hasNextQuestion()"
+                (click)="goNextQuestion()">Pregunta Siguiente
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-chevron-double-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                        d="M3.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L9.293 8 3.646 2.354a.5.5 0 0 1 0-.708z" />
+                    <path fill-rule="evenodd"
+                        d="M7.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L13.293 8 7.646 2.354a.5.5 0 0 1 0-.708z" />
+                </svg>
+            </button>
+            <button type="button" class="btn btn-success btn-lg" *ngIf="!hasNextQuestion()"
+                [routerLink]="['/pt', testid, 'answering']">Revisar y Entregar
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-chevron-double-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                        d="M3.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L9.293 8 3.646 2.354a.5.5 0 0 1 0-.708z" />
+                    <path fill-rule="evenodd"
+                        d="M7.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L13.293 8 7.646 2.354a.5.5 0 0 1 0-.708z" />
+                </svg>
+            </button>
+        </div>
+    </div>
+    <div class="row" *ngIf="showWarningExitQuestion()">
+        <div class="col-sm d-grid gap-2 my-3">
+            <button type="button" class="btn btn-primary btn-lg" [ngClass]="{ 'disabled': !hasPrevQuestion() }"
+                data-bs-toggle="modal" data-bs-target="#anteriorModal">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-chevron-double-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                        d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+                    <path fill-rule="evenodd"
+                        d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+                </svg>
+                Pregunta Anterior</button>
+        </div>
+        <div class="col-sm d-grid gap-2 my-3">
+            <button type="button" class="btn btn-primary btn-lg" *ngIf="hasNextQuestion()" data-bs-toggle="modal"
+                data-bs-target="#nextModal">Pregunta Siguiente
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-chevron-double-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                        d="M3.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L9.293 8 3.646 2.354a.5.5 0 0 1 0-.708z" />
+                    <path fill-rule="evenodd"
+                        d="M7.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L13.293 8 7.646 2.354a.5.5 0 0 1 0-.708z" />
+                </svg>
+            </button>
+            <button type="button" class="btn btn-success btn-lg" *ngIf="!hasNextQuestion()" data-bs-toggle="modal"
+                data-bs-target="#goAnsweringListModal">Revisar y Entregar
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-chevron-double-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                        d="M3.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L9.293 8 3.646 2.354a.5.5 0 0 1 0-.708z" />
+                    <path fill-rule="evenodd"
+                        d="M7.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L13.293 8 7.646 2.354a.5.5 0 0 1 0-.708z" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="anteriorModal" tabindex="-1" aria-labelledby="anteriorModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="anteriorModalLabel">¿Ir a la pregunta anterior sin guardar?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        No has guardado tu respuesta a la pregunta, ¿seguro que quieres ir a la pregunta anterior?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                            (click)="goPrevQuestion()">Sí, Ir a la pregunta
+                            anterior</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="nextModal" tabindex="-1" aria-labelledby="nextModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="nextModalLabel">¿Ir a la pregunta siguiente sin guardar?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        No has guardado tu respuesta a la pregunta, ¿seguro que quieres ir a la pregunta siguiente?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                            (click)="goNextQuestion()">Sí, Ir a la pregunta
+                            siguiente</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="goAnsweringListModal" tabindex="-1" aria-labelledby="goAnsweringListModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="goAnsweringListModalLabel">¿Revisar preguntas sin guardar la actual?
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        No has guardado tu respuesta a la pregunta, ¿seguro que quieres ir a la lista de preguntas?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                            [routerLink]="['/pt', testid, 'answering']">Sí, Ir a la lista de preguntas</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

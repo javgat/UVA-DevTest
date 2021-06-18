@@ -1,0 +1,36 @@
+<div class="mt-5">
+    <h2>Creación de equipo</h2>
+    <form (ngSubmit)='teamSubmit()' ngNativeValidate>
+        <div class="mb-3">
+            <label for="inputTeamname" class="form-label">Nombre del equipo</label>
+            <input type="text" class="form-control" name="inputTeamname" aria-describedby="teamnameHelp"
+                [(ngModel)]="team.teamname" required />
+            <div id="teamnameHelp" class="form-text text-muted">El nombre único del equipo. No introducir el caracter @ ni espacios en blanco</div>
+        </div>
+        <div class="mb-3">
+            <label for="inputDescription" class="form-label">Descripción</label>
+            <input type="text" class="form-control" name="inputDescription" aria-describedby="descriptionHelp"
+                [(ngModel)]="team.description" />
+            <div id="descriptionHelp" class="form-text text-muted">Información detallada del equipo (opcional)</div>
+        </div>
+        <div class="mb-3">
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="inputSoloProfesores" id="inputSoloProfesoresTrue"
+                    required (change)="onSelectSoloProf(true)" />
+                <label class="form-check-label" for="inputSoloProfesoresTrue">
+                    Equipo de profesores
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="inputSoloProfesores" id="inputSoloProfesoresFalse"
+                    checked required (change)="onSelectSoloProf(false)" />
+                <label class="form-check-label" for="inputSoloProfesoresFalse">
+                    Equipo de estudiantes
+                </label>
+            </div>
+        </div>
+        <div class="d-grid gap-2">
+            <input type="submit" value="Enviar" class="btn btn-primary" id="buttonSendTeam" />
+        </div>
+    </form>
+</div>

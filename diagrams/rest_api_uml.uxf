@@ -1,0 +1,2828 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <help_text>// Uncomment the following line to change the fontsize and font:
+// fontsize=14
+// fontfamily=SansSerif //possible: SansSerif,Serif,Monospaced
+fontfamily=Monospaced
+//////////////////////////////////////////////////////////////////////////////////////////////
+// Welcome to UMLet!
+//
+// Double-click on elements to add them to the diagram, or to copy them
+// Edit elements by modifying the text in this panel
+// Hold Ctrl to select multiple elements
+// Use Ctrl+mouse to select via lasso
+//
+// Use +/- or Ctrl+mouse wheel to zoom
+// Drag a whole relation at its central square icon
+//
+// Press Ctrl+C to copy the whole diagram to the system clipboard (then just paste it to, eg, Word)
+// Edit the files in the "palettes" directory to create your own element palettes
+//
+// Select "Custom Elements &gt; New..." to create new element types
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+
+// This text will be stored with each diagram;  use it for notes.</help_text>
+  <zoom_level>8</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2112</x>
+      <y>240</y>
+      <w>304</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*Users*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getUsers(): User[]
++ &lt;&lt;POST&gt;&gt; registerUser(su : SigninUser): User
++ &lt;&lt;POST&gt;&gt; postEmailUser(e: EmailUser): User</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2288</x>
+      <y>72</y>
+      <w>120</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Application&gt;&gt;
+*DevTestAPI*
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1696</x>
+      <y>232</y>
+      <w>296</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*AccessTokens*
+bg=yellow
+--
+--
++ &lt;&lt;POST&gt;&gt; login(lu : LoginUser): JWTCookie</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2608</x>
+      <y>248</y>
+      <w>232</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*Teams*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getTeams(): Team[]
++ &lt;&lt;POST&gt;&gt; postTeam(t: Team): Team</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1840</x>
+      <y>136</y>
+      <w>168</w>
+      <h>112</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/accesstokens</panel_attributes>
+    <additional_attributes>10.0;120.0;10.0;60.0;120.0;10.0;190.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2544</x>
+      <y>136</y>
+      <w>208</w>
+      <h>128</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/teams</panel_attributes>
+    <additional_attributes>240.0;140.0;240.0;80.0;40.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2264</x>
+      <y>104</y>
+      <w>96</w>
+      <h>152</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/users</panel_attributes>
+    <additional_attributes>10.0;170.0;10.0;110.0;100.0;50.0;100.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2616</x>
+      <y>376</y>
+      <w>216</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*Team*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getTeam(): Team
++ &lt;&lt;PUT&gt;&gt; putTeam(t: Team): void
++ &lt;&lt;DELETE&gt;&gt; deleteTeam(): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2120</x>
+      <y>360</y>
+      <w>272</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*User*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getUser(): User
++ &lt;&lt;PUT&gt;&gt; putUser(u: UserUpdate): void
++ &lt;&lt;DELETE&gt;&gt; deleteUser(): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2720</x>
+      <y>304</y>
+      <w>96</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/{teamname}</panel_attributes>
+    <additional_attributes>10.0;90.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2264</x>
+      <y>312</y>
+      <w>96</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/{username}</panel_attributes>
+    <additional_attributes>10.0;60.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1928</x>
+      <y>520</y>
+      <w>320</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*Password*
+bg=yellow
+--
+--
++ &lt;&lt;PUT&gt;&gt; putPassword(pu: PasswordUpdate): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2080</x>
+      <y>456</y>
+      <w>200</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/password</panel_attributes>
+    <additional_attributes>10.0;80.0;10.0;10.0;230.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2384</x>
+      <y>248</y>
+      <w>240</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/teams</panel_attributes>
+    <additional_attributes>280.0;20.0;130.0;20.0;10.0;160.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2480</x>
+      <y>544</y>
+      <w>200</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*Members*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getMembers(): User[]</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2416</x>
+      <y>672</y>
+      <w>248</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*Member*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getMember(): User
++ &lt;&lt;PUT&gt;&gt; putMember(m: Message): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2560</x>
+      <y>456</y>
+      <w>184</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/members</panel_attributes>
+    <additional_attributes>10.0;110.0;60.0;50.0;210.0;50.0;210.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2544</x>
+      <y>600</y>
+      <w>96</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/{username}</panel_attributes>
+    <additional_attributes>10.0;90.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1640</x>
+      <y>360</y>
+      <w>400</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*AccessToken*
+bg=yellow
+--
+--
++ &lt;&lt;DELETE&gt;&gt; closeSessions(p: Password, j: JWTCookie): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1824</x>
+      <y>288</y>
+      <w>96</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/{username}</panel_attributes>
+    <additional_attributes>10.0;90.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>4216</x>
+      <y>424</y>
+      <w>216</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*Test*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getTest(): Test
++ &lt;&lt;PUT&gt;&gt; putTest(t: Test): void
++ &lt;&lt;DELETE&gt;&gt; deleteTest(): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>3592</x>
+      <y>224</y>
+      <w>472</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*Questions*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getQuestions(tags: String[][], likeTitle: String): Question[]
++ &lt;&lt;POST&gt;&gt; postQuestion(q: Question): Question
++ &lt;&lt;POST&gt;&gt; copyQuestion(): Question</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>4224</x>
+      <y>216</y>
+      <w>416</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*Tests*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getTests(tags: String[][], likeTitle: String): Test[]
++ &lt;&lt;POST&gt;&gt; postTest(t: Test): Test
++ &lt;&lt;POST&gt;&gt; copyTest(): Test</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>3624</x>
+      <y>400</y>
+      <w>264</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*Question*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getQuestion(): Question
++ &lt;&lt;PUT&gt;&gt; putQuestion(q: Question): void
++ &lt;&lt;DELETE&gt;&gt; deleteQuestion(): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>4328</x>
+      <y>296</y>
+      <w>80</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/{testid}</panel_attributes>
+    <additional_attributes>10.0;160.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3736</x>
+      <y>304</y>
+      <w>112</w>
+      <h>112</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/{questionid}</panel_attributes>
+    <additional_attributes>10.0;120.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>4088</x>
+      <y>136</y>
+      <w>152</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/publicTests</panel_attributes>
+    <additional_attributes>170.0;100.0;170.0;70.0;90.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>4112</x>
+      <y>272</y>
+      <w>128</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/tests</panel_attributes>
+    <additional_attributes>140.0;10.0;60.0;10.0;50.0;70.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3448</x>
+      <y>288</y>
+      <w>160</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/questions</panel_attributes>
+    <additional_attributes>180.0;20.0;20.0;20.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>4312</x>
+      <y>496</y>
+      <w>144</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/questions</panel_attributes>
+    <additional_attributes>160.0;80.0;160.0;30.0;10.0;30.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3424</x>
+      <y>136</y>
+      <w>200</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/questions</panel_attributes>
+    <additional_attributes>230.0;110.0;230.0;80.0;70.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>6304</x>
+      <y>240</y>
+      <w>224</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*Answers*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getAnswers(): Answer[]
++ &lt;&lt;POST&gt;&gt; startAnswer(): Answer</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>6304</x>
+      <y>424</y>
+      <w>232</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*Answer*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getAnswer(): Answer
++ &lt;&lt;PUT&gt;&gt; finishAnswer(): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>6208</x>
+      <y>560</y>
+      <w>416</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>	&lt;&lt;Resource&gt;&gt;
+*QuestionAnswers*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getQuestionAnswers(): QuestionAnswer[]
++ &lt;&lt;POST&gt;&gt; addQuestionAnswer(q: QuestionAnswer): QuestionAnswer</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>6232</x>
+      <y>704</y>
+      <w>352</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*QuestionAnswer*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getQuestionAnswer(): QuestionAnswer
++ &lt;&lt;PUT&gt;&gt; putQuestionAnswer(q: QuestionAnswer): void
++ &lt;&lt;DELETE&gt;&gt; deleteQuestionAnswer(): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>6408</x>
+      <y>304</y>
+      <w>96</w>
+      <h>136</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/{answerid}</panel_attributes>
+    <additional_attributes>10.0;150.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>6400</x>
+      <y>488</y>
+      <w>80</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/qanswers</panel_attributes>
+    <additional_attributes>10.0;90.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>6400</x>
+      <y>632</y>
+      <w>112</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/{questionid}</panel_attributes>
+    <additional_attributes>10.0;90.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>5440</x>
+      <y>456</y>
+      <w>656</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>800.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>5992</x>
+      <y>576</y>
+      <w>232</w>
+      <h>184</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/qanswers</panel_attributes>
+    <additional_attributes>270.0;10.0;130.0;210.0;10.0;210.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>4328</x>
+      <y>560</y>
+      <w>240</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*QuestionsOfTest*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getQuestions(): Question[]</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>4288</x>
+      <y>688</y>
+      <w>296</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*QuestionOfTest*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getQuestion(): Question
++ &lt;&lt;PUT&gt;&gt; addQuestionToTest(valorFinal: int,
+	posicion: int): void
++ &lt;&lt;DELETE&gt;&gt; deleteQuestionFromTest(): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>4432</x>
+      <y>608</y>
+      <w>112</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/{questionid}</panel_attributes>
+    <additional_attributes>10.0;100.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2384</x>
+      <y>280</y>
+      <w>3936</w>
+      <h>152</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/answers</panel_attributes>
+    <additional_attributes>4900.0;10.0;4670.0;10.0;4630.0;60.0;110.0;60.0;10.0;170.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2696</x>
+      <y>544</y>
+      <w>192</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*Admins*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getAdmins(): User[]</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2720</x>
+      <y>464</y>
+      <w>120</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/admins</panel_attributes>
+    <additional_attributes>130.0;100.0;130.0;40.0;10.0;40.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2680</x>
+      <y>672</y>
+      <w>240</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*Admin*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getAdmin(): User
++ &lt;&lt;PUT&gt;&gt; putAdmin(m: Message): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2792</x>
+      <y>600</y>
+      <w>96</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/{username}</panel_attributes>
+    <additional_attributes>10.0;90.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>5008</x>
+      <y>280</y>
+      <w>176</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/solvableTests</panel_attributes>
+    <additional_attributes>200.0;20.0;40.0;20.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>5192</x>
+      <y>136</y>
+      <w>208</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/publishedTests</panel_attributes>
+    <additional_attributes>140.0;130.0;140.0;60.0;100.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>4256</x>
+      <y>296</y>
+      <w>80</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/tests</panel_attributes>
+    <additional_attributes>70.0;10.0;30.0;110.0;30.0;60.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>5144</x>
+      <y>296</y>
+      <w>144</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/answeredTests</panel_attributes>
+    <additional_attributes>140.0;10.0;40.0;110.0;40.0;40.0;10.0;40.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>6256</x>
+      <y>16</y>
+      <w>264</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>Para iniciar la respuesta:
+POST /users/{id}/solvableTests/{id}/answers
+Añadir respuestas a preguntas:
+POST */answers/{id}/questions
+Editar una respuesta añadida
+PUT */answers/{id}/questions/{id}
+Finalizar test:
+PUT */answers/{id}
+fontsize=12
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2824</x>
+      <y>296</y>
+      <w>2792</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/publishedTests</panel_attributes>
+    <additional_attributes>3460.0;10.0;3350.0;140.0;3350.0;60.0;70.0;60.0;10.0;160.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>4976</x>
+      <y>16</y>
+      <w>520</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>/tests -&gt; Tests Editables que profesores ven
+/publicPublishedTests -&gt; Tests Publicados, realizables por todos
+/publishedTests -&gt; Todos los tests Publicados
+/users/x/tests -&gt; Tests Editables propiedad de profesor
+/teams/x/tests -&gt; Tests Editables que equipo administra
+/users/x/publishedTests -&gt; TestsPublicados realizables por usuario (públicos e invitado)
+/users/x/invitedTests-&gt; TestsPublicados a los que el usuario está invitado directamente
+/teams/x/publishedTests -&gt; TestsPublicados realizados por equipo
+
+POST */tests/x/publishedTests -&gt; Publica el test x
+fontsize=12
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>5168</x>
+      <y>240</y>
+      <w>504</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*PublishedTests*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getPublishedTests(tags: String[][], likeTitle: String): Test[]
++ &lt;&lt;POST&gt;&gt; publishTest(p: PublishTestParams): Test</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>5168</x>
+      <y>440</y>
+      <w>280</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*PublishedTest*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getPublishedTest(): Test
++ &lt;&lt;PUT&gt;&gt; putPublishedTest(t: Test): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>5760</x>
+      <y>576</y>
+      <w>240</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*PublishedQuestions*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getQuestions(): Question[]</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>5768</x>
+      <y>696</y>
+      <w>232</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*PublishedQuestion*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getQuestion(): Question</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>5304</x>
+      <y>496</y>
+      <w>608</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/questions</panel_attributes>
+    <additional_attributes>740.0;100.0;740.0;60.0;640.0;40.0;10.0;40.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>5872</x>
+      <y>624</y>
+      <w>112</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/{questionid}</panel_attributes>
+    <additional_attributes>10.0;90.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>5320</x>
+      <y>296</y>
+      <w>80</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/{testid}</panel_attributes>
+    <additional_attributes>10.0;180.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3632</x>
+      <y>304</y>
+      <w>104</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/questions</panel_attributes>
+    <additional_attributes>70.0;10.0;30.0;100.0;30.0;50.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>4424</x>
+      <y>296</y>
+      <w>816</w>
+      <h>200</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/publishedTests</panel_attributes>
+    <additional_attributes>1000.0;10.0;10.0;230.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1104</x>
+      <y>232</y>
+      <w>208</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*LogoutTokens*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; logout(): JWTCookie</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>152</x>
+      <y>104</y>
+      <w>2208</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/tipoRoles</panel_attributes>
+    <additional_attributes>10.0;160.0;10.0;90.0;230.0;50.0;2740.0;50.0;2740.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2920</x>
+      <y>544</y>
+      <w>192</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*UsersFromTeam*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getUsers(): User[]</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2720</x>
+      <y>456</y>
+      <w>280</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/users</panel_attributes>
+    <additional_attributes>330.0;110.0;330.0;80.0;220.0;50.0;10.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2936</x>
+      <y>672</y>
+      <w>256</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*UserFromTeam*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getUserFromTeam(): User
++ &lt;&lt;DELETE&gt;&gt; deleteUserFromTeam(): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3008</x>
+      <y>592</y>
+      <w>96</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/{username}</panel_attributes>
+    <additional_attributes>10.0;100.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>4184</x>
+      <y>8</y>
+      <w>296</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>POST /users/x/tests
+POST /users/x/tests/y/copiedTests
+fontsize=12
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>3488</x>
+      <y>0</y>
+      <w>280</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>POST /users/x/questions
+POST /users/x/questions/y/copiedQuestions
+fontsize=12
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>2520</x>
+      <y>200</y>
+      <w>152</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>POST /users/x/teams
+fontsize=12
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2616</x>
+      <y>216</y>
+      <w>56</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;50.0;40.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3544</x>
+      <y>32</y>
+      <w>112</w>
+      <h>208</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;120.0;240.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>4248</x>
+      <y>40</y>
+      <w>32</w>
+      <h>192</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;20.0;220.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>5048</x>
+      <y>176</y>
+      <w>232</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>POST */tests/x/publishedTests
+fontsize=12
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>5184</x>
+      <y>192</y>
+      <w>56</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;50.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>6144</x>
+      <y>192</y>
+      <w>240</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>POST /users/x/solvableTests/y/answers
+fontsize=12
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>6240</x>
+      <y>208</y>
+      <w>120</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;130.0;40.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2336</x>
+      <y>104</y>
+      <w>4104</w>
+      <h>152</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/answers</panel_attributes>
+    <additional_attributes>5110.0;170.0;5110.0;110.0;5010.0;50.0;10.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>6120</x>
+      <y>512</y>
+      <w>240</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>POST */answers/x/qanswers
+fontsize=12
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>6248</x>
+      <y>528</y>
+      <w>56</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;50.0;40.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>3464</x>
+      <y>544</y>
+      <w>264</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*Options*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getOptions(): Option[]
++ &lt;&lt;POST&gt;&gt; postOption(o: Option): Option</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>3464</x>
+      <y>664</y>
+      <w>264</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*Option*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getOption(): Option
++ &lt;&lt;PUT&gt;&gt; putOption(o: Option): void
++ &lt;&lt;PUT&gt;&gt; deleteOption(): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>3176</x>
+      <y>248</y>
+      <w>224</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*Tags*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getTags(): Tag[]</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>3744</x>
+      <y>544</y>
+      <w>184</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*TagsOfQuestion*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getTags(): Tag[]</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>3736</x>
+      <y>664</y>
+      <w>280</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*TagOfQuestion*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt;  getTag(): Tag
++ &lt;&lt;PUT&gt;&gt; addTagToQuestion(): void
++ &lt;&lt;DELETE&gt;&gt; removeTagFromQuestion(): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3584</x>
+      <y>472</y>
+      <w>192</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/options</panel_attributes>
+    <additional_attributes>10.0;90.0;10.0;50.0;220.0;50.0;220.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3584</x>
+      <y>608</y>
+      <w>120</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/{optionindex}</panel_attributes>
+    <additional_attributes>10.0;70.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3864</x>
+      <y>592</y>
+      <w>64</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/{tag}</panel_attributes>
+    <additional_attributes>10.0;90.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3752</x>
+      <y>472</y>
+      <w>112</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/tags</panel_attributes>
+    <additional_attributes>120.0;90.0;120.0;50.0;10.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>3176</x>
+      <y>424</y>
+      <w>224</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*Tag*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getTag(): Tag</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3296</x>
+      <y>304</y>
+      <w>64</w>
+      <h>136</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/{tag}</panel_attributes>
+    <additional_attributes>10.0;150.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3112</x>
+      <y>136</y>
+      <w>200</w>
+      <h>128</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/tags</panel_attributes>
+    <additional_attributes>230.0;140.0;230.0;80.0;70.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3392</x>
+      <y>304</y>
+      <w>232</w>
+      <h>152</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/questions</panel_attributes>
+    <additional_attributes>270.0;10.0;210.0;90.0;120.0;90.0;10.0;170.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>6264</x>
+      <y>832</y>
+      <w>280</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*Revision*
+bg=yellow
+--
+--
++ &lt;&lt;PUT&gt;&gt; putReview(r: Review): void
++ &lt;&lt;DELETE&gt;&gt; deleteReview(r: Review): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>6392</x>
+      <y>776</y>
+      <w>80</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/{review}</panel_attributes>
+    <additional_attributes>10.0;70.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1680</x>
+      <y>520</y>
+      <w>224</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*Role*
+bg=yellow
+--
+--
++ &lt;&lt;PUT&gt;&gt; putRole(r: Role): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1824</x>
+      <y>456</y>
+      <w>280</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/role</panel_attributes>
+    <additional_attributes>10.0;80.0;10.0;10.0;330.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>5200</x>
+      <y>576</y>
+      <w>240</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*InvitedUsers*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getInvitedUsers(): User[]</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>5192</x>
+      <y>696</y>
+      <w>240</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*InvitedUser*
+bg=yellow
+--
+--
++ &lt;&lt;&lt;PUT&gt;&gt; addUser(m: Message): void
++ &lt;&lt;DELETE&gt;&gt; removeUser(): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>5304</x>
+      <y>496</y>
+      <w>64</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/users</panel_attributes>
+    <additional_attributes>10.0;100.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>5304</x>
+      <y>624</y>
+      <w>96</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/{username}</panel_attributes>
+    <additional_attributes>10.0;90.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>4928</x>
+      <y>696</y>
+      <w>240</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*InvitedTeam*
+bg=yellow
+--
+--
++ &lt;&lt;&lt;PUT&gt;&gt; addTeam(m: Message): void
++ &lt;&lt;DELETE&gt;&gt; removeTeam(): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>4936</x>
+      <y>576</y>
+      <w>240</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*InvitedTeams*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getInvitedTeams(): Team[]</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>5064</x>
+      <y>496</y>
+      <w>264</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/teams</panel_attributes>
+    <additional_attributes>10.0;100.0;10.0;40.0;310.0;40.0;310.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>5048</x>
+      <y>624</y>
+      <w>96</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/{teamname}</panel_attributes>
+    <additional_attributes>10.0;90.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>4632</x>
+      <y>568</y>
+      <w>240</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*AdminTeams*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getAdminTeams(): Team[]</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>4632</x>
+      <y>688</y>
+      <w>240</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*AdminTeam*
+bg=yellow
+--
+--
++ &lt;&lt;&lt;PUT&gt;&gt; addTeam(): void
++ &lt;&lt;DELETE&gt;&gt; removeTeam(): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>4424</x>
+      <y>512</y>
+      <w>424</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/adminTeams</panel_attributes>
+    <additional_attributes>420.0;70.0;420.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>4752</x>
+      <y>616</y>
+      <w>96</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/{teamname}</panel_attributes>
+    <additional_attributes>10.0;90.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>3208</x>
+      <y>664</y>
+      <w>240</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*AdminTeam*
+bg=yellow
+--
+--
++ &lt;&lt;&lt;PUT&gt;&gt; addTeam(): void
++ &lt;&lt;DELETE&gt;&gt; removeTeam(): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>3232</x>
+      <y>544</y>
+      <w>208</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*AdminTeams*
+bg=yellow
+--
+--
+&lt;&lt;GET&gt;&gt; getAdminTeams(): Team[]</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3320</x>
+      <y>600</y>
+      <w>96</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/{teamname}</panel_attributes>
+    <additional_attributes>10.0;80.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3320</x>
+      <y>496</y>
+      <w>288</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/teams</panel_attributes>
+    <additional_attributes>10.0;60.0;10.0;20.0;340.0;20.0;340.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>5944</x>
+      <y>824</y>
+      <w>264</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*PublishedOptions*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getOptions(): Option[]</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>5616</x>
+      <y>824</y>
+      <w>264</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*PublishedTagsOfQuestion*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getTags(): Tag[]</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>5832</x>
+      <y>752</y>
+      <w>248</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/options</panel_attributes>
+    <additional_attributes>290.0;90.0;290.0;50.0;10.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>5712</x>
+      <y>752</y>
+      <w>144</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/tags</panel_attributes>
+    <additional_attributes>10.0;90.0;10.0;50.0;160.0;50.0;160.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>4216</x>
+      <y>136</y>
+      <w>144</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/publicEditTests</panel_attributes>
+    <additional_attributes>130.0;100.0;130.0;70.0;60.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1376</x>
+      <y>232</y>
+      <w>280</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*Relogin*
+bg=yellow
+--
+--
++ &lt;&lt;POST&gt;&gt; relogin(j: JWTCookie): JWTCookie</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1488</x>
+      <y>136</y>
+      <w>176</w>
+      <h>112</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/relogin</panel_attributes>
+    <additional_attributes>10.0;120.0;10.0;60.0;120.0;10.0;200.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3816</x>
+      <y>304</y>
+      <w>160</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/sharedQuestions</panel_attributes>
+    <additional_attributes>90.0;10.0;50.0;100.0;50.0;30.0;10.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>4384</x>
+      <y>296</y>
+      <w>128</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/sharedTests</panel_attributes>
+    <additional_attributes>70.0;10.0;40.0;100.0;40.0;40.0;10.0;40.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>4976</x>
+      <y>256</y>
+      <w>208</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/invitedTests</panel_attributes>
+    <additional_attributes>240.0;20.0;70.0;20.0;10.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>5320</x>
+      <y>136</y>
+      <w>256</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/publicPublishedTests</panel_attributes>
+    <additional_attributes>140.0;130.0;140.0;60.0;100.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3520</x>
+      <y>136</y>
+      <w>200</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/editQuestions</panel_attributes>
+    <additional_attributes>230.0;110.0;230.0;80.0;70.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3432</x>
+      <y>264</y>
+      <w>176</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/editQuestions</panel_attributes>
+    <additional_attributes>200.0;20.0;30.0;20.0;10.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3416</x>
+      <y>304</y>
+      <w>232</w>
+      <h>136</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/editQuestions</panel_attributes>
+    <additional_attributes>270.0;10.0;190.0;140.0;20.0;140.0;10.0;150.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>4024</x>
+      <y>696</y>
+      <w>256</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*TagOfTest*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt;  getTag(): Tag
++ &lt;&lt;PUT&gt;&gt; addTagToTest(): void
++ &lt;&lt;DELETE&gt;&gt; removeTagFromTest(): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>4152</x>
+      <y>608</y>
+      <w>64</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/{tag}</panel_attributes>
+    <additional_attributes>10.0;110.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>4048</x>
+      <y>560</y>
+      <w>248</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*TagsOfTest*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getTagsFromTest(): Tag[]</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>4160</x>
+      <y>496</y>
+      <w>176</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/tags</panel_attributes>
+    <additional_attributes>10.0;80.0;10.0;30.0;200.0;30.0;200.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3392</x>
+      <y>296</y>
+      <w>904</w>
+      <h>184</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/editTests</panel_attributes>
+    <additional_attributes>1110.0;10.0;1090.0;20.0;1010.0;140.0;1010.0;100.0;280.0;100.0;220.0;210.0;10.0;210.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>4128</x>
+      <y>296</y>
+      <w>128</w>
+      <h>136</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/tests</panel_attributes>
+    <additional_attributes>140.0;10.0;30.0;150.0;30.0;100.0;10.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3616</x>
+      <y>136</y>
+      <w>200</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/allQuestions</panel_attributes>
+    <additional_attributes>230.0;110.0;230.0;80.0;70.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3728</x>
+      <y>136</y>
+      <w>200</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/allEditQuestions</panel_attributes>
+    <additional_attributes>230.0;110.0;230.0;80.0;70.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3416</x>
+      <y>240</y>
+      <w>192</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/publicEditQuestions</panel_attributes>
+    <additional_attributes>220.0;20.0;40.0;20.0;10.0;110.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>4368</x>
+      <y>136</y>
+      <w>128</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/tests</panel_attributes>
+    <additional_attributes>140.0;100.0;140.0;70.0;60.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>4312</x>
+      <y>136</y>
+      <w>120</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/editTests</panel_attributes>
+    <additional_attributes>130.0;100.0;130.0;70.0;50.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>4080</x>
+      <y>200</y>
+      <w>160</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/publicEditTests</panel_attributes>
+    <additional_attributes>180.0;20.0;30.0;20.0;10.0;160.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>4944</x>
+      <y>232</y>
+      <w>240</w>
+      <h>112</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/publicPublishedTests</panel_attributes>
+    <additional_attributes>280.0;20.0;90.0;20.0;10.0;120.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>4632</x>
+      <y>248</y>
+      <w>200</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/publishedTests</panel_attributes>
+    <additional_attributes>10.0;10.0;120.0;10.0;90.0;100.0;70.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>5368</x>
+      <y>296</y>
+      <w>136</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/invitedTests</panel_attributes>
+    <additional_attributes>90.0;10.0;40.0;130.0;40.0;60.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3880</x>
+      <y>304</y>
+      <w>272</w>
+      <h>152</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/copiedQuestions</panel_attributes>
+    <additional_attributes>190.0;10.0;190.0;170.0;10.0;170.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>4424</x>
+      <y>296</y>
+      <w>224</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/copiedTests</panel_attributes>
+    <additional_attributes>160.0;10.0;160.0;180.0;10.0;180.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>4096</x>
+      <y>224</y>
+      <w>144</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/sharedEditTests</panel_attributes>
+    <additional_attributes>160.0;20.0;30.0;20.0;10.0;130.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>4112</x>
+      <y>248</y>
+      <w>128</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/editTests</panel_attributes>
+    <additional_attributes>140.0;20.0;30.0;20.0;10.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3400</x>
+      <y>216</y>
+      <w>208</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/availableQuestions</panel_attributes>
+    <additional_attributes>240.0;20.0;40.0;20.0;10.0;130.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3392</x>
+      <y>192</y>
+      <w>224</w>
+      <h>152</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/availableEditQuestions</panel_attributes>
+    <additional_attributes>260.0;40.0;230.0;20.0;30.0;20.0;10.0;170.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1744</x>
+      <y>816</y>
+      <w>528</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*FavoriteQuestions*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getFavoriteQuestions(tags: String[][], likeTitle: String): Question[]</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2056</x>
+      <y>440</y>
+      <w>224</w>
+      <h>392</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/favoriteQuestions</panel_attributes>
+    <additional_attributes>70.0;470.0;70.0;450.0;100.0;430.0;260.0;430.0;260.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1272</x>
+      <y>936</y>
+      <w>288</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*FavoriteTest*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getFavoriteTest(): Test
++ &lt;&lt;PUT&gt;&gt; addFavoriteTest(): void
++ &lt;&lt;DELETE&gt;&gt; removeFavoriteTest(): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1400</x>
+      <y>872</y>
+      <w>80</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/{testid}</panel_attributes>
+    <additional_attributes>10.0;80.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1256</x>
+      <y>816</y>
+      <w>480</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*FavoriteTests*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getFavoriteTests(tags: String[][], likeTitle: String): Test[]</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1384</x>
+      <y>776</y>
+      <w>768</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/favoriteTests</panel_attributes>
+    <additional_attributes>10.0;50.0;10.0;10.0;940.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1992</x>
+      <y>944</y>
+      <w>288</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*FavoriteQuestion*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getFavoriteQuestion(): Question
++ &lt;&lt;PUT&gt;&gt; addFavoriteQuestion(): void
++ &lt;&lt;DELETE&gt;&gt; removeFavoriteQuestion(): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2112</x>
+      <y>872</y>
+      <w>112</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/{questionid}</panel_attributes>
+    <additional_attributes>10.0;90.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2280</x>
+      <y>816</y>
+      <w>520</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*FavoriteEditQuestions*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getFavEditQuestions(tags: String[][], likeTitle: String): Question[]</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2256</x>
+      <y>776</y>
+      <w>352</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/favoriteEditQuestions</panel_attributes>
+    <additional_attributes>240.0;50.0;240.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>736</x>
+      <y>816</y>
+      <w>504</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*FavoriteEditTests*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getFavoriteEditTests(tags: String[][], likeTitle: String): Test[]</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>984</x>
+      <y>776</y>
+      <w>424</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/favoriteEditTests</panel_attributes>
+    <additional_attributes>10.0;50.0;10.0;10.0;510.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>944</x>
+      <y>520</y>
+      <w>240</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*MailTokens*
+bg=yellow
+--
+--
++ &lt;&lt;POST&gt;&gt; postRecoveryToken(): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1240</x>
+      <y>520</y>
+      <w>400</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*RecoverPassword*
+bg=yellow
+--
+--
++ &lt;&lt;PUT&gt;&gt; recoverPass(r: PasswordRecovery): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1072</x>
+      <y>456</y>
+      <w>344</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/PassRecoveryTokens</panel_attributes>
+    <additional_attributes>10.0;80.0;10.0;10.0;410.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1392</x>
+      <y>456</y>
+      <w>456</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/mailtokens</panel_attributes>
+    <additional_attributes>10.0;80.0;10.0;10.0;550.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>5464</x>
+      <y>576</y>
+      <w>248</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*TagsOfPublishedTest*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getTagsFromPTest(): Tag[]</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>5464</x>
+      <y>696</y>
+      <w>256</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*TagOfPublishedTest*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt;  getTagFronPTest(): Tag</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>5576</x>
+      <y>624</y>
+      <w>64</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/{tag}</panel_attributes>
+    <additional_attributes>10.0;90.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>5464</x>
+      <y>520</y>
+      <w>176</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/tags</panel_attributes>
+    <additional_attributes>150.0;70.0;150.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>5608</x>
+      <y>296</y>
+      <w>192</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/sharedPublishedTests</panel_attributes>
+    <additional_attributes>70.0;10.0;40.0;110.0;40.0;40.0;10.0;40.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>4912</x>
+      <y>208</y>
+      <w>296</w>
+      <h>136</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/invitedTestsByTeamsAndUser</panel_attributes>
+    <additional_attributes>350.0;40.0;340.0;20.0;100.0;20.0;10.0;150.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>6040</x>
+      <y>304</y>
+      <w>336</w>
+      <h>176</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/openAnswers</panel_attributes>
+    <additional_attributes>400.0;10.0;380.0;70.0;120.0;70.0;10.0;200.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>5920</x>
+      <y>480</y>
+      <w>400</w>
+      <h>112</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/questions</panel_attributes>
+    <additional_attributes>10.0;120.0;10.0;60.0;120.0;10.0;480.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2352</x>
+      <y>136</y>
+      <w>88</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/emailUsers</panel_attributes>
+    <additional_attributes>10.0;130.0;10.0;70.0;90.0;10.0;60.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>6024</x>
+      <y>304</y>
+      <w>328</w>
+      <h>176</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/answers</panel_attributes>
+    <additional_attributes>390.0;10.0;380.0;40.0;140.0;40.0;10.0;200.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>6056</x>
+      <y>304</y>
+      <w>336</w>
+      <h>176</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/correctedAnswers</panel_attributes>
+    <additional_attributes>400.0;10.0;380.0;100.0;100.0;100.0;10.0;200.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>6072</x>
+      <y>304</y>
+      <w>336</w>
+      <h>176</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/uncorrectedAnswers</panel_attributes>
+    <additional_attributes>400.0;10.0;380.0;130.0;70.0;130.0;10.0;200.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>6640</x>
+      <y>368</y>
+      <w>232</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*Corrected*
+bg=yellow
+--
+--
++ &lt;&lt;PUT&gt;&gt; setCorrected(): void
++ &lt;&lt;DELETE&gt;&gt; setNotCorrected(): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>6528</x>
+      <y>400</y>
+      <w>128</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/corrected</panel_attributes>
+    <additional_attributes>140.0;10.0;10.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>6640</x>
+      <y>464</y>
+      <w>232</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*Visible*
+bg=yellow
+--
+--
++ &lt;&lt;PUT&gt;&gt; setVisible(): void
++ &lt;&lt;DELETE&gt;&gt; setNotVisible(): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>6528</x>
+      <y>464</y>
+      <w>128</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/visible</panel_attributes>
+    <additional_attributes>140.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>672</x>
+      <y>232</y>
+      <w>400</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*EmailConfiguration*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getEmailConfiguration(): EmailConfiguration
++ &lt;&lt;PUT&gt;&gt; setEmailConfiguration(e: EmailConfiguration): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1200</x>
+      <y>136</y>
+      <w>176</w>
+      <h>112</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/logout</panel_attributes>
+    <additional_attributes>10.0;120.0;10.0;60.0;120.0;10.0;200.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>5040</x>
+      <y>296</y>
+      <w>160</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/pendingTests</panel_attributes>
+    <additional_attributes>180.0;10.0;40.0;110.0;40.0;40.0;10.0;40.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>6056</x>
+      <y>256</y>
+      <w>264</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/correctedAnswers</panel_attributes>
+    <additional_attributes>310.0;20.0;70.0;20.0;10.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>6032</x>
+      <y>232</y>
+      <w>288</w>
+      <h>112</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/uncorrectedAnswers</panel_attributes>
+    <additional_attributes>340.0;20.0;90.0;20.0;10.0;120.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>0</x>
+      <y>232</y>
+      <w>296</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*TipoRoles*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getTipoRoles(): TipoRol[]
++ &lt;&lt;POST&gt;&gt; postTipoRol(t: TipoRol): TipoRol</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>16</x>
+      <y>368</y>
+      <w>264</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*TipoRol*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getTipoRol(): TipoRol
++ &lt;&lt;PUT&gt;&gt; putTipoRol(t: TipoRol): void
++ &lt;&lt;DELETE&gt;&gt; deleteTipoRol(): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>848</x>
+      <y>136</y>
+      <w>192</w>
+      <h>112</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/emailConfiguration</panel_attributes>
+    <additional_attributes>30.0;120.0;30.0;60.0;140.0;10.0;220.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>152</x>
+      <y>296</y>
+      <w>104</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/{rolNombre}</panel_attributes>
+    <additional_attributes>10.0;90.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>336</x>
+      <y>232</y>
+      <w>296</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*CustomizedViews*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getCViews(): CustomizedView[]</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>472</x>
+      <y>136</y>
+      <w>184</w>
+      <h>112</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/customizedViews</panel_attributes>
+    <additional_attributes>20.0;120.0;20.0;60.0;130.0;10.0;210.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>304</x>
+      <y>368</y>
+      <w>368</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*CustomizedView*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getCView(): CustomizedView
++ &lt;&lt;PUT&gt;&gt; putCView(newVista: CustomizedView): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>480</x>
+      <y>296</y>
+      <w>88</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/{rolBase}</panel_attributes>
+    <additional_attributes>10.0;90.0;10.0;10.0</additional_attributes>
+  </element>
+</diagram>

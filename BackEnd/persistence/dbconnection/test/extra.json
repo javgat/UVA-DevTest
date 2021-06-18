@@ -1,0 +1,8 @@
+{
+  "Username" : "test",
+  "Pass" : "test",
+  "Host" : "localhost",
+  "Port" : "3306",
+  "Name" : "uva_devtest",
+  "Macarron" : "Domingo"
+}

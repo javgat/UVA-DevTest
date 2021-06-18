@@ -1,0 +1,97 @@
+<div class="my-2">
+    <form *ngIf="buscarUsuario && isSearchActive()" (ngSubmit)='clickSearchUsername()' ngNativeValidate>
+        <div class="input-group my-3">
+            <button class="button btn btn-primary" type="submit">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor">
+                <path d="M0 0h24v24H0z" fill="none" />
+                <path
+                    d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+            </svg>
+                Nombre de Usuario
+            </button>
+            <input type="text" class="form-control" name="inputSearchUsername" [(ngModel)]="editLikeUsername"
+                placeholder="Username" required pattern="[^@]+" />
+            <button *ngIf="likeUsername!=undefined" type="button" class="btn btn-danger"
+                (click)="clickBorrarUsername()">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
+                    fill="currentColor">
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path
+                        d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                </svg>
+            </button>
+        </div>
+    </form>
+    <div class="table-responsive mt-3">
+        <button type="button" class="btn btn-primary mb-1" *ngIf="!isSearchActive() && buscarUsuario"
+            (click)="activateSearch()">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor">
+                <path d="M0 0h24v24H0z" fill="none" />
+                <path
+                    d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+            </svg>
+        </button>
+        <table class="table table-striped table-hover table-primary mb-0">
+            <thead>
+                <tr>
+                    <th>Autor</th>
+                    <th>Entregado</th>
+                    <th>Hora de inicio</th>
+                    <th>Hora de entrega</th>
+                    <th *ngIf="!canOrderDuracion()">Duración (minutos)</th>
+                    <th role="button" (click)="clickOrderByDuracion()" *ngIf="canOrderDuracion()">
+                        Duración (minutos)
+                        <span class="arrow-orderby" *ngIf="isMoreDuracionSelected()"> &uarr;</span>
+                        <span class="arrow-orderby" *ngIf="isLessDuracionSelected()"> &darr;</span>
+                        <span class="arrow-orderby" *ngIf="!isMoreDuracionSelected() && !isLessDuracionSelected()">
+                            &#8597;</span>
+                    </th>
+                    <th *ngIf="!canOrderPuntuacion()">Puntuación</th>
+                    <th role="button" (click)="clickOrderByPuntuacion()" *ngIf="canOrderPuntuacion()">
+                        Puntuación
+                        <span class="arrow-orderby" *ngIf="isMorePuntuacionSelected()"> &uarr;</span>
+                        <span class="arrow-orderby" *ngIf="isLessPuntuacionSelected()"> &darr;</span>
+                        <span class="arrow-orderby" *ngIf="!isMorePuntuacionSelected() && !isLessPuntuacionSelected()">
+                            &#8597;</span>
+                    </th>
+                    <th *ngIf="modoUsuario()">Visible</th>
+                </tr>
+            </thead>
+            <tbody *ngFor="let ans of answers">
+                <tr *ngIf="!modoUsuario()" role="button" [routerLink]="['/pt', testid, 'answers', ans.id]">
+                    <td>{{ans.username || ""}}</td>
+                    <td><span *ngIf="ans.entregado">Sí</span><span *ngIf="!ans.entregado">No</span></td>
+                    <td>{{printDate(ans.startTime)}}</td>
+                    <td><span *ngIf="ans.entregado">{{printDate(ans.finishTime)}}</span></td>
+                    <td>{{printDuracion(ans.startTime, ans.finishTime)}}</td>
+                    <td>{{ans.puntuacion || "--"}}</td>
+                    <td *ngIf="modoUsuario()"><span *ngIf="ans.visibleParaUsuario">Sí</span><span
+                            *ngIf="!ans.visibleParaUsuario">No</span></td>
+                </tr>
+                <tr *ngIf="modoUsuario() && ans.visibleParaUsuario" role="button"
+                    [routerLink]="['/pt', testid, 'answers', ans.id]">
+                    <td>{{ans.username || ""}}</td>
+                    <td><span *ngIf="ans.entregado">Sí</span><span *ngIf="!ans.entregado">No</span></td>
+                    <td>{{printDate(ans.startTime)}}</td>
+                    <td><span *ngIf="ans.entregado">{{printDate(ans.finishTime)}}</span></td>
+                    <td>{{printDuracion(ans.startTime, ans.finishTime)}}</td>
+                    <td>{{ans.puntuacion || "--"}}</td>
+                    <td *ngIf="modoUsuario()"><span *ngIf="ans.visibleParaUsuario">Sí</span><span
+                            *ngIf="!ans.visibleParaUsuario">No</span></td>
+                </tr>
+                <tr *ngIf="modoUsuario() && !ans.visibleParaUsuario">
+                    <td>{{ans.username || ""}}</td>
+                    <td><span *ngIf="ans.entregado">Sí</span><span *ngIf="!ans.entregado">No</span></td>
+                    <td>{{printDate(ans.startTime)}}</td>
+                    <td><span *ngIf="ans.entregado">{{printDate(ans.finishTime)}}</span></td>
+                    <td>{{printDuracion(ans.startTime, ans.finishTime)}}</td>
+                    <td>{{ans.puntuacion || "--"}}</td>
+                    <td *ngIf="modoUsuario()"><span *ngIf="ans.visibleParaUsuario">Sí</span><span
+                            *ngIf="!ans.visibleParaUsuario">No</span></td>
+                </tr>
+            </tbody>
+        </table>
+        <div *ngIf="answers.length==0" class="bg-white bg-gradient fw-bold text-center p-5">{{mensajeListaVacia}}</div>
+        <br />
+    </div>
+</div>

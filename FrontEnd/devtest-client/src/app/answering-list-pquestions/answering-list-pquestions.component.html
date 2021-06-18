@@ -1,0 +1,72 @@
+<div class="mt-3">
+    <h3>Respondiendo al test {{test.title}}</h3>
+    <button type="button" class="btn btn-primary" (click)="switchMostrarDescripcion()">
+        <span *ngIf="mostrarDescripcion">Ocultar descripción del test</span>
+        <span *ngIf="!mostrarDescripcion">Mostrar descripción del test</span>
+    </button>
+    <div class="m-3" *ngIf="mostrarDescripcion">
+        <p><b>Descripción:</b></p>
+        <div class="card mb-3">
+            <div class="card-body">
+                <markdown class="my-3 text-break" [data]="test.description"></markdown>
+            </div>
+        </div>
+        <p><b>Tiempo disponible:</b> {{test.maxMinutes}} minutos</p>
+        <p><b>Permitir entregas más allá del tiempo disponible: </b> <span *ngIf="test.tiempoEstricto">No
+                permitir</span><span *ngIf="!test.tiempoEstricto">Permitir</span></p>
+        <p><b>Nota máxima: </b> {{test.notaMaxima}}</p>
+        <p><b>Realización pública una vez publicado: </b> <span *ngIf="test.accesoPublico">Sí</span><span
+                *ngIf="!test.accesoPublico">No</span></p>
+        <p><b>Acceso público para profesores: </b> <span *ngIf="test.accesoPublicoNoPublicado">Sí</span><span
+                *ngIf="!test.accesoPublicoNoPublicado">No</span>
+        </p>
+        <p><b>Publicación automática de corrección de respuestas: </b> <span *ngIf="test.autoCorrect">Sí</span><span
+                *ngIf="!test.autoCorrect">No</span></p>
+    </div>
+    <div *ngIf="test.tiempoEstricto" class="card m-3">
+        <div class="card-body">
+            <b>Tiempo Restante: </b>
+                <countdown #cd [config]="{ leftTime: getLeftTime() }" (event)="timeIsOver($event)"></countdown>
+            <div *ngIf="isTimeOver()" class="badge bg-danger"><p>Se acabo el tiempo</p></div>
+        </div>
+    </div>
+    <h4 class="mt-3">Preguntas: </h4>
+    <div *ngFor="let pregunta of preguntas" class="card my-3">
+        <div class="card-body" role="button" [routerLink]="['/pt', testid, 'answering', 'pq', pregunta.id]">
+            <h5 class="card-title">{{pregunta.title}}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Valor: {{pregunta.valorFinal}} puntos</h6>
+            <h6 class="card-subtitle mb-2 text-muted">Tiempo estimado: {{pregunta.estimatedTime}} minutos</h6>
+            <h6 class="card-subtitle mb-2 text-muted">Tipo: {{tipoPrint(pregunta.tipoPregunta, pregunta.eleccionUnica)}}
+            </h6>
+            <p class="card-text"><span class="badge bg-danger" *ngIf="!(pregunta.isRespondida || false)">No
+                    respondida</span> <span class="badge bg-success"
+                    *ngIf="(pregunta.isRespondida || false)">Respondida</span></p>
+        </div>
+    </div>
+    <div class="d-grid gap-2 my-3">
+        <button class="btn btn-success btn-lg" type="button" data-bs-toggle="modal"
+            data-bs-target="#finnishAnswerModal">Enviar todo y terminar</button>
+    </div>
+    <!-- Modal iniciar respuesta -->
+    <div class="modal fade" id="finnishAnswerModal" tabindex="-1" aria-labelledby="finnishAnswerModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="finnishAnswerModalLabel">Enviar todo y terminar</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Has respondido {{getNumeroPreguntasRespondidas()}} preguntas de {{getNumeroPreguntasTotales()}}.
+                    </p>
+                    <p>Una vez finalices la respuesta no podrás modificar los datos enviados.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal"
+                        (click)="finishAnswerClick()">Enviar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

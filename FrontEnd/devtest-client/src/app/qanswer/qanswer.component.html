@@ -1,0 +1,158 @@
+<div class="mt-2">
+    <button type="button" class="btn btn-outline-primary m-3" [routerLink]="['/pt', testid, 'answers', answerid]">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+            class="bi bi-chevron-double-left" viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+                d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+            <path fill-rule="evenodd"
+                d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+        </svg>
+        Ver respuesta completa del examen</button>
+    <div class="card">
+        <div class="card-body">
+            <h2>Pregunta <a class="link-dark" [routerLink]="['/pt', testid, 'q', questionid]">{{question.title}}</a>
+            </h2>
+            <p><b>Usuario: </b> <a [routerLink]="['/profile', question.username]">{{question.username}}</a></p>
+            <p><b>Tiempo estimado:</b> {{question.estimatedTime}} minutos</p>
+            <p><b>Valor:</b> {{question.valorFinal}} puntos</p>
+            <p><b>Penalización por fallo: </b> {{question.penalizacion}} %</p>
+            <p><b>Corrección automática: </b> <span *ngIf="question.autoCorrect">Sí</span><span
+                    *ngIf="!question.autoCorrect">No</span></p>
+            <p><b>Corregida: </b><span class="badge bg-success" *ngIf="qa.corregida">Sí</span><span
+                    class="badge bg-danger" *ngIf="!qa.corregida">No</span></p>
+            <p *ngIf="qa.corregida"><b>Puntuación: </b>
+                <span class="badge {{bgcolorQAnswerPuntuacion(qa.puntuacion)}}">
+                    {{qa.puntuacion}}% ({{calcValor(qa.puntuacion,
+                    question.valorFinal)}}/{{question.valorFinal}})
+                </span>
+            </p>
+            <div *ngIf="isModoTestAdmin()">
+                <p *ngIf="!qa.corregida">
+                    <button *ngIf="!showCorregir" type="button" class="btn btn-primary"
+                        (click)="clickShowCorregir()">Corregir</button>
+                    <button *ngIf="showCorregir" type="button" class="btn btn-primary"
+                        (click)="clickNotShowCorregir()">Cancelar</button>
+                </p>
+                <p *ngIf="qa.corregida"><a class="link-dark" role="button" data-bs-toggle="modal"
+                        data-bs-target="#modalBorrarCorreccion">Borrar corrección</a></p>
+
+                <p *ngIf="qa.corregida">
+                    <button *ngIf="!showCorregir" type="button" class="btn btn-primary"
+                        (click)="clickShowCorregir()">Cambiar corrección</button>
+                    <button *ngIf="showCorregir" type="button" class="btn btn-primary"
+                        (click)="clickNotShowCorregir()">Cancelar</button>
+                </p>
+                <form *ngIf="showCorregir" (ngSubmit)="submitUpdateCorrection()" ngNativeValidate>
+                    <div class="mb-3">
+                        <label for="porcentajeCorreccion" class="form-label">Puntuacion [-100,100]:</label>
+                        <input type="number" required min=-100 max=100 class="form-control" id="porcentajeCorreccion"
+                            [(ngModel)]="editPuntuacion" name="editPuntuacion" />
+                    </div>
+                    <input type="submit" class="button btn btn-primary" value="Guardar" />
+                </form>
+            </div>
+            <hr />
+            <h4>Enunciado:</h4>
+            <p><span style="white-space: pre-line">{{question.question}}</span></p>
+        </div>
+    </div>
+    <div class="my-3">
+        <h3>Respuesta:</h3>
+        <p>{{qa.respuesta}}</p>
+        <div class="my-3" *ngIf="question.tipoPregunta=='string'">
+            <h3>Respuesta esperada:</h3>
+            <p>{{question.solucion}}</p>
+        </div>
+        <div class="m-3" *ngIf="question.tipoPregunta=='opciones'">
+            <p>Opciones:</p>
+            <div *ngFor="let opc of options">
+                <div class="my-1 card" *ngIf="isRadioQuestion()"
+                    [ngClass]="{'border-success': radioEsCorrecta(opc), 'border-danger': radioEsIncorrecta(opc)}">
+                    <div class="card-body">
+                        <div class="form-check">
+                            <input class="form-check-input" disabled type="radio" name="flexRadioOpcion"
+                                id="flexRadioOpcion{{opc.indice}}" [checked]="opcionSeleccionada(opc.indice)" />
+                            <label class="form-check-label">
+                                {{opc.texto}}
+                                <span style="color:green" *ngIf="radioShowTick(opc)">
+                                    <!--tick-->
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24"
+                                        width="24px" fill="currentColor">
+                                        <path d="M0 0h24v24H0V0z" fill="none" />
+                                        <path
+                                            d="M19.77 5.03l1.4 1.4L8.43 19.17l-5.6-5.6 1.4-1.4 4.2 4.2L19.77 5.03m0-2.83L8.43 13.54l-4.2-4.2L0 13.57 8.43 22 24 6.43 19.77 2.2z" />
+                                    </svg>
+                                </span>
+                                <span style="color: red" *ngIf="radioShowCross(opc)">
+                                    <!--Cross-->
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24"
+                                        width="24px" fill="currentColor">
+                                        <path d="M0 0h24v24H0z" fill="none" />
+                                        <path
+                                            d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z" />
+                                    </svg>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <!-- CHECKBOX -->
+                <div class="my-1 card" *ngIf="isCheckQuestion()"
+                    [ngClass]="{'border-success': checkEsCorrecta(opc), 'border-danger': checkEsIncorrecta(opc)}">
+                    <div class="card-body">
+                        <div class="form-check">
+                            <input class="form-check-input" disabled type="checkbox" name="flexCheckOpcion"
+                                id="flexCheckOpcion{{opc.indice}}" [checked]="opcionSeleccionada(opc.indice)" />
+                            <label class="form-check-label">
+                                {{opc.texto}}
+                                <span style="color:green" *ngIf="checkShowTick(opc)">
+                                    <!--tick-->
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24"
+                                        width="24px" fill="currentColor">
+                                        <path d="M0 0h24v24H0V0z" fill="none" />
+                                        <path
+                                            d="M19.77 5.03l1.4 1.4L8.43 19.17l-5.6-5.6 1.4-1.4 4.2 4.2L19.77 5.03m0-2.83L8.43 13.54l-4.2-4.2L0 13.57 8.43 22 24 6.43 19.77 2.2z" />
+                                    </svg>
+                                </span>
+                                <span style="color: red" *ngIf="checkShowCross(opc)">
+                                    <!--Cross-->
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24"
+                                        width="24px" fill="currentColor">
+                                        <path d="M0 0h24v24H0z" fill="none" />
+                                        <path
+                                            d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z" />
+                                    </svg>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="m-3" *ngIf="question.tipoPregunta=='codigo'">
+            <p>Tests:</p>
+        </div>
+    </div>
+
+    <!-- modal borrar correccion-->
+    <div *ngIf="qa.corregida" class="modal fade" id="modalBorrarCorreccion" tabindex="-1"
+        aria-labelledby="modalBorrarCorreccionLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalBorrarCorreccionLabel">Marcar como no corregida</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ¿Marcar respuesta como no corregida?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                        (click)="setAsNotCorregidaClick()">Marcar como no
+                        corregida</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
