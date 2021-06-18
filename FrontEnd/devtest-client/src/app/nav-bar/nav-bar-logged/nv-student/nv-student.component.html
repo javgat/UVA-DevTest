@@ -10,30 +10,67 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0 container align-items-center">
         <li class="col-sm nav-item">
-          <a [routerLink]="['/ptests']" class="nav-link fw-bold">TESTS PÚBLICOS</a>
+          <a [routerLink]="['/ptests']" class="nav-link fw-bold">
+            <svg width="24" height="26" role="img">
+              <use xlink:href="#icon-ptest" />
+            </svg>
+            TESTS PÚBLICOS
+          </a>
         </li>
         <li class="col-sm nav-item">
-          <a [routerLink]="['/u', getSessionUser().getUsername(), 'pending']" class="nav-link fw-bold">TESTS
-            PENDIENTES</a>
+          <a [routerLink]="['/u', getSessionUser().getUsername(), 'pending']" class="nav-link fw-bold">
+            <svg width="24" height="26" role="img">
+              <use xlink:href="#icon-pending" />
+            </svg>
+            TESTS PENDIENTES
+          </a>
         </li>
         <li class="col-sm nav-item">
-          <a [routerLink]="['/u', getSessionUser().getUsername(), 'answers']" class="nav-link fw-bold">MIS RESPUESTAS</a>
+          <a [routerLink]="['/u', getSessionUser().getUsername(), 'answers']" class="nav-link fw-bold">
+            <svg width="24" height="26" role="img">
+              <use xlink:href="#icon-answer" />
+            </svg>
+            MIS RESPUESTAS
+          </a>
         </li>
         <li class="col-sm nav-item">
-          <a [routerLink]="['/users']" class="nav-link fw-bold">USUARIOS</a>
+          <a [routerLink]="['/users']" class="nav-link fw-bold">
+            <svg width="24" height="26" role="img">
+              <use xlink:href="#icon-users" />
+            </svg>
+            USUARIOS
+          </a>
         </li>
         <li class="col-sm nav-item dropdown">
           <a class="nav-link dropdown-toggle fw-bold" href="#" role="button" id="dropdownMenuLink"
             data-bs-toggle="dropdown" aria-expanded="false">
+            <svg width="24" height="26" role="img">
+              <use xlink:href="#icon-user" />
+            </svg>
             {{getSessionUser().getUsername()}}
           </a>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-            <li><a class="dropdown-item" [routerLink]="['/profile', getSessionUser().getUsername()]">Ver perfil</a></li>
-            <li><a class="dropdown-item" [routerLink]="['/u', getSessionUser().getUsername(), 'teams']">Mis Equipos</a></li>
+            <li><a class="dropdown-item" [routerLink]="['/profile', getSessionUser().getUsername()]">
+              <svg width="24" height="26" role="img">
+                <use xlink:href="#icon-profile" />
+              </svg>
+              Ver perfil
+            </a></li>
+            <li><a class="dropdown-item" [routerLink]="['/u', getSessionUser().getUsername(), 'teams']">
+            <svg width="24" height="26" role="img">
+              <use xlink:href="#icon-team" />
+            </svg>
+              Mis Equipos
+            </a></li>
             <li>
               <hr class="dropdown-divider">
             </li>
-            <li><a class="dropdown-item" href="#" (click)="logout()">Cerrar sesión</a></li>
+            <li><a class="dropdown-item" href="#" (click)="logout()">
+              <svg width="24" height="26" role="img">
+                <use xlink:href="#icon-logout" />
+              </svg>
+              Cerrar sesión
+            </a></li>
           </ul>
         </li>
       </ul>

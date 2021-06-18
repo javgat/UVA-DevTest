@@ -10,8 +10,14 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0 container align-items-center">
         <li class="col-sm dropdown nav-item">
-          <a class="nav-link dropdown-toggle fw-bold" href="#" id="testsMenuUserLink" data-bs-toggle="dropdown"
-            aria-expanded="false">TESTS PUBLICADOS</a>
+          <a class="nav-link dropdown-toggle fw-bold text-wrap" href="#" id="testsMenuUserLink" data-bs-toggle="dropdown"
+            aria-expanded="false">
+              TESTS
+              <svg width="24" height="26" role="img">
+                <use xlink:href="#icon-ptest" />
+              </svg>
+              PUBLICADOS
+          </a>
           <ul class="col dropdown-menu" aria-labelledby="testsMenuUserLink">
 
             <li><a class="dropdown-item" [routerLink]="['/u', getSessionUser().getUsername(), 'pt']">Mis Tests
@@ -30,8 +36,14 @@
           </ul>
         </li>
         <li class="col-sm dropdown nav-item">
-          <a class="nav-link dropdown-toggle fw-bold" href="#" id="testsMenuUserLink" data-bs-toggle="dropdown"
-            aria-expanded="false">TESTS BORRADORES</a>
+          <a class="nav-link dropdown-toggle fw-bold text-wrap" href="#" id="testsMenuUserLink"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            TESTS
+            <svg width="24" height="26" role="img">
+              <use xlink:href="#icon-etest" />
+            </svg>
+            BORRADORES
+          </a>
           <ul class="col dropdown-menu" aria-labelledby="testsMenuUserLink">
             <li><a class="dropdown-item" [routerLink]="['/u', getSessionUser().getUsername(), 'et' ]">Mis Tests
                 Borradores</a></li>
@@ -45,7 +57,12 @@
         </li>
         <li class="col-sm nav-item dropdown">
           <a class="nav-link dropdown-toggle fw-bold" href="#" id="questionsMenuLink" data-bs-toggle="dropdown"
-            role="button" aria-expanded="false">PREGUNTAS</a>
+            role="button" aria-expanded="false">
+            <svg width="24" height="26" role="img">
+              <use xlink:href="#icon-question" />
+            </svg>
+            PREGUNTAS
+          </a>
           <ul class="dropdown-menu" aria-labelledby="questionsMenuLink">
             <li><a class="dropdown-item" [routerLink]="['/u', getSessionUser().getUsername(), 'q' ]">Mis Preguntas</a>
             <li><a class="dropdown-item" [routerLink]="['/u', getSessionUser().getUsername(), 'sq' ]">Compartiendo
@@ -58,24 +75,58 @@
           </ul>
         </li>
         <li class="col-sm nav-item">
-          <a [routerLink]="['/users']" class="nav-link fw-bold">USUARIOS</a>
+          <a [routerLink]="['/users']" class="nav-link fw-bold">
+            <svg width="24" height="26" role="img">
+              <use xlink:href="#icon-users" />
+            </svg>
+            USUARIOS
+          </a>
         </li>
         <li class="col-sm nav-item" *ngIf="getSessionUser().isAdmin()">
-          <a [routerLink]="['/admin']" class="nav-link fw-bold">ADMINISTRACIÓN</a>
+          <a [routerLink]="['/admin']" class="nav-link fw-bold">
+            <svg width="24" height="26" role="img">
+              <use xlink:href="#icon-admin" />
+            </svg>
+            ADMINISTRACIÓN
+          </a>
         </li>
+
         <li class="col-sm nav-item dropdown">
           <a class="nav-link dropdown-toggle fw-bold" href="#" role="button" id="dropdownMenuLink"
             data-bs-toggle="dropdown" aria-expanded="false">
+            <svg width="24" height="26" role="img">
+              <use xlink:href="#icon-user" />
+            </svg>
             {{getSessionUser().getUsername()}}
           </a>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-            <li><a class="dropdown-item" [routerLink]="['/profile', getSessionUser().getUsername()]">Ver perfil</a></li>
-            <li><a class="dropdown-item" [routerLink]="['/u', getSessionUser().getUsername(), 'teams']">Mis Equipos</a></li>
-            <li><a class="dropdown-item" [routerLink]="['/u', getSessionUser().getUsername(), 'answers']">Mis Respuestas</a></li>
+            <li><a class="dropdown-item" [routerLink]="['/profile', getSessionUser().getUsername()]">
+                <svg width="24" height="26" role="img">
+                  <use xlink:href="#icon-profile" />
+                </svg>
+                Ver perfil
+              </a></li>
+            <li><a class="dropdown-item" [routerLink]="['/u', getSessionUser().getUsername(), 'teams']">
+                <svg width="24" height="26" role="img">
+                  <use xlink:href="#icon-team" />
+                </svg>
+                Mis Equipos
+              </a></li>
+            <li><a class="dropdown-item" [routerLink]="['/u', getSessionUser().getUsername(), 'answers']">
+                <svg width="24" height="26" role="img">
+                  <use xlink:href="#icon-answer" />
+                </svg>
+                Mis Respuestas
+              </a></li>
             <li>
               <hr class="dropdown-divider">
             </li>
-            <li><a class="dropdown-item" href="#" (click)="logout()">Cerrar sesión</a></li>
+            <li><a class="dropdown-item" href="#" (click)="logout()">
+                <svg width="24" height="26" role="img">
+                  <use xlink:href="#icon-logout" />
+                </svg>
+                Cerrar sesión
+              </a></li>
           </ul>
         </li>
       </ul>
