@@ -330,8 +330,8 @@ CREATE TABLE Prueba(
   preguntaid int(11) NOT NULL,
   entrada longtext COLLATE utf8_unicode_ci NOT NULL,
   salida longtext COLLATE utf8_unicode_ci NOT NULL,
-  contenidoVisible boolean NOT NULL,
-  resultadoVisible boolean NOT NULL,
+  visible boolean NOT NULL, /* El usuario puede ver entrada y salida mientras lo resuelve*/
+  postEntrega boolean NOT NULL, /* La prueba se ejecuta tras entregar la respuesta al examen*/
   FOREIGN KEY(preguntaid) REFERENCES Pregunta(id) ON DELETE CASCADE,
   PRIMARY KEY(id)
 );

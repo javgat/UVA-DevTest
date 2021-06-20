@@ -1595,9 +1595,9 @@ bg=green</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1611</x>
+      <x>1647</x>
       <y>729</y>
-      <w>171</w>
+      <w>135</w>
       <h>90</h>
     </coordinates>
     <panel_attributes>**Prueba**
@@ -1606,8 +1606,8 @@ bg=yellow
 - id: int {id}
 - entrada: String
 - salida: String
-- contenidoVisible: bool
-- resultadoVisible: bool</panel_attributes>
+- visible: bool
+- postEntrega: bool</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -1630,13 +1630,13 @@ bg=yellow
     <coordinates>
       <x>1476</x>
       <y>684</y>
-      <w>153</w>
+      <w>189</w>
       <h>126</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=0..*
 m2=1</panel_attributes>
-    <additional_attributes>150.0;110.0;60.0;110.0;60.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>190.0;110.0;90.0;110.0;90.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -1680,5 +1680,32 @@ m2=1</panel_attributes>
 - SalidaIncorrecta
 bg=yellow</panel_attributes>
     <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1782</x>
+      <y>873</y>
+      <w>180</w>
+      <h>45</h>
+    </coordinates>
+    <panel_attributes>context Prueba inv:
+self.postEntrega=true implies
+self.visible=false
+
+fontsize=11
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1773</x>
+      <y>783</y>
+      <w>90</w>
+      <h>108</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;80.0;100.0</additional_attributes>
   </element>
 </diagram>

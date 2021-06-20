@@ -2181,6 +2181,63 @@ func init() {
         }
       }
     },
+    "/publishedTests/{testid}/questions/{questionid}/pruebas": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all pruebas visibles from a question.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "question"
+        ],
+        "summary": "Returns all pruebas visibles from a question.",
+        "operationId": "GetVisiblePruebasFromQuestionTest",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the test",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the question to find its pruebas visibles",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "pruebas visibles found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Prueba"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
     "/publishedTests/{testid}/questions/{questionid}/qanswers": {
       "get": {
         "security": [
@@ -3271,6 +3328,271 @@ func init() {
         "responses": {
           "200": {
             "description": "option deleted"
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/questions/{questionid}/pruebas": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all pruebas from a question.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "question"
+        ],
+        "summary": "Returns all pruebas from a question.",
+        "operationId": "GetPruebasFromQuestion",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the question to find its pruebas",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "pruebas found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Prueba"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      },
+      "post": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Creates new prueba to a question.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "question"
+        ],
+        "summary": "Creates new prueba to a question.",
+        "operationId": "PostPrueba",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the question to create a prueba",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Prueba to add",
+            "name": "prueba",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Prueba"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "prueba created",
+            "schema": {
+              "$ref": "#/definitions/Prueba"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/questions/{questionid}/pruebas/{pruebaid}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns a prueba from a question.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "question"
+        ],
+        "summary": "Returns a prueba from a question.",
+        "operationId": "GetPruebaFromQuestion",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the question to find its prueba",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "id of the prueba to find",
+            "name": "pruebaid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "prueba found",
+            "schema": {
+              "$ref": "#/definitions/Prueba"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Modifies a prueba from a question.",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "question"
+        ],
+        "summary": "Modifies a prueba from a question.",
+        "operationId": "PutPrueba",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the question to modify its prueba",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "id of the prueba to modify",
+            "name": "pruebaid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Prueba updated",
+            "name": "prueba",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Prueba"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "prueba modified"
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Deletes a prueba from a question.",
+        "tags": [
+          "question"
+        ],
+        "summary": "Deletes a prueba from a question.",
+        "operationId": "DeletePrueba",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the question to delete its prueba",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "id of the prueba to delete",
+            "name": "pruebaid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "prueba deleted"
           },
           "400": {
             "$ref": "#/responses/BadRequestError"
@@ -10695,6 +11017,41 @@ func init() {
         }
       }
     },
+    "Prueba": {
+      "type": "object",
+      "required": [
+        "entrada",
+        "salida",
+        "visible",
+        "postEntrega"
+      ],
+      "properties": {
+        "entrada": {
+          "type": "string",
+          "example": "3 3 0 0"
+        },
+        "id": {
+          "type": "integer",
+          "example": 1
+        },
+        "postEntrega": {
+          "type": "boolean",
+          "example": true
+        },
+        "preguntaid": {
+          "type": "integer",
+          "example": 1
+        },
+        "salida": {
+          "type": "string",
+          "example": "2 2"
+        },
+        "visible": {
+          "type": "boolean",
+          "example": true
+        }
+      }
+    },
     "PublishTestParams": {
       "type": "object",
       "required": [
@@ -13829,6 +14186,72 @@ func init() {
         }
       }
     },
+    "/publishedTests/{testid}/questions/{questionid}/pruebas": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all pruebas visibles from a question.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "question"
+        ],
+        "summary": "Returns all pruebas visibles from a question.",
+        "operationId": "GetVisiblePruebasFromQuestionTest",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the test",
+            "name": "testid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the question to find its pruebas visibles",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "pruebas visibles found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Prueba"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
     "/publishedTests/{testid}/questions/{questionid}/qanswers": {
       "get": {
         "security": [
@@ -15083,6 +15506,316 @@ func init() {
         "responses": {
           "200": {
             "description": "option deleted"
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/questions/{questionid}/pruebas": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all pruebas from a question.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "question"
+        ],
+        "summary": "Returns all pruebas from a question.",
+        "operationId": "GetPruebasFromQuestion",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the question to find its pruebas",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "pruebas found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Prueba"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      },
+      "post": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Creates new prueba to a question.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "question"
+        ],
+        "summary": "Creates new prueba to a question.",
+        "operationId": "PostPrueba",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the question to create a prueba",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Prueba to add",
+            "name": "prueba",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Prueba"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "prueba created",
+            "schema": {
+              "$ref": "#/definitions/Prueba"
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/questions/{questionid}/pruebas/{pruebaid}": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns a prueba from a question.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "question"
+        ],
+        "summary": "Returns a prueba from a question.",
+        "operationId": "GetPruebaFromQuestion",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the question to find its prueba",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "id of the prueba to find",
+            "name": "pruebaid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "prueba found",
+            "schema": {
+              "$ref": "#/definitions/Prueba"
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Modifies a prueba from a question.",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "question"
+        ],
+        "summary": "Modifies a prueba from a question.",
+        "operationId": "PutPrueba",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the question to modify its prueba",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "id of the prueba to modify",
+            "name": "pruebaid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Prueba updated",
+            "name": "prueba",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Prueba"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "prueba modified"
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Deletes a prueba from a question.",
+        "tags": [
+          "question"
+        ],
+        "summary": "Deletes a prueba from a question.",
+        "operationId": "DeletePrueba",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the question to delete its prueba",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "id of the prueba to delete",
+            "name": "pruebaid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "prueba deleted"
           },
           "400": {
             "description": "Incorrect Request, or invalida data",
@@ -23620,6 +24353,41 @@ func init() {
           "format": "password",
           "pattern": "^.{6,}$",
           "example": "password"
+        }
+      }
+    },
+    "Prueba": {
+      "type": "object",
+      "required": [
+        "entrada",
+        "salida",
+        "visible",
+        "postEntrega"
+      ],
+      "properties": {
+        "entrada": {
+          "type": "string",
+          "example": "3 3 0 0"
+        },
+        "id": {
+          "type": "integer",
+          "example": 1
+        },
+        "postEntrega": {
+          "type": "boolean",
+          "example": true
+        },
+        "preguntaid": {
+          "type": "integer",
+          "example": 1
+        },
+        "salida": {
+          "type": "string",
+          "example": "2 2"
+        },
+        "visible": {
+          "type": "boolean",
+          "example": true
         }
       }
     },

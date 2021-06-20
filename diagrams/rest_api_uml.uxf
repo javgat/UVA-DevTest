@@ -1222,7 +1222,7 @@ bg=cyan</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>3464</x>
+      <x>3456</x>
       <y>544</y>
       <w>264</w>
       <h>72</h>
@@ -1239,7 +1239,7 @@ bg=yellow
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>3464</x>
+      <x>3456</x>
       <y>664</y>
       <w>264</w>
       <h>80</h>
@@ -1307,20 +1307,20 @@ bg=yellow
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>3584</x>
+      <x>3576</x>
       <y>472</y>
-      <w>192</w>
+      <w>200</w>
       <h>88</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
 /options</panel_attributes>
-    <additional_attributes>10.0;90.0;10.0;50.0;220.0;50.0;220.0;10.0</additional_attributes>
+    <additional_attributes>10.0;90.0;10.0;50.0;230.0;50.0;230.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>3584</x>
+      <x>3576</x>
       <y>608</y>
       <w>120</w>
       <h>72</h>
@@ -1698,13 +1698,13 @@ bg=yellow
     <coordinates>
       <x>3320</x>
       <y>496</y>
-      <w>288</w>
+      <w>280</w>
       <h>64</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
 /teams</panel_attributes>
-    <additional_attributes>10.0;60.0;10.0;20.0;340.0;20.0;340.0;30.0</additional_attributes>
+    <additional_attributes>10.0;60.0;10.0;20.0;330.0;20.0;330.0;30.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
@@ -2824,5 +2824,95 @@ bg=yellow
 &lt;&lt;path&gt;&gt;
 /{rolBase}</panel_attributes>
     <additional_attributes>10.0;90.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>3592</x>
+      <y>776</y>
+      <w>264</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*Pruebas*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getPruebas(): Prueba[]
++ &lt;&lt;POST&gt;&gt; postPrueba(p: Prueba): Prueba</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>3600</x>
+      <y>896</y>
+      <w>248</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*Prueba*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getPrueba(): Prueba
++ &lt;&lt;PUT&gt;&gt; putPrueba(p: Prueba): void
++ &lt;&lt;DELETE&gt;&gt; deletePrueba(): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>5312</x>
+      <y>824</y>
+      <w>272</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*PublishedPruebas*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getVisiblePruebas(): Prueba[]</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>5480</x>
+      <y>776</y>
+      <w>256</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/pruebas</panel_attributes>
+    <additional_attributes>10.0;60.0;10.0;20.0;300.0;20.0;300.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3720</x>
+      <y>840</y>
+      <w>96</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/{pruebaid}</panel_attributes>
+    <additional_attributes>10.0;70.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3720</x>
+      <y>504</y>
+      <w>80</w>
+      <h>288</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/pruebas</panel_attributes>
+    <additional_attributes>10.0;340.0;10.0;10.0</additional_attributes>
   </element>
 </diagram>
