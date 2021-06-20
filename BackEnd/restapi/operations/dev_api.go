@@ -453,8 +453,8 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		TeamGetUsersFromTeamHandler: team.GetUsersFromTeamHandlerFunc(func(params team.GetUsersFromTeamParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation team.GetUsersFromTeam has not yet been implemented")
 		}),
-		QuestionGetVisiblePruebasFromQuestionTestHandler: question.GetVisiblePruebasFromQuestionTestHandlerFunc(func(params question.GetVisiblePruebasFromQuestionTestParams, principal *models.User) middleware.Responder {
-			return middleware.NotImplemented("operation question.GetVisiblePruebasFromQuestionTest has not yet been implemented")
+		PublishedTestGetVisiblePruebasFromQuestionTestHandler: published_test.GetVisiblePruebasFromQuestionTestHandlerFunc(func(params published_test.GetVisiblePruebasFromQuestionTestParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation published_test.GetVisiblePruebasFromQuestionTest has not yet been implemented")
 		}),
 		PublishedTestInviteTeamToPublishedTestHandler: published_test.InviteTeamToPublishedTestHandlerFunc(func(params published_test.InviteTeamToPublishedTestParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation published_test.InviteTeamToPublishedTest has not yet been implemented")
@@ -941,8 +941,8 @@ type DevAPI struct {
 	PublishedTestGetUsersFromPublishedTestHandler published_test.GetUsersFromPublishedTestHandler
 	// TeamGetUsersFromTeamHandler sets the operation handler for the get users from team operation
 	TeamGetUsersFromTeamHandler team.GetUsersFromTeamHandler
-	// QuestionGetVisiblePruebasFromQuestionTestHandler sets the operation handler for the get visible pruebas from question test operation
-	QuestionGetVisiblePruebasFromQuestionTestHandler question.GetVisiblePruebasFromQuestionTestHandler
+	// PublishedTestGetVisiblePruebasFromQuestionTestHandler sets the operation handler for the get visible pruebas from question test operation
+	PublishedTestGetVisiblePruebasFromQuestionTestHandler published_test.GetVisiblePruebasFromQuestionTestHandler
 	// PublishedTestInviteTeamToPublishedTestHandler sets the operation handler for the invite team to published test operation
 	PublishedTestInviteTeamToPublishedTestHandler published_test.InviteTeamToPublishedTestHandler
 	// PublishedTestInviteUserToPublishedTestHandler sets the operation handler for the invite user to published test operation
@@ -1531,8 +1531,8 @@ func (o *DevAPI) Validate() error {
 	if o.TeamGetUsersFromTeamHandler == nil {
 		unregistered = append(unregistered, "team.GetUsersFromTeamHandler")
 	}
-	if o.QuestionGetVisiblePruebasFromQuestionTestHandler == nil {
-		unregistered = append(unregistered, "question.GetVisiblePruebasFromQuestionTestHandler")
+	if o.PublishedTestGetVisiblePruebasFromQuestionTestHandler == nil {
+		unregistered = append(unregistered, "published_test.GetVisiblePruebasFromQuestionTestHandler")
 	}
 	if o.PublishedTestInviteTeamToPublishedTestHandler == nil {
 		unregistered = append(unregistered, "published_test.InviteTeamToPublishedTestHandler")
@@ -2333,7 +2333,7 @@ func (o *DevAPI) initHandlerCache() {
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
-	o.handlers["GET"]["/publishedTests/{testid}/questions/{questionid}/pruebas"] = question.NewGetVisiblePruebasFromQuestionTest(o.context, o.QuestionGetVisiblePruebasFromQuestionTestHandler)
+	o.handlers["GET"]["/publishedTests/{testid}/questions/{questionid}/pruebas"] = published_test.NewGetVisiblePruebasFromQuestionTest(o.context, o.PublishedTestGetVisiblePruebasFromQuestionTestHandler)
 	if o.handlers["PUT"] == nil {
 		o.handlers["PUT"] = make(map[string]http.Handler)
 	}

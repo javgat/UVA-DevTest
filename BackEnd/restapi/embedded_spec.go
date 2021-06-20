@@ -2193,7 +2193,7 @@ func init() {
           "application/json"
         ],
         "tags": [
-          "question"
+          "publishedTest"
         ],
         "summary": "Returns all pruebas visibles from a question.",
         "operationId": "GetVisiblePruebasFromQuestionTest",
@@ -14198,7 +14198,7 @@ func init() {
           "application/json"
         ],
         "tags": [
-          "question"
+          "publishedTest"
         ],
         "summary": "Returns all pruebas visibles from a question.",
         "operationId": "GetVisiblePruebasFromQuestionTest",

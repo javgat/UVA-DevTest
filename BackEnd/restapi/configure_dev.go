@@ -249,6 +249,13 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 	api.QuestionAddTeamToQuestionHandler = question.AddTeamToQuestionHandlerFunc(handlers.AddQuestionTeam)            // PUT /questions/{questionid}/teams/{teamname}
 	api.QuestionRemoveTeamToQuestionHandler = question.RemoveTeamToQuestionHandlerFunc(handlers.RemoveQuestionTeam)   // DELETE /questions/{questionid}/teams/{teamname}
 
+	api.QuestionGetPruebasFromQuestionHandler = question.GetPruebasFromQuestionHandlerFunc(handlers.GetPruebas) // GET /questions/{questionid}/pruebas
+	api.QuestionPostPruebaHandler = question.PostPruebaHandlerFunc(handlers.PostPrueba)                         // POST /questions/{questionid}/pruebas
+
+	api.QuestionGetPruebaFromQuestionHandler = question.GetPruebaFromQuestionHandlerFunc(handlers.GetPrueba) // GET /questions/{questionid}/pruebas/{pruebaid}
+	api.QuestionPutPruebaHandler = question.PutPruebaHandlerFunc(handlers.PutPrueba)                         // PUT /questions/{questionid}/pruebas/{pruebaid}
+	api.QuestionDeletePruebaHandler = question.DeletePruebaHandlerFunc(handlers.DeletePrueba)                // DELETE /questions/{questionid}/pruebas/{pruebaid}
+
 	// /tests
 
 	api.TestGetPublicEditTestsHandler = test.GetPublicEditTestsHandlerFunc(handlers.GetPublicEditTests) // GET /publicEditTests
@@ -314,6 +321,9 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 
 	api.PublishedTestGetQuestionAnswersFromPublishedTestQuestionHandler =
 		published_test.GetQuestionAnswersFromPublishedTestQuestionHandlerFunc(handlers.GetQuestionAnswersPTest) // GET /publishedTests/{testid}/questions/{questionid}/qanswers
+
+	api.PublishedTestGetVisiblePruebasFromQuestionTestHandler =
+		published_test.GetVisiblePruebasFromQuestionTestHandlerFunc(handlers.GetVisiblePruebas) // GET /publishedTests/{testid}/questions/{questionid}/pruebas
 
 	// /answers
 

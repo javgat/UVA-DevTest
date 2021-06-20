@@ -6387,7 +6387,7 @@ paths:
       security:
         - BearerCookie: []
       tags:
-      - question
+      - publishedTest
       summary: Returns all pruebas visibles from a question.
       operationId: GetVisiblePruebasFromQuestionTest
       description: Returns all pruebas visibles from a question.
