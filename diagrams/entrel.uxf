@@ -72,16 +72,17 @@ bg=yellow
     <id>UMLClass</id>
     <coordinates>
       <x>1665</x>
-      <y>567</y>
+      <y>549</y>
       <w>144</w>
-      <h>63</h>
+      <h>81</h>
     </coordinates>
     <panel_attributes>*RespuestaPregunta*
 bg=yellow
 --
 - puntuacion: int
 - corregida: bool
-- respuesta: String</panel_attributes>
+- respuesta: String
+- compila: bool</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -157,12 +158,12 @@ m2=1</panel_attributes>
       <x>1710</x>
       <y>441</y>
       <w>99</w>
-      <h>144</h>
+      <h>126</h>
     </coordinates>
     <panel_attributes>lt=-&gt;&gt;&gt;&gt;&gt;
 m1=0..* &lt;&lt;weak&gt;&gt;
 m2=1</panel_attributes>
-    <additional_attributes>10.0;140.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;120.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -642,8 +643,8 @@ bg=yellow</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>1539</x>
-      <y>738</y>
+      <x>1476</x>
+      <y>828</y>
       <w>270</w>
       <h>81</h>
     </coordinates>
@@ -663,21 +664,21 @@ bg=cyan</panel_attributes>
       <x>1449</x>
       <y>693</y>
       <w>108</w>
-      <h>99</h>
+      <h>153</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>100.0;90.0;10.0;10.0</additional_attributes>
+    <additional_attributes>100.0;150.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>1422</x>
       <y>693</y>
-      <w>162</w>
-      <h>180</h>
+      <w>63</w>
+      <h>243</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;160.0;180.0</additional_attributes>
+    <additional_attributes>10.0;10.0;50.0;250.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
@@ -726,10 +727,10 @@ bg=cyan</panel_attributes>
       <x>1782</x>
       <y>495</y>
       <w>36</w>
-      <h>90</h>
+      <h>72</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;80.0;20.0;10.0</additional_attributes>
+    <additional_attributes>10.0;60.0;20.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
@@ -953,8 +954,8 @@ bg=yellow</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>1530</x>
-      <y>855</y>
+      <x>1359</x>
+      <y>918</y>
       <w>252</w>
       <h>144</h>
     </coordinates>
@@ -977,7 +978,7 @@ bg=cyan</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>1953</x>
+      <x>1971</x>
       <y>414</y>
       <w>225</w>
       <h>153</h>
@@ -1001,19 +1002,19 @@ bg=cyan</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>1800</x>
-      <y>513</y>
-      <w>171</w>
-      <h>90</h>
+      <y>540</y>
+      <w>189</w>
+      <h>45</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;80.0;170.0;10.0</additional_attributes>
+    <additional_attributes>10.0;30.0;190.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>1944</x>
-      <y>576</y>
-      <w>207</w>
+      <x>1854</x>
+      <y>360</y>
+      <w>198</w>
       <h>45</h>
     </coordinates>
     <panel_attributes>context RespuestaPregunta inv:
@@ -1026,13 +1027,13 @@ bg=cyan</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1800</x>
-      <y>585</y>
-      <w>162</w>
-      <h>45</h>
+      <x>1791</x>
+      <y>396</y>
+      <w>180</w>
+      <h>171</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;30.0;160.0;10.0</additional_attributes>
+    <additional_attributes>10.0;170.0;180.0;140.0;180.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
@@ -1210,7 +1211,7 @@ original &gt;</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>1332</x>
+      <x>1296</x>
       <y>864</y>
       <w>162</w>
       <h>45</h>
@@ -1228,11 +1229,11 @@ bg=cyan</panel_attributes>
     <coordinates>
       <x>1404</x>
       <y>693</y>
-      <w>72</w>
+      <w>36</w>
       <h>189</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;60.0;190.0</additional_attributes>
+    <additional_attributes>10.0;10.0;20.0;190.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
@@ -1590,5 +1591,94 @@ bg=green</panel_attributes>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
     <additional_attributes>10.0;10.0;40.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1611</x>
+      <y>729</y>
+      <w>171</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>**Prueba**
+bg=yellow
+--
+- id: int {id}
+- entrada: String
+- salida: String
+- contenidoVisible: bool
+- resultadoVisible: bool</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1917</x>
+      <y>756</y>
+      <w>198</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>**Ejecución**
+bg=yellow
+--
+- correcta: bool
+- error: ErrorEjecucionE</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1476</x>
+      <y>684</y>
+      <w>153</w>
+      <h>126</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=0..*
+m2=1</panel_attributes>
+    <additional_attributes>150.0;110.0;60.0;110.0;60.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1773</x>
+      <y>765</y>
+      <w>162</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=0..* &lt;&lt;weak&gt;&gt;
+m2=1</panel_attributes>
+    <additional_attributes>160.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1800</x>
+      <y>567</y>
+      <w>369</w>
+      <h>207</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=0..* &lt;&lt;weak&gt;&gt;
+m2=1</panel_attributes>
+    <additional_attributes>310.0;210.0;310.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>297</x>
+      <y>909</y>
+      <w>135</w>
+      <h>81</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;enum&gt;&gt;
+*ErrorEjecucionE*
+--
+- TiempoExcedido
+- ErrorEjecucion
+- SalidaIncorrecta
+bg=yellow</panel_attributes>
+    <additional_attributes/>
   </element>
 </diagram>

@@ -1,6 +1,8 @@
 CREATE DATABASE IF NOT EXISTS uva_devtest;
 USE uva_devtest;
 
+DROP TABLE IF EXISTS Ejecucion;
+DROP TABLE IF EXISTS Prueba;
 DROP TABLE IF EXISTS OpcionRespuesta;
 DROP TABLE IF EXISTS RespuestaPregunta;
 DROP TABLE IF EXISTS RespuestaExamen;
@@ -303,6 +305,7 @@ CREATE TABLE RespuestaPregunta(
   puntuacion int(11) NOT NULL, /*porcentaje*/
   corregida boolean NOT NULL,
   respuesta longtext COLLATE utf8_unicode_ci,
+  compila boolean,
   CONSTRAINT CHK_puntuacion CHECK (puntuacion>=-100 AND puntuacion<=100),
   FOREIGN KEY(respuestaExamenid) REFERENCES RespuestaExamen(id) ON DELETE CASCADE,
   FOREIGN KEY(preguntaid) REFERENCES Pregunta(id) ON DELETE CASCADE,
@@ -320,6 +323,29 @@ CREATE TABLE OpcionRespuesta(
     FOREIGN KEY(preguntaid, opcionindice)
     REFERENCES Opcion(preguntaid, indice) ON DELETE CASCADE,
   CONSTRAINT PRIMARY KEY(respuestaExamenid, preguntaid, opcionindice)
+);
+
+CREATE TABLE Prueba(
+  id int(11) NOT NULL,
+  preguntaid int(11) NOT NULL,
+  entrada longtext COLLATE utf8_unicode_ci NOT NULL,
+  salida longtext COLLATE utf8_unicode_ci NOT NULL,
+  contenidoVisible boolean NOT NULL,
+  resultadoVisible boolean NOT NULL,
+  FOREIGN KEY(preguntaid) REFERENCES Pregunta(id) ON DELETE CASCADE,
+  PRIMARY KEY(id)
+);
+
+CREATE TABLE Ejecucion(
+  pruebaid int(11) NOT NULL,
+  respuestaExamenid int(11) NOT NULL,
+  preguntaid int(11) NOT NULL,
+  correcta boolean NOT NULL,
+  error ENUM('tiempoExcedido', 'errorEjecucion', 'salidaIncorrecta'),
+  FOREIGN KEY(pruebaid) REFERENCES Prueba(id) ON DELETE CASCADE,
+  CONSTRAINT fk_EjRespPreg
+    FOREIGN KEY(respuestaExamenid, preguntaid)
+    REFERENCES RespuestaPregunta(respuestaExamenid, preguntaid) ON DELETE CASCADE,
 );
 
 /* DATOS INICIALES */
