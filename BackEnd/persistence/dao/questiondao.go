@@ -81,6 +81,9 @@ func rowsToQuestions(rows *sql.Rows) ([]*Question, error) {
 			q.Solucion = solu.String
 			tipo = models.QuestionTipoPreguntaString
 		}
+		if !eleUni.Valid && !solu.Valid {
+			tipo = models.QuestionTipoPreguntaCodigo
+		}
 		q.TipoPregunta = &tipo
 		if err != nil {
 			log.Print(err)

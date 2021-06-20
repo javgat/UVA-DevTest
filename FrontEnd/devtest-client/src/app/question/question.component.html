@@ -275,7 +275,7 @@
             </div>
         </div>
         <div class="m-3" *ngIf="question.tipoPregunta=='codigo'">
-            <p>Tests:</p>
+            <p>Tests: En desarrollo...</p>
         </div>
     </div>
     <br class="m-4" />
@@ -320,7 +320,7 @@
                         <label class="form-check-label" for="flexSwitchAccesoPublicoNoPublicada">Acceso público para
                             profesores</label>
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-3" *ngIf="!isCodeQuestion()">
                         <label for="inputPenalizacion" class="form-label">Penalización (%)</label>
                         <input type="number" class="form-control" name="inputPenalizacion"
                             [(ngModel)]="questionEdit.penalizacion" required min=0 max=100 />

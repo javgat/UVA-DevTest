@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { ApiModule, BASE_PATH, Configuration, ConfigurationParameters } from '@javgat/devtest-api';
 import { environment } from '../environments/environment';
 import { MarkdownModule, MarkedOptions } from 'ngx-markdown';
+import { CodeEditorModule } from '@ngstack/code-editor';
 import { MainComponent } from './main/main.component';
 import { LoggedInComponent } from './main/logged-in/logged-in.component';
 import { NotLoggedInComponent } from './main/not-logged-in/not-logged-in.component';
@@ -244,6 +245,7 @@ export function apiConfigFactory (): Configuration {
     }),
     DragulaModule.forRoot(),
     CountdownModule,
+    CodeEditorModule.forRoot()
   ],
   providers: [
     { provide: BASE_PATH, useValue: environment.API_BASE_PATH },

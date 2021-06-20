@@ -403,4 +403,8 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
   showMostrarExtraInfo(): boolean{
     return this.showExtraInfo
   }
+
+  isCodeQuestion(): boolean{
+    return this.question.tipoPregunta == Question.TipoPreguntaEnum.Codigo
+  }
 }

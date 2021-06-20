@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Answer, AnswerService, Option, PublishedTestService, Question, QuestionAnswer, UserService } from '@javgat/devtest-api';
+import { CodeModel } from '@ngstack/code-editor';
 import { CountdownEvent } from 'ngx-countdown';
 import { Subscription } from 'rxjs';
 import { LoggedInController } from '../shared/app.controller';
@@ -26,6 +27,17 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
   modificandoRespuesta: boolean
   test: Examen
   timeOver: boolean
+
+  theme = 'vs-dark';
+
+  codeModel: CodeModel
+
+  codeOptions = {
+    contextmenu: true,
+    minimap: {
+      enabled: true,
+    },
+  };
 
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private route: ActivatedRoute, private ptestS: PublishedTestService, private answerS: AnswerService) {
     super(session, router, data, userS);
@@ -53,6 +65,12 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
         this.getOpenAnswer(true)
       }
     });
+    this.codeModel = {
+      language: 'cpp',
+      uri: 'main.cpp',
+      value: this.questionAnswer.respuesta || "",
+    }
+    this.recargarEditorCodigo()
   }
 
   ngOnInit(): void {
@@ -141,6 +159,8 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
       resp => {
         this.pregunta.isRespondida = true
         this.questionAnswer = resp
+        this.newRespuesta = this.questionAnswer.respuesta || ""
+        this.recargarEditorCodigo()
         this.questionAnswer.idPregunta = this.preguntaid
         if (this.questionAnswer.indicesOpciones == undefined) {
           this.questionAnswer.indicesOpciones = []
@@ -150,6 +170,8 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
         if (err.status == 410) {
           this.pregunta.isRespondida = false
           this.questionAnswer.respuesta = ""
+          this.newRespuesta = this.questionAnswer.respuesta || ""
+          this.recargarEditorCodigo()
         } else {
           this.handleErrRelog(err, "obtener respuestas de una pregunta del test realizandose", primera, this.getQuestionAnswersQuestion, this)
         }
@@ -228,6 +250,11 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
   }
 
   sendRespuestaTipoTest(){
+    this.sendRespuesta()
+  }
+
+  sendRespuestaTipoCode(){
+    this.questionAnswer.respuesta = this.newRespuesta
     this.sendRespuesta()
   }
 
@@ -310,6 +337,25 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
     if(this.openAnswer==undefined || this.openAnswer.startTime == undefined) return false
     return this.timeOver
 
+  }
+
+  recargarEditorCodigo(){
+    this.codeModel = {
+      language: 'cpp',
+      uri: 'main.cpp',
+      value: this.questionAnswer.respuesta || "",
+    }
+  }
+
+  onCodeChanged(value: any) {
+    if(value!=this.newRespuesta){
+      this.modificandoRespuesta = true
+      this.newRespuesta = value
+    }
+  }
+
+  isPreguntaCodigo(): boolean{
+    return this.pregunta.tipoPregunta=='codigo'
   }
 
 }

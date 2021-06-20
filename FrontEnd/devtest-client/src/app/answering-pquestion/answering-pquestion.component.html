@@ -18,12 +18,12 @@
             </div>
         </div>
     </div>
-    <h3>Respondiendo a la pregunta {{pregunta.posicion}}: {{pregunta.title}}</h3>
+    <h3>Respondiendo a la pregunta {{pregunta.posicion+1}}: {{pregunta.title}}</h3>
     <table class="table table-borderless">
         <tbody>
             <tr>
                 <td><b>Valor:</b> {{pregunta.valorFinal}} puntos</td>
-                <td><b>Penalización en caso de fallo:</b> {{pregunta.penalizacion}}%</td>
+                <td *ngIf="!isPreguntaCodigo()"><b>Penalización en caso de fallo:</b> {{pregunta.penalizacion}}%</td>
                 <td><b>Tiempo estimado:</b> {{pregunta.estimatedTime}} minutos</td>
                 <td><b>Tipo:</b> {{tipoPrint(pregunta.tipoPregunta, pregunta.eleccionUnica)}}</td>
             </tr>
@@ -123,13 +123,19 @@
             </form>
         </div>
     </div>
-    <div class="m-3" *ngIf="pregunta.tipoPregunta=='codigo'">
-        <p>TODO:</p>
+    <div class="m-3" *ngIf="isPreguntaCodigo()">
+        <ngs-code-editor [theme]="theme" [codeModel]="codeModel" [options]="codeOptions" (valueChanged)="onCodeChanged($event)">
+        </ngs-code-editor>
+        <div class="d-grid gap-2 mt-3">
+            <button class="btn btn-success btn-lg" type="button" (click)="sendRespuestaTipoCode()">
+                <span *ngIf="pregunta.isRespondida">Actualizar</span><span *ngIf="!pregunta.isRespondida">Guardar</span> respuesta
+            </button>
+            <!--y probar-->
+        </div>
     </div>
-    <div class="d-grid gap-2 mt-3" *ngIf="(pregunta.isRespondida || false) &&  !modificandoRespuesta">
+    <div class="d-grid gap-2 mt-3" *ngIf="(pregunta.isRespondida || false) &&  !modificandoRespuesta && !isPreguntaCodigo()">
         <button class="btn btn-warning text-dark btn-lg my-3" type="button"
-            (click)="modificarRespuestaClick()">Modificar
-            respuesta</button>
+            (click)="modificarRespuestaClick()">Modificar respuesta</button>
     </div>
     <div class="row" *ngIf="!showWarningExitQuestion()">
         <div class="col-sm d-grid gap-2 mb-3">
@@ -168,7 +174,7 @@
         </div>
     </div>
     <div class="row" *ngIf="showWarningExitQuestion()">
-        <div class="col-sm d-grid gap-2 my-3">
+        <div class="col-sm d-grid gap-2 mb-3">
             <button type="button" class="btn btn-primary btn-lg" [ngClass]="{ 'disabled': !hasPrevQuestion() }"
                 data-bs-toggle="modal" data-bs-target="#anteriorModal">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -180,7 +186,7 @@
                 </svg>
                 Pregunta Anterior</button>
         </div>
-        <div class="col-sm d-grid gap-2 my-3">
+        <div class="col-sm d-grid gap-2 mb-3">
             <button type="button" class="btn btn-primary btn-lg" *ngIf="hasNextQuestion()" data-bs-toggle="modal"
                 data-bs-target="#nextModal">Pregunta Siguiente
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -213,7 +219,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        No has guardado tu respuesta a la pregunta, ¿seguro que quieres ir a la pregunta anterior?
+                        No has guardado tu respuesta a la pregunta, o no has entregado nada ¿seguro que quieres ir a la pregunta anterior?
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
