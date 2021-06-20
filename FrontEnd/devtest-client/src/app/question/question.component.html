@@ -176,7 +176,7 @@
             </div>
         </div>
     </div>
-    <div class="my-3">
+    <div class="my-3" *ngIf="!(isCodeQuestion() && !isCorreccionAutomatica() )">
         <h3>Respuesta:</h3>
         <div class="d-grid gap-2 col-6 mx-auto" *ngIf="checkPermisosEdicion()">
             <button *ngIf="!isEditandoRespuesta()" type="button" class="btn btn-warning btn-lg"

@@ -407,4 +407,8 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
   isCodeQuestion(): boolean{
     return this.question.tipoPregunta == Question.TipoPreguntaEnum.Codigo
   }
+  
+  isCorreccionAutomatica(): boolean{
+    return this.question.autoCorrect
+  }
 }
