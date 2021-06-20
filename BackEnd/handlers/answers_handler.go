@@ -160,6 +160,11 @@ func autoCorrigeOpcionesEleMulti(daq *dao.QuestionAnswer, dq *dao.Question) erro
 	return err
 }
 
+func autoCorrigeCodigo(daq *dao.QuestionAnswer, dq *dao.Question) error {
+	// TODO
+	return nil
+}
+
 func autoCorrigeRespuestaPregunta(aid int64, dq *dao.Question) error {
 	db, err := dbconnection.ConnectDb()
 	if err == nil {
@@ -173,13 +178,13 @@ func autoCorrigeRespuestaPregunta(aid int64, dq *dao.Question) error {
 			case models.QuestionTipoPreguntaString:
 				err = autoCorrigeString(daq, dq)
 			case models.QuestionTipoPreguntaOpciones:
-				if err == nil {
-					if dq.EleccionUnica {
-						err = autoCorrigeOpcionesEleUni(daq, dq)
-					} else {
-						err = autoCorrigeOpcionesEleMulti(daq, dq)
-					}
+				if dq.EleccionUnica {
+					err = autoCorrigeOpcionesEleUni(daq, dq)
+				} else {
+					err = autoCorrigeOpcionesEleMulti(daq, dq)
 				}
+			case models.QuestionTipoPreguntaCodigo:
+				err = autoCorrigeCodigo(daq, dq)
 			default:
 				return errors.New("tipo de pregunta extraño")
 			}
