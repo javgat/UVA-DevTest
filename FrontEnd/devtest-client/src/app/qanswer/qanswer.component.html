@@ -53,12 +53,17 @@
             </div>
             <hr />
             <h4>Enunciado:</h4>
-            <p><span style="white-space: pre-line">{{question.question}}</span></p>
+            <markdown class="my-3 text-break" [data]="question.question"></markdown>
         </div>
     </div>
     <div class="my-3">
         <h3>Respuesta:</h3>
-        <p>{{qa.respuesta}}</p>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title mb-3">Entrega Final:</h5>
+                <p style="white-space: pre-line" class="text-break card-text">{{qa.respuesta}}</p>
+            </div>
+        </div>
         <div class="my-3" *ngIf="question.tipoPregunta=='string'">
             <h3>Respuesta esperada:</h3>
             <p>{{question.solucion}}</p>
@@ -129,8 +134,8 @@
                 </div>
             </div>
         </div>
-        <div class="m-3" *ngIf="question.tipoPregunta=='codigo'">
-            <p>Tests:</p>
+        <div class="m-3" *ngIf="question.tipoPregunta=='codigo' && isAutoCorrect()">
+            <p>Tests: En desarrollo...</p>
         </div>
     </div>
 

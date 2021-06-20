@@ -239,4 +239,8 @@ export class QanswerComponent extends LoggedInController implements OnInit {
     return bgcolorQAnswerPuntuacion(punt)
   }
 
+  isAutoCorrect(): boolean{
+    return this.question.autoCorrect
+  }
+
 }
