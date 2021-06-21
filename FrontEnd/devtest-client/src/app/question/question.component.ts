@@ -35,6 +35,9 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
   showExtraInfo: boolean
   pruebaEdit: Prueba
   pruebas: Prueba[]
+  pruebasidsModificando: Set<number>
+  pruebaidActualizar: number
+  pruebaidRecuperar: number
   private editandoRespuesta: boolean
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private qS: QuestionService,
     private route: ActivatedRoute, private tagS: TagService) {
@@ -46,6 +49,9 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
     }
     this.opciones = []
     this.pruebas = []
+    this.pruebaidRecuperar = 0
+    this.pruebasidsModificando = new Set()
+    this.pruebaidActualizar = 0
     this.tags = []
     this.deleteIndex = -1
     this.deletingTag = ""
@@ -441,6 +447,63 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
         this.getPruebas(true)
       },
       err => this.handleErrRelog(err, "crear nueva prueba de ejecución", primera, this.postPrueba, this)
+    )
+  }
+
+  modificarPrueba(pruebaid: number | undefined){
+    this.pruebasidsModificando.add(pruebaid || 0)
+  }
+
+  stopModificarPrueba(pruebaid: number | undefined){
+    this.pruebasidsModificando.delete(pruebaid || 0)
+  }
+
+  modificandoPrueba(pruebaid: number | undefined){
+    return this.pruebasidsModificando.has(pruebaid || 0)
+  }
+
+  cancelarModificarPrueba(pruebaid: number| undefined){
+    if(pruebaid == undefined) return
+    this.stopModificarPrueba(pruebaid)
+    this.pruebaidRecuperar = pruebaid
+    this.recuperarPrueba(true)
+  }
+
+  recuperarPrueba(primera: boolean){
+    this.qS.getPruebaFromQuestion(this.id, this.pruebaidRecuperar).subscribe(
+      resp => {
+        this.pruebas.map( (p, i, arr) => {
+          if(p.id != undefined && p.id == this.pruebaidRecuperar){
+            p.entrada = resp.entrada
+            p.salida = resp.salida
+            p.visible = resp.visible
+            p.postEntrega = resp.postEntrega
+          }
+        } )
+      },
+      err => this.handleErrRelog(err, "recuperar valor original de prueba", primera, this.recuperarPrueba, this)
+    )
+  }
+
+  guardarModificarPrueba(pruebaid: number | undefined){
+    if(pruebaid == undefined) return
+    this.stopModificarPrueba(pruebaid)
+    this.pruebaidActualizar = pruebaid
+    this.actualizarPrueba(true)
+  }
+
+  actualizarPrueba(primera: boolean){
+
+    let prus = this.pruebas.filter( (p, i, arr) => {
+      return (p.id != undefined && p.id == this.pruebaidActualizar)
+    })
+    if(prus.length==0) return
+    let pru = prus[0]
+    this.qS.putPrueba(this.id, this.pruebaidActualizar, pru).subscribe(
+      resp => {
+        this.getPruebas(true)
+      },
+      err => this.handleErrRelog(err, "actualizar valor de prueba", primera, this.actualizarPrueba, this)
     )
   }
 }
