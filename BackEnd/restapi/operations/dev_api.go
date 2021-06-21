@@ -87,6 +87,9 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		UserCopyTestHandler: user.CopyTestHandlerFunc(func(params user.CopyTestParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation user.CopyTest has not yet been implemented")
 		}),
+		AnswerCreatePreTestingHandler: answer.CreatePreTestingHandlerFunc(func(params answer.CreatePreTestingParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation answer.CreatePreTesting has not yet been implemented")
+		}),
 		QuestionDeleteOptionHandler: question.DeleteOptionHandlerFunc(func(params question.DeleteOptionParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation question.DeleteOption has not yet been implemented")
 		}),
@@ -216,6 +219,9 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		UserGetFavoriteTestsHandler: user.GetFavoriteTestsHandlerFunc(func(params user.GetFavoriteTestsParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation user.GetFavoriteTests has not yet been implemented")
 		}),
+		AnswerGetFullTestingHandler: answer.GetFullTestingHandlerFunc(func(params answer.GetFullTestingParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation answer.GetFullTesting has not yet been implemented")
+		}),
 		TeamGetInvitedTestFromTeamHandler: team.GetInvitedTestFromTeamHandlerFunc(func(params team.GetInvitedTestFromTeamParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation team.GetInvitedTestFromTeam has not yet been implemented")
 		}),
@@ -251,6 +257,9 @@ func NewDevAPI(spec *loads.Document) *DevAPI {
 		}),
 		UserGetPendingTestsFromUserHandler: user.GetPendingTestsFromUserHandlerFunc(func(params user.GetPendingTestsFromUserParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation user.GetPendingTestsFromUser has not yet been implemented")
+		}),
+		AnswerGetPreTestingHandler: answer.GetPreTestingHandlerFunc(func(params answer.GetPreTestingParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation answer.GetPreTesting has not yet been implemented")
 		}),
 		QuestionGetPruebaFromQuestionHandler: question.GetPruebaFromQuestionHandlerFunc(func(params question.GetPruebaFromQuestionParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation question.GetPruebaFromQuestion has not yet been implemented")
@@ -697,6 +706,8 @@ type DevAPI struct {
 	UserCopyQuestionHandler user.CopyQuestionHandler
 	// UserCopyTestHandler sets the operation handler for the copy test operation
 	UserCopyTestHandler user.CopyTestHandler
+	// AnswerCreatePreTestingHandler sets the operation handler for the create pre testing operation
+	AnswerCreatePreTestingHandler answer.CreatePreTestingHandler
 	// QuestionDeleteOptionHandler sets the operation handler for the delete option operation
 	QuestionDeleteOptionHandler question.DeleteOptionHandler
 	// QuestionDeletePruebaHandler sets the operation handler for the delete prueba operation
@@ -783,6 +794,8 @@ type DevAPI struct {
 	UserGetFavoriteTestHandler user.GetFavoriteTestHandler
 	// UserGetFavoriteTestsHandler sets the operation handler for the get favorite tests operation
 	UserGetFavoriteTestsHandler user.GetFavoriteTestsHandler
+	// AnswerGetFullTestingHandler sets the operation handler for the get full testing operation
+	AnswerGetFullTestingHandler answer.GetFullTestingHandler
 	// TeamGetInvitedTestFromTeamHandler sets the operation handler for the get invited test from team operation
 	TeamGetInvitedTestFromTeamHandler team.GetInvitedTestFromTeamHandler
 	// UserGetInvitedTestFromUserHandler sets the operation handler for the get invited test from user operation
@@ -807,6 +820,8 @@ type DevAPI struct {
 	QuestionGetOptionsFromQuestionHandler question.GetOptionsFromQuestionHandler
 	// UserGetPendingTestsFromUserHandler sets the operation handler for the get pending tests from user operation
 	UserGetPendingTestsFromUserHandler user.GetPendingTestsFromUserHandler
+	// AnswerGetPreTestingHandler sets the operation handler for the get pre testing operation
+	AnswerGetPreTestingHandler answer.GetPreTestingHandler
 	// QuestionGetPruebaFromQuestionHandler sets the operation handler for the get prueba from question operation
 	QuestionGetPruebaFromQuestionHandler question.GetPruebaFromQuestionHandler
 	// QuestionGetPruebasFromQuestionHandler sets the operation handler for the get pruebas from question operation
@@ -1165,6 +1180,9 @@ func (o *DevAPI) Validate() error {
 	if o.UserCopyTestHandler == nil {
 		unregistered = append(unregistered, "user.CopyTestHandler")
 	}
+	if o.AnswerCreatePreTestingHandler == nil {
+		unregistered = append(unregistered, "answer.CreatePreTestingHandler")
+	}
 	if o.QuestionDeleteOptionHandler == nil {
 		unregistered = append(unregistered, "question.DeleteOptionHandler")
 	}
@@ -1294,6 +1312,9 @@ func (o *DevAPI) Validate() error {
 	if o.UserGetFavoriteTestsHandler == nil {
 		unregistered = append(unregistered, "user.GetFavoriteTestsHandler")
 	}
+	if o.AnswerGetFullTestingHandler == nil {
+		unregistered = append(unregistered, "answer.GetFullTestingHandler")
+	}
 	if o.TeamGetInvitedTestFromTeamHandler == nil {
 		unregistered = append(unregistered, "team.GetInvitedTestFromTeamHandler")
 	}
@@ -1329,6 +1350,9 @@ func (o *DevAPI) Validate() error {
 	}
 	if o.UserGetPendingTestsFromUserHandler == nil {
 		unregistered = append(unregistered, "user.GetPendingTestsFromUserHandler")
+	}
+	if o.AnswerGetPreTestingHandler == nil {
+		unregistered = append(unregistered, "answer.GetPreTestingHandler")
 	}
 	if o.QuestionGetPruebaFromQuestionHandler == nil {
 		unregistered = append(unregistered, "question.GetPruebaFromQuestionHandler")
@@ -1842,6 +1866,10 @@ func (o *DevAPI) initHandlerCache() {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
 	o.handlers["POST"]["/users/{username}/tests/{testid}/copiedTests"] = user.NewCopyTest(o.context, o.UserCopyTestHandler)
+	if o.handlers["PUT"] == nil {
+		o.handlers["PUT"] = make(map[string]http.Handler)
+	}
+	o.handlers["PUT"]["/answers/{answerid}/qanswers/{questionid}/preTesting"] = answer.NewCreatePreTesting(o.context, o.AnswerCreatePreTestingHandler)
 	if o.handlers["DELETE"] == nil {
 		o.handlers["DELETE"] = make(map[string]http.Handler)
 	}
@@ -2017,6 +2045,10 @@ func (o *DevAPI) initHandlerCache() {
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
+	o.handlers["GET"]["/answers/{answerid}/qanswers/{questionid}/fullTesting"] = answer.NewGetFullTesting(o.context, o.AnswerGetFullTestingHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
 	o.handlers["GET"]["/teams/{teamname}/invitedTests/{testid}"] = team.NewGetInvitedTestFromTeam(o.context, o.TeamGetInvitedTestFromTeamHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
@@ -2062,6 +2094,10 @@ func (o *DevAPI) initHandlerCache() {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
 	o.handlers["GET"]["/users/{username}/pendingTests"] = user.NewGetPendingTestsFromUser(o.context, o.UserGetPendingTestsFromUserHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/answers/{answerid}/qanswers/{questionid}/preTesting"] = answer.NewGetPreTesting(o.context, o.AnswerGetPreTestingHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}

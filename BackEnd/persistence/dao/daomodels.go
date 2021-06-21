@@ -315,14 +315,14 @@ type Tag struct {
 // swagger:model QuestionAnswer
 type QuestionAnswer struct {
 
-	// compila
-	// Example: false
-	Compila *bool `json:"compila,omitempty"`
-
 	// corregida
 	// Example: true
 	// Required: true
 	Corregida *bool `json:"corregida"`
+
+	// estado
+	// Enum: [noProbado errorCompilacion ejecutando probado]
+	Estado *string `json:"estado,omitempty"`
 
 	// id pregunta
 	// Example: 1
@@ -628,4 +628,20 @@ type Prueba struct {
 	// Example: true
 	// Required: true
 	Visible *bool `json:"visible"`
+}
+
+// Testing testing
+//
+// swagger:model Testing
+type Testing struct {
+
+	// pruebas superadas
+	// Example: 5
+	// Required: true
+	PruebasSuperadas *int64 `json:"pruebasSuperadas"`
+
+	// pruebas totales
+	// Example: 15
+	// Required: true
+	PruebasTotales *int64 `json:"pruebasTotales"`
 }

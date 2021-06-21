@@ -36,6 +36,7 @@ func ToModelQuestionAnswer(q *QuestionAnswer) *models.QuestionAnswer {
 		Corregida:   q.Corregida,
 		Puntuacion:  q.Puntuacion,
 		Username:    username,
+		Estado:      q.Estado,
 	}
 	mq.IndicesOpciones = append(mq.IndicesOpciones, q.IndicesOpciones...)
 	return mq
@@ -58,7 +59,7 @@ func rowsToQuestionAnswers(rows *sql.Rows) ([]*QuestionAnswer, error) {
 	var qas []*QuestionAnswer
 	for rows.Next() {
 		var qa QuestionAnswer
-		err := rows.Scan(&qa.IDRespuesta, &qa.IDPregunta, &qa.Puntuacion, &qa.Corregida, &qa.Respuesta, &qa.Compila)
+		err := rows.Scan(&qa.IDRespuesta, &qa.IDPregunta, &qa.Puntuacion, &qa.Corregida, &qa.Respuesta, &qa.Estado)
 		if err != nil {
 			log.Print(err)
 			return qas, err
@@ -221,10 +222,10 @@ func PostQuestionAnswer(db *sql.DB, answerid int64, qa *models.QuestionAnswer) (
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
-	query, err := db.Prepare("INSERT INTO RespuestaPregunta(respuestaExamenid, preguntaid, puntuacion, corregida, respuesta) VALUES(?,?,0,0,?)")
+	query, err := db.Prepare("INSERT INTO RespuestaPregunta(respuestaExamenid, preguntaid, puntuacion, corregida, respuesta, estado) VALUES(?,?,0,0,?,?)")
 	if err == nil {
 		defer query.Close()
-		_, err = query.Exec(answerid, qa.IDPregunta, qa.Respuesta)
+		_, err = query.Exec(answerid, qa.IDPregunta, qa.Respuesta, qa.Estado)
 		if err == nil {
 			qa.IDRespuesta = &answerid
 			bfalse := false

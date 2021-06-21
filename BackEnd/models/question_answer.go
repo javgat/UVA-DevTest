@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -19,14 +20,14 @@ import (
 // swagger:model QuestionAnswer
 type QuestionAnswer struct {
 
-	// compila
-	// Example: false
-	Compila *bool `json:"compila,omitempty"`
-
 	// corregida
 	// Example: true
 	// Required: true
 	Corregida *bool `json:"corregida"`
+
+	// estado
+	// Enum: [noProbado errorCompilacion ejecutando probado]
+	Estado *string `json:"estado,omitempty"`
 
 	// id pregunta
 	// Example: 1
@@ -65,6 +66,10 @@ func (m *QuestionAnswer) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateEstado(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateIDPregunta(formats); err != nil {
 		res = append(res, err)
 	}
@@ -86,6 +91,54 @@ func (m *QuestionAnswer) Validate(formats strfmt.Registry) error {
 func (m *QuestionAnswer) validateCorregida(formats strfmt.Registry) error {
 
 	if err := validate.Required("corregida", "body", m.Corregida); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+var questionAnswerTypeEstadoPropEnum []interface{}
+
+func init() {
+	var res []string
+	if err := json.Unmarshal([]byte(`["noProbado","errorCompilacion","ejecutando","probado"]`), &res); err != nil {
+		panic(err)
+	}
+	for _, v := range res {
+		questionAnswerTypeEstadoPropEnum = append(questionAnswerTypeEstadoPropEnum, v)
+	}
+}
+
+const (
+
+	// QuestionAnswerEstadoNoProbado captures enum value "noProbado"
+	QuestionAnswerEstadoNoProbado string = "noProbado"
+
+	// QuestionAnswerEstadoErrorCompilacion captures enum value "errorCompilacion"
+	QuestionAnswerEstadoErrorCompilacion string = "errorCompilacion"
+
+	// QuestionAnswerEstadoEjecutando captures enum value "ejecutando"
+	QuestionAnswerEstadoEjecutando string = "ejecutando"
+
+	// QuestionAnswerEstadoProbado captures enum value "probado"
+	QuestionAnswerEstadoProbado string = "probado"
+)
+
+// prop value enum
+func (m *QuestionAnswer) validateEstadoEnum(path, location string, value string) error {
+	if err := validate.EnumCase(path, location, value, questionAnswerTypeEstadoPropEnum, true); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (m *QuestionAnswer) validateEstado(formats strfmt.Registry) error {
+	if swag.IsZero(m.Estado) { // not required
+		return nil
+	}
+
+	// value enum
+	if err := m.validateEstadoEnum("estado", "body", *m.Estado); err != nil {
 		return err
 	}
 

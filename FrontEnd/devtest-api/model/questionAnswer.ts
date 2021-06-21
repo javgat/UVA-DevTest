@@ -22,5 +22,14 @@ export interface QuestionAnswer {
     corregida: boolean;
     indicesOpciones?: Array<number>;
     username?: string;
-    compila?: boolean;
+    estado?: QuestionAnswer.EstadoEnum;
+}
+export namespace QuestionAnswer {
+    export type EstadoEnum = 'noProbado' | 'errorCompilacion' | 'ejecutando' | 'probado';
+    export const EstadoEnum = {
+        NoProbado: 'noProbado' as EstadoEnum,
+        ErrorCompilacion: 'errorCompilacion' as EstadoEnum,
+        Ejecutando: 'ejecutando' as EstadoEnum,
+        Probado: 'probado' as EstadoEnum
+    };
 }

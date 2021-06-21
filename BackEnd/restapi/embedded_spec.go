@@ -777,6 +777,160 @@ func init() {
         }
       }
     },
+    "/answers/{answerid}/qanswers/{questionid}/fullTesting": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns an answer testing for the testadmin",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "answer"
+        ],
+        "summary": "Returns an answer testing for the testadmin",
+        "operationId": "GetFullTesting",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the answer",
+            "name": "answerid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the question it is answering",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Testing found",
+            "schema": {
+              "$ref": "#/definitions/Testing"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/answers/{answerid}/qanswers/{questionid}/preTesting": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns an answer testing for the user answering the question",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "answer"
+        ],
+        "summary": "Returns an answer testing for the user answering the question",
+        "operationId": "GetPreTesting",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the answer",
+            "name": "answerid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the question it is answering",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Testing found",
+            "schema": {
+              "$ref": "#/definitions/Testing"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Asks to create a new testing for the user answering a question, deleting the former one",
+        "tags": [
+          "answer"
+        ],
+        "summary": "Asks to create a new testing for the user answering a question, deleting the former one",
+        "operationId": "CreatePreTesting",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the answer",
+            "name": "answerid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the question it is answering",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Asked for PreTesting"
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
     "/answers/{answerid}/qanswers/{questionid}/review": {
       "put": {
         "security": [
@@ -11198,14 +11352,19 @@ func init() {
         "idRespuesta"
       ],
       "properties": {
-        "compila": {
-          "type": "boolean",
-          "default": false,
-          "example": false
-        },
         "corregida": {
           "type": "boolean",
           "example": true
+        },
+        "estado": {
+          "type": "string",
+          "default": "noProbado",
+          "enum": [
+            "noProbado",
+            "errorCompilacion",
+            "ejecutando",
+            "probado"
+          ]
         },
         "idPregunta": {
           "type": "integer",
@@ -11434,6 +11593,23 @@ func init() {
         "valorFinal": {
           "type": "integer",
           "example": 1
+        }
+      }
+    },
+    "Testing": {
+      "type": "object",
+      "required": [
+        "pruebasSuperadas",
+        "pruebasTotales"
+      ],
+      "properties": {
+        "pruebasSuperadas": {
+          "type": "integer",
+          "example": 5
+        },
+        "pruebasTotales": {
+          "type": "integer",
+          "example": 15
         }
       }
     },
@@ -12569,6 +12745,187 @@ func init() {
         "responses": {
           "200": {
             "description": "QuestionAnswer deleted"
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/answers/{answerid}/qanswers/{questionid}/fullTesting": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns an answer testing for the testadmin",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "answer"
+        ],
+        "summary": "Returns an answer testing for the testadmin",
+        "operationId": "GetFullTesting",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the answer",
+            "name": "answerid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the question it is answering",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Testing found",
+            "schema": {
+              "$ref": "#/definitions/Testing"
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/answers/{answerid}/qanswers/{questionid}/preTesting": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns an answer testing for the user answering the question",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "answer"
+        ],
+        "summary": "Returns an answer testing for the user answering the question",
+        "operationId": "GetPreTesting",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the answer",
+            "name": "answerid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the question it is answering",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Testing found",
+            "schema": {
+              "$ref": "#/definitions/Testing"
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Asks to create a new testing for the user answering a question, deleting the former one",
+        "tags": [
+          "answer"
+        ],
+        "summary": "Asks to create a new testing for the user answering a question, deleting the former one",
+        "operationId": "CreatePreTesting",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the answer",
+            "name": "answerid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the question it is answering",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Asked for PreTesting"
           },
           "400": {
             "description": "Incorrect Request, or invalida data",
@@ -24552,14 +24909,19 @@ func init() {
         "idRespuesta"
       ],
       "properties": {
-        "compila": {
-          "type": "boolean",
-          "default": false,
-          "example": false
-        },
         "corregida": {
           "type": "boolean",
           "example": true
+        },
+        "estado": {
+          "type": "string",
+          "default": "noProbado",
+          "enum": [
+            "noProbado",
+            "errorCompilacion",
+            "ejecutando",
+            "probado"
+          ]
         },
         "idPregunta": {
           "type": "integer",
@@ -24791,6 +25153,23 @@ func init() {
           "type": "integer",
           "minimum": 0,
           "example": 1
+        }
+      }
+    },
+    "Testing": {
+      "type": "object",
+      "required": [
+        "pruebasSuperadas",
+        "pruebasTotales"
+      ],
+      "properties": {
+        "pruebasSuperadas": {
+          "type": "integer",
+          "example": 5
+        },
+        "pruebasTotales": {
+          "type": "integer",
+          "example": 15
         }
       }
     },

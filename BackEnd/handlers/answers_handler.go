@@ -729,3 +729,21 @@ func GetQAnswerFromAnswerAndQuestion(params answer.GetQuestionAnswersFromAnswerA
 	log.Println("Error en GetQuestionAnswersFromAnswerAndQuestion() ", err)
 	return answer.NewGetQuestionAnswersFromAnswerAndQuestionInternalServerError()
 }
+
+// GET /answers/{answerid}/qanswers/{questionid}/preTesting
+// Auth: CanAdminAnswers or User with testStarted or TestAdmin
+func GetPreTesting(params answer.GetPreTestingParams, u *models.User) middleware.Responder {
+
+}
+
+// PUT /answers/{answerid}/qanswers/{questionid}/preTesting
+// Auth: CanAdminAnswers or User with testStarted or TestAdmin
+func CreatePreTesting(params answer.CreatePreTestingParams, u *models.User) middleware.Responder {
+
+}
+
+// GET /answers/{answerid}/qanswers/{questionid}/fullTesting
+// Auth: CanAdminAnswers or TestAdmin
+func GetFullTesting(params answer.GetFullTestingParams, u *models.User) middleware.Responder {
+
+}

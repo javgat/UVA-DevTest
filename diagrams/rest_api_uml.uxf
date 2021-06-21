@@ -1433,12 +1433,12 @@ bg=yellow
     <coordinates>
       <x>6392</x>
       <y>776</y>
-      <w>80</w>
+      <w>72</w>
       <h>72</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
-/{review}</panel_attributes>
+/review</panel_attributes>
     <additional_attributes>10.0;70.0;10.0;10.0</additional_attributes>
   </element>
   <element>
@@ -2914,5 +2914,49 @@ bg=yellow
 &lt;&lt;path&gt;&gt;
 /pruebas</panel_attributes>
     <additional_attributes>10.0;340.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>6600</x>
+      <y>832</y>
+      <w>264</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Resource&gt;&gt;
+*Testing*
+bg=yellow
+--
+--
++ &lt;&lt;GET&gt;&gt; getPreTesting(): Testing
++ &lt;&lt;GET&gt;&gt; getFullTesting(): Testing
++ &lt;&lt;PUT&gt;&gt; createPreTesting(): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>6632</x>
+      <y>720</y>
+      <w>96</w>
+      <h>128</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/preTesting</panel_attributes>
+    <additional_attributes>10.0;140.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>6576</x>
+      <y>720</y>
+      <w>272</w>
+      <h>128</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/fullTesting</panel_attributes>
+    <additional_attributes>220.0;140.0;220.0;10.0;10.0;10.0</additional_attributes>
   </element>
 </diagram>

@@ -346,6 +346,10 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 	api.AnswerPutReviewHandler = answer.PutReviewHandlerFunc(handlers.PutReview)          // PUT /answers/{answerid}/qanswers/{questionid}/review
 	api.AnswerDeleteReviewHandler = answer.DeleteReviewHandlerFunc(handlers.DeleteReview) // DELETE /answers/{answerid}/qanswers/{questionid}/review
 
+	api.AnswerGetPreTestingHandler = answer.GetPreTestingHandlerFunc(handlers.GetPreTesting)          // GET /answers/{answerid}/qanswers/{questionid}/preTesting
+	api.AnswerCreatePreTestingHandler = answer.CreatePreTestingHandlerFunc(handlers.CreatePreTesting) // PUT /answers/{answerid}/qanswers/{questionid}/preTesting
+	api.AnswerGetFullTestingHandler = answer.GetFullTestingHandlerFunc(handlers.GetFullTesting)       // GET /answers/{answerid}/qanswers/{questionid}/fullTesting
+
 	api.AnswerGetQuestionsFromAnswerHandler = answer.GetQuestionsFromAnswerHandlerFunc(handlers.GetQuestionsFromAnswer) // GET /answers/{answerid}/questions
 
 	api.AnswerGetQuestionAnswersFromAnswerAndQuestionHandler = answer.GetQuestionAnswersFromAnswerAndQuestionHandlerFunc(handlers.GetQAnswerFromAnswerAndQuestion) // GET /answers/{answerid}/questions/{questionid}/qanswers

@@ -338,7 +338,7 @@ export class RespuestaPregunta implements QuestionAnswer{
     corregida: boolean;
     indicesOpciones: number[];
     username: string;
-    compila: boolean;
+    estado: QuestionAnswer.EstadoEnum;
     constructor(qa?: QuestionAnswer){
         this.idPregunta = qa?.idPregunta || 0
         this.idRespuesta = qa?.idRespuesta || 0
@@ -347,7 +347,7 @@ export class RespuestaPregunta implements QuestionAnswer{
         this.respuesta = qa?.respuesta || ""
         this.indicesOpciones = qa?.indicesOpciones || []
         this.username = qa?.username || ""
-        this.compila = qa?.compila || false
+        this.estado = qa?.estado || QuestionAnswer.EstadoEnum.NoProbado
     }
 
 }

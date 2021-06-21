@@ -6844,6 +6844,108 @@ paths:
           $ref: '#/responses/GoneError'
         500:
           $ref: '#/responses/InternalServerError'
+
+  /answers/{answerid}/qanswers/{questionid}/preTesting:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - answer
+      summary: Returns an answer testing for the user answering the question
+      operationId: GetPreTesting
+      description: Returns an answer testing for the user answering the question
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: answerid
+        description: Id of the answer
+        required: true
+        type: integer
+      - in: path
+        name: questionid
+        description: Id of the question it is answering
+        required: true
+        type: integer
+      responses:
+        200:
+          description: Testing found
+          schema:
+            $ref: '#/definitions/Testing'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+    put:
+      security:
+        - BearerCookie: []
+      tags:
+      - answer
+      summary: Asks to create a new testing for the user answering a question, deleting the former one
+      operationId: CreatePreTesting
+      description: Asks to create a new testing for the user answering a question, deleting the former one
+      parameters:
+      - in: path
+        name: answerid
+        description: Id of the answer
+        required: true
+        type: integer
+      - in: path
+        name: questionid
+        description: Id of the question it is answering
+        required: true
+        type: integer
+      responses:
+        200:
+          description: Asked for PreTesting
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  /answers/{answerid}/qanswers/{questionid}/fullTesting:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - answer
+      summary: Returns an answer testing for the testadmin
+      operationId: GetFullTesting
+      description: Returns an answer testing for the testadmin
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: answerid
+        description: Id of the answer
+        required: true
+        type: integer
+      - in: path
+        name: questionid
+        description: Id of the question it is answering
+        required: true
+        type: integer
+      responses:
+        200:
+          description: Testing found
+          schema:
+            $ref: '#/definitions/Testing'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
   /answers/{answerid}/questions:
     get:
       security:
@@ -7448,10 +7550,11 @@ definitions:
       username:
         type: string
         example: joselito97
-      compila:
-        type: boolean
-        example: false
-        default: false
+      estado:
+        type: string
+        enum: [noProbado, errorCompilacion, ejecutando, probado]
+        default: noProbado
+
   Tag:
     type: object
     required:
@@ -7607,6 +7710,18 @@ definitions:
         type: integer
         minimum: 0
         example: 1
+  Testing:
+    type: object
+    required:
+      - pruebasSuperadas
+      - pruebasTotales
+    properties:
+      pruebasSuperadas:
+        type: integer
+        example: 5
+      pruebasTotales:
+        type: integer
+        example: 15
 securityDefinitions:
   BearerCookie:
     type: apiKey
