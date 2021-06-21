@@ -480,6 +480,7 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
             p.salida = resp.salida
             p.visible = resp.visible
             p.postEntrega = resp.postEntrega
+            p.valor = resp.valor
           }
         } )
       },
@@ -521,5 +522,23 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
       },
       err => this.handleErrRelog(err, "eliminar prueba", primera, this.eliminarPrueba, this)
     )
+  }
+
+  isPruebaValid(p: Prueba): boolean{
+    return p.valor!=undefined && p.valor>=0
+  }
+
+  isPruebaEditValid(): boolean{
+    return this.isPruebaValid(this.pruebaEdit)
+  }
+
+  isPruebaIdValid(pid: number | undefined): boolean{
+    if(pid == undefined) return false
+    let prus = this.pruebas.filter( (p, i, arr) => {
+      return (p.id != undefined && p.id == pid)
+    })
+    if(prus.length==0) return false
+    let pru = prus[0]
+    return this.isPruebaValid(pru)
   }
 }

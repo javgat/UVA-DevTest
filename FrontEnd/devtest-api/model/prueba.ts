@@ -18,4 +18,5 @@ export interface Prueba {
     salida: string;
     visible: boolean;
     postEntrega: boolean;
+    valor: number;
 }

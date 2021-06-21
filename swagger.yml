@@ -7583,6 +7583,7 @@ definitions:
     - salida
     - visible
     - postEntrega
+    - valor
     properties:
       id:
         type: integer
@@ -7602,6 +7603,10 @@ definitions:
       postEntrega:
         type: boolean
         example: true
+      valor:
+        type: integer
+        minimum: 0
+        example: 1
 securityDefinitions:
   BearerCookie:
     type: apiKey

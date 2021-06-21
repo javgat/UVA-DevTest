@@ -18,7 +18,7 @@ func rowsToPruebas(rows *sql.Rows) ([]*Prueba, error) {
 	var pruebas []*Prueba
 	for rows.Next() {
 		var t Prueba
-		err := rows.Scan(&t.ID, &t.Preguntaid, &t.Entrada, &t.Salida, &t.Visible, &t.PostEntrega)
+		err := rows.Scan(&t.ID, &t.Preguntaid, &t.Entrada, &t.Salida, &t.Visible, &t.PostEntrega, &t.Valor)
 		if err != nil {
 			return pruebas, err
 		}
@@ -48,6 +48,7 @@ func ToModelPrueba(p *Prueba) *models.Prueba {
 		Salida:      p.Salida,
 		Visible:     p.Visible,
 		PostEntrega: p.PostEntrega,
+		Valor:       p.Valor,
 	}
 	return mp
 }
@@ -84,11 +85,11 @@ func PostPrueba(db *sql.DB, questionid int64, mp *models.Prueba) (*Prueba, error
 	}
 	var p *Prueba
 	visible := *mp.Visible && !*mp.PostEntrega
-	query, err := db.Prepare("INSERT INTO Prueba(preguntaid, entrada, salida, visible, postEntrega) VALUES(?,?,?,?,?) ")
+	query, err := db.Prepare("INSERT INTO Prueba(preguntaid, entrada, salida, visible, postEntrega, valor) VALUES(?,?,?,?,?,?) ")
 	if err == nil {
 		defer query.Close()
 		var res sql.Result
-		res, err = query.Exec(questionid, mp.Entrada, mp.Salida, visible, mp.PostEntrega)
+		res, err = query.Exec(questionid, mp.Entrada, mp.Salida, visible, mp.PostEntrega, mp.Valor)
 		if err == nil {
 			var lid int64
 			lid, err = res.LastInsertId()
@@ -100,6 +101,7 @@ func PostPrueba(db *sql.DB, questionid int64, mp *models.Prueba) (*Prueba, error
 					Salida:      mp.Salida,
 					Visible:     &visible,
 					PostEntrega: mp.PostEntrega,
+					Valor:       mp.Valor,
 				}
 				return p, err
 			}
@@ -130,10 +132,10 @@ func PutPrueba(db *sql.DB, questionid int64, pruebaid int64, mp *models.Prueba) 
 		return errors.New(errorDBNil)
 	}
 	visible := *mp.Visible && !*mp.PostEntrega
-	query, err := db.Prepare("UPDATE Prueba SET entrada=?, salida=?, visible=?, postEntrega=? WHERE preguntaid=? AND id=? ")
+	query, err := db.Prepare("UPDATE Prueba SET entrada=?, salida=?, visible=?, postEntrega=?, valor=? WHERE preguntaid=? AND id=? ")
 	if err == nil {
 		defer query.Close()
-		_, err := query.Exec(mp.Entrada, mp.Salida, visible, mp.PostEntrega, questionid, pruebaid)
+		_, err := query.Exec(mp.Entrada, mp.Salida, visible, mp.PostEntrega, mp.Valor, questionid, pruebaid)
 		return err
 	}
 	return err

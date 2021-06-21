@@ -333,6 +333,8 @@ CREATE TABLE Prueba(
   salida longtext COLLATE utf8_unicode_ci NOT NULL,
   visible boolean NOT NULL, /* El usuario puede ver entrada y salida mientras lo resuelve*/
   postEntrega boolean NOT NULL, /* La prueba se ejecuta tras entregar la respuesta al examen*/
+  valor int(11) NOT NULL, /* Valor que tiene la prueba, su valor final sera valor/suma(prueba.valor of pruebas)*/
+  CONSTRAINT CHK_pruebaValor CHECK (valor>=0),
   FOREIGN KEY(preguntaid) REFERENCES Pregunta(id) ON DELETE CASCADE,
   PRIMARY KEY(id)
 );

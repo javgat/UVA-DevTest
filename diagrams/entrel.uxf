@@ -643,8 +643,8 @@ bg=yellow</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>1476</x>
-      <y>828</y>
+      <x>1485</x>
+      <y>846</y>
       <w>270</w>
       <h>81</h>
     </coordinates>
@@ -663,22 +663,22 @@ bg=cyan</panel_attributes>
     <coordinates>
       <x>1449</x>
       <y>693</y>
-      <w>108</w>
-      <h>153</h>
+      <w>117</w>
+      <h>171</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>100.0;150.0;10.0;10.0</additional_attributes>
+    <additional_attributes>110.0;170.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>1422</x>
       <y>693</y>
-      <w>63</w>
-      <h>243</h>
+      <w>72</w>
+      <h>261</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;50.0;250.0</additional_attributes>
+    <additional_attributes>10.0;10.0;60.0;270.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
@@ -954,8 +954,8 @@ bg=yellow</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>1359</x>
-      <y>918</y>
+      <x>1368</x>
+      <y>936</y>
       <w>252</w>
       <h>144</h>
     </coordinates>
@@ -1598,7 +1598,7 @@ bg=green</panel_attributes>
       <x>1647</x>
       <y>729</y>
       <w>135</w>
-      <h>90</h>
+      <h>108</h>
     </coordinates>
     <panel_attributes>**Prueba**
 bg=yellow
@@ -1607,7 +1607,8 @@ bg=yellow
 - entrada: String
 - salida: String
 - visible: bool
-- postEntrega: bool</panel_attributes>
+- postEntrega: bool
+- valor: int</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -1687,11 +1688,13 @@ bg=yellow</panel_attributes>
       <x>1782</x>
       <y>873</y>
       <w>180</w>
-      <h>45</h>
+      <h>72</h>
     </coordinates>
     <panel_attributes>context Prueba inv:
 self.postEntrega=true implies
 self.visible=false
+
+self.valor &gt;= 0
 
 fontsize=11
 bg=cyan</panel_attributes>

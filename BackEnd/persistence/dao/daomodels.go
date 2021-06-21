@@ -618,6 +618,12 @@ type Prueba struct {
 	// Required: true
 	Salida *string `json:"salida"`
 
+	// valor
+	// Example: 1
+	// Required: true
+	// Minimum: 0
+	Valor *int64 `json:"valor"`
+
 	// visible
 	// Example: true
 	// Required: true

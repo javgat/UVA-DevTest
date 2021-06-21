@@ -275,7 +275,6 @@
             </div>
         </div>
         <div class="m-3" *ngIf="question.tipoPregunta=='codigo'">
-            <p>En desarrollo...</p>
             <h4>Pruebas de ejecución:</h4>
             <div class="d-grid gap-2 col-6 mx-auto mb-3" *ngIf="checkPermisosEdicion() && isEditandoRespuesta()">
                 <button type="button" class="btn btn-primary btn-lg" (click)="clickAddPrueba()" data-bs-toggle="modal"
@@ -309,18 +308,20 @@
                             *ngIf="!prueba.visible">No</span></p>
                     <p><b>Ejecución Post-Entrega: </b><span *ngIf="prueba.postEntrega">Sí</span><span
                             *ngIf="!prueba.postEntrega">No</span></p>
+                    <p><b>Valor: </b>{{prueba.valor}}</p>
                     <div class="d-grid gap-2 col-6 mx-auto mb-3" *ngIf="isEditandoRespuesta()">
-                        <button class="button btn btn-success" (click)="modificarPrueba(prueba.id)">Modificar</button>
+                        <button class="button btn btn-success btn-lg"
+                            (click)="modificarPrueba(prueba.id)">Modificar</button>
                     </div>
                 </div>
                 <div class="card-body" *ngIf="modificandoPrueba(prueba.id) && isEditandoRespuesta()">
                     <div class="mb-3">
-                        <label for="inputTitle" class="form-label">Entrada:</label>
+                        <h5>Entrada</h5>
                         <textarea type="text" class="form-control" name="inputEntrada" [(ngModel)]="prueba.entrada"
                             required rows=3></textarea>
                     </div>
                     <div class="mb-3">
-                        <label for="inputQuestion" class="form-label">Salida esperada:</label>
+                        <h5>Salida</h5>
                         <textarea type="text" class="form-control" name="inputSalida" [(ngModel)]="prueba.salida"
                             required rows=3></textarea>
                     </div>
@@ -334,9 +335,17 @@
                             [checked]="prueba.postEntrega" (change)="prueba.postEntrega = !prueba.postEntrega">
                         <label class="form-check-label" for="flexSwitchPostEntrega">Ejecución post-entrega</label>
                     </div>
-                    <button class="button btn btn-danger" (click)="cancelarModificarPrueba(prueba.id)">Cancelar</button>
-                    <button class="button btn btn-success mx-3"
-                        (click)="guardarModificarPrueba(prueba.id)">Guardar</button>
+                    <div class="mb-3">
+                        <label for="inputValor" class="form-label">Valor:</label>
+                        <input type="number" class="form-control" name="inputValor" [(ngModel)]="prueba.valor"
+                            required min=0 />
+                    </div>
+                    <div class="d-grid gap-2 col-6 mx-auto mb-3" *ngIf="isEditandoRespuesta()">
+                        <button class="button btn btn-success btn-lg"
+                            (click)="guardarModificarPrueba(prueba.id)" [disabled]="!isPruebaIdValid(prueba.id)">Guardar</button>
+                        <button class="button btn btn-danger btn-lg"
+                            (click)="cancelarModificarPrueba(prueba.id)">Cancelar</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -467,12 +476,12 @@
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="inputTitle" class="form-label">Entrada:</label>
+                        <label for="inputEntrada" class="form-label">Entrada:</label>
                         <textarea type="text" class="form-control" name="inputEntrada" [(ngModel)]="pruebaEdit.entrada"
                             required rows=3></textarea>
                     </div>
                     <div class="mb-3">
-                        <label for="inputQuestion" class="form-label">Salida esperada:</label>
+                        <label for="inputSalida" class="form-label">Salida esperada:</label>
                         <textarea type="text" class="form-control" name="inputSalida" [(ngModel)]="pruebaEdit.salida"
                             required rows=3></textarea>
                     </div>
@@ -487,10 +496,15 @@
                             (change)="pruebaEdit.postEntrega = !pruebaEdit.postEntrega">
                         <label class="form-check-label" for="flexSwitchPostEntrega">Ejecución post-entrega</label>
                     </div>
+                    <div class="mb-3">
+                        <label for="inputValor" class="form-label">Valor:</label>
+                        <input type="number" class="form-control" name="inputValor" [(ngModel)]="pruebaEdit.valor"
+                            required min=0 />
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-success" data-bs-dismiss="modal"
-                        (click)="postPruebaSubmit()">Crear</button>
+                        (click)="postPruebaSubmit()" [disabled]="!isPruebaEditValid()">Crear</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                 </div>
             </form>

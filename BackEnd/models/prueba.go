@@ -42,6 +42,12 @@ type Prueba struct {
 	// Required: true
 	Salida *string `json:"salida"`
 
+	// valor
+	// Example: 1
+	// Required: true
+	// Minimum: 0
+	Valor *int64 `json:"valor"`
+
 	// visible
 	// Example: true
 	// Required: true
@@ -61,6 +67,10 @@ func (m *Prueba) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateSalida(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateValor(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -95,6 +105,19 @@ func (m *Prueba) validatePostEntrega(formats strfmt.Registry) error {
 func (m *Prueba) validateSalida(formats strfmt.Registry) error {
 
 	if err := validate.Required("salida", "body", m.Salida); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Prueba) validateValor(formats strfmt.Registry) error {
+
+	if err := validate.Required("valor", "body", m.Valor); err != nil {
+		return err
+	}
+
+	if err := validate.MinimumInt("valor", "body", *m.Valor, 0, false); err != nil {
 		return err
 	}
 

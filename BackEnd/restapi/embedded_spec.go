@@ -11023,7 +11023,8 @@ func init() {
         "entrada",
         "salida",
         "visible",
-        "postEntrega"
+        "postEntrega",
+        "valor"
       ],
       "properties": {
         "entrada": {
@@ -11045,6 +11046,10 @@ func init() {
         "salida": {
           "type": "string",
           "example": "2 2"
+        },
+        "valor": {
+          "type": "integer",
+          "example": 1
         },
         "visible": {
           "type": "boolean",
@@ -24367,7 +24372,8 @@ func init() {
         "entrada",
         "salida",
         "visible",
-        "postEntrega"
+        "postEntrega",
+        "valor"
       ],
       "properties": {
         "entrada": {
@@ -24389,6 +24395,11 @@ func init() {
         "salida": {
           "type": "string",
           "example": "2 2"
+        },
+        "valor": {
+          "type": "integer",
+          "minimum": 0,
+          "example": 1
         },
         "visible": {
           "type": "boolean",

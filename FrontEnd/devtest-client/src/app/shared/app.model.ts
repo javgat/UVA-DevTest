@@ -401,6 +401,7 @@ export class PruebaEjecucion implements Prueba{
     salida: string;
     visible: boolean;
     postEntrega: boolean;
+    valor: number;
     constructor(p?: Prueba){
         this.id = p?.id || 0
         this.preguntaid = p?.preguntaid || 0
@@ -408,5 +409,6 @@ export class PruebaEjecucion implements Prueba{
         this.salida = p?.salida || ""
         this.visible = p?.visible || false
         this.postEntrega = p?.postEntrega || false
+        this.valor = p?.valor || 0
     }
 }
