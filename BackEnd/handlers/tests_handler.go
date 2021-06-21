@@ -290,10 +290,22 @@ func cloneQuestions(db *sql.DB, mqs []*models.Question, newMTest *models.Test, o
 								}
 								var opciones []*dao.Option
 								opciones, err = dao.GetOptionsQuestion(db, origqid)
-								for _, opc := range opciones {
-									_, err = dao.PostOption(db, newqid, dao.ToModelOption(opc))
-									if err != nil {
-										return err
+								if err == nil {
+									for _, opc := range opciones {
+										_, err = dao.PostOption(db, newqid, dao.ToModelOption(opc))
+										if err != nil {
+											return err
+										}
+									}
+									var pruebas []*dao.Prueba
+									pruebas, err = dao.GetPruebas(db, origqid)
+									if err == nil {
+										for _, pru := range pruebas {
+											_, err = dao.PostPrueba(db, newqid, dao.ToModelPrueba(pru))
+										}
+										if err != nil {
+											return err
+										}
 									}
 								}
 							}

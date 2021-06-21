@@ -577,6 +577,39 @@ func copyTagsQuestion(sourceQID int64, targetQID int64) error {
 	return err
 }
 
+func copyPrueba(pru *dao.Prueba, targetQID int64) (*models.Prueba, error) {
+	pru.Preguntaid = targetQID
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		mp := dao.ToModelPrueba(pru)
+		var p *dao.Prueba
+		p, err = dao.PostPrueba(db, targetQID, mp)
+		if err == nil && p != nil {
+			mp = dao.ToModelPrueba(p)
+			return mp, nil
+		}
+	}
+	return nil, err
+}
+
+func copyPruebasQuestion(sourceQID int64, targetQID int64) error {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		var ps []*dao.Prueba
+		ps, err = dao.GetPruebas(db, sourceQID)
+		if err == nil {
+			for _, p := range ps {
+				_, err = copyPrueba(p, targetQID)
+				if err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}
+	return err
+}
+
 func copyQuestion(q *dao.Question, username string, userID int64) (*models.Question, error) {
 	db, err := dbconnection.ConnectDb()
 	if err == nil {
@@ -592,7 +625,10 @@ func copyQuestion(q *dao.Question, username string, userID int64) (*models.Quest
 				if err == nil {
 					err = copyTagsQuestion(q.ID, mq.ID)
 					if err == nil {
-						return mq, nil
+						err = copyPruebasQuestion(q.ID, mq.ID)
+						if err == nil {
+							return mq, nil
+						}
 					}
 				}
 			}
