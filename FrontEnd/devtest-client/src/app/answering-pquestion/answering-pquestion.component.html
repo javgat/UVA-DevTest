@@ -132,6 +132,19 @@
             </button>
             <!--y probar-->
         </div>
+        <div class="mt-3">
+            <h4>Pruebas visibles:</h4>
+            <div class="card mb-3" *ngFor="let prueba of pruebas">
+                <div class="card-body">
+                    <h5>Entrada</h5>
+                    <textarea type="text" class="form-control mb-3" disabled>{{prueba.entrada}}</textarea>
+                    <h5>Salida</h5>
+                    <textarea type="text" class="form-control mb-3" disabled>{{prueba.salida}}</textarea>
+                    <p><b>Valor: </b>{{prueba.valor}}</p>
+                </div>
+            </div>
+
+        </div>
     </div>
     <div class="d-grid gap-2 mt-3" *ngIf="(pregunta.isRespondida || false) &&  !modificandoRespuesta && !isPreguntaCodigo()">
         <button class="btn btn-warning text-dark btn-lg my-3" type="button"

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Answer, AnswerService, Option, PublishedTestService, Question, QuestionAnswer, UserService } from '@javgat/devtest-api';
+import { Answer, AnswerService, Option, Prueba, PublishedTestService, Question, QuestionAnswer, UserService } from '@javgat/devtest-api';
 import { CodeModel } from '@ngstack/code-editor';
 import { CountdownEvent } from 'ngx-countdown';
 import { Subscription } from 'rxjs';
@@ -27,6 +27,7 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
   modificandoRespuesta: boolean
   test: Examen
   timeOver: boolean
+  pruebas: Prueba[]
 
   theme = 'vs-dark';
 
@@ -48,6 +49,7 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
     this.pregunta = new Pregunta()
     this.test = new Examen()
     this.timeOver = false
+    this.pruebas = []
     this.questionAnswer = {
       idPregunta: 0,
       idRespuesta: 0,
@@ -123,8 +125,10 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
       resp => {
         this.pregunta = Pregunta.constructorFromQuestion(resp)
         this.getQuestionAnswersQuestion(true)
-        if (this.pregunta.tipoPregunta == "opciones") {
+        if (this.pregunta.tipoPregunta == Question.TipoPreguntaEnum.Opciones) {
           this.getOpciones(true)
+        }else if(this.pregunta.tipoPregunta == Question.TipoPreguntaEnum.Codigo){
+          this.getPruebasVisibles(true)
         }
         this.getPTest(true)
       },
@@ -356,6 +360,15 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
 
   isPreguntaCodigo(): boolean{
     return this.pregunta.tipoPregunta=='codigo'
+  }
+
+  getPruebasVisibles(primera: boolean){
+    this.ptestS.getVisiblePruebasFromQuestionTest(this.testid, this.questionAnswer.idPregunta).subscribe(
+      resp => {
+        this.pruebas = resp
+      },
+      err => this.handleErrRelog(err, "obtener las pruebas visibles de una pregunta de codigo", primera, this.getPruebasVisibles, this)
+    )
   }
 
 }

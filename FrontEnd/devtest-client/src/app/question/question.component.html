@@ -317,27 +317,27 @@
                 <div class="card-body" *ngIf="modificandoPrueba(prueba.id) && isEditandoRespuesta()">
                     <div class="mb-3">
                         <h5>Entrada</h5>
-                        <textarea type="text" class="form-control" name="inputEntrada" [(ngModel)]="prueba.entrada"
+                        <textarea type="text" class="form-control" name="inputEntrada{{prueba.id}}" [(ngModel)]="prueba.entrada"
                             required rows=3></textarea>
                     </div>
                     <div class="mb-3">
                         <h5>Salida</h5>
-                        <textarea type="text" class="form-control" name="inputSalida" [(ngModel)]="prueba.salida"
+                        <textarea type="text" class="form-control" name="inputSalida{{prueba.id}}" [(ngModel)]="prueba.salida"
                             required rows=3></textarea>
                     </div>
                     <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" id="flexSwitchVisible"
+                        <input class="form-check-input" type="checkbox" id="flexSwitchVisible{{prueba.id}}"
                             [checked]="prueba.visible" (change)="prueba.visible = !prueba.visible">
-                        <label class="form-check-label" for="flexSwitchVisible">Visible al responder</label>
+                        <label class="form-check-label" for="flexSwitchVisible{{prueba.id}}">Visible al responder</label>
                     </div>
                     <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" id="flexSwitchPostEntrega"
+                        <input class="form-check-input" type="checkbox" id="flexSwitchPostEntrega{{prueba.id}}"
                             [checked]="prueba.postEntrega" (change)="prueba.postEntrega = !prueba.postEntrega">
-                        <label class="form-check-label" for="flexSwitchPostEntrega">Ejecución post-entrega</label>
+                        <label class="form-check-label" for="flexSwitchPostEntrega{{prueba.id}}">Ejecución post-entrega</label>
                     </div>
                     <div class="mb-3">
-                        <label for="inputValor" class="form-label">Valor:</label>
-                        <input type="number" class="form-control" name="inputValor" [(ngModel)]="prueba.valor"
+                        <label for="inputValor{{prueba.id}}" class="form-label">Valor:</label>
+                        <input type="number" class="form-control" name="inputValor{{prueba.id}}" [(ngModel)]="prueba.valor"
                             required min=0 />
                     </div>
                     <div class="d-grid gap-2 col-6 mx-auto mb-3" *ngIf="isEditandoRespuesta()">
