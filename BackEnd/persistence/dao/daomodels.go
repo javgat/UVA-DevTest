@@ -585,3 +585,37 @@ type PTestUpdate struct {
 	// Enum: [alEntregar alCorregir manual]
 	Visibilidad *string `json:"visibilidad"`
 }
+
+// Prueba prueba
+//
+// swagger:model Prueba
+type Prueba struct {
+
+	// entrada
+	// Example: 3 3 0 0
+	// Required: true
+	Entrada *string `json:"entrada"`
+
+	// id
+	// Example: 1
+	ID int64 `json:"id,omitempty"`
+
+	// post entrega
+	// Example: true
+	// Required: true
+	PostEntrega *bool `json:"postEntrega"`
+
+	// preguntaid
+	// Example: 1
+	Preguntaid int64 `json:"preguntaid,omitempty"`
+
+	// salida
+	// Example: 2 2
+	// Required: true
+	Salida *string `json:"salida"`
+
+	// visible
+	// Example: true
+	// Required: true
+	Visible *bool `json:"visible"`
+}

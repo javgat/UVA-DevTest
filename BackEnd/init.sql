@@ -326,7 +326,7 @@ CREATE TABLE OpcionRespuesta(
 );
 
 CREATE TABLE Prueba(
-  id int(11) NOT NULL,
+  id int(11) NOT NULL AUTO_INCREMENT,
   preguntaid int(11) NOT NULL,
   entrada longtext COLLATE utf8_unicode_ci NOT NULL,
   salida longtext COLLATE utf8_unicode_ci NOT NULL,
@@ -346,6 +346,7 @@ CREATE TABLE Ejecucion(
   CONSTRAINT fk_EjRespPreg
     FOREIGN KEY(respuestaExamenid, preguntaid)
     REFERENCES RespuestaPregunta(respuestaExamenid, preguntaid) ON DELETE CASCADE,
+  CONSTRAINT PRIMARY KEY(pruebaid, respuestaExamenid, preguntaid)
 );
 
 /* DATOS INICIALES */
