@@ -245,6 +245,7 @@ CREATE TABLE TestPregunta(
   FOREIGN KEY(preguntaid) REFERENCES Pregunta(id) ON DELETE CASCADE,
   CONSTRAINT PRIMARY KEY(testid, preguntaid)
 );
+
 CREATE TABLE PreguntaEquipo(
   preguntaid int(11) NOT NULL,
   equipoid int(11) NOT NULL,
