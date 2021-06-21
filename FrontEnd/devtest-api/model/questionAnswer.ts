@@ -22,4 +22,5 @@ export interface QuestionAnswer {
     corregida: boolean;
     indicesOpciones?: Array<number>;
     username?: string;
+    compila?: boolean;
 }

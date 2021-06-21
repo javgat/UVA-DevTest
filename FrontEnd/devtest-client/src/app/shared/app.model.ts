@@ -1,4 +1,4 @@
-import { User, Team, Question, Test, Answer, QuestionAnswer, EmailConfiguration, CustomizedView } from "@javgat/devtest-api";
+import { User, Team, Question, Test, Answer, QuestionAnswer, EmailConfiguration, CustomizedView, Prueba } from "@javgat/devtest-api";
 
 export enum Tipo {
     SUCCESS = "success",
@@ -338,6 +338,7 @@ export class RespuestaPregunta implements QuestionAnswer{
     corregida: boolean;
     indicesOpciones: number[];
     username: string;
+    compila: boolean;
     constructor(qa?: QuestionAnswer){
         this.idPregunta = qa?.idPregunta || 0
         this.idRespuesta = qa?.idRespuesta || 0
@@ -346,6 +347,7 @@ export class RespuestaPregunta implements QuestionAnswer{
         this.respuesta = qa?.respuesta || ""
         this.indicesOpciones = qa?.indicesOpciones || []
         this.username = qa?.username || ""
+        this.compila = qa?.compila || false
     }
 
 }
@@ -389,5 +391,22 @@ export class VistaPersonalizada implements CustomizedView{
     constructor(c?: CustomizedView){
         this.rolBase = c?.rolBase || CustomizedView.RolBaseEnum.NoRegistrado
         this.mensajeInicio = c?.mensajeInicio || ""
+    }
+}
+
+export class PruebaEjecucion implements Prueba{
+    id?: number | undefined;
+    preguntaid?: number | undefined;
+    entrada: string;
+    salida: string;
+    visible: boolean;
+    postEntrega: boolean;
+    constructor(p?: Prueba){
+        this.id = p?.id || 0
+        this.preguntaid = p?.preguntaid || 0
+        this.entrada = p?.entrada || ""
+        this.salida = p?.salida || ""
+        this.visible = p?.visible || false
+        this.postEntrega = p?.postEntrega || false
     }
 }

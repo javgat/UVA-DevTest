@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Option, Question, QuestionService, Tag, TagService, Team, UserService } from '@javgat/devtest-api';
+import { Option, Prueba, Question, QuestionService, Tag, TagService, Team, UserService } from '@javgat/devtest-api';
 import { Subscription } from 'rxjs';
 import { LoggedInTeacherController } from '../shared/app.controller';
-import { Mensaje, Pregunta, Tipo, tipoPrint } from '../shared/app.model';
+import { Mensaje, Pregunta, PruebaEjecucion, Tipo, tipoPrint } from '../shared/app.model';
 import { DataService } from '../shared/data.service';
 import { SessionService } from '../shared/session.service';
 
@@ -33,6 +33,8 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
   testid?: number
   autotags: Tag[]
   showExtraInfo: boolean
+  pruebaEdit: Prueba
+  pruebas: Prueba[]
   private editandoRespuesta: boolean
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private qS: QuestionService,
     private route: ActivatedRoute, private tagS: TagService) {
@@ -43,6 +45,7 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
       tag: ""
     }
     this.opciones = []
+    this.pruebas = []
     this.tags = []
     this.deleteIndex = -1
     this.deletingTag = ""
@@ -51,6 +54,7 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
     this.questionEdit = new Pregunta()
     this.isFavorita = false
     this.showExtraInfo = false
+    this.pruebaEdit = new PruebaEjecucion()
     this.nuevaOpcion = {
       correcta: false,
       texto: ""
@@ -119,6 +123,8 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
         this.setTipoPrint()
         if (this.question.tipoPregunta == Question.TipoPreguntaEnum.Opciones) {
           this.getOptions(true)
+        }else if(this.question.tipoPregunta == Question.TipoPreguntaEnum.Codigo){
+          this.getPruebas(true)
         }
         this.getTags(true)
         if (!this.getSessionUser().isEmpty()) {
@@ -146,6 +152,15 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
         this.opciones = resp
       },
       err => this.handleErrRelog(err, "obtener opciones de respuesta de pregunta", primera, this.getOptions, this)
+    )
+  }
+
+  getPruebas(primera: boolean) {
+    this.qS.getPruebasFromQuestion(this.id).subscribe(
+      resp => {
+        this.pruebas = resp
+      },
+      err => this.handleErrRelog(err, "obtener pruebas de respuesta de pregunta", primera, this.getPruebas, this)
     )
   }
 
@@ -377,7 +392,7 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
   }
 
   needsStopEditarRespuesta(): boolean{
-    return this.question.tipoPregunta == "opciones"
+    return this.question.tipoPregunta == Question.TipoPreguntaEnum.Opciones || this.question.tipoPregunta == Question.TipoPreguntaEnum.Codigo
   }
 
   showVolverTest(): boolean{
@@ -410,5 +425,22 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
   
   isCorreccionAutomatica(): boolean{
     return this.question.autoCorrect
+  }
+
+  clickAddPrueba(){
+    this.pruebaEdit = new PruebaEjecucion()
+  }
+
+  postPruebaSubmit(){
+    this.postPrueba(true)
+  }
+
+  postPrueba(primera: boolean){
+    this.qS.postPrueba(this.id, this.pruebaEdit).subscribe(
+      resp => {
+        this.getPruebas(true)
+      },
+      err => this.handleErrRelog(err, "crear nueva prueba de ejecución", primera, this.postPrueba, this)
+    )
   }
 }
