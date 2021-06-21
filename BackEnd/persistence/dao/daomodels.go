@@ -315,6 +315,10 @@ type Tag struct {
 // swagger:model QuestionAnswer
 type QuestionAnswer struct {
 
+	// compila
+	// Example: false
+	Compila *bool `json:"compila,omitempty"`
+
 	// corregida
 	// Example: true
 	// Required: true

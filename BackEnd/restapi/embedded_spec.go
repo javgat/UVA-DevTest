@@ -11193,6 +11193,11 @@ func init() {
         "idRespuesta"
       ],
       "properties": {
+        "compila": {
+          "type": "boolean",
+          "default": false,
+          "example": false
+        },
         "corregida": {
           "type": "boolean",
           "example": true
@@ -24536,6 +24541,11 @@ func init() {
         "idRespuesta"
       ],
       "properties": {
+        "compila": {
+          "type": "boolean",
+          "default": false,
+          "example": false
+        },
         "corregida": {
           "type": "boolean",
           "example": true

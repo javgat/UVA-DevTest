@@ -7448,6 +7448,10 @@ definitions:
       username:
         type: string
         example: joselito97
+      compila:
+        type: boolean
+        example: false
+        default: false
   Tag:
     type: object
     required:

@@ -58,7 +58,7 @@ func rowsToQuestionAnswers(rows *sql.Rows) ([]*QuestionAnswer, error) {
 	var qas []*QuestionAnswer
 	for rows.Next() {
 		var qa QuestionAnswer
-		err := rows.Scan(&qa.IDRespuesta, &qa.IDPregunta, &qa.Puntuacion, &qa.Corregida, &qa.Respuesta)
+		err := rows.Scan(&qa.IDRespuesta, &qa.IDPregunta, &qa.Puntuacion, &qa.Corregida, &qa.Respuesta, &qa.Compila)
 		if err != nil {
 			log.Print(err)
 			return qas, err
