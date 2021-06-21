@@ -38,6 +38,7 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
   pruebasidsModificando: Set<number>
   pruebaidActualizar: number
   pruebaidRecuperar: number
+  pruebaidEliminar: number
   private editandoRespuesta: boolean
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private qS: QuestionService,
     private route: ActivatedRoute, private tagS: TagService) {
@@ -50,6 +51,7 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
     this.opciones = []
     this.pruebas = []
     this.pruebaidRecuperar = 0
+    this.pruebaidEliminar = 0
     this.pruebasidsModificando = new Set()
     this.pruebaidActualizar = 0
     this.tags = []
@@ -493,7 +495,6 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
   }
 
   actualizarPrueba(primera: boolean){
-
     let prus = this.pruebas.filter( (p, i, arr) => {
       return (p.id != undefined && p.id == this.pruebaidActualizar)
     })
@@ -504,6 +505,21 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
         this.getPruebas(true)
       },
       err => this.handleErrRelog(err, "actualizar valor de prueba", primera, this.actualizarPrueba, this)
+    )
+  }
+
+  eliminarPruebaClick(pruebaid: number | undefined){
+    if(pruebaid==undefined) return
+    this.pruebaidEliminar = pruebaid
+    this.eliminarPrueba(true)
+  }
+
+  eliminarPrueba(primera: boolean){
+    this.qS.deletePrueba(this.id, this.pruebaidEliminar).subscribe(
+      resp => {
+        this.getPruebas(true)
+      },
+      err => this.handleErrRelog(err, "eliminar prueba", primera, this.eliminarPrueba, this)
     )
   }
 }

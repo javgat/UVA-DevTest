@@ -278,18 +278,40 @@
             <p>En desarrollo...</p>
             <h4>Pruebas de ejecución:</h4>
             <div class="d-grid gap-2 col-6 mx-auto mb-3" *ngIf="checkPermisosEdicion() && isEditandoRespuesta()">
-                    <button type="button" class="btn btn-primary btn-lg" (click)="clickAddPrueba()"
-                    data-bs-toggle="modal" data-bs-target="#addPruebaModal">Añadir Prueba</button>
+                <button type="button" class="btn btn-primary btn-lg" (click)="clickAddPrueba()" data-bs-toggle="modal"
+                    data-bs-target="#addPruebaModal">Añadir Prueba</button>
             </div>
             <div class="card mb-3" *ngFor="let prueba of pruebas">
                 <div class="card-body" *ngIf="!modificandoPrueba(prueba.id) || !isEditandoRespuesta()">
+                    <div *ngIf="isEditandoRespuesta()" class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <div class="dropdown">
+                            <button class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenuDelete"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
+                                    fill="currentColor">
+                                    <path d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M0 0h24v24H0V0z" fill="none" />
+                                    <path
+                                        d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zm2.46-7.12l1.41-1.41L12 12.59l2.12-2.12 1.41 1.41L13.41 14l2.12 2.12-1.41 1.41L12 15.41l-2.12 2.12-1.41-1.41L10.59 14l-2.13-2.12zM15.5 4l-1-1h-5l-1 1H5v2h14V4z" />
+                                </svg>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuDelete">
+                                <li><a role="button" class="dropdown-item"
+                                        (click)="eliminarPruebaClick(prueba.id)">Eliminar</a></li>
+                            </ul>
+                        </div>
+                    </div>
                     <h5>Entrada</h5>
                     <textarea type="text" class="form-control mb-3" disabled>{{prueba.entrada}}</textarea>
                     <h5>Salida</h5>
                     <textarea type="text" class="form-control mb-3" disabled>{{prueba.salida}}</textarea>
-                    <p><b>Visible al responder: </b><span *ngIf="prueba.visible">Sí</span><span *ngIf="!prueba.visible">No</span></p>
-                    <p><b>Ejecución Post-Entrega: </b><span *ngIf="prueba.postEntrega">Sí</span><span *ngIf="!prueba.postEntrega">No</span></p>
-                    <button class="button btn btn-success" *ngIf="isEditandoRespuesta()" (click)="modificarPrueba(prueba.id)">Modificar</button>
+                    <p><b>Visible al responder: </b><span *ngIf="prueba.visible">Sí</span><span
+                            *ngIf="!prueba.visible">No</span></p>
+                    <p><b>Ejecución Post-Entrega: </b><span *ngIf="prueba.postEntrega">Sí</span><span
+                            *ngIf="!prueba.postEntrega">No</span></p>
+                    <div class="d-grid gap-2 col-6 mx-auto mb-3" *ngIf="isEditandoRespuesta()">
+                        <button class="button btn btn-success" (click)="modificarPrueba(prueba.id)">Modificar</button>
+                    </div>
                 </div>
                 <div class="card-body" *ngIf="modificandoPrueba(prueba.id) && isEditandoRespuesta()">
                     <div class="mb-3">
@@ -299,23 +321,22 @@
                     </div>
                     <div class="mb-3">
                         <label for="inputQuestion" class="form-label">Salida esperada:</label>
-                        <textarea type="text" class="form-control" name="inputSalida"
-                            [(ngModel)]="prueba.salida" required rows=3></textarea>
+                        <textarea type="text" class="form-control" name="inputSalida" [(ngModel)]="prueba.salida"
+                            required rows=3></textarea>
                     </div>
                     <div class="form-check form-switch">
                         <input class="form-check-input" type="checkbox" id="flexSwitchVisible"
-                            [checked]="prueba.visible"
-                            (change)="prueba.visible = !prueba.visible">
+                            [checked]="prueba.visible" (change)="prueba.visible = !prueba.visible">
                         <label class="form-check-label" for="flexSwitchVisible">Visible al responder</label>
                     </div>
                     <div class="form-check form-switch">
                         <input class="form-check-input" type="checkbox" id="flexSwitchPostEntrega"
-                            [checked]="prueba.postEntrega"
-                            (change)="prueba.postEntrega = !prueba.postEntrega">
+                            [checked]="prueba.postEntrega" (change)="prueba.postEntrega = !prueba.postEntrega">
                         <label class="form-check-label" for="flexSwitchPostEntrega">Ejecución post-entrega</label>
                     </div>
                     <button class="button btn btn-danger" (click)="cancelarModificarPrueba(prueba.id)">Cancelar</button>
-                    <button class="button btn btn-success mx-3" (click)="guardarModificarPrueba(prueba.id)">Guardar</button>
+                    <button class="button btn btn-success mx-3"
+                        (click)="guardarModificarPrueba(prueba.id)">Guardar</button>
                 </div>
             </div>
         </div>
@@ -435,8 +456,8 @@
     </div>
 </div>
 <!-- Añadir prueba-->
-<div class="modal fade" id="addPruebaModal" tabindex="-1" aria-labelledby="addPruebaModalLabel" *ngIf="checkPermisosEdicion()"
-    aria-hidden="true">
+<div class="modal fade" id="addPruebaModal" tabindex="-1" aria-labelledby="addPruebaModalLabel"
+    *ngIf="checkPermisosEdicion()" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <form ngNativeValidate>
@@ -452,13 +473,12 @@
                     </div>
                     <div class="mb-3">
                         <label for="inputQuestion" class="form-label">Salida esperada:</label>
-                        <textarea type="text" class="form-control" name="inputSalida"
-                            [(ngModel)]="pruebaEdit.salida" required rows=3></textarea>
+                        <textarea type="text" class="form-control" name="inputSalida" [(ngModel)]="pruebaEdit.salida"
+                            required rows=3></textarea>
                     </div>
                     <div class="form-check form-switch">
                         <input class="form-check-input" type="checkbox" id="flexSwitchVisible"
-                            [checked]="pruebaEdit.visible"
-                            (change)="pruebaEdit.visible = !pruebaEdit.visible">
+                            [checked]="pruebaEdit.visible" (change)="pruebaEdit.visible = !pruebaEdit.visible">
                         <label class="form-check-label" for="flexSwitchVisible">Visible al responder</label>
                     </div>
                     <div class="form-check form-switch">
