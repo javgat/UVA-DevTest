@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AnswerService, Option, PublishedTestService, Question, QuestionAnswer, QuestionService, Review, Test, UserService } from '@javgat/devtest-api';
+import { CodeModel } from '@ngstack/code-editor';
 import { Subscription } from 'rxjs';
 import { LoggedInController } from '../shared/app.controller';
 import { bgcolorQAnswerPuntuacion, Examen, Pregunta, RespuestaPregunta, tipoPrint } from '../shared/app.model';
@@ -25,6 +26,15 @@ export class QanswerComponent extends LoggedInController implements OnInit {
   editPuntuacion: number
   isInAdminTeam: boolean
   test: Test
+  theme = 'vs-dark';
+  codeModel: CodeModel
+
+  codeOptions = {
+    contextmenu: true,
+    minimap: {
+      enabled: true,
+    },
+  };
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService,
     private route: ActivatedRoute, private answerS: AnswerService, private ptestS: PublishedTestService, private qS: QuestionService) {
     super(session, router, data, userS)
@@ -36,6 +46,11 @@ export class QanswerComponent extends LoggedInController implements OnInit {
     this.question = new Pregunta()
     this.editPuntuacion = 0
     this.qa = new RespuestaPregunta()
+    this.codeModel = {
+      language: 'cpp',
+      uri: 'main.cpp',
+      value: this.qa.respuesta || "",
+    }
     this.showCorregir = false
     this.test = new Examen()
     this.routeSub = this.route.params.subscribe(params => {
@@ -76,6 +91,7 @@ export class QanswerComponent extends LoggedInController implements OnInit {
     this.answerS.getQuestionAnswerFromAnswer(this.answerid, this.questionid).subscribe(
       resp => {
         this.qa = new RespuestaPregunta(resp)
+        this.recargarEditorCodigo()
         this.editPuntuacion = this.qa.puntuacion
       },
       err => this.handleErrRelog(err, "obtener respuesta de una pregunta", primera, this.getQAnswer, this)
@@ -241,6 +257,14 @@ export class QanswerComponent extends LoggedInController implements OnInit {
 
   isAutoCorrect(): boolean{
     return this.question.autoCorrect
+  }
+
+  recargarEditorCodigo(){
+    this.codeModel = {
+      language: 'cpp',
+      uri: 'main.cpp',
+      value: this.qa.respuesta || "",
+    }
   }
 
 }
