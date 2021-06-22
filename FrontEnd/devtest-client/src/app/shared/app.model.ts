@@ -1,4 +1,4 @@
-import { User, Team, Question, Test, Answer, QuestionAnswer, EmailConfiguration, CustomizedView, Prueba } from "@javgat/devtest-api";
+import { User, Team, Question, Test, Answer, QuestionAnswer, EmailConfiguration, CustomizedView, Prueba, Testing } from "@javgat/devtest-api";
 
 export enum Tipo {
     SUCCESS = "success",
@@ -410,5 +410,15 @@ export class PruebaEjecucion implements Prueba{
         this.visible = p?.visible || false
         this.postEntrega = p?.postEntrega || false
         this.valor = p?.valor || 0
+    }
+}
+
+export class ResultadoPruebas implements Testing{
+    pruebasSuperadas: number;
+    pruebasTotales: number;
+
+    constructor(t?: Testing){
+        this.pruebasSuperadas = t?.pruebasSuperadas || 0
+        this.pruebasTotales = t?.pruebasTotales || 0
     }
 }

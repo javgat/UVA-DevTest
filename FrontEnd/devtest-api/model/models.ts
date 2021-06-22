@@ -21,6 +21,7 @@ export * from './tag';
 export * from './team';
 export * from './test';
 export * from './testPregunta';
+export * from './testing';
 export * from './tipoRol';
 export * from './user';
 export * from './userUpdate';

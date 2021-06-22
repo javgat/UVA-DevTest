@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AnswerService, Option, PublishedTestService, Question, QuestionAnswer, QuestionService, Review, Test, UserService } from '@javgat/devtest-api';
+import { AnswerService, Option, Prueba, PublishedTestService, Question, QuestionAnswer, QuestionService, Review, Test, UserService } from '@javgat/devtest-api';
 import { CodeModel } from '@ngstack/code-editor';
 import { Subscription } from 'rxjs';
 import { LoggedInController } from '../shared/app.controller';
-import { bgcolorQAnswerPuntuacion, Examen, Pregunta, RespuestaPregunta, tipoPrint } from '../shared/app.model';
+import { bgcolorQAnswerPuntuacion, Examen, Pregunta, RespuestaPregunta, ResultadoPruebas, tipoPrint } from '../shared/app.model';
 import { DataService } from '../shared/data.service';
 import { SessionService } from '../shared/session.service';
 
@@ -29,6 +29,9 @@ export class QanswerComponent extends LoggedInController implements OnInit {
   theme = 'vs-dark';
   codeModel: CodeModel
 
+  pruebas: Prueba[]
+  resPruebas: ResultadoPruebas
+
   codeOptions = {
     contextmenu: true,
     minimap: {
@@ -44,6 +47,8 @@ export class QanswerComponent extends LoggedInController implements OnInit {
     this.isInAdminTeam = false
     this.options = []
     this.question = new Pregunta()
+    this.pruebas = []
+    this.resPruebas = new ResultadoPruebas()
     this.editPuntuacion = 0
     this.qa = new RespuestaPregunta()
     this.codeModel = {
@@ -104,6 +109,8 @@ export class QanswerComponent extends LoggedInController implements OnInit {
         this.question = Pregunta.constructorFromQuestion(resp)
         if (this.question.tipoPregunta == Question.TipoPreguntaEnum.Opciones) {
           this.getOptions(true)
+        }else if(this.question.tipoPregunta == Question.TipoPreguntaEnum.Codigo){
+          this.getPruebas(true)
         }
       },
       err => this.handleErrRelog(err, "obtener pregunta", primera, this.getPregunta, this)
@@ -264,6 +271,45 @@ export class QanswerComponent extends LoggedInController implements OnInit {
       language: 'cpp',
       uri: 'main.cpp',
       value: this.qa.respuesta || "",
+    }
+  }
+
+  getPruebas(primera: boolean){
+    this.qS.getPruebasFromQuestion(this.questionid).subscribe(
+      resp => this.pruebas = resp,
+      err => this.handleErrRelog(err, "obtener pruebas de preguntas", primera, this.getPruebas, this)
+    )
+  }
+
+  getResultadoPruebas(primera: boolean){
+    this.answerS.getFullTesting(this.answerid, this.questionid).subscribe(
+      resp=>{
+        this.resPruebas = resp
+      },
+      err => this.handleErrRelog(err, "obtener resultado de fulltesting de pruebas", primera, this.getResultadoPruebas, this)
+    )
+  }
+
+  isVisibleEstadoEjecucion(): boolean{
+    return this.qa.estado!=QuestionAnswer.EstadoEnum.NoProbado
+  }
+
+  isEstadoProbado(): boolean{
+    return this.qa.estado == QuestionAnswer.EstadoEnum.Probado
+  }
+
+  printEstado(): string{
+    switch(this.qa.estado){
+      case QuestionAnswer.EstadoEnum.Ejecutando:
+        return "Ejecutando..."
+      case QuestionAnswer.EstadoEnum.ErrorCompilacion:
+        return "Error de compilación"
+      case QuestionAnswer.EstadoEnum.Probado:
+        return "Compilado con éxito"
+      case QuestionAnswer.EstadoEnum.NoProbado:
+        return "No probado"
+      default:
+        return ""
     }
   }
 

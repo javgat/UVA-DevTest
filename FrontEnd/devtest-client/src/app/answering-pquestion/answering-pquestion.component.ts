@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Answer, AnswerService, Option, Prueba, PublishedTestService, Question, QuestionAnswer, UserService } from '@javgat/devtest-api';
+import { Answer, AnswerService, Option, Prueba, PublishedTestService, Question, QuestionAnswer, Testing, UserService } from '@javgat/devtest-api';
 import { CodeModel } from '@ngstack/code-editor';
 import { CountdownEvent } from 'ngx-countdown';
 import { Subscription } from 'rxjs';
 import { LoggedInController } from '../shared/app.controller';
-import { Examen, Mensaje, Pregunta, Tipo, tipoPrint } from '../shared/app.model';
+import { Examen, Mensaje, Pregunta, ResultadoPruebas, Tipo, tipoPrint } from '../shared/app.model';
 import { DataService } from '../shared/data.service';
 import { SessionService } from '../shared/session.service';
 
@@ -28,6 +28,7 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
   test: Examen
   timeOver: boolean
   pruebas: Prueba[]
+  resPruebas: ResultadoPruebas
 
   theme = 'vs-dark';
 
@@ -39,6 +40,7 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
       enabled: true,
     },
   };
+  TIEMPO_RECARGA_ESTADO_COMPILACION: number = 4000 //ms
 
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private route: ActivatedRoute, private ptestS: PublishedTestService, private answerS: AnswerService) {
     super(session, router, data, userS);
@@ -49,13 +51,15 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
     this.pregunta = new Pregunta()
     this.test = new Examen()
     this.timeOver = false
+    this.resPruebas = new ResultadoPruebas()
     this.pruebas = []
     this.questionAnswer = {
       idPregunta: 0,
       idRespuesta: 0,
       puntuacion: 0,
       corregida: false,
-      respuesta: ""
+      respuesta: "",
+      estado: QuestionAnswer.EstadoEnum.NoProbado
     }
     this.newRespuesta = ""
     this.routeSub = this.route.params.subscribe(params => {
@@ -169,6 +173,12 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
         if (this.questionAnswer.indicesOpciones == undefined) {
           this.questionAnswer.indicesOpciones = []
         }
+        console.log(this.questionAnswer.estado)
+        if(this.questionAnswer.estado==QuestionAnswer.EstadoEnum.Probado){
+          this.getResultadoPruebas(true)
+        }else  if(this.questionAnswer.estado == QuestionAnswer.EstadoEnum.Ejecutando){
+          setTimeout(() => {this.getQuestionAnswersQuestion(true)}, this.TIEMPO_RECARGA_ESTADO_COMPILACION)
+        }
       },
       err => {
         if (err.status == 410) {
@@ -180,6 +190,16 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
           this.handleErrRelog(err, "obtener respuestas de una pregunta del test realizandose", primera, this.getQuestionAnswersQuestion, this)
         }
       }
+    )
+  }
+
+  getResultadoPruebas(primera: boolean){
+    if (this.openAnswer == undefined || this.openAnswer.id == undefined) return
+    this.answerS.getPreTesting(this.openAnswer.id, this.preguntaid).subscribe(
+      resp=>{
+        this.resPruebas = resp
+      },
+      err => this.handleErrRelog(err, "obtener resultado de pretesting de pruebas", primera, this.getResultadoPruebas, this)
     )
   }
 
@@ -208,6 +228,7 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
       resp => {
         //this.cambiarMensaje(new Mensaje("Respuesta actualizada con éxito", Tipo.SUCCESS, true))
         this.getOpenAnswer(true)
+        this.executePreTestingIfCode(true)
       },
       err => {
         this.handleErrRelog(err, "publicar nueva respuesta a una pregunta de test publicado", primera, this.postRespuesta, this)
@@ -221,11 +242,22 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
       resp => {
         this.cambiarMensaje(new Mensaje("Respuesta actualizada con éxito", Tipo.SUCCESS, true))
         this.getOpenAnswer(true)
+        this.executePreTestingIfCode(true)
       },
       err => {
         this.handleErrRelog(err, "modificar una respuesta a una pregunta de test publicado", primera, this.putRespuesta, this)
       }
     )
+  }
+
+  executePreTestingIfCode(primera: boolean){
+    if (this.openAnswer == undefined || this.openAnswer.id == undefined) return
+    if(this.pregunta.tipoPregunta==Question.TipoPreguntaEnum.Codigo){
+      this.answerS.createPreTesting(this.openAnswer.id, this.pregunta.id).subscribe(
+        resp => {},
+        err => this.handleErrRelog(err, "pedir la compilacion en backend de pretesting", primera, this.executePreTestingIfCode, this)
+      )
+    }
   }
 
 
@@ -369,6 +401,29 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
       },
       err => this.handleErrRelog(err, "obtener las pruebas visibles de una pregunta de codigo", primera, this.getPruebasVisibles, this)
     )
+  }
+
+  isVisibleEstadoEjecucion(): boolean{
+    return this.pregunta.isRespondida && this.questionAnswer.estado!=QuestionAnswer.EstadoEnum.NoProbado
+  }
+
+  isEstadoProbado(): boolean{
+    return this.questionAnswer.estado == QuestionAnswer.EstadoEnum.Probado
+  }
+
+  printEstado(): string{
+    switch(this.questionAnswer.estado){
+      case QuestionAnswer.EstadoEnum.Ejecutando:
+        return "Ejecutando..."
+      case QuestionAnswer.EstadoEnum.ErrorCompilacion:
+        return "Error de compilación"
+      case QuestionAnswer.EstadoEnum.Probado:
+        return "Compilado con éxito"
+      case QuestionAnswer.EstadoEnum.NoProbado:
+        return "No probado"
+      default:
+        return ""
+    }
   }
 
 }
