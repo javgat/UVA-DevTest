@@ -320,3 +320,27 @@ func DeleteReview(db *sql.DB, answerid int64, questionid int64) error {
 	}
 	return err
 }
+
+func SetQuestionAnswerEjecutando(db *sql.DB, answerid int64, questionid int64) error {
+	if db == nil {
+		return errors.New(errorDBNil)
+	}
+	query, err := db.Prepare("UPDATE RespuestaPregunta SET estado='ejecutando' WHERE respuestaExamenid=? AND preguntaid=?")
+	if err == nil {
+		defer query.Close()
+		_, err = query.Exec(answerid, questionid)
+	}
+	return err
+}
+
+func SetQuestionAnswerErrorCompilacion(db *sql.DB, answerid int64, questionid int64) error {
+	if db == nil {
+		return errors.New(errorDBNil)
+	}
+	query, err := db.Prepare("UPDATE RespuestaPregunta SET estado='errorCompilacion' WHERE respuestaExamenid=? AND preguntaid=?")
+	if err == nil {
+		defer query.Close()
+		_, err = query.Exec(answerid, questionid)
+	}
+	return err
+}

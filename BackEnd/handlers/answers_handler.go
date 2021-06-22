@@ -14,6 +14,7 @@ import (
 	"uva-devtest/permissions"
 	"uva-devtest/persistence/dao"
 	"uva-devtest/persistence/dbconnection"
+	"uva-devtest/probador"
 	"uva-devtest/restapi/operations/answer"
 
 	"github.com/go-openapi/runtime/middleware"
@@ -733,17 +734,86 @@ func GetQAnswerFromAnswerAndQuestion(params answer.GetQuestionAnswersFromAnswerA
 // GET /answers/{answerid}/qanswers/{questionid}/preTesting
 // Auth: CanAdminAnswers or User with testStarted or TestAdmin
 func GetPreTesting(params answer.GetPreTestingParams, u *models.User) middleware.Responder {
-
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		var ans *dao.Answer
+		ans, err = dao.GetAnswer(db, params.Answerid)
+		if err == nil {
+			if ans == nil {
+				return answer.NewGetPreTestingGone()
+			}
+			if permissions.CanAdminAnswers(u) || isTestOpenByUserAuth(u, ans.Testid) || isTestAdmin(u, ans.Testid) {
+				var t *dao.Testing
+				t, err = dao.GetPreTesting(db, params.Answerid, params.Questionid)
+				if err == nil {
+					mt := dao.ToModelTesting(t)
+					if err == nil {
+						return answer.NewGetPreTestingOK().WithPayload(mt)
+					}
+				}
+				log.Println("Error en GetPreTesting() ", err)
+				return answer.NewGetPreTestingInternalServerError()
+			}
+			return answer.NewGetPreTestingForbidden()
+		}
+	}
+	log.Println("Error en GetPreTesting() ", err)
+	return answer.NewGetPreTestingInternalServerError()
 }
 
 // PUT /answers/{answerid}/qanswers/{questionid}/preTesting
 // Auth: CanAdminAnswers or User with testStarted or TestAdmin
 func CreatePreTesting(params answer.CreatePreTestingParams, u *models.User) middleware.Responder {
-
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		var ans *dao.Answer
+		ans, err = dao.GetAnswer(db, params.Answerid)
+		if err == nil {
+			if ans == nil {
+				return answer.NewCreatePreTestingGone()
+			}
+			if permissions.CanAdminAnswers(u) || isTestOpenByUserAuth(u, ans.Testid) || isTestAdmin(u, ans.Testid) {
+				err = dao.SetQuestionAnswerEjecutando(db, params.Answerid, params.Questionid)
+				if err == nil {
+					go probador.ExecutePrePruebas(params.Answerid, params.Questionid)
+					return answer.NewCreatePreTestingOK()
+				}
+				log.Println("Error en CreatePreTesting() ", err)
+				return answer.NewCreatePreTestingInternalServerError()
+			}
+			return answer.NewCreatePreTestingForbidden()
+		}
+	}
+	log.Println("Error en CreatePreTesting() ", err)
+	return answer.NewCreatePreTestingInternalServerError()
 }
 
 // GET /answers/{answerid}/qanswers/{questionid}/fullTesting
 // Auth: CanAdminAnswers or TestAdmin
 func GetFullTesting(params answer.GetFullTestingParams, u *models.User) middleware.Responder {
-
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		var ans *dao.Answer
+		ans, err = dao.GetAnswer(db, params.Answerid)
+		if err == nil {
+			if ans == nil {
+				return answer.NewGetFullTestingGone()
+			}
+			if permissions.CanAdminAnswers(u) || isTestAdmin(u, ans.Testid) {
+				var t *dao.Testing
+				t, err = dao.GetFullTesting(db, params.Answerid, params.Questionid)
+				if err == nil {
+					mt := dao.ToModelTesting(t)
+					if err == nil {
+						return answer.NewGetFullTestingOK().WithPayload(mt)
+					}
+				}
+				log.Println("Error en GetFullTesting() ", err)
+				return answer.NewGetFullTestingInternalServerError()
+			}
+			return answer.NewGetFullTestingForbidden()
+		}
+	}
+	log.Println("Error en GetFullTesting() ", err)
+	return answer.NewGetFullTestingInternalServerError()
 }

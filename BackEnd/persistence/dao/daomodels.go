@@ -645,3 +645,10 @@ type Testing struct {
 	// Required: true
 	PruebasTotales *int64 `json:"pruebasTotales"`
 }
+
+const (
+	EstadoEjecucionCorrecto         = "correcto"
+	EstadoEjecucionTiempoExcedido   = "tiempoExcedido"
+	EstadoEjecucionErrorRuntime     = "errorRuntime"
+	EstadoEjecucionSalidaIncorrecta = "salidaIncorrecta"
+)

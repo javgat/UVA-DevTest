@@ -343,7 +343,7 @@ CREATE TABLE Ejecucion(
   pruebaid int(11) NOT NULL,
   respuestaExamenid int(11) NOT NULL,
   preguntaid int(11) NOT NULL,
-  estado ENUM('correcto', 'tiempoExcedido', 'errorEjecucion', 'salidaIncorrecta'),
+  estado ENUM('correcto', 'tiempoExcedido', 'errorRuntime', 'salidaIncorrecta'),
   FOREIGN KEY(pruebaid) REFERENCES Prueba(id) ON DELETE CASCADE,
   CONSTRAINT fk_EjRespPreg
     FOREIGN KEY(respuestaExamenid, preguntaid)
