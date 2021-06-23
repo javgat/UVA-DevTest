@@ -100,6 +100,7 @@ export class QanswerComponent extends LoggedInController implements OnInit {
         this.qa = new RespuestaPregunta(resp)
         this.recargarEditorCodigo()
         this.editPuntuacion = this.qa.puntuacion
+        this.getResultadoPruebas()
       },
       err => this.handleErrRelog(err, "obtener respuesta de una pregunta", primera, this.getQAnswer, this)
     )
@@ -283,12 +284,29 @@ export class QanswerComponent extends LoggedInController implements OnInit {
     )
   }
 
-  getResultadoPruebas(primera: boolean){
+  getResultadoPruebas(){
+    if(this.isModoTestAdmin() || this.getSessionUser().isAdmin()){
+      this.getFullResultadoPruebas(true)
+    }else{
+      this.getPreResultadoPruebas(true)
+    }
+  }
+
+  getPreResultadoPruebas(primera: boolean){
+    this.answerS.getPreTesting(this.answerid, this.questionid).subscribe(
+      resp=>{
+        this.resPruebas = resp
+      },
+      err => this.handleErrRelog(err, "obtener resultado de pretesting de pruebas", primera, this.getPreResultadoPruebas, this)
+    )
+  }
+
+  getFullResultadoPruebas(primera: boolean){
     this.answerS.getFullTesting(this.answerid, this.questionid).subscribe(
       resp=>{
         this.resPruebas = resp
       },
-      err => this.handleErrRelog(err, "obtener resultado de fulltesting de pruebas", primera, this.getResultadoPruebas, this)
+      err => this.handleErrRelog(err, "obtener resultado de fulltesting de pruebas", primera, this.getFullResultadoPruebas, this)
     )
   }
 

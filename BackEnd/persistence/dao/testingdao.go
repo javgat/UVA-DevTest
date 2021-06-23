@@ -21,8 +21,12 @@ type EjecucionTesting struct {
 // Return *models.Testing: Testing represented in rows
 // Return error if something happens
 func rowsToTesting(rows *sql.Rows) (*Testing, error) {
-	var t *Testing
-	*t.PruebasTotales = 0
+	var sup int64 = 0
+	var tot int64 = 0
+	var t *Testing = &Testing{
+		PruebasSuperadas: &sup,
+		PruebasTotales:   &tot,
+	}
 	//var ejs []*EjecucionTesting
 	for rows.Next() {
 		var ej EjecucionTesting
