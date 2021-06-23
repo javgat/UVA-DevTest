@@ -28,6 +28,7 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
   test: Examen
   timeOver: boolean
   pruebas: Prueba[]
+  isMostrandoPruebas: boolean
   resPruebas: ResultadoPruebas
 
   theme = 'vs-dark';
@@ -45,6 +46,7 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private route: ActivatedRoute, private ptestS: PublishedTestService, private answerS: AnswerService) {
     super(session, router, data, userS);
     this.modificandoRespuesta = false
+    this.isMostrandoPruebas = false
     this.testid = 0
     this.preguntaid = 0
     this.options = []
@@ -424,6 +426,14 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
       default:
         return ""
     }
+  }
+
+  isMostrarPruebas(): boolean{
+    return this.isMostrandoPruebas
+  }
+
+  switchMostrarPruebas(){
+    this.isMostrandoPruebas = !this.isMostrandoPruebas
   }
 
 }

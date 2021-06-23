@@ -28,6 +28,7 @@ export class QanswerComponent extends LoggedInController implements OnInit {
   test: Test
   theme = 'vs-dark';
   codeModel: CodeModel
+  isMostrandoPruebas: boolean
 
   pruebas: Prueba[]
   resPruebas: ResultadoPruebas
@@ -46,6 +47,7 @@ export class QanswerComponent extends LoggedInController implements OnInit {
     this.answerid = 0
     this.isInAdminTeam = false
     this.options = []
+    this.isMostrandoPruebas = false
     this.question = new Pregunta()
     this.pruebas = []
     this.resPruebas = new ResultadoPruebas()
@@ -311,6 +313,14 @@ export class QanswerComponent extends LoggedInController implements OnInit {
       default:
         return ""
     }
+  }
+
+  isMostrarPruebas(): boolean{
+    return this.isMostrandoPruebas
+  }
+
+  switchMostrarPruebas(){
+    this.isMostrandoPruebas = !this.isMostrandoPruebas
   }
 
 }
