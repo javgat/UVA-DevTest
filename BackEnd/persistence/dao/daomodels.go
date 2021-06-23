@@ -656,3 +656,11 @@ const (
 	EstadoEjecucionErrorRuntime     = "errorRuntime"
 	EstadoEjecucionSalidaIncorrecta = "salidaIncorrecta"
 )
+
+type Ejecucion struct {
+	Pruebaid          *int64
+	RespuestaExamenid *int64
+	Preguntaid        *int64
+	Estado            *string
+	SalidaReal        *string
+}

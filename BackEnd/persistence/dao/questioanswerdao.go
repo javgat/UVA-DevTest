@@ -60,15 +60,14 @@ func rowsToQuestionAnswers(rows *sql.Rows) ([]*QuestionAnswer, error) {
 	var qas []*QuestionAnswer
 	for rows.Next() {
 		var qa QuestionAnswer
-		var errCompST string
-		var errComp *string = &errCompST
-		err := rows.Scan(&qa.IDRespuesta, &qa.IDPregunta, &qa.Puntuacion, &qa.Corregida, &qa.Respuesta, &qa.Estado, errComp)
+		var errComp sql.NullString
+		err := rows.Scan(&qa.IDRespuesta, &qa.IDPregunta, &qa.Puntuacion, &qa.Corregida, &qa.Respuesta, &qa.Estado, &errComp)
 		if err != nil {
 			log.Print(err)
 			return qas, err
 		}
-		if errComp != nil {
-			qa.ErrorCompilacion = *errComp
+		if errComp.Valid {
+			qa.ErrorCompilacion = errComp.String
 		} else {
 			qa.ErrorCompilacion = ""
 		}
@@ -349,6 +348,18 @@ func SetQuestionAnswerErrorCompilacion(db *sql.DB, errorCompilacion *string, ans
 	if err == nil {
 		defer query.Close()
 		_, err = query.Exec(errorCompilacion, answerid, questionid)
+	}
+	return err
+}
+
+func SetQuestionAnswerProbado(db *sql.DB, answerid int64, questionid int64) error {
+	if db == nil {
+		return errors.New(errorDBNil)
+	}
+	query, err := db.Prepare("UPDATE RespuestaPregunta SET estado='probado' WHERE respuestaExamenid=? AND preguntaid=?")
+	if err == nil {
+		defer query.Close()
+		_, err = query.Exec(answerid, questionid)
 	}
 	return err
 }
