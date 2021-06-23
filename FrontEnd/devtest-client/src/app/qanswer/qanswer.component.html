@@ -144,14 +144,32 @@
             </div>
             <div *ngIf="isVisibleEstadoEjecucion()" class="my-3">
                 <h4>Ejecucion de las Pruebas:</h4>
-                <p><b>Estado: </b>{{printEstado()}}<span *ngIf="isErrorCompilacion()">: {{getErrorCompilacionString()}}</span></p>
+                <p><b>Estado: </b>{{printEstado()}}<span *ngIf="isErrorCompilacion()">:</span></p>
+                <div class="card  text-white bg-danger" *ngIf="isErrorCompilacion()">
+                    <div class="card-body">
+                        <p class="card-text" style="white-space: pre-line">{{getErrorCompilacionString()}}</p>
+                    </div>
+                </div>
                 <p *ngIf="isEstadoProbado()"><b>Pruebas superadas: </b>{{resPruebas.pruebasSuperadas}} /
                     {{resPruebas.pruebasTotales}}</p>
             </div>
-            <div class="mt-3">
-            <button class="btn btn-primary btn-lg" type="button" (click)="switchMostrarPruebas()">
-                <span  *ngIf="!isMostrarPruebas()">Mostrar</span><span *ngIf="isMostrarPruebas()">Ocultar</span> Pruebas
-            </button>
+            <div class="my-3 col-md-12 text-center">
+                <button class="btn btn-primary btn-lg" type="button" (click)="switchMostrarPruebas()">
+                    <span *ngIf="!isMostrarPruebas()">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
+                            fill="currentColor">
+                            <path d="M0 0h24v24H0z" fill="none" />
+                            <path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z" />
+                        </svg>
+                        Mostrar</span>
+                    <span *ngIf="isMostrarPruebas()">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
+                            fill="currentColor">
+                            <path d="M0 0h24v24H0z" fill="none" />
+                            <path d="M12 8l-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14z" />
+                        </svg>
+                        Ocultar</span> Pruebas Visibles
+                </button>
             </div>
             <div class="mt-3" *ngIf="isMostrarPruebas()">
                 <h4>Pruebas:</h4>
