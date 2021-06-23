@@ -323,4 +323,11 @@ export class QanswerComponent extends LoggedInController implements OnInit {
     this.isMostrandoPruebas = !this.isMostrandoPruebas
   }
 
+  isErrorCompilacion(): boolean{
+    return this.qa.estado == QuestionAnswer.EstadoEnum.ErrorCompilacion
+  }
+
+  getErrorCompilacionString(): string{
+    return this.qa.errorCompilacion || ""
+  }
 }

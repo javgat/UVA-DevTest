@@ -135,7 +135,7 @@
         </div>
         <div *ngIf="isVisibleEstadoEjecucion()" class="my-3">
             <h4>Ejecucion de las Pruebas:</h4>
-            <p><b>Estado: </b>{{printEstado()}}</p>
+            <p><b>Estado: </b>{{printEstado()}}<span *ngIf="isErrorCompilacion()">: {{getErrorCompilacionString()}}</span></p>
             <p *ngIf="isEstadoProbado()"><b>Pruebas superadas: </b>{{resPruebas.pruebasSuperadas}} / {{resPruebas.pruebasTotales}}</p>
         </div>
 

@@ -436,4 +436,11 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
     this.isMostrandoPruebas = !this.isMostrandoPruebas
   }
 
+  isErrorCompilacion(): boolean{
+    return this.questionAnswer.estado == QuestionAnswer.EstadoEnum.ErrorCompilacion
+  }
+
+  getErrorCompilacionString(): string{
+    return this.questionAnswer.errorCompilacion || ""
+  }
 }

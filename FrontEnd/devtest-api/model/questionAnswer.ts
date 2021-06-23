@@ -23,6 +23,7 @@ export interface QuestionAnswer {
     indicesOpciones?: Array<number>;
     username?: string;
     estado?: QuestionAnswer.EstadoEnum;
+    errorCompilacion?: string;
 }
 export namespace QuestionAnswer {
     export type EstadoEnum = 'noProbado' | 'errorCompilacion' | 'ejecutando' | 'probado';

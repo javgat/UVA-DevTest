@@ -16,7 +16,8 @@ func ExecutePrePruebas(answerid int64, questionid int64) {
 	// STUB ACTION: errorCompilacion
 	db, err := dbconnection.ConnectDb()
 	if err == nil {
-		err = dao.SetQuestionAnswerErrorCompilacion(db, answerid, questionid)
+		errorComp := "Operaciones STUB"
+		err = dao.SetQuestionAnswerErrorCompilacion(db, &errorComp, answerid, questionid)
 	}
 
 	if err != nil {
@@ -28,7 +29,8 @@ func ExecuteFullPruebas(answerid int64, questionid int64) {
 	// STUB ACTION: errorCompilacion
 	db, err := dbconnection.ConnectDb()
 	if err == nil {
-		err = dao.SetQuestionAnswerErrorCompilacion(db, answerid, questionid)
+		errorComp := "Operaciones STUB"
+		err = dao.SetQuestionAnswerErrorCompilacion(db, &errorComp, answerid, questionid)
 		if err == nil {
 			var puntuacion int64 = 0
 			review := &models.Review{

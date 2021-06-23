@@ -339,6 +339,7 @@ export class RespuestaPregunta implements QuestionAnswer{
     indicesOpciones: number[];
     username: string;
     estado: QuestionAnswer.EstadoEnum;
+    errorCompilacion: string;
     constructor(qa?: QuestionAnswer){
         this.idPregunta = qa?.idPregunta || 0
         this.idRespuesta = qa?.idRespuesta || 0
@@ -348,6 +349,7 @@ export class RespuestaPregunta implements QuestionAnswer{
         this.indicesOpciones = qa?.indicesOpciones || []
         this.username = qa?.username || ""
         this.estado = qa?.estado || QuestionAnswer.EstadoEnum.NoProbado
+        this.errorCompilacion = qa?.errorCompilacion || ""
     }
 
 }

@@ -11356,6 +11356,10 @@ func init() {
           "type": "boolean",
           "example": true
         },
+        "errorCompilacion": {
+          "type": "string",
+          "example": "Error line 4 missing ';'"
+        },
         "estado": {
           "type": "string",
           "default": "noProbado",
@@ -24912,6 +24916,10 @@ func init() {
         "corregida": {
           "type": "boolean",
           "example": true
+        },
+        "errorCompilacion": {
+          "type": "string",
+          "example": "Error line 4 missing ';'"
         },
         "estado": {
           "type": "string",

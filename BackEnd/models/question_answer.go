@@ -25,6 +25,10 @@ type QuestionAnswer struct {
 	// Required: true
 	Corregida *bool `json:"corregida"`
 
+	// error compilacion
+	// Example: Error line 4 missing ';'
+	ErrorCompilacion string `json:"errorCompilacion,omitempty"`
+
 	// estado
 	// Enum: [noProbado errorCompilacion ejecutando probado]
 	Estado *string `json:"estado,omitempty"`

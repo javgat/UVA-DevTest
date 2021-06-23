@@ -7554,6 +7554,9 @@ definitions:
         type: string
         enum: [noProbado, errorCompilacion, ejecutando, probado]
         default: noProbado
+      errorCompilacion:
+        type: string
+        example: Error line 4 missing ';'
 
   Tag:
     type: object

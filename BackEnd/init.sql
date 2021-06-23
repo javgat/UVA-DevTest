@@ -307,6 +307,7 @@ CREATE TABLE RespuestaPregunta(
   corregida boolean NOT NULL,
   respuesta longtext COLLATE utf8_unicode_ci,
   estado ENUM('noProbado', 'errorCompilacion', 'ejecutando', 'probado') NOT NULL,
+  errorCompilacion longtext COLLATE utf8_unicode_ci,
   CONSTRAINT CHK_puntuacion CHECK (puntuacion>=-100 AND puntuacion<=100),
   FOREIGN KEY(respuestaExamenid) REFERENCES RespuestaExamen(id) ON DELETE CASCADE,
   FOREIGN KEY(preguntaid) REFERENCES Pregunta(id) ON DELETE CASCADE,
@@ -344,6 +345,7 @@ CREATE TABLE Ejecucion(
   respuestaExamenid int(11) NOT NULL,
   preguntaid int(11) NOT NULL,
   estado ENUM('correcto', 'tiempoExcedido', 'errorRuntime', 'salidaIncorrecta'),
+  salidaReal longtext COLLATE utf8_unicode_ci,
   FOREIGN KEY(pruebaid) REFERENCES Prueba(id) ON DELETE CASCADE,
   CONSTRAINT fk_EjRespPreg
     FOREIGN KEY(respuestaExamenid, preguntaid)
