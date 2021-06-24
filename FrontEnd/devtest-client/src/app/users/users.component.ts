@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '@javgat/devtest-api';
-import { LoggedInController } from '../shared/app.controller';
+import { LoggedInController, LoggedInTeacherController } from '../shared/app.controller';
 import { DataService } from '../shared/data.service';
 import { SessionService } from '../shared/session.service';
 
@@ -10,7 +10,7 @@ import { SessionService } from '../shared/session.service';
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.css']
 })
-export class UsersComponent extends LoggedInController implements OnInit {
+export class UsersComponent extends LoggedInTeacherController implements OnInit {
 
 
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private route: ActivatedRoute) {
