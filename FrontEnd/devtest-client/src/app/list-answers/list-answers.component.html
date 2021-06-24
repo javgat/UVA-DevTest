@@ -75,7 +75,8 @@
                     <td><span *ngIf="ans.entregado">Sí</span><span *ngIf="!ans.entregado">No</span></td>
                     <td>{{printDate(ans.startTime)}}</td>
                     <td><span *ngIf="ans.entregado">{{printDate(ans.finishTime)}}</span></td>
-                    <td>{{printDuracion(ans.startTime, ans.finishTime)}}</td>
+                    <td *ngIf="ans.entregado">{{printDuracion(ans.startTime, ans.finishTime)}}</td>
+                    <td *ngIf="!ans.entregado">--</td>
                     <td>{{ans.puntuacion || "--"}}</td>
                     <td *ngIf="modoUsuario()"><span *ngIf="ans.visibleParaUsuario">Sí</span><span
                             *ngIf="!ans.visibleParaUsuario">No</span></td>
@@ -85,7 +86,8 @@
                     <td><span *ngIf="ans.entregado">Sí</span><span *ngIf="!ans.entregado">No</span></td>
                     <td>{{printDate(ans.startTime)}}</td>
                     <td><span *ngIf="ans.entregado">{{printDate(ans.finishTime)}}</span></td>
-                    <td>{{printDuracion(ans.startTime, ans.finishTime)}}</td>
+                    <td *ngIf="ans.entregado">{{printDuracion(ans.startTime, ans.finishTime)}}</td>
+                    <td *ngIf="!ans.entregado">--</td>
                     <td>{{ans.puntuacion || "--"}}</td>
                     <td *ngIf="modoUsuario()"><span *ngIf="ans.visibleParaUsuario">Sí</span><span
                             *ngIf="!ans.visibleParaUsuario">No</span></td>
