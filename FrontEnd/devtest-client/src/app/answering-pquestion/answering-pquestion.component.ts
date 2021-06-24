@@ -31,6 +31,7 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
   isMostrandoPruebas: boolean
   resPruebas: ResultadoPruebas
   collapsedPruebaIds: Set<number>
+  isEsperandoEjecucion: boolean
   theme = 'vs-dark';
 
   codeModel: CodeModel
@@ -49,6 +50,7 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
     this.testid = 0
     this.preguntaid = 0
     this.collapsedPruebaIds = new Set()
+    this.isEsperandoEjecucion = false
     this.options = []
     this.pregunta = new Pregunta()
     this.test = new Examen()
@@ -169,17 +171,23 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
       resp => {
         this.pregunta.isRespondida = true
         this.questionAnswer = resp
-        this.newRespuesta = this.questionAnswer.respuesta || ""
-        this.recargarEditorCodigo()
+        if(!this.isEsperandoEjecucion){
+          this.newRespuesta = this.questionAnswer.respuesta || ""
+          this.recargarEditorCodigo()
+        }
         this.questionAnswer.idPregunta = this.preguntaid
         if (this.questionAnswer.indicesOpciones == undefined) {
           this.questionAnswer.indicesOpciones = []
         }
         console.log(this.questionAnswer.estado)
-        if(this.questionAnswer.estado==QuestionAnswer.EstadoEnum.Probado){
-          this.getResultadoPruebas(true)
-        }else  if(this.questionAnswer.estado == QuestionAnswer.EstadoEnum.Ejecutando){
+        if(this.questionAnswer.estado == QuestionAnswer.EstadoEnum.Ejecutando){
+          this.isEsperandoEjecucion = true
           setTimeout(() => {this.getQuestionAnswersQuestion(true)}, this.TIEMPO_RECARGA_ESTADO_COMPILACION)
+        }else{
+          this.isEsperandoEjecucion = false
+          if(this.questionAnswer.estado==QuestionAnswer.EstadoEnum.Probado){
+            this.getResultadoPruebas(true)
+          }
         }
         this.getPruebasVisibles(true)
       },
