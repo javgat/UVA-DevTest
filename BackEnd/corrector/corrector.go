@@ -41,14 +41,14 @@ func executePruebas(answerid int64, questionid int64, isPostEntrega bool) {
 					if err == nil {
 						err = writeCodeProgram(qa.Respuesta, sharedDir)
 						if err == nil {
-							err = execDocker(sharedDir)
+							err = dao.DeleteEjecuciones(db, answerid, questionid)
 							if err == nil {
-								var errsComp string
-								errsComp, err = readCompilationErrors(sharedDir)
+								err = execDocker(sharedDir)
 								if err == nil {
-									var puntuacion int64 = 0
-									err = dao.DeleteEjecuciones(db, answerid, questionid)
+									var errsComp string
+									errsComp, err = readCompilationErrors(sharedDir)
 									if err == nil {
+										var puntuacion int64 = 0
 										if errsComp == "" {
 											for _, p := range ps {
 												if !*p.PostEntrega || isPostEntrega {
@@ -90,6 +90,7 @@ func executePruebas(answerid int64, questionid int64, isPostEntrega bool) {
 									}
 								}
 							}
+
 						}
 					}
 				}
