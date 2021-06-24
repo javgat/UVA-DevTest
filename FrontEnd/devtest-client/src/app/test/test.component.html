@@ -207,7 +207,7 @@
             </div>
         </form>
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#changePositionModal"
-            (click)="prepareModalPosPreguntas()">Modificar orden de preguntas</button>
+            (click)="prepareModalPosPreguntas()" *ngIf="checkPermisosEdicion()">Modificar orden de preguntas</button>
         <div class="table-responsive">
             <table class="table table-striped table-hover table-primary my-3">
                 <thead>
@@ -218,7 +218,7 @@
                         <th>Tiempo Estimado</th>
                         <th>Tipo</th>
                         <th>Valor en test</th>
-                        <th></th>
+                        <th *ngIf="checkPermisosEdicion()"></th>
                     </tr>
                 </thead>
                 <tbody>
