@@ -684,7 +684,7 @@ func GetQAnswerFromAnswerAndQuestion(params answer.GetQuestionAnswersFromAnswerA
 }
 
 // GET /answers/{answerid}/qanswers/{questionid}/preTesting
-// Auth: CanAdminAnswers or User with testStarted or TestAdmin
+// Auth: CanAdminAnswers or User with testAnswered or TestAdmin
 func GetPreTesting(params answer.GetPreTestingParams, u *models.User) middleware.Responder {
 	db, err := dbconnection.ConnectDb()
 	if err == nil {
@@ -694,7 +694,7 @@ func GetPreTesting(params answer.GetPreTestingParams, u *models.User) middleware
 			if ans == nil {
 				return answer.NewGetPreTestingGone()
 			}
-			if permissions.CanAdminAnswers(u) || isTestOpenByUserAuth(u, ans.Testid) || isTestAdmin(u, ans.Testid) {
+			if permissions.CanAdminAnswers(u) || isTestAnsweredByUserAuth(u, ans.Testid) || isTestAdmin(u, ans.Testid) {
 				var t *dao.Testing
 				t, err = dao.GetPreTesting(db, params.Answerid, params.Questionid)
 				if err == nil {
@@ -826,8 +826,7 @@ func GetVisiblePublishedPruebas(params answer.GetVisiblePublishedPruebasFromQues
 					var ps []*dao.Prueba
 					ps, err = dao.GetVisiblePublishedPruebasQuestion(db, params.Questionid, params.Answerid)
 					if err == nil {
-						var mps []*models.Prueba
-						mps = dao.ToModelPruebas(ps)
+						mps := dao.ToModelPruebas(ps)
 						return answer.NewGetVisiblePublishedPruebasFromQuestionTestOK().WithPayload(mps)
 					}
 				}

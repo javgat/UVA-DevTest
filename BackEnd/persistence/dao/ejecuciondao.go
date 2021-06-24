@@ -33,3 +33,15 @@ func SaveEjecucion(db *sql.DB, ej *Ejecucion) error {
 	}
 	return err
 }
+
+func DeleteEjecuciones(db *sql.DB, answerid int64, questionid int64) error {
+	if db == nil {
+		return errors.New(errorDBNil)
+	}
+	query, err := db.Prepare("DELETE FROM Ejecucion WHERE respuestaExamenid=? AND preguntaid=? ")
+	if err == nil {
+		defer query.Close()
+		_, err = query.Exec(answerid, questionid)
+	}
+	return err
+}

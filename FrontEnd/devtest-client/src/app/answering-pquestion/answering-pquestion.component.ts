@@ -181,6 +181,7 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
         }else  if(this.questionAnswer.estado == QuestionAnswer.EstadoEnum.Ejecutando){
           setTimeout(() => {this.getQuestionAnswersQuestion(true)}, this.TIEMPO_RECARGA_ESTADO_COMPILACION)
         }
+        this.getPruebasVisibles(true)
       },
       err => {
         if (err.status == 410) {
@@ -480,7 +481,7 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
       case Prueba.EstadoEnum.TiempoExcedido:
         return "Tiempo límite de ejecución sobrepasado"
       default:
-        return "Error"
+        return "No ejecutada"
     }
   }
 }

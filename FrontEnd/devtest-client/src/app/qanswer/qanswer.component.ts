@@ -390,7 +390,7 @@ export class QanswerComponent extends LoggedInController implements OnInit {
       case Prueba.EstadoEnum.TiempoExcedido:
         return "Tiempo límite de ejecución sobrepasado"
       default:
-        return "Error"
+        return "No ejecutada"
     }
   }
 }

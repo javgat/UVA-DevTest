@@ -293,6 +293,30 @@ func isTestOpenByUserAuth(u *models.User, testid int64) bool {
 	return false
 }
 
+func isTestAnsweredByUser(u *models.User, testid int64) (bool, error) {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		var t *dao.Test
+		t, err = dao.GetATestFromUser(db, *u.Username, testid)
+		if err == nil {
+			isTestAnswered := t != nil
+			return isTestAnswered, nil
+		}
+	}
+	return false, err
+}
+
+func isTestAnsweredByUserAuth(u *models.User, testid int64) bool {
+	if u == nil {
+		return false
+	}
+	b, e := isTestAnsweredByUser(u, testid)
+	if e == nil {
+		return b
+	}
+	return false
+}
+
 func hasAnswerVisible(u *models.User, testid int64) (bool, error) {
 	db, err := dbconnection.ConnectDb()
 	if err == nil {

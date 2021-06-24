@@ -47,43 +47,46 @@ func executePruebas(answerid int64, questionid int64, isPostEntrega bool) {
 								errsComp, err = readCompilationErrors(sharedDir)
 								if err == nil {
 									var puntuacion int64 = 0
-									if errsComp == "" {
-										for _, p := range ps {
-											if !*p.PostEntrega || isPostEntrega {
-												var ej *dao.Ejecucion
-												ej, err = readPruebaInput(p, answerid, questionid, sharedDir)
-												if err == nil {
-													var est string
-													sumaValores += *p.Valor
-													if *ej.SalidaReal == *p.Salida {
-														est = dao.EstadoEjecucionCorrecto
-														valoresObtenidos += *p.Valor
-													} else {
-														est = dao.EstadoEjecucionSalidaIncorrecta
+									err = dao.DeleteEjecuciones(db, answerid, questionid)
+									if err == nil {
+										if errsComp == "" {
+											for _, p := range ps {
+												if !*p.PostEntrega || isPostEntrega {
+													var ej *dao.Ejecucion
+													ej, err = readPruebaInput(p, answerid, questionid, sharedDir)
+													if err == nil {
+														var est string
+														sumaValores += *p.Valor
+														if *ej.SalidaReal == *p.Salida {
+															est = dao.EstadoEjecucionCorrecto
+															valoresObtenidos += *p.Valor
+														} else {
+															est = dao.EstadoEjecucionSalidaIncorrecta
+														}
+														ej.Estado = &est
+														err = dao.SaveEjecucion(db, ej)
 													}
-													ej.Estado = &est
-													err = dao.SaveEjecucion(db, ej)
+												}
+												if err != nil {
+													break
 												}
 											}
-											if err != nil {
-												break
+											err = dao.SetQuestionAnswerProbado(db, answerid, questionid)
+											if sumaValores > 0 {
+												puntuacion = (valoresObtenidos * 100) / sumaValores
+											} else {
+												puntuacion = 0
 											}
-										}
-										err = dao.SetQuestionAnswerProbado(db, answerid, questionid)
-										if sumaValores > 0 {
-											puntuacion = (valoresObtenidos * 100) / sumaValores
 										} else {
+											err = dao.SetQuestionAnswerErrorCompilacion(db, &errsComp, answerid, questionid)
 											puntuacion = 0
 										}
-									} else {
-										err = dao.SetQuestionAnswerErrorCompilacion(db, &errsComp, answerid, questionid)
-										puntuacion = 0
-									}
-									if err == nil && isPostEntrega {
-										review := &models.Review{
-											Puntuacion: &puntuacion,
+										if err == nil && isPostEntrega {
+											review := &models.Review{
+												Puntuacion: &puntuacion,
+											}
+											err = UpdateReview(answerid, questionid, review)
 										}
-										err = UpdateReview(answerid, questionid, review)
 									}
 								}
 							}
