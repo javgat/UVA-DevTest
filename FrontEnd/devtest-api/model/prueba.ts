@@ -19,4 +19,21 @@ export interface Prueba {
     visible: boolean;
     postEntrega: boolean;
     valor: number;
+    /**
+     * actual output of the questionanswer executed. Only in getPublishedPruebas and getVisiblePublishedPruebas.
+     */
+    salidaReal?: string;
+    /**
+     * Only in getPublishedPruebas and getVisiblePublishedPruebas.
+     */
+    estado?: Prueba.EstadoEnum;
+}
+export namespace Prueba {
+    export type EstadoEnum = 'correcto' | 'tiempoExcedido' | 'errorRuntime' | 'salidaIncorrecta';
+    export const EstadoEnum = {
+        Correcto: 'correcto' as EstadoEnum,
+        TiempoExcedido: 'tiempoExcedido' as EstadoEnum,
+        ErrorRuntime: 'errorRuntime' as EstadoEnum,
+        SalidaIncorrecta: 'salidaIncorrecta' as EstadoEnum
+    };
 }

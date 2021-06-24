@@ -769,3 +769,71 @@ func GetFullTesting(params answer.GetFullTestingParams, u *models.User) middlewa
 	log.Println("Error en GetFullTesting() ", err)
 	return answer.NewGetFullTestingInternalServerError()
 }
+
+// GetPublishedPruebas GET /answers/{answerid}/questions/{questionid}/pruebas
+// Auth: TestAdmin or CanAdminPTests
+func GetPublishedPruebas(params answer.GetPublishedPruebasFromQuestionTestParams, u *models.User) middleware.Responder {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		var a *dao.Answer
+		a, err = dao.GetAnswer(db, params.Answerid)
+		if err == nil && a != nil {
+			var ts *dao.Test
+			ts, err = dao.GetTest(db, a.Testid)
+			if err == nil && ts != nil {
+				if !(permissions.CanAdminPTests(u) || isTestAdmin(u, ts.ID)) {
+					return answer.NewGetPublishedPruebasFromQuestionTestForbidden()
+				}
+				var qs *dao.Question
+				qs, err = dao.GetQuestionFromTest(db, ts.ID, params.Questionid)
+				if err == nil && qs != nil {
+					var ps []*dao.Prueba
+					ps, err = dao.GetPublishedPruebasQuestion(db, params.Questionid, params.Answerid)
+					if err == nil {
+						var mps []*models.Prueba
+						mps = dao.ToModelPruebas(ps)
+						return answer.NewGetPublishedPruebasFromQuestionTestOK().WithPayload(mps)
+					}
+				}
+				return answer.NewGetPublishedPruebasFromQuestionTestGone()
+			}
+		}
+	}
+	return answer.NewGetPublishedPruebasFromQuestionTestInternalServerError()
+}
+
+// GetVisiblePublishedPruebas GET /answers/{answerid}/questions/{questionid}/visiblePruebas
+// Auth: CanVerPTests if accesoPublico, else: TestInvited, TestAdmin or CanAdminPTests
+func GetVisiblePublishedPruebas(params answer.GetVisiblePublishedPruebasFromQuestionTestParams, u *models.User) middleware.Responder {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		var a *dao.Answer
+		a, err = dao.GetAnswer(db, params.Answerid)
+		if err == nil && a != nil {
+			var ts *dao.Test
+			ts, err = dao.GetPublishedTest(db, a.Testid)
+			if err == nil && ts != nil {
+				if !*ts.AccesoPublico {
+					if !(permissions.CanAdminPTests(u) || isTestAdmin(u, ts.ID) || isTestInvited(u, ts.ID)) {
+						return answer.NewGetVisiblePublishedPruebasFromQuestionTestForbidden()
+					}
+				} else if !permissions.CanVerPTests(u) {
+					return answer.NewGetVisiblePublishedPruebasFromQuestionTestForbidden()
+				}
+				var qs *dao.Question
+				qs, err = dao.GetQuestionFromTest(db, ts.ID, params.Questionid)
+				if err == nil && qs != nil {
+					var ps []*dao.Prueba
+					ps, err = dao.GetVisiblePublishedPruebasQuestion(db, params.Questionid, params.Answerid)
+					if err == nil {
+						var mps []*models.Prueba
+						mps = dao.ToModelPruebas(ps)
+						return answer.NewGetVisiblePublishedPruebasFromQuestionTestOK().WithPayload(mps)
+					}
+				}
+				return answer.NewGetVisiblePublishedPruebasFromQuestionTestGone()
+			}
+		}
+	}
+	return answer.NewGetVisiblePublishedPruebasFromQuestionTestInternalServerError()
+}

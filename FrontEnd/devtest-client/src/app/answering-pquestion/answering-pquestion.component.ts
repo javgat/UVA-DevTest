@@ -397,11 +397,25 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
   }
 
   getPruebasVisibles(primera: boolean){
+    if(this.openAnswer==undefined || this.openAnswer.id==undefined) return
+    this.answerS.getVisiblePublishedPruebasFromQuestionTest(this.openAnswer.id, this.questionAnswer.idPregunta).subscribe(
+      resp => {
+        this.pruebas = resp
+        if(this.pruebas.length==0){
+          this.geUndonetVisiblePruebas(true)
+        }
+      },
+      err => this.handleErrRelog(err, "obtener las pruebas visibles de una pregunta de codigo", primera, this.getPruebasVisibles, this)
+    )
+  }
+
+  geUndonetVisiblePruebas(primera: boolean){
+    if (this.testid == undefined) return
     this.ptestS.getVisiblePruebasFromQuestionTest(this.testid, this.questionAnswer.idPregunta).subscribe(
       resp => {
         this.pruebas = resp
       },
-      err => this.handleErrRelog(err, "obtener las pruebas visibles de una pregunta de codigo", primera, this.getPruebasVisibles, this)
+      err => this.handleErrRelog(err, "obtener pruebas visibles de respuesta de pregunta", primera, this.geUndonetVisiblePruebas, this)
     )
   }
 
@@ -442,5 +456,31 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
 
   getErrorCompilacionString(): string{
     return this.questionAnswer.errorCompilacion || ""
+  }
+
+  showEvaluation(): boolean {
+    return true
+  }
+
+  isPruebaSuperada(pruebaid: number | undefined): boolean {
+    if (pruebaid == undefined) return false
+    let ps = this.pruebas.filter((p) =>{return p.id == pruebaid})
+    if(ps.length<1) return false
+    return ps[0].estado == Prueba.EstadoEnum.Correcto
+  }
+
+  printEstadoPrueba(estado: string | undefined): string{
+    switch(estado){
+      case Prueba.EstadoEnum.Correcto:
+        return "Superada"
+      case Prueba.EstadoEnum.ErrorRuntime:
+        return "Error en tiempo de ejecución"
+      case Prueba.EstadoEnum.SalidaIncorrecta:
+        return "Salida incorrecta"
+      case Prueba.EstadoEnum.TiempoExcedido:
+        return "Tiempo límite de ejecución sobrepasado"
+      default:
+        return "Error"
+    }
   }
 }

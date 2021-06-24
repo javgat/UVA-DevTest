@@ -316,7 +316,7 @@ bg=yellow</panel_attributes>
     <coordinates>
       <x>780</x>
       <y>50</y>
-      <w>230</w>
+      <w>220</w>
       <h>160</h>
     </coordinates>
     <panel_attributes>*Answer*
@@ -401,8 +401,8 @@ bg=yellow</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1020</x>
-      <y>50</y>
+      <x>250</x>
+      <y>780</y>
       <w>140</w>
       <h>50</h>
     </coordinates>
@@ -451,8 +451,8 @@ bg=yellow</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1020</x>
-      <y>110</y>
+      <x>1010</x>
+      <y>50</y>
       <w>180</w>
       <h>110</h>
     </coordinates>
@@ -469,10 +469,10 @@ bg=yellow</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1020</x>
-      <y>230</y>
+      <x>470</x>
+      <y>770</y>
       <w>160</w>
-      <h>70</h>
+      <h>60</h>
     </coordinates>
     <panel_attributes>*Message*
 -
@@ -484,8 +484,8 @@ bg=yellow</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1020</x>
-      <y>310</y>
+      <x>1010</x>
+      <y>170</y>
       <w>140</w>
       <h>90</h>
     </coordinates>
@@ -501,8 +501,8 @@ bg=yellow</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1020</x>
-      <y>410</y>
+      <x>1010</x>
+      <y>270</y>
       <w>140</w>
       <h>110</h>
     </coordinates>
@@ -519,8 +519,8 @@ bg=yellow</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1020</x>
-      <y>630</y>
+      <x>1010</x>
+      <y>490</y>
       <w>120</w>
       <h>90</h>
     </coordinates>
@@ -536,8 +536,8 @@ bg=yellow</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1020</x>
-      <y>530</y>
+      <x>1010</x>
+      <y>390</y>
       <w>120</w>
       <h>90</h>
     </coordinates>
@@ -553,9 +553,9 @@ bg=yellow</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>780</x>
-      <y>680</y>
-      <w>220</w>
+      <x>250</x>
+      <y>710</y>
+      <w>210</w>
       <h>60</h>
     </coordinates>
     <panel_attributes>*Testing*
@@ -568,8 +568,8 @@ bg=yellow</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1020</x>
-      <y>730</y>
+      <x>1010</x>
+      <y>590</y>
       <w>150</w>
       <h>100</h>
     </coordinates>
@@ -580,6 +580,46 @@ bg=yellow</panel_attributes>
 - ErrorCompilacion
 - Ejecutando
 - Probado
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>780</x>
+      <y>680</y>
+      <w>220</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>*Prueba*
+-
++ id: integer
++ preguntaid: integer
++ entrada: string
++ salida: string
++ visible: boolean
++ postEntrega: boolean
++ valor: integer
++ salidaReal: string
++ estado: EstadoEjecucionE
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1010</x>
+      <y>700</y>
+      <w>150</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;enum&gt;&gt;
+*EstadoEjecucionE*
+--
+- Correcto
+- TiempoExcedido
+- ErrorRuntime
+- SalidaIncorrecta
 bg=yellow</panel_attributes>
     <additional_attributes/>
   </element>

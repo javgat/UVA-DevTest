@@ -354,6 +354,12 @@ func configureAPI(api *operations.DevAPI) http.Handler {
 
 	api.AnswerGetQuestionAnswersFromAnswerAndQuestionHandler = answer.GetQuestionAnswersFromAnswerAndQuestionHandlerFunc(handlers.GetQAnswerFromAnswerAndQuestion) // GET /answers/{answerid}/questions/{questionid}/qanswers
 
+	api.AnswerGetPublishedPruebasFromQuestionTestHandler =
+		answer.GetPublishedPruebasFromQuestionTestHandlerFunc(handlers.GetPublishedPruebas) // GET /answers/{answerid}/questions/{questionid}/visiblePruebas
+
+	api.AnswerGetVisiblePublishedPruebasFromQuestionTestHandler =
+		answer.GetVisiblePublishedPruebasFromQuestionTestHandlerFunc(handlers.GetVisiblePublishedPruebas) // GET /answers/{answerid}/questions/{questionid}/pruebas
+
 	// /tags
 
 	api.TagGetTagsHandler = tag.GetTagsHandlerFunc(handlers.GetTags)                                                 // GET /tags

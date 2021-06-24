@@ -604,6 +604,10 @@ type Prueba struct {
 	// Required: true
 	Entrada *string `json:"entrada"`
 
+	// Only in getPublishedPruebas and getVisiblePublishedPruebas.
+	// Enum: [correcto tiempoExcedido errorRuntime salidaIncorrecta]
+	Estado string `json:"estado,omitempty"`
+
 	// id
 	// Example: 1
 	ID int64 `json:"id,omitempty"`
@@ -621,6 +625,10 @@ type Prueba struct {
 	// Example: 2 2
 	// Required: true
 	Salida *string `json:"salida"`
+
+	// actual output of the questionanswer executed. Only in getPublishedPruebas and getVisiblePublishedPruebas.
+	// Example: 2 3
+	SalidaReal string `json:"salidaReal,omitempty"`
 
 	// valor
 	// Example: 1

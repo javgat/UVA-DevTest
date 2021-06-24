@@ -1725,7 +1725,7 @@ bg=yellow
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>5616</x>
+      <x>5664</x>
       <y>824</y>
       <w>264</w>
       <h>56</h>
@@ -1754,15 +1754,15 @@ bg=yellow
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>5712</x>
+      <x>5760</x>
       <y>752</y>
-      <w>144</w>
+      <w>96</w>
       <h>88</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
 /tags</panel_attributes>
-    <additional_attributes>10.0;90.0;10.0;50.0;160.0;50.0;160.0;10.0</additional_attributes>
+    <additional_attributes>10.0;90.0;10.0;50.0;100.0;50.0;100.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -2865,29 +2865,31 @@ bg=yellow
     <coordinates>
       <x>5312</x>
       <y>824</y>
-      <w>272</w>
-      <h>56</h>
+      <w>320</w>
+      <h>80</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Resource&gt;&gt;
 *PublishedPruebas*
 bg=yellow
 --
 --
-+ &lt;&lt;GET&gt;&gt; getVisiblePruebas(): Prueba[]</panel_attributes>
++ &lt;&lt;GET&gt;&gt; getVisiblePruebas(): Prueba[]
++ &lt;&lt;GET&gt;&gt; getPublishedPruebas(): Prueba[]
++ &lt;&lt;GET&gt;&gt; getVisiblePublishedPruebas(): Prueba[]</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>5480</x>
+      <x>5536</x>
       <y>776</y>
-      <w>256</w>
+      <w>248</w>
       <h>64</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
 &lt;&lt;path&gt;&gt;
-/pruebas</panel_attributes>
-    <additional_attributes>10.0;60.0;10.0;20.0;300.0;20.0;300.0;30.0</additional_attributes>
+/visiblePruebas</panel_attributes>
+    <additional_attributes>10.0;60.0;10.0;20.0;290.0;20.0;290.0;30.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -2958,5 +2960,44 @@ bg=yellow
 &lt;&lt;path&gt;&gt;
 /fullTesting</panel_attributes>
     <additional_attributes>220.0;140.0;220.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>5424</x>
+      <y>776</y>
+      <w>136</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;path&gt;&gt;
+/pruebas</panel_attributes>
+    <additional_attributes>10.0;60.0;10.0;20.0;150.0;20.0;150.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>5192</x>
+      <y>776</y>
+      <w>176</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>GET /publishedTests/*
+GET /answers/x/questions/*
+GET /answers/x/questions/*
+fontsize=12
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>5256</x>
+      <y>808</y>
+      <w>72</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;70.0;60.0</additional_attributes>
   </element>
 </diagram>

@@ -7016,6 +7016,82 @@ paths:
         500:
           $ref: '#/responses/InternalServerError'
 
+  /answers/{answerid}/questions/{questionid}/visiblePruebas:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - answer
+      summary: Returns all pruebas visibles from a question. It will contain the correctness information related to the QuestionAnswer
+      operationId: GetVisiblePublishedPruebasFromQuestionTest
+      description: Returns all pruebas visibles from a question. It will contain the correctness information related to the QuestionAnswer
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: answerid
+        description: Id of the answer
+        required: true
+        type: integer
+      - in: path
+        name: questionid
+        description: Id of the question to find its pruebas visibles
+        required: true
+        type: integer
+      responses:
+        200:
+          description: pruebas visibles found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Prueba'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
+  /answers/{answerid}/questions/{questionid}/pruebas:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - answer
+      summary: Returns all pruebas from a question. It will contain the correctness information related to the QuestionAnswer
+      operationId: GetPublishedPruebasFromQuestionTest
+      description: Returns all pruebas from a question. It will contain the correctness information related to the QuestionAnswer
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: answerid
+        description: Id of the answer
+        required: true
+        type: integer
+      - in: path
+        name: questionid
+        description: Id of the question to find its pruebas
+        required: true
+        type: integer
+      responses:
+        200:
+          description: pruebas found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Prueba'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
 responses:
   BadRequestError:
     description: Incorrect Request, or invalida data
@@ -7713,6 +7789,14 @@ definitions:
         type: integer
         minimum: 0
         example: 1
+      salidaReal:
+        type: string
+        example: 2 3
+        description: actual output of the questionanswer executed. Only in getPublishedPruebas and getVisiblePublishedPruebas.
+      estado:
+        type: string
+        enum: [correcto, tiempoExcedido, errorRuntime, salidaIncorrecta]
+        description: Only in getPublishedPruebas and getVisiblePublishedPruebas.
   Testing:
     type: object
     required:

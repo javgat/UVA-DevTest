@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Option, Prueba, Question, QuestionService, Tag, TagService, Team, UserService } from '@javgat/devtest-api';
+import { Option, Prueba, PublishedTestService, Question, QuestionService, Tag, TagService, Team, UserService } from '@javgat/devtest-api';
 import { Subscription } from 'rxjs';
 import { LoggedInTeacherController } from '../shared/app.controller';
 import { Mensaje, Pregunta, PruebaEjecucion, Tipo, tipoPrint } from '../shared/app.model';
@@ -41,7 +41,7 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
   pruebaidEliminar: number
   private editandoRespuesta: boolean
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private qS: QuestionService,
-    private route: ActivatedRoute, private tagS: TagService) {
+    private route: ActivatedRoute, private tagS: TagService, private ptestS: PublishedTestService) {
     super(session, router, data, userS)
     this.isInAdminTeam = false
     this.editandoRespuesta = false
@@ -163,12 +163,34 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
     )
   }
 
+  isModoQuestionAdmin(): boolean {
+    return this.isInAdminTeam || this.question.username == this.getSessionUser().getUsername()
+  }
+
   getPruebas(primera: boolean) {
+    if(this.isModoQuestionAdmin() || this.getSessionUser().isAdmin() || this.testid==undefined){
+      this.getAllPruebas(primera)
+    }else{
+      this.getVisiblePruebas(primera)
+    }
+  }
+
+  getAllPruebas(primera: boolean){
     this.qS.getPruebasFromQuestion(this.id).subscribe(
       resp => {
         this.pruebas = resp
       },
-      err => this.handleErrRelog(err, "obtener pruebas de respuesta de pregunta", primera, this.getPruebas, this)
+      err => this.handleErrRelog(err, "obtener pruebas de respuesta de pregunta", primera, this.getAllPruebas, this)
+    )
+  }
+
+  getVisiblePruebas(primera: boolean){
+    if (this.testid == undefined || this.question.id == undefined) return
+    this.ptestS.getVisiblePruebasFromQuestionTest(this.testid, this.question.id).subscribe(
+      resp => {
+        this.pruebas = resp
+      },
+      err => this.handleErrRelog(err, "obtener pruebas visibles de respuesta de pregunta", primera, this.getVisiblePruebas, this)
     )
   }
 

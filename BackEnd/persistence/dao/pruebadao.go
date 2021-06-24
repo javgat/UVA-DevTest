@@ -40,6 +40,30 @@ func rowsToPrueba(rows *sql.Rows) (*Prueba, error) {
 	return prueba, err
 }
 
+// Transforms some sql.Rows into a slice(array) of Pruebas, with more values
+// Param rows: Rows which contains database information returned
+// Return []models.Prueba: Pruebas represented in rows
+// Return error if any
+func rowsToPublishedPruebas(rows *sql.Rows) ([]*Prueba, error) {
+	var pruebas []*Prueba
+	for rows.Next() {
+		var t Prueba
+		var salidaReal, estado sql.NullString
+		err := rows.Scan(&t.ID, &t.Preguntaid, &t.Entrada, &t.Salida, &t.Visible, &t.PostEntrega, &t.Valor, &salidaReal, &estado)
+		if salidaReal.Valid {
+			t.SalidaReal = salidaReal.String
+		}
+		if estado.Valid {
+			t.Estado = estado.String
+		}
+		if err != nil {
+			return pruebas, err
+		}
+		pruebas = append(pruebas, &t)
+	}
+	return pruebas, nil
+}
+
 func ToModelPrueba(p *Prueba) *models.Prueba {
 	mp := &models.Prueba{
 		ID:          p.ID,
@@ -49,6 +73,8 @@ func ToModelPrueba(p *Prueba) *models.Prueba {
 		Visible:     p.Visible,
 		PostEntrega: p.PostEntrega,
 		Valor:       p.Valor,
+		SalidaReal:  p.SalidaReal,
+		Estado:      p.Estado,
 	}
 	return mp
 }
@@ -165,6 +191,42 @@ func GetVisiblePruebasQuestion(db *sql.DB, questionid int64) ([]*Prueba, error) 
 		rows, err := query.Query(questionid)
 		if err == nil {
 			p, err = rowsToPruebas(rows)
+			return p, err
+		}
+	}
+	return nil, err
+}
+
+func GetPublishedPruebasQuestion(db *sql.DB, questionid int64, answerid int64) ([]*Prueba, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var p []*Prueba
+	query, err := db.Prepare("SELECT P.*, E.salidaReal, E.estado FROM Prueba P JOIN Ejecucion E ON E.pruebaid=P.id WHERE P.preguntaid=?" +
+		" AND E.respuestaExamenid=?")
+	if err == nil {
+		defer query.Close()
+		rows, err := query.Query(questionid, answerid)
+		if err == nil {
+			p, err = rowsToPublishedPruebas(rows)
+			return p, err
+		}
+	}
+	return nil, err
+}
+
+func GetVisiblePublishedPruebasQuestion(db *sql.DB, questionid int64, answerid int64) ([]*Prueba, error) {
+	if db == nil {
+		return nil, errors.New(errorDBNil)
+	}
+	var p []*Prueba
+	query, err := db.Prepare("SELECT P.*, E.salidaReal, E.estado FROM Prueba P JOIN Ejecucion E ON E.pruebaid=P.id WHERE P.preguntaid=? " +
+		" AND E.respuestaExamenid=? AND P.visible=1 ")
+	if err == nil {
+		defer query.Close()
+		rows, err := query.Query(questionid, answerid)
+		if err == nil {
+			p, err = rowsToPublishedPruebas(rows)
 			return p, err
 		}
 	}

@@ -171,6 +171,14 @@
                     <textarea type="text" class="form-control mb-3" disabled>{{prueba.entrada}}</textarea>
                     <h5>Salida Esperada</h5>
                     <textarea type="text" class="form-control mb-3" disabled>{{prueba.salida}}</textarea>
+                    <div *ngIf="showEvaluation()">
+                        <h5>Salida Obtenida</h5>
+                        <textarea type="text" class="form-control mb-3" disabled>{{prueba.salidaReal}}</textarea>
+                        <p class="my-3"><b>Estado: </b>
+                            <span *ngIf="isPruebaSuperada(prueba.id)" class="badge bg-success">Superada</span>
+                            <span *ngIf="!isPruebaSuperada(prueba.id)" class="badge bg-danger">{{printEstadoPrueba(prueba.estado)}}</span>
+                        </p>
+                    </div>
                     <p><b>Valor: </b>{{prueba.valor}}</p>
                 </div>
             </div>

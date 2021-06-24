@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -23,6 +24,10 @@ type Prueba struct {
 	// Example: 3 3 0 0
 	// Required: true
 	Entrada *string `json:"entrada"`
+
+	// Only in getPublishedPruebas and getVisiblePublishedPruebas.
+	// Enum: [correcto tiempoExcedido errorRuntime salidaIncorrecta]
+	Estado string `json:"estado,omitempty"`
 
 	// id
 	// Example: 1
@@ -42,6 +47,10 @@ type Prueba struct {
 	// Required: true
 	Salida *string `json:"salida"`
 
+	// actual output of the questionanswer executed. Only in getPublishedPruebas and getVisiblePublishedPruebas.
+	// Example: 2 3
+	SalidaReal string `json:"salidaReal,omitempty"`
+
 	// valor
 	// Example: 1
 	// Required: true
@@ -59,6 +68,10 @@ func (m *Prueba) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateEntrada(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateEstado(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -87,6 +100,54 @@ func (m *Prueba) Validate(formats strfmt.Registry) error {
 func (m *Prueba) validateEntrada(formats strfmt.Registry) error {
 
 	if err := validate.Required("entrada", "body", m.Entrada); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+var pruebaTypeEstadoPropEnum []interface{}
+
+func init() {
+	var res []string
+	if err := json.Unmarshal([]byte(`["correcto","tiempoExcedido","errorRuntime","salidaIncorrecta"]`), &res); err != nil {
+		panic(err)
+	}
+	for _, v := range res {
+		pruebaTypeEstadoPropEnum = append(pruebaTypeEstadoPropEnum, v)
+	}
+}
+
+const (
+
+	// PruebaEstadoCorrecto captures enum value "correcto"
+	PruebaEstadoCorrecto string = "correcto"
+
+	// PruebaEstadoTiempoExcedido captures enum value "tiempoExcedido"
+	PruebaEstadoTiempoExcedido string = "tiempoExcedido"
+
+	// PruebaEstadoErrorRuntime captures enum value "errorRuntime"
+	PruebaEstadoErrorRuntime string = "errorRuntime"
+
+	// PruebaEstadoSalidaIncorrecta captures enum value "salidaIncorrecta"
+	PruebaEstadoSalidaIncorrecta string = "salidaIncorrecta"
+)
+
+// prop value enum
+func (m *Prueba) validateEstadoEnum(path, location string, value string) error {
+	if err := validate.EnumCase(path, location, value, pruebaTypeEstadoPropEnum, true); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (m *Prueba) validateEstado(formats strfmt.Registry) error {
+	if swag.IsZero(m.Estado) { // not required
+		return nil
+	}
+
+	// value enum
+	if err := m.validateEstadoEnum("estado", "body", m.Estado); err != nil {
 		return err
 	}
 

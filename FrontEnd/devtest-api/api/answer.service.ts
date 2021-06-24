@@ -19,6 +19,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { Answer } from '../model/answer';
+import { Prueba } from '../model/prueba';
 import { Question } from '../model/question';
 import { QuestionAnswer } from '../model/questionAnswer';
 import { Review } from '../model/review';
@@ -448,6 +449,57 @@ export class AnswerService {
     }
 
     /**
+     * Returns all pruebas from a question. It will contain the correctness information related to the QuestionAnswer
+     * Returns all pruebas from a question. It will contain the correctness information related to the QuestionAnswer
+     * @param answerid Id of the answer
+     * @param questionid Id of the question to find its pruebas
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getPublishedPruebasFromQuestionTest(answerid: number, questionid: number, observe?: 'body', reportProgress?: boolean): Observable<Array<Prueba>>;
+    public getPublishedPruebasFromQuestionTest(answerid: number, questionid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Prueba>>>;
+    public getPublishedPruebasFromQuestionTest(answerid: number, questionid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Prueba>>>;
+    public getPublishedPruebasFromQuestionTest(answerid: number, questionid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (answerid === null || answerid === undefined) {
+            throw new Error('Required parameter answerid was null or undefined when calling getPublishedPruebasFromQuestionTest.');
+        }
+
+        if (questionid === null || questionid === undefined) {
+            throw new Error('Required parameter questionid was null or undefined when calling getPublishedPruebasFromQuestionTest.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Array<Prueba>>(`${this.basePath}/answers/${encodeURIComponent(String(answerid))}/questions/${encodeURIComponent(String(questionid))}/pruebas`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Returns an answer&#39;s questionAnswer
      * Returns an answers&#39;s questionAnswer
      * @param answerid Id of the answer
@@ -632,6 +684,57 @@ export class AnswerService {
         ];
 
         return this.httpClient.get<Array<Question>>(`${this.basePath}/answers/${encodeURIComponent(String(answerid))}/questions`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns all pruebas visibles from a question. It will contain the correctness information related to the QuestionAnswer
+     * Returns all pruebas visibles from a question. It will contain the correctness information related to the QuestionAnswer
+     * @param answerid Id of the answer
+     * @param questionid Id of the question to find its pruebas visibles
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getVisiblePublishedPruebasFromQuestionTest(answerid: number, questionid: number, observe?: 'body', reportProgress?: boolean): Observable<Array<Prueba>>;
+    public getVisiblePublishedPruebasFromQuestionTest(answerid: number, questionid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Prueba>>>;
+    public getVisiblePublishedPruebasFromQuestionTest(answerid: number, questionid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Prueba>>>;
+    public getVisiblePublishedPruebasFromQuestionTest(answerid: number, questionid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (answerid === null || answerid === undefined) {
+            throw new Error('Required parameter answerid was null or undefined when calling getVisiblePublishedPruebasFromQuestionTest.');
+        }
+
+        if (questionid === null || questionid === undefined) {
+            throw new Error('Required parameter questionid was null or undefined when calling getVisiblePublishedPruebasFromQuestionTest.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Array<Prueba>>(`${this.basePath}/answers/${encodeURIComponent(String(answerid))}/questions/${encodeURIComponent(String(questionid))}/visiblePruebas`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

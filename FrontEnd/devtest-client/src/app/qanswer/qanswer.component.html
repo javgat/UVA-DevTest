@@ -168,7 +168,7 @@
                             <path d="M0 0h24v24H0z" fill="none" />
                             <path d="M12 8l-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14z" />
                         </svg>
-                        Ocultar</span> Pruebas Visibles
+                        Ocultar</span> Pruebas <span *ngIf="showTextoVisibles()">Visibles</span>
                 </button>
             </div>
             <div class="mt-3" *ngIf="isMostrarPruebas()">
@@ -177,8 +177,16 @@
                     <div class="card-body">
                         <h5>Entrada</h5>
                         <textarea type="text" class="form-control mb-3" disabled>{{prueba.entrada}}</textarea>
-                        <h5>Salida</h5>
+                        <h5>Salida Esperada</h5>
                         <textarea type="text" class="form-control mb-3" disabled>{{prueba.salida}}</textarea>
+                        <div *ngIf="showEvaluation()">
+                            <h5>Salida Obtenida</h5>
+                            <textarea type="text" class="form-control mb-3" disabled>{{prueba.salidaReal}}</textarea>
+                            <p class="my-3"><b>Estado: </b>
+                                <span *ngIf="isPruebaSuperada(prueba.id)" class="badge bg-success">Superada</span>
+                                <span *ngIf="!isPruebaSuperada(prueba.id)" class="badge bg-danger">{{printEstadoPrueba(prueba.estado)}}</span>
+                            </p>
+                        </div>
                         <p><b>Valor: </b>{{prueba.valor}}</p>
                     </div>
                 </div>

@@ -112,7 +112,7 @@ export class QanswerComponent extends LoggedInController implements OnInit {
         this.question = Pregunta.constructorFromQuestion(resp)
         if (this.question.tipoPregunta == Question.TipoPreguntaEnum.Opciones) {
           this.getOptions(true)
-        }else if(this.question.tipoPregunta == Question.TipoPreguntaEnum.Codigo){
+        } else if (this.question.tipoPregunta == Question.TipoPreguntaEnum.Codigo) {
           this.getPruebas(true)
         }
       },
@@ -121,13 +121,13 @@ export class QanswerComponent extends LoggedInController implements OnInit {
   }
 
   getOptions(primera: boolean) {
-    if(this.getSessionUser().isTeacherOrAdmin())
+    if (this.getSessionUser().isTeacherOrAdmin())
       this.getOptionsAsTeacher(primera)
     else
       this.getOptionsAsStudent(primera)
   }
 
-  getOptionsAsTeacher(primera: boolean){
+  getOptionsAsTeacher(primera: boolean) {
     this.qS.getOptionsFromQuestion(this.questionid).subscribe(
       resp => {
         this.options = resp
@@ -136,7 +136,7 @@ export class QanswerComponent extends LoggedInController implements OnInit {
     )
   }
 
-  getOptionsAsStudent(primera: boolean){
+  getOptionsAsStudent(primera: boolean) {
     this.ptestS.getOptionsFromPublishedQuestion(this.testid, this.questionid).subscribe(
       resp => {
         this.options = resp
@@ -155,7 +155,7 @@ export class QanswerComponent extends LoggedInController implements OnInit {
       }
     )
   }
-  
+
   getIsInAdminTeam(primera: boolean) {
     this.userS.getSharedTestFromUser(this.getSessionUser().getUsername(), this.testid).subscribe(
       resp => {
@@ -198,7 +198,7 @@ export class QanswerComponent extends LoggedInController implements OnInit {
   }
 
   checkEsIncorrecta(opc: Option): boolean {
-    return (!(opc.correcta) && this.opcionSeleccionada(opc.indice)) || (opc.correcta==true && !this.opcionSeleccionada(opc.indice))
+    return (!(opc.correcta) && this.opcionSeleccionada(opc.indice)) || (opc.correcta == true && !this.opcionSeleccionada(opc.indice))
   }
 
   checkShowTick(opc: Option): boolean {
@@ -209,31 +209,31 @@ export class QanswerComponent extends LoggedInController implements OnInit {
     return (!(opc.correcta) && this.opcionSeleccionada(opc.indice))
   }
 
-  isRadioQuestion(): boolean{
-    return this.question.eleccionUnica==true
+  isRadioQuestion(): boolean {
+    return this.question.eleccionUnica == true
   }
 
-  isCheckQuestion(): boolean{
+  isCheckQuestion(): boolean {
     return !this.isRadioQuestion()
   }
-  
-  clickShowCorregir(){
+
+  clickShowCorregir() {
     this.showCorregir = true
   }
 
-  clickNotShowCorregir(){
+  clickNotShowCorregir() {
     this.showCorregir = false
   }
 
-  submitUpdateCorrection(){
+  submitUpdateCorrection() {
     this.showCorregir = false
     this.updateCorrection(true)
   }
 
-  updateCorrection(primera: boolean){
+  updateCorrection(primera: boolean) {
     let review: Review
     review = {
-      puntuacion : this.editPuntuacion
+      puntuacion: this.editPuntuacion
     }
     this.answerS.putReview(this.answerid, this.questionid, review).subscribe(
       resp => this.getQAnswer(true),
@@ -241,35 +241,35 @@ export class QanswerComponent extends LoggedInController implements OnInit {
     )
   }
 
-  setAsNotCorregidaClick(){
+  setAsNotCorregidaClick() {
     this.setAsNotCorregida(true)
   }
 
-  setAsNotCorregida(primera: boolean){
+  setAsNotCorregida(primera: boolean) {
     this.answerS.deleteReview(this.answerid, this.questionid).subscribe(
       resp => this.getQAnswer(true),
       err => this.handleErrRelog(err, "borrar correccion", primera, this.setAsNotCorregida, this)
     )
   }
 
-  calcValor(porcentaje: number | undefined, valorFinal: number | undefined): number{
-    if(porcentaje == undefined || valorFinal == undefined) return 0
-    return (porcentaje * valorFinal)/100
+  calcValor(porcentaje: number | undefined, valorFinal: number | undefined): number {
+    if (porcentaje == undefined || valorFinal == undefined) return 0
+    return (porcentaje * valorFinal) / 100
   }
 
   isModoTestAdmin(): boolean {
     return this.isInAdminTeam || this.test.username == this.getSessionUser().getUsername()
   }
 
-  bgcolorQAnswerPuntuacion(punt: number){
+  bgcolorQAnswerPuntuacion(punt: number) {
     return bgcolorQAnswerPuntuacion(punt)
   }
 
-  isAutoCorrect(): boolean{
+  isAutoCorrect(): boolean {
     return this.question.autoCorrect
   }
 
-  recargarEditorCodigo(){
+  recargarEditorCodigo() {
     this.codeModel = {
       language: 'cpp',
       uri: 'main.cpp',
@@ -277,49 +277,64 @@ export class QanswerComponent extends LoggedInController implements OnInit {
     }
   }
 
-  getPruebas(primera: boolean){
-    this.qS.getPruebasFromQuestion(this.questionid).subscribe(
+  getPruebas(primera: boolean) {
+    if (this.isModoTestAdmin() || this.getSessionUser().isAdmin()) {
+      this.getFullPruebas(primera)
+    } else {
+      this.getVisiblePruebas(primera)
+    }
+  }
+
+  getFullPruebas(primera: boolean) {
+    this.answerS.getPublishedPruebasFromQuestionTest(this.answerid, this.questionid).subscribe(
       resp => this.pruebas = resp,
-      err => this.handleErrRelog(err, "obtener pruebas de preguntas", primera, this.getPruebas, this)
+      err => this.handleErrRelog(err, "obtener todas las pruebas de pregunta", primera, this.getFullPruebas, this)
     )
   }
 
-  getResultadoPruebas(){
-    if(this.isModoTestAdmin() || this.getSessionUser().isAdmin()){
+  getVisiblePruebas(primera: boolean) {
+    this.answerS.getVisiblePublishedPruebasFromQuestionTest(this.answerid, this.questionid).subscribe(
+      resp => this.pruebas = resp,
+      err => this.handleErrRelog(err, "obtener pruebas visibles de pregunta", primera, this.getVisiblePruebas, this)
+    )
+  }
+
+  getResultadoPruebas() {
+    if (this.isModoTestAdmin() || this.getSessionUser().isAdmin()) {
       this.getFullResultadoPruebas(true)
-    }else{
+    } else {
       this.getPreResultadoPruebas(true)
     }
   }
 
-  getPreResultadoPruebas(primera: boolean){
+  getPreResultadoPruebas(primera: boolean) {
     this.answerS.getPreTesting(this.answerid, this.questionid).subscribe(
-      resp=>{
+      resp => {
         this.resPruebas = resp
       },
       err => this.handleErrRelog(err, "obtener resultado de pretesting de pruebas", primera, this.getPreResultadoPruebas, this)
     )
   }
 
-  getFullResultadoPruebas(primera: boolean){
+  getFullResultadoPruebas(primera: boolean) {
     this.answerS.getFullTesting(this.answerid, this.questionid).subscribe(
-      resp=>{
+      resp => {
         this.resPruebas = resp
       },
       err => this.handleErrRelog(err, "obtener resultado de fulltesting de pruebas", primera, this.getFullResultadoPruebas, this)
     )
   }
 
-  isVisibleEstadoEjecucion(): boolean{
-    return this.qa.estado!=QuestionAnswer.EstadoEnum.NoProbado
+  isVisibleEstadoEjecucion(): boolean {
+    return this.qa.estado != QuestionAnswer.EstadoEnum.NoProbado
   }
 
-  isEstadoProbado(): boolean{
+  isEstadoProbado(): boolean {
     return this.qa.estado == QuestionAnswer.EstadoEnum.Probado
   }
 
-  printEstado(): string{
-    switch(this.qa.estado){
+  printEstado(): string {
+    switch (this.qa.estado) {
       case QuestionAnswer.EstadoEnum.Ejecutando:
         return "Ejecutando..."
       case QuestionAnswer.EstadoEnum.ErrorCompilacion:
@@ -333,19 +348,49 @@ export class QanswerComponent extends LoggedInController implements OnInit {
     }
   }
 
-  isMostrarPruebas(): boolean{
+  isMostrarPruebas(): boolean {
     return this.isMostrandoPruebas
   }
 
-  switchMostrarPruebas(){
+  switchMostrarPruebas() {
     this.isMostrandoPruebas = !this.isMostrandoPruebas
   }
 
-  isErrorCompilacion(): boolean{
+  isErrorCompilacion(): boolean {
     return this.qa.estado == QuestionAnswer.EstadoEnum.ErrorCompilacion
   }
 
-  getErrorCompilacionString(): string{
+  getErrorCompilacionString(): string {
     return this.qa.errorCompilacion || ""
+  }
+
+  showTextoVisibles(): boolean {
+    return !(this.isModoTestAdmin() || this.getSessionUser().isAdmin())
+  }
+
+  showEvaluation(): boolean {
+    return true
+  }
+
+  isPruebaSuperada(pruebaid: number | undefined): boolean {
+    if (pruebaid == undefined) return false
+    let ps = this.pruebas.filter((p) =>{return p.id == pruebaid})
+    if(ps.length<1) return false
+    return ps[0].estado == Prueba.EstadoEnum.Correcto
+  }
+
+  printEstadoPrueba(estado: string | undefined): string{
+    switch(estado){
+      case Prueba.EstadoEnum.Correcto:
+        return "Superada"
+      case Prueba.EstadoEnum.ErrorRuntime:
+        return "Error en tiempo de ejecución"
+      case Prueba.EstadoEnum.SalidaIncorrecta:
+        return "Salida incorrecta"
+      case Prueba.EstadoEnum.TiempoExcedido:
+        return "Tiempo límite de ejecución sobrepasado"
+      default:
+        return "Error"
+    }
   }
 }

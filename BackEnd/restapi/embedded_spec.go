@@ -1087,6 +1087,63 @@ func init() {
         }
       }
     },
+    "/answers/{answerid}/questions/{questionid}/pruebas": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all pruebas from a question. It will contain the correctness information related to the QuestionAnswer",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "answer"
+        ],
+        "summary": "Returns all pruebas from a question. It will contain the correctness information related to the QuestionAnswer",
+        "operationId": "GetPublishedPruebasFromQuestionTest",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the answer",
+            "name": "answerid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the question to find its pruebas",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "pruebas found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Prueba"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
     "/answers/{answerid}/questions/{questionid}/qanswers": {
       "get": {
         "security": [
@@ -1126,6 +1183,63 @@ func init() {
               "type": "array",
               "items": {
                 "$ref": "#/definitions/QuestionAnswer"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/BadRequestError"
+          },
+          "403": {
+            "$ref": "#/responses/ForbiddenError"
+          },
+          "410": {
+            "$ref": "#/responses/GoneError"
+          },
+          "500": {
+            "$ref": "#/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/answers/{answerid}/questions/{questionid}/visiblePruebas": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all pruebas visibles from a question. It will contain the correctness information related to the QuestionAnswer",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "answer"
+        ],
+        "summary": "Returns all pruebas visibles from a question. It will contain the correctness information related to the QuestionAnswer",
+        "operationId": "GetVisiblePublishedPruebasFromQuestionTest",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the answer",
+            "name": "answerid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the question to find its pruebas visibles",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "pruebas visibles found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Prueba"
               }
             }
           },
@@ -11185,6 +11299,16 @@ func init() {
           "type": "string",
           "example": "3 3 0 0"
         },
+        "estado": {
+          "description": "Only in getPublishedPruebas and getVisiblePublishedPruebas.",
+          "type": "string",
+          "enum": [
+            "correcto",
+            "tiempoExcedido",
+            "errorRuntime",
+            "salidaIncorrecta"
+          ]
+        },
         "id": {
           "type": "integer",
           "example": 1
@@ -11200,6 +11324,11 @@ func init() {
         "salida": {
           "type": "string",
           "example": "2 2"
+        },
+        "salidaReal": {
+          "description": "actual output of the questionanswer executed. Only in getPublishedPruebas and getVisiblePublishedPruebas.",
+          "type": "string",
+          "example": "2 3"
         },
         "valor": {
           "type": "integer",
@@ -13138,6 +13267,72 @@ func init() {
         }
       }
     },
+    "/answers/{answerid}/questions/{questionid}/pruebas": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all pruebas from a question. It will contain the correctness information related to the QuestionAnswer",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "answer"
+        ],
+        "summary": "Returns all pruebas from a question. It will contain the correctness information related to the QuestionAnswer",
+        "operationId": "GetPublishedPruebasFromQuestionTest",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the answer",
+            "name": "answerid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the question to find its pruebas",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "pruebas found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Prueba"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
     "/answers/{answerid}/questions/{questionid}/qanswers": {
       "get": {
         "security": [
@@ -13177,6 +13372,72 @@ func init() {
               "type": "array",
               "items": {
                 "$ref": "#/definitions/QuestionAnswer"
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Request, or invalida data",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Not authorized to this content",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "410": {
+            "description": "That resource does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/answers/{answerid}/questions/{questionid}/visiblePruebas": {
+      "get": {
+        "security": [
+          {
+            "BearerCookie": []
+          }
+        ],
+        "description": "Returns all pruebas visibles from a question. It will contain the correctness information related to the QuestionAnswer",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "answer"
+        ],
+        "summary": "Returns all pruebas visibles from a question. It will contain the correctness information related to the QuestionAnswer",
+        "operationId": "GetVisiblePublishedPruebasFromQuestionTest",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Id of the answer",
+            "name": "answerid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Id of the question to find its pruebas visibles",
+            "name": "questionid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "pruebas visibles found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Prueba"
               }
             }
           },
@@ -24741,6 +25002,16 @@ func init() {
           "type": "string",
           "example": "3 3 0 0"
         },
+        "estado": {
+          "description": "Only in getPublishedPruebas and getVisiblePublishedPruebas.",
+          "type": "string",
+          "enum": [
+            "correcto",
+            "tiempoExcedido",
+            "errorRuntime",
+            "salidaIncorrecta"
+          ]
+        },
         "id": {
           "type": "integer",
           "example": 1
@@ -24756,6 +25027,11 @@ func init() {
         "salida": {
           "type": "string",
           "example": "2 2"
+        },
+        "salidaReal": {
+          "description": "actual output of the questionanswer executed. Only in getPublishedPruebas and getVisiblePublishedPruebas.",
+          "type": "string",
+          "example": "2 3"
         },
         "valor": {
           "type": "integer",

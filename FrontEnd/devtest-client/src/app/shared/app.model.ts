@@ -404,6 +404,8 @@ export class PruebaEjecucion implements Prueba{
     visible: boolean;
     postEntrega: boolean;
     valor: number;
+    salidaReal: string;
+    estado?: Prueba.EstadoEnum;
     constructor(p?: Prueba){
         this.id = p?.id || 0
         this.preguntaid = p?.preguntaid || 0
@@ -412,6 +414,12 @@ export class PruebaEjecucion implements Prueba{
         this.visible = p?.visible || false
         this.postEntrega = p?.postEntrega || false
         this.valor = p?.valor || 0
+        this.salidaReal = p?.salidaReal || ""
+        this.estado = p?.estado
+    }
+
+    getEstado(): string {
+        return this.estado || ""
     }
 }
 
