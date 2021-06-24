@@ -176,6 +176,9 @@
             </div>
         </div>
     </div>
+    <div class="my-3" *ngIf="(isCodeQuestion() && !isCorreccionAutomatica() ) && checkPermisosEdicion()">
+        <p class="text-muted">Para poder añadir pruebas unitarias a la pregunta, tendrá que ser editada para configurarla como pregunta de corrección automática</p>
+    </div>
     <div class="my-3" *ngIf="!(isCodeQuestion() && !isCorreccionAutomatica() )">
         <h3>Respuesta:</h3>
         <div class="d-grid gap-2 col-6 mx-auto" *ngIf="checkPermisosEdicion()">
