@@ -8,6 +8,7 @@ import (
 	"errors"
 	"log"
 	"strconv"
+	"strings"
 	"uva-devtest/models"
 	"uva-devtest/persistence/dao"
 	"uva-devtest/persistence/dbconnection"
@@ -57,13 +58,16 @@ func executePruebas(answerid int64, questionid int64, isPostEntrega bool) {
 													if err == nil {
 														var est string
 														sumaValores += *p.Valor
-														if *ej.SalidaReal == *p.Salida {
-															est = dao.EstadoEjecucionCorrecto
-															valoresObtenidos += *p.Valor
-														} else {
-															est = dao.EstadoEjecucionSalidaIncorrecta
+														if !strings.EqualFold(strings.Trim(*ej.Estado, " "), strings.Trim(models.PruebaEstadoErrorRuntime, " ")) &&
+															!strings.EqualFold(strings.Trim(*ej.Estado, " "), strings.Trim(models.PruebaEstadoTiempoExcedido, " ")) {
+															if *ej.SalidaReal == *p.Salida {
+																est = dao.EstadoEjecucionCorrecto
+																valoresObtenidos += *p.Valor
+															} else {
+																est = dao.EstadoEjecucionSalidaIncorrecta
+															}
+															ej.Estado = &est
 														}
-														ej.Estado = &est
 														err = dao.SaveEjecucion(db, ej)
 													}
 												}
