@@ -30,7 +30,7 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
   pruebas: Prueba[]
   isMostrandoPruebas: boolean
   resPruebas: ResultadoPruebas
-
+  collapsedPruebaIds: Set<number>
   theme = 'vs-dark';
 
   codeModel: CodeModel
@@ -41,7 +41,6 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
       enabled: true,
     },
   };
-  TIEMPO_RECARGA_ESTADO_COMPILACION: number = 4000 //ms
 
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private route: ActivatedRoute, private ptestS: PublishedTestService, private answerS: AnswerService) {
     super(session, router, data, userS);
@@ -49,6 +48,7 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
     this.isMostrandoPruebas = false
     this.testid = 0
     this.preguntaid = 0
+    this.collapsedPruebaIds = new Set()
     this.options = []
     this.pregunta = new Pregunta()
     this.test = new Examen()
@@ -455,6 +455,10 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
     return this.questionAnswer.estado == QuestionAnswer.EstadoEnum.ErrorCompilacion
   }
 
+  isEjecutando(): boolean{
+    return this.questionAnswer.estado == QuestionAnswer.EstadoEnum.Ejecutando
+  }
+
   getErrorCompilacionString(): string{
     return this.questionAnswer.errorCompilacion || ""
   }
@@ -482,6 +486,31 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
         return "Tiempo límite de ejecución sobrepasado"
       default:
         return "No ejecutada"
+    }
+  }
+
+  getPruebaIndice(id: number | undefined): string{
+    if(id==undefined) return ""
+    for(let i = 0; i<this.pruebas.length; i++){
+      if(id==this.pruebas[i].id){
+        let valor = i+1
+        return valor.toString()
+      }
+    }
+    return ""
+  }
+
+  isCollapsed(id: number | undefined): boolean{
+    if(id==undefined) return true
+    return this.collapsedPruebaIds.has(id)
+  }
+
+  switchCollapse(id: number | undefined){
+    if(id==undefined) return
+    if(this.collapsedPruebaIds.has(id)){
+      this.collapsedPruebaIds.delete(id)
+    }else{
+      this.collapsedPruebaIds.add(id)
     }
   }
 }

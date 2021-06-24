@@ -124,10 +124,12 @@
         </div>
     </div>
     <div class="m-3" *ngIf="isPreguntaCodigo()">
-        <ngs-code-editor [theme]="theme" [codeModel]="codeModel" [options]="codeOptions"
-            (valueChanged)="onCodeChanged($event)">
-        </ngs-code-editor>
-        <div class="d-grid gap-2 mt-3">
+        <div style="height: calc(100vh - 200px); min-height: 250px;">
+            <ngs-code-editor [theme]="theme" [codeModel]="codeModel" [options]="codeOptions"
+                (valueChanged)="onCodeChanged($event)" style="height: 100%">
+            </ngs-code-editor>
+        </div>
+        <div class="d-grid gap-2 mt-3 col-6 mx-auto">
             <button class="btn btn-success btn-lg" type="button" (click)="sendRespuestaTipoCode()">
                 <span *ngIf="pregunta.isRespondida">Actualizar</span><span *ngIf="!pregunta.isRespondida">Guardar</span>
                 y probar respuesta
@@ -141,11 +143,14 @@
                     <p class="card-text" style="white-space: pre-line">{{getErrorCompilacionString()}}</p>
                 </div>
             </div>
+            <div class="spinner-border" role="status" *ngIf="isEjecutando()">
+                <span class="visually-hidden">Ejecutando...</span>
+            </div>
             <p *ngIf="isEstadoProbado()"><b>Pruebas superadas: </b>{{resPruebas.pruebasSuperadas}} /
                 {{resPruebas.pruebasTotales}}</p>
         </div>
 
-        <div class="my-3 col-md-12 text-center">
+        <div class="mt-5 mb-3 col-md-12 text-center">
             <button class="btn btn-primary btn-lg" type="button" (click)="switchMostrarPruebas()">
                 <span *ngIf="!isMostrarPruebas()">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
@@ -165,21 +170,51 @@
         </div>
         <div class="mt-3" *ngIf="isMostrarPruebas()">
             <h4>Pruebas visibles:</h4>
-            <div class="card mb-3" *ngFor="let prueba of pruebas">
+            <div class="card my-3" *ngFor="let prueba of pruebas">
                 <div class="card-body">
-                    <h5>Entrada</h5>
-                    <textarea type="text" class="form-control mb-3" disabled>{{prueba.entrada}}</textarea>
-                    <h5>Salida Esperada</h5>
-                    <textarea type="text" class="form-control mb-3" disabled>{{prueba.salida}}</textarea>
-                    <div *ngIf="showEvaluation()">
-                        <h5>Salida Obtenida</h5>
-                        <textarea type="text" class="form-control mb-3" disabled>{{prueba.salidaReal}}</textarea>
-                        <p class="my-3"><b>Estado: </b>
-                            <span *ngIf="isPruebaSuperada(prueba.id)" class="badge bg-success">Superada</span>
-                            <span *ngIf="!isPruebaSuperada(prueba.id)" class="badge bg-danger">{{printEstadoPrueba(prueba.estado)}}</span>
-                        </p>
+                    <table class="table table-borderless">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <h5>Prueba {{getPruebaIndice(prueba.id)}}</h5>
+                                </td>
+                                <td><b>Valor: </b>{{prueba.valor}} puntos</td>
+                                <td *ngIf="showEvaluation()"><b>Estado: </b>
+                                    <span *ngIf="isPruebaSuperada(prueba.id)" class="badge bg-success">Superada</span>
+                                    <span *ngIf="!isPruebaSuperada(prueba.id)"
+                                        class="badge bg-danger">{{printEstadoPrueba(prueba.estado)}}</span>
+                                </td>
+                                <td class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <button class="btn btn-primary" type="button" (click)="switchCollapse(prueba.id)">
+                                        <span *ngIf="isCollapsed(prueba.id)">
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24"
+                                                width="24px" fill="currentColor">
+                                                <path d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z" />
+                                            </svg>
+                                        </span>
+                                        <span *ngIf="!isCollapsed(prueba.id)">
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24"
+                                                width="24px" fill="currentColor">
+                                                <path d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M12 8l-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14z" />
+                                            </svg>
+                                        </span>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div *ngIf="!isCollapsed(prueba.id)">
+                        <h5>Entrada</h5>
+                        <textarea type="text" class="form-control mb-3" disabled>{{prueba.entrada}}</textarea>
+                        <h5>Salida Esperada</h5>
+                        <textarea type="text" class="form-control mb-3" disabled>{{prueba.salida}}</textarea>
+                        <div *ngIf="showEvaluation()">
+                            <h5>Salida Obtenida</h5>
+                            <textarea type="text" class="form-control mb-3" disabled>{{prueba.salidaReal}}</textarea>
+                        </div>
                     </div>
-                    <p><b>Valor: </b>{{prueba.valor}}</p>
                 </div>
             </div>
 

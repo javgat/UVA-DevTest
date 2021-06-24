@@ -35,6 +35,7 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
   showExtraInfo: boolean
   pruebaEdit: Prueba
   pruebas: Prueba[]
+  collapsedPruebaIds: Set<number>
   pruebasidsModificando: Set<number>
   pruebaidActualizar: number
   pruebaidRecuperar: number
@@ -53,6 +54,7 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
     this.pruebaidRecuperar = 0
     this.pruebaidEliminar = 0
     this.pruebasidsModificando = new Set()
+    this.collapsedPruebaIds = new Set()
     this.pruebaidActualizar = 0
     this.tags = []
     this.deleteIndex = -1
@@ -563,4 +565,30 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
     let pru = prus[0]
     return this.isPruebaValid(pru)
   }
+
+  getPruebaIndice(id: number | undefined): string{
+    if(id==undefined) return ""
+    for(let i = 0; i<this.pruebas.length; i++){
+      if(id==this.pruebas[i].id){
+        let valor = i+1
+        return valor.toString()
+      }
+    }
+    return ""
+  }
+
+  isCollapsed(id: number | undefined): boolean{
+    if(id==undefined) return true
+    return this.collapsedPruebaIds.has(id)
+  }
+
+  switchCollapse(id: number | undefined){
+    if(id==undefined) return
+    if(this.collapsedPruebaIds.has(id)){
+      this.collapsedPruebaIds.delete(id)
+    }else{
+      this.collapsedPruebaIds.add(id)
+    }
+  }
+  
 }

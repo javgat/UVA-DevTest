@@ -282,67 +282,106 @@
             </div>
             <div class="card mb-3" *ngFor="let prueba of pruebas">
                 <div class="card-body" *ngIf="!modificandoPrueba(prueba.id) || !isEditandoRespuesta()">
-                    <div *ngIf="isEditandoRespuesta()" class="d-grid gap-2 d-md-flex justify-content-md-end">
-                        <div class="dropdown">
-                            <button class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenuDelete"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
-                                    fill="currentColor">
-                                    <path d="M0 0h24v24H0z" fill="none" />
-                                    <path d="M0 0h24v24H0V0z" fill="none" />
-                                    <path
-                                        d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zm2.46-7.12l1.41-1.41L12 12.59l2.12-2.12 1.41 1.41L13.41 14l2.12 2.12-1.41 1.41L12 15.41l-2.12 2.12-1.41-1.41L10.59 14l-2.13-2.12zM15.5 4l-1-1h-5l-1 1H5v2h14V4z" />
-                                </svg>
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuDelete">
-                                <li><a role="button" class="dropdown-item"
-                                        (click)="eliminarPruebaClick(prueba.id)">Eliminar</a></li>
-                            </ul>
+                    <table class="table table-borderless">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <h5>Prueba {{getPruebaIndice(prueba.id)}}</h5>
+                                </td>
+                                <td><b>Valor: </b>{{prueba.valor}} puntos</td>
+                                <td class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <button class="btn btn-primary" type="button" (click)="switchCollapse(prueba.id)">
+                                        <span *ngIf="isCollapsed(prueba.id)">
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24"
+                                                width="24px" fill="currentColor">
+                                                <path d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z" />
+                                            </svg>
+                                        </span>
+                                        <span *ngIf="!isCollapsed(prueba.id)">
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24"
+                                                width="24px" fill="currentColor">
+                                                <path d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M12 8l-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14z" />
+                                            </svg>
+                                        </span>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div *ngIf="!isCollapsed(prueba.id)">
+                        <div *ngIf="isEditandoRespuesta()" class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <div class="dropdown">
+                                <button class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenuDelete"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24"
+                                        width="24px" fill="currentColor">
+                                        <path d="M0 0h24v24H0z" fill="none" />
+                                        <path d="M0 0h24v24H0V0z" fill="none" />
+                                        <path
+                                            d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zm2.46-7.12l1.41-1.41L12 12.59l2.12-2.12 1.41 1.41L13.41 14l2.12 2.12-1.41 1.41L12 15.41l-2.12 2.12-1.41-1.41L10.59 14l-2.13-2.12zM15.5 4l-1-1h-5l-1 1H5v2h14V4z" />
+                                    </svg>
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuDelete">
+                                    <li><a role="button" class="dropdown-item"
+                                            (click)="eliminarPruebaClick(prueba.id)">Eliminar</a></li>
+                                </ul>
+                            </div>
                         </div>
-                    </div>
-                    <h5>Entrada</h5>
-                    <textarea type="text" class="form-control mb-3" disabled>{{prueba.entrada}}</textarea>
-                    <h5>Salida</h5>
-                    <textarea type="text" class="form-control mb-3" disabled>{{prueba.salida}}</textarea>
-                    <p><b>Visible al responder: </b><span *ngIf="prueba.visible">Sí</span><span
-                            *ngIf="!prueba.visible">No</span></p>
-                    <p><b>Ejecución Post-Entrega: </b><span *ngIf="prueba.postEntrega">Sí</span><span
-                            *ngIf="!prueba.postEntrega">No</span></p>
-                    <p><b>Valor: </b>{{prueba.valor}}</p>
-                    <div class="d-grid gap-2 col-6 mx-auto mb-3" *ngIf="isEditandoRespuesta()">
-                        <button class="button btn btn-success btn-lg"
-                            (click)="modificarPrueba(prueba.id)">Modificar</button>
+                        <h5>Entrada</h5>
+                        <textarea type="text" class="form-control mb-3" disabled>{{prueba.entrada}}</textarea>
+                        <h5>Salida Esperada</h5>
+                        <textarea type="text" class="form-control mb-3" disabled>{{prueba.salida}}</textarea>
+                        <p><b>Visible al responder: </b><span *ngIf="prueba.visible">Sí</span><span
+                                *ngIf="!prueba.visible">No</span></p>
+                        <p><b>Ejecución: </b>{{getTextoEjecucionPostEntrega(prueba.postEntrega)}}</p>
+                        <div class="d-grid gap-2 col-6 mx-auto mb-3" *ngIf="isEditandoRespuesta()">
+                            <button class="button btn btn-success btn-lg"
+                                (click)="modificarPrueba(prueba.id)">Modificar</button>
+                        </div>
                     </div>
                 </div>
                 <div class="card-body" *ngIf="modificandoPrueba(prueba.id) && isEditandoRespuesta()">
                     <div class="mb-3">
+                        <label for="inputValor{{prueba.id}}" class="form-label">Valor:</label>
+                        <input type="number" class="form-control" name="inputValor{{prueba.id}}"
+                            [(ngModel)]="prueba.valor" required min=0 />
+                        <div id="inputValor{{prueba.id}}" class="form-text">Valor que tendrá la prueba respecto a la
+                            puntuación de la pregunta. Su valor final será el valor dividido entre la suma de los
+                            valores de todas las pruebas de la pregunta.</div>
+                    </div>
+                    <div class="mb-3">
                         <h5>Entrada</h5>
-                        <textarea type="text" class="form-control" name="inputEntrada{{prueba.id}}" [(ngModel)]="prueba.entrada"
-                            required rows=3></textarea>
+                        <textarea type="text" class="form-control" name="inputEntrada{{prueba.id}}"
+                            [(ngModel)]="prueba.entrada" required rows=3></textarea>
                     </div>
                     <div class="mb-3">
                         <h5>Salida</h5>
-                        <textarea type="text" class="form-control" name="inputSalida{{prueba.id}}" [(ngModel)]="prueba.salida"
-                            required rows=3></textarea>
+                        <textarea type="text" class="form-control" name="inputSalida{{prueba.id}}"
+                            [(ngModel)]="prueba.salida" required rows=3></textarea>
                     </div>
                     <div class="form-check form-switch">
                         <input class="form-check-input" type="checkbox" id="flexSwitchVisible{{prueba.id}}"
                             [checked]="prueba.visible" (change)="prueba.visible = !prueba.visible">
-                        <label class="form-check-label" for="flexSwitchVisible{{prueba.id}}">Visible al responder</label>
+                        <label class="form-check-label" for="flexSwitchVisible{{prueba.id}}">Visible al
+                            responder</label>
+                        <div id="flexSwitchVisible{{prueba.id}}" class="form-text">El usuario verá la entrada y la
+                            salida esperada, y sabrá cual ha sido la salida real de su respuesta durante la realización
+                            del examen.</div>
                     </div>
                     <div class="form-check form-switch">
                         <input class="form-check-input" type="checkbox" id="flexSwitchPostEntrega{{prueba.id}}"
                             [checked]="prueba.postEntrega" (change)="prueba.postEntrega = !prueba.postEntrega">
-                        <label class="form-check-label" for="flexSwitchPostEntrega{{prueba.id}}">Ejecución post-entrega</label>
-                    </div>
-                    <div class="mb-3">
-                        <label for="inputValor{{prueba.id}}" class="form-label">Valor:</label>
-                        <input type="number" class="form-control" name="inputValor{{prueba.id}}" [(ngModel)]="prueba.valor"
-                            required min=0 />
+                        <label class="form-check-label" for="flexSwitchPostEntrega{{prueba.id}}">Ejecución
+                            post-entrega</label>
+                        <div id="flexSwitchPostEntrega{{prueba.id}}" class="form-text">La prueba no se contará para el
+                            cálculo de pruebas superadas que ve el usuario durante la realización, pero sí se usará para
+                            el cálculo final de la nota y lo verán los profesores responsables.</div>
                     </div>
                     <div class="d-grid gap-2 col-6 mx-auto mb-3" *ngIf="isEditandoRespuesta()">
-                        <button class="button btn btn-success btn-lg"
-                            (click)="guardarModificarPrueba(prueba.id)" [disabled]="!isPruebaIdValid(prueba.id)">Guardar</button>
+                        <button class="button btn btn-success btn-lg" (click)="guardarModificarPrueba(prueba.id)"
+                            [disabled]="!isPruebaIdValid(prueba.id)">Guardar</button>
                         <button class="button btn btn-danger btn-lg"
                             (click)="cancelarModificarPrueba(prueba.id)">Cancelar</button>
                     </div>
@@ -481,7 +520,7 @@
                             required rows=3></textarea>
                     </div>
                     <div class="mb-3">
-                        <label for="inputSalida" class="form-label">Salida esperada:</label>
+                        <label for="inputSalida" class="form-label">Salida Esperada:</label>
                         <textarea type="text" class="form-control" name="inputSalida" [(ngModel)]="pruebaEdit.salida"
                             required rows=3></textarea>
                     </div>
@@ -489,22 +528,30 @@
                         <input class="form-check-input" type="checkbox" id="flexSwitchVisible"
                             [checked]="pruebaEdit.visible" (change)="pruebaEdit.visible = !pruebaEdit.visible">
                         <label class="form-check-label" for="flexSwitchVisible">Visible al responder</label>
+                        <div id="flexSwitchVisible" class="form-text">El usuario verá la entrada y la salida esperada, y
+                            sabrá cual ha sido la salida real de su respuesta durante la realización del examen.</div>
                     </div>
                     <div class="form-check form-switch">
                         <input class="form-check-input" type="checkbox" id="flexSwitchPostEntrega"
                             [checked]="pruebaEdit.postEntrega"
                             (change)="pruebaEdit.postEntrega = !pruebaEdit.postEntrega">
                         <label class="form-check-label" for="flexSwitchPostEntrega">Ejecución post-entrega</label>
+                        <div id="flexSwitchPostEntrega" class="form-text">La prueba no se contará para el cálculo de
+                            pruebas superadas que ve el usuario durante la realización, pero sí se usará para el cálculo
+                            final de la nota y lo verán los profesores responsables.</div>
                     </div>
                     <div class="mb-3">
                         <label for="inputValor" class="form-label">Valor:</label>
                         <input type="number" class="form-control" name="inputValor" [(ngModel)]="pruebaEdit.valor"
                             required min=0 />
+                        <div id="inputValor" class="form-text">Valor que tendrá la prueba respecto a la puntuación de la
+                            pregunta. Su valor final será el valor dividido entre la suma de los valores de todas las
+                            pruebas de la pregunta.</div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-success" data-bs-dismiss="modal"
-                        (click)="postPruebaSubmit()" [disabled]="!isPruebaEditValid()">Crear</button>
+                    <button type="submit" class="btn btn-success" data-bs-dismiss="modal" (click)="postPruebaSubmit()"
+                        [disabled]="!isPruebaEditValid()">Crear</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                 </div>
             </form>

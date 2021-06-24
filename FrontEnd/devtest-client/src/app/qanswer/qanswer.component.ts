@@ -29,6 +29,7 @@ export class QanswerComponent extends LoggedInController implements OnInit {
   theme = 'vs-dark';
   codeModel: CodeModel
   isMostrandoPruebas: boolean
+  collapsedPruebaIds: Set<number>
 
   pruebas: Prueba[]
   resPruebas: ResultadoPruebas
@@ -50,6 +51,7 @@ export class QanswerComponent extends LoggedInController implements OnInit {
     this.isMostrandoPruebas = false
     this.question = new Pregunta()
     this.pruebas = []
+    this.collapsedPruebaIds = new Set()
     this.resPruebas = new ResultadoPruebas()
     this.editPuntuacion = 0
     this.qa = new RespuestaPregunta()
@@ -101,6 +103,9 @@ export class QanswerComponent extends LoggedInController implements OnInit {
         this.recargarEditorCodigo()
         this.editPuntuacion = this.qa.puntuacion
         this.getResultadoPruebas()
+        if(this.qa.estado == QuestionAnswer.EstadoEnum.Ejecutando){
+          setTimeout(() => {this.getQAnswer(true)}, this.TIEMPO_RECARGA_ESTADO_COMPILACION)
+        }
       },
       err => this.handleErrRelog(err, "obtener respuesta de una pregunta", primera, this.getQAnswer, this)
     )
@@ -360,6 +365,10 @@ export class QanswerComponent extends LoggedInController implements OnInit {
     return this.qa.estado == QuestionAnswer.EstadoEnum.ErrorCompilacion
   }
 
+  isEjecutando(): boolean{
+    return this.qa.estado == QuestionAnswer.EstadoEnum.Ejecutando
+  }
+
   getErrorCompilacionString(): string {
     return this.qa.errorCompilacion || ""
   }
@@ -393,4 +402,30 @@ export class QanswerComponent extends LoggedInController implements OnInit {
         return "No ejecutada"
     }
   }
+
+  getPruebaIndice(id: number | undefined): string{
+    if(id==undefined) return ""
+    for(let i = 0; i<this.pruebas.length; i++){
+      if(id==this.pruebas[i].id){
+        let valor = i+1
+        return valor.toString()
+      }
+    }
+    return ""
+  }
+
+  isCollapsed(id: number | undefined): boolean{
+    if(id==undefined) return true
+    return this.collapsedPruebaIds.has(id)
+  }
+
+  switchCollapse(id: number | undefined){
+    if(id==undefined) return
+    if(this.collapsedPruebaIds.has(id)){
+      this.collapsedPruebaIds.delete(id)
+    }else{
+      this.collapsedPruebaIds.add(id)
+    }
+  }
+
 }
