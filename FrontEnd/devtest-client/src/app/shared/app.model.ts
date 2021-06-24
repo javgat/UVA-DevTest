@@ -1,4 +1,4 @@
-import { User, Team, Question, Test, Answer, QuestionAnswer, EmailConfiguration, CustomizedView, Prueba, Testing } from "@javgat/devtest-api";
+import { User, Team, Question, Test, Answer, QuestionAnswer, EmailConfiguration, CustomizedView, Prueba, Testing, Tag } from "@javgat/devtest-api";
 
 export enum Tipo {
     SUCCESS = "success",
@@ -430,5 +430,12 @@ export class ResultadoPruebas implements Testing{
     constructor(t?: Testing){
         this.pruebasSuperadas = t?.pruebasSuperadas || 0
         this.pruebasTotales = t?.pruebasTotales || 0
+    }
+}
+
+export class Etiqueta implements Tag{
+    tag: string;
+    constructor(t?: Tag){
+        this.tag = t?.tag || ""
     }
 }

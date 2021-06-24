@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Option, Prueba, PublishedTestService, Question, QuestionService, Tag, TagService, Team, UserService } from '@javgat/devtest-api';
 import { Subscription } from 'rxjs';
 import { LoggedInTeacherController } from '../shared/app.controller';
-import { Mensaje, Pregunta, PruebaEjecucion, Tipo, tipoPrint } from '../shared/app.model';
+import { Etiqueta, Mensaje, Pregunta, PruebaEjecucion, Tipo, tipoPrint } from '../shared/app.model';
 import { DataService } from '../shared/data.service';
 import { SessionService } from '../shared/session.service';
 
@@ -46,9 +46,7 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
     super(session, router, data, userS)
     this.isInAdminTeam = false
     this.editandoRespuesta = false
-    this.newTag = {
-      tag: ""
-    }
+    this.newTag = new Etiqueta()
     this.opciones = []
     this.pruebas = []
     this.pruebaidRecuperar = 0
@@ -256,9 +254,14 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
     this.addTag(true)
   }
 
+  cleanTag(){
+    this.newTag = new Etiqueta()
+  }
+
   addTag(primera: boolean) {
     this.qS.addTagToQuestion(this.id, this.newTag.tag).subscribe(
       resp => {
+        this.cleanTag()
         this.getTags(true)
       },
       err => {
