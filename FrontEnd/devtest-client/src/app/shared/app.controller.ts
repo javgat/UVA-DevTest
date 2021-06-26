@@ -17,6 +17,8 @@ export abstract class LoggedInController {
     private sessionLoginWaited: boolean
     private sessionUserWaited: boolean
 
+    TIEMPO_RECARGA_ESTADO_COMPILACION: number = 4000 //ms
+
     constructor(protected session: SessionService, protected router: Router, private data: DataService, protected userS: UserService, private routex?: ActivatedRoute) {
         this.session.checkStorageSession()
         this.sessionLogin = new SessionLogin(false)
@@ -93,7 +95,7 @@ export abstract class LoggedInController {
 
     // Redirige cuando no tienes permisos
     redirectNotAllowed() {
-        if(this.routex == undefined){
+        if (this.routex == undefined) {
             this.router.navigate(['/'])
             return
         }
@@ -289,6 +291,13 @@ export abstract class LoggedInController {
         if (rol != undefined && rol.adminPermissions)
             return true
         return false
+    }
+
+    getTextoEjecucionPostEntrega(postEntrega: boolean): string {
+        if (postEntrega) {
+            return "Exclusivamente después de la entrega"
+        }
+        return "Durante la respuesta"
     }
 
 }

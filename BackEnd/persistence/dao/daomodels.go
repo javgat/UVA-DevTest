@@ -320,6 +320,14 @@ type QuestionAnswer struct {
 	// Required: true
 	Corregida *bool `json:"corregida"`
 
+	// error compilacion
+	// Example: Error line 4 missing ';'
+	ErrorCompilacion string `json:"errorCompilacion,omitempty"`
+
+	// estado
+	// Enum: [noProbado errorCompilacion ejecutando probado]
+	Estado *string `json:"estado,omitempty"`
+
 	// id pregunta
 	// Example: 1
 	// Required: true
@@ -584,4 +592,83 @@ type PTestUpdate struct {
 	// Required: true
 	// Enum: [alEntregar alCorregir manual]
 	Visibilidad *string `json:"visibilidad"`
+}
+
+// Prueba prueba
+//
+// swagger:model Prueba
+type Prueba struct {
+
+	// entrada
+	// Example: 3 3 0 0
+	// Required: true
+	Entrada *string `json:"entrada"`
+
+	// Only in getPublishedPruebas and getVisiblePublishedPruebas.
+	// Enum: [correcto tiempoExcedido errorRuntime salidaIncorrecta]
+	Estado string `json:"estado,omitempty"`
+
+	// id
+	// Example: 1
+	ID int64 `json:"id,omitempty"`
+
+	// post entrega
+	// Example: true
+	// Required: true
+	PostEntrega *bool `json:"postEntrega"`
+
+	// preguntaid
+	// Example: 1
+	Preguntaid int64 `json:"preguntaid,omitempty"`
+
+	// salida
+	// Example: 2 2
+	// Required: true
+	Salida *string `json:"salida"`
+
+	// actual output of the questionanswer executed. Only in getPublishedPruebas and getVisiblePublishedPruebas.
+	// Example: 2 3
+	SalidaReal string `json:"salidaReal,omitempty"`
+
+	// valor
+	// Example: 1
+	// Required: true
+	// Minimum: 0
+	Valor *int64 `json:"valor"`
+
+	// visible
+	// Example: true
+	// Required: true
+	Visible *bool `json:"visible"`
+}
+
+// Testing testing
+//
+// swagger:model Testing
+type Testing struct {
+
+	// pruebas superadas
+	// Example: 5
+	// Required: true
+	PruebasSuperadas *int64 `json:"pruebasSuperadas"`
+
+	// pruebas totales
+	// Example: 15
+	// Required: true
+	PruebasTotales *int64 `json:"pruebasTotales"`
+}
+
+const (
+	EstadoEjecucionCorrecto         = "correcto"
+	EstadoEjecucionTiempoExcedido   = "tiempoExcedido"
+	EstadoEjecucionErrorRuntime     = "errorRuntime"
+	EstadoEjecucionSalidaIncorrecta = "salidaIncorrecta"
+)
+
+type Ejecucion struct {
+	Pruebaid          *int64
+	RespuestaExamenid *int64
+	Preguntaid        *int64
+	Estado            *string
+	SalidaReal        *string
 }

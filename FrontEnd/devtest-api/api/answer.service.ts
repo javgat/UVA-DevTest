@@ -19,9 +19,11 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { Answer } from '../model/answer';
+import { Prueba } from '../model/prueba';
 import { Question } from '../model/question';
 import { QuestionAnswer } from '../model/questionAnswer';
 import { Review } from '../model/review';
+import { Testing } from '../model/testing';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -58,6 +60,57 @@ export class AnswerService {
         return false;
     }
 
+
+    /**
+     * Asks to create a new testing for the user answering a question, deleting the former one
+     * Asks to create a new testing for the user answering a question, deleting the former one
+     * @param answerid Id of the answer
+     * @param questionid Id of the question it is answering
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public createPreTesting(answerid: number, questionid: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public createPreTesting(answerid: number, questionid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public createPreTesting(answerid: number, questionid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public createPreTesting(answerid: number, questionid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (answerid === null || answerid === undefined) {
+            throw new Error('Required parameter answerid was null or undefined when calling createPreTesting.');
+        }
+
+        if (questionid === null || questionid === undefined) {
+            throw new Error('Required parameter questionid was null or undefined when calling createPreTesting.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.put<any>(`${this.basePath}/answers/${encodeURIComponent(String(answerid))}/qanswers/${encodeURIComponent(String(questionid))}/preTesting`,
+            null,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
 
     /**
      * Deletes an answer&#39;s questionAnswer. Only if answer is open
@@ -294,6 +347,159 @@ export class AnswerService {
     }
 
     /**
+     * Returns an answer testing for the testadmin
+     * Returns an answer testing for the testadmin
+     * @param answerid Id of the answer
+     * @param questionid Id of the question it is answering
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getFullTesting(answerid: number, questionid: number, observe?: 'body', reportProgress?: boolean): Observable<Testing>;
+    public getFullTesting(answerid: number, questionid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Testing>>;
+    public getFullTesting(answerid: number, questionid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Testing>>;
+    public getFullTesting(answerid: number, questionid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (answerid === null || answerid === undefined) {
+            throw new Error('Required parameter answerid was null or undefined when calling getFullTesting.');
+        }
+
+        if (questionid === null || questionid === undefined) {
+            throw new Error('Required parameter questionid was null or undefined when calling getFullTesting.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Testing>(`${this.basePath}/answers/${encodeURIComponent(String(answerid))}/qanswers/${encodeURIComponent(String(questionid))}/fullTesting`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns an answer testing for the user answering the question
+     * Returns an answer testing for the user answering the question
+     * @param answerid Id of the answer
+     * @param questionid Id of the question it is answering
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getPreTesting(answerid: number, questionid: number, observe?: 'body', reportProgress?: boolean): Observable<Testing>;
+    public getPreTesting(answerid: number, questionid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Testing>>;
+    public getPreTesting(answerid: number, questionid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Testing>>;
+    public getPreTesting(answerid: number, questionid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (answerid === null || answerid === undefined) {
+            throw new Error('Required parameter answerid was null or undefined when calling getPreTesting.');
+        }
+
+        if (questionid === null || questionid === undefined) {
+            throw new Error('Required parameter questionid was null or undefined when calling getPreTesting.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Testing>(`${this.basePath}/answers/${encodeURIComponent(String(answerid))}/qanswers/${encodeURIComponent(String(questionid))}/preTesting`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns all pruebas from a question. It will contain the correctness information related to the QuestionAnswer
+     * Returns all pruebas from a question. It will contain the correctness information related to the QuestionAnswer
+     * @param answerid Id of the answer
+     * @param questionid Id of the question to find its pruebas
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getPublishedPruebasFromQuestionTest(answerid: number, questionid: number, observe?: 'body', reportProgress?: boolean): Observable<Array<Prueba>>;
+    public getPublishedPruebasFromQuestionTest(answerid: number, questionid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Prueba>>>;
+    public getPublishedPruebasFromQuestionTest(answerid: number, questionid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Prueba>>>;
+    public getPublishedPruebasFromQuestionTest(answerid: number, questionid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (answerid === null || answerid === undefined) {
+            throw new Error('Required parameter answerid was null or undefined when calling getPublishedPruebasFromQuestionTest.');
+        }
+
+        if (questionid === null || questionid === undefined) {
+            throw new Error('Required parameter questionid was null or undefined when calling getPublishedPruebasFromQuestionTest.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Array<Prueba>>(`${this.basePath}/answers/${encodeURIComponent(String(answerid))}/questions/${encodeURIComponent(String(questionid))}/pruebas`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Returns an answer&#39;s questionAnswer
      * Returns an answers&#39;s questionAnswer
      * @param answerid Id of the answer
@@ -478,6 +684,57 @@ export class AnswerService {
         ];
 
         return this.httpClient.get<Array<Question>>(`${this.basePath}/answers/${encodeURIComponent(String(answerid))}/questions`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns all pruebas visibles from a question. It will contain the correctness information related to the QuestionAnswer
+     * Returns all pruebas visibles from a question. It will contain the correctness information related to the QuestionAnswer
+     * @param answerid Id of the answer
+     * @param questionid Id of the question to find its pruebas visibles
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getVisiblePublishedPruebasFromQuestionTest(answerid: number, questionid: number, observe?: 'body', reportProgress?: boolean): Observable<Array<Prueba>>;
+    public getVisiblePublishedPruebasFromQuestionTest(answerid: number, questionid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Prueba>>>;
+    public getVisiblePublishedPruebasFromQuestionTest(answerid: number, questionid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Prueba>>>;
+    public getVisiblePublishedPruebasFromQuestionTest(answerid: number, questionid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (answerid === null || answerid === undefined) {
+            throw new Error('Required parameter answerid was null or undefined when calling getVisiblePublishedPruebasFromQuestionTest.');
+        }
+
+        if (questionid === null || questionid === undefined) {
+            throw new Error('Required parameter questionid was null or undefined when calling getVisiblePublishedPruebasFromQuestionTest.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Array<Prueba>>(`${this.basePath}/answers/${encodeURIComponent(String(answerid))}/questions/${encodeURIComponent(String(questionid))}/visiblePruebas`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

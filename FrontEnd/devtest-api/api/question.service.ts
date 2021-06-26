@@ -19,6 +19,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { Option } from '../model/option';
+import { Prueba } from '../model/prueba';
 import { Question } from '../model/question';
 import { Tag } from '../model/tag';
 import { Team } from '../model/team';
@@ -256,6 +257,56 @@ export class QuestionService {
         ];
 
         return this.httpClient.delete<any>(`${this.basePath}/questions/${encodeURIComponent(String(questionid))}/options/${encodeURIComponent(String(optionindex))}`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Deletes a prueba from a question.
+     * Deletes a prueba from a question.
+     * @param questionid Id of the question to delete its prueba
+     * @param pruebaid id of the prueba to delete
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public deletePrueba(questionid: number, pruebaid: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public deletePrueba(questionid: number, pruebaid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public deletePrueba(questionid: number, pruebaid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public deletePrueba(questionid: number, pruebaid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (questionid === null || questionid === undefined) {
+            throw new Error('Required parameter questionid was null or undefined when calling deletePrueba.');
+        }
+
+        if (pruebaid === null || pruebaid === undefined) {
+            throw new Error('Required parameter pruebaid was null or undefined when calling deletePrueba.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.delete<any>(`${this.basePath}/questions/${encodeURIComponent(String(questionid))}/pruebas/${encodeURIComponent(String(pruebaid))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -630,6 +681,103 @@ export class QuestionService {
     }
 
     /**
+     * Returns a prueba from a question.
+     * Returns a prueba from a question.
+     * @param questionid Id of the question to find its prueba
+     * @param pruebaid id of the prueba to find
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getPruebaFromQuestion(questionid: number, pruebaid: number, observe?: 'body', reportProgress?: boolean): Observable<Prueba>;
+    public getPruebaFromQuestion(questionid: number, pruebaid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Prueba>>;
+    public getPruebaFromQuestion(questionid: number, pruebaid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Prueba>>;
+    public getPruebaFromQuestion(questionid: number, pruebaid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (questionid === null || questionid === undefined) {
+            throw new Error('Required parameter questionid was null or undefined when calling getPruebaFromQuestion.');
+        }
+
+        if (pruebaid === null || pruebaid === undefined) {
+            throw new Error('Required parameter pruebaid was null or undefined when calling getPruebaFromQuestion.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Prueba>(`${this.basePath}/questions/${encodeURIComponent(String(questionid))}/pruebas/${encodeURIComponent(String(pruebaid))}`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns all pruebas from a question.
+     * Returns all pruebas from a question.
+     * @param questionid Id of the question to find its pruebas
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getPruebasFromQuestion(questionid: number, observe?: 'body', reportProgress?: boolean): Observable<Array<Prueba>>;
+    public getPruebasFromQuestion(questionid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Prueba>>>;
+    public getPruebasFromQuestion(questionid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Prueba>>>;
+    public getPruebasFromQuestion(questionid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (questionid === null || questionid === undefined) {
+            throw new Error('Required parameter questionid was null or undefined when calling getPruebasFromQuestion.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Array<Prueba>>(`${this.basePath}/questions/${encodeURIComponent(String(questionid))}/pruebas`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Returns a question
      * Returns a question
      * @param questionid Id of the question to find
@@ -965,6 +1113,63 @@ export class QuestionService {
     }
 
     /**
+     * Creates new prueba to a question.
+     * Creates new prueba to a question.
+     * @param questionid Id of the question to create a prueba
+     * @param prueba Prueba to add
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public postPrueba(questionid: number, prueba: Prueba, observe?: 'body', reportProgress?: boolean): Observable<Prueba>;
+    public postPrueba(questionid: number, prueba: Prueba, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Prueba>>;
+    public postPrueba(questionid: number, prueba: Prueba, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Prueba>>;
+    public postPrueba(questionid: number, prueba: Prueba, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (questionid === null || questionid === undefined) {
+            throw new Error('Required parameter questionid was null or undefined when calling postPrueba.');
+        }
+
+        if (prueba === null || prueba === undefined) {
+            throw new Error('Required parameter prueba was null or undefined when calling postPrueba.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.post<Prueba>(`${this.basePath}/questions/${encodeURIComponent(String(questionid))}/pruebas`,
+            prueba,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Creates a question
      * Creates a question
      * @param username Username of the user who owns the question
@@ -1073,6 +1278,67 @@ export class QuestionService {
 
         return this.httpClient.put<any>(`${this.basePath}/questions/${encodeURIComponent(String(questionid))}/options/${encodeURIComponent(String(optionindex))}`,
             option,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Modifies a prueba from a question.
+     * Modifies a prueba from a question.
+     * @param questionid Id of the question to modify its prueba
+     * @param pruebaid id of the prueba to modify
+     * @param prueba Prueba updated
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public putPrueba(questionid: number, pruebaid: number, prueba: Prueba, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public putPrueba(questionid: number, pruebaid: number, prueba: Prueba, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public putPrueba(questionid: number, pruebaid: number, prueba: Prueba, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public putPrueba(questionid: number, pruebaid: number, prueba: Prueba, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (questionid === null || questionid === undefined) {
+            throw new Error('Required parameter questionid was null or undefined when calling putPrueba.');
+        }
+
+        if (pruebaid === null || pruebaid === undefined) {
+            throw new Error('Required parameter pruebaid was null or undefined when calling putPrueba.');
+        }
+
+        if (prueba === null || prueba === undefined) {
+            throw new Error('Required parameter prueba was null or undefined when calling putPrueba.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.put<any>(`${this.basePath}/questions/${encodeURIComponent(String(questionid))}/pruebas/${encodeURIComponent(String(pruebaid))}`,
+            prueba,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

@@ -577,6 +577,39 @@ func copyTagsQuestion(sourceQID int64, targetQID int64) error {
 	return err
 }
 
+func copyPrueba(pru *dao.Prueba, targetQID int64) (*models.Prueba, error) {
+	pru.Preguntaid = targetQID
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		mp := dao.ToModelPrueba(pru)
+		var p *dao.Prueba
+		p, err = dao.PostPrueba(db, targetQID, mp)
+		if err == nil && p != nil {
+			mp = dao.ToModelPrueba(p)
+			return mp, nil
+		}
+	}
+	return nil, err
+}
+
+func copyPruebasQuestion(sourceQID int64, targetQID int64) error {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		var ps []*dao.Prueba
+		ps, err = dao.GetPruebas(db, sourceQID)
+		if err == nil {
+			for _, p := range ps {
+				_, err = copyPrueba(p, targetQID)
+				if err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}
+	return err
+}
+
 func copyQuestion(q *dao.Question, username string, userID int64) (*models.Question, error) {
 	db, err := dbconnection.ConnectDb()
 	if err == nil {
@@ -592,7 +625,10 @@ func copyQuestion(q *dao.Question, username string, userID int64) (*models.Quest
 				if err == nil {
 					err = copyTagsQuestion(q.ID, mq.ID)
 					if err == nil {
-						return mq, nil
+						err = copyPruebasQuestion(q.ID, mq.ID)
+						if err == nil {
+							return mq, nil
+						}
 					}
 				}
 			}
@@ -1519,4 +1555,108 @@ func PostEmailUser(params user.PostEmailUserParams, u *models.User) middleware.R
 	}
 	log.Println("Error en PostEmailUser(): ", err)
 	return user.NewPostEmailUserInternalServerError()
+}
+
+// GET /users/{username}/favoriteEditQuestions
+// Auth: Current User or CanAdminUsers
+// Req: Fav+available+editable (SQL)
+func GetFavoriteEditQuestions(params user.GetFavoriteEditQuestionsParams, u *models.User) middleware.Responder {
+	if isUser(params.Username, u) || permissions.CanAdminUsers(u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			var qs []*dao.Question
+			qs, err = dao.GetFavoriteEditQuestions(db, params.Username, params.Tags, params.LikeTitle, params.Orderby,
+				params.Limit, params.Offset)
+			if err == nil {
+				var mqs []*models.Question
+				mqs, err = dao.ToModelQuestions(qs)
+				if err == nil {
+					return user.NewGetFavoriteEditQuestionsOK().WithPayload(mqs)
+				}
+			}
+		}
+		return user.NewGetFavoriteEditQuestionsInternalServerError()
+	}
+	return user.NewGetFavoriteEditQuestionsForbidden()
+}
+
+// GET /users/{username}/favoriteQuestions
+// Auth: Current User or CanAdminUsers
+// Req: Fav+available (SQL)
+func GetFavoriteQuestions(params user.GetFavoriteQuestionsParams, u *models.User) middleware.Responder {
+	if isUser(params.Username, u) || permissions.CanAdminUsers(u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			var qs []*dao.Question
+			qs, err = dao.GetFavoriteQuestions(db, params.Username, params.Tags, params.LikeTitle, params.Orderby,
+				params.Limit, params.Offset)
+			if err == nil {
+				var mqs []*models.Question
+				mqs, err = dao.ToModelQuestions(qs)
+				if err == nil {
+					return user.NewGetFavoriteQuestionsOK().WithPayload(mqs)
+				}
+			}
+		}
+		return user.NewGetFavoriteQuestionsInternalServerError()
+	}
+	return user.NewGetFavoriteQuestionsForbidden()
+}
+
+// GET /users/{username}/favoriteQuestions/{questionid}
+// Auth: Current User or CanAdminUsers
+// Req: Fav+available (SQL)
+func GetFavoriteQuestion(params user.GetFavoriteQuestionParams, u *models.User) middleware.Responder {
+	if isUser(params.Username, u) || permissions.CanAdminUsers(u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			var qs *dao.Question
+			qs, err = dao.GetFavoriteQuestion(db, params.Username, params.Questionid)
+			if err == nil {
+				if qs == nil {
+					return user.NewGetFavoriteQuestionGone()
+				}
+				var mqs *models.Question
+				mqs, err = dao.ToModelQuestion(qs)
+				if err == nil {
+					return user.NewGetFavoriteQuestionOK().WithPayload(mqs)
+				}
+			}
+		}
+		return user.NewGetFavoriteQuestionInternalServerError()
+	}
+	return user.NewGetFavoriteQuestionForbidden()
+}
+
+// PUT /users/{username}/favoriteQuestions/{questionid}
+// Auth: Current User or CanAdminUsers
+func AddFavoriteQuestion(params user.AddQuestionFavoriteParams, u *models.User) middleware.Responder {
+	if isUser(params.Username, u) || permissions.CanAdminUsers(u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			err = dao.AddFavoriteQuestion(db, params.Username, params.Questionid)
+			if err == nil {
+				return user.NewAddQuestionFavoriteOK()
+			}
+		}
+		log.Println(err)
+		return user.NewAddQuestionFavoriteInternalServerError()
+	}
+	return user.NewAddQuestionFavoriteForbidden()
+}
+
+// DELETE /users/{username}/favoriteQuestions/{questionid}
+// Auth: Current User or CanAdminUsers
+func RemoveFavoriteQuestion(params user.RemoveQuestionFavoriteParams, u *models.User) middleware.Responder {
+	if isUser(params.Username, u) || permissions.CanAdminUsers(u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			err = dao.RemoveFavoriteQuestion(db, params.Username, params.Questionid)
+			if err == nil {
+				return user.NewRemoveQuestionFavoriteOK()
+			}
+		}
+		return user.NewRemoveQuestionFavoriteInternalServerError()
+	}
+	return user.NewRemoveQuestionFavoriteForbidden()
 }

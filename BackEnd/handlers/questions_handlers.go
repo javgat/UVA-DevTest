@@ -11,7 +11,6 @@ import (
 	"uva-devtest/persistence/dao"
 	"uva-devtest/persistence/dbconnection"
 	"uva-devtest/restapi/operations/question"
-	"uva-devtest/restapi/operations/user"
 
 	"github.com/go-openapi/runtime/middleware"
 )
@@ -79,7 +78,7 @@ func GetEditQuestions(params question.GetEditQuestionsParams, u *models.User) mi
 				}
 			}
 		}
-		log.Println("Error en users_handler GetEditQuestions(): ", err)
+		log.Println("Error en questions_handlers GetEditQuestions(): ", err)
 		return question.NewGetEditQuestionsInternalServerError()
 	}
 	return question.NewGetEditQuestionsForbidden()
@@ -102,7 +101,7 @@ func GetQuestions(params question.GetQuestionsParams, u *models.User) middleware
 				}
 			}
 		}
-		log.Println("Error en users_handler GetQuestions(): ", err)
+		log.Println("Error en questions_handlers GetQuestions(): ", err)
 		return question.NewGetQuestionsInternalServerError()
 	}
 	return question.NewGetQuestionsForbidden()
@@ -130,7 +129,7 @@ func GetQuestion(params question.GetQuestionParams, u *models.User) middleware.R
 			}
 			return question.NewGetQuestionGone()
 		}
-		log.Println("Error en users_handler GetQuestions(): ", err)
+		log.Println("Error en questions_handlers GetQuestions(): ", err)
 		return question.NewGetQuestionInternalServerError()
 	}
 	return question.NewGetQuestionForbidden()
@@ -227,7 +226,7 @@ func GetQuestionTags(params question.GetTagsFromQuestionParams, u *models.User) 
 				}
 			}
 		}
-		log.Println("Error en users_handler GetQuestionTags(): ", err)
+		log.Println("Error en questions_handlers GetQuestionTags(): ", err)
 		return question.NewGetTagsFromQuestionInternalServerError()
 	}
 	return question.NewGetTagsFromQuestionForbidden()
@@ -250,7 +249,7 @@ func GetQuestionTag(params question.GetTagFromQuestionParams, u *models.User) mi
 			}
 			return question.NewGetTagFromQuestionGone()
 		}
-		log.Println("Error en users_handler GetQuestionTag(): ", err)
+		log.Println("Error en questions_handlers GetQuestionTag(): ", err)
 		return question.NewGetTagFromQuestionInternalServerError()
 	}
 	return question.NewGetTagFromQuestionForbidden()
@@ -275,7 +274,7 @@ func AddQuestionTag(params question.AddTagToQuestionParams, u *models.User) midd
 				}
 			}
 		}
-		log.Println("Error en users_handler AddQuestionTag(): ", err)
+		log.Println("Error en questions_handlers AddQuestionTag(): ", err)
 		return question.NewAddTagToQuestionGone()
 	}
 	return question.NewAddTagToQuestionForbidden()
@@ -295,7 +294,7 @@ func RemoveQuestionTag(params question.RemoveTagFromQuestionParams, u *models.Us
 				}
 			}
 		}
-		log.Println("Error en users_handler RemoveQuestionTag(): ", err)
+		log.Println("Error en questions_handlers RemoveQuestionTag(): ", err)
 		return question.NewRemoveTagFromQuestionGone()
 	}
 	return question.NewRemoveTagFromQuestionForbidden()
@@ -315,7 +314,7 @@ func AddQuestionTeam(params question.AddTeamToQuestionParams, u *models.User) mi
 						return question.NewAddTeamToQuestionOK()
 					}
 				}
-				log.Println("Error en users_handler AddQuestionTeam(): ", err)
+				log.Println("Error en questions_handlers AddQuestionTeam(): ", err)
 			}
 			s := "El equipo a añadir tiene que ser de profesores"
 			if err != nil {
@@ -347,7 +346,7 @@ func RemoveQuestionTeam(params question.RemoveTeamToQuestionParams, u *models.Us
 					return question.NewRemoveTeamToQuestionOK()
 				}
 			}
-			log.Println("Error en users_handler RemoveQuestionTeam(): ", err)
+			log.Println("Error en questions_handlers RemoveQuestionTeam(): ", err)
 			return question.NewRemoveTeamToQuestionGone()
 		}
 	}
@@ -369,7 +368,7 @@ func GetTeamsFromQuestion(params question.GetTeamsFromQuestionParams, u *models.
 				}
 			}
 		}
-		log.Println("Error en users_handler GetTeamsFromQuestion(): ", err)
+		log.Println("Error en questions_handlers GetTeamsFromQuestion(): ", err)
 		return question.NewGetTeamsFromQuestionInternalServerError()
 	}
 	return question.NewGetTeamsFromQuestionForbidden()
@@ -390,7 +389,7 @@ func GetOptions(params question.GetOptionsFromQuestionParams, u *models.User) mi
 				}
 			}
 		}
-		log.Println("Error en users_handler GetOptions(): ", err)
+		log.Println("Error en questions_handlers GetOptions(): ", err)
 		return question.NewGetOptionsFromQuestionInternalServerError()
 	}
 	return question.NewGetOptionsFromQuestionForbidden()
@@ -435,7 +434,7 @@ func GetOption(params question.GetOptionFromQuestionParams, u *models.User) midd
 				}
 			}
 		}
-		log.Println("Error en users_handler GetOption(): ", err)
+		log.Println("Error en questions_handlers GetOption(): ", err)
 		return question.NewGetOptionFromQuestionInternalServerError()
 	}
 	return question.NewGetOptionFromQuestionForbidden()
@@ -453,7 +452,7 @@ func PutOption(params question.PutOptionParams, u *models.User) middleware.Respo
 				return question.NewPutOptionOK()
 			}
 		}
-		log.Println("Error en users_handler PutOption(): ", err)
+		log.Println("Error en questions_handlers PutOption(): ", err)
 		return question.NewPutOptionInternalServerError()
 	}
 	return question.NewPutOptionForbidden()
@@ -476,106 +475,166 @@ func DeleteOption(params question.DeleteOptionParams, u *models.User) middleware
 	return question.NewDeleteOptionForbidden()
 }
 
-// GET /users/{username}/favoriteEditQuestions
-// Auth: Current User or CanAdminUsers
-// Req: Fav+available+editable (SQL)
-func GetFavoriteEditQuestions(params user.GetFavoriteEditQuestionsParams, u *models.User) middleware.Responder {
-	if isUser(params.Username, u) || permissions.CanAdminUsers(u) {
-		db, err := dbconnection.ConnectDb()
-		if err == nil {
-			var qs []*dao.Question
-			qs, err = dao.GetFavoriteEditQuestions(db, params.Username, params.Tags, params.LikeTitle, params.Orderby,
-				params.Limit, params.Offset)
-			if err == nil {
-				var mqs []*models.Question
-				mqs, err = dao.ToModelQuestions(qs)
-				if err == nil {
-					return user.NewGetFavoriteEditQuestionsOK().WithPayload(mqs)
-				}
-			}
-		}
-		return user.NewGetFavoriteEditQuestionsInternalServerError()
-	}
-	return user.NewGetFavoriteEditQuestionsForbidden()
-}
-
-// GET /users/{username}/favoriteQuestions
-// Auth: Current User or CanAdminUsers
-// Req: Fav+available (SQL)
-func GetFavoriteQuestions(params user.GetFavoriteQuestionsParams, u *models.User) middleware.Responder {
-	if isUser(params.Username, u) || permissions.CanAdminUsers(u) {
-		db, err := dbconnection.ConnectDb()
-		if err == nil {
-			var qs []*dao.Question
-			qs, err = dao.GetFavoriteQuestions(db, params.Username, params.Tags, params.LikeTitle, params.Orderby,
-				params.Limit, params.Offset)
-			if err == nil {
-				var mqs []*models.Question
-				mqs, err = dao.ToModelQuestions(qs)
-				if err == nil {
-					return user.NewGetFavoriteQuestionsOK().WithPayload(mqs)
-				}
-			}
-		}
-		return user.NewGetFavoriteQuestionsInternalServerError()
-	}
-	return user.NewGetFavoriteQuestionsForbidden()
-}
-
-// GET /users/{username}/favoriteQuestions/{questionid}
-// Auth: Current User or CanAdminUsers
-// Req: Fav+available (SQL)
-func GetFavoriteQuestion(params user.GetFavoriteQuestionParams, u *models.User) middleware.Responder {
-	if isUser(params.Username, u) || permissions.CanAdminUsers(u) {
+// GET /questions/{questionid}/pruebas
+// Auth: (CanVerQuestions and Question.AccesoPublicoNoPublicada==true) OR (QuestionAdmin or CanAdminEQuestions)
+func GetPruebas(params question.GetPruebasFromQuestionParams, u *models.User) middleware.Responder {
+	if permissions.CanVerQuestions(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
 			var qs *dao.Question
-			qs, err = dao.GetFavoriteQuestion(db, params.Username, params.Questionid)
-			if err == nil {
-				if qs == nil {
-					return user.NewGetFavoriteQuestionGone()
+			qs, err = dao.GetQuestion(db, params.Questionid)
+			if err == nil && qs != nil {
+				if !*qs.AccesoPublicoNoPublicada {
+					if !(permissions.CanAdminQuestions(u) || isQuestionAdmin(u, params.Questionid)) {
+						return question.NewGetPruebasFromQuestionForbidden()
+					}
 				}
-				var mqs *models.Question
-				mqs, err = dao.ToModelQuestion(qs)
+				var ps []*dao.Prueba
+				ps, err = dao.GetPruebas(db, params.Questionid)
 				if err == nil {
-					return user.NewGetFavoriteQuestionOK().WithPayload(mqs)
+					mps := dao.ToModelPruebas(ps)
+					return question.NewGetPruebasFromQuestionOK().WithPayload(mps)
 				}
+				log.Println("Error en questions_handlers GetPruebas(): ", err)
+				return question.NewGetPruebasFromQuestionInternalServerError()
 			}
+			return question.NewGetPruebasFromQuestionGone()
 		}
-		return user.NewGetFavoriteQuestionInternalServerError()
+		log.Println("Error en questions_handlers GetPruebas(): ", err)
+		return question.NewGetPruebasFromQuestionInternalServerError()
 	}
-	return user.NewGetFavoriteQuestionForbidden()
+	return question.NewGetPruebasFromQuestionForbidden()
 }
 
-// PUT /users/{username}/favoriteQuestions/{questionid}
-// Auth: Current User or CanAdminUsers
-func AddFavoriteQuestion(params user.AddQuestionFavoriteParams, u *models.User) middleware.Responder {
-	if isUser(params.Username, u) || permissions.CanAdminUsers(u) {
+// POST /questions/{questionid}/pruebas
+// Auth: (CanVerQuestions and Question.AccesoPublicoNoPublicada==true) OR (QuestionAdmin or CanAdminEQuestions)
+// Req: Question.Editable
+func PostPrueba(params question.PostPruebaParams, u *models.User) middleware.Responder {
+	if permissions.CanVerQuestions(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			err = dao.AddFavoriteQuestion(db, params.Username, params.Questionid)
-			if err == nil {
-				return user.NewAddQuestionFavoriteOK()
+			var qs *dao.Question
+			qs, err = dao.GetQuestion(db, params.Questionid)
+			if err == nil && qs != nil {
+				if !*qs.AccesoPublicoNoPublicada {
+					if !(permissions.CanAdminQuestions(u) || isQuestionAdmin(u, params.Questionid)) {
+						return question.NewPostPruebaForbidden()
+					}
+				}
+				if !*qs.Editable {
+					return question.NewPostPruebaForbidden()
+				}
+				var p *dao.Prueba
+				p, err = dao.PostPrueba(db, params.Questionid, params.Prueba)
+				if err == nil {
+					mp := dao.ToModelPrueba(p)
+					return question.NewPostPruebaCreated().WithPayload(mp)
+				}
+				log.Println("Error en questions_handlers PostPrueba(): ", err)
+				return question.NewPostPruebaInternalServerError()
 			}
+			return question.NewPostPruebaGone()
 		}
-		log.Println(err)
-		return user.NewAddQuestionFavoriteInternalServerError()
+		log.Println("Error en questions_handlers PostPrueba(): ", err)
+		return question.NewPostPruebaInternalServerError()
 	}
-	return user.NewAddQuestionFavoriteForbidden()
+	return question.NewPostPruebaForbidden()
 }
 
-// DELETE /users/{username}/favoriteQuestions/{questionid}
-// Auth: Current User or CanAdminUsers
-func RemoveFavoriteQuestion(params user.RemoveQuestionFavoriteParams, u *models.User) middleware.Responder {
-	if isUser(params.Username, u) || permissions.CanAdminUsers(u) {
+// GET /questions/{questionid}/pruebas/{pruebaid}
+// Auth: (CanVerQuestions and Question.AccesoPublicoNoPublicada==true) OR (QuestionAdmin or CanAdminEQuestions)
+func GetPrueba(params question.GetPruebaFromQuestionParams, u *models.User) middleware.Responder {
+	if permissions.CanVerQuestions(u) {
 		db, err := dbconnection.ConnectDb()
 		if err == nil {
-			err = dao.RemoveFavoriteQuestion(db, params.Username, params.Questionid)
-			if err == nil {
-				return user.NewRemoveQuestionFavoriteOK()
+			var qs *dao.Question
+			qs, err = dao.GetQuestion(db, params.Questionid)
+			if err == nil && qs != nil {
+				if !*qs.AccesoPublicoNoPublicada {
+					if !(permissions.CanAdminQuestions(u) || isQuestionAdmin(u, params.Questionid)) {
+						return question.NewGetPruebaFromQuestionForbidden()
+					}
+				}
+				var p *dao.Prueba
+				p, err = dao.GetPrueba(db, params.Questionid, params.Pruebaid)
+				if err == nil {
+					mp := dao.ToModelPrueba(p)
+					return question.NewGetPruebaFromQuestionOK().WithPayload(mp)
+				}
+				log.Println("Error en questions_handlers GetPrueba(): ", err)
+				return question.NewGetPruebaFromQuestionInternalServerError()
 			}
+			return question.NewGetPruebaFromQuestionGone()
 		}
-		return user.NewRemoveQuestionFavoriteInternalServerError()
+		log.Println("Error en questions_handlers GetPrueba(): ", err)
+		return question.NewGetPruebaFromQuestionInternalServerError()
 	}
-	return user.NewRemoveQuestionFavoriteForbidden()
+	return question.NewGetPruebaFromQuestionForbidden()
+}
+
+// PUT /questions/{questionid}/pruebas/{pruebaid}
+// Auth: (CanVerQuestions and Question.AccesoPublicoNoPublicada==true) OR (QuestionAdmin or CanAdminEQuestions)
+// Req: Question.Editable
+func PutPrueba(params question.PutPruebaParams, u *models.User) middleware.Responder {
+	if permissions.CanVerQuestions(u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			var qs *dao.Question
+			qs, err = dao.GetQuestion(db, params.Questionid)
+			if err == nil && qs != nil {
+				if !*qs.AccesoPublicoNoPublicada {
+					if !(permissions.CanAdminQuestions(u) || isQuestionAdmin(u, params.Questionid)) {
+						return question.NewPutPruebaForbidden()
+					}
+				}
+				if !*qs.Editable {
+					return question.NewPutPruebaForbidden()
+				}
+				err = dao.PutPrueba(db, params.Questionid, params.Pruebaid, params.Prueba)
+				if err == nil {
+					return question.NewPutPruebaOK()
+				}
+				log.Println("Error en questions_handlers PutPrueba(): ", err)
+				return question.NewPutPruebaInternalServerError()
+			}
+			return question.NewPutPruebaGone()
+		}
+		log.Println("Error en questions_handlers PutPrueba(): ", err)
+		return question.NewPutPruebaInternalServerError()
+	}
+	return question.NewPutPruebaForbidden()
+}
+
+// DELETE /questions/{questionid}/pruebas/{pruebaid}
+// Auth: (CanVerQuestions and Question.AccesoPublicoNoPublicada==true) OR (QuestionAdmin or CanAdminEQuestions)
+// Req: Question.Editable
+func DeletePrueba(params question.DeletePruebaParams, u *models.User) middleware.Responder {
+	if permissions.CanVerQuestions(u) {
+		db, err := dbconnection.ConnectDb()
+		if err == nil {
+			var qs *dao.Question
+			qs, err = dao.GetQuestion(db, params.Questionid)
+			if err == nil && qs != nil {
+				if !*qs.AccesoPublicoNoPublicada {
+					if !(permissions.CanAdminQuestions(u) || isQuestionAdmin(u, params.Questionid)) {
+						return question.NewDeletePruebaForbidden()
+					}
+				}
+				if !*qs.Editable {
+					return question.NewDeletePruebaForbidden()
+				}
+				err = dao.DeletePrueba(db, params.Questionid, params.Pruebaid)
+				if err == nil {
+					return question.NewDeletePruebaOK()
+				}
+				log.Println("Error en questions_handlers DeletePrueba(): ", err)
+				return question.NewDeletePruebaInternalServerError()
+			}
+			return question.NewDeletePruebaGone()
+		}
+		log.Println("Error en questions_handlers DeletePrueba(): ", err)
+		return question.NewDeletePruebaInternalServerError()
+	}
+	return question.NewDeletePruebaForbidden()
+
 }

@@ -10,6 +10,7 @@ import (
 	"log"
 	"strings"
 	"time"
+	"uva-devtest/corrector"
 	"uva-devtest/models"
 	"uva-devtest/permissions"
 	"uva-devtest/persistence/dao"
@@ -98,7 +99,7 @@ func autoCorrigeString(daq *dao.QuestionAnswer, dq *dao.Question) error {
 	review := &models.Review{
 		Puntuacion: &puntuacion,
 	}
-	err := updateReview(*daq.IDRespuesta, dq.ID, review)
+	err := corrector.UpdateReview(*daq.IDRespuesta, dq.ID, review)
 	return err
 }
 
@@ -123,7 +124,7 @@ func autoCorrigeOpcionesEleUni(daq *dao.QuestionAnswer, dq *dao.Question) error 
 		review := &models.Review{
 			Puntuacion: &puntuacion,
 		}
-		err = updateReview(*daq.IDRespuesta, dq.ID, review)
+		err = corrector.UpdateReview(*daq.IDRespuesta, dq.ID, review)
 	}
 	return err
 }
@@ -154,10 +155,16 @@ func autoCorrigeOpcionesEleMulti(daq *dao.QuestionAnswer, dq *dao.Question) erro
 			review := &models.Review{
 				Puntuacion: &puntuacion,
 			}
-			err = updateReview(*daq.IDRespuesta, dq.ID, review)
+			err = corrector.UpdateReview(*daq.IDRespuesta, dq.ID, review)
 		}
 	}
 	return err
+}
+
+func autoCorrigeCodigo(daq *dao.QuestionAnswer, dq *dao.Question) error {
+	// TODO
+	go corrector.ExecuteFullPruebas(*daq.IDRespuesta, *daq.IDPregunta)
+	return nil
 }
 
 func autoCorrigeRespuestaPregunta(aid int64, dq *dao.Question) error {
@@ -173,13 +180,13 @@ func autoCorrigeRespuestaPregunta(aid int64, dq *dao.Question) error {
 			case models.QuestionTipoPreguntaString:
 				err = autoCorrigeString(daq, dq)
 			case models.QuestionTipoPreguntaOpciones:
-				if err == nil {
-					if dq.EleccionUnica {
-						err = autoCorrigeOpcionesEleUni(daq, dq)
-					} else {
-						err = autoCorrigeOpcionesEleMulti(daq, dq)
-					}
+				if dq.EleccionUnica {
+					err = autoCorrigeOpcionesEleUni(daq, dq)
+				} else {
+					err = autoCorrigeOpcionesEleMulti(daq, dq)
 				}
+			case models.QuestionTipoPreguntaCodigo:
+				err = autoCorrigeCodigo(daq, dq)
 			default:
 				return errors.New("tipo de pregunta extraño")
 			}
@@ -559,60 +566,11 @@ func isAnswerTestAdmin(u *models.User, answerid int64) bool {
 	return false
 }
 
-func addAnswerPuntuacion(aid int64, qid int64, puntuacion int64) error {
-	db, err := dbconnection.ConnectDb()
-	if err == nil {
-		var a *dao.Answer
-		var q *dao.Question
-		a, err = dao.GetAnswer(db, aid)
-		if err == nil {
-			if a == nil {
-				return errors.New("no se encontro el recurso")
-			}
-			q, err = dao.GetQuestionFromTest(db, a.Testid, qid)
-			if err == nil {
-				if q == nil {
-					return errors.New("no se encontro el recurso")
-				}
-				punt := a.Puntuacion + float64(*q.ValorFinal*puntuacion)/float64(100)
-				err = dao.PutAnswerPuntuacion(db, aid, punt)
-				if err == nil {
-					return nil
-				}
-			}
-		}
-	}
-	return err
-}
-
-func substractAnswerPuntuacion(aid int64, qid int64, puntuacion int64) error {
-	return addAnswerPuntuacion(aid, qid, -puntuacion)
-}
-
-func updateReview(aid int64, qid int64, review *models.Review) error {
-	db, err := dbconnection.ConnectDb()
-	if err == nil {
-		var qa *dao.QuestionAnswer
-		qa, err = dao.GetQuestionAnswerFromAnswer(db, aid, qid)
-		if qa != nil && err == nil {
-			err = substractAnswerPuntuacion(aid, qid, *qa.Puntuacion)
-		}
-		if err == nil {
-			log.Println(*review.Puntuacion)
-			err = addAnswerPuntuacion(aid, qid, *review.Puntuacion)
-			if err == nil {
-				err = dao.PutReview(db, aid, qid, review)
-			}
-		}
-	}
-	return err
-}
-
 // PUT /answers/{answerid}/qanswers/{questionid}/review
 // Auth: TestAdmin or CanAdminAnswers
 func PutReview(params answer.PutReviewParams, u *models.User) middleware.Responder {
 	if isAnswerTestAdmin(u, params.Answerid) || permissions.CanAdminAnswers(u) {
-		err := updateReview(params.Answerid, params.Questionid, params.Review)
+		err := corrector.UpdateReview(params.Answerid, params.Questionid, params.Review)
 		if err == nil {
 			return answer.NewPutReviewOK()
 		}
@@ -632,7 +590,7 @@ func DeleteReview(params answer.DeleteReviewParams, u *models.User) middleware.R
 			var qa *dao.QuestionAnswer
 			qa, err = dao.GetQuestionAnswerFromAnswer(db, params.Answerid, params.Questionid)
 			if qa != nil && err == nil {
-				err = substractAnswerPuntuacion(params.Answerid, params.Questionid, *qa.Puntuacion)
+				err = corrector.SubstractAnswerPuntuacion(params.Answerid, params.Questionid, *qa.Puntuacion)
 			}
 			if err == nil {
 				err = dao.DeleteReview(db, params.Answerid, params.Questionid)
@@ -723,4 +681,158 @@ func GetQAnswerFromAnswerAndQuestion(params answer.GetQuestionAnswersFromAnswerA
 	}
 	log.Println("Error en GetQuestionAnswersFromAnswerAndQuestion() ", err)
 	return answer.NewGetQuestionAnswersFromAnswerAndQuestionInternalServerError()
+}
+
+// GET /answers/{answerid}/qanswers/{questionid}/preTesting
+// Auth: CanAdminAnswers or User with testAnswered or TestAdmin
+func GetPreTesting(params answer.GetPreTestingParams, u *models.User) middleware.Responder {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		var ans *dao.Answer
+		ans, err = dao.GetAnswer(db, params.Answerid)
+		if err == nil {
+			if ans == nil {
+				return answer.NewGetPreTestingGone()
+			}
+			if permissions.CanAdminAnswers(u) || isTestAnsweredByUserAuth(u, ans.Testid) || isTestAdmin(u, ans.Testid) {
+				var t *dao.Testing
+				t, err = dao.GetPreTesting(db, params.Answerid, params.Questionid)
+				if err == nil {
+					mt := dao.ToModelTesting(t)
+					if err == nil {
+						return answer.NewGetPreTestingOK().WithPayload(mt)
+					}
+				}
+				log.Println("Error en GetPreTesting() ", err)
+				return answer.NewGetPreTestingInternalServerError()
+			}
+			return answer.NewGetPreTestingForbidden()
+		}
+	}
+	log.Println("Error en GetPreTesting() ", err)
+	return answer.NewGetPreTestingInternalServerError()
+}
+
+// PUT /answers/{answerid}/qanswers/{questionid}/preTesting
+// Auth: CanAdminAnswers or User with testStarted or TestAdmin
+func CreatePreTesting(params answer.CreatePreTestingParams, u *models.User) middleware.Responder {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		var ans *dao.Answer
+		ans, err = dao.GetAnswer(db, params.Answerid)
+		if err == nil {
+			if ans == nil {
+				return answer.NewCreatePreTestingGone()
+			}
+			if permissions.CanAdminAnswers(u) || isTestOpenByUserAuth(u, ans.Testid) || isTestAdmin(u, ans.Testid) {
+				err = dao.SetQuestionAnswerEjecutando(db, params.Answerid, params.Questionid)
+				if err == nil {
+					go corrector.ExecutePrePruebas(params.Answerid, params.Questionid)
+					return answer.NewCreatePreTestingOK()
+				}
+				log.Println("Error en CreatePreTesting() ", err)
+				return answer.NewCreatePreTestingInternalServerError()
+			}
+			return answer.NewCreatePreTestingForbidden()
+		}
+	}
+	log.Println("Error en CreatePreTesting() ", err)
+	return answer.NewCreatePreTestingInternalServerError()
+}
+
+// GET /answers/{answerid}/qanswers/{questionid}/fullTesting
+// Auth: CanAdminAnswers or TestAdmin
+func GetFullTesting(params answer.GetFullTestingParams, u *models.User) middleware.Responder {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		var ans *dao.Answer
+		ans, err = dao.GetAnswer(db, params.Answerid)
+		if err == nil {
+			if ans == nil {
+				return answer.NewGetFullTestingGone()
+			}
+			if permissions.CanAdminAnswers(u) || isTestAdmin(u, ans.Testid) {
+				var t *dao.Testing
+				t, err = dao.GetFullTesting(db, params.Answerid, params.Questionid)
+				if err == nil {
+					mt := dao.ToModelTesting(t)
+					if err == nil {
+						return answer.NewGetFullTestingOK().WithPayload(mt)
+					}
+				}
+				log.Println("Error en GetFullTesting() ", err)
+				return answer.NewGetFullTestingInternalServerError()
+			}
+			return answer.NewGetFullTestingForbidden()
+		}
+	}
+	log.Println("Error en GetFullTesting() ", err)
+	return answer.NewGetFullTestingInternalServerError()
+}
+
+// GetPublishedPruebas GET /answers/{answerid}/questions/{questionid}/pruebas
+// Auth: TestAdmin or CanAdminPTests
+func GetPublishedPruebas(params answer.GetPublishedPruebasFromQuestionTestParams, u *models.User) middleware.Responder {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		var a *dao.Answer
+		a, err = dao.GetAnswer(db, params.Answerid)
+		if err == nil && a != nil {
+			var ts *dao.Test
+			ts, err = dao.GetTest(db, a.Testid)
+			if err == nil && ts != nil {
+				if !(permissions.CanAdminPTests(u) || isTestAdmin(u, ts.ID)) {
+					return answer.NewGetPublishedPruebasFromQuestionTestForbidden()
+				}
+				var qs *dao.Question
+				qs, err = dao.GetQuestionFromTest(db, ts.ID, params.Questionid)
+				if err == nil && qs != nil {
+					var ps []*dao.Prueba
+					ps, err = dao.GetPublishedPruebasQuestion(db, params.Questionid, params.Answerid)
+					if err == nil {
+						var mps []*models.Prueba
+						mps = dao.ToModelPruebas(ps)
+						return answer.NewGetPublishedPruebasFromQuestionTestOK().WithPayload(mps)
+					}
+				}
+				return answer.NewGetPublishedPruebasFromQuestionTestGone()
+			}
+		}
+	}
+	return answer.NewGetPublishedPruebasFromQuestionTestInternalServerError()
+}
+
+// GetVisiblePublishedPruebas GET /answers/{answerid}/questions/{questionid}/visiblePruebas
+// Auth: CanVerPTests if accesoPublico, else: TestInvited, TestAdmin or CanAdminPTests
+func GetVisiblePublishedPruebas(params answer.GetVisiblePublishedPruebasFromQuestionTestParams, u *models.User) middleware.Responder {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		var a *dao.Answer
+		a, err = dao.GetAnswer(db, params.Answerid)
+		if err == nil && a != nil {
+			var ts *dao.Test
+			ts, err = dao.GetPublishedTest(db, a.Testid)
+			if err == nil && ts != nil {
+				if !*ts.AccesoPublico {
+					if !(permissions.CanAdminPTests(u) || isTestAdmin(u, ts.ID) || isTestInvited(u, ts.ID)) {
+						return answer.NewGetVisiblePublishedPruebasFromQuestionTestForbidden()
+					}
+				} else if !permissions.CanVerPTests(u) {
+					return answer.NewGetVisiblePublishedPruebasFromQuestionTestForbidden()
+				}
+				var qs *dao.Question
+				qs, err = dao.GetQuestionFromTest(db, ts.ID, params.Questionid)
+				if err == nil && qs != nil {
+					var ps []*dao.Prueba
+					ps, err = dao.GetVisiblePublishedPruebasQuestion(db, params.Questionid, params.Answerid)
+					if err == nil {
+						mps := dao.ToModelPruebas(ps)
+						return answer.NewGetVisiblePublishedPruebasFromQuestionTestOK().WithPayload(mps)
+					}
+				}
+				return answer.NewGetVisiblePublishedPruebasFromQuestionTestGone()
+			}
+		}
+	}
+	return answer.NewGetVisiblePublishedPruebasFromQuestionTestInternalServerError()
 }

@@ -1,4 +1,4 @@
-import { User, Team, Question, Test, Answer, QuestionAnswer, EmailConfiguration, CustomizedView } from "@javgat/devtest-api";
+import { User, Team, Question, Test, Answer, QuestionAnswer, EmailConfiguration, CustomizedView, Prueba, Testing, Tag } from "@javgat/devtest-api";
 
 export enum Tipo {
     SUCCESS = "success",
@@ -338,6 +338,8 @@ export class RespuestaPregunta implements QuestionAnswer{
     corregida: boolean;
     indicesOpciones: number[];
     username: string;
+    estado: QuestionAnswer.EstadoEnum;
+    errorCompilacion: string;
     constructor(qa?: QuestionAnswer){
         this.idPregunta = qa?.idPregunta || 0
         this.idRespuesta = qa?.idRespuesta || 0
@@ -346,6 +348,8 @@ export class RespuestaPregunta implements QuestionAnswer{
         this.respuesta = qa?.respuesta || ""
         this.indicesOpciones = qa?.indicesOpciones || []
         this.username = qa?.username || ""
+        this.estado = qa?.estado || QuestionAnswer.EstadoEnum.NoProbado
+        this.errorCompilacion = qa?.errorCompilacion || ""
     }
 
 }
@@ -389,5 +393,49 @@ export class VistaPersonalizada implements CustomizedView{
     constructor(c?: CustomizedView){
         this.rolBase = c?.rolBase || CustomizedView.RolBaseEnum.NoRegistrado
         this.mensajeInicio = c?.mensajeInicio || ""
+    }
+}
+
+export class PruebaEjecucion implements Prueba{
+    id?: number | undefined;
+    preguntaid?: number | undefined;
+    entrada: string;
+    salida: string;
+    visible: boolean;
+    postEntrega: boolean;
+    valor: number;
+    salidaReal: string;
+    estado?: Prueba.EstadoEnum;
+    constructor(p?: Prueba){
+        this.id = p?.id || 0
+        this.preguntaid = p?.preguntaid || 0
+        this.entrada = p?.entrada || ""
+        this.salida = p?.salida || ""
+        this.visible = p?.visible || false
+        this.postEntrega = p?.postEntrega || false
+        this.valor = p?.valor || 0
+        this.salidaReal = p?.salidaReal || ""
+        this.estado = p?.estado
+    }
+
+    getEstado(): string {
+        return this.estado || ""
+    }
+}
+
+export class ResultadoPruebas implements Testing{
+    pruebasSuperadas: number;
+    pruebasTotales: number;
+
+    constructor(t?: Testing){
+        this.pruebasSuperadas = t?.pruebasSuperadas || 0
+        this.pruebasTotales = t?.pruebasTotales || 0
+    }
+}
+
+export class Etiqueta implements Tag{
+    tag: string;
+    constructor(t?: Tag){
+        this.tag = t?.tag || ""
     }
 }

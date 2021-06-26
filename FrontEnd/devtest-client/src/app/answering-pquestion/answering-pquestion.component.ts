@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Answer, AnswerService, Option, PublishedTestService, Question, QuestionAnswer, UserService } from '@javgat/devtest-api';
+import { Answer, AnswerService, Option, Prueba, PublishedTestService, Question, QuestionAnswer, Testing, UserService } from '@javgat/devtest-api';
+import { CodeModel } from '@ngstack/code-editor';
 import { CountdownEvent } from 'ngx-countdown';
 import { Subscription } from 'rxjs';
 import { LoggedInController } from '../shared/app.controller';
-import { Examen, Mensaje, Pregunta, Tipo, tipoPrint } from '../shared/app.model';
+import { Examen, Mensaje, Pregunta, ResultadoPruebas, Tipo, tipoPrint } from '../shared/app.model';
 import { DataService } from '../shared/data.service';
 import { SessionService } from '../shared/session.service';
 
@@ -26,22 +27,43 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
   modificandoRespuesta: boolean
   test: Examen
   timeOver: boolean
+  pruebas: Prueba[]
+  isMostrandoPruebas: boolean
+  resPruebas: ResultadoPruebas
+  collapsedPruebaIds: Set<number>
+  isEsperandoEjecucion: boolean
+  theme = 'vs-dark';
+
+  codeModel: CodeModel
+
+  codeOptions = {
+    contextmenu: true,
+    minimap: {
+      enabled: true,
+    },
+  };
 
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private route: ActivatedRoute, private ptestS: PublishedTestService, private answerS: AnswerService) {
     super(session, router, data, userS);
     this.modificandoRespuesta = false
+    this.isMostrandoPruebas = false
     this.testid = 0
     this.preguntaid = 0
+    this.collapsedPruebaIds = new Set()
+    this.isEsperandoEjecucion = false
     this.options = []
     this.pregunta = new Pregunta()
     this.test = new Examen()
     this.timeOver = false
+    this.resPruebas = new ResultadoPruebas()
+    this.pruebas = []
     this.questionAnswer = {
       idPregunta: 0,
       idRespuesta: 0,
       puntuacion: 0,
       corregida: false,
-      respuesta: ""
+      respuesta: "",
+      estado: QuestionAnswer.EstadoEnum.NoProbado
     }
     this.newRespuesta = ""
     this.routeSub = this.route.params.subscribe(params => {
@@ -53,6 +75,12 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
         this.getOpenAnswer(true)
       }
     });
+    this.codeModel = {
+      language: 'cpp',
+      uri: 'main.cpp',
+      value: this.questionAnswer.respuesta || "",
+    }
+    this.recargarEditorCodigo()
   }
 
   ngOnInit(): void {
@@ -105,8 +133,10 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
       resp => {
         this.pregunta = Pregunta.constructorFromQuestion(resp)
         this.getQuestionAnswersQuestion(true)
-        if (this.pregunta.tipoPregunta == "opciones") {
+        if (this.pregunta.tipoPregunta == Question.TipoPreguntaEnum.Opciones) {
           this.getOpciones(true)
+        }else if(this.pregunta.tipoPregunta == Question.TipoPreguntaEnum.Codigo){
+          this.getPruebasVisibles(true)
         }
         this.getPTest(true)
       },
@@ -141,19 +171,46 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
       resp => {
         this.pregunta.isRespondida = true
         this.questionAnswer = resp
+        if(!this.isEsperandoEjecucion){
+          this.newRespuesta = this.questionAnswer.respuesta || ""
+          this.recargarEditorCodigo()
+        }
         this.questionAnswer.idPregunta = this.preguntaid
         if (this.questionAnswer.indicesOpciones == undefined) {
           this.questionAnswer.indicesOpciones = []
         }
+        console.log(this.questionAnswer.estado)
+        if(this.questionAnswer.estado == QuestionAnswer.EstadoEnum.Ejecutando){
+          this.isEsperandoEjecucion = true
+          setTimeout(() => {this.getQuestionAnswersQuestion(true)}, this.TIEMPO_RECARGA_ESTADO_COMPILACION)
+        }else{
+          this.isEsperandoEjecucion = false
+          if(this.questionAnswer.estado==QuestionAnswer.EstadoEnum.Probado){
+            this.getResultadoPruebas(true)
+          }
+        }
+        this.getPruebasVisibles(true)
       },
       err => {
         if (err.status == 410) {
           this.pregunta.isRespondida = false
           this.questionAnswer.respuesta = ""
+          this.newRespuesta = this.questionAnswer.respuesta || ""
+          this.recargarEditorCodigo()
         } else {
           this.handleErrRelog(err, "obtener respuestas de una pregunta del test realizandose", primera, this.getQuestionAnswersQuestion, this)
         }
       }
+    )
+  }
+
+  getResultadoPruebas(primera: boolean){
+    if (this.openAnswer == undefined || this.openAnswer.id == undefined) return
+    this.answerS.getPreTesting(this.openAnswer.id, this.preguntaid).subscribe(
+      resp=>{
+        this.resPruebas = resp
+      },
+      err => this.handleErrRelog(err, "obtener resultado de pretesting de pruebas", primera, this.getResultadoPruebas, this)
     )
   }
 
@@ -182,6 +239,7 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
       resp => {
         //this.cambiarMensaje(new Mensaje("Respuesta actualizada con éxito", Tipo.SUCCESS, true))
         this.getOpenAnswer(true)
+        this.executePreTestingIfCode(true)
       },
       err => {
         this.handleErrRelog(err, "publicar nueva respuesta a una pregunta de test publicado", primera, this.postRespuesta, this)
@@ -195,11 +253,22 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
       resp => {
         this.cambiarMensaje(new Mensaje("Respuesta actualizada con éxito", Tipo.SUCCESS, true))
         this.getOpenAnswer(true)
+        this.executePreTestingIfCode(true)
       },
       err => {
         this.handleErrRelog(err, "modificar una respuesta a una pregunta de test publicado", primera, this.putRespuesta, this)
       }
     )
+  }
+
+  executePreTestingIfCode(primera: boolean){
+    if (this.openAnswer == undefined || this.openAnswer.id == undefined) return
+    if(this.pregunta.tipoPregunta==Question.TipoPreguntaEnum.Codigo){
+      this.answerS.createPreTesting(this.openAnswer.id, this.pregunta.id).subscribe(
+        resp => {},
+        err => this.handleErrRelog(err, "pedir la compilacion en backend de pretesting", primera, this.executePreTestingIfCode, this)
+      )
+    }
   }
 
 
@@ -228,6 +297,11 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
   }
 
   sendRespuestaTipoTest(){
+    this.sendRespuesta()
+  }
+
+  sendRespuestaTipoCode(){
+    this.questionAnswer.respuesta = this.newRespuesta
     this.sendRespuesta()
   }
 
@@ -312,4 +386,139 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
 
   }
 
+  recargarEditorCodigo(){
+    this.codeModel = {
+      language: 'cpp',
+      uri: 'main.cpp',
+      value: this.questionAnswer.respuesta || "",
+    }
+  }
+
+  onCodeChanged(value: any) {
+    if(value!=this.newRespuesta){
+      this.modificandoRespuesta = true
+      this.newRespuesta = value
+    }
+  }
+
+  isPreguntaCodigo(): boolean{
+    return this.pregunta.tipoPregunta=='codigo'
+  }
+
+  getPruebasVisibles(primera: boolean){
+    if(this.openAnswer==undefined || this.openAnswer.id==undefined) return
+    this.answerS.getVisiblePublishedPruebasFromQuestionTest(this.openAnswer.id, this.questionAnswer.idPregunta).subscribe(
+      resp => {
+        this.pruebas = resp
+        if(this.pruebas.length==0){
+          this.geUndonetVisiblePruebas(true)
+        }
+      },
+      err => this.handleErrRelog(err, "obtener las pruebas visibles de una pregunta de codigo", primera, this.getPruebasVisibles, this)
+    )
+  }
+
+  geUndonetVisiblePruebas(primera: boolean){
+    if (this.testid == undefined) return
+    this.ptestS.getVisiblePruebasFromQuestionTest(this.testid, this.questionAnswer.idPregunta).subscribe(
+      resp => {
+        this.pruebas = resp
+      },
+      err => this.handleErrRelog(err, "obtener pruebas visibles de respuesta de pregunta", primera, this.geUndonetVisiblePruebas, this)
+    )
+  }
+
+  isVisibleEstadoEjecucion(): boolean{
+    return this.pregunta.isRespondida && this.questionAnswer.estado!=QuestionAnswer.EstadoEnum.NoProbado
+  }
+
+  isEstadoProbado(): boolean{
+    return this.questionAnswer.estado == QuestionAnswer.EstadoEnum.Probado
+  }
+
+  printEstado(): string{
+    switch(this.questionAnswer.estado){
+      case QuestionAnswer.EstadoEnum.Ejecutando:
+        return "Ejecutando..."
+      case QuestionAnswer.EstadoEnum.ErrorCompilacion:
+        return "Error de compilación"
+      case QuestionAnswer.EstadoEnum.Probado:
+        return "Compilado con éxito"
+      case QuestionAnswer.EstadoEnum.NoProbado:
+        return "No probado"
+      default:
+        return ""
+    }
+  }
+
+  isMostrarPruebas(): boolean{
+    return this.isMostrandoPruebas
+  }
+
+  switchMostrarPruebas(){
+    this.isMostrandoPruebas = !this.isMostrandoPruebas
+  }
+
+  isErrorCompilacion(): boolean{
+    return this.questionAnswer.estado == QuestionAnswer.EstadoEnum.ErrorCompilacion
+  }
+
+  isEjecutando(): boolean{
+    return this.questionAnswer.estado == QuestionAnswer.EstadoEnum.Ejecutando
+  }
+
+  getErrorCompilacionString(): string{
+    return this.questionAnswer.errorCompilacion || ""
+  }
+
+  showEvaluation(): boolean {
+    return true
+  }
+
+  isPruebaSuperada(pruebaid: number | undefined): boolean {
+    if (pruebaid == undefined) return false
+    let ps = this.pruebas.filter((p) =>{return p.id == pruebaid})
+    if(ps.length<1) return false
+    return ps[0].estado == Prueba.EstadoEnum.Correcto
+  }
+
+  printEstadoPrueba(estado: string | undefined): string{
+    switch(estado){
+      case Prueba.EstadoEnum.Correcto:
+        return "Superada"
+      case Prueba.EstadoEnum.ErrorRuntime:
+        return "Error en tiempo de ejecución"
+      case Prueba.EstadoEnum.SalidaIncorrecta:
+        return "Salida incorrecta"
+      case Prueba.EstadoEnum.TiempoExcedido:
+        return "Tiempo límite de ejecución sobrepasado"
+      default:
+        return "No ejecutada"
+    }
+  }
+
+  getPruebaIndice(id: number | undefined): string{
+    if(id==undefined) return ""
+    for(let i = 0; i<this.pruebas.length; i++){
+      if(id==this.pruebas[i].id){
+        let valor = i+1
+        return valor.toString()
+      }
+    }
+    return ""
+  }
+
+  isCollapsed(id: number | undefined): boolean{
+    if(id==undefined) return true
+    return this.collapsedPruebaIds.has(id)
+  }
+
+  switchCollapse(id: number | undefined){
+    if(id==undefined) return
+    if(this.collapsedPruebaIds.has(id)){
+      this.collapsedPruebaIds.delete(id)
+    }else{
+      this.collapsedPruebaIds.add(id)
+    }
+  }
 }

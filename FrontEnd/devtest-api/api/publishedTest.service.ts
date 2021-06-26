@@ -22,6 +22,7 @@ import { Answer } from '../model/answer';
 import { Message } from '../model/message';
 import { Option } from '../model/option';
 import { PTestUpdate } from '../model/pTestUpdate';
+import { Prueba } from '../model/prueba';
 import { PublishTestParams } from '../model/publishTestParams';
 import { Question } from '../model/question';
 import { QuestionAnswer } from '../model/questionAnswer';
@@ -956,6 +957,57 @@ export class PublishedTestService {
         ];
 
         return this.httpClient.get<Array<User>>(`${this.basePath}/publishedTests/${encodeURIComponent(String(testid))}/users`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns all pruebas visibles from a question.
+     * Returns all pruebas visibles from a question.
+     * @param testid Id of the test
+     * @param questionid Id of the question to find its pruebas visibles
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getVisiblePruebasFromQuestionTest(testid: number, questionid: number, observe?: 'body', reportProgress?: boolean): Observable<Array<Prueba>>;
+    public getVisiblePruebasFromQuestionTest(testid: number, questionid: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Prueba>>>;
+    public getVisiblePruebasFromQuestionTest(testid: number, questionid: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Prueba>>>;
+    public getVisiblePruebasFromQuestionTest(testid: number, questionid: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (testid === null || testid === undefined) {
+            throw new Error('Required parameter testid was null or undefined when calling getVisiblePruebasFromQuestionTest.');
+        }
+
+        if (questionid === null || questionid === undefined) {
+            throw new Error('Required parameter questionid was null or undefined when calling getVisiblePruebasFromQuestionTest.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerCookie) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Cookie"]) {
+            headers = headers.set('Cookie', this.configuration.apiKeys["Cookie"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Array<Prueba>>(`${this.basePath}/publishedTests/${encodeURIComponent(String(testid))}/questions/${encodeURIComponent(String(questionid))}/pruebas`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

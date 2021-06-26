@@ -293,6 +293,30 @@ func isTestOpenByUserAuth(u *models.User, testid int64) bool {
 	return false
 }
 
+func isTestAnsweredByUser(u *models.User, testid int64) (bool, error) {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		var t *dao.Test
+		t, err = dao.GetATestFromUser(db, *u.Username, testid)
+		if err == nil {
+			isTestAnswered := t != nil
+			return isTestAnswered, nil
+		}
+	}
+	return false, err
+}
+
+func isTestAnsweredByUserAuth(u *models.User, testid int64) bool {
+	if u == nil {
+		return false
+	}
+	b, e := isTestAnsweredByUser(u, testid)
+	if e == nil {
+		return b
+	}
+	return false
+}
+
 func hasAnswerVisible(u *models.User, testid int64) (bool, error) {
 	db, err := dbconnection.ConnectDb()
 	if err == nil {
@@ -597,4 +621,36 @@ func GetTagFromPTest(params published_test.GetTagFromPublishedTestParams, u *mod
 		}
 	}
 	return published_test.NewGetTagFromPublishedTestInternalServerError()
+}
+
+// GetVisiblePruebas GET /publishedTests/{testid}/questions/{questionid}/pruebas
+// Auth: CanVerPTests if accesoPublico, else: TestInvited, TestAdmin or CanAdminPTests
+func GetVisiblePruebas(params published_test.GetVisiblePruebasFromQuestionTestParams, u *models.User) middleware.Responder {
+	db, err := dbconnection.ConnectDb()
+	if err == nil {
+		var ts *dao.Test
+		ts, err = dao.GetPublishedTest(db, params.Testid)
+		if err == nil && ts != nil {
+			if !*ts.AccesoPublico {
+				if !(permissions.CanAdminPTests(u) || isTestAdmin(u, params.Testid) || isTestInvited(u, params.Testid)) {
+					return published_test.NewGetVisiblePruebasFromQuestionTestForbidden()
+				}
+			} else if !permissions.CanVerPTests(u) {
+				return published_test.NewGetVisiblePruebasFromQuestionTestForbidden()
+			}
+			var qs *dao.Question
+			qs, err = dao.GetQuestionFromTest(db, params.Testid, params.Questionid)
+			if err == nil && qs != nil {
+				var ps []*dao.Prueba
+				ps, err = dao.GetVisiblePruebasQuestion(db, params.Questionid)
+				if err == nil {
+					var mps []*models.Prueba
+					mps = dao.ToModelPruebas(ps)
+					return published_test.NewGetVisiblePruebasFromQuestionTestOK().WithPayload(mps)
+				}
+			}
+			return published_test.NewGetVisiblePruebasFromQuestionTestGone()
+		}
+	}
+	return published_test.NewGetVisiblePruebasFromQuestionTestInternalServerError()
 }

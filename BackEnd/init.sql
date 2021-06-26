@@ -1,6 +1,8 @@
 CREATE DATABASE IF NOT EXISTS uva_devtest;
 USE uva_devtest;
 
+DROP TABLE IF EXISTS Ejecucion;
+DROP TABLE IF EXISTS Prueba;
 DROP TABLE IF EXISTS OpcionRespuesta;
 DROP TABLE IF EXISTS RespuestaPregunta;
 DROP TABLE IF EXISTS RespuestaExamen;
@@ -243,6 +245,7 @@ CREATE TABLE TestPregunta(
   FOREIGN KEY(preguntaid) REFERENCES Pregunta(id) ON DELETE CASCADE,
   CONSTRAINT PRIMARY KEY(testid, preguntaid)
 );
+
 CREATE TABLE PreguntaEquipo(
   preguntaid int(11) NOT NULL,
   equipoid int(11) NOT NULL,
@@ -303,6 +306,8 @@ CREATE TABLE RespuestaPregunta(
   puntuacion int(11) NOT NULL, /*porcentaje*/
   corregida boolean NOT NULL,
   respuesta longtext COLLATE utf8_unicode_ci,
+  estado ENUM('noProbado', 'errorCompilacion', 'ejecutando', 'probado') NOT NULL,
+  errorCompilacion longtext COLLATE utf8_unicode_ci,
   CONSTRAINT CHK_puntuacion CHECK (puntuacion>=-100 AND puntuacion<=100),
   FOREIGN KEY(respuestaExamenid) REFERENCES RespuestaExamen(id) ON DELETE CASCADE,
   FOREIGN KEY(preguntaid) REFERENCES Pregunta(id) ON DELETE CASCADE,
@@ -320,6 +325,32 @@ CREATE TABLE OpcionRespuesta(
     FOREIGN KEY(preguntaid, opcionindice)
     REFERENCES Opcion(preguntaid, indice) ON DELETE CASCADE,
   CONSTRAINT PRIMARY KEY(respuestaExamenid, preguntaid, opcionindice)
+);
+
+CREATE TABLE Prueba(
+  id int(11) NOT NULL AUTO_INCREMENT,
+  preguntaid int(11) NOT NULL,
+  entrada longtext COLLATE utf8_unicode_ci NOT NULL,
+  salida longtext COLLATE utf8_unicode_ci NOT NULL,
+  visible boolean NOT NULL, /* El usuario puede ver entrada y salida mientras lo resuelve*/
+  postEntrega boolean NOT NULL, /* La prueba se ejecuta tras entregar la respuesta al examen*/
+  valor int(11) NOT NULL, /* Valor que tiene la prueba, su valor final sera valor/suma(prueba.valor of pruebas)*/
+  CONSTRAINT CHK_pruebaValor CHECK (valor>=0),
+  FOREIGN KEY(preguntaid) REFERENCES Pregunta(id) ON DELETE CASCADE,
+  PRIMARY KEY(id)
+);
+
+CREATE TABLE Ejecucion(
+  pruebaid int(11) NOT NULL,
+  respuestaExamenid int(11) NOT NULL,
+  preguntaid int(11) NOT NULL,
+  estado ENUM('correcto', 'tiempoExcedido', 'errorRuntime', 'salidaIncorrecta'),
+  salidaReal longtext COLLATE utf8_unicode_ci,
+  FOREIGN KEY(pruebaid) REFERENCES Prueba(id) ON DELETE CASCADE,
+  CONSTRAINT fk_EjRespPreg
+    FOREIGN KEY(respuestaExamenid, preguntaid)
+    REFERENCES RespuestaPregunta(respuestaExamenid, preguntaid) ON DELETE CASCADE,
+  CONSTRAINT PRIMARY KEY(pruebaid, respuestaExamenid, preguntaid)
 );
 
 /* DATOS INICIALES */

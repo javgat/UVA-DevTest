@@ -4810,6 +4810,179 @@ paths:
           $ref: '#/responses/GoneError'
         500:
           $ref: '#/responses/InternalServerError'
+  
+  /questions/{questionid}/pruebas:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - question
+      summary: Returns all pruebas from a question.
+      operationId: GetPruebasFromQuestion
+      description: Returns all pruebas from a question.
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: questionid
+        description: Id of the question to find its pruebas
+        required: true
+        type: integer
+      responses:
+        200:
+          description: pruebas found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Prueba'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+    post:
+      security:
+        - BearerCookie: []
+      tags:
+      - question
+      summary: Creates new prueba to a question.
+      operationId: PostPrueba
+      description: Creates new prueba to a question.
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: questionid
+        description: Id of the question to create a prueba
+        required: true
+        type: integer
+      - in: body
+        name: prueba
+        description: Prueba to add
+        required: true
+        schema:
+          $ref: '#/definitions/Prueba'
+      responses:
+        201:
+          description: prueba created
+          schema:
+            $ref: '#/definitions/Prueba'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  /questions/{questionid}/pruebas/{pruebaid}:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - question
+      summary: Returns a prueba from a question.
+      operationId: GetPruebaFromQuestion
+      description: Returns a prueba from a question.
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: questionid
+        description: Id of the question to find its prueba
+        required: true
+        type: integer
+      - in: path
+        name: pruebaid
+        description: id of the prueba to find
+        required: true
+        type: integer
+      responses:
+        200:
+          description: prueba found
+          schema:
+            $ref: '#/definitions/Prueba'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+    put:
+      security:
+        - BearerCookie: []
+      tags:
+      - question
+      summary: Modifies a prueba from a question.
+      operationId: PutPrueba
+      description: Modifies a prueba from a question.
+      consumes:
+      - application/json
+      parameters:
+      - in: path
+        name: questionid
+        description: Id of the question to modify its prueba
+        required: true
+        type: integer
+      - in: path
+        name: pruebaid
+        description: id of the prueba to modify
+        required: true
+        type: integer
+      - in: body
+        name: prueba
+        description: Prueba updated
+        required: true
+        schema:
+          $ref: '#/definitions/Prueba'
+      responses:
+        200:
+          description: prueba modified
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+    delete:
+      security:
+        - BearerCookie: []
+      tags:
+      - question
+      summary: Deletes a prueba from a question.
+      operationId: DeletePrueba
+      description: Deletes a prueba from a question.
+      parameters:
+      - in: path
+        name: questionid
+        description: Id of the question to delete its prueba
+        required: true
+        type: integer
+      - in: path
+        name: pruebaid
+        description: id of the prueba to delete
+        required: true
+        type: integer
+      responses:
+        200:
+          description: prueba deleted
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
 
   /publicEditTests:
     get:
@@ -6209,6 +6382,44 @@ paths:
         500:
           $ref: '#/responses/InternalServerError'
 
+  /publishedTests/{testid}/questions/{questionid}/pruebas:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - publishedTest
+      summary: Returns all pruebas visibles from a question.
+      operationId: GetVisiblePruebasFromQuestionTest
+      description: Returns all pruebas visibles from a question.
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: testid
+        description: Id of the test
+        required: true
+        type: integer
+      - in: path
+        name: questionid
+        description: Id of the question to find its pruebas visibles
+        required: true
+        type: integer
+      responses:
+        200:
+          description: pruebas visibles found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Prueba'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
   /answers:
     get:
       security:
@@ -6633,6 +6844,108 @@ paths:
           $ref: '#/responses/GoneError'
         500:
           $ref: '#/responses/InternalServerError'
+
+  /answers/{answerid}/qanswers/{questionid}/preTesting:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - answer
+      summary: Returns an answer testing for the user answering the question
+      operationId: GetPreTesting
+      description: Returns an answer testing for the user answering the question
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: answerid
+        description: Id of the answer
+        required: true
+        type: integer
+      - in: path
+        name: questionid
+        description: Id of the question it is answering
+        required: true
+        type: integer
+      responses:
+        200:
+          description: Testing found
+          schema:
+            $ref: '#/definitions/Testing'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+    put:
+      security:
+        - BearerCookie: []
+      tags:
+      - answer
+      summary: Asks to create a new testing for the user answering a question, deleting the former one
+      operationId: CreatePreTesting
+      description: Asks to create a new testing for the user answering a question, deleting the former one
+      parameters:
+      - in: path
+        name: answerid
+        description: Id of the answer
+        required: true
+        type: integer
+      - in: path
+        name: questionid
+        description: Id of the question it is answering
+        required: true
+        type: integer
+      responses:
+        200:
+          description: Asked for PreTesting
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+  /answers/{answerid}/qanswers/{questionid}/fullTesting:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - answer
+      summary: Returns an answer testing for the testadmin
+      operationId: GetFullTesting
+      description: Returns an answer testing for the testadmin
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: answerid
+        description: Id of the answer
+        required: true
+        type: integer
+      - in: path
+        name: questionid
+        description: Id of the question it is answering
+        required: true
+        type: integer
+      responses:
+        200:
+          description: Testing found
+          schema:
+            $ref: '#/definitions/Testing'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
   /answers/{answerid}/questions:
     get:
       security:
@@ -6694,6 +7007,82 @@ paths:
             type: array
             items:
               $ref: '#/definitions/QuestionAnswer'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
+  /answers/{answerid}/questions/{questionid}/visiblePruebas:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - answer
+      summary: Returns all pruebas visibles from a question. It will contain the correctness information related to the QuestionAnswer
+      operationId: GetVisiblePublishedPruebasFromQuestionTest
+      description: Returns all pruebas visibles from a question. It will contain the correctness information related to the QuestionAnswer
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: answerid
+        description: Id of the answer
+        required: true
+        type: integer
+      - in: path
+        name: questionid
+        description: Id of the question to find its pruebas visibles
+        required: true
+        type: integer
+      responses:
+        200:
+          description: pruebas visibles found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Prueba'
+        400:
+          $ref: '#/responses/BadRequestError'
+        403:
+          $ref: '#/responses/ForbiddenError'
+        410:
+          $ref: '#/responses/GoneError'
+        500:
+          $ref: '#/responses/InternalServerError'
+
+  /answers/{answerid}/questions/{questionid}/pruebas:
+    get:
+      security:
+        - BearerCookie: []
+      tags:
+      - answer
+      summary: Returns all pruebas from a question. It will contain the correctness information related to the QuestionAnswer
+      operationId: GetPublishedPruebasFromQuestionTest
+      description: Returns all pruebas from a question. It will contain the correctness information related to the QuestionAnswer
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: answerid
+        description: Id of the answer
+        required: true
+        type: integer
+      - in: path
+        name: questionid
+        description: Id of the question to find its pruebas
+        required: true
+        type: integer
+      responses:
+        200:
+          description: pruebas found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Prueba'
         400:
           $ref: '#/responses/BadRequestError'
         403:
@@ -7237,6 +7626,14 @@ definitions:
       username:
         type: string
         example: joselito97
+      estado:
+        type: string
+        enum: [noProbado, errorCompilacion, ejecutando, probado]
+        default: noProbado
+      errorCompilacion:
+        type: string
+        example: Error line 4 missing ';'
+
   Tag:
     type: object
     required:
@@ -7360,6 +7757,58 @@ definitions:
         type: boolean
         example: true
         description: True if you want to send an email, false if not.
+
+  Prueba:
+    type: object
+    required:
+    - entrada
+    - salida
+    - visible
+    - postEntrega
+    - valor
+    properties:
+      id:
+        type: integer
+        example: 1
+      preguntaid:
+        type: integer
+        example: 1
+      entrada:
+        type: string
+        example: 3 3 0 0
+      salida:
+        type: string
+        example: 2 2
+      visible:
+        type: boolean
+        example: true
+      postEntrega:
+        type: boolean
+        example: true
+      valor:
+        type: integer
+        minimum: 0
+        example: 1
+      salidaReal:
+        type: string
+        example: 2 3
+        description: actual output of the questionanswer executed. Only in getPublishedPruebas and getVisiblePublishedPruebas.
+      estado:
+        type: string
+        enum: [correcto, tiempoExcedido, errorRuntime, salidaIncorrecta]
+        description: Only in getPublishedPruebas and getVisiblePublishedPruebas.
+  Testing:
+    type: object
+    required:
+      - pruebasSuperadas
+      - pruebasTotales
+    properties:
+      pruebasSuperadas:
+        type: integer
+        example: 5
+      pruebasTotales:
+        type: integer
+        example: 15
 securityDefinitions:
   BearerCookie:
     type: apiKey

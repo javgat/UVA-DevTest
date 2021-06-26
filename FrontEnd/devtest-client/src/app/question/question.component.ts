@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Option, Question, QuestionService, Tag, TagService, Team, UserService } from '@javgat/devtest-api';
+import { Option, Prueba, PublishedTestService, Question, QuestionService, Tag, TagService, Team, UserService } from '@javgat/devtest-api';
 import { Subscription } from 'rxjs';
 import { LoggedInTeacherController } from '../shared/app.controller';
-import { Mensaje, Pregunta, Tipo, tipoPrint } from '../shared/app.model';
+import { Etiqueta, Mensaje, Pregunta, PruebaEjecucion, Tipo, tipoPrint } from '../shared/app.model';
 import { DataService } from '../shared/data.service';
 import { SessionService } from '../shared/session.service';
 
@@ -33,16 +33,27 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
   testid?: number
   autotags: Tag[]
   showExtraInfo: boolean
+  pruebaEdit: Prueba
+  pruebas: Prueba[]
+  collapsedPruebaIds: Set<number>
+  pruebasidsModificando: Set<number>
+  pruebaidActualizar: number
+  pruebaidRecuperar: number
+  pruebaidEliminar: number
   private editandoRespuesta: boolean
   constructor(session: SessionService, router: Router, data: DataService, userS: UserService, private qS: QuestionService,
-    private route: ActivatedRoute, private tagS: TagService) {
+    private route: ActivatedRoute, private tagS: TagService, private ptestS: PublishedTestService) {
     super(session, router, data, userS)
     this.isInAdminTeam = false
     this.editandoRespuesta = false
-    this.newTag = {
-      tag: ""
-    }
+    this.newTag = new Etiqueta()
     this.opciones = []
+    this.pruebas = []
+    this.pruebaidRecuperar = 0
+    this.pruebaidEliminar = 0
+    this.pruebasidsModificando = new Set()
+    this.collapsedPruebaIds = new Set()
+    this.pruebaidActualizar = 0
     this.tags = []
     this.deleteIndex = -1
     this.deletingTag = ""
@@ -51,6 +62,7 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
     this.questionEdit = new Pregunta()
     this.isFavorita = false
     this.showExtraInfo = false
+    this.pruebaEdit = new PruebaEjecucion()
     this.nuevaOpcion = {
       correcta: false,
       texto: ""
@@ -119,6 +131,8 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
         this.setTipoPrint()
         if (this.question.tipoPregunta == Question.TipoPreguntaEnum.Opciones) {
           this.getOptions(true)
+        }else if(this.question.tipoPregunta == Question.TipoPreguntaEnum.Codigo){
+          this.getPruebas(true)
         }
         this.getTags(true)
         if (!this.getSessionUser().isEmpty()) {
@@ -146,6 +160,37 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
         this.opciones = resp
       },
       err => this.handleErrRelog(err, "obtener opciones de respuesta de pregunta", primera, this.getOptions, this)
+    )
+  }
+
+  isModoQuestionAdmin(): boolean {
+    return this.isInAdminTeam || this.question.username == this.getSessionUser().getUsername()
+  }
+
+  getPruebas(primera: boolean) {
+    if(this.isModoQuestionAdmin() || this.getSessionUser().isAdmin() || this.testid==undefined){
+      this.getAllPruebas(primera)
+    }else{
+      this.getVisiblePruebas(primera)
+    }
+  }
+
+  getAllPruebas(primera: boolean){
+    this.qS.getPruebasFromQuestion(this.id).subscribe(
+      resp => {
+        this.pruebas = resp
+      },
+      err => this.handleErrRelog(err, "obtener pruebas de respuesta de pregunta", primera, this.getAllPruebas, this)
+    )
+  }
+
+  getVisiblePruebas(primera: boolean){
+    if (this.testid == undefined || this.question.id == undefined) return
+    this.ptestS.getVisiblePruebasFromQuestionTest(this.testid, this.question.id).subscribe(
+      resp => {
+        this.pruebas = resp
+      },
+      err => this.handleErrRelog(err, "obtener pruebas visibles de respuesta de pregunta", primera, this.getVisiblePruebas, this)
     )
   }
 
@@ -209,9 +254,14 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
     this.addTag(true)
   }
 
+  cleanTag(){
+    this.newTag = new Etiqueta()
+  }
+
   addTag(primera: boolean) {
     this.qS.addTagToQuestion(this.id, this.newTag.tag).subscribe(
       resp => {
+        this.cleanTag()
         this.getTags(true)
       },
       err => {
@@ -377,7 +427,7 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
   }
 
   needsStopEditarRespuesta(): boolean{
-    return this.question.tipoPregunta == "opciones"
+    return this.question.tipoPregunta == Question.TipoPreguntaEnum.Opciones || this.question.tipoPregunta == Question.TipoPreguntaEnum.Codigo
   }
 
   showVolverTest(): boolean{
@@ -403,4 +453,145 @@ export class QuestionComponent extends LoggedInTeacherController implements OnIn
   showMostrarExtraInfo(): boolean{
     return this.showExtraInfo
   }
+
+  isCodeQuestion(): boolean{
+    return this.question.tipoPregunta == Question.TipoPreguntaEnum.Codigo
+  }
+  
+  isCorreccionAutomatica(): boolean{
+    return this.question.autoCorrect
+  }
+
+  clickAddPrueba(){
+    this.pruebaEdit = new PruebaEjecucion()
+  }
+
+  postPruebaSubmit(){
+    this.postPrueba(true)
+  }
+
+  postPrueba(primera: boolean){
+    this.qS.postPrueba(this.id, this.pruebaEdit).subscribe(
+      resp => {
+        this.getPruebas(true)
+      },
+      err => this.handleErrRelog(err, "crear nueva prueba de ejecución", primera, this.postPrueba, this)
+    )
+  }
+
+  modificarPrueba(pruebaid: number | undefined){
+    this.pruebasidsModificando.add(pruebaid || 0)
+  }
+
+  stopModificarPrueba(pruebaid: number | undefined){
+    this.pruebasidsModificando.delete(pruebaid || 0)
+  }
+
+  modificandoPrueba(pruebaid: number | undefined){
+    return this.pruebasidsModificando.has(pruebaid || 0)
+  }
+
+  cancelarModificarPrueba(pruebaid: number| undefined){
+    if(pruebaid == undefined) return
+    this.stopModificarPrueba(pruebaid)
+    this.pruebaidRecuperar = pruebaid
+    this.recuperarPrueba(true)
+  }
+
+  recuperarPrueba(primera: boolean){
+    this.qS.getPruebaFromQuestion(this.id, this.pruebaidRecuperar).subscribe(
+      resp => {
+        this.pruebas.map( (p, i, arr) => {
+          if(p.id != undefined && p.id == this.pruebaidRecuperar){
+            p.entrada = resp.entrada
+            p.salida = resp.salida
+            p.visible = resp.visible
+            p.postEntrega = resp.postEntrega
+            p.valor = resp.valor
+          }
+        } )
+      },
+      err => this.handleErrRelog(err, "recuperar valor original de prueba", primera, this.recuperarPrueba, this)
+    )
+  }
+
+  guardarModificarPrueba(pruebaid: number | undefined){
+    if(pruebaid == undefined) return
+    this.stopModificarPrueba(pruebaid)
+    this.pruebaidActualizar = pruebaid
+    this.actualizarPrueba(true)
+  }
+
+  actualizarPrueba(primera: boolean){
+    let prus = this.pruebas.filter( (p, i, arr) => {
+      return (p.id != undefined && p.id == this.pruebaidActualizar)
+    })
+    if(prus.length==0) return
+    let pru = prus[0]
+    this.qS.putPrueba(this.id, this.pruebaidActualizar, pru).subscribe(
+      resp => {
+        this.getPruebas(true)
+      },
+      err => this.handleErrRelog(err, "actualizar valor de prueba", primera, this.actualizarPrueba, this)
+    )
+  }
+
+  eliminarPruebaClick(pruebaid: number | undefined){
+    if(pruebaid==undefined) return
+    this.pruebaidEliminar = pruebaid
+    this.eliminarPrueba(true)
+  }
+
+  eliminarPrueba(primera: boolean){
+    this.qS.deletePrueba(this.id, this.pruebaidEliminar).subscribe(
+      resp => {
+        this.getPruebas(true)
+      },
+      err => this.handleErrRelog(err, "eliminar prueba", primera, this.eliminarPrueba, this)
+    )
+  }
+
+  isPruebaValid(p: Prueba): boolean{
+    return p.valor!=undefined && p.valor>=0
+  }
+
+  isPruebaEditValid(): boolean{
+    return this.isPruebaValid(this.pruebaEdit)
+  }
+
+  isPruebaIdValid(pid: number | undefined): boolean{
+    if(pid == undefined) return false
+    let prus = this.pruebas.filter( (p, i, arr) => {
+      return (p.id != undefined && p.id == pid)
+    })
+    if(prus.length==0) return false
+    let pru = prus[0]
+    return this.isPruebaValid(pru)
+  }
+
+  getPruebaIndice(id: number | undefined): string{
+    if(id==undefined) return ""
+    for(let i = 0; i<this.pruebas.length; i++){
+      if(id==this.pruebas[i].id){
+        let valor = i+1
+        return valor.toString()
+      }
+    }
+    return ""
+  }
+
+  isCollapsed(id: number | undefined): boolean{
+    if(id==undefined) return true
+    return this.collapsedPruebaIds.has(id)
+  }
+
+  switchCollapse(id: number | undefined){
+    if(id==undefined) return
+    if(this.collapsedPruebaIds.has(id)){
+      this.collapsedPruebaIds.delete(id)
+    }else{
+      this.collapsedPruebaIds.add(id)
+    }
+  }
+  
 }

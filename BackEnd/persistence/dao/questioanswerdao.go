@@ -30,12 +30,14 @@ func ToModelQuestionAnswer(q *QuestionAnswer) *models.QuestionAnswer {
 		}
 	}
 	mq := &models.QuestionAnswer{
-		IDPregunta:  q.IDPregunta,
-		IDRespuesta: q.IDRespuesta,
-		Respuesta:   q.Respuesta,
-		Corregida:   q.Corregida,
-		Puntuacion:  q.Puntuacion,
-		Username:    username,
+		IDPregunta:       q.IDPregunta,
+		IDRespuesta:      q.IDRespuesta,
+		Respuesta:        q.Respuesta,
+		Corregida:        q.Corregida,
+		Puntuacion:       q.Puntuacion,
+		Username:         username,
+		Estado:           q.Estado,
+		ErrorCompilacion: q.ErrorCompilacion,
 	}
 	mq.IndicesOpciones = append(mq.IndicesOpciones, q.IndicesOpciones...)
 	return mq
@@ -58,10 +60,16 @@ func rowsToQuestionAnswers(rows *sql.Rows) ([]*QuestionAnswer, error) {
 	var qas []*QuestionAnswer
 	for rows.Next() {
 		var qa QuestionAnswer
-		err := rows.Scan(&qa.IDRespuesta, &qa.IDPregunta, &qa.Puntuacion, &qa.Corregida, &qa.Respuesta)
+		var errComp sql.NullString
+		err := rows.Scan(&qa.IDRespuesta, &qa.IDPregunta, &qa.Puntuacion, &qa.Corregida, &qa.Respuesta, &qa.Estado, &errComp)
 		if err != nil {
 			log.Print(err)
 			return qas, err
+		}
+		if errComp.Valid {
+			qa.ErrorCompilacion = errComp.String
+		} else {
+			qa.ErrorCompilacion = ""
 		}
 
 		qas = append(qas, &qa)
@@ -221,10 +229,10 @@ func PostQuestionAnswer(db *sql.DB, answerid int64, qa *models.QuestionAnswer) (
 	if db == nil {
 		return nil, errors.New(errorDBNil)
 	}
-	query, err := db.Prepare("INSERT INTO RespuestaPregunta(respuestaExamenid, preguntaid, puntuacion, corregida, respuesta) VALUES(?,?,0,0,?)")
+	query, err := db.Prepare("INSERT INTO RespuestaPregunta(respuestaExamenid, preguntaid, puntuacion, corregida, respuesta, estado) VALUES(?,?,0,0,?,?)")
 	if err == nil {
 		defer query.Close()
-		_, err = query.Exec(answerid, qa.IDPregunta, qa.Respuesta)
+		_, err = query.Exec(answerid, qa.IDPregunta, qa.Respuesta, qa.Estado)
 		if err == nil {
 			qa.IDRespuesta = &answerid
 			bfalse := false
@@ -313,6 +321,42 @@ func DeleteReview(db *sql.DB, answerid int64, questionid int64) error {
 		return errors.New(errorDBNil)
 	}
 	query, err := db.Prepare("UPDATE RespuestaPregunta SET puntuacion=0, corregida=0 WHERE respuestaExamenid=? AND preguntaid=?")
+	if err == nil {
+		defer query.Close()
+		_, err = query.Exec(answerid, questionid)
+	}
+	return err
+}
+
+func SetQuestionAnswerEjecutando(db *sql.DB, answerid int64, questionid int64) error {
+	if db == nil {
+		return errors.New(errorDBNil)
+	}
+	query, err := db.Prepare("UPDATE RespuestaPregunta SET estado='ejecutando' WHERE respuestaExamenid=? AND preguntaid=?")
+	if err == nil {
+		defer query.Close()
+		_, err = query.Exec(answerid, questionid)
+	}
+	return err
+}
+
+func SetQuestionAnswerErrorCompilacion(db *sql.DB, errorCompilacion *string, answerid int64, questionid int64) error {
+	if db == nil {
+		return errors.New(errorDBNil)
+	}
+	query, err := db.Prepare("UPDATE RespuestaPregunta SET estado='errorCompilacion', errorCompilacion=? WHERE respuestaExamenid=? AND preguntaid=?")
+	if err == nil {
+		defer query.Close()
+		_, err = query.Exec(errorCompilacion, answerid, questionid)
+	}
+	return err
+}
+
+func SetQuestionAnswerProbado(db *sql.DB, answerid int64, questionid int64) error {
+	if db == nil {
+		return errors.New(errorDBNil)
+	}
+	query, err := db.Prepare("UPDATE RespuestaPregunta SET estado='probado' WHERE respuestaExamenid=? AND preguntaid=?")
 	if err == nil {
 		defer query.Close()
 		_, err = query.Exec(answerid, questionid)
