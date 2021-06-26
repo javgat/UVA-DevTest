@@ -61,6 +61,26 @@ nombre de usuario "admin" y contraseña "admin":
 
 ### BackEnd
 
+#### Ejecución de pruebas sobre las respuestas
+
+Para la ejecución de pruebas sobre las respuestas enviadas por los usuarios se ha utilizado Docker,
+concretamente la versión 20.10.7.
+
+Una vez se finalice la instalación de Docker en el sistema, se recomienda añadir al usuario que ejecute
+los procesos del servidor al grupo de usuarios de Docker, para así evitar tener que ejecutar los
+procesos con permisos de superusuario.
+
+A continuación hay que construir la imagen de Docker encargada de ejecutar los procesos, para eso
+habrá que entrar en el directorio **/BackEnd/docker/** y ejecutar el script **build_container.sh**.
+
+Una vez hecho esto ya sé podrá ejecutar el servidor. Desde el servidor se llamará a los diferentes
+scripts que hay en el directorio principalmente mencionado, y los directorios que se compartirán
+con el contenedor de Docker estarán en el directorio **/tmp**, dentro de un subdirectorio llamado
+**pruebas** que se creará automáticamente, por lo que hay que asegurarse de que el usuario tiene
+los permisos necesarios sobre el directorio **/tmp**.
+
+#### Servidor
+
 El lenguaje de programación utilizado en el BackEnd es Go, o Golang, y la versión utilizada es la 1.15.8.
 Se recomienda utilizar esa versión o una posterior compatible para compilar el software del BackEnd.
 
