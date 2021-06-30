@@ -108,7 +108,8 @@ export class AnsweringPQuestionComponent extends LoggedInController implements O
       idRespuesta: 0,
       puntuacion: 0,
       corregida: false,
-      respuesta: ""
+      respuesta: "",
+      estado: QuestionAnswer.EstadoEnum.NoProbado
     }
     this.newRespuesta = ""
   }
