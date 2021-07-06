@@ -16,6 +16,8 @@ conjunta de profesionales de HP y profesores de la Escuela.
 La tutorización del TFG se llevó a cabo por Rubén López Fernández, profesional de la empresa, y Valentín
 Cardeñoso Payo, profesor de la Escuela de Ingeniería Informática.
 
+La memoria del TFG se encuentra en el archivo **/diagrams/TFG_JavierGatonHerguedas.pdf**.
+
 ## Administración e Instalación
 
 La instalación de la aplicación se explicará para un entorno Linux, poniendo de ejemplo Ubuntu 20.04.
