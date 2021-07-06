@@ -54,9 +54,9 @@ bg=yellow</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>2024</x>
-      <y>440</y>
+      <y>418</y>
       <w>220</w>
-      <h>110</h>
+      <h>143</h>
     </coordinates>
     <panel_attributes>*RespuestaExamen*
 bg=yellow
@@ -65,7 +65,9 @@ bg=yellow
 - startTime: DateTime
 - finishTime: DateTime
 - entregado: bool
-- visibleParaUsuario: bool</panel_attributes>
+- visibleParaUsuario: bool
+- puntuacion: float
+- corregida: bool</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -157,14 +159,14 @@ m2=1</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>2090</x>
-      <y>539</y>
+      <y>550</y>
       <w>121</w>
-      <h>154</h>
+      <h>143</h>
     </coordinates>
     <panel_attributes>lt=-&gt;&gt;&gt;&gt;&gt;
 m1=0..* &lt;&lt;weak&gt;&gt;
 m2=1</panel_attributes>
-    <additional_attributes>10.0;120.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;110.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -177,7 +179,7 @@ m2=1</panel_attributes>
     <panel_attributes>lt=-
 m1=0..*
 m2=1</panel_attributes>
-    <additional_attributes>1130.0;340.0;1130.0;10.0;10.0;10.0;10.0;340.0</additional_attributes>
+    <additional_attributes>1130.0;320.0;1130.0;10.0;10.0;10.0;10.0;340.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -736,8 +738,8 @@ bg=cyan</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>2233</x>
-      <y>385</y>
+      <x>2255</x>
+      <y>374</y>
       <w>231</w>
       <h>44</h>
     </coordinates>
@@ -751,12 +753,12 @@ bg=cyan</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>2145</x>
-      <y>385</y>
-      <w>110</w>
-      <h>77</h>
+      <y>374</y>
+      <w>132</w>
+      <h>66</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;50.0;80.0;10.0</additional_attributes>
+    <additional_attributes>10.0;40.0;100.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
