@@ -25,7 +25,7 @@ La instalación de la aplicación se explicará para un entorno Linux, poniendo 
 Lo primero de todo es clonar el repositorio de git.
 
 ```shell
-    git clone https://gitlab.com/HP-SCDS/Observatorio/2020-2021/uva-devtest .
+    git clone https://github.com/javgat/UVA-DevTest .
 ```
 
 Una vez descargado, se puede dividir la instalación en tres partes: Base de datos, BackEnd y FrontEnd.
