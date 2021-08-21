@@ -25,7 +25,7 @@ La instalación de la aplicación se explicará para un entorno Linux, poniendo 
 Lo primero de todo es clonar el repositorio de git.
 
 ```shell
-    git clone https://gitlab.com/HP-SCDS/Observatorio/2020-2021/uva-devtest .
+    git clone https://github.com/javgat/UVA-DevTest .
 ```
 
 Una vez descargado, se puede dividir la instalación en tres partes: Base de datos, BackEnd y FrontEnd.
@@ -96,9 +96,10 @@ Una vez instalado go, se necesitará compilar el código fuente. Para ello basta
 ```
 
 Habrá que añadir unos archivos extra al directorio **/Backend/config**. Dos relacionados a la conexión HTTPS,
-el certificado TLS, que se denominará "cert.pem" y la clave (key) "key.pem". Un tercer archivo estará relacionado
-con la configuración del correo electrónico del sistema, que contendrá la dirección de correo, la contraseña, el
-servidor de correo, el puerto utilizado, y la dirección de la página web que se enlazará en los correos.
+el certificado TLS, que se denominará "cert.pem" y la clave (key) "key.pem". Un tercer archivo denominado
+"emailinfo.json" estará relacionado con la configuración del correo electrónico del sistema, que contendrá
+la dirección de correo, la contraseña, el servidor de correo, el puerto utilizado, y la dirección de la
+página web que se enlazará en los correos.
 
 ```json
 {
